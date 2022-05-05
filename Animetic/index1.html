@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Аниме мини-игры</title>
+	<title>Аниме крестики-нолики</title>
+	<script type="text/javascript" src="js/scripts.js"></script>
 	<link rel="stylesheet" href="styles/style.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Фоновое изображение</title>
@@ -14,9 +15,24 @@
 </head>
 <body>
 		<div class="game-area">
+			<button onclick="window.location.href = 'index.html';">В начало</button>
 		<div class="toparea">
-			<button onclick="window.location.href = 'index1.html';">Крестики-нолики</button>
-			<button onclick="window.location.href = 'index2.html';">Игра на память</button>
+		<div class="game-options">
+			<select name="game_type" id="game_type" onchange="resetAIButton()">
+				<option value="3">Поле 3 x 3 </option>
+				<option value="4">Поле 4 x 4 </option>
+				<option value="5">Поле 5 x 5 </option>
+			</select>
+			<input type="checkbox" name="robot" checked="true" id="robot"> Против Юки? <br/>
+			<input type="submit" value="Начать игру" onclick="generateGame()" class="submit-button"> 
+		</div>
+		<div class="score-card">
+			Очки игрока X : <span id="score-X">0</span> <br>
+			Очки игрока Y : <span id="score-Y">0</span>
+		</div>
+		<div id="game-board" class="game-board">
+			<b>Выберите размер поля и нажмите 'Начать игру'.</b>
+		</div>
 	</div>
 		</div>
  <script>

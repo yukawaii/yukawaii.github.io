@@ -24,7 +24,9 @@ a {
     width: 500px;
 	position: right, bottom;
 }
-
+.toparea {
+	position: flex;
+}
 .game-options {
 	border-bottom: 1px dashed #CFCFCF;
 	padding-bottom: 20px;
