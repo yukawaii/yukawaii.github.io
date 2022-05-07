@@ -103,7 +103,13 @@ function checkWinner() {
 				// On winning disabled all boxes
 				disableAllBoxes();
 
-				alert('Игрок '+turn+' побеждает !!');
+				/* alert('Игрок '+turn+' побеждает !!'); */
+				swal({  
+					title: "Игра окончена!",  
+					text: "Победа достаётся игроку " + turn,  
+					icon: "success",  
+					button: "Ясно",  
+				  });
 				
 				break;
 			} 
@@ -112,7 +118,8 @@ function checkWinner() {
 
 	// If no one wins; declare DRAW
 	if ( ( total_turns == (game_type*game_type) ) && finished === false ) { 
-		alert('Ничья!');
+		// alert('Ничья!');
+		swal("Ничья!", "Победила дружба.");
 		finished = true;
 		disableAllBoxes(); 
 	}

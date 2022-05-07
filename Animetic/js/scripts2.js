@@ -3,6 +3,7 @@ const cards = document.querySelectorAll('.memory-card');
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
+let matchCounter=0;
 
 function flipCard() {
   if (lockBoard) return;
@@ -24,7 +25,21 @@ function flipCard() {
 function checkForMatch() {
   let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
 
-  isMatch ? disableCards() : unflipCards();
+ /* isMatch ? disableCards() : unflipCards(); */
+ if(isMatch){
+  matchCounter+=1;
+ disableCards();
+   if(matchCounter==(cards.length/2)){
+       /* window.alert("Поздравляю! Ты победил!"); */
+       swal({  
+        title: "Молодец!",  
+        text: "Все парные карточки найдены!",  
+        icon: "success",  
+        button: "Хорошо",  
+      });  
+     }
+ }
+ else{ unflipCards(); }
 }
 
 function disableCards() {
