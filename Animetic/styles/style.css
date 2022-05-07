@@ -30,7 +30,7 @@ a {
 .game-options {
 	border-bottom: 1px dashed #CFCFCF;
 	padding-bottom: 20px;
-	display:flex;
+	display: flex;
 }
 .game-options select, .game-options input  {
 	border: 1px solid #333;

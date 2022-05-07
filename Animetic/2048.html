@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>2048</title>
+        <style type="text/css">
+            BODY {
+             background: url(resources/background.png) no-repeat 1px 1px; /* Параметры фона */
+             background-color: #c7b39b
+            }
+       /* Стили кнопки */
+       .iksweb{display: inline-block; cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+       .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+           </style>
+        <link rel="stylesheet" href="2048.css">
+        <script src="2048.js"></script>
+    </head>
+    <body>
+        <button class = "iksweb" onclick="window.location.href = 'index.html';">В начало</button>
+                <button class = "iksweb" onclick="window.location.href = 'index2.html';">Игра на память</button>
+                <button class = "iksweb" onclick="window.location.href = '2048.html';">Очистить поле</button>
+                <button class = "iksweb" onclick = myalert()>Как играть?</button>
+                <h2 style="background-color:rgba(255, 223, 211, 0.5);">Очки: <span id="score">0</span></h2>
+        <div id="board">
+        </div>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+
+function myalert() {
+    swal({  
+        title: "Правила игры 2048:",  
+        text: "Цель игры: собрать максимально большое число, передвигая карточки с цифрами. На каждом раунде в игре появляется две плитки с цифрой «2». Нажатием стрелок на клавиатуре Вы можете скинуть все плитки игрового поля в одну из 4 сторон. Если при сбрасывании две плитки одного номинала «налетают» одна на другую, то они превращаются в одну, номинал которой равен сумме соединившихся плиток. После каждого хода на свободной секции поля появляется новая плитка номиналом «2» или «4».За каждое соединение игровые очки увеличиваются на номинал получившейся плитки. Игра заканчивается поражением, если после очередного хода невозможно совершить действие.", 
+        button: "Понятно",  
+      });  
+     }
+
+
+            function resizeGame() {
+            var gameArea = document.getElementById('game-area');
+            var widthToHeight = 5 / 2;
+            var newWidth = window.innerWidth;
+            var newHeight = window.innerHeight;
+            var newWidthToHeight = newWidth / newHeight;
+            
+            if (newWidthToHeight > widthToHeight) {
+                newWidth = newHeight * widthToHeight;
+                gameArea.style.height = newHeight + 'px';
+                gameArea.style.width = newWidth + 'px';
+            } else {
+                newHeight = newWidth / widthToHeight;
+                gameArea.style.width = newWidth + 'px';
+                gameArea.style.height = newHeight + 'px';
+            }
+            
+            gameArea.style.marginTop = (-newHeight / 2) + 'px';
+            gameArea.style.marginLeft = (-newWidth / 2) + 'px';
+        }
+        window.addEventListener('resize', resizeGame, false);
+        window.addEventListener('orientationchange', resizeGame, false);
+        
+        </script>
+    </body>
+</html>
