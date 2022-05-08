@@ -10,6 +10,13 @@ input::-moz-focus-inner {
 a {
    outline: 0;
 }
+
+.myclass1 {
+text-align: center;
+}
+.myclass2 {
+	text-align: right;
+	}
 	  
 .submit-button {
 	margin-top: 20px;
