@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
 	<script src = "App.js"></script>
 	<title>Аниме мини-игры</title>
 	<link rel="stylesheet" href="styles/style.css">
@@ -24,14 +25,8 @@
 		<button class = "iksweb" onclick="window.location.href = '15num.html';">Пятнашки</button><br>
 		<button class = "iksweb" onclick="window.location.href = 'index1.html';">Крестики-нолики</button><br>
 		<button class = "iksweb" onclick="window.location.href = 'index2.html';">Игра на память</button><br>
+		<button class = "iksweb" onclick="bridge.send()">Поделиться</button><br>
 	</div>
-	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
-	<script>
-	const bridge = vkBridge.default;
-	bridge.subscribe((e) => console.log("vkBridge event", e));
-	bridge.send("VKWebAppInit", {});
-	
-	</script>
 	
 </body>
 </html>
