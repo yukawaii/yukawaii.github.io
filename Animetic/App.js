@@ -6,5 +6,5 @@ bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
-bridge.send("VKWebAppShare", {"link": "vk.com/app8156273#Anime_games"});
+bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
 }
