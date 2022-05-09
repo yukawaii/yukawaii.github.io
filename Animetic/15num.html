@@ -2,6 +2,7 @@
 <html>
 <head>
 	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+	<script src="/js/baner.js"></script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Пятнашки</title>
@@ -37,13 +38,6 @@ swal({
   });  
  }
 </script>
-<script src="/js/baner.js"></script>
-<script>
-bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-
-bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-</script>
+<PromoBanner bannerData={bannerData} />
 </body>
 </html>

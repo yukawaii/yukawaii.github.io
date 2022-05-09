@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+  <script src="/js/baner.js"></script>
   <meta charset="UTF-8">
 
   <title>Игра на память</title>
@@ -84,15 +85,6 @@
     </div>
   </section>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="js/scripts2.js"></script>
-  <script src="/js/baner.js"></script>
-  <script>
-bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-
-bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-</script>
-  
+  <PromoBanner bannerData={bannerData} />
 </body>
 </html>
