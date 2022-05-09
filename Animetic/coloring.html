@@ -27,12 +27,12 @@
 		<button class = "iksweb" onclick="window.location.href = 'coloring5.html';">Гейша</button><br>
 		<button class = "iksweb" onclick="window.location.href = 'index.html';">В начало</button> </div>
 	</div>
-	<script src="/App.js">
-bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+	<script>
+		bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
 
 bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
-</script>
+	</script>
 </body>
 </html>
