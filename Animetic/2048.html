@@ -61,6 +61,13 @@ function myalert() {
       });  
      }
         </script>
+        <script src="/js/baner.js"></script>
+        <script>
+bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
 
+bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+</script>
     </body>
 </html>
