@@ -31,5 +31,12 @@
 		<button class = "iksweb" onclick="favor1()">В избранное</button>
 	</div>
 <script src="js/banner.js"></script>
+<View activePanel="promo">
+    <Panel id="promo">
+      <FixedLayout vertical="bottom">
+        <PromoBanner bannerData={promoBannerProps} />
+      </FixedLayout>
+    </Panel>
+  </View>
 </body>
 </html>
