@@ -16,3 +16,10 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+
+function myadd2(){
+  bridge.send("VKWebAppGetAds").then((bannerInfo) => {
+    setBannerData(bannerInfo);
+  });
+  return <PromoBanner bannerData={bannerData} />;
+}
