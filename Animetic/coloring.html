@@ -2,6 +2,7 @@
 <html>
 <head>
 	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+	<script src="/js/baner.js"></script>
 	<title>Аниме мини-игры</title>
 	<link rel="stylesheet" href="styles/style.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -27,5 +28,13 @@
 		<button class = "iksweb" onclick="window.location.href = 'coloring5.html';">Гейша</button><br>
 		<button class = "iksweb" onclick="window.location.href = 'index.html';">В начало</button> </div>
 	</div>
+	<script src="/js/baner.js"></script>
+	<script>
+bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+
+bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+</script>
 </body>
 </html>
