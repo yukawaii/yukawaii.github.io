@@ -16,3 +16,11 @@ const Banner = () => {
   
     return <PromoBanner bannerData={bannerData} />;
   }
+
+  <View activePanel="promo">
+    <Panel id="promo">
+      <FixedLayout vertical="bottom">
+        <PromoBanner bannerData={promoBannerProps} />
+      </FixedLayout>
+    </Panel>
+  </View>;
