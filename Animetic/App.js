@@ -10,3 +10,8 @@ bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": 
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
+function myadd1(){
+  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
