@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
   <meta charset="UTF-8">
 
   <title>Игра на память</title>
@@ -20,13 +19,12 @@
 	</style>
 </head>
 <body>
-	<script src = "App.js"></script>
+  <script src = "App.js"></script>
   <div class="game-area">
 			<button class = "iksweb" onclick="window.location.href = 'index1.html';">Крестики-нолики</button>
       <button class = "iksweb" onclick="window.location.href = 'index.html';">В начало</button><br>
       <button class = "iksweb" onclick="window.location.href = 'index2.html';">Играть ещё раз</button>
       <button class = "iksweb" onclick="share1()">Поделиться</button>
-      <button class = "iksweb" onclick="favor1()">В избранное</button>
   </div>
     <section class="memory-game">
     <div class="memory-card" data-framework="aurelia">
@@ -84,6 +82,7 @@
     </div>
   </section>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <PromoBanner bannerData={bannerData} />
+  <script src="js/scripts2.js"></script>
+  
 </body>
 </html>
