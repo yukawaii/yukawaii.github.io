@@ -17,9 +17,26 @@ function myadd1(){
 .catch(error => console.log(error));
 }
 
-function myadd2(){
-  bridge.send("VKWebAppGetAds").then((bannerInfo) => {
-    setBannerData(bannerInfo);
-  });
+
+const Banner = () => {
+  const [bannerData, setBannerData] = useState({});
+
+  useEffect(() => {
+    bridge.send("VKWebAppGetAds").then((bannerInfo) => {
+      setBannerData(bannerInfo);
+    });
+  }, []);
+
+  if (!bannerData) {
+    return null;
+  }
+
   return <PromoBanner bannerData={bannerData} />;
 }
+
+function myadd2(){
+  bridge.send("VKWebAppGetAds")
+  .then((bannerInfo) => {
+    setBannerData(bannerInfo);
+  return <PromoBanner bannerData={bannerData} />;
+}); }
