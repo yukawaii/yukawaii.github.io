@@ -16,27 +16,3 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-
-
-const Banner = () => {
-  const [bannerData, setBannerData] = useState({});
-
-  useEffect(() => {
-    bridge.send("VKWebAppGetAds").then((bannerInfo) => {
-      setBannerData(bannerInfo);
-    });
-  }, []);
-
-  if (!bannerData) {
-    return null;
-  }
-
-  return <PromoBanner bannerData={bannerData} />;
-}
-
-function myadd2(){
-  bridge.send("VKWebAppGetAds")
-  .then((bannerInfo) => {
-    setBannerData(bannerInfo);
-  return <PromoBanner bannerData={bannerData} />;
-}); }
