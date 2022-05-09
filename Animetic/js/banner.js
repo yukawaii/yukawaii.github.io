@@ -1,5 +1,7 @@
 import "@vkontakte/vkui/dist/vkui.css";
 import { PromoBanner } from '@vkontakte/vkui';
+import React from "react";
+import ReactDOM from "react-dom";
 
 const Banner = () => {
     const [bannerData, setBannerData] = useState({});
@@ -16,6 +18,14 @@ const Banner = () => {
   
     return <PromoBanner bannerData={bannerData} />;
   }
+  ReactDOM.render(
+    <ConfigProvider>
+      <AdaptivityProvider>
+        <App />
+      </AdaptivityProvider>
+    </ConfigProvider>,
+    document.getElementById("root")
+  );
 
   <View activePanel="promo">
     <Panel id="promo">
