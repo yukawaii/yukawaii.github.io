@@ -19,4 +19,6 @@ const Banner = () => {
     return <PromoBanner bannerData={bannerData} />;
   }
 
-  ReactDOM.render(Banner, document.getElementById('banner').innerHTML);
+  //ReactDOM.render(Banner, document.getElementById('baner').innerHTML);
+  const domContainer = document.querySelector('#baner');
+ReactDOM.render(Banner, domContainer);
