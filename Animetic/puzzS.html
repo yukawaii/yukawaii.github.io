@@ -100,11 +100,10 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script  type="text/babel" scr = "index.js">
-                ReactDOM.render(<Banner />);
     </script>
      <div id = "promo"></div>
     <script type="text/babel">
-        ReactDOM.render(<PromoBanner bannerData={bannerData} />);
+        ReactDOM.render(<PromoBanner bannerData={bannerData} />,   document.getElementById('root'));
       </script>
 </body>
 </html>
