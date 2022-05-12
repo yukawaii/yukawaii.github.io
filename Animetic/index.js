@@ -1,7 +1,6 @@
+'use strict';
 import "@vkontakte/vkui/dist/vkui.css";
 import "@vkontakte/vkui/dist/vkui.css";
-import React from "react";
-import ReactDOM from "react-dom";
 
 const Banner = () => {
     const [bannerData, setBannerData] = useState({});
@@ -20,5 +19,5 @@ const Banner = () => {
   }
 
   //ReactDOM.render(Banner, document.getElementById('baner').innerHTML);
-  const domContainer = document.querySelector('#baner');
+const domContainer = document.querySelector('#baner');
 ReactDOM.render(Banner, domContainer);
