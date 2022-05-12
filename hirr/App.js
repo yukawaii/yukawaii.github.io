@@ -7,6 +7,14 @@ bridge.send("VKWebAppInit", {});
 function share1(){
 bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
 }
+function share2(){
+  bridge.send("VKWebAppShowWallPostBox", {
+    "message": "Игры для запоминания хираганы!", 
+    "attachments": "./resources/share.jpg",
+    "link": "vk.com/app8156273"
+  });
+}
+
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
