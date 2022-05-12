@@ -18,12 +18,14 @@ const Banner = () => {
 }
  
 
-/*<View activePanel="promo">
+
+<View activePanel="promo">
   <Panel id="promo">
     <FixedLayout vertical="bottom">
     <Banner />
     </FixedLayout>
   </Panel>
 </View>;
+
 /* const domContainer = document.querySelector('#promo');
 ReactDOM.render(useEffect, domContainer); */
