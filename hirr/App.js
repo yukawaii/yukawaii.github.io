@@ -10,8 +10,7 @@ bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": 
 function share2(){
   bridge.send("VKWebAppShowWallPostBox", {
     "message": "Игры для быстрого запоминания хираганы!",
-    "attachments": "https://vk.com/app8165024",
-    "attachments": "./resources/share.jpg"
+    "attachments": "https://vk.com/app8165024"
   });
 }
 
