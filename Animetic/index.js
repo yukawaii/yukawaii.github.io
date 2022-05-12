@@ -17,4 +17,4 @@ const Banner = () => {
     return <PromoBanner bannerData={bannerData} />;
   }
 
-  ReactDOM.render(<PromoBanner bannerData={bannerData} />, document.getElementById('banner'));
+  ReactDOM.render(Banner, document.getElementById('banner'));
