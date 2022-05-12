@@ -1,4 +1,3 @@
-'use strict';
 import "@vkontakte/vkui/dist/vkui.css";
 import "@vkontakte/vkui/dist/vkui.css";
 
@@ -18,6 +17,8 @@ const Banner = () => {
     return <PromoBanner bannerData={bannerData} />;
   }
 
-  //ReactDOM.render(Banner, document.getElementById('baner').innerHTML);
 const domContainer = document.querySelector('#baner');
 ReactDOM.render(Banner, domContainer);
+
+
+ReactDOM.render(Banner, document.getElementById('baner').innerHTML);
