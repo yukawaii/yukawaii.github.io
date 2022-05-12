@@ -14,11 +14,12 @@ const Banner = () => {
       return null;
     }
   
-    return <PromoBanner bannerData={bannerData} />;
+    return (
+    <div>
+        <PromoBanner bannerData={bannerData} />; </div>)
   }
-
-  const domContainer = document.querySelector('#promo');
-ReactDom.render(<PromoBanner bannerData={bannerData} />, domContainer);
+  ReactDOM.render(Banner, document.getElementById('root'));
+  
 
 /*<View activePanel="promo">
   <Panel id="promo">
