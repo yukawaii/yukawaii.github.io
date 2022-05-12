@@ -24,3 +24,5 @@ const Banner = () => {
     </FixedLayout>
   </Panel>
 </View>;
+const domContainer = document.querySelector('#promo');
+ReactDOM.render(Banner, domContainer);
