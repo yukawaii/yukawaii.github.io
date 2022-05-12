@@ -1,0 +1,114 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+  }
+  
+  body {
+	height: 50vh;
+	display: flex;
+	background: #060AB2;
+  }
+  
+  .memory-game {
+	width: 407px;
+	height: 300px;
+	margin: auto;
+	display: flex;
+	flex-wrap: wrap;
+	perspective: 407px;
+  }
+  
+  .memory-card {
+	width: calc(25% - 10px);
+	height: calc(33.333% - 10px);
+	margin: 5px;
+	position: relative;
+	transform: scale(1);
+	transform-style: preserve-3d;
+	transition: transform .5s;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+  }
+  
+  .memory-card:active {
+	transform: scale(0.97);
+	transition: transform .2s;
+  }
+  
+  .memory-card.flip {
+	transform: rotateY(180deg);
+  }
+  
+  .front-face,
+  .back-face {
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	position: absolute;
+	border-radius: 5px;
+	background: #1C7CCC;
+	backface-visibility: hidden;
+  }
+  
+  .front-face {
+	transform: rotateY(180deg);
+  }
+  .game-area {
+	margin:0 auto;
+	text-align: center;
+	padding-top: 20px; 
+	position: sticky;
+}
+#vitoria {
+    position: fixed;
+    text-align: center;
+    color: rgb(0, 71, 165);
+    font-family: 'Righteous', cursive;
+    width: 50%;
+    height: 50vh;
+    z-index: 5;
+    background: rgba(0,0,0,0.6);
+    top: 0;
+    display: none;
+}
+
+#vitoria h1 {
+    font-size: 4em;
+    font-weight: normal;
+}
+
+#vitoria h2 {
+    font-size: 2em;
+    margin: 1em;
+}
+
+#vitoria a {
+    text-decoration: none;
+    color: rgb(50, 50, 50);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 3px solid rgb(50, 50, 50);
+    position: absolute;
+    bottom: calc(20vh + 50px);
+    left: calc(50% - 72px);
+    width: fit-content;
+}
+
+#vitoria a:hover {
+    background-color: rgb(50, 50, 50);
+    color: lightblue;
+}
+
+#vitoria p {
+    color: rgb(50, 50, 50);
+}
+#vitoria #container {
+    background: lightblue;
+    padding: 50px;
+    width: 80%;
+    height: 60vh;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20vh;
+}
