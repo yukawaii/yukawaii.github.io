@@ -5,5 +5,11 @@
     "mobile": "index.html",
     "mvk": "index.html",
     "web": "index.html"
-  }
+  },
+
+
+  "presets": [
+      "@babel/preset-env",
+     ["@babel/preset-react", {"runtime": "automatic"}]
+  ]
 }
