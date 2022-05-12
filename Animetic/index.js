@@ -16,7 +16,9 @@ const Banner = () => {
   
     return <PromoBanner bannerData={bannerData} />;
   }
-ReactDom.render({Banner});
+
+  const domContainer = document.querySelector('#promo');
+ReactDom.render(<PromoBanner bannerData={bannerData} />, domContainer);
 
 /*<View activePanel="promo">
   <Panel id="promo">
