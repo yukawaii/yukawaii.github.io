@@ -16,8 +16,9 @@ const Banner = () => {
   
     return <PromoBanner bannerData={bannerData} />;
   }
+ReactDom.render({Banner});
 
-<View activePanel="promo">
+/*<View activePanel="promo">
   <Panel id="promo">
     <FixedLayout vertical="bottom">
     <Banner />
