@@ -5,7 +5,7 @@ bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
-bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
+bridge.send("VKWebAppShare", {"message": "Интересные игры!", "link": "vk.com/app8156273"});
 }
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
