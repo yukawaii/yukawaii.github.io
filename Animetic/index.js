@@ -20,9 +20,9 @@ const Banner = () => {
 <View activePanel="promo">
   <Panel id="promo">
     <FixedLayout vertical="bottom">
-    <PromoBanner bannerData={bannerData} />
+    <Banner />
     </FixedLayout>
   </Panel>
 </View>;
-const domContainer = document.querySelector('#promo');
-ReactDOM.render(useEffect, domContainer);
+/* const domContainer = document.querySelector('#promo');
+ReactDOM.render(useEffect, domContainer); */
