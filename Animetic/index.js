@@ -25,4 +25,4 @@ const Banner = () => {
   </Panel>
 </View>;
 const domContainer = document.querySelector('#promo');
-ReactDOM.render(Banner, domContainer);
+ReactDOM.render(useEffect, domContainer);
