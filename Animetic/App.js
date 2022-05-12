@@ -4,8 +4,12 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
 //поделиться
+
 function share1(){
-bridge.send("VKWebAppShare", {"message": "Интересные игры!", "link": "vk.com/app8156273"});
+  bridge.send("VKWebAppShowWallPostBox", {
+    "message": "Аниме-пазлы на каждый день!",
+    "attachments": "https://vk.com/animepuzz"
+  });
 }
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
@@ -16,3 +20,4 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+
