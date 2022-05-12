@@ -14,12 +14,9 @@ const Banner = () => {
       return null;
     }
   
-    return (
-    <div>
-        <PromoBanner bannerData={bannerData} />; </div>)
-  }
-  ReactDOM.render(Banner, document.getElementById('root'));
-  
+    return <PromoBanner bannerData={bannerData} />;
+}
+ 
 
 /*<View activePanel="promo">
   <Panel id="promo">
