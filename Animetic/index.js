@@ -1,5 +1,7 @@
 import "@vkontakte/vkui/dist/vkui.css";
 import "@vkontakte/vkui/dist/vkui.css";
+import React from "react";
+import ReactDOM from "react-dom";
 
 const Banner = () => {
     const [bannerData, setBannerData] = useState({});
