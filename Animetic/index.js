@@ -1,6 +1,5 @@
 import "@vkontakte/vkui/dist/vkui.css";
-import { PromoBanner } from '@vkontakte/vkui';
-import React from "react";
+import "@vkontakte/vkui/dist/vkui.css";
 
 const Banner = () => {
     const [bannerData, setBannerData] = useState({});
@@ -17,3 +16,5 @@ const Banner = () => {
   
     return <PromoBanner bannerData={bannerData} />;
   }
+
+  ReactDOM.render(<PromoBanner bannerData={bannerData} />, document.getElementById('banner'));
