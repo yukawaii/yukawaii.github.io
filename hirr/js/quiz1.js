@@ -109,7 +109,7 @@ const myApp = [{
     answer: 1,
 }, {
     question: "Как читается эта мора? <br> <img src = '../mem/img/19.png' width='100' height='100' />",
-    options:["ТЭ", "", "ФУ", "СО"],
+    options:["ТЭ", "КА", "ФУ", "СО"],
     answer: 0,
 
 }, {
