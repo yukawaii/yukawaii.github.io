@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+	<title>Аниме крестики-нолики</title>
+	<script type="text/javascript" src="js/scripts.js"></script>
+	<link rel="stylesheet" href="styles/style.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Фоновое изображение</title>
+	<style type="text/css">
+	 BODY {
+	  background: url(resources/background.png) no-repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b
+	 }
+	 /* Стили кнопки */
+.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+	</style>
+</head>
+<body>
+	<script src = "App.js"></script>
+		<div class="game-area">
+			<button class = "iksweb" onclick="window.location.href = 'index.html';">В начало</button>
+			<button class = "iksweb" onclick="share1()">Поделиться</button><br>
+		<div class="toparea">
+		<div class="game-options">
+			<select name="game_type" id="game_type" onchange="resetAIButton()">
+				<option value="3">Поле 3 x 3 </option>
+				<option value="4">Поле 4 x 4 </option>
+				<option value="5">Поле 5 x 5 </option>
+			</select>
+			<input type="checkbox" name="robot" checked="true" id="robot"> Против Юки? <br/>
+			<input type="submit" value="Начать игру" class = "iksweb" onclick="generateGame()" class="submit-button"> 
+		</div>
+		<div class="score-card">
+			Очки игрока X : <span id="score-X">0</span> <br>
+			Очки игрока Y : <span id="score-Y">0</span>
+		</div>
+		<div id="game-board" class="game-board">
+			<b>Выберите размер поля и нажмите 'Начать игру'.</b>
+		</div>
+	</div>
+		</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
