@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Image Puzzle</title>
+    <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/image-puzzle.css" rel="stylesheet" />
+    <style type="text/css">
+                	 BODY {
+	  background: url(../resources/back1cloud.jpg) no-repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b
+	 }
+   /* Стили кнопки */
+   .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+   .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+       </style>
+    <script src="../js/image-puzzle.js"></script>
+</head>
+
+<body style="background-color:powderblue;">
+    <script src = "../App.js"></script>
+    <script>
+        myadd1();
+    </script>
+    <div id="collage">
+            <div style="display:inline-block; margin:auto; width:95%; vertical-align:top;">
+                <ul id="sortable" class="sortable"></ul>
+                <div id="actualImageBox">
+                    <div id="stepBox">
+                        <h3 id="imgTitle"></h3>
+                        <hr />
+                        <div>Ходов:</div>
+                        <div id="stepCount" class="stepCount">0</div>
+                    </div>
+                    <div id="timeBox">
+                        Прошло времени:<br> <span id="timerPanel"></span> сек
+                    </div>
+                    <div>Собери пазл, чтобы получить картину.</div>
+                    <p id="levelPanel">
+                        <input type="radio" name="level" id="easy" checked="checked" value="3" onchange="imagePuzzle.startGame(images, this.value);"
+                        /> <label for="easy">Просто</label>
+                        <input type="radio" name="level" id="medium" value="4" onchange="imagePuzzle.startGame(images, this.value);" />                        <label for="medium">Средне</label>
+                        <input type="radio" name="level" id="hard" value="5" onchange="imagePuzzle.startGame(images, this.value);" />                        <label for="hard">Сложно</label>
+                    </p>
+                    <div>
+                        <button id="btnRule" type="button" class = "iksweb" onclick="rules();">Как играть?</button>
+                        <button id="newPhoto" type="button" class = "iksweb" onclick="restart();">Поменять картину</button>
+                     </div>
+                     <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
+                     <button class = "iksweb" onclick="share2()">Поделиться</button>
+               </div>
+            </div>
+        </div>
+        <div id="gameOver" style="display:none;">
+            <div style="background-color: #FDEED9; padding: 5px 10px 20px 10px; text-align: center; border-radius:33px;border:6px solid #C6D8FF; ">
+                <h2 style="text-align:center">Молодец!</h2>
+             <br /> Картина собрана.<br /> 
+                <br /> Ходов: <span id="stepCount" class="stepCount">0</span>.
+                <br /> Прошло времени: <span class="timeCount">0</span> секунд<br />
+                <div> <br /> 
+                    <button class = "iksweb" onclick="window.location.reload(true);">Играть ещё</button>
+                </div>
+            </div>
+        </div>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            var images = [
+                { src: '../images/na.jpg', title: 'НА. Замок' },
+                { src: '../images/ni.jpg', title: 'НИ. Чай маття' },
+                { src: '../images/nu.jpg', title: 'НУ. Синтоистсие врата' },
+                { src: '../images/ne.jpg', title: 'НЭ. Мост Акаси-Кайкэ' },
+                { src: '../images/no.jpg', title: 'НО. Момидзи' },
+                { src: '../images/ha.jpg', title: 'ХА. Сакура' },
+                { src: '../images/hi.jpg', title: 'ХИ. Магнолия' },
+                { src: '../images/hu.jpg', title: 'ФУ. Карпы кои' },
+                { src: '../images/he.jpg', title: 'ХЭ. Бонсай' },
+                { src: '../images/ho.jpg', title: 'ХО. Японский фонарь' },
+            ];
+
+            window.onload = function () {
+                var gridSize = document.querySelector('#levelPanel input[type="radio"]:checked').getAttribute('value');
+                imagePuzzle.startGame(images, gridSize);
+            };
+            function restart() {
+                var gridSize = document.querySelector('#levelPanel input[type="radio"]:checked').getAttribute('value');
+                imagePuzzle.startGame(images, gridSize);
+            }
+            function rules() {
+    swal({  
+        title: "Как играть в пазлы:",  
+        text: "Цель игры: собрать картину. Пользуйтесь мышкой, чтобы передвигать квадратные карточки с частями изображения, пока не соберёте законченную картину. Весёлой игры!", 
+        button: "Вперёд!",  
+      });  
+     }
+        </script>
+    </div>
+</body>
+</html>
