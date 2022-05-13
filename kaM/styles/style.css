@@ -21,7 +21,9 @@ text-align: center;
 .myclass2 {
 	text-align: right;
 	}
-	  
+	.myclass3 {
+		text-align: center;
+		}
 .submit-button {
 	margin-top: 20px;
 	width: 280px;
