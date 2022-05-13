@@ -1,0 +1,82 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIRAGANA Quiz</title>
+    <link rel="stylesheet" href="../styles/quiz.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+    <style>BODY {
+        background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
+        background-color: #c7b39b
+       }
+  /* Стили кнопки */
+  .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+  .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+  </style>
+</head>
+
+<body>
+    <script src = "../App.js"></script>
+    <script>
+        myadd1();
+    </script>
+    <div class="quiz-home-box custom-box show">
+        <h3>ХИРАГАНА викторина</h3> 
+        <h3>Уровень 2</h3>
+        <h3>У Вас есть 10 секунд на каждый вопрос.<br>
+        21 вопрос. </h3>
+        <button type="button" class="start-quiz-btn btn">Начать игру</button>
+        <button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Другой уровень</button>
+    </div>
+
+    <div class="quiz-box custom-box">
+        <div class="stats">
+            <div class="quiz-time">
+                <div class="remaining-time"></div>
+                <span class="time-up-text">Время вышло!</span>
+            </div>
+            <div class="score-board">
+                <span class="score-text">Очки:</span>
+                <span class="correct-answers"></span>
+            </div>
+        </div>
+        <div class="question-box">
+            <div class="current-question-num" id="current-question-num">
+
+            </div>
+            <div class="question-text" id="question-text"></div>
+         
+        </div>
+
+        <div class="option-box" id="option-box">
+
+        </div>
+        <div class="answer-description">
+
+        </div>
+        <div class="next-question">
+            <button type="button" class="next-question-btn btn">Дальше</button>
+            <button type="button" class="see-result-btn btn">Посмотреть результат</button>
+        </div>
+    </div>
+
+    <div class="quiz-over-box custom-box">
+        <h1>Результаты</h1>
+        <h4>Всего вопросов: <span class="total-questions">3</span></h4>
+        <h4>Дано ответов: <span class="total-attempt"></span></h4>
+        <h4>Верно: <span class="total-correct"></span></h4>
+        <h4>Ошибки: <span class="total-wrong"></span></h4>
+        <h4>Процент верных ответов: <span class="percentage"></span></h4>
+        <button class = "iksweb" onclick="share2()">Поделиться</button>
+
+       <button type="button" class="start-again-quiz-btn btn">Играть ещё раз</button>
+        <button type="button" class="go-home-btn btn">В начало уровня</button>
+            </h4>
+        </div>
+    </div>
+
+    <script src="../js/quiz2.js"></script>
+</body>
+
+</html>
