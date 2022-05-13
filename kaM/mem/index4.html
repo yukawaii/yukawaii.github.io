@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+  <title>Игра на память</title>
+  <link rel="stylesheet" href="../styles/styles2.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Фоновое изображение</title>
+	<style type="text/css">
+	 BODY {
+	  background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b
+	 }
+   /* Стили кнопки */
+.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+	</style>
+</head>
+<body>
+  <script src = "../App.js"></script>
+  <div class="game-area">
+      <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button><br>
+      <button class = "iksweb" onclick="window.location.href = './index4.html';">Играть ещё раз</button><br>
+      <button class = "iksweb" onclick="window.location.href = './indexmemory.html';">Другой уровень</button><br>
+      <button class = "iksweb" onclick="share2()">Поделиться</button>
+  </div>
+    <section class="memory-game">
+    <div class="memory-card" data-framework="aurelia">
+      <img class="front-face" src="img/11.png" alt="Aurelia" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="aurelia">
+      <img class="front-face" src="img/11.png" alt="Aurelia" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+
+    <div class="memory-card" data-framework="vue">
+      <img class="front-face" src="img/12.png" alt="Vue" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="vue">
+      <img class="front-face" src="img/12.png" alt="Vue" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+
+    <div class="memory-card" data-framework="angular">
+      <img class="front-face" src="img/vue.png" alt="Angular" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="angular">
+      <img class="front-face" src="img/vue.png" alt="Angular" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+
+    <div class="memory-card" data-framework="ember">
+      <img class="front-face" src="img/13.png" alt="Ember" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="ember">
+      <img class="front-face" src="img/13.png" alt="Ember" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+
+    <div class="memory-card" data-framework="backbone">
+      <img class="front-face" src="img/14.png" alt="Backbone" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="backbone">
+      <img class="front-face" src="img/14.png" alt="Backbone" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+
+    <div class="memory-card" data-framework="react">
+      <img class="front-face" src="img/15.png" alt="React" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+    <div class="memory-card" data-framework="react">
+      <img class="front-face" src="img/15.png" alt="React" />
+      <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+    </div>
+  </section>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="js/scripts2.js"></script> 
+</body>
+</html>
