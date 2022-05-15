@@ -493,7 +493,8 @@ document.addEventListener('keydown', event => {
             break;
         case "Space":
             {
-           startPauseResume();
+                myadd1()
+           //startPauseResume();
             }
             break; 
         default:
@@ -603,11 +604,11 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
     .then(data => console.log(data.result))
    
     .catch(error => console.log(error));
+    setTimeout(startPauseResume, 2000);
+    console.clear();
 }
 
 function startPauseResume(){
-    myadd1();
-    if (data.result){
     if(gameState.initialized){
         if(gameState.paused){
             resumeGame()
@@ -618,7 +619,7 @@ function startPauseResume(){
         }
     } else{
         startGame()
-    }}
+    }
 }
 
 document.getElementById('tetris').addEventListener('click', function(){
