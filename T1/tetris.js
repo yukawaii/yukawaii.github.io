@@ -610,9 +610,15 @@ function startPauseResume(){
         startGame()
     }
 }
+function myadd2(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
 
 document.getElementById('tetris').addEventListener('click', function(){
-    myadd1(); startPauseResume()
+    myadd2(); startPauseResume()
 });
 
 update();
