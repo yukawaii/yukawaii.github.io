@@ -7,8 +7,8 @@ bridge.send("VKWebAppInit", {});
 
 function share1(){
   bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Аниме-пазлы на каждый день!",
-    "attachments": "https://vk.com/animepuzz"
+    "message": "Тетрис как на приставке!",
+    "attachments": "https://vk.com/app8167395"
   });
 }
 function favor1(){
@@ -23,3 +23,9 @@ function myadd2(){
 .catch(error => console.log(error));
 }
 
+function myadd1(){
+  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+        bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+      .then(data => console.log(data.result))
+           .catch(error => console.log(error));
+  }

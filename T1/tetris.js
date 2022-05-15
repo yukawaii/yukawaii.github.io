@@ -595,23 +595,7 @@ function endGame(){
     update()
 }
 
-
-function myadd1(){
-bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-    .then(data => console.log(data.result))
-   
-    .catch(error => console.log(error));
-}
-
 function startPauseResume(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-    .then(data => console.log(data.result))
-   
-    .catch(error => console.log(error));
     if(gameState.initialized){
         if(gameState.paused){
             resumeGame()
@@ -626,11 +610,7 @@ function startPauseResume(){
 }
 
 document.getElementById('tetris').addEventListener('click', function(){
-    startPauseResume()
+    myadd1(); startPauseResume()
 });
 
 update();
-
-
-
-
