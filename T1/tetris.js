@@ -494,7 +494,7 @@ document.addEventListener('keydown', event => {
         case "Space":
             {
                 myadd1();
-            startPauseResume();
+           // startPauseResume();
             }
             break; 
         default:
@@ -602,7 +602,11 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
 
     bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
     .then(data => console.log(data.result))
+   
     .catch(error => console.log(error));
+    if (data.result = true){
+        startPauseResume();
+    } 
 }
 
 function startPauseResume(){
