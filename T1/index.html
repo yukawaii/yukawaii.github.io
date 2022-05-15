@@ -16,7 +16,9 @@
             height: 90vh;
             max-height: 900px
         }
-        
+        /* Стили кнопки */
+.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
         </style>
      </head>
     <body class="parent" style="background: #202025; font-family: 'Russo One', sans-serif;" >
@@ -24,7 +26,7 @@
             const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
-
+myadd2();
         </script>
       
         <div  style="color:white; background: #111; padding: 1em; border-radius: 5px">
@@ -35,6 +37,5 @@ bridge.send("VKWebAppInit", {});
             <button class = "iksweb" onclick="share1()">Поделиться</button><br>
             <button class = "iksweb" onclick="favor1()">В избранное</button><br>
         </div>
-
     </body>
 </html>
