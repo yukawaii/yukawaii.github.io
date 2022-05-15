@@ -493,8 +493,7 @@ document.addEventListener('keydown', event => {
             break;
         case "Space":
             {
-                myadd1()
-           //startPauseResume();
+           startPauseResume();
             }
             break; 
         default:
@@ -604,11 +603,15 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
     .then(data => console.log(data.result))
    
     .catch(error => console.log(error));
-    setTimeout(startPauseResume, 2000);
-    console.clear();
 }
 
 function startPauseResume(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+    .then(data => console.log(data.result))
+   
+    .catch(error => console.log(error));
     if(gameState.initialized){
         if(gameState.paused){
             resumeGame()
