@@ -493,8 +493,7 @@ document.addEventListener('keydown', event => {
             break;
         case "Space":
             {
-                myadd1();
-           // startPauseResume();
+           startPauseResume();
             }
             break; 
         default:
@@ -607,9 +606,9 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
 }
 
 function startPauseResume(){
+    myadd1();
     if(gameState.initialized){
         if(gameState.paused){
-            myadd1();
             resumeGame()
         } else if (gameState.over){
             homeScreen()
