@@ -604,14 +604,12 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
     .then(data => console.log(data.result))
    
     .catch(error => console.log(error));
-    if (data.result = true){
-        startPauseResume();
-    } 
 }
 
 function startPauseResume(){
     if(gameState.initialized){
         if(gameState.paused){
+            myadd1();
             resumeGame()
         } else if (gameState.over){
             homeScreen()
