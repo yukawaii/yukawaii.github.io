@@ -218,7 +218,7 @@ function drawPausedScreen(){
     context.textAlign = "center";
     context.fillText("Пауза", canvas.width /2, canvas.height /2)
     context.font = '18px Russo One';
-    context.fillText("Нажмите пробел или коснитесь, чтобы продолжить", canvas.width /2, canvas.height /1.8)
+    context.fillText("Нажмите кнопку СТАРТ, чтобы продолжить", canvas.width /2, canvas.height /1.8)
     
 }
 
@@ -248,7 +248,7 @@ function drawMainMenu(){
     };
     
     context.font = '18px Russo One';
-    context.fillText("Нажмите пробел или коснитесь, чтобы начать", canvas.width /2, canvas.height /1.8)
+    context.fillText("Нажмите кнопку СТАРТ, чтобы начать", canvas.width /2, canvas.height /1.8)
 }
 
 function drawMatrix(matrix, offset) {
@@ -596,9 +596,9 @@ function startPauseResume(){
     }
 }
 
-document.getElementById('tetris').addEventListener('click', function(){
-   startPauseResume()
+//document.getElementById('tetris').addEventListener('click', function(){
+ //  startPauseResume()
 
-});
+//});
 
 update();
