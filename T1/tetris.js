@@ -539,7 +539,6 @@ function pauseGame(){
 
 function resumeGame(){
     initAudio();
-    myadd1();
     gameState.paused=false
     update();
     pauseSound.pause()
