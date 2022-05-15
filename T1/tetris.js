@@ -1,9 +1,5 @@
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-
 //context.scale (20,20);
 const blockSize = 40;
 
@@ -543,6 +539,7 @@ function pauseGame(){
 
 function resumeGame(){
     initAudio();
+    myadd1();
     gameState.paused=false
     update();
     pauseSound.pause()
