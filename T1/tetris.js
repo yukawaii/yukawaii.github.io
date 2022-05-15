@@ -218,7 +218,7 @@ function drawPausedScreen(){
     context.textAlign = "center";
     context.fillText("Пауза", canvas.width /2, canvas.height /2)
     context.font = '18px Russo One';
-    context.fillText("Нажмите кнопку ПРОДОЛЖИТЬ, чтобы возобновить игру", canvas.width /2, canvas.height /1.8)
+    context.fillText("Нажмите кнопку ПРОДОЛЖИТЬ", canvas.width /2, canvas.height /1.8)
     
 }
 
