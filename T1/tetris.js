@@ -192,16 +192,16 @@ function drawGame(){
 
     context.textAlign = "center"
     context.fillStyle='#888'
-    context.font = '24px Russo One';
-    context.fillText("Сбросы:", canvas.width /5 * 2, 30)
+    context.font = '20px Russo One';
+    context.fillText("Линий:", canvas.width /5 * 2, 30)
     context.fillStyle='#fff'
     context.font = '40px Russo One';
     context.fillText(player.lines, canvas.width /5 * 2, 70)
 
     context.textAlign = "center"
     context.fillStyle='#888'
-    context.font = '24px Russo One';
-    context.fillText("Level:", canvas.width /5 * 3, 30)
+    context.font = '20px Russo One';
+    context.fillText("Уровень:", canvas.width /5 * 3, 30)
     context.fillStyle='#fff'
     context.font = '40px Russo One';
     context.fillText(player.level, canvas.width /5 * 3, 70)
