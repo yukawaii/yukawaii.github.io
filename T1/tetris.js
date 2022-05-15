@@ -481,11 +481,6 @@ document.addEventListener('keydown', event => {
         case "Escape":
             endGame()
             break;
-        case "Space":
-            {
-           startPauseResume();
-            }
-            break; 
         default:
     }
 })

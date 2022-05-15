@@ -9,8 +9,8 @@ bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": 
 }
 function share2(){
   bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Игры для быстрого запоминания хираганы!",
-    "attachments": "https://vk.com/app8165024"
+    "message": "Тетрис прямо как на приставке!",
+    "attachments": "https://vk.com/app8167395"
   });
 }
 
@@ -20,6 +20,12 @@ bridge.send("VKWebAppAddToFavorites");
 function myadd1(){
   bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+function myadd2(){
+  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+  bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
