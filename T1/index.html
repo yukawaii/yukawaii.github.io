@@ -26,9 +26,15 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
         </script>
+      
         <div  style="color:white; background: #111; padding: 1em; border-radius: 5px">
             <canvas id="tetris" width="480" height="900" style="border-radius: 5px"></canvas>
             <script src="tetris.js"></script>
+            <button class = "iksweb" onclick="drawPausedScreen()">Пауза</button>
+            <script src="App.js"></script>
+            <button class = "iksweb" onclick="share1()">Поделиться</button><br>
+            <button class = "iksweb" onclick="favor1()">В избранное</button><br>
         </div>
+
     </body>
 </html>

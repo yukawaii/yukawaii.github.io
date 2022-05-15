@@ -402,8 +402,12 @@ function rotate(matrix, dir){
 function update(time = 0){
     if(gameState.initialized){
         if(gameState.paused){
-            //game paused
-            drawPausedScreen()
+            //game paused{
+                {            drawPausedScreen();
+                    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+                    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+                  .then(data => console.log(data.result))
+                 .catch(error => console.log(error));} 
         } else if (gameState.over){
             drawGameOverScreen()
         } else {
@@ -535,9 +539,7 @@ function pauseGame(){
     pauseSound.play()
 
 }
-myadd1();
 function resumeGame(){
-    myadd1();
     initAudio();
     gameState.paused=false
     update();
