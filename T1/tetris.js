@@ -525,8 +525,6 @@ function pauseGame(){
     pauseSound.pause()
     pauseSound.currentTime = 0;
     pauseSound.play()
-    myadd2();
-
 }
 function resumeGame(){
     initAudio();
@@ -597,12 +595,6 @@ function startPauseResume(){
         startGame()
     }
 }
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
 
 document.getElementById('tetris').addEventListener('click', function(){
    startPauseResume()
