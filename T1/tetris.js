@@ -607,6 +607,7 @@ bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
 
 function startPauseResume(){
     myadd1();
+    if (data.result){
     if(gameState.initialized){
         if(gameState.paused){
             resumeGame()
@@ -617,7 +618,7 @@ function startPauseResume(){
         }
     } else{
         startGame()
-    }
+    }}
 }
 
 document.getElementById('tetris').addEventListener('click', function(){
