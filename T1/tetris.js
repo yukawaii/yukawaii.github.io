@@ -618,7 +618,8 @@ function myadd2(){
   }
 
 document.getElementById('tetris').addEventListener('click', function(){
-    myadd2(); startPauseResume()
+   startPauseResume()
+
 });
 
 update();
