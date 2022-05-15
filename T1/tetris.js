@@ -404,10 +404,7 @@ function update(time = 0){
         if(gameState.paused){
             //game paused{
                 {            drawPausedScreen();
-                    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-                    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-                  .then(data => console.log(data.result))
-                 .catch(error => console.log(error));} 
+                   } 
         } else if (gameState.over){
             drawGameOverScreen()
         } else {
