@@ -466,18 +466,6 @@ const colors = [
 
 document.addEventListener('keydown', event => {
     switch(event.code){
-        case "ArrowLeft":
-            playerMove(-1)
-            break;
-        case "ArrowRight":
-            playerMove(+1)
-            break;           
-        case "ArrowDown":
-            playerDrop();
-            break;
-        case "ArrowUp":
-            playerRotate(-1);
-            break;
         case "KeyW":
             playerRotate(-1);
             break;
@@ -537,6 +525,7 @@ function pauseGame(){
     pauseSound.pause()
     pauseSound.currentTime = 0;
     pauseSound.play()
+    myadd2();
 
 }
 function resumeGame(){

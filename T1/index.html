@@ -21,21 +21,19 @@
 .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
         </style>
      </head>
+     <body>
+        <script src="App.js"></script>
+        <button class = "iksweb" onclick="drawPausedScreen()">Пауза</button>
+        <button class = "iksweb" onclick="share1()">Поделиться</button><br>
+        <button class = "iksweb" onclick="favor1()">В избранное</button><br>
+     </body>
     <body class="parent" style="background: #202025; font-family: 'Russo One', sans-serif;" >
-        <script>
-            const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-myadd2();
-        </script>
-      
+    
         <div  style="color:white; background: #111; padding: 1em; border-radius: 5px">
             <canvas id="tetris" width="480" height="900" style="border-radius: 5px"></canvas>
             <script src="tetris.js"></script>
-            <button class = "iksweb" onclick="drawPausedScreen()">Пауза</button>
-            <script src="App.js"></script>
-            <button class = "iksweb" onclick="share1()">Поделиться</button><br>
-            <button class = "iksweb" onclick="favor1()">В избранное</button><br>
-        </div>
+            <div>
+     
+        </div></div>
     </body>
 </html>
