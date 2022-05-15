@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src = "App.js"></script>
         <title>Тетрис классический</title>
         <link href="https://fonts.googleapis.com/css?family=Russo+One&display=swap" rel="stylesheet">
         <style>
@@ -19,6 +20,12 @@
         </style>
      </head>
     <body class="parent" style="background: #202025; font-family: 'Russo One', sans-serif;" >
+        <script>
+            const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+
+        </script>
         <div  style="color:white; background: #111; padding: 1em; border-radius: 5px">
             <canvas id="tetris" width="480" height="900" style="border-radius: 5px"></canvas>
             <script src="tetris.js"></script>
