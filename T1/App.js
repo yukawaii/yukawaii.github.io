@@ -4,9 +4,6 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
 //поделиться
-function share1(){
-bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
-}
 function share2(){
   bridge.send("VKWebAppShowWallPostBox", {
     "message": "Тетрис прямо как на приставке!",
@@ -29,3 +26,6 @@ function myadd2(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+
+
+//     <button class = "iksweb" onclick="pauseGame(); myadd2()">Пауза</button><br />*/
