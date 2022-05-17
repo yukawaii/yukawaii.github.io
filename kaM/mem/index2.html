@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
   <meta charset="UTF-8">
 	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
   <title>Игра на память</title>
@@ -19,11 +20,11 @@
 </head>
 <body>
   <script src = "../App.js"></script>
-  <div class ="myclass3">
-    <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
-    <button class = "iksweb" onclick="window.location.href = './index2.html';">Играть ещё раз</button>
-    <button class = "iksweb" onclick="window.location.href = './indexmemory.html';">Другой уровень</button>
-    <button class = "iksweb" onclick="share2()">Поделиться</button>
+  <div class="myclass3">
+      <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
+      <button class = "iksweb" onclick="window.location.href = './index2.html';">Играть ещё раз</button>
+      <button class = "iksweb" onclick="window.location.href = './indexmemory.html';">Другой уровень</button>
+      <button class = "iksweb" onclick="share2()">Поделиться</button>
 
     <section class="memory-game">
     <div class="memory-card" data-framework="aurelia">
@@ -69,7 +70,7 @@
     <div class="memory-card" data-framework="backbone">
       <img class="front-face" src="img/9.png" alt="Backbone" />
       <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
-    </div>
+    </div> 
 
     <div class="memory-card" data-framework="react">
       <img class="front-face" src="img/10.png" alt="React" />
@@ -79,11 +80,8 @@
       <img class="front-face" src="img/10.png" alt="React" />
       <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
     </div>
-    
-  </section>
-  </div>
+  </section> </div>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="./js/scripts2.js"></script> 
-
 </body>
 </html>
