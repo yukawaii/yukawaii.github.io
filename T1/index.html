@@ -19,9 +19,12 @@
             height: 90vh;
             max-height: 900px
         }
-        /* Стили кнопки */
+          /* Стили кнопки */
         .iksweb{display: inline-block;cursor: pointer; font-size:20px;text-decoration:none;padding:10px 20px; color:#f2f7f7;background:#354251;border-radius:26px;border:1px solid #354251;}
 .iksweb:hover{background:#1e1d54;color:#ffffff;border:1px solid #354251;transition: all 0.2s ease;}
+ /* Стили кнопки */
+ .iksweb1{display: inline-block;cursor: pointer; font-size:20px;text-decoration:none;padding:0px 0px; color:#f2f7f7;background:#202025;border-radius:0px;border:0px solid #202025;}
+.iksweb1:hover{background:#202025;color:#ffffff;border:0px solid #202025;transition: all 0.2s ease;}
         </style>
      </head>
      <body><div>
@@ -31,6 +34,7 @@
         <button class = "iksweb" onclick= "startGame()">Новая игра</button><br />
         <button class = "iksweb" onclick="share2()">Поделиться</button><br />
         <button class = "iksweb" onclick="favor1()">В избранное</button><br /> <br>
+        <button class = "iksweb1"  onclick="mutebtn()"><img id="mute" src="./mute.png" /></button> <br>
         <font color="#c9c9c9">Используйте клавиши <br /> WASD <br />для перемещения фигур.<br /> Клавиша W вращает их. </font> </div>
      </body>
     <body class="parent" style="background: #202025; font-family: 'Russo One', sans-serif;" >
@@ -39,7 +43,6 @@
             <canvas id="tetris" width="480" height="900" style="border-radius: 5px"></canvas>
             <script src="tetris.js"></script>
             <div>
-     
         </div></div>
     </body>
 </html>

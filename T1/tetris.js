@@ -24,7 +24,6 @@ highspinsSound.volume = .02
 levelupSound.volume = .1
 
 
-
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     if (w < 2 * r) r = w / 2;
     if (h < 2 * r) r = h / 2;
@@ -37,6 +36,7 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     this.closePath();
     return this;
 }
+
 function sound(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
@@ -51,6 +51,39 @@ function sound(src) {
       this.sound.pause();
     }
 }
+//проверка вкл или выкл звуки
+var mut = false;
+//выключить звуки
+function mutebtn() {
+    if (mut===false){
+    introSound.volume = .0
+    loopSound.volume = .0
+    collideSound.volume = .0
+    rotateSound.volume = .0
+    sweepSound.volume = .0
+    pauseSound.volume = .0
+    gameoverSound.volume = .0
+    highspinsSound.volume = .0
+    levelupSound.volume = .0
+    mut=true;
+    document.getElementById("mute").src = "./muteoff.png";
+}
+    // иначе - включить. Кнопка одна для вкл выкл
+    else {
+        introSound.volume = .03
+        loopSound.volume = .015
+        collideSound.volume = .04
+        rotateSound.volume = .015
+        sweepSound.volume = .25
+        pauseSound.volume = .1
+        gameoverSound.volume = .03
+        highspinsSound.volume = .02
+        levelupSound.volume = .1
+        mut = false;
+        document.getElementById("mute").src = "./mute.png";
+    }
+}
+
 function levelUp(){
     player.level++
     levelupSound.pause()
@@ -374,7 +407,7 @@ function playerRotate(dir){
             {
                 loopSound.addEventListener('ended', function() {
                     this.currentTime = 0;
-                    this.play();
+                                   this.play();
                 }, false);
             }
             loopSound.play();
@@ -483,7 +516,6 @@ document.addEventListener('keydown', event => {
 })
 
 function initAudio() {
-    
     if(gameState.introSongPlayed){
         loopSound.play();
     } else {
@@ -569,10 +601,11 @@ function endGame(){
     
     gameoverSound.pause()
     gameoverSound.currentTime = 0;
-    gameoverSound.play()
+    gameoverSound.play() 
     gameState.over = true;
     update()
 }
+
 
 function startPauseResume(){
     if(gameState.initialized){

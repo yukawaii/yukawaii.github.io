@@ -29,3 +29,4 @@ function myadd2(){
 
 
 //     <button class = "iksweb" onclick="pauseGame(); myadd2()">Пауза</button><br />*/
+
