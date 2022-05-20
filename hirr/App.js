@@ -26,7 +26,9 @@ bridge.send("VKWebAppAddToFavorites");
 .catch(error => console.log(error));
 }
 
-
+function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
 
 /*
 	<script src = "../App.js"></script>
