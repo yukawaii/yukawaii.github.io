@@ -22,6 +22,6 @@ function myadd1(){
 }
 
 function joingroup (){
-  bridge.send("VKWebAppJoinGroup", {"group_id": yugamess});
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
 
