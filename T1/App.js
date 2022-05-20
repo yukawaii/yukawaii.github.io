@@ -28,6 +28,8 @@ function myadd2(){
 .catch(error => console.log(error));
 }
 
-
+function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
 //     <button class = "iksweb" onclick="pauseGame(); myadd2()">Пауза</button><br />*/
 
