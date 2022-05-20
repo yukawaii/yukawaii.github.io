@@ -23,3 +23,6 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
