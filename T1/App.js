@@ -20,6 +20,7 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+
 function myadd2(){
   bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
