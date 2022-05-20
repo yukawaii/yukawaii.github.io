@@ -17,10 +17,9 @@ function share2(){
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
-/* function myadd1(){
+function myadd1(){
   bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-*/
