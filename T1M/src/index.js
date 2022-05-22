@@ -6,6 +6,7 @@ import App from './containers/';
 import './unit/const';
 import './control';
 import { subscribeRecord } from './unit';
+import bridge from "@vkontakte/vk-bridge";
 
 subscribeRecord(store); // 将更新的状态记录到localStorage
 
