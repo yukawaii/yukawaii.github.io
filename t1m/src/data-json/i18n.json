@@ -1,0 +1,132 @@
+{
+	"lan":["ru","cn","en","fr"],
+	"default":"ru",
+	"data":{
+		"title":{
+			"ru": "Тетрис",
+			"cn":"俄罗斯方块",
+			"en":"TETRIS",
+			"FR":"还换,没有了"
+		},
+		"github":{
+			"ru": "Гитхаб",
+			"cn": "GitHub",
+      		"en": "GitHub",
+      		"fr": "GitHub"
+		},
+		"linkTitle":{
+			"ru": "код",
+			"cn":"biubiubiu~",
+			"en":"see data source",
+			"fr":"Afficher la source des données"
+		},
+		"QRCode":{
+			"ru": "куар",
+			"cn":"贰緯碼",
+			"en":"QR code",
+			"fr":"QR code"
+		},
+		"QRNotice":{
+			"ru": "куар...",
+			"cn":"扫不扫,瓜皮",
+			"en": "Scan QR code to play with a mobile phone",
+      		"fr": "Numérisez le code QR pour jouer avec un téléphone mobile"
+		},
+		"titleCenter":{
+			"ru": "Тетрис",
+			"cn":"俄罗斯方块",
+			"en": "TETRIS",
+      		"fr": "TETRIS"
+		},
+		"point":{
+			"ru": "Очки",
+			"cn":"得分",
+			"en":"point",
+			"fr":"score"
+		},
+		"heightPoint":{
+			"ru": "Максимум",
+			"cn":"最高分",
+			"en":"Max",
+			"fr":"Max"
+		},
+		"lastRound":{
+			"ru": "Послед.раунд",
+			"cn":"上次得分",
+			"en":"Last Round",
+			"fr":"Dernier Tour"
+		},
+		"clears":{
+			"ru": "Линии",
+			"cn":"消除行",
+			"en":"Clears",
+			"fr":"Lignes"
+		},
+		"level":{
+			"ru": "Уровень",
+			"cn":"等级",
+			"en":"Level",
+			"fr":"Difficulté"	
+		},
+		"startLine":{
+			"ru": "Стартовая",
+			"cn": "起始行",
+      		"en": "Start Line",
+      		"fr": "Ligne Départ"
+		},
+		"next": {
+			"ru": "Дальше:",
+      		"cn": "下一个",
+      		"en": "Next",
+      		"fr": "Prochain"
+    	},
+    	"pause": {
+			"ru": "Пауза",
+      		"cn": "暂停",
+      		"en": "Pause",
+      		"fr": "Pause"
+    	},
+    	"sound": {
+			"ru": "Звуки",
+      		"cn": "音效",
+      		"en": "Sound",
+      		"fr": "Sonore"
+    	},
+    	"reset": {
+			"ru": "Новая игра",
+      		"cn": "重玩",
+      		"en": "Reset",
+      		"fr": "Réinitialiser"
+    	},
+    	"rotation": {
+			"ru": "Поворот",
+      		"cn": "旋转",
+      		"en": "Rotation",
+      		"fr": "Rotation"
+    	},
+    	"left": {
+			"ru": "Влево",
+      		"cn": "左移",
+      		"en": "Left",
+      		"fr": "Gauche"
+    	},
+    	"right": {
+			"ru": "Вправо",
+      		"cn": "右移",
+      		"en": "Right",
+      		"fr": "Droite"
+    	},
+    	"down": {
+			"ru": "Вниз",
+      		"cn": "下移",
+      		"en": "Down",
+      		"fr": "Bas"
+    	},
+    	"drop": {
+			"ru": "Уронить",
+      		"cn": "掉落",
+      		"en": "Drop",
+      		"fr": "Tomber"
+    	}
+	}
+}
