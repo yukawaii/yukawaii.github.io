@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
     <meta name="renderer" content="webkit">
     <meta name="description" content="使用React、Redux、Immutable制作的俄罗斯方块" />
     <meta name="keywords" content="俄罗斯方块,Tetris,React,Redux,Immuatble,JavaScript">
@@ -16,5 +17,10 @@
         <div class="loader">Загрузка...</div>
     </div>
 </div>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+<script>
+  // Sends event to client
+  vkBridge.send('VKWebAppInit');
+  </script>
 <script type="text/javascript" src="app-1.0.1.js"></script></body>
 </html>
