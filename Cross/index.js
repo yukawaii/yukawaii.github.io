@@ -1066,7 +1066,12 @@ class Sound{
         });
     }
 }
-
+function myadd2(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
 //game loop
 const update = () =>{
     stats.begin();
@@ -1123,6 +1128,7 @@ const update = () =>{
                             gameOver = true;
                             setTimeout(() => {
                                 document.getElementById("restart").style.visibility = "visible";
+                                myadd2();
                                 // if (confirm("Game Over.\nRestart?"))
                                 //     init();
                             }, 2000);
@@ -1151,6 +1157,7 @@ const update = () =>{
                             gameOver = true;
                             setTimeout(() => {
                                 document.getElementById("restart").style.visibility = "visible";
+                                myadd2();
                                 // if (confirm("Game Over.\nRestart?"))
                                 //     init();
                             }, 3000);
@@ -1191,6 +1198,7 @@ const update = () =>{
                         gameOver = true;
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
+                            myadd2();
                             // if (confirm("Game Over.\nRestart?"))
                             //     init();
                         }, 2000);
@@ -1218,6 +1226,7 @@ const update = () =>{
                         gameOver = true;
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
+                            myadd2();
                             // if (confirm("Game Over.\nRestart?"))
                             //     init();
                         }, 5000);
