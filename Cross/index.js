@@ -41,7 +41,34 @@ const firstRun = () =>{
     gameSounds = new Sound(camera);
     
 }
-
+//проверка вкл или выкл звуки
+var mut = false;
+//выключить звуки
+function mutebtn() {
+    if (mut===false){
+        gameSounds.themeSong.setVolume(0);
+        gameSounds.shred.setVolume(0);
+        gameSounds.death2.setVolume(0);
+        gameSounds.hit.setVolume(0);
+        gameSounds.buck.setVolume(0);
+           gameSounds.death.setVolume(0);
+           gameSounds.splash.setVolume(0);
+              gameSounds.shred.setVolume(0);
+    mut=true;
+}
+    // иначе - включить. Кнопка одна для вкл выкл
+    else {
+        gameSounds.themeSong.setVolume(0.25);
+        gameSounds.shred.setVolume(0.25);
+        gameSounds.death2.setVolume(0.25);
+        gameSounds.hit.setVolume(0.25);
+        gameSounds.buck.setVolume(0.25);
+           gameSounds.death.setVolume(0.25);
+           gameSounds.splash.setVolume(0.25);
+              gameSounds.shred.setVolume(0.25);
+        mut = false;
+    }
+}
 const init = () =>{
     document.getElementById("score").innerText = "Очки:0";
     document.getElementById("restart").style.visibility = "hidden";
@@ -70,8 +97,18 @@ const init = () =>{
         return lane;
     }).filter(lane => lane.index >= 0);
 
-    gameSounds.themeSong.setVolume(0.25);
+    if (mut===false){
+        gameSounds.volume = 0;
+    mut=true;
 }
+    // иначе - включить. Кнопка одна для вкл выкл
+    else {
+             gameSounds.volume = 0.25;
+        mut = false;
+    }
+}
+
+
 
 //lights up the scene
 const addLight = () =>{
@@ -1018,12 +1055,13 @@ class Sound{
             this.buck.setBuffer( buffer );
             this.buck.setLoop( false );
             this.buck.setVolume( 0.5 );
-        });
+                 });
         this.themeSong = new THREE.Audio(listener);
         audioLoader.load( 'assets/audio/katamari.mp3', buffer =>{
             this.themeSong.setBuffer( buffer );
             this.themeSong.setLoop( true );
             this.themeSong.setVolume( 0.25 );
+    
             this.themeSong.play();
         });
         this.death = new THREE.Audio(listener);
@@ -1031,6 +1069,7 @@ class Sound{
             this.death.setBuffer( buffer );
             this.death.setLoop( false );
             this.death.setVolume( 0.5 );
+
         });
         this.death2 = new THREE.Audio(listener);
         audioLoader.load( 'assets/audio/death2.wav', buffer =>{

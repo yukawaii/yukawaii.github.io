@@ -13,13 +13,23 @@
     <script src="lib/stats/stats.min.js"></script>
     <script src="lib/sweetalert/sweetalert.min.js"></script>
     <script src="app.js"></script>
+    <style>
+        /* Стили кнопки */
+        .iksweb{display: inline-block;cursor: pointer; font-size:14px;text-decoration:none;padding:4px 13px; color:#fcfcfc;background:#28821e;border-radius:37px;border:1px solid #32c734;}
+        .iksweb:hover{background:#edb668;color:#fafafa;border:1px solid #c7a732;transition: all 0.2s ease;}
+        </style>
 </head>
 <body onload = "firstRun()">
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script>
       // Sends event to client
       vkBridge.send('VKWebAppInit');
-      
+      function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
     </script>
     <div id="score"></div>
     <div id = "splash">
@@ -34,12 +44,9 @@
         </div>
         <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
         <script src="app.js"></script>
-        <div id = "play">
-            Играть
-            <button id = "pressPlay" disabled onclick = "init()"></button>
-        </div>
+        <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>        </div>
     </div>
-    <button id="restart" onclick = "init()">Играть ещё</button>
+    <button id="restart" onclick = "init()">Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Bыкл\Вкл звук</button> <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button><button id="mute" class="iksweb" onclick = "favor1()">В избранное</button></div>
     <script src="index.js"></script>
 
 </body>
