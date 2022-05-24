@@ -20,7 +20,7 @@
         </style>
             <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
-<body onload = "firstRun()">
+<body>
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script>
       // Sends event to client
@@ -37,23 +37,18 @@ function myadd2(){
   .then(data => console.log(data.result))
   .catch(error => console.log(error));
   }
+  myadd2();
     </script>
     <div id="score"><br><br></div>
     <div id = "splash">
         <div id = "title">
             Цыплёнок и дорога<br/>Вперёд
         </div>
-        <div id = "loading">
-            <div class = "main letter">Загрузка</div>
-            <div class = "period1 letter">.</div>
-            <div class = "period2 letter">.</div>
-            <div class = "period3 letter">.</div>
-        </div>
-        <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
+         <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
         <script src="app.js"></script>
         <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>        </div>
     </div>
-    <button id="restart" onclick="window.location.href = './index1.html';"></button>Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Bыкл\Вкл звук</button> <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button><button id="mute" class="iksweb" onclick = "favor1()">В избранное</button></div>
+    <button id="restart" onclick = "init()">Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Bыкл\Вкл звук</button> <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button><button id="mute" class="iksweb" onclick = "favor1()">В избранное</button></div>
     <script src="index.js"></script>
 
 </body>
