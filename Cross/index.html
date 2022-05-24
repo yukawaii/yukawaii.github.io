@@ -15,6 +15,12 @@
     <script src="app.js"></script>
 </head>
 <body onload = "firstRun()">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script>
+      // Sends event to client
+      vkBridge.send('VKWebAppInit');
+      
+    </script>
     <div id="score"></div>
     <div id = "splash">
         <div id = "title">
@@ -33,13 +39,8 @@
             <button id = "pressPlay" disabled onclick = "init()"></button>
         </div>
     </div>
-    <button id="restart" onclick = "myadd2();init()">Играть ещё</button>
+    <button id="restart" onclick = "myadd2(); init();">Играть ещё</button>
     <script src="index.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-<script>
-  // Sends event to client
-  vkBridge.send('VKWebAppInit');
-  
-</script>
+
 </body>
 </html>
