@@ -1110,12 +1110,7 @@ class Sound{
         });
     }
 }
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
+
 //game loop
 const update = () =>{
     stats.begin();
@@ -1171,7 +1166,7 @@ const update = () =>{
                             gameSounds.hit.play();
                                   gameOver = true;
                             setTimeout(() => {
-                                myadd2();
+                               
                                 document.getElementById("restart").style.visibility = "visible";
                             
                                 // if (confirm("Game Over.\nRestart?"))
@@ -1201,7 +1196,7 @@ const update = () =>{
                             gameSounds.hit.play();
                             gameOver = true;
                             setTimeout(() => {
-                                myadd2();
+                         
                                 document.getElementById("restart").style.visibility = "visible";
                                                               // if (confirm("Game Over.\nRestart?"))
                                 //     init();
@@ -1242,7 +1237,7 @@ const update = () =>{
                         chicken.fall();
                         gameOver = true;
                         setTimeout(() => {
-                              myadd2();
+                           
                             document.getElementById("restart").style.visibility = "visible";
                         
                             // if (confirm("Game Over.\nRestart?"))
