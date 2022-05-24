@@ -70,7 +70,7 @@ function mutebtn() {
     }
 }
 const init = () =>{
-    document.getElementById("score").innerText = "<br><br> Очков:0";
+    document.getElementById("score").innerText = "Очков:0";
     document.getElementById("restart").style.visibility = "hidden";
     if(document.getElementById('splash'))
         document.body.removeChild(document.getElementById('splash'));
@@ -260,7 +260,7 @@ class Chicken{
                 lane.mesh.position.z = -lane.index * cellWidth;
                 lanes.push(lane);
                 scene.add(lane.mesh);
-                document.getElementById("score").innerText = "<br> <br>Очков:" + this.maxLane;
+                document.getElementById("score").innerText = "Очков:" + this.maxLane;
             }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
