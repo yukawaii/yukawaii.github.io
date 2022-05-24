@@ -1,4 +1,6 @@
 "use strict";
+import bridge from '@vkontakte/vk-bridge';
+
 let scene, camera, renderer, orbitControl, stats;
 let clock = new THREE.Clock(), deltaTime;
 
@@ -10,6 +12,20 @@ let chicken;
 let lanes;
 let gameSounds, themeSong;
 let gameOver;
+      // Sends event to client
+      vkBridge.send('VKWebAppInit');
+      function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
+function myadd2(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
 
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
