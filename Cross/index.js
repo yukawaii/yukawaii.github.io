@@ -1156,8 +1156,9 @@ const update = () =>{
                             gameSounds.hit.play();
                             gameOver = true;
                             setTimeout(() => {
-                                document.getElementById("restart").style.visibility = "visible";
                                 myadd2();
+                                document.getElementById("restart").style.visibility = "visible";
+                            
                                 // if (confirm("Game Over.\nRestart?"))
                                 //     init();
                             }, 2000);
@@ -1185,9 +1186,9 @@ const update = () =>{
                             gameSounds.hit.play();
                             gameOver = true;
                             setTimeout(() => {
-                                document.getElementById("restart").style.visibility = "visible";
                                 myadd2();
-                                // if (confirm("Game Over.\nRestart?"))
+                                document.getElementById("restart").style.visibility = "visible";
+                                                              // if (confirm("Game Over.\nRestart?"))
                                 //     init();
                             }, 3000);
                         }
@@ -1226,8 +1227,9 @@ const update = () =>{
                         chicken.fall();
                         gameOver = true;
                         setTimeout(() => {
+                              myadd2();
                             document.getElementById("restart").style.visibility = "visible";
-                            myadd2();
+                        
                             // if (confirm("Game Over.\nRestart?"))
                             //     init();
                         }, 2000);
@@ -1254,8 +1256,9 @@ const update = () =>{
                         gameSounds.death2.play();
                         gameOver = true;
                         setTimeout(() => {
-                            document.getElementById("restart").style.visibility = "visible";
                             myadd2();
+                            document.getElementById("restart").style.visibility = "visible";
+                      
                             // if (confirm("Game Over.\nRestart?"))
                             //     init();
                         }, 5000);
