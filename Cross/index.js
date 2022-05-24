@@ -70,7 +70,7 @@ function mutebtn() {
     }
 }
 const init = () =>{
-    document.getElementById("score").innerText = "Очки:0";
+    document.getElementById("score").innerText = "Очков:0";
     document.getElementById("restart").style.visibility = "hidden";
     if(document.getElementById('splash'))
         document.body.removeChild(document.getElementById('splash'));
@@ -96,16 +96,6 @@ const init = () =>{
         scene.add(lane.mesh);
         return lane;
     }).filter(lane => lane.index >= 0);
-
-    if (mut===false){
-        gameSounds.volume = 0;
-    mut=true;
-}
-    // иначе - включить. Кнопка одна для вкл выкл
-    else {
-             gameSounds.volume = 0.25;
-        mut = false;
-    }
 }
 
 
@@ -270,7 +260,7 @@ class Chicken{
                 lane.mesh.position.z = -lane.index * cellWidth;
                 lanes.push(lane);
                 scene.add(lane.mesh);
-                document.getElementById("score").innerText = "SCORE:" + this.maxLane;
+                document.getElementById("score").innerText = "Очков:" + this.maxLane;
             }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
