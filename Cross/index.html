@@ -30,6 +30,12 @@
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
+function myadd2(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
     </script>
     <div id="score"></div>
     <div id = "splash">
