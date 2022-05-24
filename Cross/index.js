@@ -1,4 +1,5 @@
 "use strict";
+import bridge from '@vkontakte/vk-bridge';
 
 let scene, camera, renderer, orbitControl, stats;
 let clock = new THREE.Clock(), deltaTime;
@@ -1154,9 +1155,9 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
+                            myadd2();
                             gameOver = true;
                             setTimeout(() => {
-                                myadd2();
                                 document.getElementById("restart").style.visibility = "visible";
                             
                                 // if (confirm("Game Over.\nRestart?"))
@@ -1184,6 +1185,7 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
+                            myadd2();
                             gameOver = true;
                             setTimeout(() => {
                                 myadd2();
@@ -1225,6 +1227,7 @@ const update = () =>{
                 if(logsBelowChicken == 0 && chicken.getLane() == lane.index && chicken.isMoving == false){
                     if (!gameOver){
                         chicken.fall();
+                        myadd2();
                         gameOver = true;
                         setTimeout(() => {
                               myadd2();
@@ -1254,9 +1257,9 @@ const update = () =>{
                         gameSounds.themeSong.setVolume(0);
                         gameSounds.shred.play();
                         gameSounds.death2.play();
+                        myadd2();
                         gameOver = true;
                         setTimeout(() => {
-                            myadd2();
                             document.getElementById("restart").style.visibility = "visible";
                       
                             // if (confirm("Game Over.\nRestart?"))
