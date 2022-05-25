@@ -1,4 +1,4 @@
-import { myadd1 } from './App.js';
+import { myadd2 } from './App.js';
 
  const RAD = Math.PI/180;
  const scrn = document.getElementById('canvas');
@@ -14,7 +14,7 @@ import { myadd1 } from './App.js';
             bird.flap();
             break;
         case state.gameOver :
-            myadd1();
+            myadd2();
             state.curr = state.getReady;
             bird.speed = 0;
             bird.y = 100;
