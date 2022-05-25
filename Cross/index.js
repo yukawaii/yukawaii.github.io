@@ -11,7 +11,7 @@ let chicken;
 let lanes;
 let gameSounds, themeSong;
 let gameOver;
-    
+var mut = true;  
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
     stats = new Stats();
@@ -39,10 +39,9 @@ const firstRun = () =>{
 
     update();
     gameSounds = new Sound(camera);
-    
-}
+ }
 //проверка вкл или выкл звуки
-var mut = false;
+
 //выключить звуки
 function mutebtn() {
     if (mut===false){
@@ -66,7 +65,7 @@ function mutebtn() {
            gameSounds.death.setVolume(0.25);
            gameSounds.splash.setVolume(0.25);
               gameSounds.shred.setVolume(0.25);
-        mut = false;
+        mut=false;
     }
 }
 const init = () =>{
@@ -1044,13 +1043,13 @@ class Sound{
         audioLoader.load( 'assets/audio/buck.wav', buffer =>{
             this.buck.setBuffer( buffer );
             this.buck.setLoop( false );
-            this.buck.setVolume( 0.5 );
+            this.buck.setVolume( 0 );
                  });
         this.themeSong = new THREE.Audio(listener);
         audioLoader.load( 'assets/audio/katamari.mp3', buffer =>{
             this.themeSong.setBuffer( buffer );
             this.themeSong.setLoop( true );
-            this.themeSong.setVolume( 0.25 );
+            this.themeSong.setVolume( 0 );
     
             this.themeSong.play();
         });
@@ -1058,20 +1057,20 @@ class Sound{
         audioLoader.load( 'assets/audio/death.wav', buffer =>{
             this.death.setBuffer( buffer );
             this.death.setLoop( false );
-            this.death.setVolume( 0.5 );
+            this.death.setVolume( 0 );
 
         });
         this.death2 = new THREE.Audio(listener);
         audioLoader.load( 'assets/audio/death2.wav', buffer =>{
             this.death2.setBuffer( buffer );
             this.death2.setLoop( false );
-            this.death2.setVolume( 0.5 );
+            this.death2.setVolume( 0 );
         });
         this.hit = new THREE.Audio(listener);
         audioLoader.load( 'assets/audio/hit.mp3', buffer =>{
             this.hit.setBuffer( buffer );
             this.hit.setLoop( false );
-            this.hit.setVolume( 0.5 );
+            this.hit.setVolume( 0 );
             this.hit.onEnded = () =>{
                 this.hit.isPlaying = false;
                 this.death.play();
@@ -1081,7 +1080,7 @@ class Sound{
         audioLoader.load( 'assets/audio/shred.mp3', buffer =>{
             this.shred.setBuffer( buffer );
             this.shred.setLoop( false );
-            this.shred.setVolume( 0.25 );
+            this.shred.setVolume( 0 );
             // this.shred.onEnded = () =>{
             //     this.shred.isPlaying = false;
             //     this.death2.play();
@@ -1091,7 +1090,7 @@ class Sound{
         audioLoader.load( 'assets/audio/splash.mp3', buffer =>{
             this.splash.setBuffer( buffer );
             this.splash.setLoop( false );
-            this.splash.setVolume( 0.5 );
+            this.splash.setVolume( 0 );
         });
     }
 }
