@@ -1,6 +1,11 @@
 const RAD = Math.PI/180;
  const scrn = document.getElementById('canvas');
  const sctx = scrn.getContext("2d");
+ 
+  // Event handler to resize the canvas when the document view is changed
+  window.addEventListener('resize', resizeCanvas, false);
+
+
  scrn.tabIndex = 1;
  scrn.addEventListener("click",()=>{
     switch (state.curr) {
@@ -66,6 +71,7 @@ const RAD = Math.PI/180;
      die : new Audio(),
      played : false
  }
+
  const gnd = {
     sprite : new Image(),
      x : 0,
@@ -307,7 +313,7 @@ const RAD = Math.PI/180;
         this.frame = this.frame % this.tap.length;
     }
 
- };
+ }; 
 
 gnd.sprite.src="img/ground.png";
 bg.sprite.src="img/BG.png";
@@ -355,4 +361,12 @@ gameLoop();
     gnd.draw();
     UI.draw();
  }
+  //fff
+  function resizeCanvas() {
+    scrn.width = window.innerWidth;
+    scrn.height = window.innerHeight; 
+
+    draw(); 
+}
+resizeCanvas();
 
