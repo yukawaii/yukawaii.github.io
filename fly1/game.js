@@ -332,11 +332,11 @@ SFX.score.src = "sfx/score.wav"
 SFX.hit.src = "sfx/hit.wav"
 SFX.die.src = "sfx/die.wav"
 
-myadd2();
 gameLoop();
 
  function gameLoop()
  { 
+     myadd2();
      update();
      draw();
      frames++;
