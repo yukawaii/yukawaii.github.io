@@ -336,8 +336,7 @@ gameLoop();
 
  function gameLoop()
  { 
-     myadd2();
-     update();
+       update();
      draw();
      frames++;
      requestAnimationFrame(gameLoop);
