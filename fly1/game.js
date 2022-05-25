@@ -5,7 +5,6 @@ const RAD = Math.PI/180;
   // Event handler to resize the canvas when the document view is changed
   window.addEventListener('resize', resizeCanvas, false);
 
-
  scrn.tabIndex = 1;
  scrn.addEventListener("click",()=>{
     switch (state.curr) {
