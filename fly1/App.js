@@ -14,8 +14,6 @@ function share1(){
 //пригласить друзей в игру
 function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
-         .then(data => console.log(data.success))  
-        .catch(error => console.log(error));
 }
 
 function favor1(){
