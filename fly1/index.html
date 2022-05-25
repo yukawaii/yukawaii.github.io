@@ -9,8 +9,14 @@
     <link rel="stylesheet" href="style.css" > 
     <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet">
     <script src = "./App.js"></script>
+    <style>
+      /* Стили кнопки */
+      .iksweb{display: inline-block;cursor: pointer; font-size:14px;text-decoration:none;padding:4px 13px; color:#fcfcfc;background:#28821e;border-radius:37px;border:1px solid #32c734;}
+      .iksweb:hover{background:#edb668;color:#fafafa;border:1px solid #c7a732;transition: all 0.2s ease;}
+      </style>
 </head>
 <body>
+  <div><button id="mute" class="iksweb" onclick = "mutebtn()">Музыка</button> <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button><button id="mute" class="iksweb" onclick = "share1()">Рассказать</button></div>
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
         bridge.send("VKWebAppInit");
     </script>
@@ -19,27 +25,7 @@
       vkBridge.send('VKWebAppInit');
     </script>
 	<script src = "./App.js"></script>
-    <canvas id="canvas" width="607" height="500"></canvas>
+    <canvas id="canvas"></canvas>
     <script src="game.js"></script>
- <script>
-        (function() {
-          // We are resizing for mobile devices only. For other devices, the
-          // dimensions will be stuck at 800 * 600. To change the default dimensions,
-          // change the height and width of the canvas and the width of the #container
-          var win = window,
-              doc = document,
-              w = win.innerWidth,
-              h = win.innerHeight,
-              container = doc.getElementById('container'),
-              canvas = doc.getElementById('workspace');
-          
-          if( win.navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/i) ) {
-            canvas.height = h;
-            canvas.width  = w;
-            container.style.height = h+"px";
-            container.style.width = w+"px";
-          }
-        })();
-        </script>
 </body>
 </html>

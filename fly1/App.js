@@ -5,12 +5,9 @@ bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
-bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.com/app8165904"});
-}
-function share2(){
   bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Игры для быстрого запоминания катаканы!",
-    "attachments": "https://vk.com/app8165904"
+    "message": "Очень сложная и интересная игра!",
+    "attachments": "https://vk.com/app8176436"
   });
 }
 
