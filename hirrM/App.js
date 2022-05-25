@@ -26,3 +26,7 @@ function myadd1(){
 function joingroup(){
   bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
+//пригласить друзей в игру
+function infr(){
+  bridge.send("VKWebAppShowInviteBox", {})
+}
