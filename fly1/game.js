@@ -97,7 +97,7 @@ const RAD = Math.PI/180;
  const pipe = {
      top : {sprite : new Image()},
      bot : {sprite : new Image()},
-     gap:85,
+     gap:185,
      moved: true,
      pipes : [],
      draw : function(){
