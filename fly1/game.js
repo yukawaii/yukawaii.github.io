@@ -363,8 +363,8 @@ gameLoop();
  }
   //fff
   function resizeCanvas() {
-    scrn.width = window.innerWidth;
-    scrn.height = window.innerHeight; 
+    scrn.width = window.innerWidth-48;
+    scrn.height = window.innerHeight-48; 
 
     draw(); 
 }
