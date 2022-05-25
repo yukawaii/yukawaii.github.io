@@ -17,19 +17,6 @@
     <script type="text/javascript">
       // Sends event to client
       vkBridge.send('VKWebAppInit');
-
-      function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
     </script>
 	<script src = "./App.js"></script>
     <canvas id="canvas" width="607" height="500"></canvas>
