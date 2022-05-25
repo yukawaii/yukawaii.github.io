@@ -286,8 +286,7 @@ function myadd2(){
                 sctx.strokeText(this.score.curr,scrn.width/2-5,50);
                 break;
             case state.gameOver :
-                myadd2();
-                    sctx.lineWidth = "2";
+                                sctx.lineWidth = "2";
                     sctx.font = "40px Tahoma";
                     let sc = `Очки :     ${this.score.curr}`;
                     try {
@@ -333,6 +332,7 @@ SFX.score.src = "sfx/score.wav"
 SFX.hit.src = "sfx/hit.wav"
 SFX.die.src = "sfx/die.wav"
 
+myadd2();
 gameLoop();
 
  function gameLoop()
