@@ -24,7 +24,7 @@ let myArray = [];
 let interval;
 
 const myApp = [{
-    question: "<img src = '../mem/img/7.png' width='200' height='300' />",
+    question: "<img src = '../mem/img/7.png' width='250' height='250' />",
     options: ["Опоссум", "Кенгуру", "Утконос", "Тушканчик"],
     answer: 3,
     description: "Кенгуру восточный серый. Хвост служит животному опорой, когда оно стоит, и помогает балансировать при прыжках.",
