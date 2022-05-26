@@ -8,8 +8,6 @@ body {
     background-color:rgb(219, 200, 175);
 }
 
-
-
 .custom-box {
     max-width: 600px;
     max-height: 600px;
@@ -210,13 +208,13 @@ cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0
 
 .quiz-box .answer-description {
     background-color: rgb(159, 216, 162);
-    border: 2px solid white;
-    margin-top:  2px;
-    padding: 10px;
+    border: 1px solid white;
+    margin-top:  1px;
+    padding: 2px;
     border-radius: 10px;
     color: black;
     display: none;
-    font-size: larger;
+    font-size: relative;
 }
 
 .quiz-box .next-question {
