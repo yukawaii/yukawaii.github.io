@@ -68,8 +68,55 @@ const RAD = Math.PI/180;
      score : new Audio(),
      hit : new Audio(),
      die : new Audio(),
+     bgmusic: new Audio(),
      played : false
  }
+SFX.start.volume = .0;
+SFX.flap.volume = .0;
+SFX.score.volume = .0;
+SFX.hit.volume = .0;
+SFX.die.volume = .0;
+SFX.bgmusic.volume = .0;
+
+//чтобы музыка повторялась 
+if (typeof SFX.bgmusic.loop == 'boolean')
+{
+    SFX.bgmusic.loop = true;
+}
+else
+{
+    SFX.bgmusic.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+    }, false);
+}
+
+//проверка вкл или выкл звуки
+var mut = true;
+//выключить звуки
+function mutebtn() {
+    if (mut===false){
+        SFX.start.volume = .0
+        SFX.flap.volume = .0
+        SFX.score.volume = .0
+        SFX.hit.volume = .0
+        SFX.die.volume = .0
+        SFX.bgmusic.volume = .0
+    mut=true;
+    SFX.bgmusic.pause ();
+}
+    // иначе - включить. Кнопка одна для вкл выкл
+    else {
+        SFX.start.volume = .05
+        SFX.flap.volume = .05
+        SFX.score.volume = .05
+        SFX.hit.volume = .05
+        SFX.die.volume = .05
+        SFX.bgmusic.volume = .02
+        mut = false;
+        SFX.bgmusic.play();
+    }
+}
 
  const gnd = {
     sprite : new Image(),
@@ -331,6 +378,8 @@ SFX.flap.src = "sfx/flap.wav"
 SFX.score.src = "sfx/score.wav"
 SFX.hit.src = "sfx/hit.wav"
 SFX.die.src = "sfx/die.wav"
+SFX.bgmusic.src = "sfx/bgmusic.mp3"
+
 
 gameLoop();
 
