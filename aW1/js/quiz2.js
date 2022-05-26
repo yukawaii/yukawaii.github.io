@@ -25,101 +25,101 @@ let interval;
 
 const myApp = [{
     // ХА СТРОКА
-    question: "Как читается эта мора? <br> <img src = '../mem/img/26.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/26.png' width='250' height='250' />",
     options: ["СА", "ХА", "Н", "О"],
     answer: 1,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/27.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/27.png' width='250' height='250' />",
     options: ["ХИ", "Я", "СЭ", "НО"],
     answer: 0,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/28.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/28.png' width='250' height='250' />",
     options: ["ВА", "ЦУ", "ФУ", "РУ"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/29.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/29.png' width='250' height='250' />",
     options: ["СА", "ХЭ", "ЦУ", "РО"],
     answer: 1,
   /*  description: "The answer is innerHTML.", Тут можно добавить пояснения к ответу */
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/30.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/30.png' width='250' height='250' />",
     options: ["Ё", "ХО", "НУ", "МА"],
     answer: 1,
 },
 // МA-line
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/31.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/31.png' width='250' height='250' />",
     options: ["МУ", "СЭ", "РУ", "МА"],
     answer: 3,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/32.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/32.png' width='250' height='250' />",
     options: ["МА", "ВА", "МИ", "НО"],
     answer: 2,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/33.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/33.png' width='250' height='250' />",
     options: ["ТА", "ТЭ", "МУ", "КО"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/34.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/34.png' width='250' height='250' />",
     options:["НИ", "МЭ", "ЦУ", "О"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/35.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/35.png' width='250' height='250' />",
     options: ["МО", "ТО", "У", "Э"],
     answer: 0,
 },
 //  РА-line
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/36.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/36.png' width='250' height='250' />",
     options: ["Ё", "РА", "КИ", "ЦУ"],
     answer: 1,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/37.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/37.png' width='250' height='250' />",
     options: ["КА", "ТЭ", "РИ", "СИ"],
     answer: 2,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/40.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/40.png' width='250' height='250' />",
     options: ["И", "КЭ", "РУ", "О"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/38.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/38.png' width='250' height='250' />",
     options:["КА", "КЭ", "ФУ", "РЭ"],
     answer: 3,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/39.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/39.png' width='250' height='250' />",
     options: ["РО", "ТЭ", "ЦУ", "СО"],
     answer: 0,
 },
 // СТРОКА ЯЮЁ ВА О Н
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/41.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/41.png' width='250' height='250' />",
     options: ["Я", "НЭ", "Ё", "ЦУ"],
     answer: 0,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/42.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/42.png' width='250' height='250' />",
     options: ["КА", "Ю", "НУ", "И"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/43.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/43.png' width='250' height='250' />",
     options: ["Ё", "ТИ", "Ю", "ВА"],
     answer: 0,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/44.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/44.png' width='250' height='250' />",
     options:["ХА", "ВА", "ФУ", "СО"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/45.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/45.png' width='250' height='250' />",
     options: ["А", "НЭ", "О", "ТО"],
     answer: 2,
 },
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/46.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/46.png' width='250' height='250' />",
     options: ["Н", "Ю", "Я", "У"],
     answer: 0,
 }]

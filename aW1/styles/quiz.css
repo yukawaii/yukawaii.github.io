@@ -10,7 +10,7 @@ body {
 
 .custom-box {
     max-width: 600px;
-    max-height: 600px;
+    max-height: 500px;
     background-color:rgba(255, 223, 211, 0.7);
     margin: 3px auto;
     padding: 5px 4px;

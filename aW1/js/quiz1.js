@@ -26,119 +26,119 @@ let interval;
 const myApp = [{
     question: "<img src = '../mem/img/7.png' width='250' height='250' />",
     options: ["Опоссум", "Кенгуру", "Утконос", "Тушканчик"],
-    answer: 3,
+    answer: 1,
     description: "Кенгуру восточный серый. Хвост служит животному опорой, когда оно стоит, и помогает балансировать при прыжках.",
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/10.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/10.png' width='250' height='250' />",
     options: ["А", "A", "СЭ", "О"],
     answer: 1,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/9.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/9.png' width='250' height='250' />",
     options: ["НА", "И", "ЦУ", "О"],
     answer: 1,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/8.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/8.png' width='250' height='250' />",
     options: ["А", "НЭ", "У", "О"],
     answer: 2,
   /*  description: "The answer is innerHTML.", Тут можно добавить пояснения к ответу */
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/6.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/6.png' width='250' height='250' />",
     options: ["А", "Э", "НУ", "ТО"],
     answer: 1,
 },
 // KA-line
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/2.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/2.png' width='250' height='250' />",
     options: ["KO", "СЭ", "KA", "ТО"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/3.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/3.png' width='250' height='250' />",
     options: ["А", "КЭ", "КИ", "НО"],
     answer: 2,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/4.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/4.png' width='250' height='250' />",
     options: ["НА", "ТЭ", "КУ", "КО"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/5.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/5.png' width='250' height='250' />",
     options:["НИ", "КЭ", "ЦУ", "СО"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/1.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/1.png' width='250' height='250' />",
     options: ["НО", "KО", "СО", "CО"],
     answer: 1,
 },
 //  CA-line
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/11.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/11.png' width='250' height='250' />",
     options: ["СА", "ТЭ", "КИ", "ЦУ"],
     answer: 0,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/12.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/12.png' width='250' height='250' />",
     options: ["КА", "ТЭ", "НУ", "СИ"],
     answer: 3,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/13.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/13.png' width='250' height='250' />",
     options: ["ТИ", "КЭ", "СУ", "ТО"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/14.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/14.png' width='250' height='250' />",
     options:["НА", "СЭ", "ФУ", "СО"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/15.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/15.png' width='250' height='250' />",
     options: ["А", "СЭ", "CO", "TО"],
     answer: 2,
 },
 // СТРОКА ТА
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/16.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/16.png' width='250' height='250' />",
     options: ["ХА", "НЭ", "СИ", "ТА"],
     answer: 3,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/17.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/17.png' width='250' height='250' />",
     options: ["КА", "ТИ", "НУ", "КИ"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/18.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/18.png' width='250' height='250' />",
     options: ["ТИ", "ЦУ", "СУ", "НО"],
     answer: 1,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/19.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/19.png' width='250' height='250' />",
     options:["ТЭ", "КА", "ФУ", "СО"],
     answer: 0,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/20.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/20.png' width='250' height='250' />",
     options: ["СА", "ТО", "ЦУ", "ТА"],
     answer: 1,
 },
 // СТРОКА НА
 {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/21.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/21.png' width='250' height='250' />",
     options: ["НИ", "ТЭ", "СИ", "НА"],
     answer: 3,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/22.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/22.png' width='250' height='250' />",
     options: ["НИ", "НА", "СУ", "ТИ"],
     answer: 0,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/23.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/23.png' width='250' height='250' />",
     options: ["ТИ", "ЦУ", "НУ", "КУ"],
     answer: 2,
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/24.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/24.png' width='250' height='250' />",
     options:["КУ", "НЭ", "ФУ", "СЭ"],
     answer: 1,
 
 }, {
-    question: "Как читается эта мора? <br> <img src = '../mem/img/25.png' width='100' height='100' />",
+    question: "<img src = '../mem/img/25.png' width='250' height='250' />",
     options: ["НО", "СЭ", "ЦУ", "СА"],
     answer: 0,
 }
