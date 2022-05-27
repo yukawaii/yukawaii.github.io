@@ -36,3 +36,7 @@ function myadd2(){
 function joingroup(){
   bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
+//Top-table
+function top1(){
+  showLeaderboardBox({user_result:"integer"});
+}
