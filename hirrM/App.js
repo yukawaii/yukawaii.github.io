@@ -37,8 +37,10 @@ function ressend(){
       activity_id: 2,
       value: score
   })}
+
   function top1(){
-      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
-      .then(data => console.log(data.success))  
-     .catch(error => console.log(error));
-      } 
+    bridge.send("secure.addAppEvent", {activity_id: 2, value: score});
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 
