@@ -46,9 +46,9 @@ function ressend(){
     var score2;
     VK.Api.call("apps.getScore",{}, function(r) {
       if(r.response) {
-      score1=r.response[0]; }
+      score2=r.response[0]; }
       });;
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
