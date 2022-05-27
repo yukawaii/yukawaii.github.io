@@ -35,9 +35,15 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 
+var score2;
+//турнирная табличка
   function top1(){
     VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.73"});
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+        VK.Api.call("apps.getScore",{}, function(r) {
+      if(r.response) {
+      score2=(r.response); }
+      });;
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
