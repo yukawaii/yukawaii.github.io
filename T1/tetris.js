@@ -598,7 +598,7 @@ function homeScreen() {
 }
 
 //турнирная табличка
-function ressend(){
+/*function ressend(){
     bridge.send("secure.addAppEvent", {
         activity_id: 2,
         value: player.score
@@ -607,7 +607,7 @@ function ressend(){
         bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
-        }
+        } */
 
 function endGame(){
     stopSounds()
