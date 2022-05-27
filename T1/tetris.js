@@ -1,3 +1,8 @@
+//инициализация
+const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 //context.scale (20,20);
@@ -596,11 +601,19 @@ function homeScreen() {
     player.spins = 0;
     player.matrix = []
 }
+
+//турнирная табличка
 function ressend(){
     bridge.send('secure.addAppEvent', {
         activity_id: 2,
-        value: sc 
-    })};
+        value: player.score
+    })}
+    function top1(){
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        }
+
 function endGame(){
     stopSounds()
     ressend();

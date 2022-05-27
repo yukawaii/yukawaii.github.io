@@ -34,8 +34,3 @@ function joingroup(){
 //     <button class = "iksweb" onclick="pauseGame(); myadd2()">Пауза</button><br />*/
 
 //Top-table
-function top1(){
-  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: sc})
-  .then(data => console.log(data.success))  
- .catch(error => console.log(error));
-  };
