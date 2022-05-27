@@ -34,6 +34,10 @@
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
+        //пригласить друзей в игру
+function infr(){
+  bridge.send("VKWebAppShowInviteBox", {})
+}
 function myadd1(){
   bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
