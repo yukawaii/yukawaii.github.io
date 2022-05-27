@@ -35,5 +35,6 @@ function joingroup(){
 
 //Top-table
 function top1(){
-  bridge.showLeaderboardBox(user_result);
-}
+  this.bridge.send('VKWebAppShowLeaderBoardBox', {
+    user_result: userResult
+  })};

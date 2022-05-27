@@ -595,10 +595,14 @@ function homeScreen() {
     player.spins = 0;
     player.matrix = []
 }
-
+function ressend(){
+    this.bridge.send('secure.addAppEvent', {
+        activity_id: 2,
+        value: player.score 
+    })};
 function endGame(){
     stopSounds()
-    secure.addAppEvent({activity_ad: 2, value:  player.score});
+    ressend();
     gameoverSound.pause()
     gameoverSound.currentTime = 0;
     gameoverSound.play() 
