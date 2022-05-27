@@ -38,12 +38,12 @@ function ressend(){
       value: score
   })}
   function top1(){
-      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
       .then(data => console.log(data.success))  
      .catch(error => console.log(error));
       } 
   function top2(){
-            bridge.send("VKWebAppShowLeaderBoardBox", {user_result: integer})
+            bridge.send("VKWebAppShowLeaderBoardBox", {user_result: integer, global:1})
             .then(data => console.log(data.success))  
            .catch(error => console.log(error));
             } 
