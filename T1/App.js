@@ -1,4 +1,3 @@
-import { sc } from "./tetris.js"
 //инициализация
 const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
