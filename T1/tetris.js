@@ -630,5 +630,6 @@ function startPauseResume(){
  //  startPauseResume()
 
 //});
-
+var sc = player.score;
+export { sc };
 update();

@@ -1,3 +1,4 @@
+import { sc } from "./tetris.js"
 //инициализация
 const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
@@ -35,7 +36,7 @@ function joingroup(){
 
 //Top-table
 function top1(){
-  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
+  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: sc})
   .then(data => console.log(data.success))  
  .catch(error => console.log(error));
   };
