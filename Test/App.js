@@ -41,7 +41,6 @@ function ressend(){
       value: score1
   })}
 
-  var score1 = require('index');
   function top1(){
     bridge.send("secure.addAppEvent", {activity_id: 2, value: score1, global:1});
     var score2=bridge.send("apps.getScore", {userId: 0});
