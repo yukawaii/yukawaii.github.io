@@ -35,5 +35,5 @@ function joingroup(){
 
 //Top-table
 function top1(){
-  showLeaderboardBox(user_result);
+  bridge.showLeaderboardBox(user_result);
 }
