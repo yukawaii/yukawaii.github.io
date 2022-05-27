@@ -261,6 +261,7 @@ class Chicken{
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
                 score1=this.maxLane;
+                bridge.send("storage.set",{key:"score1", value:score1});
           }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
