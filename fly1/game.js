@@ -23,6 +23,7 @@ const RAD = Math.PI/180;
             pipe.pipes=[];
             UI.score.curr = 0;
             SFX.played=false;
+            secure.addAppEvent({activity_ad: 2, value: this.score.curr});
             break;
     }
  })
@@ -349,6 +350,7 @@ function mutebtn() {
                         sctx.fillText(sc,scrn.width/2-85,scrn.height/2+15);
                         sctx.strokeText(sc,scrn.width/2-85,scrn.height/2+15);
                     }
+                
                     
                 break;
         }
@@ -360,6 +362,8 @@ function mutebtn() {
     }
 
  }; 
+
+
 
 gnd.sprite.src="img/ground.png";
 bg.sprite.src="img/BG.png";
