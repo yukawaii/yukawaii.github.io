@@ -29,3 +29,14 @@ function myadd2(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+//турнирная табличка
+function ressend(){
+  bridge.send("secure.addAppEvent", {
+      activity_id: 2,
+      value: Chicken.maxLane
+  })}
+  function top1(){
+      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: Chicken.maxLane})
+      .then(data => console.log(data.success))  
+     .catch(error => console.log(error));
+      } 

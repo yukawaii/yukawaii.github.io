@@ -1149,6 +1149,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                                   gameOver = true;
+                                  ressend();
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1179,6 +1180,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
+                            ressend();
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1220,6 +1222,7 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
+                        ressend();
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1249,6 +1252,7 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
+                        ressend();
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
@@ -1265,7 +1269,17 @@ const update = () =>{
     stats.end();
     requestAnimationFrame(update);
 }
-
+//турнирная табличка
+function ressend(){
+    bridge.send("secure.addAppEvent", {
+        activity_id: 2,
+        value: Chicken.maxLane
+    })}
+    function top1(){
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: Chicken.maxLane})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        } 
 //resize
 const onPageResize = () =>{
     camera.aspect = window.innerWidth / window.innerHeight;
