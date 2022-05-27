@@ -1,5 +1,5 @@
 "use strict";
-
+export { score1 };
 let scene, camera, renderer, orbitControl, stats;
 let clock = new THREE.Clock(), deltaTime;
 
