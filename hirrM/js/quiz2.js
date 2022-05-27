@@ -321,7 +321,21 @@ function resetQuiz() {
 function quizOver() {
     nextQuestionBtn.classList.remove("show");
     seeResultBtn.classList.add("show");
+    ressend();
 }
+
+
+//турнирная табличка
+function ressend(){
+    bridge.send("secure.addAppEvent", {
+        activity_id: 2,
+        value: score
+    })}
+    function top1(){
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        } 
 
 seeResultBtn.addEventListener("click", () => {
     // quizBox.style.display = "none";
