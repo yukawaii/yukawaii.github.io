@@ -42,7 +42,7 @@ function ressend(){
   })}
 
   function top1(){
-    v.API.Request("secure.addAppEvent",{activity_id: 2, value: score1, global:1});
+    v.API.Request("secure.addAppEvent",{activity_id: 2, value: score1, global:1, v:5.131});
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
