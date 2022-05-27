@@ -1,4 +1,4 @@
-import { score1 } from './index';
+//import { score1 } from './index.js';
 //инициализация
 const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
@@ -40,7 +40,8 @@ function ressend(){
       activity_id: 2,
       value: score1
   })}
-
+  
+  var score1 = require('index');
   function top1(){
     bridge.send("secure.addAppEvent", {activity_id: 2, value: score1, global:1});
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
