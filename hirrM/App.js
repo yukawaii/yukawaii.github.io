@@ -42,8 +42,3 @@ function ressend(){
       .then(data => console.log(data.success))  
      .catch(error => console.log(error));
       } 
-  function top2(){
-            bridge.send("VKWebAppShowLeaderBoardBox", {user_result: integer, global:1})
-            .then(data => console.log(data.success))  
-           .catch(error => console.log(error));
-            } 
