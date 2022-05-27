@@ -30,3 +30,14 @@ function joingroup(){
 function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
+//турнирная табличка
+function ressend(){
+  bridge.send("secure.addAppEvent", {
+      activity_id: 2,
+      value: score
+  })}
+  function top1(){
+      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+      .then(data => console.log(data.success))  
+     .catch(error => console.log(error));
+      } 
