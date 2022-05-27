@@ -22,26 +22,6 @@
             <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
 <body onload = "firstRun()">
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
-        bridge.send("VKWebAppInit");
-    </script>
-    <script type="text/javascript">
-      // Sends event to client
-      vkBridge.send('VKWebAppInit');
-
-      function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
-    </script>
     <div id="score"><br><br></div>
     <div id = "splash">
         <div id = "title">

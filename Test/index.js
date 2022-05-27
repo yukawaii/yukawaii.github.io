@@ -260,6 +260,7 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
+                score1=this.maxLane;
           }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
@@ -1148,11 +1149,7 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
-                                  gameOver = true;
-                                  if (score1<= Chicken.maxLane){
-                                      score1=Chicken.maxLane;
-                                  bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
-                                  }
+                            gameOver = true;
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1183,10 +1180,6 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
-                            if (score1<= Chicken.maxLane){
-                                score1=Chicken.maxLane;
-                            bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
-                            }
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1228,10 +1221,6 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
-                        if (score1<= Chicken.maxLane){
-                            score1=Chicken.maxLane;
-                        bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
-                        }
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1261,10 +1250,6 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
-                        if (score1<= Chicken.maxLane){
-                            score1=Chicken.maxLane;
-                        bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
-                        }
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
