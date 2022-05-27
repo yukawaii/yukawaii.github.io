@@ -20,13 +20,12 @@
 </head>
 
 <body>
-    <script src = "../App.js"></script>
-    <script>
-     const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-      myadd1();
-  </script>
+      <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
+        bridge.send("VKWebAppInit");
+      </script>
+        <script src = "../App.js">
+            myadd1();
+      </script>
     <div class="quiz-home-box custom-box show">
         <h3>ХИРАГАНА викторина</h3> 
         <h3>Уровень 1</h3>
