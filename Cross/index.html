@@ -13,7 +13,7 @@
     <script src="lib/112.1/BufferGeometryUtils.min.js"></script>
     <script src="lib/stats/stats.min.js"></script>
     <script src="lib/sweetalert/sweetalert.min.js"></script>
-    <script src="app.js"></script>
+    <script src="App.js"></script>
     <style>
         /* Стили кнопки */
         .iksweb{display: inline-block;cursor: pointer; font-size:14px;text-decoration:none;padding:4px 13px; color:#fcfcfc;background:#28821e;border-radius:37px;border:1px solid #32c734;}
@@ -22,30 +22,6 @@
             <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 </head>
 <body onload = "firstRun()">
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
-        bridge.send("VKWebAppInit");
-    </script>
-    <script type="text/javascript">
-      // Sends event to client
-      vkBridge.send('VKWebAppInit');
-
-      function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-        //пригласить друзей в игру
-function infr(){
-  bridge.send("VKWebAppShowInviteBox", {})
-}
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
-    </script>
     <div id="score"><br><br></div>
     <div id = "splash">
         <div id = "title">
@@ -58,10 +34,13 @@ function myadd2(){
             <div class = "period3 letter">.</div>
         </div>
         <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
-        <script src="app.js"></script>
+        <script src="App.js"></script>
         <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>        </div>
     </div>
-    <button id="restart" onclick="window.location.href = './index1.html';">Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Музыка</button> <button id="mute" class="iksweb" onclick = "joingroup()">Группа</button><button class = "iksweb" onclick="infr()">Позвать друзей</button></div>
+    <button id="restart" onclick="window.location.href = './index1.html';">Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Музыка</button> 
+        <button id="mute" class="iksweb" onclick = "joingroup()">Группа</button>
+        <button class = "iksweb" onclick="top1()">Топ</button>
+        <button class = "iksweb" onclick="infr()">Позвать друзей</button></div>
     <script src="index.js"></script>
 
 </body>
