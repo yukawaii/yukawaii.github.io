@@ -35,12 +35,6 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 //турнирная табличка
-function ressend(){
-  bridge.send("secure.addAppEvent", {
-      activity_id: 2,
-      value: score1
-  })}
-
   function top1(){
     VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.73"});
     var score2;
@@ -52,3 +46,14 @@ function ressend(){
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
+
+    //past try
+    /*
+    
+  function top1(){
+    VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.73"});
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 
+    */
