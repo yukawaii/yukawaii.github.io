@@ -599,7 +599,7 @@ function homeScreen() {
 function ressend(){
     bridge.send('secure.addAppEvent', {
         activity_id: 2,
-        value: player.score 
+        value: sc 
     })};
 function endGame(){
     stopSounds()
