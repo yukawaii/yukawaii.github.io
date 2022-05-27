@@ -1,8 +1,3 @@
-//инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-
 const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 //context.scale (20,20);
