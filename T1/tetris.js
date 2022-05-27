@@ -598,7 +598,7 @@ function homeScreen() {
 
 function endGame(){
     stopSounds()
-    
+    secure.addAppEvent({activity_ad: 2, value:  player.score});
     gameoverSound.pause()
     gameoverSound.currentTime = 0;
     gameoverSound.play() 
