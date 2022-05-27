@@ -4,11 +4,6 @@ const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
-//api
-VK.init({
-  apiId: 8178502
-});
-
 //поделиться
 function share1(){
   bridge.send("VKWebAppShowWallPostBox", {
