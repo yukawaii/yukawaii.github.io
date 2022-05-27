@@ -543,6 +543,7 @@ function initAudio() {
 }
 
 function pauseGame(){
+    ressend();
     introSound.pause();
     loopSound.pause();
     gameState.paused=true
@@ -596,7 +597,7 @@ function homeScreen() {
     player.matrix = []
 }
 function ressend(){
-    this.bridge.send('secure.addAppEvent', {
+    bridge.send('secure.addAppEvent', {
         activity_id: 2,
         value: player.score 
     })};

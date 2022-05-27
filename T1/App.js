@@ -35,6 +35,7 @@ function joingroup(){
 
 //Top-table
 function top1(){
-  this.bridge.send('VKWebAppShowLeaderBoardBox', {
-    user_result: userResult
-  })};
+  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
+  .then(data => console.log(data.success))  
+ .catch(error => console.log(error));
+  };
