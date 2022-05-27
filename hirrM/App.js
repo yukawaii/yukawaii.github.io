@@ -1,7 +1,7 @@
 //инициализация
-const bridge = vkBridge.default;
+/*const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
+bridge.send("VKWebAppInit", {}); */
 
 //поделиться
 function share1(){
