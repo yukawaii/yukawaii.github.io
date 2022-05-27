@@ -604,7 +604,7 @@ function homeScreen() {
 
 //турнирная табличка
 function ressend(){
-    bridge.send('secure.addAppEvent', {
+    bridge.send("secure.addAppEvent", {
         activity_id: 2,
         value: player.score
     })}
