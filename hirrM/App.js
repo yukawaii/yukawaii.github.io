@@ -1,7 +1,7 @@
 //инициализация
-/*const bridge = vkBridge.default;
+const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {}); */
+bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
@@ -31,4 +31,14 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 //турнирная табличка
-
+//турнирная табличка
+function ressend(){
+  bridge.send("secure.addAppEvent", {
+      activity_id: 2,
+      value: score
+  })}
+  function top1(){
+      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+      .then(data => console.log(data.success))  
+     .catch(error => console.log(error));
+      } 
