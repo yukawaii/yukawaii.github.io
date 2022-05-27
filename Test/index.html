@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <link rel="shortcut icon" href="zid.png">
+    <title>Цыплёнок и дорога</title>
+    <link href="index.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="lib/112.1/three.min.js"></script>
+    <script src="lib/112.1/GLTFLoader.min.js"></script>
+    <script src="lib/112.1/OrbitControls.min.js"></script>
+    <script src="lib/112.1/BufferGeometryUtils.min.js"></script>
+    <script src="lib/stats/stats.min.js"></script>
+    <script src="lib/sweetalert/sweetalert.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+        /* Стили кнопки */
+        .iksweb{display: inline-block;cursor: pointer; font-size:14px;text-decoration:none;padding:4px 13px; color:#fcfcfc;background:#28821e;border-radius:37px;border:1px solid #32c734;}
+        .iksweb:hover{background:#edb668;color:#fafafa;border:1px solid #c7a732;transition: all 0.2s ease;}
+        </style>
+            <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+</head>
+<body onload = "firstRun()">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
+        bridge.send("VKWebAppInit");
+    </script>
+    <script type="text/javascript">
+      // Sends event to client
+      vkBridge.send('VKWebAppInit');
+
+      function joingroup(){
+  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
+function myadd2(){
+    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
+    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
+    </script>
+    <div id="score"><br><br></div>
+    <div id = "splash">
+        <div id = "title">
+            Цыплёнок и дорога<br/>Вперёд
+        </div>
+        <div id = "loading">
+            <div class = "main letter">Загрузка</div>
+            <div class = "period1 letter">.</div>
+            <div class = "period2 letter">.</div>
+            <div class = "period3 letter">.</div>
+        </div>
+        <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
+        <script src="app.js"></script>
+        <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>        </div>
+    </div>
+    <button id="restart" onclick="window.location.href = './index1.html';">Играть ещё</button><div><button id="mute" class="iksweb" onclick = "mutebtn()">Музыка</button> <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button></div>
+    <script src="index.js"></script>
+
+</body>
+</html>
