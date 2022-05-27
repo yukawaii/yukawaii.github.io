@@ -340,6 +340,7 @@ function resetQuiz() {
 function quizOver() {
     nextQuestionBtn.classList.remove("show");
     seeResultBtn.classList.add("show");
+    ressend();
 }
 
 seeResultBtn.addEventListener("click", () => {
@@ -349,6 +350,18 @@ seeResultBtn.addEventListener("click", () => {
     quizOverBox.classList.add("show");
     quizResult();
 })
+
+//турнирная табличка
+function ressend(){
+    bridge.send("secure.addAppEvent", {
+        activity_id: 2,
+        value: player.score
+    })}
+    function top1(){
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        } 
 
 startAgainQuizBtn.addEventListener("click", () => {
     quizBox.classList.add("show");
