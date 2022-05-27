@@ -355,10 +355,10 @@ seeResultBtn.addEventListener("click", () => {
 function ressend(){
     bridge.send("secure.addAppEvent", {
         activity_id: 2,
-        value: player.score
+        value: score
     })}
     function top1(){
-        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: player.score})
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } 
