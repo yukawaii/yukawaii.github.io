@@ -44,7 +44,6 @@ function ressend(){
   var score1 = require('index');
   function top1(){
     bridge.send("secure.addAppEvent", {activity_id: 2, value: score1, global:1});
-    bridge.send("secure.addAppEvent", {activity_id: 2});
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
