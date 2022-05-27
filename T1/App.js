@@ -33,3 +33,7 @@ function joingroup(){
 }
 //     <button class = "iksweb" onclick="pauseGame(); myadd2()">Пауза</button><br />*/
 
+//Top-table
+function top1(){
+  showLeaderboardBox(user_result);
+}
