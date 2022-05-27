@@ -33,10 +33,12 @@ function myadd2(){
 function ressend(){
   bridge.send("secure.addAppEvent", {
       activity_id: 2,
-      value: Chicken.maxLane
+      value: score1
   })}
+
   function top1(){
-      bridge.send("VKWebAppShowLeaderBoardBox", {user_result: Chicken.maxLane})
-      .then(data => console.log(data.success))  
-     .catch(error => console.log(error));
-      } 
+    bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 

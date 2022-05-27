@@ -120,7 +120,7 @@ const addLight = () =>{
     //scene.add(new THREE.CameraHelper(sunlight.shadow.camera));    //enable to show shadow properties in scene
     scene.add(sunlight);
 }
-
+var score1;
 //creates chicken
 class Chicken{
     constructor(size = {x: 0.63, y: 0.6, z: 0.63}){
@@ -260,6 +260,9 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
+                if (score1 <= this.maxLane){
+                score1=this.maxLane;
+                }
             }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
