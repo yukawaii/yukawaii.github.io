@@ -38,5 +38,5 @@ function joingroup(){
 }
 //Top-table
 function top1(){
-  showLeaderboardBox({user_result:"integer"});
+  showLeaderboardBox(user_result(integer));
 }
