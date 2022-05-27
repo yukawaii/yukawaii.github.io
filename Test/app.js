@@ -29,6 +29,10 @@ function myadd2(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
+//пригласить друзей в игру
+function infr(){
+  bridge.send("VKWebAppShowInviteBox", {})
+}
 //турнирная табличка
 function ressend(){
   bridge.send("secure.addAppEvent", {
