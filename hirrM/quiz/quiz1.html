@@ -1,31 +1,26 @@
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-    <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIRAGANA Quiz</title>
-    <link rel="stylesheet" href="../styles/quiz.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+	<title>Аниме мини-игры</title>
+	<link rel="stylesheet" href="../styles/quiz.css">
     <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
-    <style>BODY {
-        background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
-        background-color: #c7b39b
-       }
-  /* Стили кнопки */
-  .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
-  .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
-  </style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style type="text/css">
+	 BODY {
+	  background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b
+	 }
+/* Стили кнопки */
+.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
+.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+	</style>
 </head>
-
 <body>
-      <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
-        bridge.send("VKWebAppInit");
-      </script>
-        <script src = "../App.js">
-            myadd1();
-      </script>
+	<script src = "../App.js"></script>
+    <script>  myadd1();
+    </script>
     <div class="quiz-home-box custom-box show">
         <h3>ХИРАГАНА викторина</h3> 
         <h3>Уровень 1</h3>
