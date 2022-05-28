@@ -58,7 +58,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 
 //получение очков из вк
 bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params": {"user_id": {userid}, "v":5.1, "access_token":{token}}})
-.then(data => {console.log("Очков на вк:" + response);
+.then(response => {console.log("Очков на вк:" + response);
   // *назначение переменных*
   score2= response;
 })
