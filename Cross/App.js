@@ -52,18 +52,18 @@ token = data.access_token;
 })
 .catch(error => console.log(error)); */
 
-//получение очков из вк
-/*bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params": 
-{"user_id": userid, "v":"5.131", 
-"access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
-.then(data => {console.log("Очков на вк:" + data);
-  // *назначение переменных*
-  score2= data.response;
-})
-.catch(error => console.log(error));
-}; */
-
-
+    
+    //получение очков из вк
+    function getsc(){
+    bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+     {"user_id": userid, "v":"5.131",
+      "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
+    .then(data => {console.log("Очков на вк:" + data.response);
+      // *назначение переменных*
+      score2= data.response;
+    })
+    .catch(error => console.log(error));}
+/*
 function getsc(){
 const score2 = bridge.send("VKWebAppCallAPIMethod",
   {
@@ -76,7 +76,7 @@ const score2 = bridge.send("VKWebAppCallAPIMethod",
 );
 
 return score2;
-}
+}   */
 //отправка очков в вк
 function sendscore(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
