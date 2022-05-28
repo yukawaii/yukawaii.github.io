@@ -77,6 +77,6 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 .catch(error => console.log(error));} */
 
 function top1(){
-  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score1, "global":1})
+  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score1, "global":true})
 .then(data => console.log(data.success))  
 .catch(error => console.log(error));} 
