@@ -1095,22 +1095,6 @@ class Sound{
         });
     }
 }
-function getinfo1(){
-    bridge.send('VKWebAppGetUserInfo')
-    .then(data => {userid = data.id; console.log("data_id: " + data.id + "MY userid: " + userid);
-        // *назначение переменных*
-    })
-    .catch(error => console.log(error));
-    };
-//send score
-function sendscore1(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent_from_script", "params":
-     {"client_secret":"qp47UOdcqJmW94rKknxR",
-         "user_id": userid, "activity_id":2, "value": score1, "v": "5.131", "global":1,
-          "access_token": "a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
-    .then(data => {console.log("Ответ на добавление очков:" + data.response);
-    })
-    .catch(error => console.log(error)); }
 
 //game loop
 const update = () =>{
@@ -1166,7 +1150,6 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
-                            sendscore1();
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1197,7 +1180,6 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
-                            sendscore1();
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1239,7 +1221,6 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
-                        sendscore1();
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1269,7 +1250,6 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
-                        sendscore1();
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       

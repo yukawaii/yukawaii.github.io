@@ -34,57 +34,16 @@ function myadd2(){
 function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
-var token;
-var userid;
- var score2;
+//турнирная табличка
+function ressend(){
+  bridge.send("secure.addAppEvent", {
+      activity_id: 2,
+      value: score1
+  })}
 
-function getinfo(){
-bridge.send('VKWebAppGetUserInfo')
-.then(data => {userid = data.id; console.log("data_id: " + data.id + "MY userid: " + userid);
-    // *назначение переменных*
-})
-.catch(error => console.log(error));
-getsc();
-
-bridge.send("VKWebAppGetAuthToken", {"app_id": 8171561, "scope": "friends,status"})
-.then(data => {console.log(data.access_token);
-    // *назначение переменных*
-token = data.access_token;
-})
-.catch(error => console.log(error));}
-  
-    //получение очков из вк
- function getsc(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
-     {"user_id": userid, "v":"5.131",
-      "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
-    .then(data => {console.log("Очков на вк:" + data.response);
-      // *назначение переменных*
-   (score2 = data.response);
-      return data.response;
-    })
-    .catch(error => console.log(error));} ;
-
-//отправка очков в вк
-function sendscore(){
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-{"client_secret":"qp47UOdcqJmW94rKknxR", 
-"user_id":userid, "activity_id":2, "value":score1, "v":"5.131", "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
- "global":1}})
-.then(r => {console.log("Ответ на добавление очков:" + r.response);
-})
-.catch(error => console.log(error)); }
-
-/*
-function top1(){
-  bridge.send("VKWebAppCallAPIMethod",{"method":"apps.getLeaderboard","params":{
-    "user_result":score1,"global":1, "v":"5.131", "type":"score", "access_token":token}})
- //bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
-.then(data => {console.log(data.success);
-})  
-.catch(error => console.log(error));} */
-
-function top1(){
-  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score1, "global":1})
-.then(data => console.log(data.success))  
-.catch(error => console.log(error));}  
+  function top1(){
+    bridge.send("secure.addAppEvent", {activity_id: 2, value: score1, global:1});
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 
