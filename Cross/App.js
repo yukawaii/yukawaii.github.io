@@ -52,7 +52,7 @@ token = data.access_token;
 .catch(error => console.log(error)); */
 
 //получение очков из вк
-bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params": {"user_id": userid, "v":"5.131", "access_token":token, global:1}})
+bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params": {"user_id": userid, "v":"5.131", "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
 .then(response => {console.log("Очков на вк:" + response);
   // *назначение переменных*
   score2= response;
