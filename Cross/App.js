@@ -47,13 +47,14 @@ bridge.send('VKWebAppGetUserInfo')
 getsc();}
   
     //получение очков из вк
- function getsc(){
+ async function getsc(){
     bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
       "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
     .then(data => {console.log("Очков на вк:" + data.response);
       // *назначение переменных*
-      score2 = data.response;
+   await (score2 = data.response);
+      return data.response;
     })
     .catch(error => console.log(error));} 
 
@@ -67,7 +68,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 .catch(error => console.log(error)); }
 
 function top1(){
- getsc();
+getsc();
   bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
 .catch(error => console.log(error));}
