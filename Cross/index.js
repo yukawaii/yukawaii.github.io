@@ -1095,6 +1095,12 @@ class Sound{
         });
     }
 }
+//send score
+function sendscore(){
+    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "appevent_from_script", "params": {"user_id": {userid}, "activity_id":2, "value": {score1}, "v": "5.1", "access_token": {token}}})
+    .then(response => {console.log("Ответ на добавление очков:" + response);
+    })
+    .catch(error => console.log(error)); }
 
 //game loop
 const update = () =>{
@@ -1150,6 +1156,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
+                            sendscore();
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1180,6 +1187,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                             gameOver = true;
+                            sendscore();
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1221,6 +1229,7 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
+                        sendscore();
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1250,6 +1259,7 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
+                        sendscore();
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
