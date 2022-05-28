@@ -36,6 +36,7 @@ function infr(){
 }
 var token;
 var userid; 
+var score2;
 
 function getinfo(){
 bridge.send('VKWebAppGetUserInfo')
@@ -98,24 +99,3 @@ else {
 .then(data => console.log("Score2: " + data.success))  
 .catch(error => console.log("Score2ошибка: " + error));}
 }
-
-//турнирная табличка
-//"client_secret":"qp47UOdcqJmW94rKknxR",  
- /* function top1(){
-    VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.73"});
-        VK.Api.call("apps.getScore",{}, function(r) {
-      if(r.response) {
-      score2 = (r.response); }
-      });;
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
-    .then(data => console.log(data.success))  
-   .catch(error => console.log(error));
-    } 
-    //past try
-    
-  function top1(){
-    VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.9"});
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
-    .then(data => console.log(data.success))  
-   .catch(error => console.log(error));
-    }  */
