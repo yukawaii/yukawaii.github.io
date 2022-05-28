@@ -54,6 +54,8 @@ token = data.access_token;
 
 //отправка очков в вк
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params": {"user_id": {userid}, "activity_id":2, "value": {score1}, "v": "5.1", "access_token": {token}}})
+.then(response => {console.log("Ответ на добавление очков:" + response);
+})
 .catch(error => console.log(error));
 
 //получение очков из вк
