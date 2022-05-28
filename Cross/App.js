@@ -36,7 +36,6 @@ function infr(){
 }
 var token;
 var userid; 
-var score2;
 
 function getinfo(){
 bridge.send('VKWebAppGetUserInfo')
@@ -45,25 +44,25 @@ bridge.send('VKWebAppGetUserInfo')
 })
 .catch(error => console.log(error));
 getsc();}
-
-/*bridge.send("VKWebAppGetAuthToken", {"app_id": 8171561, "scope": "friends,status"})
-.then(data => {console.log(data.access_token);
-    // *назначение переменных*
-token = data.access_token;
-})
-.catch(error => console.log(error)); */
-
-    
+  
     //получение очков из вк
-    function getsc(){
+    /* рабочая  function getsc(){
     bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
       "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
     .then(data => {console.log("Очков на вк:" + data.response);
       // *назначение переменных*
-      score2= data.response;
+      score2 = data.response;
     })
-    .catch(error => console.log(error));}
+    .catch(error => console.log(error));}   возвращает очки в консоль верно */
+
+    const score2 = () => { bridge.send("VKWebAppCallAPIMethod", 
+    {"method": "apps.getScore", "request_id": "getscore", "params":
+    {"user_id": userid, "v":"5.131",
+     "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
+    
+  return data.response;
+};
 /*
 function getsc(){
 const score2 = bridge.send("VKWebAppCallAPIMethod",
@@ -78,6 +77,8 @@ const score2 = bridge.send("VKWebAppCallAPIMethod",
 
 return score2;
 }   */
+
+
 //отправка очков в вк
 function sendscore(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
@@ -89,7 +90,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 
 function top1(){
   sendscore();
-  getsc();
+ // getsc();
 if (typeof score2 === 'undefined' || score2 === null){
 bridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score1, "global":1})
 .then(data => console.log("Score2 андифайн. Скор1: : " + data.success))  
