@@ -63,8 +63,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "
 //отправка очков в вк
 function sendscore(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-{"client_secret":"qp47UOdcqJmW94rKknxR", 
-"service_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
+{"client_secret":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", 
 "user_id":userid, "activity_id":2, "value":score1, "v": "5.131", "access_token":token, global:1}})
 .then(response => {console.log("Ответ на добавление очков:" + response);
 })
@@ -83,6 +82,7 @@ else {
 }
 
 //турнирная табличка
+//"client_secret":"qp47UOdcqJmW94rKknxR",  
  /* function top1(){
     VK.Api.call("secure.addAppEvent",{activity_id: 2, value: score1, global:1,  v:"5.73"});
         VK.Api.call("apps.getScore",{}, function(r) {

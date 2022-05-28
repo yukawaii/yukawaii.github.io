@@ -1121,9 +1121,8 @@ function getinfo1(){
 function sendscore1(){
     getinfo1();
     bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent_from_script", "params":
-     {"client_secret":"qp47UOdcqJmW94rKknxR",
-      "service_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
-       "user_id": userid, "activity_id":2, "value": score1, "v": "5.131", "access_token": token}})
+     {"client_secret":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
+            "user_id": userid, "activity_id":2, "value": score1, "v": "5.131", "access_token": token}})
     .then(response => {console.log("Ответ на добавление очков:" + response);
     })
     .catch(error => console.log(error)); }
