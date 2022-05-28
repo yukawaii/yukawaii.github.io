@@ -67,8 +67,8 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 })
 .catch(error => console.log(error)); }
 
-async function top1(){
-  const score2= await getsc();
+function top1(){
+ score2 = getsc();
   bridge.send("VKWebAppCallAPIMethod",{"method":"VKWebAppShowLeaderBoardBox","params":{"user_result":score2,"global":1}})
  //bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
