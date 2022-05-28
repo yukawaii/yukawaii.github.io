@@ -69,7 +69,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 
 function top1(){
   sendscore();
-if (score2 != 0){
+if (typeof score2 === 'undefined' || score2 === null){
 bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
 .then(data => console.log("Score2: " + data.success))  
 .catch(error => console.log("Score2: " +error));}
