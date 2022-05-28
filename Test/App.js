@@ -70,11 +70,11 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 function top1(){
   sendscore();
 if (typeof score2 === 'undefined' || score2 === null){
-bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
+bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
 .then(data => console.log("Score2: " + data.success))  
-.catch(error => console.log("Score2: " +error));}
+.catch(error => console.log("Score2: " +error));   sendscore();}
 else {
-  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+  bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
 .then(data => console.log("Score1: " + data.success))  
 .catch(error => console.log("Score1: " + error));}
 }
