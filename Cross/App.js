@@ -54,7 +54,7 @@ getsc();}
     .then(data => {console.log("Очков на вк:" + data.response);
       // *назначение переменных*
    await (score2 = data.response);
-      return data.response;
+      return score2;
     })
     .catch(error => console.log(error));} 
 
