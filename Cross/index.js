@@ -1102,13 +1102,6 @@ function getinfo1(){
     })
     .catch(error => console.log(error));
     
-   /* bridge.send("VKWebAppGetAuthToken", {"app_id": 8171561, "scope": "friends,status"})
-    .then(data => {console.log(data.access_token);
-        // *назначение переменных*
-    token = data.access_token;
-    })
-    .catch(error => console.log(error)); */
-    
     //получение очков из вк
     bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
@@ -1118,10 +1111,9 @@ function getinfo1(){
       score2= data.response;
     })
     .catch(error => console.log(error));
-    }
+    };
 //send score
 function sendscore1(){
-    getinfo1();
     bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent_from_script", "params":
      {"client_secret":"qp47UOdcqJmW94rKknxR",
          "user_id": userid, "activity_id":2, "value": score1, "v": "5.131", "access_token": "a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
