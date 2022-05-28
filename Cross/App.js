@@ -91,12 +91,6 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 function top1(){
   sendscore();
  // getsc();
-if (typeof score2 === 'undefined' || score2 === null){
-bridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score1, "global":1})
-.then(data => console.log("Score2 андифайн. Скор1: : " + data.success))  
-.catch(error => console.log("Score2андифайношибка: " +error +"score1: " + score1));   sendscore();}
-else {
-  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score2, "global":1})
-.then(data => console.log("Score2: " + data.success))  
-.catch(error => console.log("Score2ошибка: " + error));}
-}
+  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
+.then(data => console.log(data.success))  
+.catch(error => console.log(error));}
