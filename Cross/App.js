@@ -47,7 +47,7 @@ bridge.send('VKWebAppGetUserInfo')
 getsc();}
   
     //получение очков из вк
-    /* рабочая  function getsc(){
+ function getsc(){
     bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
       "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
@@ -55,21 +55,7 @@ getsc();}
       // *назначение переменных*
       score2 = data.response;
     })
-    .catch(error => console.log(error));}   возвращает очки в консоль верно */
-
-function getsc(){
-var score2 = bridge.send("VKWebAppCallAPIMethod",
-  {
-    "method": "apps.getScore", "request_id": "getscore", "params": 
-    {
-      "user_id": userid, "v":"5.131", 
-      "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1
-    }
-  }
-);
-
-return score2;
-} 
+    .catch(error => console.log(error));} 
 
 //отправка очков в вк
 function sendscore(){
