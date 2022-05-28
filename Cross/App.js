@@ -72,11 +72,11 @@ function top1(){
 if (typeof score2 === 'undefined' || score2 === null){
 bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
 .then(data => console.log("Score2: " + data.success))  
-.catch(error => console.log("Score2: " +error));   sendscore();}
+.catch(error => console.log("Score2: " +error +"score1: " + score1));   sendscore();}
 else {
   bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
-.then(data => console.log("Score1: " + data.success))  
-.catch(error => console.log("Score1: " + error));}
+.then(data => console.log("Score2: " + data.success))  
+.catch(error => console.log("Score2ошибка: " + error));}
 }
 
 //турнирная табличка
