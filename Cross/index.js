@@ -1097,7 +1097,7 @@ class Sound{
 }
 //send score
 function sendscore(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "appevent_from_script", "params": {"user_id": {userid}, "activity_id":2, "value": {score1}, "v": "5.1", "access_token": {token}}})
+    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "appevent_from_script", "params": {"user_id": userid, "activity_id":2, "value": score1, "v": "5.1", "access_token": token}})
     .then(response => {console.log("Ответ на добавление очков:" + response);
     })
     .catch(error => console.log(error)); }
