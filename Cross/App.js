@@ -35,7 +35,7 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 var token;
-var userid; var score2;
+var userid; 
 
 function getinfo(){
 bridge.send('VKWebAppGetUserInfo')
@@ -55,13 +55,27 @@ token = data.access_token;
 bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params": 
 {"user_id": userid, "v":"5.131", 
 "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
-.then(data => {console.log("Очков на вк:" + data.response);
+.then(data => {console.log("Очков на вк:" + data);
   // *назначение переменных*
   score2= data.response;
 })
 .catch(error => console.log(error));
 };
 
+
+function getsc(){
+const score2 = bridge.send("VKWebAppCallAPIMethod",
+  {
+    "method": "apps.getScore", "request_id": "getscore", "params": 
+    {
+      "user_id": userid, "v":"5.131", 
+      "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1
+    }
+  }
+);
+
+return score2;
+}
 //отправка очков в вк
 function sendscore(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
@@ -73,6 +87,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 
 function top1(){
   sendscore();
+  getsc();
 if (typeof score2 === 'undefined' || score2 === null){
 bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
 .then(data => console.log("Score2 андифайн. Скор1: : " + data.success))  
