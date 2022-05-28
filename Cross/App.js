@@ -62,20 +62,22 @@ getsc();}
 function sendscore(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
 {"client_secret":"qp47UOdcqJmW94rKknxR", 
-"user_id":userid, "activity_id":2, "value":score1, "v": "5.131", "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
+"user_id":userid, "activity_id":2, "value":score1, "v": "5.131", "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
+ "global":1}})
 .then(r => {console.log("Ответ на добавление очков:" + r.response);
 })
 .catch(error => console.log(error)); }
 
-function top1(){
+/* function top1(){
  score2 = getsc();
-  bridge.send("VKWebAppCallAPIMethod",{"method":"VKWebAppShowLeaderBoardBox","params":{"user_result":score2,"global":1}})
+  bridge.send("VKWebAppCallAPIMethod",{"method":"VKWebAppShowLeaderBoardBox","params":{
+    "user_result":score2,"global":1, "v": "5.131"}})
  //bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
-.catch(error => console.log(error));}
+.catch(error => console.log(error));} */
 
-/* function top1(){
+function top1(){
 getsc();
   bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
-.catch(error => console.log(error));} */
+.catch(error => console.log(error));} 
