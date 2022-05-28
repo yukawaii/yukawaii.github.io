@@ -45,7 +45,7 @@ userid = data.id;
 })
 .catch(error => console.log(error));
 
-bridge.send("VKWebAppGetAuthToken", {"app_id": 8171561, "scope": "friends,status"})
+bridge.send("VKWebAppGetAuthToken", {"app_id": 8178502, "scope": "friends,status"})
 .then(data => {console.log(data.access_token);
     // *назначение переменных*
 token = data.access_token;
