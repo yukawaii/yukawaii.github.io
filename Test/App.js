@@ -75,8 +75,8 @@ bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score2, global:1})
 .catch(error => console.log(error));}
 else {
   bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
-.then(data => console.log(data.success))  
-.catch(error => console.log(error));}
+.then(data => console.log("Score1: " + data.success))  
+.catch(error => console.log("Score1: " + error));}
 }
 
 
