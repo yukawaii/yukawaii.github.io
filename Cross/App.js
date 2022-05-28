@@ -54,9 +54,9 @@ getsc();}
     .then(data => {console.log("Очков на вк:" + data.response);
       // *назначение переменных*
    (score2 = data.response);
-      return score2;
+      return data.response;
     })
-    .catch(error => console.log(error));} 
+    .catch(error => console.log(error));} ;
 
 //отправка очков в вк
 function sendscore(){
@@ -67,8 +67,15 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 })
 .catch(error => console.log(error)); }
 
-function top1(){
+async function top1(){
+  const score2= await getsc();
+  bridge.send("VKWebAppCallAPIMethod",{"method":"VKWebAppShowLeaderBoardBox","params":{"user_result":score2,"global":1}})
+ //bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
+.then(data => console.log(data.success))  
+.catch(error => console.log(error));}
+
+/* function top1(){
 getsc();
   bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
-.catch(error => console.log(error));}
+.catch(error => console.log(error));} */
