@@ -44,7 +44,14 @@ bridge.send('VKWebAppGetUserInfo')
     // *назначение переменных*
 })
 .catch(error => console.log(error));
-getsc();}
+getsc();
+
+bridge.send("VKWebAppGetAuthToken", {"app_id": 8171561, "scope": "friends,status"})
+.then(data => {console.log(data.access_token);
+    // *назначение переменных*
+token = data.access_token;
+})
+.catch(error => console.log(error));}
   
     //получение очков из вк
  function getsc(){
@@ -68,15 +75,16 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 })
 .catch(error => console.log(error)); }
 
-/* function top1(){
- score2 = getsc();
-  bridge.send("VKWebAppCallAPIMethod",{"method":"VKWebAppShowLeaderBoardBox","params":{
-    "user_result":score2,"global":1, "v": "5.131"}})
+function top1(){
+  bridge.send("VKWebAppCallAPIMethod",{"method":"apps.getLeaderboard","params":{
+    "user_result":score1,"global":1, "v":"5.131", "type":"score", "access_token":token}})
  //bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score2, "global":1})
 .then(data => console.log(data.success))  
-.catch(error => console.log(error));} */
-
-function top1(){
-  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score1, "global":true})
-.then(data => console.log(data.success))  
 .catch(error => console.log(error));} 
+
+
+/* рабочий метод, но показ только себя
+function top1(){
+  bridge.send("VKWebAppShowLeaderBoardBox", {"user_result":score1, "type":"score", "global":1})
+.then(data => console.log(data.success))  
+.catch(error => console.log(error));}   */
