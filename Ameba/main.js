@@ -217,7 +217,17 @@ function draw(time) {
       endGameParticles[i].physics()
     }
   }
-
+  function share1(){
+    bridge.send("VKWebAppShowWallPostBox", {
+    "message": "Интересная игра!",
+    "attachments": "https://vk.com/app8179835"
+    });
+    }
+    
+    function joingroup(){
+    bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+    }    
+         
   function myadd1(){
     bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
     bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
