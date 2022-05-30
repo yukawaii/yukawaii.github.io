@@ -12,9 +12,11 @@
 	  background-color: #c7b39b
 	 }
 /* Стили кнопки */
+.iksweb2{display: inline-block; position:fixed; bottom: 0; right:5%; bottom:1%;   cursor: pointer;}
 .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
 .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
+	<script type="text/javascript" src="../js/sound.js"></script>
 </head>
 <body>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -24,10 +26,17 @@
   </jl-coloringbook>
   <script src = "../App.js"></script>
 	<div class ="myclass2">
+		<button class = "iksweb"  onclick="mutebtn()">♫</button>
 		<button class = "iksweb" onclick="window.location.href = './coloring.html';">Другая картинка</button>
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Викторина</button>
     <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button> 
 	<button class = "iksweb" onclick="infr()">Пригласить друзей</button></div>
+	<div align="center">
+        <audio controls autoplay loop>
+            <source src="../images/sakuya2.mp3" type="audio/ogg">
+            <embed src="../images/sakuya2.mp3" autostart="false" loop="true" hidden="true"> 
+          </audio> 
+     </div>
 	<script>
 		myadd1();
 		</script>

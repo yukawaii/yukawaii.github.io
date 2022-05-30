@@ -34,7 +34,7 @@ function infr(){
 function ressend(){
   bridge.send("secure.addAppEvent", {
       activity_id: 2,
-      value: score
+      value: score1
   })}
 
   function top1(){
