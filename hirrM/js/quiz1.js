@@ -311,6 +311,7 @@ function nextQuestion() {
     startTimer();
 }
 var userid;
+
 function getid(){
     bridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data.id);
@@ -327,7 +328,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
    "value":score1, 
    "v": "5.1", 
    "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
-.then(data => {console.log("Ответ на добавление очков:" + data);
+.then(data => {console.log("Ответ на добавление очков:" + response);
 })
 .catch(error => console.log(error)); }
 
@@ -373,18 +374,7 @@ seeResultBtn.addEventListener("click", () => {
     quizResult();
 })
 
-//турнирная табличка
-function ressend(){
-    bridge.send("secure.addAppEvent", {
-        activity_id: 2,
-        value: score
-    })}
-    function top1(){
-        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
-        .then(data => console.log(data.success))  
-       .catch(error => console.log(error));
-        } 
-
+//
 startAgainQuizBtn.addEventListener("click", () => {
     quizBox.classList.add("show");
     quizOverBox.classList.remove("show");
