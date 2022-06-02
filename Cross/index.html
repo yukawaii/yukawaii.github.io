@@ -35,12 +35,6 @@
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
-function myadd2(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
     </script>
     <div id="score"><br><br></div>
     <div id = "splash">
@@ -55,12 +49,12 @@ function myadd2(){
         </div>
         <div id = "instructions">Используйте стрелки или пальцы<br> для перемещения</div>
         <script src="App.js"></script>
-        <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>        </div>
+        <div id = "play" class="main letter">Играть<button id = "pressPlay" disabled onclick = "init()"></button>  </div>
     </div>
     <button id="restart" onclick="window.location.href = './index1.html';">Играть ещё</button>
     <div><button id="mute" class="iksweb" onclick = "mutebtn()">Музыка</button>
-         <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button></div>
-    <button class = "iksweb" onclick="infr()">Позвать друзей</button>
+         <button id="mute" class="iksweb" onclick = "joingroup()">Подписаться</button>
+    <button class = "iksweb" onclick="infr()">Позвать друзей</button></div>
     <script src="index.js"></script>
 
 </body>
