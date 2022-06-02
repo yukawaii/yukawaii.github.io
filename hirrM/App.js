@@ -18,7 +18,6 @@ function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
 function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -30,12 +29,7 @@ function joingroup(){
 function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
-/*//турнирная табличка  было. меняю 02 06 2022
-function ressend(){
-  bridge.send("secure.addAppEvent", {
-      activity_id: 2,
-      value: score1
-  })} */
+
 var userid;
 var score1=sessionStorage.getItem("score1");
 
@@ -61,7 +55,6 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 .catch(error => console.log(error)); }
 
   function top1(){
-    bridge.send("secure.addAppEvent", {activity_id: 2, value: score1});
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
