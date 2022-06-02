@@ -1273,12 +1273,12 @@ const update = () =>{
 }
 
 function ressend(){
-    score1=this.maxLine;
+    score1=this.maxLane;
     bridge.send("secure.addAppEvent", {
         activity_id: 2,
         value: score1
     })}
-    
+
 //resize
 const onPageResize = () =>{
     camera.aspect = window.innerWidth / window.innerHeight;

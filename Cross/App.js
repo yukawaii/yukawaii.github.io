@@ -15,7 +15,6 @@ function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
 function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -24,7 +23,6 @@ function joingroup(){
   bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
 function myadd2(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -35,8 +33,9 @@ function infr(){
 }
 //турнирная табличка
 var score1;
+
 function ressend(){
-  score1=this.maxLine;
+  score1=this.maxLane;
   bridge.send("secure.addAppEvent", {
       activity_id: 2,
       value: score1
