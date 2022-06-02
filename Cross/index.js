@@ -12,18 +12,6 @@ let lanes;
 let gameSounds, themeSong;
 let gameOver;
 var mut = true;  
-var score1;
-
-function ressend(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
-   {"user_id":userid, 
-   "activity_id":2, "value":score1,
-    "v": "5.1", "access_token":a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec}})
- .then(response => {console.log("Ответ на добавление очков:" + response);
- })
- .catch(error => console.log(error)); }
-
- 
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
     stats = new Stats();
@@ -132,7 +120,7 @@ const addLight = () =>{
     //scene.add(new THREE.CameraHelper(sunlight.shadow.camera));    //enable to show shadow properties in scene
     scene.add(sunlight);
 }
-
+var score1;
 //creates chicken
 class Chicken{
     constructor(size = {x: 0.63, y: 0.6, z: 0.63}){
@@ -273,7 +261,7 @@ class Chicken{
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
                 score1=this.maxLane;
-            }
+          }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
             let midwayX = (this.model.position.x + finalX)/2;
@@ -1161,8 +1149,7 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
-                                  gameOver = true;
-                            ressend();
+                            gameOver = true;
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1192,8 +1179,7 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
-                             gameOver = true;
-                         ressend();
+                            gameOver = true;
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1235,7 +1221,6 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
-                      ressend();
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1265,7 +1250,6 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
-                     ressend();
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
