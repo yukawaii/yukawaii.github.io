@@ -310,6 +310,26 @@ function nextQuestion() {
     hideTimeUpText();
     startTimer();
 }
+var userid;
+function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+  function ressend(){
+    getid();
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+ {"user_id":userid,
+  "activity_id":2,
+   "value":score1, 
+   "v": "5.1", 
+   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+.then(data => {console.log("Ответ на добавление очков:" + data);
+})
+.catch(error => console.log(error)); }
 
 function quizResult() {
     document.querySelector(".total-questions").innerHTML = myApp.length;
@@ -318,6 +338,8 @@ function quizResult() {
     document.querySelector(".total-wrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
+    sessionStorage.setItem("score1", score);
+    ressend();
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));
