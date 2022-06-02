@@ -120,7 +120,7 @@ const addLight = () =>{
     //scene.add(new THREE.CameraHelper(sunlight.shadow.camera));    //enable to show shadow properties in scene
     scene.add(sunlight);
 }
-var score1;
+
 //creates chicken
 class Chicken{
     constructor(size = {x: 0.63, y: 0.6, z: 0.63}){
@@ -260,8 +260,7 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
-                score1=this.maxLane;
-          }
+            }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
             let midwayX = (this.model.position.x + finalX)/2;
@@ -1149,7 +1148,10 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
-                            gameOver = true;
+                                  gameOver = true;
+                                  bridge.send("secure.addAppEvent", { activity_id: 2,
+                                    value: this.maxLane
+                                });
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1179,7 +1181,10 @@ const update = () =>{
                             chicken.squish();
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
-                            gameOver = true;
+                             gameOver = true;
+                            bridge.send("secure.addAppEvent", { activity_id: 2,
+                                value: this.maxLane
+                            });
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1221,6 +1226,9 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
+                        bridge.send("secure.addAppEvent", { activity_id: 2,
+                            value: this.maxLane
+                        });
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1250,6 +1258,9 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
+                        bridge.send("secure.addAppEvent", { activity_id: 2,
+                            value: this.maxLane
+                        });
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
