@@ -63,8 +63,7 @@ function ressend1(){
         
         //отправка очков в вк
         function ressend(){
-          score1=this.maxLane;
-        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+           bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
           {"user_id":userid, 
           "activity_id":2, "value":score1,
            "v": "5.1", "access_token":a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec}})

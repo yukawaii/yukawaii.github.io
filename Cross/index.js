@@ -262,6 +262,7 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
+                score1=this.maxLane;
             }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
