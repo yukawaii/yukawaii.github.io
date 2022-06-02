@@ -14,6 +14,16 @@ let gameOver;
 var mut = true;  
 var score1;
 
+function ressend(){
+    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+   {"user_id":userid, 
+   "activity_id":2, "value":score1,
+    "v": "5.1", "access_token":a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec}})
+ .then(response => {console.log("Ответ на добавление очков:" + response);
+ })
+ .catch(error => console.log(error)); }
+
+ 
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
     stats = new Stats();
