@@ -12,6 +12,8 @@ let lanes;
 let gameSounds, themeSong;
 let gameOver;
 var mut = true;  
+var score1;
+
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
     stats = new Stats();
@@ -1149,9 +1151,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                                   gameOver = true;
-                                  bridge.send("secure.addAppEvent", { activity_id: 2,
-                                    value: this.maxLane
-                                });
+                            ressend();
                             setTimeout(() => {
                                
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1182,9 +1182,7 @@ const update = () =>{
                             gameSounds.themeSong.setVolume(0);
                             gameSounds.hit.play();
                              gameOver = true;
-                            bridge.send("secure.addAppEvent", { activity_id: 2,
-                                value: this.maxLane
-                            });
+                         ressend();
                             setTimeout(() => {
                          
                                 document.getElementById("restart").style.visibility = "visible";
@@ -1226,9 +1224,7 @@ const update = () =>{
                     if (!gameOver){
                         chicken.fall();
                         gameOver = true;
-                        bridge.send("secure.addAppEvent", { activity_id: 2,
-                            value: this.maxLane
-                        });
+                      ressend();
                         setTimeout(() => {
                            
                             document.getElementById("restart").style.visibility = "visible";
@@ -1258,9 +1254,7 @@ const update = () =>{
                         gameSounds.shred.play();
                         gameSounds.death2.play();
                         gameOver = true;
-                        bridge.send("secure.addAppEvent", { activity_id: 2,
-                            value: this.maxLane
-                        });
+                     ressend();
                         setTimeout(() => {
                             document.getElementById("restart").style.visibility = "visible";
                       
@@ -1278,6 +1272,13 @@ const update = () =>{
     requestAnimationFrame(update);
 }
 
+function ressend(){
+    score1=this.maxLine;
+    bridge.send("secure.addAppEvent", {
+        activity_id: 2,
+        value: score1
+    })}
+    
 //resize
 const onPageResize = () =>{
     camera.aspect = window.innerWidth / window.innerHeight;
