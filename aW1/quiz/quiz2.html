@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="../styles/quiz.css">
     <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
     <style>BODY {
-        background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
-        background-color: #c7b39b
+		background: url(../resources/background.png) repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b;
+	  background-size: cover;
        }
   /* Стили кнопки */
   .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
@@ -19,16 +20,14 @@
 
 <body>
     <script src = "../App.js"></script>
-    <script>
-        myadd1();
-    </script>
     <div class="quiz-home-box custom-box show">
-        <h3>КАТАКАНА викторина</h3> 
-        <h3>Уровень 2</h3>
+        <h3>Австралийская область</h3> 
+        <h3>Папуасская подобласть</h3>
         <h3>У Вас есть 10 секунд на каждый вопрос.<br>
-        21 вопрос. </h3>
+        Всего 6 вопросов. </h3>
         <button type="button" class="start-quiz-btn btn">Начать игру</button>
         <button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Другой уровень</button>
+        <button class = "iksweb" onclick="joingroup()">Группа</button>
         <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
     </div>
 
@@ -55,7 +54,7 @@
 
         </div>
         <div class="next-question">
-            <button type="button" class="next-question-btn btn">Дальше</button>
+            <button type="button" class="next-question-btn btn">Дальше</button><button class = "iksweb" onclick="window.location.href = './quiz.html';">В начало</button>
             <button type="button" class="see-result-btn btn">Посмотреть результат</button>
         </div>
         <div class="answer-description">
