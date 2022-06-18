@@ -24,104 +24,36 @@ let myArray = [];
 let interval;
 
 const myApp = [{
-    // ХА СТРОКА
-    question: "<img src = '../mem/img/26.png' width='250' height='250' />",
-    options: ["СА", "ХА", "Н", "О"],
-    answer: 1,
-}, {
-    question: "<img src = '../mem/img/27.png' width='250' height='250' />",
-    options: ["ХИ", "Я", "СЭ", "НО"],
-    answer: 0,
-}, {
-    question: "<img src = '../mem/img/28.png' width='250' height='250' />",
-    options: ["ВА", "ЦУ", "ФУ", "РУ"],
-    answer: 2,
-}, {
-    question: "<img src = '../mem/img/29.png' width='250' height='250' />",
-    options: ["СА", "ХЭ", "ЦУ", "РО"],
-    answer: 1,
-  /*  description: "The answer is innerHTML.", Тут можно добавить пояснения к ответу */
-}, {
-    question: "<img src = '../mem/img/30.png' width='250' height='250' />",
-    options: ["Ё", "ХО", "НУ", "МА"],
-    answer: 1,
-},
-// МA-line
-{
     question: "<img src = '../mem/img/31.png' width='250' height='250' />",
-    options: ["МУ", "СЭ", "РУ", "МА"],
-    answer: 3,
-}, {
-    question: "<img src = '../mem/img/32.png' width='250' height='250' />",
-    options: ["МА", "ВА", "МИ", "НО"],
-    answer: 2,
-
-}, {
+    options: ["Какаду", "Молох", "Кукабара", "Казуар"],
+    answer: 0,
+    description: "Какаду желтохохлый большой. Очень любит купаться под проливным дождем.",
+},{
     question: "<img src = '../mem/img/33.png' width='250' height='250' />",
-    options: ["ТА", "ТЭ", "МУ", "КО"],
+    options: ["Корелла", "Казуар", "Павлин", "Эму"],
+    answer: 3,
+    description: "Эму. Яйца насиживают оба родителя, но вылупившихся малышей воспитывает самец.",
+},{
+    question: "<img src = '../mem/img/32.png' width='250' height='250' />",
+    options: ["Крокодил", "Аллигатор", "Рыба-крокодил", "Рыба-пила"],
     answer: 2,
-}, {
+    description: "Рыба-крокодил. Быстро плавает, закапывается в песок при опасности.",
+},{
     question: "<img src = '../mem/img/34.png' width='250' height='250' />",
-    options:["НИ", "МЭ", "ЦУ", "О"],
-    answer: 1,
-
+    options: ["Павлин", "Попугай", "Курица", "Голубь"],
+    answer: 3,
+    description: "Голубь веероносный венценосный. Если погибает один из пары, другой остается навсегда вдовцом.",
 }, {
     question: "<img src = '../mem/img/35.png' width='250' height='250' />",
-    options: ["МО", "ТО", "У", "Э"],
+    options: ["Поссум", "Белка", "Бурундук", "Лемур"],
     answer: 0,
-},
-//  РА-line
-{
+    description: "Поссум сахарный летающий. Ориентируется даже в кромешной темноте.",
+}, {
     question: "<img src = '../mem/img/36.png' width='250' height='250' />",
-    options: ["Ё", "РА", "КИ", "ЦУ"],
-    answer: 1,
-}, {
-    question: "<img src = '../mem/img/37.png' width='250' height='250' />",
-    options: ["КА", "ТЭ", "РИ", "СИ"],
+    options: ["Шишечник", "Анемоновая", "Рыба-бабочка", "Золотая рыбка"],
     answer: 2,
-
-}, {
-    question: "<img src = '../mem/img/40.png' width='250' height='250' />",
-    options: ["И", "КЭ", "РУ", "О"],
-    answer: 2,
-}, {
-    question: "<img src = '../mem/img/38.png' width='250' height='250' />",
-    options:["КА", "КЭ", "ФУ", "РЭ"],
-    answer: 3,
-
-}, {
-    question: "<img src = '../mem/img/39.png' width='250' height='250' />",
-    options: ["РО", "ТЭ", "ЦУ", "СО"],
-    answer: 0,
-},
-// СТРОКА ЯЮЁ ВА О Н
-{
-    question: "<img src = '../mem/img/41.png' width='250' height='250' />",
-    options: ["Я", "НЭ", "Ё", "ЦУ"],
-    answer: 0,
-}, {
-    question: "<img src = '../mem/img/42.png' width='250' height='250' />",
-    options: ["КА", "Ю", "НУ", "И"],
-    answer: 1,
-
-}, {
-    question: "<img src = '../mem/img/43.png' width='250' height='250' />",
-    options: ["Ё", "ТИ", "Ю", "ВА"],
-    answer: 0,
-}, {
-    question: "<img src = '../mem/img/44.png' width='250' height='250' />",
-    options:["ХА", "ВА", "ФУ", "СО"],
-    answer: 1,
-
-}, {
-    question: "<img src = '../mem/img/45.png' width='250' height='250' />",
-    options: ["А", "НЭ", "О", "ТО"],
-    answer: 2,
-},
-{
-    question: "<img src = '../mem/img/46.png' width='250' height='250' />",
-    options: ["Н", "Ю", "Я", "У"],
-    answer: 0,
+    description: "Рыба-бабочка меднополосая. Пятно служит обманкой для хищников, считающих, что это глаз рыбы.",
+  /*  description: "The answer is innerHTML.", Тут можно добавить пояснения к ответу */
 }]
 
 
