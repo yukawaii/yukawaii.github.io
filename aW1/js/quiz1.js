@@ -366,6 +366,7 @@ function quizResult() {
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
     sessionStorage.setItem("score1", score);
+    sendscore();
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));

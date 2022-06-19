@@ -23,6 +23,14 @@
 	<script src = "./App.js"></script>
 	<script>
 		getinfo();
+		bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
+  "user_id":userid, "activity_id":2, "value":1, "v":"5.131",
+   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
+   "global":1}})
+  .then(r => {console.log("Ответ на добавление очков:" + r.response);
+  })
+  .catch(error => console.log(error));
 	</script>
 	<div class ="myclass1">
 		<br> 

@@ -52,7 +52,7 @@ function getinfo(){
    function getsc(){
       bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
-        "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec", global:1}})
+        "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a", global:1}})
       .then(data => {console.log("Очков на вк:" + data.response);
         // *назначение переменных*
      (score2 = data.response);
@@ -68,11 +68,11 @@ function getinfo(){
     var scorsum= score1+score2;
     sessionStorage.setItem("scorsum", scorsum);
   bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"qp47UOdcqJmW94rKknxR", 
+  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
   "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
-   "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
+   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
    "global":1}})
-  .then(r => {console.log("Ответ на добавление очков:" + r.response);
+   .then(data => {console.log("Ответ на добавление очков:" + data.response);
   })
   .catch(error => console.log(error)); }
 
