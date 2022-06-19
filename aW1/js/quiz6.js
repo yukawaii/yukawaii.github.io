@@ -277,6 +277,7 @@ function quizResult() {
     document.querySelector(".total-wrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
+    sessionStorage.setItem("score1", score);
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));

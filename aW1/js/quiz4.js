@@ -42,7 +42,7 @@ const myApp = [
         description: "Крайт ужевидный морской проводит большую часть жизни в воде, но часто выходит на сушу.",
     },{
         question: "<img src = '../mem/img/56.png' width='250' height='250' />",
-        options: ["Горлица", "Петроика", "Кукушка", "Казуар"],
+        options: ["Горлица", "Петроика", "Дюгонь", "Казуар"],
         answer: 0,
         description: "Горлица зебровая полосатая. Любит траву и различные семена растений, поедает небольших насекомых.",
     },{
@@ -231,6 +231,7 @@ function quizResult() {
     document.querySelector(".total-wrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
+    sessionStorage.setItem("score1", score);
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));

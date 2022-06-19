@@ -19,7 +19,6 @@ bridge.send("VKWebAppAddToFavorites");
 }
 
 function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
   bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
@@ -39,15 +38,17 @@ var userid;
 function getinfo(){
   bridge.send('VKWebAppGetUserInfo')
   .then(data => {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  sessionStorage.setItem("userid", userid);
       // *назначение переменных*
       return userid;
+      
   })
   .catch(error => console.log(error));
  // getsc();
   
 }
     
-  /*    //получение очков из вк
+     //получение очков из вк
    function getsc(){
       bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
@@ -57,14 +58,31 @@ function getinfo(){
      (score2 = data.response);
         return data.response;
       })
-      .catch(error => console.log(error));} ; */
+      .catch(error => console.log(error));} 
   
   //отправка очков в вк
   function sendscore(){
+    getsc();
+    var userid = sessionStorage.getItem('userid');
+    var score1 = sessionStorage.getItem('score1');
+    var scorsum= score1+score2;
+    sessionStorage.setItem("scorsum", scorsum);
   bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
   {"client_secret":"qp47UOdcqJmW94rKknxR", 
-  "user_id":userid, "activity_id":2, "value":score1, "v":"5.131", "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
+  "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
+   "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
    "global":1}})
   .then(r => {console.log("Ответ на добавление очков:" + r.response);
   })
   .catch(error => console.log(error)); }
+
+  //доска топ
+
+  function showLeaderBoard(scorsum)
+{
+  var scorsum = sessionStorage.getItem('scorsum');
+	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
+         .then(data => console.log(data.success))  
+         .catch(error => console.log(error));
+}
+

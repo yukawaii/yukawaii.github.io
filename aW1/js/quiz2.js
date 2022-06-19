@@ -30,7 +30,7 @@ const myApp = [{
     description: "Какаду желтохохлый большой. Очень любит купаться под проливным дождем.",
 },{
     question: "<img src = '../mem/img/33.png' width='250' height='250' />",
-    options: ["Корелла", "Казуар", "Павлин", "Эму"],
+    options: ["Корелла", "Казуар", "Дюгонь", "Эму"],
     answer: 3,
     description: "Эму. Яйца насиживают оба родителя, но вылупившихся малышей воспитывает самец.",
 },{
@@ -231,6 +231,7 @@ function quizResult() {
     document.querySelector(".total-wrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
+    sessionStorage.setItem("score1", score);
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));

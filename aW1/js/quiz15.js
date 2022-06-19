@@ -26,68 +26,83 @@ let interval;
 const myApp = [
  
     {
-        question: "<img src = '../mem/img/98.png' width='250' height='250' />",
-        options: ["Чайка", "Казарка", "Перепёлка", "Буревестник"],
-        answer: 3,
-        description: "Буревестник средиземноморский. Ныряет на глубину 15 м, но плохо передвигается по суше, опираясь на грудь и крылья",
+        question: "<img src = '../mem/img/125.png' width='250' height='250' />",
+        options: ["", "Казарка", "Сизоворонка", "Буревестник"],
+        answer: 0,
+        description: "",
     }, {
-        question: "<img src = '../mem/img/99.png' width='250' height='250' />",
-        options: ["Черепаха морская", "Тортилла", "Средиземноморская", "Береговая черепаха"],
-        answer: 2,
-        description: "Черепаха средиземноморская. Ночью и днем спит, прячась между камнями или зарывшись в песок. Зимой впадает в спячку",
-    },{
-        question: "<img src = '../mem/img/100.png' width='250' height='250' />",
-        options: ["Каракатица", "Морской конёк", "Кальмар", "Креветка"],
-        answer: 0,
-        description: "Каракатица обыкновенная. Каждый плавник работает сам по себе,поэтому она передвигается немного боком.",
-    },{
-        question: "<img src = '../mem/img/101.png' width='250' height='250' />",
-        options: ["Сокол", "Ястреб", "Кукушка", "Снегирь"],
-        answer: 0,
-        description: "Сокол средиземноморский. Действуют сообща: одна птица пугает добычу, а другая ловит ее на лету.",
-    },{
-        question: "<img src = '../mem/img/102.png' width='250' height='250' />",
-        options: ["Пума", "Олень", "Лань", "Антилопа"],
-        answer: 2,
-        description: "Лань. В отдельных частях ареала встречаются совершенно темные или, напротив, практически белые лани.",
-    },{
-        question: "<img src = '../mem/img/103.png' width='250' height='250' />",
-        options: ["Камбала", "Спинорог", "Скат", "Манта"],
+        question: "<img src = '../mem/img/126.png' width='250' height='250' />",
+        options: ["Капибара", "Верблюд", "Лама", "Альпака"],
         answer: 1,
-        description: "Спинорог серый. . В составе первого спинного плавника есть три колючих луча для обороны, напоминающих рога",
+        description: ".",
+    },{
+        question: "<img src = '../mem/img/127.png' width='250' height='250' />",
+        options: ["Омар чёрный", "Морской краб", "Скорпион", "Рак-убийца"],
+        answer: 2,
+        description: ".",
+    },{
+        question: "<img src = '../mem/img/128.png' width='250' height='250' />",
+        options: ["Кеклик", "Казарка", "Кукушка", "Утка-мандаринка"],
+        answer: 0,
+        description: ".",
+    },{
+        question: "<img src = '../mem/img/129.png' width='250' height='250' />",
+        options: ["Пони", "Олень", "Лошадь", "Антилопа"],
+        answer: 1,
+        description: ". ",
+    },{
+        question: "<img src = '../mem/img/130.png' width='250' height='250' />",
+        options: [" паук", " домовый", "", "Мухоед"],
+        answer: 2,
+        description: "",
     },
     {
-        question: "<img src = '../mem/img/104.png' width='250' height='250' />",
-        options: ["Тигр", "Пума", "Пантера", "Леопард"],
+        question: "<img src = '../mem/img/131.png' width='250' height='250' />",
+        options: ["", "Колпица", "Ибис", "Цапля"],
+        answer: 0,
+        description: "",
+    },
+    {
+        question: "<img src = '../mem/img/132.png' width='250' height='250' />",
+        options: ["Лис рыжий", "Волк красный", "Лис пушистый", "Волк рыжий"],
+        answer: 1,
+        description: " ",
+    },
+    {
+        question: "<img src = '../mem/img/118.png' width='250' height='250' />",
+        options: ["Лягушка", "Жаба", "Чесночница", "Песочница"],
         answer: 3,
-        description: "Леопард. Охотятся ночью, поодиночке, выслеживая жертву из засады.",
-    },
-    {
-        question: "<img src = '../mem/img/105.png' width='250' height='250' />",
-        options: ["Цапля", "Фламинго", "Журавль", "Аист"],
-        answer: 1,
-        description: "Фламинго обыкновенный. Ноги без перьев мёрзнут, поэтому поднимает то одну, то другую ногу.",
-    },
-    {
-        question: "<img src = '../mem/img/106.png' width='250' height='250' />",
-        options: ["Уж", "Черепаха", "Полоз", "Гюрза"],
-        answer: 2,
-        description: "Полоз эскулапов. Укус не смертелен, но весьма болезнен.",
+        description: "",
     },{
-        question: "<img src = '../mem/img/107.png' width='250' height='250' />",
-        options: ["Орбис", "Ибис", "Ирис", "Катарсис"],
-        answer: 1,
-        description: "Ибис священный. Охотится на других птиц, поедает их яйца. Врагов нет.",
-    },{
-        question: "<img src = '../mem/img/108.png' width='250' height='250' />",
-        options: ["Мышь", "Тушканчик", "Белка-летяга", "Лисица фенек"],
-        answer: 3,
-        description: "Лисица фенек ведёт ночной образ жизни. Может прыгать на высоту 70 сантиметров",
-    },{
-        question: "<img src = '../mem/img/109.png' width='250' height='250' />",
-        options: ["Скарабей", "Колорад", "Жук-навозник", "Майский жук"],
+        question: "<img src = '../mem/img/119.png' width='250' height='250' />",
+        options: ["Ибис", "Колпица", "Журавль", "Цапля"],
         answer: 0,
-        description: "Скарабей священный. Основное занятие — скатывание шариков навоза (еда скарабея). ",
+        description: "",
+    },{
+        question: "<img src = '../mem/img/120.png' width='250' height='250' />",
+        options: ["Дикая кошка", "Лис серый", "Песец", "Манул"],
+        answer: 3,
+        description: "",
+    },{
+        question: "<img src = '../mem/img/121.png' width='250' height='250' />",
+        options: ["Гюрза", "Уж", "Полоз", "Кобра"],
+        answer: 2,
+        description: "",
+    },{
+        question: "<img src = '../mem/img/122.png' width='250' height='250' />",
+        options: ["Ястреб", "Сокол", "Бородач", "Орёл"],
+        answer: 1,
+        description: ".",
+    },{
+        question: "<img src = '../mem/img/123.png' width='250' height='250' />",
+        options: ["Волк", "Шакал", "Лис", "Собака динго"],
+        answer: 3,
+        description: "а",
+    },{
+        question: "<img src = '../mem/img/124.png' width='250' height='250' />",
+        options: ["Саранча", "Кузнечик", "Стрекоза", "Светлячок"],
+        answer: 0,
+        description: "",
     }
     ]
   
@@ -266,6 +281,7 @@ function quizResult() {
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
     sessionStorage.setItem("score1", score);
+    sendscore();
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));
