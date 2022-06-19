@@ -21,29 +21,41 @@
 </head>
 <body>
 	<script src = "./App.js"></script>
-	<script>
-		getinfo();
-		bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
-  "user_id":userid, "activity_id":2, "value":1, "v":"5.131",
-   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
-   "global":1}})
-  .then(r => {console.log("Ответ на добавление очков:" + r.response);
-  })
-  .catch(error => console.log(error));
-	</script>
 	<div class ="myclass1">
 		<br> 
-		<h3> Попробуй угадать всех животных! </h3> 
-		<button class = "iksweb1" onclick="window.location.href = './quiz/quiz.html';">Викторина</button><br>
+		<h3>Другие игры</h3> 
+
+		<button class = "iksweb" onclick="mo()">Весёлая мошка</button>
+		<button class = "iksweb" onclick="tsipa()">Цыплёнок и дорога</button>
+		<button class = "iksweb" onclick="hit()">Хитрикс</button>
+		<button class = "iksweb" onclick="ameba()">Амёба: эволюция</button>
+		<button class = "iksweb" onclick="jK()">Японския язык: катакана</button>
+		<button class = "iksweb" onclick="jH()">Японския язык: хирагана</button>
 			<button class = "iksweb" onclick="joingroup()">Подписаться</button>
-		<button class = "iksweb" onclick="share2()">Поделиться</button>
-		<button class = "iksweb" onclick="infr()">Пригласить друзей</button>
-		<button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button><br>
-		<h3>Они поделены по ареалу обитания. Выбери область мира, а потом уровень игры. На каждом уровне ты узнаешь много нового и интересного про животных!</h3>
+		<button class = "iksweb" onclick="window.location.href = './index.html';">В начало</button><br>
 	</div>
 	<script type="text/javascript">
-		var score1;
+	function mo(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8176436, "location": "vk.com/app8176436"});
+	}
+/*	function aW(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8177204, "location": "vk.com/app8177204"});
+	} */
+	function tsipa(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8171561, "location": "vk.com/crosstheroad"});
+	}
+	function hit(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8176436, "location": "vk.com/hitrixx"});
+	}
+	function ameba(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8179835, "location": "vk.com/amebae"});
+	}
+	function jK(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8165904, "location": "vk.com/katakana_jp"});
+	}
+	function jH(){
+		bridge.send("VKWebAppOpenApp", {"app_id": 8165024, "location": "vk.com/hiragana_jp"});
+	}
 		</script>
 </body>
 </html>
