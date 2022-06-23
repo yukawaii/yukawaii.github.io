@@ -22,6 +22,9 @@
 <body>
     <script src = "../App.js"></script>
     <script>
+        const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
         myAdd1();
     </script>
     <div class="quiz-home-box custom-box show">
