@@ -34,7 +34,7 @@
         <h3>У Вас есть 10 секунд на каждый вопрос.<br>
         12 вопросов. </h3>
         <button type="button" class="start-quiz-btn btn">Начать игру</button>
-        <button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Другой уровень</button>
+       <button class = "iksweb" onclick="lev0()">Другой уровень</button>
         <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
         <button class = "iksweb" onclick="joingroup()">Подписаться</button>
     </div>
@@ -85,7 +85,12 @@
     </div>
 
     <script src="../js/quiz3.js"></script>
-  
+      <script>
+        function lev0(){
+            myadd1();
+            window.location.href = '../quiz/quiz.html';
+        }
+    </script>
 </body>
 
 </html>
