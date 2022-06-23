@@ -25,6 +25,11 @@
         const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
+function myAdd1(){
+  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
         myAdd1();
     </script>
         <div align="center">
