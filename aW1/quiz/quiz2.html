@@ -18,7 +18,10 @@
   </style>
 </head>
 
-<body>
+<body> <script>
+	const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+	bridge.send("VKWebAppInit", {}); </script>
     <script src = "../App.js"></script>
     <div align="center">
         <audio controls loop>
