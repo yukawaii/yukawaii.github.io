@@ -21,6 +21,9 @@
 <body>
     <script src = "../App.js"></script>
     <script>
+        const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
         myAdd1();
     </script>
         <div align="center">
@@ -35,7 +38,7 @@
         9 вопросов. </h3>
         <button type="button" class="start-quiz-btn btn">Начать игру</button>
         <button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Другой уровень</button>
-        <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
+        <button class = "iksweb" onclick="infr();">Пригласить друзей</button>
     </div>
 
     <div class="quiz-box custom-box">

@@ -18,10 +18,12 @@
   </style>
 </head>
 
-<body> <script>
-	const bridge = vkBridge.default;
+<body>
+    <script>
+        const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
-	bridge.send("VKWebAppInit", {}); </script>
+bridge.send("VKWebAppInit", {});
+    </script>
     <script src = "../App.js"></script>
     <div align="center">
         <audio controls loop>
@@ -63,14 +65,13 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
         </div>
         <div class="next-question">
             <button type="button" class="next-question-btn btn">Дальше</button>
-	 <button class = "iksweb" onclick="lev1();">В начало</button>
-            <button type="button" class="see-result-btn btn">Посмотреть результат</button>
+              <button type="button" class="see-result-btn btn">Посмотреть результат</button>
         </div>
         <div class="answer-description">
 
         </div>
     </div>
-
+    <button class = "iksweb" onclick="lev1();">В начало</button>
     <div class="quiz-over-box custom-box">
         <h1>Результаты</h1>
         <h4>Всего вопросов: <span class="total-questions">3</span></h4>
@@ -89,11 +90,9 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
 <script>
     function lev1(){
         myAdd1();
-               window.location.href = '../quiz/quiz.html';
+        window.location.href = './quiz.html';
     }
 </script>
-
-
 </body>
 
 </html>
