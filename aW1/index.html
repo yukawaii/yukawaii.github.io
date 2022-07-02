@@ -25,6 +25,9 @@
 		const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
+		var userid;
+var score2;
+		 sessionStorage.setItem("score1", 0);
 		getinfo();
 		bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
   {"client_secret":"R1vw1yvDiH7viQAkPis4", 
@@ -46,6 +49,23 @@ bridge.send("VKWebAppInit", {});
         return data.response;
       })
       .catch(error => console.log(error));} ;
+		
+		//отправка очков в вк
+  function sendscore(){
+    getsc();
+    var userid = sessionStorage.getItem('userid');
+    var score1 = sessionStorage.getItem('score1');
+    var scorsum= score1+score2;
+    sessionStorage.setItem("scorsum", scorsum);
+  bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
+  "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
+   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
+   "global":1}})
+   .then(data => {console.log("Ответ на добавление очков:" + data.response);
+  })
+  .catch(error => console.log(error)); }; 
+		
 		 function showLeaderBoard(scorsum)
 {
   var scorsum = sessionStorage.getItem('scorsum');
@@ -68,6 +88,6 @@ bridge.send("VKWebAppInit", {});
 		var score1;
 		</script>
 	
-	<--! <button class = "iksweb" onclick="showLeaderBoard(scorsum);">Топ</button> -->
+<--! <button class = "iksweb" onclick="showLeaderBoard(scorsum);">Топ</button> 
 </body>
 </html>
