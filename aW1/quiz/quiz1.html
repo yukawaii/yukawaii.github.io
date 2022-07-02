@@ -21,7 +21,11 @@
 
 <body>
     <script src = "../App.js"></script>
-  
+    <script>
+        const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+    </script>
     <div align="center">
         <audio controls loop>
             <source src="../resources/bgmusic.mp3" type="audio/ogg">
@@ -35,7 +39,7 @@
         30 вопросов. </h3>
         <button type="button" class="start-quiz-btn btn">Начать игру</button>
         <button class = "iksweb" onclick="joingroup()">Группа</button>
-  <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
+   <button class = "iksweb" onclick="lev1();">Другой уровень</button>
         <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
     </div>
 
@@ -85,7 +89,17 @@
     </div>
 
     <script src="../js/quiz1.js"></script>
- 
+ <script>
+    function myAdd1(){
+  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+    function lev1(){
+        
+        window.location.href = '../quiz/quiz.html';
+    }
+</script>
 </body>
 
 </html>
