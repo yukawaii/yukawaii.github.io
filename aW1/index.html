@@ -67,7 +67,7 @@ var score2; var scorsum;
   })
   .catch(error => console.log(error)); }; 
 		
-		 function showLeaderBoard(scorsum)
+		 function showLeaderBoard()
 {
   var scorsum = sessionStorage.getItem('scorsum');
 	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
