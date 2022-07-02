@@ -19,7 +19,12 @@
 </head>
 <body>
 	<script src = "../App.js"></script>
-    <script>  myadd1();
+    <script> 
+	    
+		const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+	    myadd1();
     </script>
     <div class="quiz-home-box custom-box show">
         <h3>ХИРАГАНА викторина</h3> 
