@@ -34,6 +34,25 @@ bridge.send("VKWebAppInit", {});
   .then(r => {console.log("Ответ на добавление очков:" + r.response);
   })
   .catch(error => console.log(error));
+		
+		 //получение очков из вк
+   function getsc(){
+      bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+       {"user_id": userid, "v":"5.131",
+        "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a", global:1}})
+      .then(data => {console.log("Очков на вк:" + data.response);
+        // *назначение переменных*
+     (score2 = data.response);
+        return data.response;
+      })
+      .catch(error => console.log(error));} ;
+		 function showLeaderBoard(scorsum)
+{
+  var scorsum = sessionStorage.getItem('scorsum');
+	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
+         .then(data => console.log(data.success))  
+         .catch(error => console.log(error));
+}
 	</script>
 	<div class ="myclass1">
 		<br> 
