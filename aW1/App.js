@@ -85,7 +85,7 @@ function getinfo(){
   function showLeaderBoard(scorsum)
 {
   var scorsum = sessionStorage.getItem('scorsum');
-	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
+	bridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
          .then(data => console.log(data.success))  
          .catch(error => console.log(error));
 }
