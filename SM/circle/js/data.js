@@ -1,7 +1,7 @@
 const DATA = {
     hiragana: [
         {
-            jp: 'あ',
+            "jp": 'あ',
             trad: 'A'
         },
         {

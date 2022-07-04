@@ -110,5 +110,16 @@ window.onload = () => {
  
     }
     askQuestion();
-    
+    document.getElementById("pausebut").onclick = event => {
+        const settingTimeAttack = document.getElementById("setting-time-attack").checked;
+      
+        if (settingTimeAttack) {
+        timeoutElem.style.webkitAnimationPlayState = 'paused';
+          
+      }
+  else  timeoutElem.style.webkitAnimationPlayState = 'running';
+          
+              }
+
+  
 }

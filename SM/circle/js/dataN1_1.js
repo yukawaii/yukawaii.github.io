@@ -1,0 +1,8 @@
+const DATA = {
+    kanji: [
+
+    ],
+    vocabulary: [
+
+    ]
+}

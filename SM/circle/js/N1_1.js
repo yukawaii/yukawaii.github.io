@@ -2,8 +2,8 @@ let SCORE = 0;
 
 const askQuestion = () => {
     const settingOrder = document.getElementById("setting-order").value;
-    const questionOrder = settingOrder === "question" ? "trad" : "jp";
-    const answerOrder = settingOrder === "answer" ? "trad" : "jp";
+    const questionOrder = settingOrder === "question" ? trad : jp;
+    const answerOrder = settingOrder === "answer" ? trad : jp;
 
     const possibleModes = Array.from(document.getElementsByName("setting-mode"))
         .filter(option => option.checked)
@@ -12,7 +12,7 @@ const askQuestion = () => {
     const mode = possibleModes[Math.floor(Math.random() * possibleModes.length)];
 
     const answerCount = 4;
-    const possibleAnswers = DATA[mode]
+    const possibleAnswers = DATAN1[mode]
         .sort(() => .5 - Math.random())
         .slice(0, answerCount);
     const answer = possibleAnswers[Math.floor(Math.random() * answerCount)];
@@ -44,7 +44,7 @@ const askQuestion = () => {
                 timeoutElem.style.webkitAnimationPlayState = 'paused';
                 clearTimeout(timeout);
             }
-            answerQuestion(answer["trad"], possibleAnswer["trad"]);
+            answerQuestion(answer[trad], possibleAnswer[trad]);
         }
         answersElem.appendChild(answerElem);
 
@@ -110,5 +110,16 @@ window.onload = () => {
  
     }
     askQuestion();
-    
+    document.getElementById("pausebut").onclick = event => {
+        const settingTimeAttack = document.getElementById("setting-time-attack").checked;
+      
+        if (settingTimeAttack) {
+        timeoutElem.style.webkitAnimationPlayState = 'paused';
+          
+      }
+  else  timeoutElem.style.webkitAnimationPlayState = 'running';
+          
+              }
+
+  
 }
