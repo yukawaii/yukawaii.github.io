@@ -6,65 +6,58 @@
     <title>JLPT Японский язык</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
     <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="js/App.js"></script>
 	<link rel="icon" href="favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
-    <script src="js/data.js"></script>
     <script src="js/main.js"></script>
+    <style type="text/css">
+
+        /* Стили кнопки */
+        .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:5px 5px; color:#0f0f0f;background:#FDEED9;border-radius:50px;border:6px solid #C6D8FF;}
+        .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
+        .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:5px 5px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
+        .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
+            </style>
 </head>
 
 <body oncontextmenu="return false;">
+<div style="position: flex">
+    <h3>Японский язык: кандзи + лексика <br />
+    Выберите уровень Норёку Сикэн</h3>
+<div style="position: relative; display: flex">
+<h4>Азбуки, Норёку Н5, Н4</h4>
+    <button class = "iksweb" onclick="window.location.href = './azb.html';"> Норёку Н5</button><br>
 
-    <div id="pausebut-container"> 
-    <div id="pausebut">Пауза</div> </div>
-    <!-- Settings -->
-    <div id="settings-container">
-        <div id="setting-title">Настройки</div>
-     
-        <div id="settings" style="height: 0px;">
-            <div class="option">
-                <label for="setting-order">На русском</label>
-                <select name="setting-order" id="setting-order">
-                    <option value="question">вопросы</option>
-                    <option value="answer" selected>ответы</option>
-                </select>
-            </div>
-
-            <div class="option">
-                <input type="checkbox" id="setting-hiragana" name="setting-mode" value="hiragana">
-                <label for="setting-hiragana">Хирагана</label>
-            </div>
-
-            <div class="option">
-                <input type="checkbox" id="setting-katakana" name="setting-mode" value="katakana">
-                <label for="setting-katakana">Катакана</label>
-            </div>
-
-            <div class="option">
-                <input type="checkbox" id="setting-kanji" name="setting-mode" value="kanji" checked>
-                <label for="setting-kanji">Кандзи Н5</label>
-            </div>
-
-            <div class="option">
-                <input type="checkbox" id="setting-vocabulary" name="setting-mode" value="vocabulary">
-                <label for="setting-vocabulary">Лексика Н5</label>
-            </div>
-            
-            <div class="option">
-                <input type="checkbox" id="setting-time-attack" name="setting-time-attack" value="time-attack" checked>
-                <label for="setting-time-attack">Время на ответ:</label>
-                <input type="number" id="setting-time-attack-speed" name="setting-time-attack-speed" step="1" min="1" max="10" value="5">
-                <label for="setting-time-attack-speed">сек</label>
-            </div>
-        </div>
+  
+    <button class = "iksweb" onclick="window.location.href = './N4_1.html';">Н4: уровень 1</button><br>
+    <button class = "iksweb" onclick="window.location.href = './N4_2.html';">Н4: уровень 2</button><br>
     </div>
-
-    <!-- Question -->
-    <div id="question-container">
-        <div id="score" style="opacity: 0;">X</div>
-        <div id="question" class="dark"></div>
-        <div id="answers" class="answers"></div>
+    <div style="position: relative; display: flex">
+    <h4>Норёку Н3</h4>
+        <button class = "iksweb" onclick="window.location.href = './N3_1.html';">Н3: уровень 1</button><br>
+        <button class = "iksweb" onclick="window.location.href = './N3_2.html';">Н3: уровень 2</button><br>
+        <button class = "iksweb" onclick="window.location.href = './N3_3.html';">Н3: уровень 3</button><br>
     </div>
+        <div style="position: relative; display: flex">
+        <h4>Норёку Н2</h4>
+    <button class = "iksweb" onclick="window.location.href = './N2_1.html';">Н2: уровень 1</button><br>
+    <button class = "iksweb" onclick="window.location.href = './N2_2.html';">Н2: уровень 2</button><br>
+    <button class = "iksweb" onclick="window.location.href = './N2_3.html';">Н2: уровень 3</button><br> 
+    </div>  
+        <div style="position: relative; display: flex">
+<h4>Норёку Н1</h4>
+    <button class = "iksweb" onclick="window.location.href = './N1_1.html';">Н1: уровень 1</button><br>
+    <button class = "iksweb" onclick="window.location.href = './N1_2.html';">Н1: уровень 2</button><br>
+    <button class = "iksweb" onclick="window.location.href = './N1_3.html';">Н1: уровень 3</button><br>
+</div>
+<div style="position:relative; bottom:0px;">
+    <button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button>
+<button class = "iksweb" onclick="joingroup()">Подписаться</button>
+<button class = "iksweb" onclick="share2()">Поделиться</button>
+</div>
+</div>
 </body>
 
 </html>

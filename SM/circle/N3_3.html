@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>JLPT Японский язык</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+	<link rel="icon" href="favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="js/App.js"></script>
+    <script src="js/datan3_3.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body oncontextmenu="return false;">
+    <script> myAdd();</script>
+    <div id="homebut"><input type="image" onclick="window.location.href ='./index.html';" 
+        src="./css/btn_home.png" width="70" height="65"  /></div>
+      <!-- Settings -->
+    <div id="settings-container">
+        <div id="setting-title">Настройки</div>
+     
+        <div id="settings" style="height: 0px;">
+            <div class="option">
+                <label for="setting-order">На русском</label>
+                <select name="setting-order" id="setting-order">
+                    <option value="question">вопросы</option>
+                    <option value="answer" selected>ответы</option>
+                </select>
+            </div>
+
+    <!--    <div class="option">
+                <input type="checkbox" id="setting-hiragana" name="setting-mode" value="hiragana">
+                <label for="setting-hiragana">Хирагана</label>
+            </div>
+
+            <div class="option">
+                <input type="checkbox" id="setting-katakana" name="setting-mode" value="katakana">
+                <label for="setting-katakana">Катакана</label>
+            </div>  -->
+
+            <div class="option">
+                <input type="checkbox" id="setting-kanji" name="setting-mode" value="kanji" checked>
+                <label for="setting-kanji">Кандзи Н3</label>
+            </div>
+
+            <div class="option">
+                <input type="checkbox" id="setting-vocabulary" name="setting-mode" value="vocabulary">
+                <label for="setting-vocabulary">Лексика Н3</label>
+            </div>
+            
+            <div class="option">
+                <input type="checkbox" id="setting-time-attack" name="setting-time-attack" value="time-attack" checked>
+                <label for="setting-time-attack">Время на ответ:</label>
+                <input type="number" id="setting-time-attack-speed" name="setting-time-attack-speed" step="1" min="1" max="10" value="5">
+                <label for="setting-time-attack-speed">сек</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question -->
+    <div id="question-container">
+        <div id="score" style="opacity: 0;">X</div>
+        <div id="question" class="dark"></div>
+        <div id="answers" class="answers"></div>
+    </div>
+</body>
+
+</html>
