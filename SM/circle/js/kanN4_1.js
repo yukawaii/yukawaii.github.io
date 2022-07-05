@@ -388,49 +388,49 @@ const DATA = {
     jp: "旅",
     on: "リョ",
     kun: "たび",
-    trad: "trip, travel"
+    trad: "Путешествие"
 }, {
     "category": "jlptn4",
     jp: "服",
     on: "フ",
     kun: "",
-    trad: "clothing, admit, obey, discharge"
+    trad: "Одежда"
 }, {
     "category": "jlptn4",
     jp: "夕",
     on: "セキ ユ",
     kun: "",
-    trad: "evening"
+    trad: "Вечер, сумерки"
 }, {
     "category": "jlptn4",
     jp: "借",
     on: "シャク",
     kun: "か.りる",
-    trad: "borrow, rent"
+    trad: "Боать в долг"
 }, {
     "category": "jlptn4",
     jp: "曜",
     on: "ヨ",
     kun: "",
-    trad: "weekday"
+    trad: "День недели"
 }, {
     "category": "jlptn4",
     jp: "飲",
     on: "イン オン",
     kun: "の.む -の.み",
-    trad: "drink, smoke, take"
+    trad: "Пить, напиток"
 }, {
     "category": "jlptn4",
     jp: "肉",
     on: "ニク",
     kun: "",
-    trad: "meat"
+    trad: "Мясо"
 }, {
     "category": "jlptn4",
     jp: "貸",
     on: "タイ",
     kun: "か.す か.し- かし-",
-    trad: "lend"
+    trad: "Одалживать"
 }, {
     "category": "jlptn4",
     jp: "堂",
@@ -442,13 +442,13 @@ const DATA = {
     jp: "鳥",
     on: "チョウ ト",
     kun: "",
-    trad: "bird, chicken"
+    trad: "Птичка"
 }, {
     "category": "jlptn4",
     jp: "飯",
     on: "ハン メ",
     kun: "",
-    trad: "meal, boiled rice"
+    trad: "Еда, варёный рис"
 }, {
     "category": "jlptn4",
     jp: "勉",
@@ -460,55 +460,55 @@ const DATA = {
     jp: "冬",
     on: "トウ",
     kun: "ふゆ",
-    trad: "winter"
+    trad: "Зима"
 }, {
     "category": "jlptn4",
     jp: "昼",
     on: "チュウ",
     kun: "ひる",
-    trad: "daytime, noon"
+    trad: "Полдень, днём"
 }, {
     "category": "jlptn4",
     jp: "茶",
     on: "チャ",
     kun: "",
-    trad: "tea"
+    trad: "Чай"
 }, {
     "category": "jlptn4",
     jp: "弟",
     on: "テイ ダイ デ オトウ",
     kun: "",
-    trad: "younger brother, faithful service to elders"
+    trad: "Младший брат"
 }, {
     "category": "jlptn4",
     jp: "牛",
     on: "ギュウ ウ",
     kun: "",
-    trad: "cow"
+    trad: "Корова, бык"
 }, {
     "category": "jlptn4",
     jp: "魚",
     on: "ギョ -ザカ",
     kun: "うお さかな",
-    trad: "fish"
+    trad: "Рыбка"
 }, {
     "category": "jlptn4",
     jp: "兄",
     on: "ケイ キョウ ア",
     kun: "",
-    trad: "elder brother, big brother"
+    trad: "Старший брат"
 }, {
     "category": "jlptn4",
     jp: "犬",
     on: "ケン",
     kun: "いぬ いぬ-",
-    trad: "dog"
+    trad: "Пёс, собака"
 }, {
     "category": "jlptn4",
     jp: "妹",
     on: "マイ イモウ",
     kun: "",
-    trad: "younger sister"
+    trad: "Младшая сестра"
 }, {
     "category": "jlptn4",
     jp: "姉",
