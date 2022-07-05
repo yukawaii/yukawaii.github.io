@@ -4,385 +4,385 @@ const DATA = {
     jp: "少",
     on: "ショウ",
     kun: "すく.ない すこ.し",
-    trad: "few, little"
+    trad: "Немного, мало"
 }, {
     "category": "jlptn4",
     jp: "町",
     on: "チョウ",
     kun: "まち",
-    trad: "village, town, block, street"
+    trad: "Город, район"
 }, {
     "category": "jlptn4",
     jp: "料",
     on: "リョウ",
     kun: "",
-    trad: "fee, materials"
+    trad: "Оплата, материалы"
 }, {
     "category": "jlptn4",
     jp: "工",
     on: "コウ ク",
     kun: "",
-    trad: "craft, construction"
+    trad: "Конструкция, производство"
 }, {
     "category": "jlptn4",
     jp: "建",
     on: "ケン コン タ.",
     kun: "た.てる た.て -だ.て",
-    trad: "build"
+    trad: "Строение, строить"
 }, {
     "category": "jlptn4",
     jp: "空",
     on: "クウ ムナ.シ",
     kun: "そら あ.く あ.き あ.ける から す.く す.かす",
-    trad: "empty, sky, void, vacant, vacuum"
+    trad: "Небо, пустота"
 }, {
     "category": "jlptn4",
     jp: "急",
     on: "キュウ",
     kun: "いそ.ぐ いそ.ぎ",
-    trad: "hurry, emergency, sudden, steep"
+    trad: "Срочный, торопиться"
 }, {
     "category": "jlptn4",
     jp: "止",
     on: "シ -サ.",
     kun: "と.まる -ど.まり と.める -と.める -ど.め とど.める とど.め とど.まる や.める や.む -や.む よ.",
-    trad: "stop, halt"
+    trad: "Останавливаться"
 }, {
     "category": "jlptn4",
     jp: "送",
     on: "ソウ",
     kun: "おく.る",
-    trad: "escort, send"
+    trad: "Посылка, отправка"
 }, {
     "category": "jlptn4",
     jp: "切",
     on: "セツ サイ -ギ.",
     kun: "き.る -き.る き.り -き.り -ぎ.り き.れる -き.れる き.れ -き.れ",
-    trad: "cut, cutoff, be sharp"
+    trad: "Резать, отрезать"
 }, {
     "category": "jlptn4",
     jp: "転",
     on: "テン",
     kun: "ころ.がる ころ.げる ころ.がす ころ.ぶ まろ.ぶ うたた うつ.る",
-    trad: "revolve, turn around, change"
+    trad: "Катиться, сменять"
 }, {
     "category": "jlptn4",
     jp: "研",
     on: "ケン ト.",
     kun: "",
-    trad: "polish, study of, sharpen"
+    trad: "Исследование, оттачивать"
 }, {
     "category": "jlptn4",
     jp: "足",
     on: "ソク タ.",
     kun: "あし た.りる た.る",
-    trad: "leg, foot, be sufficient, counter for pairs of footwear"
+    trad: "Нога, сч.суф. носков"
 }, {
     "category": "jlptn4",
     jp: "究",
     on: "キュウ ク キワ.メ",
     kun: "",
-    trad: "research, study"
+    trad: "Исследования"
 }, {
     "category": "jlptn4",
     jp: "楽",
     on: "ガク ラク ゴウ コノ.",
     kun: "たの.しい たの.しむ",
-    trad: "music, comfort, ease"
+    trad: "Музыка, радость"
 }, {
     "category": "jlptn4",
     jp: "起",
     on: "キ",
     kun: "お.きる お.こる お.こす おこ.す た.つ",
-    trad: "rouse, wake up, get up"
+    trad: "Просыпаться, случаться"
 }, {
     "category": "jlptn4",
     jp: "着",
     on: "チャク ジャク",
     kun: "き.る -ぎ き.せる -き.せ つ.く つ.ける",
-    trad: "don, arrive, wear, counter for suits of clothing"
+    trad: "Одевать, приезжать"
 }, {
     "category": "jlptn4",
     jp: "店",
     on: "テン",
     kun: "みせ たな",
-    trad: "store, shop"
+    trad: "Магазин"
 }, {
     "category": "jlptn4",
     jp: "病",
     on: "ビョウ ヘイ",
     kun: "や.む -や.み やまい",
-    trad: "ill, sick"
+    trad: "Болезнь"
 }, {
     "category": "jlptn4",
     jp: "質",
     on: "シツ シチ チ",
     kun: "たち ただ.す もと わりふ",
-    trad: "substance, quality, matter, temperament"
+    trad: "Качество"
 }, {
     "category": "jlptn4",
     jp: "待",
     on: "タイ -マ.",
     kun: "ま.つ",
-    trad: "wait, depend on"
+    trad: "Ждать"
 }, {
     "category": "jlptn4",
     jp: "試",
     on: "シ",
     kun: "こころ.みる ため.す",
-    trad: "test, try, attempt, experiment, ordeal"
+    trad: "Попытка, пробовать"
 }, {
     "category": "jlptn4",
     jp: "族",
     on: "ゾ",
     kun: "",
-    trad: "tribe, family"
+    trad: "Семья, клан"
 }, {
     "category": "jlptn4",
     jp: "銀",
     on: "ギン シロガ",
     kun: "",
-    trad: "silver"
+    trad: "Серебро"
 }, {
     "category": "jlptn4",
     jp: "早",
     on: "ソウ サッ",
     kun: "はや.い はや はや- はや.まる はや.める さ",
-    trad: "early, fast"
+    trad: "Рано, быстро"
 }, {
     "category": "jlptn4",
     jp: "映",
     on: "エイ -バ.",
     kun: "うつ.る うつ.す は.える",
-    trad: "reflect, reflection, projection"
+    trad: "Отражение, проекция"
 }, {
     "category": "jlptn4",
     jp: "親",
     on: "シン シタ.シ",
     kun: "おや おや- した.しい",
-    trad: "parent, intimacy, relative, familiarity, dealer (cards)"
+    trad: "Родители, близкие"
 }, {
     "category": "jlptn4",
     jp: "験",
     on: "ケン ゲン",
     kun: "あかし しるし ため.す ためし",
-    trad: "verification, effect, testing"
+    trad: "Тестирование"
 }, {
     "category": "jlptn4",
     jp: "英",
     on: "エイ ハナブ",
     kun: "",
-    trad: "England, English"
+    trad: "Английский"
 }, {
     "category": "jlptn4",
     jp: "医",
     on: "イ",
     kun: "い.やす い.する くすし",
-    trad: "doctor, medicine"
+    trad: "Врач, медицина"
 }, {
     "category": "jlptn4",
     jp: "仕",
     on: "シ ジ",
     kun: "つか.える",
-    trad: "attend, doing, official, serve"
+    trad: "Служить, работа"
 }, {
     "category": "jlptn4",
     jp: "去",
     on: "キョ コ -サ.",
     kun: "さ.る",
-    trad: "gone, past, quit, leave, elapse, eliminate, divorce"
+    trad: "Прошлое, покидать"
 }, {
     "category": "jlptn4",
     jp: "味",
     on: "ミ",
     kun: "あじ あじ.わう",
-    trad: "flavor, taste"
+    trad: "Вкус, пробовать"
 }, {
     "category": "jlptn4",
     jp: "写",
     on: "シャ ジャ",
     kun: "うつ.す うつ.る うつ- うつ.し",
-    trad: "copy, be photographed, describe"
+    trad: "Копировать, фото"
 }, {
     "category": "jlptn4",
     jp: "字",
     on: "ジ",
     kun: "あざ あざな -な",
-    trad: "jp, letter, word, section of village"
+    trad: "Знак, буква"
 }, {
     "category": "jlptn4",
     jp: "答",
     on: "トウ コタ.",
     kun: "こた.える",
-    trad: "solution, answer"
+    trad: "Ответ, решение"
 }, {
     "category": "jlptn4",
     jp: "夜",
     on: "ヤ",
     kun: "よ よる",
-    trad: "night, evening"
+    trad: "Ночь, вечер"
 }, {
     "category": "jlptn4",
     jp: "音",
     on: "オン イン -ノン",
     kun: "おと",
-    trad: "sound, noise"
+    trad: "Звук"
 }, {
     "category": "jlptn4",
     jp: "注",
     on: "チュウ",
     kun: "そそ.ぐ さ.す つ.ぐ",
-    trad: "pour, irrigate, shed (tears), flow into, concentrate on, notes, comment, annotate"
+    trad: "Наливать, концентрация"
 }, {
     "category": "jlptn4",
     jp: "帰",
     on: "キ",
     kun: "かえ.る かえ.す おく.る とつ.ぐ",
-    trad: "homecoming, arrive at, lead to, result in"
+    trad: "Возвращаться"
 }, {
     "category": "jlptn4",
     jp: "古",
     on: "コ -フル.",
     kun: "ふる.い ふる-",
-    trad: "old"
+    trad: "Старый"
 }, {
     "category": "jlptn4",
     jp: "歌",
     on: "カ",
     kun: "うた うた.う",
-    trad: "song, sing"
+    trad: "Петь, песня"
 }, {
     "category": "jlptn4",
     jp: "買",
     on: "バイ",
     kun: "か.う",
-    trad: "buy"
+    trad: "Покупать"
 }, {
     "category": "jlptn4",
     jp: "悪",
     on: "アク オ",
     kun: "わる.い わる- あ.し にく.い -にく.い ああ いずくに いずくんぞ にく.む",
-    trad: "bad, vice, rascal, false, evil, wrong"
+    trad: "Зло, плохой"
 }, {
     "category": "jlptn4",
     jp: "図",
     on: "ズ ト ハカ.",
     kun: "え",
-    trad: "map, drawing, plan, unexpected, accidentally"
+    trad: "Карта, чертёж"
 }, {
     "category": "jlptn4",
     jp: "週",
     on: "シュウ",
     kun: "",
-    trad: "week"
+    trad: "Неделя"
 }, {
     "category": "jlptn4",
     jp: "室",
     on: "シツ",
     kun: "むろ",
-    trad: "room, apartment, chamber, greenhouse, cellar"
+    trad: "Комната, кабинет"
 }, {
     "category": "jlptn4",
     jp: "歩",
     on: "ホ ブ フ アユ.",
     kun: "ある.く",
-    trad: "walk, counter for steps"
+    trad: "Идти пешком"
 }, {
     "category": "jlptn4",
     jp: "風",
     on: "フウ フ -カ",
     kun: "かぜ かざ-",
-    trad: "wind, air, style, manner"
+    trad: "Ветер, стиль"
 }, {
     "category": "jlptn4",
     jp: "紙",
     on: "シ",
     kun: "かみ",
-    trad: "paper"
+    trad: "Бумага"
 }, {
     "category": "jlptn4",
     jp: "黒",
     on: "コク",
     kun: "くろ くろ.ずむ くろ.い",
-    trad: "black"
+    trad: "Черный"
 }, {
     "category": "jlptn4",
     jp: "花",
     on: "カ ケ ハ",
     kun: "",
-    trad: "flower"
+    trad: "Цветочек"
 }, {
     "category": "jlptn4",
     jp: "春",
     on: "シュン ハ",
     kun: "",
-    trad: "springtime, spring (season)"
+    trad: "Весна, молодость"
 }, {
     "category": "jlptn4",
     jp: "赤",
     on: "セキ シャク アカ.ラメ",
     kun: "あか あか- あか.い あか.らむ",
-    trad: "red"
+    trad: "Красный, краснеть"
 }, {
     "category": "jlptn4",
     jp: "青",
     on: "セイ ショウ アオ.",
     kun: "あお あお-",
-    trad: "blue, green"
+    trad: "Голубой, зелёный"
 }, {
     "category": "jlptn4",
     jp: "館",
     on: "カン タ",
     kun: "やかた",
-    trad: "building, mansion, large building, palace"
+    trad: "Строение, дворец, павильон"
 }, {
     "category": "jlptn4",
     jp: "屋",
     on: "オク",
     kun: "",
-    trad: "roof, house, shop, dealer, seller"
+    trad: "Крыша, дом"
 }, {
     "category": "jlptn4",
     jp: "色",
     on: "ショク シキ イ",
     kun: "",
-    trad: "color"
+    trad: "Цвет"
 }, {
     "category": "jlptn4",
     jp: "走",
     on: "ソウ ハシ.",
     kun: "",
-    trad: "run"
+    trad: "Бежать"
 }, {
     "category": "jlptn4",
     jp: "秋",
     on: "シュウ ト",
     kun: "あき",
-    trad: "autumn"
+    trad: "Осень"
 }, {
     "category": "jlptn4",
     jp: "夏",
     on: "カ ガ ゲ",
     kun: "なつ",
-    trad: "summer"
+    trad: "Лето"
 }, {
     "category": "jlptn4",
     jp: "習",
     on: "シュウ ジュ",
     kun: "なら.う なら.い",
-    trad: "learn"
+    trad: "Учить"
 }, {
     "category": "jlptn4",
     jp: "駅",
     on: "エキ",
     kun: "",
-    trad: "station"
+    trad: "Станция"
 }, {
     "category": "jlptn4",
     jp: "洋",
     on: "ヨ",
     kun: "",
-    trad: "ocean, western style"
+    trad: "Океан, западный стиль"
 }, {
     "category": "jlptn4",
     jp: "旅",
