@@ -643,6 +643,20 @@ vocabulary : [
     {jp:"送る",trad:"Посылать",kun:"おくる","romaji":"okuru","level":4},{jp:"迎える",trad:"Встречать",kun:"むかえる","romaji":"mukaeru","level":4},
     {jp:"凄い",trad:"Клёвый, крайне",kun:"すごい","romaji":"sugoi","level":4},{jp:"以内",trad:"Внутри",kun:"いない","romaji":"inai","level":4},
     {jp:"探す",trad:"Искать",kun:"さがす","romaji":"sagasu","level":4},{jp:"行う",trad:"Проводить (мероприятие)",kun:"おこなう","romaji":"okonau","level":4},
-    {jp:"引き出し",trad:"Выдвижной ящик","romaji":"hikidashi","level":4},{jp:"焼ける",trad:"",kun:"やける","romaji":"yakeru","level":4},{jp:"けんか・する",trad:"to quarrel",kun:"","romaji":"kenka-suru","level":4},{jp:"背中",trad:"back of the body",kun:"せなか","romaji":"senaka","level":4},{jp:"込む",trad:"to be crowded",kun:"こむ","romaji":"komu","level":4},{jp:"あいさつ・する",trad:"to greet",kun:"","romaji":"aisatsu-suru","level":4},{jp:"負ける",trad:"to lose",kun:"まける","romaji":"makeru","level":4},{jp:"ごらんになる",trad:"(respectful) to see",kun:"","romaji":"goranninaru","level":4},{jp:"事務所",trad:"office",kun:"じむしょ","romaji":"jimusho","level":4},{jp:"そろそろ",trad:"gradually, soon",kun:"","romaji":"sorosoro","level":4},{jp:"美術館",trad:"art gallery",kun:"びじゅつかん","romaji":"bijutsukan","level":4},{jp:"あ",trad:"Ah",kun:"","romaji":"a","level":4},{jp:"以外",trad:"with the exception of",kun:"いがい","romaji":"igai","level":4},{jp:"じゃま",trad:"hindrance, intrusion",kun:"","romaji":"jama","level":4},{jp:"安心",trad:"relief",kun:"あんしん","romaji":"anshin","level":4},{jp:"集める",trad:"to collect something",kun:"あつめる","romaji":"atsumeru","level":4},{jp:"捨てる",trad:"to throw away",kun:"すてる","romaji":"suteru","level":4},{jp:"駐車場",trad:"parking lot",kun:"ちゅうしゃじょう","romaji":"chūshajō","level":4},{jp:"確か",trad:"definite",kun:"たしか","romaji":"tashika","level":4},{jp:"手袋",trad:"glove",kun:"てぶくろ","romaji":"tebukuro","level":4},{jp:"熱",trad:"fever",kun:"ねつ","romaji":"netsu","level":4},{jp:"指",trad:"finger",kun:"ゆび","romaji":"yubi","level":4},{jp:"止める",trad:"to stop something",kun:"とめる","romaji":"tomeru","level":4},{jp:"アクセサリー",trad:"accessory",kun:"","romaji":"akusesarī","level":4},{jp:"下る",trad:"to get down, to descend",kun:"さがる","romaji":"sagaru","level":4},{jp:"ほめる",trad:"to praise",kun:"","romaji":"homeru","level":4},{jp:"回る",trad:"to go around",kun:"まわる","romaji":"mawaru","level":4},
+    {jp:"引き出し",trad:"Выдвижной ящик","romaji":"hikidashi","level":4},{jp:"焼ける",trad:"Пожариться",kun:"やける","romaji":"yakeru","level":4},
+    {jp:"けんか・する",trad:"Ссориться",kun:"","romaji":"kenka-suru","level":4},{jp:"背中",trad:"На спине, спина",kun:"せなか","romaji":"senaka","level":4},
+    {jp:"込む",trad:"Быть заполненным, битком",kun:"こむ","romaji":"komu","level":4},{jp:"あいさつ・する",trad:"Здороваться",kun:"","romaji":"aisatsu-suru","level":4},
+    {jp:"負ける",trad:"Проиграть",kun:"まける","romaji":"makeru","level":4},{jp:"ごらんになる",trad:"(уваж.)смотреть",kun:"","romaji":"goranninaru","level":4},
+    
+    {jp:"事務所",trad:"Офис, управление",kun:"じむしょ","romaji":"jimusho","level":4},{jp:"そろそろ",trad:"Скоро",kun:"","romaji":"sorosoro","level":4},
+    {jp:"美術館",trad:"Музей",kun:"びじゅつかん","romaji":"bijutsukan","level":4},
+    {jp:"あ",trad:"Aх",kun:"","romaji":"a","level":4},{jp:"以外",trad:"За исключением",kun:"いがい","romaji":"igai","level":4},
+    {jp:"じゃま",trad:"Помеха",kun:"","romaji":"jama","level":4},{jp:"安心",trad:"Облегчение",kun:"あんしん","romaji":"anshin","level":4},
+    {jp:"集める",trad:"Коллекционировать",kun:"あつめる","romaji":"atsumeru","level":4},{jp:"捨てる",trad:"Выкинуть",kun:"すてる","romaji":"suteru","level":4},
+    {jp:"駐車場",trad:"Парковка",kun:"ちゅうしゃじょう","romaji":"chūshajō","level":4},{jp:"確か",trad:"Определённо",kun:"たしか","romaji":"tashika","level":4},
+    {jp:"手袋",trad:"Перчатки",kun:"てぶくろ","romaji":"tebukuro","level":4},{jp:"熱",trad:"Жар",kun:"ねつ","romaji":"netsu","level":4}
+    ,{jp:"指",trad:"Палец",kun:"ゆび","romaji":"yubi","level":4},{jp:"止める",trad:"Останавливать что-то",kun:"とめる","romaji":"tomeru","level":4},
+    {jp:"アクセサリー",trad:"Аксессуары",kun:"","romaji":"akusesarī","level":4},{jp:"下る",trad:"Опускаться, спускаться",kun:"さがる","romaji":"sagaru","level":4},
+    {jp:"ほめる",trad:"Хвалить",kun:"ほめる","romaji":"homeru","level":4},{jp:"回る",trad:"Вращаться",kun:"まわる","romaji":"mawaru","level":4},
 {jp:"くださる",trad:"(уваж.)давать",kun:"","romaji":"kudasaru","level":4}
 ] }
