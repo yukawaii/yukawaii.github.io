@@ -5,619 +5,619 @@ const DATA ={
             jp: "政",
             on: "セイ ショウ マ",
             kun: "まつりごと",
-            trad: "politics, government"
+            trad: "Политика"
         }, {
             "category": "jlptn3",
             jp: "議",
             on: "",
             kun: "",
-            trad: "deliberation, consultation, debate, consideration"
+            trad: "Обсуждение, дебаты"
         }, {
             "category": "jlptn3",
             jp: "民",
             on: "ミン タ",
             kun: "",
-            trad: "people, nation, subjects"
+            trad: "Народ"
         }, {
             "category": "jlptn3",
             jp: "連",
             on: "レン -ヅ.",
             kun: "つら.なる つら.ねる つ.れる",
-            trad: "take along, lead, join, connect, party, gang, clique"
+            trad: "Связь, брать с собой"
         }, {
             "category": "jlptn3",
             jp: "対",
             on: "タイ ツイ ムカ.",
             kun: "あいて こた.える そろ.い つれあ.い なら.ぶ",
-            trad: "vis-a-vis, opposite, even, equal, versus, anti-, compare"
+            trad: "Против, противоположность"
         }, {
             "category": "jlptn3",
             jp: "部",
             on: "ブ -",
             kun: "",
-            trad: "section, bureau, dept, class, copy, part, portion, counter for copies of a newspaper or magazine"
+            trad: "Отдел, секция, часть"
         }, {
             "category": "jlptn3",
             jp: "合",
             on: "ゴウ ガッ カッ -ア.ワセ",
             kun: "あ.う -あ.う あ.い あい- -あ.い -あい あ.わす あ.わせる",
-            trad: "fit, suit, join, 0.1"
+            trad: "Совпадение"
         }, {
             "category": "jlptn3",
             jp: "市",
             on: "シ イ",
             kun: "",
-            trad: "market, city, town"
+            trad: "Город"
         }, {
             "category": "jlptn3",
             jp: "内",
             on: "ナイ ダイ ウ",
             kun: "",
-            trad: "inside, within, between, among, house, home"
+            trad: "Внутри, дом"
         }, {
             "category": "jlptn3",
             jp: "相",
             on: "ソウ ショウ",
             kun: "あい",
-            trad: "inter-, mutual, together, each other, minister of state, councillor, aspect, phase, physiognomy"
+            trad: "Взаимный, признаки"
         }, {
             "category": "jlptn3",
             jp: "定",
             on: "テイ ジョウ サダ.",
             kun: "さだ.める さだ.まる",
-            trad: "determine, fix, establish, decide"
+            trad: "Устанавливать, правило"
         }, {
             "category": "jlptn3",
             jp: "回",
             on: "カイ エ",
             kun: "まわ.る -まわ.る -まわ.り まわ.す -まわ.す まわ.し- -まわ.し もとお.る か.える",
-            trad: "-times, round, game, revolve, counter for occurrences"
+            trad: "Круг, раз"
         }, {
             "category": "jlptn3",
             jp: "選",
             on: "セン",
             kun: "えら.ぶ",
-            trad: "elect, select, choose, prefer"
+            trad: "Выбор"
         }, {
             "category": "jlptn3",
             jp: "米",
             on: "ベイ マイ メエトル ヨ",
             kun: "こめ",
-            trad: "rice, USA, metre"
+            trad: "Рис, США"
         }, {
             "category": "jlptn3",
             jp: "実",
             on: "ジツ シツ ミチ.",
             kun: "み みの.る まこと まことに みの",
-            trad: "reality, truth"
+            trad: "Реальность, истина"
         }, {
             "category": "jlptn3",
             jp: "関",
             on: "カン",
             kun: "せき -ぜき かか.わる からくり かんぬき",
-            trad: "connection, barrier, gateway, involve, concerning"
+            trad: "Застава, иметь отношение"
         }, {
             "category": "jlptn3",
             jp: "決",
             on: "ケツ",
             kun: "き.める -ぎ.め き.まる さ.く",
-            trad: "decide, fix, agree upon, appoint"
+            trad: "Выносить решение, решать"
         }, {
             "category": "jlptn3",
             jp: "全",
             on: "ゼン スベ.",
             kun: "まった.く",
-            trad: "whole, entire, all, complete, fulfill"
+            trad: "Весь, полностью"
         }, {
             "category": "jlptn3",
             jp: "表",
             on: "ヒョウ",
             kun: "おもて -おもて あらわ.す あらわ.れる あら.わす",
-            trad: "surface, table, chart, diagram"
+            trad: "Снаружи, выражать"
         }, {
             "category": "jlptn3",
             jp: "戦",
             on: "セン ワナナ.",
             kun: "いくさ たたか.う おのの.く そよぐ",
-            trad: "war, battle, match"
+            trad: "Война, битва"
         }, {
             "category": "jlptn3",
             jp: "経",
             on: "ケイ キョウ ノ",
             kun: "へ.る た.つ たていと はか.る",
-            trad: "sutra, longitude, pass thru, expire, warp"
+            trad: "Сутра, проходить"
         }, {
             "category": "jlptn3",
             jp: "最",
             on: "サイ シュ ツ",
             kun: "もっと.も",
-            trad: "utmost, most, extreme"
+            trad: "Самый, наиболее"
         }, {
             "category": "jlptn3",
             jp: "現",
             on: "ゲン アラワ.",
             kun: "あらわ.れる",
-            trad: "present, existing, actual"
+            trad: "Реальный, возникать"
         }, {
             "category": "jlptn3",
             jp: "調",
             on: "チョウ トトノ.エ",
             kun: "しら.べる しら.べ ととの.う",
-            trad: "tune, tone, meter, key (music), writing style, prepare, exorcise, investigate"
+            trad: "Тон, выяснять"
         }, {
             "category": "jlptn3",
             jp: "化",
             on: "カ ケ",
             kun: "ば.ける ば.かす ふ.ける け.する",
-            trad: "change, take the form of, influence, enchant, delude, -ization"
+            trad: "Превращаться, менять"
         }, {
             "category": "jlptn3",
             jp: "当",
             on: "トウ マサ.ニベ",
             kun: "あ.たる あ.たり あ.てる あ.て まさ.に",
-            trad: "hit, right, appropriate, himself"
+            trad: "Попадать, подходить"
         }, {
             "category": "jlptn3",
             jp: "約",
             on: "ヤク",
             kun: "",
-            trad: "promise, approximately, shrink"
+            trad: "Обещание"
         }, {
             "category": "jlptn3",
             jp: "首",
             on: "シュ ク",
             kun: "",
-            trad: "neck"
+            trad: "Шея"
         }, {
             "category": "jlptn3",
             jp: "法",
             on: "ホウ ハッ ホッ フラン ノ",
             kun: "",
-            trad: "method, law, rule, principle, model, system"
+            trad: "Способ, закон"
         }, {
             "category": "jlptn3",
             jp: "性",
             on: "セイ ショウ",
             kun: "さが",
-            trad: "sex, gender, nature"
+            trad: "Гендер, пол, характер"
         }, {
             "category": "jlptn3",
             jp: "要",
             on: "ヨウ イ.",
             kun: "",
-            trad: "need, main point, essence, pivot, key to"
+            trad: "Требование, необходщимость"
         }, {
             "category": "jlptn3",
             jp: "制",
             on: "セイ",
             kun: "",
-            trad: "system, law, rule"
+            trad: "Система, правило"
         }, {
             "category": "jlptn3",
             jp: "治",
             on: "ジ チ ナオ.",
             kun: "おさ.める おさ.まる なお.る",
-            trad: "reign, be at peace, calm down, subdue, quell, govt, cure, heal, rule, conserve"
+            trad: "Лечить, усмирять, управлять"
         }, {
             "category": "jlptn3",
             jp: "務",
             on: "ム ツト.メ",
             kun: "",
-            trad: "task, duties"
+            trad: "Обязанность, дела"
         }, {
             "category": "jlptn3",
             jp: "成",
             on: "セイ ジョウ -ナ.",
             kun: "な.る な.す",
-            trad: "turn into, become, get, grow, elapse, reach"
+            trad: "Становиться, образовывать"
         }, {
             "category": "jlptn3",
             jp: "期",
             on: "キ ゴ",
             kun: "",
-            trad: "period, time, date, term"
+            trad: "Период времени"
         }, {
             "category": "jlptn3",
             jp: "取",
             on: "シュ -ド.",
             kun: "と.る と.り と.り- とり",
-            trad: "take, fetch, take up"
+            trad: "Брать"
         }, {
             "category": "jlptn3",
             jp: "都",
             on: "ト ツ ミヤ",
             kun: "",
-            trad: "metropolis, capital"
+            trad: "Столица"
         }, {
             "category": "jlptn3",
             jp: "和",
             on: "ワ オ カ ナゴ.ヤ",
             kun: "やわ.らぐ やわ.らげる なご.む",
-            trad: "harmony, Japanese style, peace, soften, Japan"
+            trad: "Гармония, мир, яп.стиль"
         }, {
             "category": "jlptn3",
             jp: "機",
             on: "キ",
             kun: "はた",
-            trad: "mechanism, opportunity, occasion, machine, airplane"
+            trad: "Механизм, шанс"
         }, {
             "category": "jlptn3",
             jp: "平",
             on: "ヘイ ビョウ ヒョウ",
             kun: "たい.ら -だいら ひら ひら",
-            trad: "even, flat, peace"
+            trad: "Плоский, спокойный"
         }, {
             "category": "jlptn3",
             jp: "加",
             on: "カ",
             kun: "くわ.える くわ.わる",
-            trad: "add, addition, increase, join, include, Canada"
+            trad: "Добавлять, прибавлять"
         }, {
             "category": "jlptn3",
             jp: "受",
             on: "ジュ ウ.カ",
             kun: "う.ける -う.け",
-            trad: "accept, undergo, answer (phone), take, get, catch, receive"
+            trad: "Принимать, получать"
         }, {
             "category": "jlptn3",
             jp: "続",
             on: "ゾク ショク コウ キョウ ツグ.ナ",
             kun: "つづ.く つづ.ける",
-            trad: "continue, series, sequel"
+            trad: "Продолжение"
         }, {
             "category": "jlptn3",
             jp: "進",
             on: "シン スス.メ",
             kun: "すす.む",
-            trad: "advance, proceed, progress, promote"
+            trad: "Продвигаться, прогресс"
         }, {
             "category": "jlptn3",
             jp: "数",
             on: "スウ ス サク ソク シュ ワズラワ.シ",
             kun: "かず かぞ.える しばしば せ.める",
-            trad: "number, strength, fate, law, figures"
+            trad: "Число, считать"
         }, {
             "category": "jlptn3",
             jp: "記",
             on: "キ シル.",
             kun: "",
-            trad: "scribe, account, narrative"
+            trad: "Запись, отчёт"
         }, {
             "category": "jlptn3",
             jp: "初",
             on: "ショ -ゾ.",
             kun: "はじ.め はじ.めて はつ はつ- うい- -そ.める",
-            trad: "first time, beginning"
+            trad: "Впервый, начало"
         }, {
             "category": "jlptn3",
             jp: "指",
             on: "シ -サ.",
             kun: "ゆび さ.す",
-            trad: "finger, point to, indicate, put into, play (chess), measure (ruler)"
+            trad: "Палец, указывать"
         }, {
             "category": "jlptn3",
             jp: "権",
             on: "ケン ゴン",
             kun: "おもり かり はか.る",
-            trad: "authority, power, rights"
+            trad: "Право, власть"
         }, {
             "category": "jlptn3",
             jp: "支",
             on: "",
             kun: "しんよう じゅうまた",
-            trad: "branch, support, sustain"
+            trad: "Поддержка, филиал"
         }, {
             "category": "jlptn3",
             jp: "産",
             on: "サン ム.",
             kun: "う.む う.まれる うぶ-",
-            trad: "products, bear, give birth, yield, childbirth, native, property"
+            trad: "Рождать, производить"
         }, {
             "category": "jlptn3",
             jp: "点",
             on: "テン",
             kun: "つ.ける つ.く た.てる さ.す とぼ.す とも.す ぼち",
-            trad: "spot, point, mark, speck, decimal point"
+            trad: "Отметка, балл, зажигать"
         }, {
             "category": "jlptn3",
             jp: "報",
             on: "ホウ",
             kun: "むく.いる",
-            trad: "report, news, reward, retribution"
+            trad: "Информация, вознаградить"
         }, {
             "category": "jlptn3",
             jp: "済",
             on: "サイ セイ ワタ.",
             kun: "す.む -ず.み -ずみ す.まない す.ます -す.ます すく.う な.す わたし",
-            trad: "finish, come to an end, excusable, need not"
+            trad: "Прийти к завершению"
         }, {
             "category": "jlptn3",
             jp: "活",
             on: "カツ",
             kun: "い.きる い.かす い.ける",
-            trad: "lively, resuscitation, being helped, living"
+            trad: "Жизнь, оживлять"
         }, {
             "category": "jlptn3",
             jp: "原",
             on: "ゲン ハ",
             kun: "",
-            trad: "meadow, original, primitive, field, plain, prairie, tundra, wilderness"
+            trad: "Равнина, источник"
         }, {
             "category": "jlptn3",
             jp: "共",
             on: "キョウ",
             kun: "とも とも.に -ども",
-            trad: "together, both, neither, all, and, alike, with"
+            trad: "Вместе, коммунизм"
         }, {
             "category": "jlptn3",
             jp: "得",
             on: "トク ウ.",
             kun: "え.る",
-            trad: "gain, get, find, earn, acquire, can, may, able to, profit, advantage, benefit"
+            trad: "Получать, выгода"
         }, {
             "category": "jlptn3",
             jp: "解",
             on: "カイ ゲ サト.",
             kun: "と.く と.かす と.ける ほど.く ほど.ける わか.る",
-            trad: "unravel, notes, key, explanation, understanding, untie, undo, solve, answer, cancel, absolve, explain, minute"
+            trad: "Развязывать, решать"
         }, {
             "category": "jlptn3",
             jp: "交",
             on: "コウ コモゴ",
             kun: "まじ.わる まじ.える ま.じる まじ.る ま.ざる ま.ぜる -か.う か.わす かわ.す",
-            trad: "mingle, mixing, association, coming & going"
+            trad: "Пересекаться, смешивать"
         }, {
             "category": "jlptn3",
             jp: "資",
-            on: "",
-            kun: "",
-            trad: "assets, resources, capital, funds, data, be conducive to, contribute to"
+            on: "シ",
+            kun: "し.する",
+            trad: "Капитал, содействовать"
         }, {
             "category": "jlptn3",
             jp: "予",
             on: "ヨ シャ",
             kun: "あらかじ.め",
-            trad: "beforehand, previous, myself, I"
+            trad: "Заранее"
         }, {
             "category": "jlptn3",
             jp: "向",
             on: "コウ ムカ.",
             kun: "む.く む.い -む.き む.ける -む.け む.かう む.かい む.こう む.こう- むこ",
-            trad: "yonder, facing, beyond, confront, defy, tend toward, approach"
+            trad: "Направление, та сторона"
         }, {
             "category": "jlptn3",
             jp: "際",
             on: "サイ -ギ",
             kun: "きわ",
-            trad: "occasion, side, edge, verge, dangerous, adventurous, indecent, time, when"
+            trad: "Рубеж, край, в случае"
         }, {
             "category": "jlptn3",
             jp: "勝",
             on: "ショウ カ",
             kun: "か.つ -が.ち まさ.る すぐ.れる",
-            trad: "victory, win, prevail, excel"
+            trad: "Победа, превосходить"
         }, {
             "category": "jlptn3",
             jp: "面",
             on: "メン ベン ツ",
             kun: "おも おもて",
-            trad: "mask, face, features, surface"
+            trad: "Маска, лицо, поверхность"
         }, {
             "category": "jlptn3",
             jp: "告",
             on: "コク ツ.ゲ",
             kun: "",
-            trad: "revelation, tell, inform, announce"
+            trad: "Объявлять"
         }, {
             "category": "jlptn3",
             jp: "反",
             on: "ハン ホン タン ホ -カエ.",
             kun: "そ.る そ.らす かえ.す かえ.る",
-            trad: "anti-"
+            trad: "Против, переворачивать"
         }, {
             "category": "jlptn3",
             jp: "判",
             on: "ハン バン",
             kun: "わか.る",
-            trad: "judgement, signature, stamp, seal"
+            trad: "Штамп, истолковывать"
         }, {
             "category": "jlptn3",
             jp: "認",
             on: "ニン",
             kun: "みと.める したた.める",
-            trad: "acknowledge, witness, discern, recognize, appreciate, believe"
+            trad: "Признавать, записывать"
         }, {
             "category": "jlptn3",
             jp: "参",
             on: "サン シン ミ",
             kun: "まい.る まい- まじわる",
-            trad: "nonplussed, three, going, coming, visiting, visit, be defeated, die, be madly in love"
+            trad: "Идти пешком, втюриться"
         }, {
             "category": "jlptn3",
             jp: "利",
             on: "リ キ.",
-            kun: "",
-            trad: "profit, advantage, benefit"
+            kun: "き.く",
+            trad: "Выгода, быть эффективным"
         }, {
             "category": "jlptn3",
             jp: "組",
             on: "ソ",
             kun: "く.む くみ -ぐみ",
-            trad: "association, braid, plait, construct, assemble, unite, cooperate, grapple"
+            trad: "Группа, организация"
         }, {
             "category": "jlptn3",
             jp: "信",
             on: "シ",
-            kun: "",
-            trad: "faith, truth, fidelity, trust"
+            kun: "しん.じる",
+            trad: "Вера, доверять"
         }, {
             "category": "jlptn3",
             jp: "在",
             on: "ザイ ア.",
-            kun: "",
-            trad: "exist, outskirts, suburbs, located in"
+            kun: "あ.る",
+            trad: "Быть, находиться"
         }, {
             "category": "jlptn3",
             jp: "件",
             on: "ケン",
             kun: "くだん",
-            trad: "affair, case, matter, item"
+            trad: "Случай, дело, вышесказанное"
         }, {
             "category": "jlptn3",
             jp: "側",
             on: "ソク",
             kun: "かわ がわ そば",
-            trad: "side, lean, oppose, regret"
+            trad: "Сторона"
         }, {
             "category": "jlptn3",
             jp: "任",
             on: "ニン マカ.",
             kun: "まか.せる",
-            trad: "responsibility, duty, term, entrust to, appoint"
+            trad: "Ответственность, положиться"
         }, {
             "category": "jlptn3",
             jp: "引",
             on: "イン ヒ.ケ",
             kun: "ひ.く ひ.き ひ.き- -び.き",
-            trad: "pull, tug, jerk, admit, install, quote, refer to"
+            trad: "Тянуть, скидка"
         }, {
             "category": "jlptn3",
             jp: "求",
             on: "キュウ グ",
             kun: "もと.める",
-            trad: "request, want, wish for, require, demand"
+            trad: "Требовать"
         }, {
             "category": "jlptn3",
             jp: "所",
             on: "ショ ト",
             kun: "ところ -ところ どころ",
-            trad: "place"
+            trad: "Место"
         }, {
             "category": "jlptn3",
             jp: "次",
             on: "ジ シ ツ",
             kun: "つ.ぐ",
-            trad: "next, order, sequence"
+            trad: "Следующий, следовать"
         }, {
             "category": "jlptn3",
             jp: "昨",
             on: "サク",
             kun: "",
-            trad: "yesterday, previous"
+            trad: "Вчера"
         }, {
             "category": "jlptn3",
             jp: "論",
             on: "ロン",
             kun: "",
-            trad: "argument, discourse"
+            trad: "Полемира, теория, доктрина"
         }, {
             "category": "jlptn3",
             jp: "官",
             on: "カン",
             kun: "",
-            trad: "bureaucrat, the government"
+            trad: "Чиновник, госслужба"
         }, {
             "category": "jlptn3",
             jp: "増",
             on: "ゾウ フ.ヤ",
             kun: "ま.す ま.し ふ.える",
-            trad: "increase, add, augment, gain, promote"
+            trad: "Увеличение, прибавка"
         }, {
             "category": "jlptn3",
             jp: "係",
             on: "ケイ",
             kun: "かか.る かかり -がかり かか.わる",
-            trad: "person in charge, connection, duty, concern oneself"
+            trad: "Ответственный за что-то"
         }, {
             "category": "jlptn3",
             jp: "感",
             on: "カン",
-            kun: "",
-            trad: "emotion, feeling, sensation"
+            kun: "かん.じる",
+            trad: "Чувства"
         }, {
             "category": "jlptn3",
             jp: "情",
             on: "ジョウ セイ",
             kun: "なさ.け",
-            trad: "feelings, emotion, passion, sympathy, circumstances, facts"
+            trad: "Жалость, печать, чувство"
         }, {
             "category": "jlptn3",
             jp: "投",
             on: "トウ",
             kun: "な.げる -な.げ",
-            trad: "throw, discard, abandon, launch into, join, invest in, hurl, give up, sell at a loss"
+            trad: "Бросать"
         }, {
             "category": "jlptn3",
             jp: "示",
             on: "ジ シ",
             kun: "しめ.す",
-            trad: "show, indicate, point out, express, display"
+            trad: "Пооказывать, пример"
         }, {
             "category": "jlptn3",
             jp: "変",
             on: "ヘン",
             kun: "か.わる か.わり か.える",
-            trad: "unusual, change, strange"
+            trad: "Странный, отличаться"
         }, {
             "category": "jlptn3",
             jp: "打",
             on: "ダ ダアス ブ.",
             kun: "う.つ う.ち-",
-            trad: "strike, hit, knock, pound, dozen"
+            trad: "Бить"
         }, {
             "category": "jlptn3",
             jp: "直",
             on: "チョク ジキ ジカ ス.",
             kun: "ただ.ちに なお.す -なお.す なお.る なお.き",
-            trad: "straightaway, honesty, frankness, fix, repair"
+            trad: "Исправлять, прямой, сразу же"
         }, {
             "category": "jlptn3",
             jp: "両",
             on: "リョウ フタ",
             kun: "てる",
-            trad: "both, old Japanese coin, counter for vehicles, two"
+            trad: "Оба"
         }, {
             "category": "jlptn3",
             jp: "式",
             on: "シ",
             kun: "",
-            trad: "style, ceremony, rite, function, method, system, form, expression"
+            trad: "Стиль, церемония"
         }, {
             "category": "jlptn3",
             jp: "確",
             on: "カク コウ",
             kun: "たし.か たし.かめる",
-            trad: "assurance, firm, tight, hard, solid, confirm, clear, evident"
+            trad: "Достоверный, уточнять"
         }, {
             "category": "jlptn3",
             jp: "果",
             on: "カ ハ.",
             kun: "は.たす はた.す -は.たす は.てる -は.てる",
-            trad: "fruit, reward, carry out, achieve, complete, end, finish, succeed"
+            trad: "Плод, край, выполнить"
         }, {
             "category": "jlptn3",
             jp: "容",
             on: "ヨウ イ.レ",
             kun: "",
-            trad: "contain, form, looks"
+            trad: "Вмещать, форма, вид"
         }, {
             "category": "jlptn3",
             jp: "必",
             on: "ヒツ",
             kun: "かなら.ず",
-            trad: "invariably, certain, inevitable"
+            trad: "Обязательно"
         }, {
             "category": "jlptn3",
             jp: "演",
             on: "エン",
             kun: "",
-            trad: "performance, act, play, render, stage"
+            trad: "Представление"
         }, {
             "category": "jlptn3",
             jp: "歳",
             on: "サイ セイ",
             kun: "とし とせ よわい",
-            trad: "year-end, age, occasion, opportunity"
+            trad: "Возраст, года"
         }, {
             "category": "jlptn3",
             jp: "争",
