@@ -16,10 +16,7 @@ const askQuestion = () => {
         .sort(() => .5 - Math.random())
         .slice(0, answerCount);
     const answer = possibleAnswers[Math.floor(Math.random() * answerCount)];
-
-        //проверяем есть ли пауза и начинаем игру
-       
-
+         
     const questionElem = document.getElementById("question");
     questionElem.innerHTML = '<div id="question-content">' + answer[questionOrder] + '</div>';
 
@@ -55,7 +52,7 @@ const askQuestion = () => {
 
         const answerValue = document.createElement("div");
         answerValue.className = "answer-value";
-        answerValue.innerHTML = possibleAnswer[questionOrder];
+        answerValue.innerHTML = possibleAnswer[questionOrder]+"  " +possibleAnswer["kun"].split(' ')[0];
         answerElem.appendChild(answerValue);
     });
 }
@@ -72,6 +69,7 @@ const answerQuestion = (answer, guess) => {
 
     document.getElementById("answers").childNodes.forEach(answerElem => {
         answerElem.onclick = () => false;
+        // цвета фона: верно- зелёные, невверно- красные
         answerElem.style.backgroundColor = (answerElem.firstChild.innerHTML === answer || answerElem.lastChild.innerHTML === answer) ? "#85bb65 " : "#AB2524";
         answerElem.firstChild.style.height = "48px";
         answerElem.firstChild.style.lineHeight = "48px";
@@ -80,23 +78,6 @@ const answerQuestion = (answer, guess) => {
     });
     setTimeout(() => askQuestion(), 4000);
 }
-/* не работает пауза
-const pausebut = document.getElementById("pausebut");
-
-    pausebut.onclick = () => {
-        if (playing === true){
-        if (settingTimeAttack) {
-         
-            timeoutElem.style.webkitAnimationPlayState = 'paused';
-            clearTimeout(timeout); 
-        }
-else  if (playing===false){
-    if (settingTimeAttack) {
-    timeoutElem.style.webkitAnimationPlayState = 'running';
-}}}
-    } */
-// последние скобки от проверки на паузу, что паузы нет
-
 
 window.onload = () => {
 
@@ -110,5 +91,4 @@ window.onload = () => {
  
     }
     askQuestion();
-    
 }
