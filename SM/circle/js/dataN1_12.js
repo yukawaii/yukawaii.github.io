@@ -5,79 +5,79 @@ const DATA = {
             "character": "陣",
             "onyomi": "ジン",
             "kunyomi": "",
-            "meaning": "camp, battle array, ranks, position"
+            "meaning": "Боевой порядок"
         }, {
             "category": "jlptn1",
             "character": "我",
             "onyomi": "ガ",
-            "kunyomi": "われ わ わ.が- わが",
-            "meaning": "ego, I, selfish, our, oneself"
+            "kunyomi": "われ わ わ.が",
+            "meaning": "Эго, мой"
         }, {
             "category": "jlptn1",
             "character": "為",
-            "onyomi": "イ ナ",
+            "onyomi": "イ ",
             "kunyomi": "ため な.る な.す す.る たり つく.る",
-            "meaning": "do, change, make, benefit, welfare, be of use, reach to, try, practice, cost, serve as, good, advantage, as a re"
+            "meaning": "Делать, для"
         }, {
             "category": "jlptn1",
             "character": "抑",
             "onyomi": "ヨク",
             "kunyomi": "おさ.える",
-            "meaning": "repress, well, now, in the first place, push, shove, press, seal, do in spite of"
+            "meaning": "Сдерживать"
         }, {
             "category": "jlptn1",
             "character": "幕",
             "onyomi": "マク バク",
-            "kunyomi": "",
-            "meaning": "curtain, bunting, act of play"
+            "kunyomi": "まく",
+            "meaning": "Занавес, театр.акт"
         }, {
             "category": "jlptn1",
             "character": "染",
             "onyomi": "セン -シ.メ",
             "kunyomi": "そ.める -ぞ.め -ぞめ そ.まる し.みる -じ.みる し.み",
-            "meaning": "dye, color, paint, stain, print"
+            "meaning": "Красить, просачиваться"
         }, {
             "category": "jlptn1",
             "character": "奈",
-            "onyomi": "ナ ナイ ダイ",
+            "onyomi": "ナ",
             "kunyomi": "いかん からなし",
-            "meaning": "Nara, what?"
+            "meaning": "Нара"
         }, {
             "category": "jlptn1",
             "character": "傷",
             "onyomi": "ショウ",
             "kunyomi": "きず いた.む いた.める",
-            "meaning": "wound, hurt, injure, impair, pain, injury, cut, gash, scar, weak point"
+            "meaning": "Рана"
         }, {
             "category": "jlptn1",
             "character": "択",
             "onyomi": "タク",
             "kunyomi": "えら.ぶ",
-            "meaning": "choose, select, elect, prefer"
+            "meaning": "Выбирать"
         }, {
             "category": "jlptn1",
             "character": "秀",
-            "onyomi": "シュウ ヒイ.デ",
-            "kunyomi": "",
-            "meaning": "excel, excellence, beauty, surpass"
+            "onyomi": "シュウ,
+            "kunyomi": "ひいで.る",
+            "meaning": "Превосходить"
         }, {
             "category": "jlptn1",
             "character": "徴",
-            "onyomi": "チョウ チ",
+            "onyomi": "チョウ",
             "kunyomi": "しるし",
-            "meaning": "indications, sign, omen, symptom, collect, seek, refer to, question"
+            "meaning": "Симптом, признак"
         }, {
             "category": "jlptn1",
             "character": "弾",
             "onyomi": "ダン タン",
-            "kunyomi": "ひ.く -ひ.き はず.む たま はじ.く はじ.ける ただ.す はじ.きゆみ",
-            "meaning": "bullet, twang, flip, snap"
+            "kunyomi": "たま ひ.く はず.む はじ.く はじ.ける ただ.す はじ.きゆみ",
+            "meaning": "Пуля, лопаться"
         }, {
             "category": "jlptn1",
             "character": "償",
             "onyomi": "ショウ",
             "kunyomi": "つぐな.う",
-            "meaning": "reparation, make up for, recompense, redeem"
+            "meaning": "Возмещение"
         }, {
             "category": "jlptn1",
             "character": "功",
