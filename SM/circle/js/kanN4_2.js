@@ -16,13 +16,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "事",
-    on: "ジ ズ ツカ.エ",
+    on: "ジ ズ",
     kun: "こと つか.う",
     trad: "Дело, факт, событие"
 }, {
     "category": "jlptn4",
     jp: "自",
-    on: "ジ シ オノ.ズ",
+    on: "ジ シ",
     kun: "みずか.ら おの.ずから",
     trad: "Сам, лично"
 }, {
@@ -34,7 +34,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "発",
-    on: "ハツ ホツ ハナ.",
+    on: "ハツ ホツ",
     kun: "た.つ あば.く おこ.る つか.わす",
     trad: "Публикация, начало"
 }, {
@@ -48,7 +48,7 @@ const DATA = {
     jp: "地",
     on: "チ",
     kun: "",
-    trad: "ground, earth"
+    trad: "Земля"
 }, {
     "category": "jlptn4",
     jp: "業",
