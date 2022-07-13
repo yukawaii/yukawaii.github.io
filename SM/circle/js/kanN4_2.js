@@ -419,7 +419,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "始",
     on: "シ ハジ.マ",
-    kun: "はじ.める -はじ.める",
+    kun: "はじ.める",
     trad: "Начинать"
 }, {
     "category": "jlptn4",
