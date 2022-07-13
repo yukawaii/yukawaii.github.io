@@ -466,9 +466,9 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "有",
-    on: "ユウ ウ ア.",
-    kun: "",
-    trad: "Обладать, существовать, быть"
+    on: "ユウ ウ",
+    kun: "あ.る",
+    trad: "Обладать, быть"
 }, {
     "category": "jlptn4",
     jp: "口",
