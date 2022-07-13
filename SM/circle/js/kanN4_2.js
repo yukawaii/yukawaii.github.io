@@ -4,7 +4,7 @@ const DATA = {
 {
     "category": "jlptn4",
     jp: "会",
-    on: "カイ エ アツ.マ",
+    on: "カイ エ",
     kun: "あ.う あ.わせる",
     trad: "Встреча, общество"
 }, {
@@ -82,13 +82,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "立",
-    on: "リツ リュウ リットル -ダ.テ",
-    kun: "た.つ た.てる -だ.て",
+    on: "リツ リュウ",
+    kun: "た.つ た.てる",
     trad: "Стоять"
 }, {
     "category": "jlptn4",
     jp: "開",
-    on: "カイ ア.ケ",
+    on: "カイ",
     kun: "ひら.く ひら.き ひら.ける あ.く",
     trad: "Открывать"
 }, {
@@ -172,7 +172,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "主",
-    on: "シュ ス シュウ アル",
+    on: "シュ ス シュウ",
     kun: "ぬし おも",
     trad: "Хозяин, основной"
 }, {
@@ -238,8 +238,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "以",
-    on: "イ モッ.",
-    kun: "",
+    on: "イ",
+    kun: "に.る",
     trad: "В сравнении"
 }, {
     "category": "jlptn4",
@@ -310,7 +310,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "元",
-    on: "ゲン ガン ",
+    on: "ゲン ガン",
     kun: "もと",
     trad: "Начало, основа"
 }, {
