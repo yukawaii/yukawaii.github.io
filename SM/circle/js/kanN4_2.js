@@ -28,8 +28,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "社",
-    on: "シャ ヤシ",
-    kun: "",
+    on: "シャ",
+    kun: "やしろ",
     trad: "Храм, фирма"
 }, {
     "category": "jlptn4",
@@ -52,20 +52,20 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "業",
-    on: "ギョウ ゴウ ワ",
+    on: "ギョウ ゴウ",
     kun: "",
     trad: "Производство"
 }, {
     "category": "jlptn4",
     jp: "方",
-    on: "ホウ -ガ",
-    kun: "かた -かた",
+    on: "ホウ",
+    kun: "かた",
     trad: "Способ, (уваж.)человек"
 }, {
     "category": "jlptn4",
     jp: "新",
     on: "シン",
-    kun: "あたら.しい あら.た あら- にい",
+    kun: "あたら.しい あら.た にい",
     trad: "Новый"
 }, {
     "category": "jlptn4",
@@ -83,67 +83,67 @@ const DATA = {
     "category": "jlptn4",
     jp: "立",
     on: "リツ リュウ リットル -ダ.テ",
-    kun: "た.つ -た.つ た.ち- た.てる -た.てる た.て- たて- -た.て -だ.て",
+    kun: "た.つ た.てる -だ.て",
     trad: "Стоять"
 }, {
     "category": "jlptn4",
     jp: "開",
     on: "カイ ア.ケ",
-    kun: "ひら.く ひら.き -びら.き ひら.ける あ.く",
+    kun: "ひら.く ひら.き ひら.ける あ.く",
     trad: "Открывать"
 }, {
     "category": "jlptn4",
     jp: "手",
     on: "シュ ズ",
-    kun: "て て- -て た-",
+    kun: "て た-",
     trad: "Рука"
 }, {
     "category": "jlptn4",
     jp: "力",
-    on: "リョク リキ リイ チカ",
-    kun: "",
+    on: "リョク リキ",
+    kun: "ちから",
     trad: "Сила"
 }, {
     "category": "jlptn4",
     jp: "問",
-    on: "モン ト",
+    on: "モン",
     kun: "と.う と.い",
     trad: "Вопрос, проблема"
 }, {
     "category": "jlptn4",
     jp: "代",
-    on: "ダイ タイ シ",
-    kun: "か.わる かわ.る かわ.り -がわ.り か.える よ",
+    on: "ダイ タイ",
+    kun: "か.わる か.える よ",
     trad: "Оплата, замена, эпоха"
 }, {
     "category": "jlptn4",
     jp: "明",
-    on: "メイ ミョウ ミン ア.カ",
-    kun: "あ.かり あか.るい あか.るむ あか.らむ あき.らか あ.ける -あ.け あ.く あ.くる",
+    on: "メイ ミョウ ミン",
+    kun: "あ.かり あか.るい あか.るむ あか.らむ あき.らか あ.ける あ.く あ.くる",
     trad: "Светлый"
 }, {
     "category": "jlptn4",
     jp: "動",
-    on: "ドウ ウゴ.カ",
+    on: "ドウ",
     kun: "うご.く",
     trad: "Движение"
 }, {
     "category": "jlptn4",
     jp: "京",
-    on: "キョウ ケイ キン ミヤ",
-    kun: "",
+    on: "キョウ ケイ キン",
+    kun: "みやこ",
     trad: "Столица"
 }, {
     "category": "jlptn4",
     jp: "目",
     on: "モク ボク",
-    kun: "め -め ま",
+    kun: "め ま",
     trad: "Глаз, опыт"
 }, {
     "category": "jlptn4",
     jp: "通",
-    on: "ツウ ツ カヨ.",
-    kun: "とお.る とお.り -とお.り -どお.り とお.す とお.し -どお.し",
+    on: "ツウ ツ",
+    kun: "とお.る とお.り とお.す とお.し",
     trad: "Трансп.движение, проходить"
 }, {
     "category": "jlptn4",
@@ -154,13 +154,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "理",
-    on: "リ コトワ",
-    kun: "",
+    on: "リ",
+    kun: "り",
     trad: "Логика, причина, истина"
 }, {
     "category": "jlptn4",
     jp: "体",
-    on: "タイ テイ カタ",
+    on: "タイ テイ",
     kun: "からだ",
     trad: "Тело, объект"
 }, {
@@ -184,8 +184,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "意",
-    on: "",
-    kun: "",
+    on: "イ",
+    kun: "い",
     trad: "Мысль, идея, мнение"
 }, {
     "category": "jlptn4",
@@ -196,44 +196,44 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "作",
-    on: "サク サ -ヅク.",
+    on: "サク サ",
     kun: "つく.る つく.り",
     trad: "Делать, создавать"
 }, {
     "category": "jlptn4",
     jp: "用",
-    on: "ヨウ モチ.イ",
-    kun: "",
+    on: "ヨウ",
+    kun: "もち.いる",
     trad: "Использовать"
 }, {
     "category": "jlptn4",
     jp: "度",
-    on: "ド ト タク -タ.",
+    on: "ド ト タク",
     kun: "たび",
     trad: "Градус, раз"
 }, {
     "category": "jlptn4",
     jp: "強",
-    on: "キョウ ゴウ コワ.",
-    kun: "つよ.い つよ.まる つよ.める し.いる",
+    on: "キョウ ゴウ",
+    kun: "つよ.い し.いる つよ.まる つよ.める",
     trad: "Сильный"
 }, {
     "category": "jlptn4",
     jp: "公",
-    on: "コウ ク オオヤ",
+    on: "コウ ク",
     kun: "",
     trad: "Публичный"
 }, {
     "category": "jlptn4",
     jp: "持",
-    on: "ジ モ.テ",
-    kun: "も.つ -も.ち",
+    on: "ジ",
+    kun: "も.つ",
     trad: "Держать, иметь"
 }, {
     "category": "jlptn4",
     jp: "野",
     on: "ヤ ショ",
-    kun: "の の",
+    kun: "の",
     trad: "Деревенский, поле"
 }, {
     "category": "jlptn4",
@@ -256,7 +256,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "世",
-    on: "セイ セ ソウ サンジュ",
+    on: "セイ セ ソウ",
     kun: "よ",
     trad: "Поколение, мир"
 }, {
@@ -268,13 +268,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "正",
-    on: "セイ ショウ マサ.",
+    on: "セイ ショウ",
     kun: "ただ.しい ただ.す まさ",
     trad: "Правильный"
 }, {
     "category": "jlptn4",
     jp: "安",
-    on: "アン ヤス.ラ",
+    on: "アン",
     kun: "やす.い やす.まる やす",
     trad: "Простой, безопасность"
 }, {
@@ -286,8 +286,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "心",
-    on: "",
-    kun: "りっしんべん",
+    on: "シン",
+    kun: "こころ",
     trad: "Сердце, дух"
 }, {
     "category": "jlptn4",
@@ -298,7 +298,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "教",
-    on: "キョウ オソ.ワ",
+    on: "キョウ",
     kun: "おし.える",
     trad: "Учение"
 }, {
@@ -310,25 +310,25 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "元",
-    on: "ゲン ガン モ",
-    kun: "",
+    on: "ゲン ガン ",
+    kun: "もと",
     trad: "Начало, основа"
 }, {
     "category": "jlptn4",
     jp: "重",
-    on: "ジュウ チョウ オ",
-    kun: "え おも.い おも.り おも.なう かさ.ねる かさ.なる",
+    on: "ジュウ チョウ",
+    kun: "え おも.い かさ.ねる おも.り おも.なう かさ.なる",
     trad: "Тяжёлый"
 }, {
     "category": "jlptn4",
     jp: "近",
-    on: "キン コン チカ.",
-    kun: "",
+    on: "キン コン",
+    kun: "ちか.い",
     trad: "Близко"
 }, {
     "category": "jlptn4",
     jp: "考",
-    on: "コウ カンガ.",
+    on: "コウ",
     kun: "かんが.える",
     trad: "Размышлять"
 }, {
@@ -340,50 +340,50 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "海",
-    on: "カイ ウ",
-    kun: "",
+    on: "カイ",
+    kun: "うみ",
     trad: "Море, океан"
 }, {
     "category": "jlptn4",
     jp: "売",
-    on: "バイ ウ.レ",
+    on: "バイ",
     kun: "う.る",
     trad: "Продавать"
 }, {
     "category": "jlptn4",
     jp: "知",
-    on: "チ シ.ラセ",
+    on: "チ",
     kun: "し.る",
     trad: "Знать"
 }, {
     "category": "jlptn4",
     jp: "道",
-    on: "ドウ トウ ミ",
-    kun: "",
+    on: "ドウ トウ",
+    kun: "みち",
     trad: "Путь, дорога, учение"
 }, {
     "category": "jlptn4",
     jp: "集",
-    on: "シュウ ツド.",
+    on: "シュウ",
     kun: "あつ.まる あつ.める",
     trad: "Собирать"
 }, {
     "category": "jlptn4",
     jp: "別",
-    on: "ベツ ワ.ケ",
+    on: "ベツ",
     kun: "わか.れる",
     trad: "Другой, расставаться"
 }, {
     "category": "jlptn4",
     jp: "物",
     on: "ブツ モツ",
-    kun: "もの もの-",
+    kun: "もの",
     trad: "Вещь, объект"
 }, {
     "category": "jlptn4",
     jp: "使",
     on: "シ",
-    kun: "つか.う つか.い -つか.い -づか.い",
+    kun: "つか.う つか.い",
     trad: "использовать"
 }, {
     "category": "jlptn4",
@@ -394,7 +394,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "計",
-    on: "ケイ ハカ.ラ",
+    on: "ケイ",
     kun: "はか.る",
     trad: "Измерять, взвешивать"
 }, {
@@ -407,7 +407,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "特",
     on: "トク",
-    kun: "",
+    kun: "とく",
     trad: "Особенный"
 }, {
     "category": "jlptn4",
