@@ -3,7 +3,7 @@ const DATA = {
         {
             "category": "jlptn2",
             "character": "省",
-            "onyomi": "セイ ショウ ハブ.",
+            "onyomi": "セイ ショウ",
             "kunyomi": "かえり.みる",
             "meaning": "Министерство, рефлексия"
         }, {
