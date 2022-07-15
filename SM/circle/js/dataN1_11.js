@@ -88,38 +88,38 @@ const DATA = {
             "category": "jlptn1",
             "character": "撤",
             "onyomi": "テツ",
-            "kunyomi": "",
-            "meaning": "remove, withdraw, disarm, dismantle, reject, exclude"
+            "kunyomi": "てっ.する",
+            "meaning": "Убирать, вывод войск"
         }, {
             "category": "jlptn1",
             "character": "削",
-            "onyomi": "サク ソ.",
+            "onyomi": "サク",
             "kunyomi": "けず.る はつ.る",
-            "meaning": "plane, sharpen, whittle, pare"
+            "meaning": "Точить, свежевать"
         }, {
             "category": "jlptn1",
             "character": "密",
             "onyomi": "ミツ",
             "kunyomi": "ひそ.か",
-            "meaning": "secrecy, density (pop), minuteness, carefulness"
+            "meaning": "Секрет, близкий, тайно"
         }, {
             "category": "jlptn1",
             "character": "措",
             "onyomi": "ソ",
             "kunyomi": "お.く",
-            "meaning": "set aside, give up, suspend, discontinue, lay aside, except"
+            "meaning": "Отставлять, откладывать в сторону"
         }, {
             "category": "jlptn1",
             "character": "志",
-            "onyomi": "シ シリング ココロザ",
+            "onyomi": "シ",
             "kunyomi": "こころざ.す",
-            "meaning": "intention, plan, resolve, aspire, motive, hopes, shilling"
+            "meaning": "Стремиться, намереваться"
         }, {
             "category": "jlptn1",
             "character": "載",
-            "onyomi": "サイ ノ.",
+            "onyomi": "サイ",
             "kunyomi": "の.せる",
-            "meaning": "ride, board, get on, place, spread, 10**44"
+            "meaning": "Класть, помещать"
         }    ],
     vocabulary: [
 
