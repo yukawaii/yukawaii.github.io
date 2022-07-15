@@ -16,7 +16,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "為",
             "onyomi": "イ ",
-            "kunyomi": "ため な.る な.す す.る たり つく.る",
+            "kunyomi": "ため な.る な.す す.る",
             "meaning": "Делать, для"
         }, {
             "category": "jlptn1",
@@ -34,13 +34,13 @@ const DATA = {
             "category": "jlptn1",
             "character": "染",
             "onyomi": "セン -シ.メ",
-            "kunyomi": "そ.める -ぞ.め -ぞめ そ.まる し.みる -じ.みる し.み",
+            "kunyomi": "そ.める そ.まる し.みる し.み",
             "meaning": "Красить, просачиваться"
         }, {
             "category": "jlptn1",
             "character": "奈",
             "onyomi": "ナ",
-            "kunyomi": "いかん からなし",
+            "kunyomi": "ナ",
             "meaning": "Нара"
         }, {
             "category": "jlptn1",
@@ -70,7 +70,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "弾",
             "onyomi": "ダン タン",
-            "kunyomi": "たま ひ.く はず.む はじ.く はじ.ける ただ.す はじ.きゆみ",
+            "kunyomi": "たま ひ.く はず.む はじ.ける ただ.す",
             "meaning": "Пуля, лопаться"
         }, {
             "category": "jlptn1",
@@ -81,51 +81,51 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "功",
-            "onyomi": "コウ ク イサ",
-            "kunyomi": "",
-            "meaning": "achievement, merits, success, honor, credit"
+            "onyomi": "コウ ク",
+            "kunyomi": "いさお",
+            "meaning": "Заслуга, подвиг
         }, {
             "category": "jlptn1",
             "character": "拠",
-            "onyomi": "キョ コ",
-            "kunyomi": "よ.る",
-            "meaning": "foothold, based on, follow, therefore"
+            "onyomi": "キョウ ",
+            "kunyomi": "よ.る よりどころ",
+            "meaning": "Опираться, основываться на"
         }, {
             "category": "jlptn1",
             "character": "秘",
             "onyomi": "ヒ",
             "kunyomi": "ひ.める ひそ.か かく.す",
-            "meaning": "secret, conceal"
+            "meaning": "Секрет, скрывать"
         }, {
             "category": "jlptn1",
             "character": "拒",
-            "onyomi": "キョ ゴ",
+            "onyomi": "キョウ",
             "kunyomi": "こば.む",
-            "meaning": "repel, refuse, reject, decline"
+            "meaning": "Отказываться"
         }, {
             "category": "jlptn1",
             "character": "刑",
-            "onyomi": "ケ",
-            "kunyomi": "",
-            "meaning": "punish, penalty, sentence, punishment"
+            "onyomi": "ケイ",
+            "kunyomi": "ケイ",
+            "meaning": "Наказание"
         }, {
             "category": "jlptn1",
             "character": "塚",
-            "onyomi": "チョウ -ヅ",
+            "onyomi": "チョウ",
             "kunyomi": "つか",
-            "meaning": "hillock, mound"
+            "meaning": "Насыпь, холм"
         }, {
             "category": "jlptn1",
             "character": "致",
             "onyomi": "チ",
             "kunyomi": "いた.す",
-            "meaning": "doth, do, send, forward, cause, exert, incur, engage"
+            "meaning": "Делать, отдавать, посылать"
         }, {
             "category": "jlptn1",
             "character": "繰",
-            "onyomi": "ソウ ク.",
-            "kunyomi": "",
-            "meaning": "winding, reel, spin, turn (pages), look up, refer to"
+            "onyomi": "ソウ",
+            "kunyomi": "く.る",
+            "meaning": "Наматывать, прясть"
         }    ],
     vocabulary: [
 
