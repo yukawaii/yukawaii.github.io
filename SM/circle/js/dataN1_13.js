@@ -5,55 +5,55 @@ const DATA = {
             "character": "尾",
             "onyomi": "ビ",
             "kunyomi": "お",
-            "meaning": "tail, end, counter for fish, lower slope of mountain"
+            "meaning": "Хвост"
         }, {
             "category": "jlptn1",
             "character": "描",
             "onyomi": "ビョウ",
             "kunyomi": "えが.く か.く",
-            "meaning": "sketch, compose, write, draw, paint"
+            "meaning": "Рисовать"
         }, {
             "category": "jlptn1",
             "character": "鈴",
-            "onyomi": "レイ リン ス",
-            "kunyomi": "",
-            "meaning": "small bell, buzzer"
+            "onyomi": "レイ リン",
+            "kunyomi": "すず",
+            "meaning": "Колокольчик"
         }, {
             "category": "jlptn1",
             "character": "盤",
-            "onyomi": "バ",
-            "kunyomi": "",
-            "meaning": "tray, shallow bowl, platter, tub, board, phonograph record"
+            "onyomi": "バン",
+            "kunyomi": "バン",
+            "meaning": "Доска, поднос"
         }, {
             "category": "jlptn1",
             "character": "項",
             "onyomi": "コウ",
             "kunyomi": "うなじ",
-            "meaning": "paragraph, nape of neck, clause, item, term (expression)"
+            "meaning": "Параграф, затылок"
         }, {
             "category": "jlptn1",
             "character": "喪",
             "onyomi": "ソウ",
             "kunyomi": "も",
-            "meaning": "miss, mourning"
+            "meaning": "Траур"
         }, {
             "category": "jlptn1",
             "character": "伴",
-            "onyomi": "ハン バン トモナ.",
-            "kunyomi": "",
-            "meaning": "consort, accompany, bring with, companion"
+            "onyomi": "ハン バン",
+            "kunyomi": "ともな.う",
+            "meaning": "Сопровождать"
         }, {
             "category": "jlptn1",
             "character": "養",
-            "onyomi": "ヨウ リョウ ヤシナ.",
-            "kunyomi": "",
-            "meaning": "foster, bring up, rear, develop, nurture"
+            "onyomi": "ヨウ リョウ",
+            "kunyomi": "やしな.う",
+            "meaning": "Воспитывать"
         }, {
             "category": "jlptn1",
             "character": "懸",
-            "onyomi": "ケン ケ",
+            "onyomi": "ケン",
             "kunyomi": "か.ける か.かる",
-            "meaning": "suspend, hang, 10%, install, depend, consult"
+            "meaning": "Вешать, висеть"
         }, {
             "category": "jlptn1",
             "character": "街",
