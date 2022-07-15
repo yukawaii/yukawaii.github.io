@@ -3,87 +3,87 @@ const DATA = {
         {
             "category": "jlptn1",
             "character": "善",
-            "onyomi": "ゼン ヨシ.トス",
+            "onyomi": "ゼン",
             "kunyomi": "よ.い い.い よ.く",
-            "meaning": "virtuous, good, goodness"
+            "meaning": "Добро, хороший"
         }, {
             "category": "jlptn1",
             "character": "逮",
             "onyomi": "タイ",
             "kunyomi": "",
-            "meaning": "apprehend, chase"
+            "meaning": "Арест"
         }, {
             "category": "jlptn1",
             "character": "迫",
-            "onyomi": "ハク セマ.",
-            "kunyomi": "",
-            "meaning": "urge, force, imminent, spur on"
+            "onyomi": "ハク",
+            "kunyomi": "せま.る",
+            "meaning": "Наседать,приближаться"
         }, {
             "category": "jlptn1",
             "character": "惑",
             "onyomi": "ワク",
             "kunyomi": "まど.う",
-            "meaning": "beguile, delusion, perplexity"
+            "meaning": "Растеряться, недоумевать"
         }, {
             "category": "jlptn1",
             "character": "崩",
             "onyomi": "ホウ",
             "kunyomi": "くず.れる -くず.れ くず.す",
-            "meaning": "crumble, die, demolish, level"
+            "meaning": "Разваливаться, разрушать"
         }, {
             "category": "jlptn1",
             "character": "紀",
-            "onyomi": "",
-            "kunyomi": "",
-            "meaning": "chronicle, account, narrative, history, annals, geologic period"
+            "onyomi": "キ",
+            "kunyomi": "き",
+            "meaning": "Эра, период, запись"
         }, {
             "category": "jlptn1",
             "character": "聴",
-            "onyomi": "チョウ テイ ユル.",
+            "onyomi": "チョウ テイ",
             "kunyomi": "き.く",
-            "meaning": "listen, headstrong, naughty, careful inquiry"
+            "meaning": "Слушать"
         }, {
             "category": "jlptn1",
             "character": "脱",
             "onyomi": "ダツ",
             "kunyomi": "ぬ.ぐ ぬ.げる",
-            "meaning": "undress, removing, escape from, get rid of, be left out, take off"
+            "meaning": "Раздевать(ся)"
         }, {
             "category": "jlptn1",
             "character": "級",
-            "onyomi": "キュ",
-            "kunyomi": "",
-            "meaning": "class, rank, grade"
+            "onyomi": "キュウ",
+            "kunyomi": "きゅう",
+            "meaning": "Ранг, разряд"
         }, {
             "category": "jlptn1",
             "character": "博",
-            "onyomi": "ハク バ",
-            "kunyomi": "",
-            "meaning": "Dr., command, esteem, win acclaim, Ph.D., exposition, fair"
+            "onyomi": "ハク バク",
+            "kunyomi": "はく.する",
+            "meaning": "Эрудиция, доктор_наук"
         }, {
             "category": "jlptn1",
             "character": "締",
             "onyomi": "テイ",
-            "kunyomi": "し.まる し.まり し.める -し.め -じ.め",
-            "meaning": "tighten, tie, shut, lock, fasten"
+            "kunyomi": "し.まる し.まり し.める",
+            "meaning": "Завязывать, напряжённость"
         }, {
             "category": "jlptn1",
             "character": "救",
             "onyomi": "キュウ",
             "kunyomi": "すく.う",
-            "meaning": "salvation, save, help, rescue, reclaim"
+            "meaning": "Спасать, помогать"
         }, {
             "category": "jlptn1",
             "character": "執",
-            "onyomi": "シツ シュウ ト.",
-            "kunyomi": "",
-            "meaning": "tenacious, take hold, grasp, take to heart"
+            "onyomi": "シツ シュウ",
+            "kunyomi": "と.る",
+            "meaning": "Брать"
         }, {
             "category": "jlptn1",
             "character": "房",
-            "onyomi": "ボウ フ",
-            "kunyomi": "",
-            "meaning": "tassel, tuft, fringe, bunch, lock (hair), segment (orange), house, room"
+            "onyomi": "ボウ",
+            "kunyomi": "ふさ",
+            "meaning": "Гроздь, пучок, бахрома"
         }, {
             "category": "jlptn1",
             "character": "撤",
