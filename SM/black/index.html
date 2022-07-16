@@ -23,17 +23,13 @@
   .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
   .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
       </style>
-      <script>
-        const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-      </script>
 </head>
 <body>
-
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
      <script>
         //инициализация
-//const bridge = vkBridge.default;
+const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
