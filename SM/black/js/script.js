@@ -14,6 +14,17 @@ const mobileLeftArrow = document.getElementById('left-arrow');
 const mobileRightArrow = document.getElementById('right-arrow');
 const mobileDownArrow = document.getElementById('down-arrow');
 
+const button1 = document.querySelector('#button1');
+
+button1.addEventListener('click', () => {
+ vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+});
+const button2 = document.querySelector('#button2');
+
+button1.addEventListener('click', () => {
+window.location.href = './i.html';
+});
+
 // Game data
 let actualDirections = [];
 let directionsRecorded = [];
@@ -375,6 +386,3 @@ window.addEventListener('keydown', advanceGame);
 window.addEventListener('touchend', handleMobileStart);
 
 instructionsTimeout = setTimeout(addInstructions, 800);
-
-
-
