@@ -120,19 +120,19 @@ function checkArrowDirection(event) {
   
     switch (event.key) {
       case 'ArrowDown':
-        directionsRecorded.push('down');
+        directionsRecorded.push('Вниз');
         addTextToSmallText('Вниз');
         break;
       case 'ArrowUp':
-        directionsRecorded.push('up');
+        directionsRecorded.push('Вверх');
         addTextToSmallText('Вверх');
         break;
       case 'ArrowLeft':
-        directionsRecorded.push('left');
+        directionsRecorded.push('Влево');
         addTextToSmallText('Влево');
         break;
       case 'ArrowRight':
-        directionsRecorded.push('right');
+        directionsRecorded.push('Вправо');
         addTextToSmallText('Вправо');
         break;
       default:
