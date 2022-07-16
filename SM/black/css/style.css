@@ -1,0 +1,174 @@
+* {
+    touch-action: manipulation;
+}
+
+html, body {
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0;
+    font-family: 'Anek Latin', sans-serif;
+}
+
+#clock {
+    margin: 0;
+    position: absolute;
+    top: 37%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    font-size: 5vh;
+    font-weight: 600;
+    color: #000000;
+    opacity: 0;
+    transition: opacity 800ms ease-in, color 800ms ease-in-out;
+}
+
+#game-container {
+    display: flex;
+    position: relative;
+    height: 100vh;
+    text-align: center;
+}
+
+#game-content {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    color: rgba(245, 245, 245, 0.938);
+    font-size: 10vh;
+    font-weight: 600;
+}
+
+#small-text {
+    font-size: 4vh;
+}
+
+#instructions-container {
+    display: flex;
+    text-align: center;
+}
+
+#instructions {
+    margin: 0;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5vh;
+    color: #000000;
+    opacity: 0;
+    transition: opacity 800ms ease-in, color 800ms ease-in-out;
+}
+
+#mobile-buttons {
+    display: none;
+}
+
+.mobile-prompt {
+    display: none;
+}
+
+#button-table {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 6vh;
+}
+
+@media only screen and (max-width: 830px) {
+    #instructions {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #game-content {
+        font-size: 8vh;
+    }
+
+    #small-text {
+        font-size: 4vh;
+    }
+
+    #instructions {
+        font-size: 2.7vh;
+    }
+}
+
+@media only screen and (max-height: 500px) and (min-width: 500px) {
+    #clock {
+        top: 30%;
+        font-size: 7vh;
+    }
+    
+    #game-content {
+        font-size: 20vh;
+    }
+
+    #small-text {
+        font-size: 8vh;
+    }
+
+    #instructions {
+        font-size: 4vh;
+    }
+
+    .mobile-prompt {
+        display: inline-block;
+    }
+
+    .desktop-prompt {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 900px) and (max-width: 500px) {
+    #instructions {
+        top: 10%;
+        bottom: 100%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .mobile-prompt {
+        display: inline-block;
+    }
+
+    .desktop-prompt {
+        display: none;
+    }
+}
+
+@media only screen and (max-height: 780px) {
+    #clock {
+        top: 32%;
+    }
+
+    #game-content {
+        top: 45%;
+    }
+    
+    #button-table {
+        bottom: -1em;
+        font-size: 6vh;
+    }
+}
+
+@media only screen and (max-height: 740px) {   
+    #button-table {
+        bottom: -1.4em;
+        font-size: 6vh;
+    }
+}
