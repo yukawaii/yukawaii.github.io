@@ -23,9 +23,13 @@
 <body>
     <script src = "../App.js"></script>
     <script>
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
+vkBridge.send("VKWebAppInit", {});
+	    		function myAdd1(){
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+	    myAdd1();
     </script>
       <div align="center">
         <audio controls loop>
