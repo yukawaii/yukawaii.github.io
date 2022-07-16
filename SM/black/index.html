@@ -87,6 +87,7 @@ function getinfo(){
       .then(data => {console.log("Очков на вк:" + data.response);
         // *назначение переменных*
      (score2 = data.response);
+		      console.log('Очков в вк: ' + score2);
         return data.response;
       })
       .catch(error => console.log(error));} ;
