@@ -1,9 +1,7 @@
 const directions = ['Вверх', 'Вниз', 'Влево', 'Вправо'];
 const multipliers = ['x2', 'x3'];
 const colors = ['#6CC5D9', '#F2D857', '#F2B279', '#F2762E', '#DC3A4B', '#0FD081'];
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
+
 // Document elements
 const messageLine = document.getElementById('message-line');
 const smallText = document.getElementById('small-text');
