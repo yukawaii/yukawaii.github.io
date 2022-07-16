@@ -233,7 +233,7 @@ function addPlayAgainInstructions() {
     if (isTouchEnabled) {
         instructions.innerHTML = "Нажми на экран";
     } else {
-        instructions.innerHTML = "Нажми любую клвишу";
+        instructions.innerHTML = "Нажми любую клавишу";
     }
 }
 
