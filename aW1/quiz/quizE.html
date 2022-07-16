@@ -28,7 +28,13 @@ bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
     </script>
 	<script src = "../App.js"></script>
-	<script> myAdd1(); </script>
+	<script> 
+		function myAdd1(){
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+		myAdd1(); </script>
 	<div class ="myclass1">
 		<h3> Неотропическая область</h3>
 		<h3> Выбери подобласть обитания животных!</h3>
