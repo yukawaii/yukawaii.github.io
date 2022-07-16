@@ -30,6 +30,11 @@ bridge.send("VKWebAppInit", {});
     </script>
 	<script src = "../App.js"></script>
 	<script>
+				function myAdd1(){
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
 		myAdd1(); </script>
 	<div class ="myclass1">
 		<h3> Голарктическая область</h3>
