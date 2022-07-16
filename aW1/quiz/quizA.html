@@ -18,7 +18,13 @@
 	</style>
 </head>
 <body>
+	<script>
+        const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+    </script>
 	<script src = "../App.js"></script>
+	<script> myAdd1(); </script>
 		
 	<div class ="myclass1">
 		<h3> Австралийская область</h3>
