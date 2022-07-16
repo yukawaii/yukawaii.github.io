@@ -3,6 +3,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
 	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <title>Угадай животное! Мир</title>
 	<link rel="stylesheet" href="../styles/style.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -17,7 +18,10 @@
 .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
 </head>
-<body>
+<body> <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
 	<script>
         const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
