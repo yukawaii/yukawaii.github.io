@@ -22,7 +22,12 @@ let initialSmallText = '. . .';
 let gameStatus = true;
 let isTouchEnabled = false;
 const startingTimeInterval = 2100;
-
+function myAdd1(){
+    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+  .then(data => console.log(data.result))
+  .catch(error => console.log(error));
+  }
+  
 // Game functions
 function selectValueAtRandom(arr) {
     const index = Math.floor(Math.random() * arr.length);
@@ -215,11 +220,7 @@ function updateClock() {
 function styleEndGameClock() {
     clock.style.color = colors[3];
 }
-function myAdd1(){
-    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
+
 function setEndGameMessage() {
     messageLine.innerHTML = 'Игра окончена';
     sessionStorage.setItem("score1", score);
@@ -283,6 +284,7 @@ function sendscore(){
 
 function endGame() {
     gameStatus = false;
+    myAdd1();
     clearAllIntervals();
     window.removeEventListener('keydown', checkArrowDirection);
     if (isTouchEnabled) {
@@ -290,7 +292,6 @@ function endGame() {
     }
     styleEndGameClock();
     setEndGameMessage();
-    myAdd1();
     setTimeout(function() {
         window.addEventListener('keydown', reloadPage);
         window.addEventListener('click', reloadPage);
