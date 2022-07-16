@@ -216,7 +216,7 @@ function styleEndGameClock() {
     clock.style.color = colors[3];
 }
 function myAdd1(){
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
   .then(data => console.log(data.result))
   .catch(error => console.log(error));
   }
@@ -255,7 +255,7 @@ function levelUp(currentSpeed) {
 }
    //получение очков из вк
    function getsc(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
       "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac", global:1}})
     .then(data => {console.log("Очков на вк:" + data.response);
@@ -272,7 +272,7 @@ function sendscore(){
   var score1 = sessionStorage.getItem('score1');
   var scorsum= score1+score2;
   sessionStorage.setItem("scorsum", scorsum);
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
 {"client_secret":"Pl4TYB00x4HZc4SiqXhj", 
 "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
  "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac",

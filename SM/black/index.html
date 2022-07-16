@@ -26,20 +26,19 @@
       </style>
 </head>
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+    <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
     <script type="text/javascript">
-        //инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
 bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.com/app8177204"});
 }
 function share2(){
-  bridge.send("VKWebAppShowWallPostBox", {
+    vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Классная викторина про животных!",
     "attachments": "https://vk.com/app8177204"
   });
@@ -50,17 +49,17 @@ bridge.send("VKWebAppAddToFavorites");
 }
 
 function myAdd1(){
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
 function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
 
 //пригласить друзей в игру
 function infr(){
-  bridge.send("VKWebAppShowInviteBox", {})
+    vkBridge.send("VKWebAppShowInviteBox", {})
   .then(data => console.log(data.success))  
  .catch(error => console.log(error));
 }
@@ -71,7 +70,7 @@ let score1=0;
 let scorsum=0;
 
 function getinfo(){
-  bridge.send('VKWebAppGetUserInfo')
+    vkBridge.send('VKWebAppGetUserInfo')
   .then(data => {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
   sessionStorage.setItem("userid", userid);
       // *назначение переменных*
@@ -85,7 +84,7 @@ function getinfo(){
     
      //получение очков из вк
    function getsc(){
-      bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
         "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac", global:1}})
       .then(data => {console.log("Очков на вк:" + data.response);
@@ -102,7 +101,7 @@ function getinfo(){
     var score1 = sessionStorage.getItem('score1');
     var scorsum= score1+score2;
     sessionStorage.setItem("scorsum", scorsum);
-  bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
   {"client_secret":"Pl4TYB00x4HZc4SiqXhj", 
   "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
    "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac",
@@ -116,7 +115,7 @@ function getinfo(){
   function showLeaderBoard(scorsum)
 {
   var scorsum = sessionStorage.getItem('scorsum');
-	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
+  vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
          .then(data => console.log(data.success))  
          .catch(error => console.log(error));
 }
