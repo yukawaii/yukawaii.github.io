@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
     <script src="js/script.js" defer></script>
 <style>
   /* Стили кнопки */
@@ -24,14 +23,17 @@
   .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
   .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
       </style>
+      <script>
+        const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+      </script>
 </head>
 <body>
-    <button class = "iksweb" onclick="joingroup()">Подписаться</button>
-    <button class = "iksweb" onclick="share2()">Поделиться</button> 
-    <button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button><br>
-    <script>
+
+     <script>
         //инициализация
-const bridge = vkBridge.default;
+//const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
@@ -154,5 +156,7 @@ function getinfo(){
             </tr>
         </table>
     </div>
+    <button class = "iksweb" onclick="joingroup()">Подписаться</button>
+    <button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button><br>
 </body>
 </html>

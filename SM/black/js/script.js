@@ -1,7 +1,9 @@
 const directions = ['Вверх', 'Вниз', 'Влево', 'Вправо'];
 const multipliers = ['x2', 'x3'];
 const colors = ['#6CC5D9', '#F2D857', '#F2B279', '#F2762E', '#DC3A4B', '#0FD081'];
-
+const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
 // Document elements
 const messageLine = document.getElementById('message-line');
 const smallText = document.getElementById('small-text');
@@ -222,7 +224,7 @@ function myAdd1(){
 function setEndGameMessage() {
     messageLine.innerHTML = 'Игра окончена';
     sessionStorage.setItem("score1", score);
-    smallText.innerHTML = '<span style="color:#F2D857;">score: ' + score + '</span><span style="color:#6CC5D9;"> play again?</span>';
+    smallText.innerHTML = '<span style="color:#F2D857;">Очки: ' + score + '</span><span style="color:#6CC5D9;"> Играть ещё?</span>';
 }
 
 function addPlayAgainInstructions() {
