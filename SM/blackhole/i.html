@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<title>Чёрная дыра</title>
+	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+ 
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+   <link rel="manifest" href="manifest.json">
+   <meta name="theme-color" content="<%= htmlWebpackPlugin.options.background_color %>">
+	<style>body
+		{background-color:black; 
+		margin:0;
+		}canvas{display:block;}</style>
+		</style>
+	 <style>
+    /* Стили кнопки */
+    .iksweb{display: inline-block;cursor: pointer; font-size:13px;text-decoration:none;padding:10px 20px; color:#f2f5f7;background:#232729;border-radius:0px;border:5px solid #2dbf22;}
+    .iksweb:hover{background:#354251;color:#ffffff;border:5px solid #286118;transition: all 0.2s ease;}
+    </style>
+</head>
+<body>
+	<div class ="myclass1">
+		<script>
+            // Sends event to client
+            vkBridge.send('VKWebAppInit');
+          </script>
+        <script type="text/javascript">
+
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeads", {ad_format:"interstitial"})
+    .then(data => console.log(data.result))
+    .catch(error => console.log(error));
+    }
+    function joingroup(){
+        vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+    }
+    
+    //пригласить друзей в игру
+    function infr(){
+        vkBridge.send("VKWebAppShowInviteBox", {})
+      .then(data => console.log(data.success))  
+     .catch(error => console.log(error));
+    }
+
+    </script>
+
+
+		<br> 
+		<h3>Другие игры</h3> 
+
+		<button class = "iksweb" onclick="location.href='https://m.vk.com/app8176436'">Весёлая мошка</button>
+		<button class = "iksweb" onclick="location.href='https://m.vk.com/crosstheroad'">Цыплёнок и дорога</button>
+		<button class = "iksweb" onclick="window.open('https://m.vk.com/hitrixx');">Хитрикс</button><br>
+		<button class = "iksweb" onclick="window.open('https://m.vk.com/amebae');">Амёба: эволюция</button>
+		<button class = "iksweb" onclick="window.open('https://m.vk.com/tetrisc');">Весёлый тетрис</button>
+	<br>	<button class = "iksweb" onclick="window.open('https://m.vk.com/katakana_jp');">Японския язык: катакана</button>
+		<button class = "iksweb" onclick="window.open('https://m.vk.com/hiragana_jp');">Японския язык: хирагана</button>
+		<br>
+	<button class = "iksweb" onclick="window.open('https://vk.com/app8177204');">Угадай животное!</button> 
+		<button class = "iksweb" onclick="window.open('https://m.vk.com/animepuzz');">Аниме-пазлы</button>
+			<button class = "iksweb" onclick="joingroup()">Подписаться</button>
+		<button class = "iksweb" onclick="window.location.href = './index.html';">В начало</button><br>
+	</div>
+
+</body>
+</html>
