@@ -16,7 +16,7 @@ p {
 #clock {
     margin: 0;
     position: absolute;
-    top: 27%;
+    top: 17%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
@@ -37,7 +37,7 @@ p {
 #game-content {
     margin: 0;
     position: absolute;
-    top: 40%;
+    top: 25%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
@@ -108,7 +108,7 @@ p {
 
 @media only screen and (max-height: 500px) and (min-width: 500px) {
     #clock {
-        top: 27%;
+        top: 17%;
         font-size: 7vh;
     }
     
