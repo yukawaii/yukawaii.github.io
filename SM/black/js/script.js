@@ -270,7 +270,7 @@ function levelUp(currentSpeed) {
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
      {"user_id": userid, "v":"5.131",
       "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac", global:1}})
-    .then(data => {console.log("Очков на вк:" + data.response);
+    .then(data => {console.log('Очков на вк: ' + data.response);
       // *назначение переменных*
    (score2 = data.response);
       return data.response;
@@ -289,7 +289,7 @@ function sendscore(){
 "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
  "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac",
  "global":1}})
- .then(data => {console.log("Ответ на добавление очков:" + data.response);
+ .then(data => {console.log('Ответ на добавление очков: ' + data.response);
 })
 .catch(error => console.log(error)); }
 
