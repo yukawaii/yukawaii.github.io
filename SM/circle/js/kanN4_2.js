@@ -89,13 +89,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "開",
     on: "カイ",
-    kun: "ひ あ.く",
+    kun: "ひら.く あ.く",
     trad: "Открывать"
 }, {
     "category": "jlptn4",
     jp: "手",
     on: "シュ ズ",
-    kun: "て た-",
+    kun: "て",
     trad: "Рука"
 }, {
     "category": "jlptn4",
@@ -137,13 +137,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "目",
     on: "モク ボク",
-    kun: "め ま",
+    kun: "め",
     trad: "Глаз, опыт"
 }, {
     "category": "jlptn4",
     jp: "通",
     on: "ツウ ツ",
-    kun: "とお.る とお.り とお.す とお.し",
+    kun: "とお.る とお.す",
     trad: "Трансп.движение, проходить"
 }, {
     "category": "jlptn4",
@@ -167,7 +167,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "田",
     on: "デン",
-    kun: "",
+    kun: "デン",
     trad: "Рисовое поле"
 }, {
     "category": "jlptn4",
@@ -179,7 +179,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "題",
     on: "ダイ",
-    kun: "",
+    kun: "ダイ",
     trad: "Тема"
 }, {
     "category": "jlptn4",
@@ -191,13 +191,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "不",
     on: "フ ブ",
-    kun: "",
+    kun: "フ",
     trad: "Негативный, не-"
 }, {
     "category": "jlptn4",
     jp: "作",
     on: "サク サ",
-    kun: "つく.る つく.り",
+    kun: "つく.る",
     trad: "Делать, создавать"
 }, {
     "category": "jlptn4",
@@ -275,13 +275,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "安",
     on: "アン",
-    kun: "やす.い やす.まる やす",
+    kun: "やす.い やす.まる",
     trad: "Простой, безопасность"
 }, {
     "category": "jlptn4",
     jp: "院",
     on: "イン",
-    kun: "",
+    kun: "イン",
     trad: "Институт, больница, храм"
 }, {
     "category": "jlptn4",
@@ -293,7 +293,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "界",
     on: "カイ",
-    kun: "",
+    kun: "カイ",
     trad: "Мир"
 }, {
     "category": "jlptn4",
@@ -317,7 +317,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "重",
     on: "ジュウ チョウ",
-    kun: "え おも.い かさ.ねる おも.り おも.なう かさ.なる",
+    kun: "え おも.い かさ.ねる おも.なう かさ.なる",
     trad: "Тяжёлый"
 }, {
     "category": "jlptn4",
