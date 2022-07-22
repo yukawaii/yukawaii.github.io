@@ -4,7 +4,7 @@ const DATA = {
 {
     "category": "jlptn4",
     jp: "会",
-    on: "カイ エ",
+    on: "カイ",
     kun: "あ.う あ.わせる",
     trad: "Встреча, общество"
 }, {
@@ -47,13 +47,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "地",
     on: "チ",
-    kun: "",
+    kun: "チ",
     trad: "Земля"
 }, {
     "category": "jlptn4",
     jp: "業",
     on: "ギョウ ゴウ",
-    kun: "",
+    kun: "ギョウ ゴウ",
     trad: "Производство"
 }, {
     "category": "jlptn4",
@@ -77,7 +77,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "員",
     on: "イ",
-    kun: "",
+    kun: "イ",
     trad: "Работник, член клуба"
 }, {
     "category": "jlptn4",
@@ -89,7 +89,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "開",
     on: "カイ",
-    kun: "ひら.く ひら.き ひら.ける あ.く",
+    kun: "ひ あ.く",
     trad: "Открывать"
 }, {
     "category": "jlptn4",
