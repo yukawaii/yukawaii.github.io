@@ -242,9 +242,9 @@ function addPlayAgainInstructions() {
     instructions.style.opacity = .95;
     instructions.style.color = '#FFFFFF';
     if (isTouchEnabled) {
-        instructions.innerHTML = "Нажми на экран";
-    } else {
         instructions.innerHTML = "Нажми любую клавишу";
+    } else {
+        instructions.innerHTML = "Нажми на экран";
     }
 }
 
