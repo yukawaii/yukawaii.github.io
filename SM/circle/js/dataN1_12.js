@@ -33,8 +33,8 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "染",
-            "onyomi": "セン -シ.メ",
-            "kunyomi": "そ.める そ.まる し.みる し.み",
+            "onyomi": "セン",
+            "kunyomi": "そ.める そ.まる し.みる",
             "meaning": "Красить, просачиваться"
         }, {
             "category": "jlptn1",
@@ -87,7 +87,7 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "拠",
-            "onyomi": "キョウ ",
+            "onyomi": "キョウ",
             "kunyomi": "よ.る よりどころ",
             "meaning": "Опираться, основываться на"
         }, {
