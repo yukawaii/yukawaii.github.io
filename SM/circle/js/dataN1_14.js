@@ -3,9 +3,9 @@ const DATA = {
         {
             "category": "jlptn1",
             "character": "露",
-            "onyomi": "ロ ロウ ツ",
-            "kunyomi": "",
-            "meaning": "dew, tears, expose, Russia"
+            "onyomi": "ロ",
+            "kunyomi": "つゆ あらわ",
+            "meaning": "Роса, Россия, откровенно"
         }, {
             "category": "jlptn1",
             "character": "沖",
