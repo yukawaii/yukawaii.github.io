@@ -646,11 +646,11 @@ const DATA ={
 
     ],
     vocabulary: 
-        [{jp:"合図",trad:"sign, signal",kun:"あいず","romaji":"aizu","level":3},
-        {jp:"清潔",trad:"clean",kun:"せいけつ","romaji":"seiketsu","level":3},
-        {jp:"願い",trad:"desire, wish, request",kun:"ねがい","romaji":"negai","level":3},
-        {jp:"幕",trad:"curtain, bunting, act (in play)",kun:"まく","romaji":"maku","level":3},
-        {jp:"馬",trad:"(1) horse, (2) promoted bishop (shogi)",kun:"うま","romaji":"uma","level":3},
+        [{jp:"合図",trad:"знак, сигнал",kun:"あいず","romaji":"aizu","level":3},
+        {jp:"清潔",trad:"чистота",kun:"せいけつ","romaji":"seiketsu","level":3},
+        {jp:"願い",trad:"желание, просьба",kun:"ねがい","romaji":"negai","level":3},
+        {jp:"幕",trad:"занавес, акт, 1 разряд сумо",kun:"まく","romaji":"maku","level":3},
+        {jp:"馬",trad:"",kun:"うま","romaji":"uma","level":3},
         {jp:"除く",trad:"to remove, to exclude, to except",kun:"のぞく","romaji":"nozoku","level":3},
         {jp:"香り",trad:"aroma, fragrance, scent, smell",kun:"かおり","romaji":"kaori","level":3},
         {jp:"歩道",trad:"footpath, walkway, sidewalk",kun:"ほどう","romaji":"hodō","level":3},
