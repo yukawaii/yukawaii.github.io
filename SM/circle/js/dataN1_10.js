@@ -21,8 +21,8 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "皇",
-            "onyomi": "コウ オ",
-            "kunyomi": "",
+            "onyomi": "コウ",
+            "kunyomi": "コウ",
             "meaning": "Император"
         }, {
             "category": "jlptn1",
@@ -46,7 +46,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "債",
             "onyomi": "サイ",
-            "kunyomi": "",
+            "kunyomi": "サイ",
             "meaning": "Заём"
         }, {
             "category": "jlptn1",
@@ -118,7 +118,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "康",
             "onyomi": "コウ",
-            "kunyomi": "",
+            "kunyomi": "コウ",
             "meaning": "Здоровье"
         }    ],
     vocabulary: [
