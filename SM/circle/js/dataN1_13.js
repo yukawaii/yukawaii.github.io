@@ -57,75 +57,75 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "街",
-            "onyomi": "ガイ カイ マ",
-            "kunyomi": "",
-            "meaning": "boulevard, street, town"
+            "onyomi": "ガイ カイ",
+            "kunyomi": "まち",
+            "meaning": "Город, кварталы"
         }, {
             "category": "jlptn1",
             "character": "契",
             "onyomi": "ケイ",
             "kunyomi": "ちぎ.る",
-            "meaning": "pledge, promise, vow"
+            "meaning": "Клясться"
         }, {
             "category": "jlptn1",
             "character": "掲",
             "onyomi": "ケイ",
             "kunyomi": "かか.げる",
-            "meaning": "put up (a notice), put up, hoist, display, hang out, publish, describe"
+            "meaning": "Вывешивать, поднимать над головой"
         }, {
             "category": "jlptn1",
             "character": "躍",
             "onyomi": "ヤク オド.",
-            "kunyomi": "",
-            "meaning": "leap, dance, skip"
+            "kunyomi": "おどる",
+            "meaning": "Прыгать, скакать"
         }, {
             "category": "jlptn1",
             "character": "棄",
             "onyomi": "キ",
             "kunyomi": "す.てる",
-            "meaning": "abandon, throw away, discard, resign, reject, sacrifice"
+            "meaning": "Выбрасывать, отказываться"
         }, {
             "category": "jlptn1",
             "character": "邸",
-            "onyomi": "テイ ヤシ",
-            "kunyomi": "",
-            "meaning": "residence, mansion"
+            "onyomi": "テイ",
+            "kunyomi": "やしき",
+            "meaning": "Особняк"
         }, {
             "category": "jlptn1",
             "character": "縮",
             "onyomi": "シュク",
-            "kunyomi": "ちぢ.む ちぢ.まる ちぢ.める ちぢ.れる ちぢ.らす",
-            "meaning": "shrink, contract, shrivel, wrinkle, reduce"
+            "kunyomi": "ちぢ.む ちぢ.れる ちぢ.らす ちぢ.まる ちぢ.める",
+            "meaning": "Сжимать, сокращать, завивать волосы"
         }, {
             "category": "jlptn1",
             "character": "還",
             "onyomi": "カン",
             "kunyomi": "かえ.る",
-            "meaning": "send back, return"
+            "meaning": "Возвращаться"
         }, {
             "category": "jlptn1",
             "character": "属",
-            "onyomi": "ゾク ショク ヤカ",
-            "kunyomi": "さかん つく",
-            "meaning": "belong, genus, subordinate official, affiliated"
+            "onyomi": "ゾク",
+            "kunyomi": "ぞく.する",
+            "meaning": "Чиновник, принадлежать к"
         }, {
             "category": "jlptn1",
             "character": "慮",
-            "onyomi": "リョ オモンパカ.",
+            "onyomi": "リョ",
             "kunyomi": "おもんぱく.る",
-            "meaning": "prudence, thought, concern, consider, deliberate, fear"
+            "meaning": "Обдумывать, думать, опасаться"
         }, {
             "category": "jlptn1",
             "character": "枠",
-            "onyomi": "",
+            "onyomi": "-",
             "kunyomi": "わく",
-            "meaning": "frame, framework, spindle, spool, bounding-box, (kokuji)"
+            "meaning": "Рамка, катушка, пяльцы, шпулька"
         }, {
             "category": "jlptn1",
             "character": "恵",
-            "onyomi": "ケイ エ メグ.",
+            "onyomi": "ケイ エ",
             "kunyomi": "めぐ.む",
-            "meaning": "favor, blessing, grace, kindness"
+            "meaning": "Благоволить, милость"
         }
     ],
     vocabulary: [
