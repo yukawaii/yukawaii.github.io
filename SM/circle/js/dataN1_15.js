@@ -63,63 +63,63 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "誘",
-            "onyomi": "ユウ イウ",
-            "kunyomi": "さそ.う いざな.う",
-            "meaning": "entice, lead, tempt, invite, ask, call for, seduce, allure"
+            "onyomi": "ユウ",
+            "kunyomi": "さそ.う いざな.う おび.く",
+            "meaning": "Приглашать, завлекать"
         }, {
             "category": "jlptn1",
             "character": "紛",
             "onyomi": "フン",
-            "kunyomi": "まぎ.れる -まぎ.れ まぎ.らす まぎ.らわす まぎ.らわしい",
-            "meaning": "distract, be mistaken for, go astray, divert"
+            "kunyomi": "まぎ.れる まぎ.らわしい まぎ.らす まぎ.らわす",
+            "meaning": "Отвлекать, двусмысленный,затеряться в"
         }, {
             "category": "jlptn1",
             "character": "至",
-            "onyomi": "シ イタ.",
-            "kunyomi": "",
-            "meaning": "climax, arrive, proceed, reach, attain, result in"
+            "onyomi": "シ",
+            "kunyomi": "いた.る",
+            "meaning": "Доходить, достигать, крайне"
         }, {
             "category": "jlptn1",
             "character": "宗",
-            "onyomi": "シュウ ソウ ム",
-            "kunyomi": "",
-            "meaning": "religion, sect, denomination, main point, origin, essence"
+            "onyomi": "シュウ ソウ",
+            "kunyomi": "むね",
+            "meaning": "Религ.школа, суть, цель"
         }, {
             "category": "jlptn1",
             "character": "促",
             "onyomi": "ソク",
             "kunyomi": "うなが.す",
-            "meaning": "stimulate, urge, press, demand, incite"
+            "meaning": "Вынуждать, форсировать"
         }, {
             "category": "jlptn1",
             "character": "慎",
-            "onyomi": "シン ツツシ.",
-            "kunyomi": "つつし.む つつし",
-            "meaning": "humility, be careful, discrete, prudent"
+            "onyomi": "シン",
+            "kunyomi": "つつし.む つつしい",
+            "meaning": "Избегать, благоразумие, смиренный"
         }, {
             "category": "jlptn1",
             "character": "控",
             "onyomi": "コウ",
             "kunyomi": "ひか.える ひか.え",
-            "meaning": "withdraw, draw in, hold back, refrain from, be moderate"
+            "meaning": "Воздерживаться, заметки"
         }, {
             "category": "jlptn1",
             "character": "智",
-            "onyomi": "",
-            "kunyomi": "",
-            "meaning": "wisdom, intellect, reason"
+            "onyomi": "チ",
+            "kunyomi": "チ",
+            "meaning": "Ум, мудрость"
         }, {
             "category": "jlptn1",
             "character": "握",
             "onyomi": "アク",
             "kunyomi": "にぎ.る",
-            "meaning": "grip, hold, mould sushi, bribe"
+            "meaning": "Горсть, держать в руке"
         }, {
             "category": "jlptn1",
             "character": "宙",
-            "onyomi": "チュ",
-            "kunyomi": "",
-            "meaning": "mid-air, air, space, sky, memorization, interval of time"
+            "onyomi": "チュウ",
+            "kunyomi": "チュウ",
+            "meaning": "Небо, воздух, космос"
         }    ],
     vocabulary: [
 
