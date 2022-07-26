@@ -10,116 +10,116 @@ const DATA = {
             "category": "jlptn1",
             "character": "沖",
             "onyomi": "チュウ",
-            "kunyomi": "おき おきつ ちゅう.する わく",
-            "meaning": "open sea, offing, rise high into sky"
+            "kunyomi": "おき ちゅう.する",
+            "meaning": "Открытое море, взмывать"
         }, {
             "category": "jlptn1",
             "character": "緩",
-            "onyomi": "カン ユル.メ",
+            "onyomi": "カン",
             "kunyomi": "ゆる.い ゆる.やか ゆる.む",
-            "meaning": "slacken, loosen, relax, lessen, be moderate, ease"
+            "meaning": "Нетугой, расшатываться, ослаблять"
         }, {
             "category": "jlptn1",
             "character": "節",
-            "onyomi": "セツ セチ ノッ",
-            "kunyomi": "ふし -ぶし",
-            "meaning": "node, season, period, occasion, verse, clause, stanza, honor, joint, knuckle, knob, knot, tune, melody"
+            "onyomi": "セツ セチ",
+            "kunyomi": "ふし せっ.する",
+            "meaning": "Сустав, экономить, сезон, интонация, утолщение"
         }, {
             "category": "jlptn1",
             "character": "需",
             "onyomi": "ジュ",
-            "kunyomi": "",
-            "meaning": "demand, request, need"
+            "kunyomi": "ジュ",
+            "meaning": "Спрос"
         }, {
             "category": "jlptn1",
             "character": "射",
             "onyomi": "シャ",
             "kunyomi": "い.る さ.す",
-            "meaning": "shoot, shine into, onto, archery"
+            "meaning": "Стрелять, попадать, падать (лучи)"
         }, {
             "category": "jlptn1",
             "character": "購",
             "onyomi": "コウ",
-            "kunyomi": "",
-            "meaning": "subscription, buy"
+            "kunyomi": "あがな.う",
+            "meaning": "Приобретать, закупка"
         }, {
             "category": "jlptn1",
             "character": "揮",
             "onyomi": "キ",
             "kunyomi": "ふる.う",
-            "meaning": "brandish, wave, wag, swing, shake"
+            "meaning": "Размахивать, трясти"
         }, {
             "category": "jlptn1",
             "character": "充",
-            "onyomi": "ジュウ ミ.タ",
-            "kunyomi": "あ.てる",
-            "meaning": "allot, fill"
+            "onyomi": "ジュウ",
+            "kunyomi": "あ.てる み.たす",
+            "meaning": "Предназначать, наполнять"
         }, {
             "category": "jlptn1",
             "character": "貢",
-            "onyomi": "コウ ク",
+            "onyomi": "コウ",
             "kunyomi": "みつ.ぐ",
-            "meaning": "tribute, support, finance"
+            "meaning": "Ден.поддержка, платить дань"
         }, {
             "category": "jlptn1",
             "character": "鹿",
             "onyomi": "ロク",
             "kunyomi": "しか",
-            "meaning": "deer"
+            "meaning": "Олень"
         }, {
             "category": "jlptn1",
             "character": "却",
             "onyomi": "キャク",
             "kunyomi": "かえ.って しりぞ.く しりぞ.ける",
-            "meaning": "instead, on the contrary, rather"
+            "meaning": "Наоборот, отступать"
         }, {
             "category": "jlptn1",
             "character": "端",
-            "onyomi": "タン ハ",
-            "kunyomi": "はし は はた -ばた",
-            "meaning": "edge, origin, end, point, border, verge, cape"
+            "onyomi": "タン",
+            "kunyomi": "はし は はた",
+            "meaning": "Начало, край, кончик, остаток"
         }, {
             "category": "jlptn1",
             "character": "賃",
-            "onyomi": "チ",
-            "kunyomi": "",
-            "meaning": "fare, fee, hire, rent, wages, charge"
+            "onyomi": "チン",
+            "kunyomi": "チン",
+            "meaning": "Плата"
         }, {
             "category": "jlptn1",
             "character": "獲",
             "onyomi": "カク",
             "kunyomi": "え.る",
-            "meaning": "seize, get, find, earn, acquire, can, may, able to"
+            "meaning": "Получать, завоёвывать"
         }, {
             "category": "jlptn1",
             "character": "郡",
             "onyomi": "グン",
             "kunyomi": "こうり",
-            "meaning": "county, district"
+            "meaning": "Уезд"
         }, {
             "category": "jlptn1",
             "character": "併",
             "onyomi": "ヘイ",
-            "kunyomi": "あわ.せる",
-            "meaning": "join, get together, unite, collective"
+            "kunyomi": "あわ.せ しか.し",
+            "meaning": "Вдобавок, однако "
         }, {
             "category": "jlptn1",
             "character": "徹",
-            "onyomi": "テ",
-            "kunyomi": "",
-            "meaning": "penetrate, clear, pierce, strike home, sit up (all night)"
+            "onyomi": "テツ",
+            "kunyomi": "とお.る　とお.す",
+            "meaning": "Проникать, пропускать"
         }, {
             "category": "jlptn1",
             "character": "貴",
-            "onyomi": "キ トウト.",
+            "onyomi": "キ",
             "kunyomi": "たっと.い とうと.い たっと.ぶ",
-            "meaning": "precious, value, prize, esteem, honor"
+            "meaning": "Благородный, ценить"
         }, {
             "category": "jlptn1",
             "character": "衝",
             "onyomi": "ショウ",
             "kunyomi": "つ.く",
-            "meaning": "collide, brunt, highway, opposition (astronomy), thrust, pierce, stab, prick"
+            "meaning": "Толкать, нападать, бодать"
         }    ],
     vocabulary: [
 
