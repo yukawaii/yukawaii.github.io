@@ -10,7 +10,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "吉",
             "onyomi": "キチ キツ",
-            "kunyomi": "",
+            "kunyomi": "キチ キツ",
             "meaning": "Удача, счастье"
         }, {
             "category": "jlptn1",
@@ -27,7 +27,7 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "臨",
-            "onyomi": "リン ノゾ.",
+            "onyomi": "リン",
             "kunyomi": "のぞ.む",
             "meaning": "Присутствовать"
         }, {
