@@ -10,7 +10,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "逮",
             "onyomi": "タイ",
-            "kunyomi": "",
+            "kunyomi": "タイ",
             "meaning": "Арест"
         }, {
             "category": "jlptn1",
@@ -28,7 +28,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "崩",
             "onyomi": "ホウ",
-            "kunyomi": "くず.れる -くず.れ くず.す",
+            "kunyomi": "くず.れるくず.す",
             "meaning": "Разваливаться, разрушать"
         }, {
             "category": "jlptn1",
@@ -64,7 +64,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "締",
             "onyomi": "テイ",
-            "kunyomi": "し.まる し.まり し.める",
+            "kunyomi": "し.まる し.める",
             "meaning": "Завязывать, напряжённость"
         }, {
             "category": "jlptn1",
