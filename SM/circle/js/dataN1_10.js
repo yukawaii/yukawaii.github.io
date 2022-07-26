@@ -4,7 +4,7 @@ const DATA = {
             "category": "jlptn1",
             "character": "僚",
             "onyomi": "リョウ",
-            "kunyomi": "",
+            "kunyomi": "リョウ",
             "meaning": "Коллега"
         }, {
             "category": "jlptn1",
