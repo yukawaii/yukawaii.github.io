@@ -200,7 +200,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "字",
     on: "ジ",
-    kun: "あざ あざな -な",
+    kun: "あざ あざな",
     trad: "Знак, буква"
 }, {
     "category": "jlptn4",
