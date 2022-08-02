@@ -2,111 +2,111 @@ const DATA = {
     kanji: [
         {"category": "jlptn1",
         "character": "彦",
-        "onyomi": "ゲン ヒ",
-        "kunyomi": "",
-        "meaning": "lad, boy (ancient)"
+        "onyomi": "ゲン",
+        "kunyomi": "ひこ",
+        "meaning": "Именной суффикс"
     }, {
         "category": "jlptn1",
         "character": "肝",
         "onyomi": "カン",
         "kunyomi": "きも",
-        "meaning": "liver, pluck, nerve, chutzpah"
+        "meaning": "Печень, отвага"
     }, {
         "category": "jlptn1",
         "character": "喚",
         "onyomi": "カン",
         "kunyomi": "わめ.く",
-        "meaning": "yell, cry, scream"
+        "meaning": "Вопить, кричать"
     }, {
         "category": "jlptn1",
         "character": "沿",
         "onyomi": "エン",
-        "kunyomi": "そ.う -ぞ.い",
-        "meaning": "run alongside, follow along, run along, lie along"
+        "kunyomi": "そ.う そ.って",
+        "meaning": "Вдоль"
     }, {
         "category": "jlptn1",
         "character": "妙",
         "onyomi": "ミョウ ビョウ",
-        "kunyomi": "たえ",
-        "meaning": "exquisite, strange, queer, mystery, miracle, excellent, delicate, charming"
+        "kunyomi": "たえ.なる みょう.ちきりん",
+        "meaning": "Обворожительный, странный, чудо"
     }, {
         "category": "jlptn1",
         "character": "唱",
         "onyomi": "ショウ",
         "kunyomi": "とな.える",
-        "meaning": "chant, recite, call upon, yell"
+        "meaning": "Провозглашать, кричать"
     }, {
         "category": "jlptn1",
         "character": "阿",
-        "onyomi": "ア オ オモネ.",
-        "kunyomi": "",
-        "meaning": "Africa, flatter, fawn upon, corner, nook, recess"
+        "onyomi": "ア",
+        "kunyomi": "おもね.る",
+        "meaning": "Угодничать, пресмыкаться"
     }, {
         "category": "jlptn1",
         "character": "索",
         "onyomi": "サク",
-        "kunyomi": "",
-        "meaning": "cord, rope"
+        "kunyomi": "つな",
+        "meaning": "Трос, канат"
     }, {
         "category": "jlptn1",
         "character": "誠",
-        "onyomi": "セイ マコ",
-        "kunyomi": "",
-        "meaning": "sincerity, admonish, warn, prohibit, truth, fidelity"
+        "onyomi": "セイ",
+        "kunyomi": "まこと　まことしやか",
+        "meaning": "Правда, правдоподобно, искренне"
     }, {
         "category": "jlptn1",
         "character": "襲",
-        "onyomi": "シュウ カサ.",
-        "kunyomi": "おそ.う",
-        "meaning": "attack, advance on, succeed to, pile, heap"
+        "onyomi": "シュウ",
+        "kunyomi": "おそ.う かさね ",
+        "meaning": "Атаковать, груда, слой"
     }, {
         "category": "jlptn1",
         "character": "懇",
         "onyomi": "コン",
         "kunyomi": "ねんご.ろ",
-        "meaning": "sociable, kind, courteous, hospitable, cordial"
+        "meaning": "Сердечный, тёплый, близкий"
     }, {
         "category": "jlptn1",
         "character": "俳",
         "onyomi": "ハイ",
-        "kunyomi": "",
-        "meaning": "haiku, actor"
+        "kunyomi": "ハイ",
+        "meaning": "Хайку, актёр"
     }, {
         "category": "jlptn1",
         "character": "柄",
-        "onyomi": "ヘイ ツ",
-        "kunyomi": "がら え",
-        "meaning": "design, pattern, build, nature, handle, crank, grip, knob, shaft"
+        "onyomi": "ヘイ",
+        "kunyomi": "がら え つか",
+        "meaning": "Узор, рукоятка"
     }, {
         "category": "jlptn1",
         "character": "驚",
         "onyomi": "キョウ",
         "kunyomi": "おどろ.く おどろ.かす",
-        "meaning": "wonder, be surprised, frightened, amazed"
+        "meaning": "Удивляться, поражать, пугать"
     }, {
         "category": "jlptn1",
         "character": "麻",
-        "onyomi": "マ マア ア",
-        "kunyomi": "",
-        "meaning": "hemp, flax"
+        "onyomi": "マ マア",
+        "kunyomi": "あさ お",
+        "meaning": "Конопля, лён"
     }, {
         "category": "jlptn1",
         "character": "李",
-        "onyomi": "リ スモ",
-        "kunyomi": "",
-        "meaning": "plum"
+        "onyomi": "リ",
+        "kunyomi": "すもも",
+        "meaning": "Кит.слива"
     }, {
         "category": "jlptn1",
         "character": "浩",
-        "onyomi": "コウ ヒロ.",
+        "onyomi": "コウ",
         "kunyomi": "おおき.い",
-        "meaning": "wide expanse, abundance, vigorous"
+        "meaning": "Большой, объёмный"
     }, {
         "category": "jlptn1",
         "character": "剤",
-        "onyomi": "ザイ スイ セイ",
-        "kunyomi": "かる けず.る",
-        "meaning": "dose, medicine, drug"
+        "onyomi": "ザイ",
+        "kunyomi": "ザイ",
+        "meaning": "Лекарство, снадобье"
     }, {
         "category": "jlptn1",
         "character": "瀬",
