@@ -63,7 +63,7 @@ let n5ButtonClick = document.getElementById('n5').addEventListener('click', func
     this.classList.add('selected')
     n = 'N5'
     levelTitle.innerHTML = 'N5'
-    groupTitle.innerHTML = 'Pick A Group'
+    groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
 let n4ButtonClick = document.getElementById('n4').addEventListener('click', function(){
@@ -73,7 +73,7 @@ let n4ButtonClick = document.getElementById('n4').addEventListener('click', func
     this.classList.add('selected')
     n = 'N4'
     levelTitle.innerHTML = 'N4'
-    groupTitle.innerHTML = 'Pick A Group'
+    groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
 let n3ButtonClick = document.getElementById('n3').addEventListener('click', function(){
@@ -83,17 +83,17 @@ let n3ButtonClick = document.getElementById('n3').addEventListener('click', func
     this.classList.add('selected')
     n = 'N3'
     levelTitle.innerHTML = 'N3'
-    groupTitle.innerHTML = 'Pick A Group'
+    groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
-/*let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
+let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
     for (let i = 0; i < levelButtons.length; i++) {
             levelButtons[i].classList.remove('selected')
     }
     this.classList.add('selected')
     n = 'N2'
     levelTitle.innerHTML = 'N2'
-    groupTitle.innerHTML = 'Pick A Group'
+    groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
 let n1ButtonClick = document.getElementById('n1').addEventListener('click', function(){
@@ -103,10 +103,10 @@ let n1ButtonClick = document.getElementById('n1').addEventListener('click', func
     this.classList.add('selected')
     n = 'N1'
     levelTitle.innerHTML = 'N1'
-    groupTitle.innerHTML = 'Pick A Group'
+    groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
-*/
+
 
 
 // Group Buttons - Working
@@ -143,9 +143,9 @@ function groupButtonAction(n) {
     
     for(let i = 0; i < groupObjectPropertyNames.length; i++) {
         if (i < 9){
-            groupButtonText = `Group 0${i + 1}`
+            groupButtonText = `Ур. 0${i + 1}`
         } else {
-            groupButtonText = `Group ${i + 1}`
+            groupButtonText = `Ур. ${i + 1}`
         }
 
         createGroupButtons(groupButtonText)
