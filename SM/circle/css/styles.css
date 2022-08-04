@@ -1,0 +1,550 @@
+/* font-family: 'Kosugi Maru', sans-serif; 
+font-family: 'Nanum Gothic', sans-serif;
+font-family: 'Darker Grotesque', sans-serif;
+font-family: 'Didact Gothic', sans-serif;
+font-family: 'Concert One', cursive;
+font-family: 'Sigmar One', cursive;
+font-family: 'Fugaz One', cursive; */
+
+/* $color1: rgba(39, 39, 39, 1);
+$color2: rgba(254, 215, 102, 1);
+$color3: rgba(73, 147, 130, 1);
+$color4: rgba(255, 255, 255, 1);
+$color5: rgba(93, 87, 107, 1); 
+
+
+Turtle Dark Green
+#3C7317
+*/
+
+html, body {
+    margin: 0;
+    padding: 0;
+   font-family: 'Kosugi Maru', sans-serif;
+}
+#main-container {
+    width: 95vw;
+    background-color:white;
+    margin: 0px auto;
+}
+
+
+/*---------------------------
+	  INTRO & HEADING
+---------------------------*/
+
+.heading {
+    text-align: center;
+    color: rgba(93, 87, 107, 1);
+    font-size: 45px;
+    margin: 0px;
+}
+img {
+    height: 60px;
+    width: 80px;
+}
+#image{
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+.divider {
+    font-weight: 100;
+    color: rgba(254, 215, 102, 1);
+}
+#subheading {
+    text-align: center; 
+    color: white;
+    width: 140px;
+    height: 38px;
+    margin: 40px auto;
+
+}
+#subheading p {
+    margin: 0px;
+    float: left;
+    padding-top: 10px;
+}
+#plus {
+    color: #3C7317;
+    margin-top: 10px;
+}
+#pm {
+    display: block;
+    width: 70px;
+    text-align: center;
+    float: right;
+}
+#pomodoro {
+    border-bottom: rgba(254, 215, 102, 1) solid 2px;
+}
+.container {
+    background-color: rgba(93, 87, 107, 1);
+    padding: 5px 0px;
+    margin: 30px auto;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 880px;    
+}
+#how-to, #tips, #asterisk {
+    color: white;
+}
+.asterisk {
+    color: rgba(254, 215, 102, 1);
+}
+.box {
+    background-color: white;
+    margin: 10px;
+    padding: 5px 10px;
+}
+h2 {
+    color: #78B354;
+}
+p {
+    color: rgba(93, 87, 107, 1);
+}
+
+a, a:hover {
+    color: rgba(93, 87, 107, 1);
+    text-decoration: none;
+    border-bottom: rgba(254, 215, 102, 1) solid 4px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.details {
+    display: none;
+}
+
+@media (min-width: 414px){
+    #main-container {
+        margin: 0px auto;
+    }
+}
+/*---------------------------
+	  MAIN BODY
+---------------------------*/
+button{
+    background-color: transparent;
+    border: rgba(93, 87, 107, 1) solid 2px;
+    border-radius: 10px;
+    /* height: 30px; */
+    margin: 5px auto;
+    font-size: 15px;
+    color: rgba(93, 87, 107, 1);
+}
+.selected, button:hover {
+    border: #78B354 solid 2px;
+    color: #78B354;
+}
+
+#mode-button-container, #prevnext-button-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+#learning-mode, #flash-card-mode, #previous, #next {
+    width: 30vw;
+    margin: 5px 0px;
+}
+.float-left {
+    float: left;
+    height: 100%;
+    width: 15vw;
+    min-height: 100px;
+    margin-top: 100px;
+}
+.float-right {
+    float: right;
+    width: 80vw;
+    margin-bottom: 200px;
+}
+#level-container button, #group-button {
+    display: block;
+    width: 100%;
+    min-width: 40px;
+}
+hr {
+    margin: 20px auto;
+    width: 65%;
+    border: rgba(254, 215, 102, 1) solid 2px;
+}
+
+@media (min-width: 450px){
+    .float-right {
+        margin-top: 100px;
+    }
+}
+
+/*---------------------------
+	  GROUP DISPLAY
+---------------------------*/
+#group-buttons-container {
+    text-align: center;
+    width: 100%;
+    height: 65px;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+}
+@media (min-width: 555px) {
+
+}
+#group-buttons-container button {
+    margin: 5px;
+    padding: 5px 2px;
+}
+@media (max-width: 450px){
+    #learning-mode, #flash-card-mode, #previous, #next {
+        display: block;
+        width: 100%;
+    }
+    .float-right, .float-left {
+        float: none;
+        text-align: center;
+        width: 100%;
+    }
+}
+@media (min-width: 450px){
+    #group-buttons-container {
+        flex-direction: column;
+        height: 100vh;
+        overflow-y: scroll;
+    }
+    #hide {
+        display: none;
+    }
+}
+
+
+/*---------------------------
+	  POMODORO
+---------------------------*/
+#pomodoro-container {
+    color: rgba(93, 87, 107, 1);
+    text-align: center;
+    margin: 45px auto;
+    border: rgba(93, 87, 107, 1) solid 4px;
+    border-radius: 50%;
+    padding: 20px;
+    height: 250px;
+    width: 250px;
+}
+#pomodoro-buttons-container{
+    margin: 10px auto;
+    padding: 1px;
+    width: 50%;
+}
+#pomodoro-display {
+    margin: 10px auto;
+    padding: 1px;
+    width: 100%;
+}
+#add-time, #subtract-time, #start, #pause, #resume, #reset {
+    margin: 0px 2px;
+}
+#add-time, #subtract-time{
+    width: 30px;
+}
+#set-minutes, #minute-kanji, #pomodoro-display {
+    font-size: 25px;
+}
+#pause:hover, .pause-selected {
+    border: rgba(254, 215, 102, 1) solid 2px;
+    color: rgba(254, 215, 102, 1);
+}
+#resume:hover, .resume-selected {
+    color: #3C7317;
+}
+#reset:hover {
+    border: rgba(232, 93, 117, 1) solid 2px;
+    color: rgba(232, 93, 117, 1);
+}
+#showtime{
+    padding: 1px 5px;
+    border-left: #78B354 solid 4px;
+    border-right: #78B354 solid 4px;
+}
+@media (max-width: 450px){
+    #start, #pause, #resume, #reset {
+         display: block;
+         width: 100%;
+         margin: 5px 0px;
+     }
+ }
+ @media (min-width: 450px){
+    #pomodoro-container {
+        height: 300px;
+        width: 300px;
+        padding: 0px;
+    }
+    #set-timer {
+        margin-top: 65px;
+    }
+    #pomodoro-buttons-container, #pomodoro-display {
+        margin: 30px auto;
+        padding: 1px;
+        width: 100%;
+    }
+    #set-minutes, #minute-kanji, #pomodoro-display {
+        font-size: 30px;
+    }
+}
+
+/*---------------------------
+	  KANJI DISPLAY
+---------------------------*/
+#level-group-title {
+    text-align: center;
+}
+#kanji-buttons-container{
+    text-align: center;
+    margin: 10px 0px;
+}
+#kanji-buttons-container button{
+    font-size: 25px;
+}
+
+/*---------------------------
+	  STUDY CARD : Styling
+---------------------------*/
+#card-container{
+    height: 75vh;
+    max-height: 460px;
+    max-width: 520px;
+    margin: 10px auto;
+    border: rgba(93, 87, 107, 1) solid 1px;
+}
+
+.item1 { grid-area: kanji; }
+.item2 { grid-area: reading; }
+.item3 { grid-area: definition; }
+.item4 { grid-area: examples; }
+
+#learn {
+    height: 100%;
+    display: grid;
+    grid-template-areas:
+        'kanji definition'
+        'reading examples';
+}
+#learning {
+    /* border: rgba(93, 87, 107, 1) solid 2px; */
+    height: 100%;
+}
+#learning > div, #back > div {
+    text-align: left;
+}
+
+#learning h2, #back h2 {
+    margin: 0px;
+    font-size: 18px
+}
+#learning p, #back p {
+    margin: 10px 0px;
+    padding: 5px 0px;
+    font-size: 14px;
+}
+.kanji {
+    color: rgba(93, 87, 107, 1);
+    font-size: 100px;
+    text-align: center; 
+    margin: 15px auto;
+}
+@media (orientation: landscape){
+    #learn {
+        grid-template-areas:
+        'kanji reading reading examples examples examples'
+        'definition definition definition examples examples examples'
+        'definition definition definition examples examples examples';
+    }
+}
+ /* #learning, .define, .ex, .learning h1, .learning h2 {
+     border: rgba(93, 87, 107, 1) solid 1px;
+} */
+#back div {
+    border: none;
+}
+
+/*--------------------------------
+	  FLASH CARD : Functionality
+----------------------------------*/
+ .flashcard {
+    transform : rotateY(180deg);
+    } 
+
+    /* width and height for main flip container and front and back sides */
+    #front, #back {
+    width : 100%;
+    max-width: 520px;
+    height : 50vh;
+    max-height: 260px;
+    margin: 0px auto;
+    }
+
+    /* flip speed  */
+    #flashcard {
+    transition : 1.6s;
+    transform-style : preserve-3d;
+    position : relative;
+    height: 100%;
+    } 
+
+    /* hide back on flip */
+     #front, #back {
+    backface-visibility : hidden;
+    -webkit-backface-visibility: hidden;
+    position : absolute;
+    } 
+
+    /* front pane placed above back with z index */
+    #front {
+    z-index : 1;
+    transform : rotateY(0deg);
+    text-align : center;
+    top: 18vh;
+    } 
+    @media (min-height:1000px){
+        #front {
+            top: 10vh;
+        }
+    }
+    @media (orientation: landscape){
+        #front {
+            top: 0px;
+        }
+    }
+
+    /* back side rotated to 180 deg to place at the back*/
+    #back {
+    transform : rotateY(180deg);
+    } 
+
+
+/*----------------------------------
+	  FRONT OF FLASH CARD : Styling
+------------------------------------*/
+.flashcard-front-item1 { grid-area: kanji; }
+
+#front {
+    display: grid;
+    grid-template-areas:
+      'kanji kanji kanji kanji kanji kanji'
+      'kanji kanji kanji kanji kanji kanji'
+      'kanji kanji kanji kanji kanji kanji';
+    
+  }
+
+/*----------------------------------
+	  BACK OF FLASH CARD : Styling
+------------------------------------*/
+.flashcard-item1 { grid-area: reading; }
+.flashcard-item2 { grid-area: definition; }
+.flashcard-item3 { grid-area: examples; }
+
+
+#back {
+  display: grid;
+  grid-template-areas:
+    'reading'
+    'definition'
+    'examples';
+    grid-gap: 10px;
+}
+.flashcard-ex div {
+    text-align: left;
+    margin: 0px auto;
+    width: 80%;
+    height: 100%;
+}
+@media (orientation: landscape){
+    #back {
+        grid-template-areas:
+        'reading reading reading examples examples examples'
+        'reading reading reading examples examples examples'
+        'definition definition definition examples examples examples';
+    }
+    #card-container, #learn{
+        max-height: 260px;
+        max-width: 460px;
+    }
+}
+
+/*--------------
+	  ASTERISK
+----------------*/
+#asterisk-container {
+    clear: both;
+    margin: 0px auto;
+    width: 95vw;
+    background-color: white;
+}
+
+#asterisk-container > h1 {
+    text-align: left;
+    padding: 0px 15px;
+    font-size: 50px;
+    margin: 100px 0px 0px 0px;
+    color:  #3C7317;
+    display: inline;
+}
+
+
+/*--------------
+	  FOOTER
+----------------*/
+footer {
+    background-color: rgba(93, 87, 107, 1);
+    min-height: 150px;
+    width: 100%;
+    /* max-width: 95vw; */
+    clear: both;
+    bottom: 0;
+    padding: 10px;
+    text-align: center;
+}
+footer p {
+    color: white;
+}
+footer a, footer a:hover {
+    color: white;
+    text-decoration: none;
+}
+@media (min-width: 414px){
+    footer {
+        max-width: 100vw;
+    }
+}
+
+
+/*------------------
+	TOGGLE CLASSES
+--------------------*/
+
+.hide {
+    display: none;
+}
+
+
+/*-----------
+	  ALERT
+-------------*/
+
+#alert {
+    position: absolute;
+    margin: 150px auto;
+    max-width: 100%;
+}
+
+#close-alert {
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    color: #78B354;
+    margin: 8px;
+    transition: 0.5s;
+}
+
+#close-alert:hoover {
+    color: rgba(93, 87, 107, 1);
+}
