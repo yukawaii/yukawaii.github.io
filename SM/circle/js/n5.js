@@ -1,5 +1,5 @@
 const N5 = { 
-    "Ур. 01" : 
+    "Group 01" : 
             [
                 {   
                     "kanji" : "一",
@@ -64,7 +64,7 @@ const N5 = {
                 }
             ],
 
-    "Ур. 02" :
+    "Group 02" :
             [
                 {   
                     "kanji" : "万",
@@ -128,7 +128,7 @@ const N5 = {
                     "examples" : ["勤め先 つとめさき place of work (n)","口先 くちさき lip service, mere words, professions, lips, mouth, snout, proboscis (n)","先決 せんけつ previous decision, deciding in advance (n, vs)"]
                 }
             ],
-    "Ур. 03" : 
+    "Group 03" : 
             [
                 {   
                     "kanji" : "入",
