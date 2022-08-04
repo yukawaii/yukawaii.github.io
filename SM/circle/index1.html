@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru|Concert+One|Darker+Grotesque|Didact+Gothic|Fugaz+One|Nanum+Gothic|Sigmar+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="js/App.js"></script>  
+  <script src="./js/n5.js"></script>
+    <script src="./js/n4.js"></script>
+    <script src="./js/n3.js"></script>
+ <script src="./js/n2.js"></script>
+    <script src="./js/n1.js"></script> 
+    <title>YuKawaii's Kanji</title>
+</head>
+<body>
+    <div id="alert" class="container">
+        <span id="close-alert">&times;</span>
+        <div id="alert-content" class="box">
+            <h2>Добро пожаловать в YuKawaii's Kanji Beta</h2>
+                              <p>Это приложение поможет Вам выучить кандзи и слова японского языка уровней Н1-Н5.</p>
+           <p> Продуктивной учёбы и хорошего дня! </p>
+                  </div>
+    </div>
+    <div id="main-container">
+        <div id="image">
+            <img src="./images/yuka.png" alt="turtle icon"/>
+        </div>
+        <h1 class="heading">漢字 <span class="divider">|</span> YuKawai's Kanji</h1>
+        <div id="how-to-container" class="container">
+            <h1 id="how-to"><span id="detail-arrow"> &#8227; </span>Как играть</h1>
+            <div id="how-to-details" class="details">
+                <div class="box"> 
+                    <h2>Учёба</h2>
+                    <p>Выбери уровень Норёку: N5 - N1.</p>
+                    <p>Выбери группу из 10 иероглифов и сфокусируйся на их изучении. Выписывай себе в тетрадь кандзи, чтения и примеры.</p>
+                    <p>Нажми на "Режим учёбы".</p>
+                    <p>Установи временной отрезок для изучения.</p>
+                    <p>нажми старт и приступай!</p>
+                </div>
+                <div class="box">
+                    <h2>Перерыв</h2>
+                    <p>Ты много работал, пора отдохнуть!</p>
+                    <!-- <p><img src="assets/images/turtle.png" alt="turtle icon"/>　Will let you know when the pomodoro reaches |00時 00分 00秒|</p> -->
+                    <p>Отдых очень важен для работы мозга и твоей памяти. Не забывай делать небольшие перерывы на чай с печенькой.<span class="asterisk">*</span></p>
+                </div>
+                <div class="box">
+                    <h2>Карточки</h2>
+                    <p>Выбери режим "Карточки"</p>
+                    <p>Выбери группу иероглифов и уровень, которые ты изучал.</p>
+                    <p>Нажимай на карточки, чтобы перевернуть их.</p>
+                    <p>Проверь, как хорошо, ты выучил иероглифы.</p>
+                    <p>Повторение - залог успеха! Возвращайся завтра, чтобы повторить пройденный материал. </p>
+                </div>
+               <div class="box">
+                    <h2>Проверь себя</h2>
+                    <p>Выбери режим "Викторина".</p>
+                    <p>Выбери уровень Норёку и группу кандзи.</p>
+                    <p>В настройках ты можешь поменять местами формат вопросов/ответов. </p>
+                    <p>Ты можешь увеличить/уменьшить время на каждый ответ или вовсе отключить временное ограничение в настройках.</p>
+                    <p>Возвращайся завтра, чтобы закрепить в памяти пройдленные кандзи!</p>
+                </div>
+            </div>
+        </div>
+        <div id="tips-container" class="container">
+            <h1 id="tips"><span id="detail-arrow"> &#8227; </span>Советы<span class="asterisk">*</span></h1>
+            <div id="tips-details" class="details">
+                <div class="box"> 
+                    <h2>Установи время на учёбу<span class="asterisk">*</span></h2>
+                    <p>.</p>
+                    <p>This helps students prevent overlearning.</p>
+                    <p>When you consistenly do a little at a time, you are able to focus on the process of learning the material well.</p>
+                    <p>In contrast, focusing too much on the end product can increase stress and decrease productivity.</p>
+                    <p>Before starting a pomodoro, be sure to remove as many distractions as possible.</p>
+                </div>
+                <div class="box">
+                    <h2>Breaks & Spaced Repetition<span class="asterisk">*</span></h2>
+                    <p>Taking measured breaks gives your brain time to take in what you've studied in a more relaxed state, like breaks between reps in the gym.</p>
+                    <p>When taking a longer break, consider going for a walk or doing other forms of exercise.</p>
+                    <p>Spaced repetition of small chunks of information over several days and weeks has been known to be more effective than re-reading and highlighting text.</p>
+                </div>
+                <div class="box">
+                    <h2>Testing Yourself<span class="asterisk">*</span></h2>
+                    <p>Testing yourself often through recall methods like flash cards is more effective than re-reading or highlighting text.</p>
+                    <p>Getting enough sleep, especially the night before a test, will improve your ability to recall what you have learned.</p>
+                </div>
+            </div>
+        </div>
+        <div id="list-container" class="float-left">
+            <div id="level-container">
+                <button id="n5" class="level-button">N5</button>
+                <button id="n4" class="level-button">N4</button>
+                <button id="n3" class="level-button">N3</button>
+              
+                <!-- <button id="n2" class="level-button">N2</button>
+                <button id="n1" class="level-button">N1</button> -->
+           
+            </div>
+            <hr>
+            <div id="group-buttons-container">
+            </div>
+        </div>
+        <div class="float-right">
+            <hr id="hide">
+            <div id="mode-button-container">
+                <button id="learning-mode" class="selected">Learning Mode</button>
+                <button id="flash-card-mode" class="">Flash Card Mode</button>
+            </div>
+            <div id="pomodoro-container">
+                <div id="set-timer">
+                    <button id="add-time"> &plus; </button>
+                    <span id="minute-kanji"><span id="set-minutes">25</span>分</span>
+                    <button id="subtract-time"> &minus; </button>
+                </div>
+                <div id="pomodoro-buttons-container">
+                    <button id="start" onclick="start()">Start</button>
+                    <button id="pause" onclick="pause()">Pause</button>
+                    <button id="resume" onclick="resume()">Resume</button>
+                    <button id="reset" onclick="reset()">Reset</button>
+                </div>
+                <div id="pomodoro-display">
+                    <span id="showtime">00時 00分 00秒</span>
+                </div>
+            </div>
+            <div id="level-group-title">
+                <h1 class="heading"><span id="level">Pick A Level</span><span class="divider">|</span><span id="group">Pick A Group</span></h1>
+            </div>
+            <div id="kanji-buttons-container">
+            </div>
+            <div id="card-container">
+                    <div id="learning" class="">
+                        <div id="learn" >
+                            <div class="character item1">
+                                <h1 class="kanji"></h1>
+                            </div>
+                            <div class="reading item2">
+                                <h2>音読み | Onyomi</h2>
+                                <p class="onyomi"></p>
+                                <h2>訓読み | Kunyomi</h2>
+                                <p class="kunyomi"></p>        
+                            </div>
+                            <div class="define item3">
+                                <h2>意味 | Definition</h2>
+                                <p class="definition"></p>
+                            </div>
+                            <div class="ex item4">
+                                <h2>例 | Examples</h2>
+                                <p class="examples1"></p>
+                                <p class="examples2"></p>
+                                <p class="examples3"></p>
+                            </div>
+                        </div>
+                    </div>
+                <div id="flashcard" class="hide ">
+                    <div id="front">
+                        <div class="flashcard-character flashcard-front-item1">
+                            <h1 class="kanji"></h1>
+                        </div>
+                    </div>
+                    <div id="back">
+                        <div class="reading item2">
+                            <h2>音読み | Onyomi</h2>
+                            <p class="onyomi"></p>
+                            <h2>訓読み | Kunyomi</h2>
+                            <p class="kunyomi"></p>        
+                        </div>
+                        <div class="define item3">
+                            <h2>意味 | Definition</h2>
+                            <p class="definition"></p>
+                        </div>
+                        <div class="ex item4">
+                            <h2>例 | Examples</h2>
+                            <p class="examples1"></p>
+                            <p class="examples2"></p>
+                            <p class="examples3"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div id="prevnext-button-container">
+                <button id="previous"> &lt; Previous </button>
+                <button id="next"> Next &gt; </button>
+            </div> -->
+        </div>
+    </div>
+    <div id="asterisk-container" class="container">
+        <h1 id="asterisk">*</h1>
+        <img src="assets/images/turtle.png" alt="turtle icon"/>
+        <div id="asterisk-details">
+            <div class="box">
+                <p>The study recommendations on this site are based on the Coursera course <a href="https://www.coursera.org/learn/learning-how-to-learn">Learning How To Learn</a>.</p>
+                <p>Based on years of research, this <a href="https://www.coursera.org/learn/learning-how-to-learn">free course</a> was created to help you improve how you learn by teaching you how to study more effectively.</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div id="subheading">
+            <p>Kanji +</p>
+            <div id="pm">
+                <div id="pomodoro">Pomodoro</div>
+                <div id="modoro">戻ろう</div>
+            </div>
+        </div>
+        <p> 2019 | <a href="https://marjorieetienne.com">MarjorieEtienne.com</a></p>
+    </footer>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/pomodoro.js"></script>
+</body>
+</html>
