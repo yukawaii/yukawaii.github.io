@@ -111,74 +111,74 @@ const DATA = {
         "category": "jlptn1",
         "character": "瀬",
         "onyomi": "ライ",
-        "kunyomi": "",
-        "meaning": "rapids, current, torrent, shallows, shoal"
+        "kunyomi": "せ",
+        "meaning": "Стремнина, мелководье"
     }, {
         "category": "jlptn1",
         "character": "趣",
         "onyomi": "シュ",
         "kunyomi": "おもむき おもむ.く",
-        "meaning": "gist, proceed to, tend, become"
+        "meaning": "Суть, облик, следовать"
     }, {
         "category": "jlptn1",
         "character": "陥",
         "onyomi": "カン",
         "kunyomi": "おちい.る おとしい.れる",
-        "meaning": "collapse, fall into, cave in, fall (castle), slide into"
+        "meaning": "Впадать, поймать"
     }, {
         "category": "jlptn1",
         "character": "斎",
-        "onyomi": "サイ イ.",
-        "kunyomi": "とき つつし.む ものいみ",
-        "meaning": "purification, Buddhist food, room, worship, avoid, alike"
+        "onyomi": "サイ",
+        "kunyomi": "とき いむ　いつく",
+        "meaning": "Очищение, обряд, воздерживаться"
     }, {
         "category": "jlptn1",
         "character": "貫",
-        "onyomi": "カン ヌ",
-        "kunyomi": "つらぬ.く ぬ.く",
-        "meaning": "pierce, 8 1, 3lbs, penetrate, brace"
+        "onyomi": "カン",
+        "kunyomi": "つらぬ.く ぬ.く ぬき",
+        "meaning": "Пронзать, балка"
     }, {
         "category": "jlptn1",
         "character": "仙",
-        "onyomi": "セン セン",
+        "onyomi": "センセン",
         "kunyomi": "",
-        "meaning": "hermit, wizard, cent"
+        "meaning": "Сянь, маг"
     }, {
         "category": "jlptn1",
         "character": "慰",
         "onyomi": "イ",
-        "kunyomi": "なぐさ.める なぐさ.む",
-        "meaning": "consolation, amusement, seduce, cheer, make sport of, comfort, console"
+        "kunyomi": "なぐさ.める なぐさ.む いする",
+        "meaning": "Утешать, отдых"
     }, {
         "category": "jlptn1",
         "character": "序",
-        "onyomi": "ジョ ツイ",
+        "onyomi": "ジョ",
         "kunyomi": "つい.で",
-        "meaning": "preface, beginning, order, precedence, occasion, chance, incidentally"
+        "meaning": "Введение, порядок, заодно"
     }, {
         "category": "jlptn1",
         "character": "旬",
         "onyomi": "ジュン シュン",
-        "kunyomi": "",
-        "meaning": "decameron, 10day period, season (for specific products"
+        "kunyomi": "ジュン シュン",
+        "meaning": "Сезон"
     }, {
         "category": "jlptn1",
         "character": "兼",
-        "onyomi": "ケン -カ.ネ",
+        "onyomi": "ケン",
         "kunyomi": "か.ねる",
-        "meaning": "concurrently, and"
+        "meaning": "Одновременно, совмещать в себе"
     }, {
         "category": "jlptn1",
         "character": "聖",
-        "onyomi": "セイ ショウ ヒジ",
-        "kunyomi": "",
-        "meaning": "holy, saint, sage, master, priest"
+        "onyomi": "セイ",
+        "kunyomi": "ひじり",
+        "meaning": "Святой, мудрец"
     }, {
         "category": "jlptn1",
         "character": "旨",
         "onyomi": "シ",
-        "kunyomi": "むね うま.い",
-        "meaning": "delicious, relish, show a liking for, purport, will, clever, expert"
+        "kunyomi": "むね うま.い うまがる",
+        "meaning": "Суть, вкусный, смаковать"
     }    ],
     vocabulary: [
 
