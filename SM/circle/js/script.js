@@ -62,8 +62,8 @@ let n5ButtonClick = document.getElementById('n5').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N5'
-    levelTitle.innerHTML = 'N5'
-    groupTitle.innerHTML = 'Выбери уровень'
+    levelTitle.innerHTML = 'Н5'
+    groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
 let n4ButtonClick = document.getElementById('n4').addEventListener('click', function(){
@@ -72,8 +72,8 @@ let n4ButtonClick = document.getElementById('n4').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N4'
-    levelTitle.innerHTML = 'N4'
-    groupTitle.innerHTML = 'Выбери уровень'
+    levelTitle.innerHTML = 'Н4'
+    groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
 let n3ButtonClick = document.getElementById('n3').addEventListener('click', function(){
@@ -82,8 +82,8 @@ let n3ButtonClick = document.getElementById('n3').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N3'
-    levelTitle.innerHTML = 'N3'
-    groupTitle.innerHTML = 'Выбери уровень'
+    levelTitle.innerHTML = 'Н3'
+    groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
 let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
@@ -92,8 +92,8 @@ let n2ButtonClick = document.getElementById('n2').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N2'
-    levelTitle.innerHTML = 'N2'
-    groupTitle.innerHTML = 'Выбери уровень'
+    levelTitle.innerHTML = 'Н2'
+    groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
 let n1ButtonClick = document.getElementById('n1').addEventListener('click', function(){
@@ -102,8 +102,8 @@ let n1ButtonClick = document.getElementById('n1').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N1'
-    levelTitle.innerHTML = 'N1'
-    groupTitle.innerHTML = 'Выбери уровень'
+    levelTitle.innerHTML = 'Н1'
+    groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
 
