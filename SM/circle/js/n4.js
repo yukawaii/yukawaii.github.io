@@ -1,5 +1,5 @@
 const N4 = { 
-    "Group 01" : 
+    "Ур. 01" : 
             [
                 {   
                     "kanji" : "不",
@@ -64,7 +64,7 @@ const N4 = {
                 }
             ],
 
-    "Group 02" :
+    "Ур. 02" :
             [
                 {   
                     "kanji" : "住",
@@ -128,7 +128,7 @@ const N4 = {
                     "examples" : ["お兄さん おにいさん (someone else's) elder brother (n)","兄 あに (your own) elder brother (n)","父兄 ふけい guardians, parents and older brothers (n)"]
                 }
             ],
-    "Group 03" : 
+    "Ур. 03" : 
             [
                 {   
                     "kanji" : "写",
@@ -193,7 +193,7 @@ const N4 = {
                 }
             ],
 
-    "Group 04" :
+    "Ур. 04" :
             [
                 {   
                     "kanji" : "台",
@@ -257,7 +257,7 @@ const N4 = {
                     "examples" : ["地下 ちか basement, underground (n)","地図 ちず map (n)","地上 ちじょう above ground (n)"]
                 }
             ],
-    "Group 05" : 
+    "Ур. 05" : 
             [
                 {   
                     "kanji" : "堂",
@@ -322,7 +322,7 @@ const N4 = {
                 }
             ],
 
-    "Group 06" :
+    "Ур. 06" :
             [
                 {   
                     "kanji" : "姉",
@@ -386,7 +386,7 @@ const N4 = {
                     "examples" : ["帰る かえる to return, to go back, to go home (u-v)","お帰り おかえり return, welcome (expression)","持ち帰り もちかえり takeout (ie food) (n)"]
                 }
             ],
-    "Group 07" : 
+    "Ур. 07" : 
             [
                 {   
                     "kanji" : "広",
@@ -451,7 +451,7 @@ const N4 = {
                 }
             ],
 
-    "Group 08" :
+    "Ур. 08" :
             [
                 {   
                     "kanji" : "急",
@@ -515,7 +515,7 @@ const N4 = {
                     "examples" : ["旅行 りょこう travel, trip (n, p-suru)","旅館 りょかん Japanese-style hotel (n)","旅先 たびさき destination, goal (n)"]
                 }
             ],
-    "Group 09" : 
+    "Ур. 09" : 
             [
                 {   
                     "kanji" : "族",
@@ -580,7 +580,7 @@ const N4 = {
                 }
             ],
 
-    "Group 10" :
+    "Ур. 10" :
             [
                 {   
                     "kanji" : "服",
@@ -644,7 +644,7 @@ const N4 = {
                     "examples" : ["正す ただす to correct, to amend (u-v)","正体 しょうたい natural shape, one's true character (n)","正道 せいどう the right path, path of righteousness (n)"]
                 }
             ],
-    "Group 11" : 
+    "Ур. 11" : 
             [
                 {   
                     "kanji" : "歩",
@@ -708,7 +708,7 @@ const N4 = {
                     "examples" : ["牛肉 ぎゅうにく beef (n)","牛歩 ぎゅうほ snail's pace (n)","水牛 すいぎゅう water buffalo (n)"]
                 }
             ],
-    "Group 12" : 
+    "Ур. 12" : 
             [
                 {   
                     "kanji" : "物",
@@ -772,7 +772,7 @@ const N4 = {
                     "examples" : ["世界 せかい world (n)","学界 がっかい academic world (n)","外界 がいかい physical world, the externals (n)"]
                 }
             ],
-    "Group 13" : 
+    "Ур. 13" : 
             [
                 {   
                     "kanji" : "病",
@@ -836,7 +836,7 @@ const N4 = {
                     "examples" : ["秋 あき autumn (n)","秋風 あきかぜ autumn breeze (n)","春秋 しゅんじゅう spring and autumn (n)"]
                 }
             ],
-    "Group 14" : 
+    "Ур. 14" : 
             [
                 {   
                     "kanji" : "究",
@@ -900,7 +900,7 @@ const N4 = {
                     "examples" : ["特色 とくしょく characteristic (n)","黄色 きいろ yellow (na-adj,n)","色々 いろいろ various (na-adj,n,adv)"]
                 }
             ],
-    "Group 15" : 
+    "Ур. 15" : 
             [
                 {   
                     "kanji" : "英",
@@ -964,7 +964,7 @@ const N4 = {
                     "examples" : ["質問 しつもん question, inquiry (n)","水質 すいしつ water quality (n)","悪質 あくしつ bad quality, malignant (na-adj,n)"]
                 }
             ],
-    "Group 16" : 
+    "Ур. 16" : 
             [
                 {   
                     "kanji" : "赤",
@@ -1028,7 +1028,7 @@ const N4 = {
                     "examples" : ["運 うん fortune, luck, (運がいい=to have good luck) (n)","運ぶ はこぶ to transport (u-v)","運転 うんてん driving, motion (n, p-suru)"]
                 }
             ],
-    "Group 17" : 
+    "Ур. 17" : 
             [
                 {   
                     "kanji" : "遠",
@@ -1092,7 +1092,7 @@ const N4 = {
                     "examples" : ["青 あお blue (n)","青空 あおぞら blue sky (n)","深青 ふかあお dark blue, deep blue, navy blue"]
                 }
             ],
-    "Group 18" : 
+    "Ур. 18" : 
             [
                 {   
                     "kanji" : "音",
@@ -1156,7 +1156,7 @@ const N4 = {
                     "examples" : ["小鳥 ことり small bird (n)","野鳥 やちょう wild bird (n)","一石二鳥 いっせきにちょう two birds with one stone (expr)"]
                 }
             ],
-    "Group 19" : 
+    "Ур. 19" : 
             [
                 {   
                     "kanji" : "黒",
