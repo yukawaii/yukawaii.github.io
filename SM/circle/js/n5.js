@@ -257,7 +257,7 @@ const N5 = {
                     "examples" : ["多湿 たしつ high humidity (adj-na, n)","多少 たしょう more or less, somewhat, a little, some (adj-no, adv, n)","多数 たすう great number, countless, majority (n-adv, n, adj-no)"]
                 }
             ],
-    "Group 05" : 
+    "Ур. 05" : 
             [
                 {   
                     "kanji" : "大",
@@ -322,7 +322,7 @@ const N5 = {
                 }
             ],
 
-    "Group 06" :
+    "Ур. 06" :
             [
                 {   
                     "kanji" : "左",
@@ -386,7 +386,7 @@ const N5 = {
                     "examples" : ["月刊 げっかん monthly publication (n)","月給 げっきゅう monthly salary (n)","月見 つきみ viewing the moon (n)"]
                 }
             ],
-    "Group 07" : 
+    "Ур. 07" : 
             [
                 {   
                     "kanji" : "木",
@@ -451,7 +451,7 @@ const N5 = {
                 }
             ],
 
-    "Group 08" :
+    "Ур. 08" :
             [
                 {   
                     "kanji" : "父",
@@ -515,7 +515,7 @@ const N5 = {
                     "examples" : ["耳障り みみざわり hurting one's ears (adj-na, n)","耳鼻科 じびか otolaryngology, concerning the ear, nose, and throat (n)","耳許 みみもと close to the ear (n)"]
                 }
             ],
-    "Group 09" : 
+    "Ур. 09" : 
             [
                 {   
                     "kanji" : "聞",
@@ -580,7 +580,7 @@ const N5 = {
                 }
             ],
 
-    "Group 10" :
+    "Ур. 10" :
             [
                 {   
                     "kanji" : "足",
@@ -644,7 +644,7 @@ const N5 = {
                     "examples" : ["会食 かいしょく dining together, mess (n, vs)","外食 がいしょく eating out (n, vs)","間食 かんしょく eating between meals, snacking (n, vs)"]
                 }
             ],
-    "Group 11" : 
+    "Ур. 11" : 
             [
                 {   
                     "kanji" : "飲",
