@@ -36,31 +36,31 @@ const N5 = {
                     "onyomi" : "ロク, リク",
                     "kunyomi" : "む, む.つ, むっ.つ, むい",
                     "definition" : "Шесть",
-                    "examples" : ["六月 ろくがつ June (n)","六時 ろくじ six o'clock (n)","六百　ろっぴゃく six hundred (numeric)"]
+                    "examples" : ["六月 ろくがつ июнь","六時 ろくじ 6 часов","六百　ろっぴゃく 600", "六角堂　ろっかくどう храм Роккакудо (Сиундзан Тёходзи)"]
                 },{   
                     "kanji" : "七",
                     "onyomi" : "シチ",
                     "kunyomi" : "なな, なな.つ, なの",
-                    "definition" : "one, one radical (no.1)",
-                    "examples" : ["七月 しちがつ July (n)","七時 しちじ seven o'clock (n)","七百　ななひゃく seven hundred (numeric)"]
+                    "definition" : "Семь",
+                    "examples" : ["七月 しちがつ июль","七時 しちじ 7 часов","七百　ななひゃく 700"]
                 },{   
                     "kanji" : "八",
                     "onyomi" : "ハチ",
                     "kunyomi" : "や, や.つ, やっ.つ, よう",
-                    "definition" : "eight, eight radical (no. 12)",
-                    "examples" : ["八つあたり やつあたり outburst of anger (n)","八百屋 やおや greengrocer (n)","八 や eight (numeric)"]
+                    "definition" : "Восемь",
+                    "examples" : ["八つ当り やつあたり взрыв гнева","八百屋 やおや овощная лавка","八つ やつ восемь"]
                 },{   
                     "kanji" : "九",
                     "onyomi" : "キュウ, ク",
                     "kunyomi" : "ここの, ここの.つ",
-                    "definition" : "nine",
-                    "examples" : ["九月 くがつ September (n)","九時 くじ nine o'clock (n)","九日　ここのか ninth day of the month"]
+                    "definition" : "Девять",
+                    "examples" : ["九月 くがつ сентябрь","九時 くじ 9 часов","九日　ここのか девятый день месяца"]
                 },{   
                     "kanji" : "十",
                     "onyomi" : "ジュウ, ジッ, ジュッ",
                     "kunyomi" : "とお, と",
-                    "definition" : "ten",
-                    "examples" : ["十字路 じゅうじろ crossroads (n)","不十分 ふじゅうぶん insufficient, inadequate, imperfect, shortage (adj-na, n)","十 とお 10, ten (numeric)"]
+                    "definition" : "Десять",
+                    "examples" : ["十字路 じゅうじろ перекрёсток","不十分 ふじゅうぶん недостаточный, неполный","十 とお десять", "十日　とおか 10-й день месяца"]
                 }
             ],
 
@@ -70,32 +70,32 @@ const N5 = {
                     "kanji" : "万",
                     "onyomi" : "マン, バン",
                     "kunyomi" : "よろず",
-                    "definition" : "ten thousand",
-                    "examples" : ["万人 まんにん all people, everybody, ten thousand people (n)","万一 まんいち by some chance, by some possibility, 10,000 to 1 odds (adv, n)","万引き まんびき shoplifting, shoplifter (n, vs)"]
+                    "definition" : "10 000",
+                    "examples" : ["万人 まんにん все люди, тысячи людей","万一のため まんいちのため на всякий случай","万引き まんびき магазинная кража", "万一の覚悟をする まんいちのかくごをする подготовиться к худшему"]
                 },{   
                     "kanji" : "上",
                     "onyomi" : "ジョウ, ショウ, シャン",
                     "kunyomi" : "うえ, -うえ, うわ-, かみ, あ.げる, -あ.げる, あ.がる, -あ.がる, あ.がり, -あ.がり, のぼ.る, のぼ.り, のぼ.せる, のぼ.す, よ.す",
-                    "definition" : "above, up",
-                    "examples" : ["屋上 おくじょう rooftop (n)","海上 かいじょう (by, at, on) sea, maritime, marine (adj-no)","見上げる みあげる to look up at, to raise one's eyes, to admire (Ichidan verb, vt)"]
+                    "definition" : "Верх",
+                    "examples" : ["屋上 おくじょう крыша","海上 かいじょう морской, на море ","見上げる みあげる смотреть вверх, уважать, восхищаться"]
                 },{   
                     "kanji" : "下",
                     "onyomi" : "カ, ゲ",
                     "kunyomi" : "した, しも, もと, さ.げる, さ.がる, くだ.る, くだ.り, くだ.す, -くだ.す, くだ.さる, お.ろす, お.りる",
-                    "definition" : "below, down, descend, give, low, inferior",
-                    "examples" : ["下る さがる to hang down, to abate, to retire, to fall, to step back (v5r, intransitive verb)","下げる さげる to hang, to lower, to move back, to wear, to dismiss, to grant (Ichidan verb, vt)","下さる くださる to give, to confer (Godan verb - -aru special class)"]
+                    "definition" : "Низ",
+                    "examples" : ["下る さがる свисать, отступать, понижаться","下げる さげる вешать, понижать, убирать","下さる くださる дарить, изволить"]
                 },{   
                     "kanji" : "中",
                     "onyomi" : "チュウ",
                     "kunyomi" : "なか, うち, あた.る",
-                    "definition" : "in, inside, middle, mean, center",
-                    "examples" : ["空中 くうちゅう sky, air (n)","集中 しゅうちゅう concentration, convergence, centralization, integration, gathering together (n, vs)","真夜中 まよなか dead of night, midnight (n-adv, n-t)"]
+                    "definition" : "Центр, внутри",
+                    "examples" : ["空中 くうちゅう авиация, в небе","集中 しゅうちゅう концентрация","真夜中 まよなか полночь", "中国　ちゅうごく Китай"]
                 },{   
                     "kanji" : "人",
                     "onyomi" : "ジン, ニン",
                     "kunyomi" : "ひと, -り, -と",
-                    "definition" : "person",
-                    "examples" : ["悪人 あくにん bad man, villain (n)","外国人 がいこくじん foreigner (n)","恩人 おんじん benefactor, patron (n)"]
+                    "definition" : "Человек",
+                    "examples" : ["悪人 あくにん злодей","外国人 がいこくじん иностранец","恩人 おんじん покровитель", ]
                 },{   
                     "kanji" : "今",
                     "onyomi" : "コン, キン",
