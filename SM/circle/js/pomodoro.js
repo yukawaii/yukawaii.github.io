@@ -1,7 +1,7 @@
 //pomodoro
 
 //Set Global variables
-var workClicks = 25;
+var workClicks = 10;
 var workDisplay = document.getElementById("set-minutes");
 var count = 0;
 var workSession;
