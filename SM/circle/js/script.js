@@ -122,19 +122,19 @@ let groupObjectPropertyNames
     // Main Group Button Function : combines delete and create functions depending on which level is selected
 function groupButtonAction(n) {
     switch (n) {
-        case 'N5':
+        case 'Н5':
             groupObjectPropertyNames = Object.keys(N5)
             break
-        case 'N4':
+        case 'Н4':
             groupObjectPropertyNames = Object.keys(N4)
             break
-        case 'N3':
+        case 'Н3':
             groupObjectPropertyNames = Object.keys(N3)
             break
-        case 'N2':
+        case 'Н2':
             groupObjectPropertyNames = Object.keys(N2)
             break
-        case 'N1':
+        case 'Н1':
             groupObjectPropertyNames = Object.keys(N1)
             break
     }
@@ -193,19 +193,19 @@ function groupButtonSelected () {
     function read_prop(prop) {
         let obj
         switch (n) {
-            case 'N5':
+            case 'Н5':
                 obj = N5
                 break
-            case 'N4':
+            case 'Н4':
                 obj = N4
                 break
-            case 'N3':
+            case 'Н3':
                 obj = N3
                 break
-            case 'N2':
+            case 'Н2':
                 obj = N2
                 break
-            case 'N1':
+            case 'Н1':
                 obj = N1
                 break
         }
