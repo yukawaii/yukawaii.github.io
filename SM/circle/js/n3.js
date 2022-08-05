@@ -1,5 +1,5 @@
 const N3 = { 
-    "Group 01" : 
+    "Ур. 01" : 
             [
                 {   
                     "kanji" : "丁",
@@ -63,7 +63,7 @@ const N3 = {
                     "examples" : ["仲間 なかま company, fellow, colleague, associate, comrade, mate, group, circle of friends, partner (n)","仲断 ちゅうだん interruption, suspension, break (n, vs)","仲裁 ちゅうさい arbitration, intercession, mediation (n, vs)"]
                 }
             ],
-    "Group 02" :
+    "Ур. 02" :
             [
                 {   
                     "kanji" : "伝",
@@ -127,7 +127,7 @@ const N3 = {
                     "examples" : ["健康 けんこう health, sound, wholesome (adj-na, n)","健やか すこやか vigorous, healthy, sound (adj-na, n)","保健 ほけん health preservation, hygiene, sanitation (n)"]
                 }
             ],
-    "Group 03" : 
+    "Ур. 03" : 
             [
                 {   
                     "kanji" : "側",
@@ -192,7 +192,7 @@ const N3 = {
                 }
             ],
 
-    "Group 04" :
+    "Ур. 04" :
             [
                 {   
                     "kanji" : "内",
@@ -256,7 +256,7 @@ const N3 = {
                     "examples" : ["加える くわえる to append, to sum up, to add (up), to include, to increase, to inflict (Ichidan verb, vt)","加害者 かがいしゃ assailant (n)","加工 かこう manufacturing, processing, treatment, machining (n, vs)"]
                 }
             ],
-    "Group 05" : 
+    "Ур. 05" : 
             [
                 {   
                     "kanji" : "助",
@@ -321,7 +321,7 @@ const N3 = {
                 }
             ],
 
-    "Group 06" :
+    "Ур. 06" :
             [
                 {   
                     "kanji" : "博",
@@ -385,7 +385,7 @@ const N3 = {
                     "examples" : ["司会 しかい chairmanship, leading a meeting (n, vs)","司法 しほう administration of justice (n)","上司 じょうし superior authorities, boss (n)"]
                 }
             ],
-    "Group 07" : 
+    "Ур. 07" : 
             [
                 {   
                     "kanji" : "各",
@@ -450,7 +450,7 @@ const N3 = {
                 }
             ],
 
-    "Group 08" :
+    "Ур. 08" :
             [
                 {   
                     "kanji" : "器",
@@ -514,7 +514,7 @@ const N3 = {
                     "examples" : ["大丈夫 だいじょうぶ safe, all right, OK (adj-na, adv, n)","夫妻 ふさい man and wife, married couple (n)","夫 おっと husband (n)"]
                 }
             ],
-    "Group 09" : 
+    "Ур. 09" : 
             [
                 {   
                     "kanji" : "央",
@@ -579,7 +579,7 @@ const N3 = {
                 }
             ],
 
-    "Group 10" :
+    "Ур. 10" :
             [
                 {   
                     "kanji" : "客",
@@ -643,7 +643,7 @@ const N3 = {
                     "examples" : ["海岸 かいがん coast, beach (n)","岸 きし bank, coast, shore (n)","河岸 かし river bank, riverside, fish market (n)"]
                 }
             ],
-    "Group 11" : 
+    "Ур. 11" : 
             [
                 {   
                     "kanji" : "島",
@@ -707,7 +707,7 @@ const N3 = {
                     "examples" : ["幸い さいわい happiness, blessedness (adj-na, adv, n)","幸福 こうふく happiness, blessedness (adj-na, n)","不幸 ふこう unhappiness, sorrow, misfortune, disaster, accident, death (adj-na, n)"]
                 }
             ],
-    "Group 12" :
+    "Ур. 12" :
             [
                 {   
                     "kanji" : "底",
@@ -771,7 +771,7 @@ const N3 = {
                     "examples" : ["区役所 くやくしょ ward office, council (regional) (n)","現役 げんえき active duty, active service (n)","主役 しゅやく leading part, leading actor (actress) (n)"]
                 }
             ],
-    "Group 13" : 
+    "Ур. 13" : 
             [
                 {   
                     "kanji" : "径",
@@ -835,7 +835,7 @@ const N3 = {
                     "examples" : ["指 ゆび finger (n)","指す さす to point, to nominate, to select someone, to specify some person, to identify, to indicate, to point out (v5s, vt)","指示 しじ indication, instruction, designation, directions (n, vs)"]
                 }
             ],
-    "Group 14" :
+    "Ур. 14" :
             [
                 {   
                     "kanji" : "感",
@@ -899,7 +899,7 @@ const N3 = {
                     "examples" : ["選挙 せんきょ election (n, vs)","挙句 あげく in the end, finally, after all, at last (n-adv, n-t)","暴挙 【ボウキョ】 violence, reckless action"]
                 }
             ],
-    "Group 15" : 
+    "Ур. 15" : 
             [
                 {   
                     "kanji" : "改",
@@ -964,7 +964,7 @@ const N3 = {
                 }
             ],
 
-    "Group 16" :
+    "Ур. 16" :
             [
                 {   
                     "kanji" : "昨",
@@ -1028,7 +1028,7 @@ const N3 = {
                     "examples" : ["期末 きまつ end of term (n)","月末 つきずえ end of the month (n-adv, n-t)","結末 けつまつ end, conclusion (n)"]
                 }
             ],
-    "Group 17" : 
+    "Ур. 17" : 
             [
                 {   
                     "kanji" : "札",
@@ -1093,7 +1093,7 @@ const N3 = {
                 }
             ],
 
-    "Group 18" :
+    "Ур. 18" :
             [
                 {   
                     "kanji" : "梅",
@@ -1157,7 +1157,7 @@ const N3 = {
                     "examples" : ["欠点 けってん faults, defect, weakness (n)","欠席 けっせき absence, non-attendance (n, vs)","欠乏 けつぼう want, shortage, famine (n, vs)"]
                 }
             ],
-    "Group 19" : 
+    "Ур. 19" : 
             [
                 {   
                     "kanji" : "次",
@@ -1222,7 +1222,7 @@ const N3 = {
                 }
             ],
 
-    "Group 20" :
+    "Ур. 20" :
             [
                 {   
                     "kanji" : "決",
@@ -1286,7 +1286,7 @@ const N3 = {
                     "examples" : ["一流 いちりゅう first-class, top grade, school (of art), foremost, top-notch, unique (n)","海流 かいりゅう ocean current (n)","交流 こうりゅう intercourse, (cultural) exchange, intermingling, alternating current (n, vs)"]
                 }
             ],
-    "Group 21" : 
+    "Ур. 21" : 
             [
                 {   
                     "kanji" : "浅",
@@ -1350,7 +1350,7 @@ const N3 = {
                     "examples" : ["円満 えんまん perfection, harmony, peace, smoothness, completeness, satisfaction, integrity (adj-na, n)","満月 まんげつ full moon (n)","肥満 ひまん corpulence, fatness, obesity (n, vs)"]
                 }
             ],
-    "Group 22" :
+    "Ур. 22" :
             [
                 {   
                     "kanji" : "漁",
@@ -1414,7 +1414,7 @@ const N3 = {
                     "examples" : ["牧畜 ぼくちく stock-farming (n)","牧場 まきば farm (livestock), ranch (US), station (Aus, NZ), pasture land, meadow, grazing land (n)","遊牧 ユウボク nomadism"]
                 }
             ],
-    "Group 23" : 
+    "Ур. 23" : 
             [
                 {   
                     "kanji" : "玉",
@@ -1478,7 +1478,7 @@ const N3 = {
                     "examples" : ["皮肉 ひにく cynicism, sarcasm, irony, satire (adj-na, n)","皮フ ひフ skin (n)","毛皮 もうひ fur, skin, pelt (n)"]
                 }
             ],
-    "Group 24" :
+    "Ур. 24" :
             [
                 {   
                     "kanji" : "皿",
@@ -1542,7 +1542,7 @@ const N3 = {
                     "examples" : ["投票 とうひょう voting, poll (n, vs)","票 ひょう label, ballot, ticket, sign (n, n-suf)","不在者投票 フザイシャトウヒョウ absentee ballot, absentee voting"]
                 }
             ],
-    "Group 25" : 
+    "Ур. 25" : 
             [
                 {   
                     "kanji" : "祭",
@@ -1606,7 +1606,7 @@ const N3 = {
                     "examples" : ["竹 たけ bamboo, middle (of a three-tier ranking system) (n)","笛竹 ふえたけ bamboo flute, bamboo for making flutes, wind and string instruments","竹林 チクリン bamboo thicket"]
                 }
             ],
-    "Group 26" :
+    "Ур. 26" :
             [
                 {   
                     "kanji" : "笑",
@@ -1670,7 +1670,7 @@ const N3 = {
                     "examples" : ["新米 しんまい new rice, novice, beginner, tyro, newcomer, newbie (exp, n)","日米 にちべい Japan-America (n)","米価 べいか rice price (n)"]
                 }
             ],
-    "Group 27" : 
+    "Ур. 27" : 
             [
                 {   
                     "kanji" : "粉",
@@ -1734,7 +1734,7 @@ const N3 = {
                     "examples" : ["絵本 えほん picture book (n)","絵画 かいが picture, painting (n)","油絵 あぶらえ oil painting (n)"]
                 }
             ],
-    "Group 28" :
+    "Ур. 28" :
             [
                 {   
                     "kanji" : "続",
@@ -1798,7 +1798,7 @@ const N3 = {
                     "examples" : ["育つ そだつ to be raised (eg child), to be brought up, to grow (up) (v5t, intransitive verb)","育児 いくじ childcare, nursing, upbringing (n, vs)","教育 きょういく training, education (n, adj-no, vs)"]
                 }
             ],
-    "Group 29" : 
+    "Ур. 29" : 
             [
                 {   
                     "kanji" : "胃",
@@ -1862,7 +1862,7 @@ const N3 = {
                     "examples" : ["ご苦労様 ごくろうさま thank you very much for your ..., I appreciate your efforts (exp, adj-na)","苦い にがい bitter (adj)","苦しむ くるしむ to suffer, to groan, to be worried (v5m, intransitive verb)"]
                 }
             ],
-    "Group 30" :
+    "Ур. 30" :
             [
                 {   
                     "kanji" : "草",
@@ -1926,7 +1926,7 @@ const N3 = {
                     "examples" : ["強要 きょうよう coercion, extortion (n, vs)","重要 じゅうよう important, momentous, essential, principal, major (adj-na, n)","不必要 ふひつよう unnecessary (adj-na, n)"]
                 }
             ],
-    "Group 31" : 
+    "Ур. 31" : 
             [
                 {   
                     "kanji" : "覚",
@@ -1990,7 +1990,7 @@ const N3 = {
                     "examples" : ["議題 ぎだい topic of discussion, agenda (n)","会議 かいぎ meeting, conference, session, assembly, council, convention, congress (n, vs)","議会 ぎかい Diet, congress, parliament (n)"]
                 }
             ],
-    "Group 32" : 
+    "Ур. 32" : 
             [
                 {   
                     "kanji" : "谷",
@@ -2054,7 +2054,7 @@ const N3 = {
                     "examples" : ["高速道路 こうそくどうろ highway, freeway, expressway, motorway (n)","十字路 じゅうじろ crossroads (n)","進路 しんろ route, course, career, university choices, course (of future life) (n)"]
                 }
             ],
-    "Group 33" :
+    "Ур. 33" :
             [
                 {   
                     "kanji" : "身",
@@ -2118,7 +2118,7 @@ const N3 = {
                     "examples" : ["訓連 くんれん practice, practise, training (n, vs)","連ねる つらねる to link, to join, to put together (Ichidan verb, vt)","連れる つれる to lead, to take (a person) (Ichidan verb)"]
                 }
             ],
-    "Group 34" : 
+    "Ур. 34" : 
             [
                 {   
                     "kanji" : "遊",
@@ -2182,7 +2182,7 @@ const N3 = {
                     "examples" : ["国鉄 こくてつ national railway (n)","私鉄 してつ private railway (n)","鉄 てつ iron (n)"]
                 }
             ],
-    "Group 35" : 
+    "Ур. 35" : 
             [
                 {   
                     "kanji" : "録",
@@ -2246,7 +2246,7 @@ const N3 = {
                     "examples" : ["冷静 れいせい calm, composure, coolness, serenity (adj-na, n)","静粛 せいしゅく silent (adj-na, n)","安静 あんせい rest (adj-na, n)"]
                 }
             ],
-    "Group 36" :
+    "Ур. 36" :
             [
                 {   
                     "kanji" : "面",
@@ -2310,7 +2310,7 @@ const N3 = {
                     "examples" : ["黄色い きいろい yellow (adj)","黄葉 もみじ autumn colours, fall colors, leaves changing color (colour), leaves turning red, red leaves (n, vs, n)","黄昏 こうこん dusk, twilight (n)"]
                 }
             ],
-    "Group 37" : 
+    "Ур. 37" : 
             [
                 {   
                     "kanji" : "鼻",
