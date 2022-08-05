@@ -1,5 +1,5 @@
 const N1 = { 
-    "Group 01" : 
+    "Ур. 01" : 
             [
                 {   
                     "kanji" : "",
@@ -64,7 +64,7 @@ const N1 = {
                 }
             ],
 
-    "Group 02" :
+    "Ур. 02" :
             [
                 {   
                     "kanji" : "",
@@ -128,136 +128,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
             ],
-    "Group 03" : 
-            [
-                {   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                }
-            ],
-
-    "Group 04" :
-            [
-                {   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                }
-            ],
-    "Group 05" : 
+    "Ур. 03" : 
             [
                 {   
                     "kanji" : "",
@@ -322,7 +193,7 @@ const N1 = {
                 }
             ],
 
-    "Group 06" :
+    "Ур. 04" :
             [
                 {   
                     "kanji" : "",
@@ -386,136 +257,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
             ],
-    "Group 07" : 
-            [
-                {   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                }
-            ],
-
-    "Group 08" :
-            [
-                {   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                }
-            ],
-    "Group 09" : 
+    "Ур. 05" : 
             [
                 {   
                     "kanji" : "",
@@ -580,7 +322,7 @@ const N1 = {
                 }
             ],
 
-    "Group 10" :
+    "Ур. 06" :
             [
                 {   
                     "kanji" : "",
@@ -644,7 +386,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
             ],
-    "Group 11" : 
+    "Ур. 07" : 
             [
                 {   
                     "kanji" : "",
@@ -708,7 +450,265 @@ const N1 = {
                     "examples" : ["","",""]
                 }
             ],
-  "Group 12" : [  {   
+
+    "Ур. 08" :
+            [
+                {   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                }
+            ],
+    "Ур. 09" : 
+            [
+                {   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                }
+            ],
+
+    "Ур. 10" :
+            [
+                {   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                }
+            ],
+    "Ур. 11" : 
+            [
+                {   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                },{   
+                    "kanji" : "",
+                    "onyomi" : "",
+                    "kunyomi" : "",
+                    "definition" : "",
+                    "examples" : ["","",""]
+                }
+            ],
+  "Ур. 12" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -770,7 +770,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 13" : [  {   
+   "Ур. 13" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -832,7 +832,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 14" : [  {   
+   "Ур. 14" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -894,7 +894,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 15" : [  {   
+   "Ур. 15" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -956,7 +956,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 16" : [  {   
+   "Ур. 16" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1018,7 +1018,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 17" : [  {   
+   "Ур. 17" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1080,7 +1080,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 18" : [  {   
+   "Ур. 18" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1142,7 +1142,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 19" : [  {   
+   "Ур. 19" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1204,7 +1204,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 20" : [  {   
+   "Ур. 20" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1266,7 +1266,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 21" : [  {   
+   "Ур. 21" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1328,7 +1328,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 22" : [  {   
+   "Ур. 22" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1390,7 +1390,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 23" : [  {   
+   "Ур. 23" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1452,7 +1452,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 24" : [  {   
+   "Ур. 24" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1514,7 +1514,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 25" : [  {   
+   "Ур. 25" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1576,7 +1576,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 26" : [  {   
+   "Ур. 26" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1638,7 +1638,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 27" : [  {   
+   "Ур. 27" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1700,7 +1700,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 28" : [  {   
+   "Ур. 28" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1762,7 +1762,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 29" : [  {   
+   "Ур. 29" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1824,7 +1824,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 30" : [  {   
+   "Ур. 30" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1886,7 +1886,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 31" : [  {   
+   "Ур. 31" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -1948,7 +1948,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-   "Group 32" : [  {   
+   "Ур. 32" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2010,7 +2010,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 33" : [  {   
+     "Ур. 33" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2072,7 +2072,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 34" : [  {   
+     "Ур. 34" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2134,7 +2134,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 35" : [  {   
+     "Ур. 35" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2196,7 +2196,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 36" : [  {   
+     "Ур. 36" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2258,7 +2258,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 37" : [  {   
+     "Ур. 37" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2320,7 +2320,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 38" : [  {   
+     "Ур. 38" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2382,7 +2382,7 @@ const N1 = {
                     "examples" : ["","",""]
                 }
   ],
-     "Group 39" : [  {   
+     "Ур. 39" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2443,7 +2443,7 @@ const N1 = {
                     "definition" : "",
                     "examples" : ["","",""]
                 }
-  ],   "Group 40" : [  {   
+  ],   "Ур. 40" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2504,7 +2504,7 @@ const N1 = {
                     "definition" : "",
                     "examples" : ["","",""]
                 }
-  ],   "Group 41" : [  {   
+  ],   "Ур. 41" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2565,7 +2565,7 @@ const N1 = {
                     "definition" : "",
                     "examples" : ["","",""]
                 }
-  ],   "Group 42" : [  {   
+  ],   "Ур. 42" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
@@ -2626,7 +2626,7 @@ const N1 = {
                     "definition" : "",
                     "examples" : ["","",""]
                 }
-  ],   "Group 43" : [  {   
+  ],   "Ур. 43" : [  {   
                     "kanji" : "",
                     "onyomi" : "",
                     "kunyomi" : "",
