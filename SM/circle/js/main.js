@@ -61,9 +61,10 @@ const askQuestion = () => {
     var level=1;
    var  xp;
     xp = sessionStorage.getItem('xp');
-    if (xp=null) xp=0;
+ 
     
     function firstlook() {
+        if (xp=null) {xp=1;}
     document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
