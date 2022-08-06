@@ -36,7 +36,8 @@ function infr(){
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////
 var userid;
-let score1=0;
+let score1=0; 
+sessionStorage.setItem('score1', score1);
 let scorsum=0;
 
 function getinfo(){
@@ -56,14 +57,15 @@ function getinfo(){
    function getsc(){
       bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
-        "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac", global:1}})
+        "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
       .then(data => {console.log("Очков на вк:" + data.response);
         // *назначение переменных*
      (score2 = data.response);
-        return data.response;
+        return score2;
       })
       .catch(error => console.log(error));} ;
-  
+  var l = score2;
+
   //отправка очков в вк
   function sendscore(){
     getsc();
@@ -72,9 +74,9 @@ function getinfo(){
     var scorsum= score1+score2;
     sessionStorage.setItem("scorsum", scorsum);
   bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"Pl4TYB00x4HZc4SiqXhj", 
+  {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
   "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
-   "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac",
+   "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
    "global":1}})
    .then(data => {console.log("Ответ на добавление очков:" + data.response);
   })

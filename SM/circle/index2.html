@@ -167,7 +167,15 @@ function getinfo(){
     <button class = "" onclick="window.location.href = './N1_9.html';">Н1: уровень 9</button><br>
 	    </div>
 </div>
-
+<div id="out"></div>
+        <script src="xp.js"></script>
+                 <script>
+            html = '',
+levelObj;
+levelObj = XP.parseByLevel(l, cap, deltaNext);
+    html += '<span> level: ' + levelObj.level + '; xp: ' + levelObj.xp + '/ ' + levelObj.toNext + ' </span><br>';
+    document.getElementById('out').innerHTML = html;
+            </script>
 
 <br>
 <div style="position:relative; bottom:0px;">
