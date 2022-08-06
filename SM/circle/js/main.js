@@ -61,9 +61,9 @@ const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
     scoreElem.innerHTML = "x" + SCORE;
-    xp+=SCORE;
+    user.increaseXP(SCORE);
     sessionStorage.setItem('xp', xp);
-    
+    console.log('xp vk update from main.js = ', xp);
     scoreElem.style.opacity = SCORE > 1 ? 1 : 0;
     scoreElem.animate([
         { transform: "rotate(-15deg) scale(2)" },
