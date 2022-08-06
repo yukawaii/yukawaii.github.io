@@ -170,9 +170,8 @@ function getinfo(){
 <div id="out"></div>
         <script src="xp.js"></script>
                  <script>
-            html = '',
-levelObj;
-levelObj = XP.parseByLevel(l, cap, deltaNext);
+        var    html = '';
+var levelObj = XP.parseByLevel(l, cap, deltaNext);
     html += '<span> level: ' + levelObj.level + '; xp: ' + levelObj.xp + '/ ' + levelObj.toNext + ' </span><br>';
     document.getElementById('out').innerHTML = html;
             </script>
