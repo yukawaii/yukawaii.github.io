@@ -25,6 +25,7 @@ document.getElementById('tips-container').addEventListener('click', function(){
     document.getElementById('tips-details').classList.toggle('details')
 })
 
+
 /*---------------------------
 	  BUTTONS
 ---------------------------*/
@@ -61,9 +62,9 @@ let n5ButtonClick = document.getElementById('n5').addEventListener('click', func
             levelButtons[i].classList.remove('selected')
     }
     this.classList.add('selected')
-    n = 'Н5'
-    levelTitle.innerHTML = 'Н5'
-    groupTitle.innerHTML = 'и уровень'
+    n = 'N5'
+    levelTitle.innerHTML = 'N5'
+    groupTitle.innerHTML = 'Pick A Group'
     groupButtonAction(n)
 })
 let n4ButtonClick = document.getElementById('n4').addEventListener('click', function(){
@@ -73,7 +74,7 @@ let n4ButtonClick = document.getElementById('n4').addEventListener('click', func
     this.classList.add('selected')
     n = 'N4'
     levelTitle.innerHTML = 'N4'
-    groupTitle.innerHTML = 'и уровень'
+    groupTitle.innerHTML = 'Pick A Group'
     groupButtonAction(n)
 })
 let n3ButtonClick = document.getElementById('n3').addEventListener('click', function(){
@@ -82,18 +83,18 @@ let n3ButtonClick = document.getElementById('n3').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N3'
-    levelTitle.innerHTML = 'Н3'
-    groupTitle.innerHTML = 'и уровень'
+    levelTitle.innerHTML = 'N3'
+    groupTitle.innerHTML = 'Pick A Group'
     groupButtonAction(n)
 })
-let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
+/*let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
     for (let i = 0; i < levelButtons.length; i++) {
             levelButtons[i].classList.remove('selected')
     }
     this.classList.add('selected')
     n = 'N2'
-    levelTitle.innerHTML = 'Н2'
-    groupTitle.innerHTML = 'и уровень'
+    levelTitle.innerHTML = 'N2'
+    groupTitle.innerHTML = 'Pick A Group'
     groupButtonAction(n)
 })
 let n1ButtonClick = document.getElementById('n1').addEventListener('click', function(){
@@ -102,11 +103,11 @@ let n1ButtonClick = document.getElementById('n1').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N1'
-    levelTitle.innerHTML = 'Н1'
-    groupTitle.innerHTML = 'и уровень'
+    levelTitle.innerHTML = 'N1'
+    groupTitle.innerHTML = 'Pick A Group'
     groupButtonAction(n)
 })
-
+*/
 
 
 // Group Buttons - Working
@@ -122,7 +123,7 @@ let groupObjectPropertyNames
     // Main Group Button Function : combines delete and create functions depending on which level is selected
 function groupButtonAction(n) {
     switch (n) {
-        case 'Н5':
+        case 'N5':
             groupObjectPropertyNames = Object.keys(N5)
             break
         case 'N4':
@@ -193,7 +194,7 @@ function groupButtonSelected () {
     function read_prop(prop) {
         let obj
         switch (n) {
-            case 'Н5':
+            case 'N5':
                 obj = N5
                 break
             case 'N4':
