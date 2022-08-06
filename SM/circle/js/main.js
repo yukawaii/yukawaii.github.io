@@ -85,7 +85,7 @@ const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
     scoreElem.innerHTML = "x" + SCORE;
-   giveExp(1);
+   if (SCORE>0) {giveExp(1);};
     sessionStorage.setItem('xp', xp);
     console.log('xp vk update from main.js = ', xp);
     scoreElem.style.opacity = SCORE > 1 ? 1 : 0;
