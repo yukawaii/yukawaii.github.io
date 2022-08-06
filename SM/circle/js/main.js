@@ -80,8 +80,9 @@ el1.style.position = 'absolute';
 // el.innerHTML = `<span>Hello world</span>`;
 
 // ✅ add element to DOM
-const image = document.getElementById('image');
-image.appendChild(el);
+const image1 = document.getElementById('image');
+image1.appendChild(el);
+image1.appendChild(el1);
 
 
     function showxp() {
