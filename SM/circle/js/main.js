@@ -59,14 +59,16 @@ const askQuestion = () => {
 /* level up system */
 
 var level=1;
-var  xp;
-    xp = sessionStorage.getItem('xp');
-
+var  xp=1;
+window.onload = function() {
     // create div
 // ✅ Create element
 const el = document.createElement('div');
 const el1 = document.createElement('div');
-// ✅ Set ID attribute on element
+const image0 = document.createElement('div');
+// ✅ Set ID attribute on element.
+image0.setAttribute('id', 'image');
+image0.setAttribute('src', './images/yuka.png');
 el.setAttribute('id', 'xp');
 el1.setAttribute('id', 'level');
 // ✅ Add text content to element
@@ -83,7 +85,7 @@ el1.style.position = 'absolute';
 const image1 = document.getElementById('image');
 image1.appendChild(el);
 image1.appendChild(el1);
-
+}
 
     function showxp() {
         if (xp===null) {xp=1;
