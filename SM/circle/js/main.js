@@ -64,7 +64,7 @@ const askQuestion = () => {
     if (xp=null) xp=0;
     
     function firstlook() {
-    document.geElementById("xp").innerHTML = 'Опыт: ' + xp;
+    document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
 
