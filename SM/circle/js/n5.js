@@ -118,14 +118,14 @@ const N5 = {
                     "kanji" : "何",
                     "onyomi" : "カ",
                     "kunyomi" : "なに, なん, なに-, なん-",
-                    "definition" : "what",
-                    "examples" : ["何か なんか something (exp)","何だか なんだか (a) little, somewhat, somehow (adv)","何と なんと what, how, whatever (adv)"]
+                    "definition" : "Что",
+                    "examples" : ["何か なんか как-то, типа, как бы (разг.)","何だか なんだか как-то, что-то (разг.)","何か　なにか　что-нибудь", "何よりも　なによりも　больше всего"]
                 },{   
                     "kanji" : "先",
                     "onyomi" : "セン",
                     "kunyomi" : "さき, ま.ず",
-                    "definition" : "before, ahead, previous, future, precedence",
-                    "examples" : ["勤め先 つとめさき place of work (n)","口先 くちさき lip service, mere words, professions, lips, mouth, snout, proboscis (n)","先決 せんけつ previous decision, deciding in advance (n, vs)"]
+                    "definition" : "Прежде, дальше, кончик",
+                    "examples" : ["勤め先 つとめさき место работы","口先 くちさき (всего лишь) слова, кончик языка, губы","先決 せんけつ решать заранее"]
                 }
             ],
     "Ур. 03" : 
@@ -134,20 +134,20 @@ const N5 = {
                     "kanji" : "入",
                     "onyomi" : "ニュウ, ジュ",
                     "kunyomi" : "い.る, -い.る, -い.り, い.れる, -い.れ, はい.る",
-                    "definition" : "enter, insert",
-                    "examples" : ["加入 かにゅう becoming a member, joining, entry, admission, subscription, affiliation, adherence, signing (n, vs)","落ち入る おちいる to fall, to trap, to cave in, to collapse (v5r, intransitive verb)","気に入る きにいる to be pleased with, to suit (v5r)"]
+                    "definition" : "Вход, вставлять",
+                    "examples" : ["加入 かにゅう присоединение, вступление куда-то","落ち入る おちいる впадать (в состояние), попадать (а положение)","気に入る きにいる быть по душе, понравиться"]
                 },{   
                     "kanji" : "円",
                     "onyomi" : "エン",
-                    "kunyomi" : "まる.い, まる, まど, まど.か, まろ.やか",
-                    "definition" : "circle, yen, round",
-                    "examples" : ["円 まる Yen, money, circle (n)","円安 えんやす cheap yen (n)","円高 えんだか high-valued yen, exchange in favor (favour) of the yen (n)"]
+                    "kunyomi" : "まる.い, まる, まど, まど.か, まろ.やか, つぶら",
+                    "definition" : "Йена, круг",
+                    "examples" : ["円 まる йена, круг","円安 えんやす низкий курс йены","円高 えんだか высокий курс йены", "円ら　つぶら　округлённый", "円　まどか　круглый, спокойный, тихий (возвыш.)"]
                 },{   
                     "kanji" : "出",
                     "onyomi" : "シュツ, スイ",
                     "kunyomi" : "で.る, -で, だ.す, -だ.す, い.でる, い.だす",
-                    "definition" : "exit, leave",
-                    "examples" : ["演出 えんしゅつ production (eg play), direction (n, vs)","割出す わりだす to calculate, to compute, to infer (v5s, vt)","見出し みだし heading, caption, subtitle, index (n)"]
+                    "definition" : "Выход, уходить",
+                    "examples" : ["演出 えんしゅつ постановка, режиссура","割出す わりだす подсчитывать","見出し みだし заголовок", "出色　しゅっしょく　выдающийся, превосходный"]
                 },{   
                     "kanji" : "分",
                     "onyomi" : "ブン, フン, ブ",
