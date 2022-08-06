@@ -152,8 +152,8 @@ const N5 = {
                     "kanji" : "分",
                     "onyomi" : "ブン, フン, ブ",
                     "kunyomi" : "わ.ける, わ.け, わ.かれる, わ.かる, わ.かつ",
-                    "definition" : "part, minute of time, segment, share, degree, one's lot, duty, understand, know, rate, 1%, chances, shaku/100",
-                    "examples" : ["一部分 いちぶぶん part, portion, section (n)","引分け ひきわけ draw (in competition), tie game (n)","何分 なにぶん anyway, please (adv, n)"]
+                    "definition" : "Минута, часть, сегмент, понимать, знать, сортировать, делить",
+                    "examples" : ["一部分 いちぶぶん одна часть, порция","引分け ひきわけ ничья","何分 なにぶん anyway, please (adv, n)"]
                 },{   
                     "kanji" : "前",
                     "onyomi" : "ゼン",
