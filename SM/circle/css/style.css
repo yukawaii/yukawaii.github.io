@@ -285,7 +285,7 @@ html body  #homebut {
   width: 30px;
   margin: 0px;
   padding: 0px;
-
+  background-color: transparent;
   z-index: 3;
 }
 
