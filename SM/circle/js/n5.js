@@ -30,7 +30,7 @@ const N5 = {
                     "onyomi" : "ゴ",
                     "kunyomi" : "いつ, いつ.つ",
                     "definition" : "Пять",
-                    "examples" : ["五十音 ごじゅうおん японская азбука","五分 ごぶ half, 50%, tie, evenness, 5 parts, 5% (n-adv, n)","四捨五入 ししゃごにゅう rounding up (esp. fractions) (n, vs)"]
+                    "examples" : ["五十音 ごじゅうおん японская азбука","五分 ごぶ половина, 50%, ничтожная доля, 5%","四捨五入 ししゃごにゅう округлять, отбросив меньшее"]
                 },{
                     "kanji" : "六",
                     "onyomi" : "ロク, リク",
@@ -88,7 +88,7 @@ const N5 = {
                     "kanji" : "中",
                     "onyomi" : "チュウ",
                     "kunyomi" : "なか, うち, あた.る",
-                    "definition" : "Центр, внутри",
+                    "definition" : "Центр, внутри, между, разгар, внутренняя часть",
                     "examples" : ["空中 くうちゅう авиация, в небе","集中 しゅうちゅう концентрация","真夜中 まよなか полночь", "中国　ちゅうごく Китай"]
                 },{   
                     "kanji" : "人",
@@ -100,20 +100,20 @@ const N5 = {
                     "kanji" : "今",
                     "onyomi" : "コン, キン",
                     "kunyomi" : "いま",
-                    "definition" : "now",
-                    "examples" : ["今回 こんかい now, this time, lately (n-adv, n-t)","今月 こんげつ this month (n-adv, n-t)","今後 こんご from now on, hereafter (n-adv, n-t)"]
+                    "definition" : "Сейчас",
+                    "examples" : ["今回 こんかい в этот раз","今月 こんげつ этот месяц","今後 こんご впредь, отныне"]
                 },{   
                     "kanji" : "休",
                     "onyomi" : "キュウ",
                     "kunyomi" : "やす.む, やす.まる, やす.める",
-                    "definition" : "rest, day off, retire, sleep",
-                    "examples" : ["夏休み なつやすみ summer vacation, summer holiday (n)","運休 うんきゅう service suspended (eg trains) (n, vs)","休暇 きゅうか holiday, day off, furlough (n)"]
+                    "definition" : "Отдых, отдыхать",
+                    "examples" : ["夏休み なつやすみ летние каникулы, отпуск","運休 うんきゅう приостановка движения","休暇 きゅうか выходной, отпуск, каникулы"]
                 },{   
                     "kanji" : "会",
                     "onyomi" : "カイ, エ",
                     "kunyomi" : "あ.う, あ.わせる, あつ.まる",
-                    "definition" : "meeting, meet, party, association, interview, join",
-                    "examples" : ["運動会 うんどうかい athletic meet (n)","会員 かいいん member, the membership (n)","会議 かいぎ meeting, conference (n, vs)"]
+                    "definition" : "Встреча, собрание, видеться",
+                    "examples" : ["運動会 うんどうかい спортивное соревнование","会員 かいいん член (клуба, общества)","会議 かいぎ собрание, конференция"]
                 },{   
                     "kanji" : "何",
                     "onyomi" : "カ",

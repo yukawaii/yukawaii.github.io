@@ -64,8 +64,9 @@ var  xp;
  
     
     function showxp() {
-        if (xp===null) {xp=1;};
-    document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
+        if (xp===null) {xp=1;
+        console.log('xp from main 1: ' + xp)};
+        document.geElementById("xp").innerHTML = 'XP: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
 
