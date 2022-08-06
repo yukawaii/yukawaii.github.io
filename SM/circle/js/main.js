@@ -58,13 +58,13 @@ const askQuestion = () => {
 }
 /* level up system */
 
-    var level=1;
-   var  xp;
+var level=1;
+var  xp;
     xp = sessionStorage.getItem('xp');
  
     
     function firstlook() {
-        if (xp=null) {xp=1;}
+        if (xp===null) {xp=1;}
     document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
