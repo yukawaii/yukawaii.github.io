@@ -73,8 +73,7 @@ function updatecounters(){
         level+=Math.floor(xp/500);// if xp is 1000, two levels up
         xp=xp%500;// what is left when increasing levels
      }
-     document.geElementById("xp").innerHTML = 'Опыт: ' + xp;
-    document.getElementById("level").innerHTML = 'Уровень: ' + level;
+     firstlook();
   }
 
 
