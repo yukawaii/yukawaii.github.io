@@ -84,7 +84,7 @@ function updatecounters(){
      updatecounters();//update
  }
 
-   window.onload=updatecounters;//onload init counters
+   window.onload = updatecounters();//onload init counters
 // lev up end
 
 const answerQuestion = (answer, guess) => {
