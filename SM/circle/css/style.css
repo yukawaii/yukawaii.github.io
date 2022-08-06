@@ -348,3 +348,6 @@ html body  #homebut {
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+#image {
+  background-color: transparent;
+}
