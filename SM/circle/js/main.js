@@ -56,6 +56,31 @@ const askQuestion = () => {
         answerElem.appendChild(answerValue);
     });
 }
+/* level up system */
+var user=(function(){
+    window.onload=user.update;
+    var level=1,xp=0;// no way to change these without updating (better work flow)
+    xp = sessionStorage.getItem('xp');
+    console.log('xp vk = ', xp);
+    if (xp = null) {
+        xp = 0;
+    }
+
+    return {
+       increaseXP:function(val){
+          xp+=val;
+          if(xp>400){//enough xp for level up
+           level+=Math.floor(xp/400);
+           xp=xp%400;
+         }
+         user.update();
+           },
+     update:function(){
+       document.geElementById("xp").innerHTML = 'XP: ' + xp;
+       document.getElementById("level").innerHTML = 'Current level: ' + level;
+    }};
+    })();
+// lev up end
 
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
