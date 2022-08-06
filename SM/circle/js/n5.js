@@ -24,13 +24,13 @@ const N5 = {
                     "onyomi" : "シ",
                     "kunyomi" : "よ, よ.つ, よっ.つ, よん",
                     "definition" : "Четыре",
-                    "examples" : ["四角 しかく квадрат","四角い しかくい square, rectangular (adj)","四季 しき four seasons (n)"]
+                    "examples" : ["四角 しかく квадрат","四角い しかくい квадратный","四季 しき 4 времени года"]
                 },{
                     "kanji" : "五",
                     "onyomi" : "ゴ",
                     "kunyomi" : "いつ, いつ.つ",
                     "definition" : "Пять",
-                    "examples" : ["五十音 ごじゅうおん the Japanese syllabary (n)","五分 ごぶ half, 50%, tie, evenness, 5 parts, 5% (n-adv, n)","四捨五入 ししゃごにゅう rounding up (esp. fractions) (n, vs)"]
+                    "examples" : ["五十音 ごじゅうおん японская азбука","五分 ごぶ half, 50%, tie, evenness, 5 parts, 5% (n-adv, n)","四捨五入 ししゃごにゅう rounding up (esp. fractions) (n, vs)"]
                 },{
                     "kanji" : "六",
                     "onyomi" : "ロク, リク",
