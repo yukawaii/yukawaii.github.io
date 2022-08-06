@@ -122,19 +122,19 @@ let groupObjectPropertyNames
     // Main Group Button Function : combines delete and create functions depending on which level is selected
 function groupButtonAction(n) {
     switch (n) {
-        case 'Н5':
+        case 'N5':
             groupObjectPropertyNames = Object.keys(N5)
             break
-        case 'Н4':
+        case 'N4':
             groupObjectPropertyNames = Object.keys(N4)
             break
-        case 'Н3':
+        case 'N3':
             groupObjectPropertyNames = Object.keys(N3)
             break
-        case 'Н2':
+        case 'N2':
             groupObjectPropertyNames = Object.keys(N2)
             break
-        case 'Н1':
+        case 'N1':
             groupObjectPropertyNames = Object.keys(N1)
             break
     }
