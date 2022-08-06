@@ -63,7 +63,7 @@ var  xp;
     xp = sessionStorage.getItem('xp');
  
     
-    function firstlook() {
+    function showxp() {
         if (xp===null) {xp=1;}
     document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
@@ -74,7 +74,7 @@ function updatecounters(){
         level+=Math.floor(xp/500);// if xp is 1000, two levels up
         xp=xp%500;// what is left when increasing levels
      }
-     firstlook();
+     showxp();
   }
 
 
