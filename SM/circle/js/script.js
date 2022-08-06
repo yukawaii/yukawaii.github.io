@@ -193,19 +193,19 @@ function groupButtonSelected () {
     function read_prop(prop) {
         let obj
         switch (n) {
-            case 'Н5':
+            case 'N5':
                 obj = N5
                 break
-            case 'Н4':
+            case 'N4':
                 obj = N4
                 break
-            case 'Н3':
+            case 'N3':
                 obj = N3
                 break
-            case 'Н2':
+            case 'N2':
                 obj = N2
                 break
-            case 'Н1':
+            case 'N1':
                 obj = N1
                 break
         }
