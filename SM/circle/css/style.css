@@ -276,7 +276,7 @@ html body  #pausebut {
 html body  #homebut {
   position: absolute;
   top: 0;
-  right: 35%;
+  right: 10%;
   margin: 0px;
   padding: 0px;
   font-size: 20px;
