@@ -61,7 +61,7 @@ let n5ButtonClick = document.getElementById('n5').addEventListener('click', func
             levelButtons[i].classList.remove('selected')
     }
     this.classList.add('selected')
-    n = 'N5'
+    n = 'Н5'
     levelTitle.innerHTML = 'Н5'
     groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
@@ -72,7 +72,7 @@ let n4ButtonClick = document.getElementById('n4').addEventListener('click', func
     }
     this.classList.add('selected')
     n = 'N4'
-    levelTitle.innerHTML = 'Н4'
+    levelTitle.innerHTML = 'N4'
     groupTitle.innerHTML = 'и уровень'
     groupButtonAction(n)
 })
@@ -122,7 +122,7 @@ let groupObjectPropertyNames
     // Main Group Button Function : combines delete and create functions depending on which level is selected
 function groupButtonAction(n) {
     switch (n) {
-        case 'N5':
+        case 'Н5':
             groupObjectPropertyNames = Object.keys(N5)
             break
         case 'N4':
@@ -193,7 +193,7 @@ function groupButtonSelected () {
     function read_prop(prop) {
         let obj
         switch (n) {
-            case 'N5':
+            case 'Н5':
                 obj = N5
                 break
             case 'N4':
