@@ -62,6 +62,8 @@ const askQuestion = () => {
    var  xp;
     xp = sessionStorage.getItem('xp');
     if (xp=null) xp=0;
+    document.geElementById("xp").innerHTML = 'XP: ' + xp;
+    document.getElementById("level").innerHTML = 'Current level: ' + level;
 
 function updatecounters(){
          if (xp > 500) {
