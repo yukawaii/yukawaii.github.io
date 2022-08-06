@@ -61,12 +61,33 @@ const askQuestion = () => {
 var level=1;
 var  xp;
     xp = sessionStorage.getItem('xp');
- 
-    
+
+    // create div
+// ✅ Create element
+const el = document.createElement('div');
+const el1 = document.createElement('div');
+// ✅ Set ID attribute on element
+el.setAttribute('id', 'xp');
+el1.setAttribute('id', 'level');
+// ✅ Add text content to element
+el.textContent = '1';
+el1.textContent = '1';
+el.style.left = '30%';
+el1.style.top = '90%';
+el.style.position = 'absolute';
+el1.style.position = 'absolute';
+// ✅ Or set the innerHTML of the element
+// el.innerHTML = `<span>Hello world</span>`;
+
+// ✅ add element to DOM
+const box = document.getElementById('image');
+image.appendChild(el);
+
+
     function showxp() {
         if (xp===null) {xp=1;
         console.log('xp from main 1: ' + xp)};
-        document.geElementById("xp").innerHTML = 'XP: ' + xp;
+        document.geElementById("xp").innerHTML = 'Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
 
@@ -94,7 +115,7 @@ const answerQuestion = (answer, guess) => {
     scoreElem.innerHTML = "x" + SCORE;
    if (SCORE>0) {giveExp(1);};
     sessionStorage.setItem('xp', xp);
-    console.log('xp vk update from main.js = ', xp);
+    console.log('xp в сессии update from main.js = ', xp);
     scoreElem.style.opacity = SCORE > 1 ? 1 : 0;
     scoreElem.animate([
         { transform: "rotate(-15deg) scale(2)" },
