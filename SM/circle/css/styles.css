@@ -45,6 +45,7 @@ html, body {
 img {
     height: 80px;
     width: 80px;
+    background-color: transparent;
 }
 #image{
     text-align: center;
