@@ -71,11 +71,12 @@ var  xp;
     };
 
 function updatecounters(){
+    showxp();
          if (xp > 500) {
         level+=Math.floor(xp/500);// if xp is 1000, two levels up
         xp=xp%500;// what is left when increasing levels
      }
-     showxp();
+   
   }
 
 
