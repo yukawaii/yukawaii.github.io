@@ -64,8 +64,8 @@ const askQuestion = () => {
     if (xp=null) xp=0;
     
     function firstlook() {
-    document.geElementById("xp").innerHTML = 'XP: ' + xp;
-    document.getElementById("level").innerHTML = 'Current level: ' + level;
+    document.geElementById("xp").innerHTML = 'Опыт: ' + xp;
+    document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
 
 function updatecounters(){
@@ -73,8 +73,8 @@ function updatecounters(){
         level+=Math.floor(xp/500);// if xp is 1000, two levels up
         xp=xp%500;// what is left when increasing levels
      }
-     document.geElementById("xp").innerHTML = 'XP: ' + xp;
-    document.getElementById("level").innerHTML = 'Current level: ' + level;
+     document.geElementById("xp").innerHTML = 'Опыт: ' + xp;
+    document.getElementById("level").innerHTML = 'Уровень: ' + level;
   }
 
 
