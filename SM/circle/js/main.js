@@ -57,36 +57,35 @@ const askQuestion = () => {
     });
 }
 /* level up system */
-var user=(function(){
-    window.onload=user.update;
-    var level=1,xp=0;// no way to change these without updating (better work flow)
-    xp = sessionStorage.getItem('xp');
-    console.log('xp vk = ', xp);
-    if (xp = null) {
-        xp = 0;
-    }
 
-    return {
-       increaseXP:function(val){
-          xp+=val;
-          if(xp>400){//enough xp for level up
-           level+=Math.floor(xp/400);
-           xp=xp%400;
-         }
-         user.update();
-           },
-     update:function(){
-       document.geElementById("xp").innerHTML = 'XP: ' + xp;
-       document.getElementById("level").innerHTML = 'Current level: ' + level;
-    }};
-    })();
+    var level=1;
+   var  xp;
+    xp = sessionStorage.getItem('xp');
+    if (xp=null) xp=0;
+
+function updatecounters(){
+         if (xp > 500) {
+        level+=Math.floor(xp/500);// if xp is 1000, two levels up
+        xp=xp%500;// what is left when increasing levels
+     }
+     document.geElementById("xp").innerHTML = 'XP: ' + xp;
+    document.getElementById("level").innerHTML = 'Current level: ' + level;
+  }
+
+
+ function giveExp(number){
+      xp +=  number;
+     updatecounters();//update
+ }
+
+   window.onload=updatecounters;//onload init counters
 // lev up end
 
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
     scoreElem.innerHTML = "x" + SCORE;
-    user.increaseXP(SCORE);
+   giveExp(1);
     sessionStorage.setItem('xp', xp);
     console.log('xp vk update from main.js = ', xp);
     scoreElem.style.opacity = SCORE > 1 ? 1 : 0;
