@@ -57,7 +57,33 @@ const askQuestion = () => {
     });
 }
 var xp=1;
-var level =1;
+var lvl =1;
+
+function sendxptovk(xp){
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+    {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
+    "user_id":userid, "activity_id":2, "value":xp, "v":"5.131",
+     "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
+     "global":1}})
+     .then(function(data){console.log("Ответ на добавление очков:" + data.response);
+    })
+    .catch(error => console.log(error)); 
+}
+sendxptovk(1);
+//взять опыт из вк, поделить и получить уровень
+function getxptolvl(){
+xp = vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+{"user_id": userid, "v":"5.131",
+ "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
+.then(function (data) {console.log("Очков v вк:" + data.response);
+ // *назначение переменных*
+xp = data.response;
+lvl = Math.floor(xp/500);
+ return xp, lvl;
+})
+.catch(error => console.log(error));
+}
+
 
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
