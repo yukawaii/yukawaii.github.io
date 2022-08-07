@@ -60,9 +60,9 @@ function getinfo(){
      vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
         "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
-      .then(data => {console.log("Очков на вк:" + data.response);
+      .then(function (data) {console.log("Очков на вк:" + data.response);
         // *назначение переменных*
-     (score2 = data.response);
+     score2 = data.response;
         return score2;
       })
       .catch(error => console.log(error));} ;
