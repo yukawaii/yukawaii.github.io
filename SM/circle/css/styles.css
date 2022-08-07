@@ -491,7 +491,7 @@ hr {
     text-align: left;
     padding: 0px 15px;
     font-size: 50px;
-    margin: 100px 0px 0px 0px;
+    margin: 5px 0px 0px 0px;
     color:  #3C7317;
     display: inline;
 }
@@ -502,7 +502,7 @@ hr {
 ----------------*/
 footer {
     background-color: rgba(93, 87, 107, 1);
-    min-height: 150px;
+    min-height: 100px;
     width: 100%;
     /* max-width: 95vw; */
     clear: both;
