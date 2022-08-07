@@ -33,10 +33,6 @@ function infr(){
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////
 var userid;
-let score1=0; 
-sessionStorage.setItem('score1', score1);
-let scorsum=0;
-
 function getinfo(){
   vkBridge.send('VKWebAppGetUserInfo')
   .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
