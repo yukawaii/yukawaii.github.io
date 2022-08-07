@@ -58,7 +58,7 @@ const askQuestion = () => {
 }
 var xp=1;
 var lvl =1;
-var userid;
+var userid=vkBridge.send('VKWebAppGetUserInfo');
 function getinfo(){
   userid=vkBridge.send('VKWebAppGetUserInfo')
   .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
