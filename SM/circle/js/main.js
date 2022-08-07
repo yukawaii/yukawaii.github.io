@@ -79,6 +79,8 @@ xp = vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request
  // *назначение переменных*
 xp = data.response;
 lvl = Math.floor(xp/500);
+document.getElementById("xp").innerHTML = xp;
+document.getElementById("lvl").innerHTML = lvl;
  return xp, lvl;
 })
 .catch(error => console.log(error));

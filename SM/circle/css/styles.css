@@ -411,7 +411,7 @@ hr {
     text-align : center;
     top: 18vh;
     } 
-    @media (min-height:1000px){
+    @media (min-height:500px){
         #front {
             top: 10vh;
         }
@@ -539,7 +539,7 @@ footer a, footer a:hover {
 
 #alert {
     position: absolute;
-    margin: 150px auto;
+    margin: 15px auto;
     max-width: 100%;
 }
 
