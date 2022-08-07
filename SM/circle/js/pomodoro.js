@@ -47,12 +47,11 @@ function workCountDown(){
     count --;
 
     if (count < 0){
+    myAdd1();
                clearInterval(workSession);
         workSession = null;
         document.getElementById("showtime").innerHTML = "00時 00分 00秒";
-        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
+ 
     }
 
 }
