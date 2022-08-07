@@ -58,7 +58,20 @@ const askQuestion = () => {
 }
 var xp=1;
 var lvl =1;
-
+var userid;
+function getinfo(){
+  vkBridge.send('VKWebAppGetUserInfo')
+  .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  sessionStorage.setItem("userid", userid);
+      // *назначение переменных*
+      return userid;
+      
+  })
+  .catch(error => console.log(error));
+ // getsc();
+  
+};
+    
 function sendxptovk(xp){
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
     {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
@@ -69,6 +82,8 @@ function sendxptovk(xp){
     })
     .catch(error => console.log(error)); 
 }
+
+
 sendxptovk(1);
 //взять опыт из вк, поделить и получить уровень
 function getxptolvl(){
@@ -79,20 +94,37 @@ xp = vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request
  // *назначение переменных*
 xp = data.response;
 lvl = Math.floor(xp/500);
-document.getElementById("xp").innerHTML = xp;
-document.getElementById("lvl").innerHTML = lvl;
- return xp, lvl;
+return xp, lvl;
 })
 .catch(error => console.log(error));
 }
+var xpvk=1;
+function getxpfromvk(){
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+    {"user_id": userid, "v":"5.131",
+     "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
+   .then(function (data) {console.log("Очков на вк:" + data.response);
+     // *назначение переменных*
+  xpvk = data.response;
+     return xpvk;
+   })
+   .catch(error => console.log(error));
+};
 
+function sendxpup(){
+    getxpfromvk();
+    xp= xp+xpvk; 
+ sendxptovk(xp);
+}
 
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
     scoreElem.innerHTML = "x" + SCORE;
+    if (SCORE>0) {xp=xp+1;
      sessionStorage.setItem('xp', xp);
-    console.log('xp в сессии update from main.js = ', xp);
+     sendxpup();
+    console.log('xp в сессии update from main.js = ', xp);}
     scoreElem.style.opacity = SCORE > 1 ? 1 : 0;
     scoreElem.animate([
         { transform: "rotate(-15deg) scale(2)" },
