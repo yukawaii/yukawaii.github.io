@@ -56,6 +56,9 @@ const askQuestion = () => {
         answerElem.appendChild(answerValue);
     });
 }
+var xp=1;
+var level =1;
+
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
