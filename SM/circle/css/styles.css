@@ -27,7 +27,7 @@ html, body {
     width: 95vw;
     background-color:white;
     margin: 0px auto;
-    overflow: auto;
+    overflow: scroll;
     
 }
 
