@@ -80,24 +80,6 @@ const answerQuestion = (answer, guess) => {
     });
     setTimeout(() => askQuestion(), 4000);
 }
-/* не работает пауза
-const pausebut = document.getElementById("pausebut");
-
-    pausebut.onclick = () => {
-        if (playing === true){
-        if (settingTimeAttack) {
-         
-            timeoutElem.style.webkitAnimationPlayState = 'paused';
-            clearTimeout(timeout); 
-        }
-else  if (playing===false){
-    if (settingTimeAttack) {
-    timeoutElem.style.webkitAnimationPlayState = 'running';
-}}}
-    } */
-// последние скобки от проверки на паузу, что паузы нет
-
-
 window.onload = () => {
 
   document.getElementById("settings-container").onmouseenter = event => {

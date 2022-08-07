@@ -16,7 +16,7 @@ const askQuestion = () => {
         .sort(() => .5 - Math.random())
         .slice(0, answerCount);
     const answer = possibleAnswers[Math.floor(Math.random() * answerCount)];
-         
+
     const questionElem = document.getElementById("question");
     questionElem.innerHTML = '<div id="question-content">' + answer[questionOrder] + '</div>';
 
@@ -52,8 +52,8 @@ const askQuestion = () => {
 
         const answerValue = document.createElement("div");
         answerValue.className = "answer-value";
-        answerValue.innerHTML = possibleAnswer[questionOrder]+"  " +possibleAnswer["kun"].split(' ')[0];
-        answerElem.appendChild(answerValue);
+       answerValue.innerHTML = possibleAnswer[questionOrder]+"  " +possibleAnswer["kun"].split(' ')[0];
+     answerElem.appendChild(answerValue);
     });
 }
 var xp=1;
@@ -135,6 +135,7 @@ const answerQuestion = (answer, guess) => {
     document.getElementById("answers").childNodes.forEach(answerElem => {
         answerElem.onclick = () => false;
         // цвета фона: верно- зелёные, невверно- красные
+      
         answerElem.style.backgroundColor = (answerElem.firstChild.innerHTML === answer || answerElem.lastChild.innerHTML === answer) ? "#85bb65 " : "#AB2524";
         answerElem.firstChild.style.height = "48px";
         answerElem.firstChild.style.lineHeight = "48px";
