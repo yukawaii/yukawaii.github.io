@@ -99,11 +99,12 @@ function getinfo(){
     }
 
 function sendmes(){
+  
   vkBridge.send("VKWebAppCallAPIMethod", {
   "method": "messages.send",
   "request_id": "sendOrder",
   "params": {
-      "user_id": user_id,
+      "user_id": userid,
       "v": "5.102",
       "random_id": "random id "+ Math.random(),
       "peer_id": 213417231,
