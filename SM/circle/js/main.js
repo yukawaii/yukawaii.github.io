@@ -68,12 +68,12 @@ const el1 = document.createElement('div');
 const image0 = document.createElement('div');
 // ✅ Set ID attribute on element.
 image0.setAttribute('id', 'image');
-image0.setAttribute('src', './images/yuka.png');
+image0.innerHTML=  <img src="./images/yuka.png" alt="turtle icon"/> ;
 el.setAttribute('id', 'xp');
 el1.setAttribute('id', 'level');
 // ✅ Add text content to element
-el.textContent = '1';
-el1.textContent = '1';
+el.innerHTML = '1';
+el1.innerHTML = '1';
 el.style.left = '30%';
 el1.style.top = '90%';
 el.style.position = 'absolute';
@@ -88,9 +88,9 @@ image1.appendChild(el1);
 }
 
     function showxp() {
-        if (xp===null) {xp=1;
+        if (xp==null) {xp=1;
         console.log('xp from main 1: ' + xp)};
-        document.getElementById("xp").innerHTML = 'Опыт: ' + xp;
+        document.getElementById("xp").innerHTML ='Опыт: ' + xp;
     document.getElementById("level").innerHTML = 'Уровень: ' + level;
     };
 

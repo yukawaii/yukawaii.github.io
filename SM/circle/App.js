@@ -42,7 +42,7 @@ let scorsum=0;
 
 function getinfo(){
   bridge.send('VKWebAppGetUserInfo')
-  .then(data => {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
   sessionStorage.setItem("userid", userid);
       // *назначение переменных*
       return userid;
@@ -64,7 +64,7 @@ function getinfo(){
         return score2;
       })
       .catch(error => console.log(error));} ;
-  var l = score2;
+
 
   //отправка очков в вк
   function sendscore(){
@@ -91,3 +91,17 @@ function getinfo(){
          .then(data => console.log(data.success))  
          .catch(error => console.log(error));
 }
+
+function sendmes(){
+bridge.send("VKWebAppCallAPIMethod", {
+  "method": "messages.send",
+  "request_id": "sendOrder",
+  "params": {
+      "user_id": user_id,
+      "v": "5.102",
+      "random_id": guid,
+      "peer_id": group_id,
+      "message": sendInfo,
+      "access_token": token
+  }
+})}
