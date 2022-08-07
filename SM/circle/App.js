@@ -48,6 +48,7 @@ function getinfo(){
     
      //получение очков из вк
    function getsc(){
+    getinfo();
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
     {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
     "user_id":userid, "activity_id":2, "value":1, "v":"5.131",

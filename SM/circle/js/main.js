@@ -71,6 +71,7 @@ function getinfo(){
  // getsc();
   
 };
+window.onload = getinfo();
     
 function sendxptovk(xp){
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
