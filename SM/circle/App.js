@@ -55,6 +55,11 @@ function getinfo(){
     
      //получение очков из вк
    function getsc(){
+    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+    {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
+    "user_id":userid, "activity_id":2, "value":1, "v":"5.131",
+     "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
+     "global":1}});
       bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
         "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
@@ -70,6 +75,7 @@ function getinfo(){
   function sendscore(){
     getsc();
     var userid = sessionStorage.getItem('userid');
+  
     var score1 = sessionStorage.getItem('score1');
     var scorsum= score1+score2;
     sessionStorage.setItem("scorsum", scorsum);

@@ -56,62 +56,6 @@ const askQuestion = () => {
         answerElem.appendChild(answerValue);
     });
 }
-/* level up system */
-
-var level=1;
-var  xp=1;
-window.onload = function() {
-    // create div
-// ✅ Create element
-const el = document.createElement('div');
-const el1 = document.createElement('div');
-const image0 = document.createElement('div');
-// ✅ Set ID attribute on element.
-image0.setAttribute('id', 'image');
-image0.innerHTML=  <img src="./images/yuka.png" alt="turtle icon"/> ;
-el.setAttribute('id', 'xp');
-el1.setAttribute('id', 'level');
-// ✅ Add text content to element
-el.innerHTML = '1';
-el1.innerHTML = '1';
-el.style.left = '30%';
-el1.style.top = '90%';
-el.style.position = 'absolute';
-el1.style.position = 'absolute';
-// ✅ Or set the innerHTML of the element
-// el.innerHTML = `<span>Hello world</span>`;
-
-// ✅ add element to DOM
-const image1 = document.getElementById('image');
-image1.appendChild(image0);
-image1.appendChild(el1);
-}
-
-    function showxp() {
-        if (xp==null) {xp=1;
-        console.log('xp from main 1: ' + xp)};
-        document.getElementById("xp").innerHTML ='Опыт: ' + xp;
-    document.getElementById("level").innerHTML = 'Уровень: ' + level;
-    };
-
-function updatecounters(){
-    showxp();
-         if (xp > 500) {
-        level+=Math.floor(xp/500);// if xp is 1000, two levels up
-        xp=xp%500;// what is left when increasing levels
-     }
-   
-  }
-
-
- function giveExp(number){
-      xp +=  number;
-     updatecounters();//update
- }
-
-   window.onload = updatecounters();//onload init counters
-// lev up end
-
 const answerQuestion = (answer, guess) => {
     SCORE = guess === answer ? SCORE + 1 : 0;
     const scoreElem = document.getElementById("score");
