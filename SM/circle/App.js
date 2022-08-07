@@ -87,13 +87,26 @@ function getinfo(){
 
   //доска топ
 
-  function showLeaderBoard(scorsum)
-{
-  var scorsum = sessionStorage.getItem('scorsum');
-	vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
-         .then(data => console.log(data.success))  
-         .catch(error => console.log(error));
-}
+ 
+
+
+  function showLeaderboard(scorsum) {
+    scorsum = sessionStorage.getItem('scorsum');
+    if(isMobileOrTablet()) {
+      vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+        .then(data => console.log(data))  
+        .catch(error => console.log(error));          
+    } else {
+      vkBridge.send("VKWebAppCallAPIMethod", 
+        {
+          "method": "apps.getLeaderboard", 
+          "params": { "v": vkApiVersion, "access_token": accessToken, "type": "score", "global": 1, "extended": 1 } 
+        }
+      )
+      .then(data => console.log(data))  
+      .catch(error => console.log(error));          
+    }
+  }
 
 function sendmes(){
   vkBridge.send("VKWebAppCallAPIMethod", {
