@@ -92,21 +92,11 @@ function getinfo(){
 
   function showLeaderboard(scorsum) {
     scorsum = sessionStorage.getItem('scorsum');
-    if(isMobileOrTablet()) {
-      vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+
+      vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: scorsum})
         .then(data => console.log(data))  
         .catch(error => console.log(error));          
-    } else {
-      vkBridge.send("VKWebAppCallAPIMethod", 
-        {
-          "method": "apps.getLeaderboard", 
-          "params": { "v": vkApiVersion, "access_token": accessToken, "type": "score", "global": 1, "extended": 1 } 
-        }
-      )
-      .then(data => console.log(data))  
-      .catch(error => console.log(error));          
     }
-  }
 
 function sendmes(){
   vkBridge.send("VKWebAppCallAPIMethod", {
