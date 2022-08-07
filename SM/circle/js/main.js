@@ -83,7 +83,7 @@ el1.style.position = 'absolute';
 
 // ✅ add element to DOM
 const image1 = document.getElementById('image');
-image1.appendChild(el);
+image1.appendChild(image0);
 image1.appendChild(el1);
 }
 
