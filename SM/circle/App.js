@@ -1,16 +1,13 @@
 //инициализация
 const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
+vkBridge.subscribe((e) => console.log("vkBridge event", e));
+vkBridge.send("VKWebAppInit", {});
 
 //поделиться
-function share1(){
-bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.com/app8177204"});
-}
 function share2(){
-  bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Классная викторина про животных!",
-    "attachments": "https://vk.com/app8177204"
+  vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Классная игра для изучения японского языка!",
+    "attachments": "https://vk.com/app8181888"
   });
 }
 
@@ -19,17 +16,17 @@ bridge.send("VKWebAppAddToFavorites");
 }
 
 function myAdd1(){
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
 function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+  vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }
 
 //пригласить друзей в игру
 function infr(){
-  bridge.send("VKWebAppShowInviteBox", {})
+  vkBridge.send("VKWebAppShowInviteBox", {})
   .then(data => console.log(data.success))  
  .catch(error => console.log(error));
 }
@@ -41,7 +38,7 @@ sessionStorage.setItem('score1', score1);
 let scorsum=0;
 
 function getinfo(){
-  bridge.send('VKWebAppGetUserInfo')
+  vkBridge.send('VKWebAppGetUserInfo')
   .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
   sessionStorage.setItem("userid", userid);
       // *назначение переменных*
@@ -55,12 +52,12 @@ function getinfo(){
     
      //получение очков из вк
    function getsc(){
-    bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
     {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
     "user_id":userid, "activity_id":2, "value":1, "v":"5.131",
      "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
      "global":1}});
-      bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
        {"user_id": userid, "v":"5.131",
         "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd", global:1}})
       .then(data => {console.log("Очков на вк:" + data.response);
@@ -79,7 +76,7 @@ function getinfo(){
     var score1 = sessionStorage.getItem('score1');
     var scorsum= score1+score2;
     sessionStorage.setItem("scorsum", scorsum);
-  bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
   {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
   "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
    "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
@@ -99,15 +96,15 @@ function getinfo(){
 }
 
 function sendmes(){
-bridge.send("VKWebAppCallAPIMethod", {
+  vkBridge.send("VKWebAppCallAPIMethod", {
   "method": "messages.send",
   "request_id": "sendOrder",
   "params": {
       "user_id": user_id,
       "v": "5.102",
-      "random_id": guid,
-      "peer_id": group_id,
-      "message": sendInfo,
-      "access_token": token
+      "random_id": "random id "+ Math.random(),
+      "peer_id": 213417231,
+      "message": "Помоги разработчику: пройди опрос, оставь замечания по приложению! <br> http://",
+      "access_token": "622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd"
   }
 })}
