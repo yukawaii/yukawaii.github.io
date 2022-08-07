@@ -60,7 +60,7 @@ var xp=1;
 var lvl =1;
 var userid;
 function getinfo(){
-  vkBridge.send('VKWebAppGetUserInfo')
+  userid=vkBridge.send('VKWebAppGetUserInfo')
   .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
   sessionStorage.setItem("userid", userid);
       // *назначение переменных*
