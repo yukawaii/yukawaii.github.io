@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 	<title>Хирагана</title>
 	<link rel="stylesheet" href="styles/style.css">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -17,8 +18,13 @@
 .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
 .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
+	<script src = "./App.js"></script>
 </head>
 <body>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+	  </script> 
 	<script src = "./App.js"></script>
 	<div class ="myclass1">
 		<br><br>
@@ -30,5 +36,34 @@
         <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
 			<br>          <button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button><br>
 	</div>
+	<script>
+		
+//поделиться
+function share1(){
+	vkBridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
+}
+function share2(){
+	vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Игры для быстрого запоминания хираганы!",
+    "attachments": "https://vk.com/app8165024"
+  });
+}
+
+function favor1(){
+	vkBridge.send("VKWebAppAddToFavorites");
+}
+function myadd1(){
+	vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+function joingroup(){
+  vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+//пригласить друзей в игру
+function infr(){
+	vkBridge.send("VKWebAppShowInviteBox", {})
+}
+	</script>
 </body>
 </html>

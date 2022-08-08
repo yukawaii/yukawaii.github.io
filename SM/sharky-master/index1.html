@@ -13,7 +13,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: red;
+            background: rgb(118, 175, 250);
         }
         .noselect {
             -webkit-touch-callout: none;
@@ -37,12 +37,12 @@
         }
 
         .game-over-text {
-            color: orangered;
+            color: rgb(243, 24, 17);
             font-size: 200px;
             text-align: center;
-            font-family: 'Arvo', serif;
-            font-weight: bold;
-            -webkit-text-stroke: 3px white;
+          font-family: "Comic Sans MS", "Comic Sans", bold; 
+                font-weight: bold;
+            -webkit-text-stroke: 1px white;
             text-shadow: 5px 5px black;
         }
 
@@ -60,9 +60,9 @@
             right: 0.3em;
             bottom: 0;
             color: white;
-            font-family: 'Arvo', serif;
-            font-weight: bold;
-            font-size: 5em;
+            font-family: "Comic Sans MS", "Comic Sans", bold; 
+                font-weight: bold;
+            font-size: 3em;
             -webkit-text-stroke: 1px black;
         }
 
@@ -75,9 +75,9 @@
             color: orange;
             font-size: 150px;
             text-align: center;
-            font-family: 'Arvo', serif;
-            font-weight: bold;
-            -webkit-text-stroke: 3px white;
+            font-family: "Comic Sans MS", "Comic Sans", bold; 
+                font-weight: bold;
+            -webkit-text-stroke: 1px white;
             text-shadow: 5px 5px black;
         }
 
@@ -130,6 +130,20 @@
   <script>
     // Sends event to client
     vkBridge.send('VKWebAppInit');
+    var userid;
+function getinfo(){
+  vkBridge.send('VKWebAppGetUserInfo')
+  .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  sessionStorage.setItem("userid", userid);
+      // *назначение переменных*
+      return userid;
+      
+  })
+  .catch(error => console.log(error));
+ // getsc();
+  
+};
+    getinfo();
   </script> <div>
     <button class = "btn" onclick="joingroup()">Подписаться</button>
     <button class = "btn" onclick="share2()">Поделиться</button></div>
@@ -263,7 +277,7 @@ function joingroup(){
   };
 
   spriteImage.src = "img/sprite.png";
-  backgroundImage.src = "img/background.jpg";
+  backgroundImage.src = "img/background3.jpg";
   obstacleDownImage.src = "img/obstacle-down.png";
   obstacleUpImage.src = "img/obstacle-up.png";
 
@@ -616,13 +630,26 @@ function joingroup(){
       if (!gameover) {
         if (spriteLeft > obstacleRight) {
           if (entry[3] === 0) {
-            setScore(score + 10);
+            setScore(score + 1);
+            sendscore();
             entry[3] = 1;
+
           }
         }
       }
     }
   };
+ 
+
+function sendscore(){
+       vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
+  "user_id":userid, "activity_id":2, "value":score, "v":"5.131",
+   "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
+   "global":1}})
+   .then(data => {console.log("Ответ на добавление очков:" + data.response);
+  })
+  .catch(error => console.log(error)); }
 
   var setScore = function (value) {
     score = value;
