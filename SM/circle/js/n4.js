@@ -1070,26 +1070,26 @@ const N4 = {
                     "kanji" : "開",
                     "onyomi" : "カイ",
                     "kunyomi" : "ひら.く、 ひら.き、 -びら.き、 ひら.ける、 あ.く、 あ.ける",
-                    "definition" : "open, unfold, unseal",
-                    "examples" : ["開く あく to open (u-v)","開演 カイエン curtain raising, starting (e.g. play, concert)","開く 【ひらく】 to open, to undo, to unseal, to unpack, to bloom, to unfold, to spread out, to open (for business, e.g. in the morning), to be wide (gap, etc.), to widen, to hold (meeting, etc.)"]
+                    "definition" : "Открывать",
+                    "examples" : ["開く あく открывать","開演 カイエン curtain raising, starting (e.g. play, concert)","開く 【ひらく】 to open, to undo, to unseal, to unpack, to bloom, to unfold, to spread out, to open (for business, e.g. in the morning), to be wide (gap, etc.), to widen, to hold (meeting, etc.)"]
                 },{   
                     "kanji" : "院",
                     "onyomi" : "イン",
                     "kunyomi" : "",
-                    "definition" : "Inst., institution, temple, mansion, school",
-                    "examples" : ["病院 びょういん hospital (n)","学院 がくいん institute, academy (n)","入院 にゅういん hospital admission (n,p-suru)"]
+                    "definition" : "Институт, университет, храм",
+                    "examples" : ["病院 びょういん больница","学院 がくいん institute, academy (n)","入院 にゅういん госпитализация"]
                 },{   
                     "kanji" : "集",
                     "onyomi" : "シュウ",
                     "kunyomi" : "あつ.まる、 あつ.める、 つど.う",
-                    "definition" : "gather, meet, congregate, swarm, flock",
-                    "examples" : ["集める あつめる to gather, to assemble (ru-v, trans-verb)","集まる あつまる to gather, to assemble (u-v, intrans-verb)","集中 しゅうちゅう concentration (n, p-suru)"]
+                    "definition" : "Собирать",
+                    "examples" : ["集める あつめる собирать","集まる あつまる собираться","集中 しゅうちゅう концентрация", "集り　たかり нахлебничество"]
                 },{   
                     "kanji" : "青",
                     "onyomi" : "セイ、 ショウ",
                     "kunyomi" : "あお、 あお-、 あお.い",
-                    "definition" : "blue, green",
-                    "examples" : ["青 あお blue (n)","青空 あおぞら blue sky (n)","深青 ふかあお dark blue, deep blue, navy blue"]
+                    "definition" : "Голубой, зелёный",
+                    "examples" : ["青 あお голубой","青空 あおぞらголубое небо","深青 ふかあお глубокий синий цвет"]
                 }
             ],
     "Ур. 18" : 
@@ -1098,62 +1098,62 @@ const N4 = {
                     "kanji" : "音",
                     "onyomi" : "オン、 イン、 -ノン",
                     "kunyomi" : "おと、 ね",
-                    "definition" : "sound, noise",
-                    "examples" : ["音楽 おんがく music (n)","音 おと sound (n)","足音 あしおと sound of footsteps (n)"]
+                    "definition" : "Звук, шум",
+                    "examples" : ["音楽 おんがく музыка","音 おと звук","足音 あしおと звук шагов"]
                 },{
                     "kanji" : "頭",
                     "onyomi" : "トウ、 ズ、 ト",
                     "kunyomi" : "あたま、 かしら、 -がしら、 かぶり",
-                    "definition" : "head, counter for large animals",
-                    "examples" : ["頭 あたま head (n)","頭角 トウカク distinguishing oneself, standing out, top of the head","石頭 いしあたま obstinate person, stubbornness, pigheadedness, hard head (like a rock)"]
+                    "definition" : "Голова, счёт.суф. больших животных",
+                    "examples" : ["頭 あたま голова","頭角 トウカク макушка","石頭 いしあたま твердолобый (упёртый) человек", "頭巾　ずきん капюшон", "頭目　とうもく глава, предводитель"]
                 },{
                     "kanji" : "題",
                     "onyomi" : "ダイ",
                     "kunyomi" : "",
-                    "definition" : "topic, subject",
-                    "examples" : ["問題 もんだい problem, question (n)","宿題 しゅくだい homework (n)","命題 メイダイ proposition, thesis, notion, theory, problem, issue, challenge"]
+                    "definition" : "Тема",
+                    "examples" : ["問題 もんだい проблема, вопрос","宿題 しゅくだい домашняя радота/задание","命題 メイダイ суждение, тезис", "課題　かだい тема (урока)"]
                 },{   
                     "kanji" : "顔",
                     "onyomi" : "ガン",
                     "kunyomi" : "かお",
-                    "definition" : "face, expression",
-                    "examples" : ["笑顔 えがお smiling face (n)","顔色 かおいろ complexion, expression (n)","新顔 しんがお newcomer, new face (n)"]
+                    "definition" : "Лицо",
+                    "examples" : ["笑顔 えがお улыбка","顔色 かおいろ цвет/выражение лица","新顔 しんがお новичок, новое лицо"]
                 },{
                     "kanji" : "風",
                     "onyomi" : "フウ、 フ",
                     "kunyomi" : "かぜ、 かざ-",
-                    "definition" : "wind, air, style, manner",
-                    "examples" : ["台風 たいふう typhoon (n)","洋風 ようふう western style (na-adj)","風習 ふうしゅう custom (n)"]
+                    "definition" : "Ветер, стильr",
+                    "examples" : ["台風 たいふう тайфун","洋風 ようふう западный стиль","風習 ふうしゅう обычаи, нравы", "和風　わふう японский традиционный стиль", "神風　かみかぜ камикадзэ, божественный ветер"]
                 },{
                     "kanji" : "飯",
                     "onyomi" : "ハン",
                     "kunyomi" : "めし",
-                    "definition" : "meal, boiled rice",
-                    "examples" : ["赤飯 せきはん red rice (n)","夕飯 ゆうはん evening meal (n)","ご飯 ごはん meal, rice (n)"]
+                    "definition" : "Еда, варёный рис",
+                    "examples" : ["赤飯 せきはん рис с красной фасолью","夕飯 ゆうはん ужин","ご飯 ごはん еда, рис", "炊飯器　すいはんき рисоварка", "飯事　ままごと десткая игра в дом.хозяйство"]
                 },{   
                     "kanji" : "館",
                     "onyomi" : "カン",
                     "kunyomi" : "やかた、 たて",
-                    "definition" : "building, mansion, large building, palace",
-                    "examples" : ["図書館 としょかん library (n)","本館 ほんかん main building (n)","旅館 りょかん Japanese-style inn (n)"]
+                    "definition" : "Здание",
+                    "examples" : ["図書館 としょかん библиотека","本館 ほんかん главное здание)","旅館 りょかん отель в традиц.яп. стиле", "館　やかた палаты, дворец"]
                 },{   
                     "kanji" : "首",
                     "onyomi" : "シュ",
                     "kunyomi" : "くび",
-                    "definition" : "neck",
-                    "examples" : ["足首 あしくび ankle (n)","手首 てくび wrist (n)","自首 じしゅ to surrender, to give oneself up (n,p-suru)"]
+                    "definition" : "Шея",
+                    "examples" : ["足首 あしくび щиколотка","手首 てくび запястье","自首 じしゅ явка с повинной, сдаться", "首にする　くびにする уволить"]
                 },{   
                     "kanji" : "験",
                     "onyomi" : "ケン、 ゲン",
                     "kunyomi" : "あかし、 しるし、 ため.す、 ためし",
-                    "definition" : "verification, effect, testing",
-                    "examples" : ["試験 しけん test, exam (n)","体験 たいけん personal experience (n,p-suru)","治験 チケン clinical trial"]
+                    "definition" : "Экзаменовать, опыт, испытание",
+                    "examples" : ["試験 しけん экзамен","体験 たいけん личный опыт","治験 チケン клиническое испытание", "受験　じゅけん сдача экзамена", "経験　けいけん жизненый опыт"]
                 },{   
                     "kanji" : "鳥",
                     "onyomi" : "チョウ",
                     "kunyomi" : "とり",
-                    "definition" : "bird, chicke",
-                    "examples" : ["小鳥 ことり small bird (n)","野鳥 やちょう wild bird (n)","一石二鳥 いっせきにちょう two birds with one stone (expr)"]
+                    "definition" : "Птица",
+                    "examples" : ["小鳥 ことり маленькая птичка","野鳥 やちょう дикая птаха","一石二鳥 いっせきにちょう (убить)двух птиц одним камнем (погов.)), убить двух зайцев"]
                 }
             ],
     "Ур. 19" : 
@@ -1162,8 +1162,8 @@ const N4 = {
                     "kanji" : "黒",
                     "onyomi" : "コク",
                     "kunyomi" : "くろ、 くろ.ずむ、 くろ.い",
-                    "definition" : "black",
-                    "examples" : ["黒字 くろじ to be in the black (n)","白黒 しろくろ black and white (n)","黒っぽい くろっぽい dark, blackish (adj)"]
+                    "definition" : "Чёрный",
+                    "examples" : ["黒字 くろじ чёрный шрифт","白黒 しろくろ чёрно-белый","黒っぽい くろっぽい тёмный, черноватый"]
                 }
             ]
 }
