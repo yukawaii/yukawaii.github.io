@@ -158,38 +158,38 @@ const N5 = {
                     "kanji" : "前",
                     "onyomi" : "ゼン",
                     "kunyomi" : "まえ, -まえ",
-                    "definition" : "in front, before",
-                    "examples" : ["駅前 えきまえ in front of station (n)","気前 きまえ generosity (n)","以前 いぜん ago, since, before, previous (n-adv, n-t)"]
+                    "definition" : "Спереди, перед; перед тем, как",
+                    "examples" : ["駅前 えきまえ перед ж/д станцией","気前のいい きまえのいい великодушный, щедрый","以前 いぜん раньше, прежде", "午前　ごぜん до полудня"]
                 },{   
                     "kanji" : "北",
                     "onyomi" : "ホク",
                     "kunyomi" : "きた",
-                    "definition" : "north",
-                    "examples" : ["南北 なんぼく south and north (n)","北極 ほっきょく North Pole (n)","北西 ほくせい northwest (n)"]
+                    "definition" : "Север",
+                    "examples" : ["南北 なんぼく юг и север","北極 ほっきょく Северный полюс, полярный","北西 ほくせい сверо-запад", "北海道　ほっかいどう о.Хоккайдо"]
                 },{   
                     "kanji" : "千",
                     "onyomi" : "セン",
                     "kunyomi" : "ち",
-                    "definition" : "thousand",
-                    "examples" : ["何千 なんぜん many thousands (n)","千 ち 1,000, thousand (numeric)","三千　さんぜん　3,000, thousand (numeric)"]
+                    "definition" : "Тысяча",
+                    "examples" : ["千古　せんこ глубокая древность","千 ち 1000","三千　さんぜん　3000", "千島(列島) ちしま(れっとう) Курильские острова", "千万 せんまん 10 миллионов"]
                 },{   
                     "kanji" : "午",
                     "onyomi" : "ゴ",
                     "kunyomi" : "うま",
                     "definition" : "noon, sign of the horse, 11AM-1PM, seventh sign of Chinese zodiac",
-                    "examples" : ["午後 ごご afternoon, p.m. (n-adv, n-t)","午前 ごぜん morning, a.m. (n-adv, n-t)","午 ひる noon, midday, daytime, lunch (n-adv, n-t)"]
+                    "examples" : ["午後 ごご после полудня","午前 ごぜん до полудня","午 うま Лошадь (кит.гороскоп)", "丙午 ひのえうま год Огненной Лошадь"]
                 },{   
                     "kanji" : "半",
                     "onyomi" : "ハン",
                     "kunyomi" : "なか.ば",
-                    "definition" : "half, middle, odd number, semi-, part-",
-                    "examples" : ["後半 こうはん second half, latter half (n-adv, n)","上半身 じょうはんしん upper half of body, bust (n)","大半 たいはん majority, mostly, generally (n)"]
+                    "definition" : "Половина",
+                    "examples" : ["後半 こうはん вторая половина","上半身 じょうはんしん торс, верхняя часть туловища","大半 たいはん большая часть, большинство"]
                 },{   
                     "kanji" : "南",
                     "onyomi" : "ナン, ナ",
                     "kunyomi" : "みなみ",
-                    "definition" : "south",
-                    "examples" : ["南極 なんきょく south pole, Antarctic (n)","南部 なんぶ southern part (n)","南北 なんぼく south and north (n)"]
+                    "definition" : "Юг",
+                    "examples" : ["南極 なんきょく Южный полюс, антарктический ","南部 なんぶ южная часть, южный","南北 なんぼく юг и север"]
                 }
             ],
 
@@ -199,38 +199,38 @@ const N5 = {
                     "kanji" : "友",
                     "onyomi" : "ユウ",
                     "kunyomi" : "とも",
-                    "definition" : "friend",
-                    "examples" : ["親友 しんゆう close friend, bosom (old, intimate) friend, buddy, crony, chum (n)","友好 ゆうこう friendship (n)","友情 ゆうじょう friendship, fellowship (n)"]
+                    "definition" : "Друг",
+                    "examples" : ["親友 しんゆう близкий друг","友好 ゆうこう дружба, дружеские отношения","友情 ゆうじょう дружба, дружеские чувства"]
                 },{   
                     "kanji" : "口",
                     "onyomi" : "コウ, ク",
                     "kunyomi" : "くち",
-                    "definition" : "mouth",
-                    "examples" : ["ひと口 ひとくち mouthful, bite, sip, draft, draught, one word (n)","口 くち mouth, opening, hole, gap (n, suffix, counter)","口語 こうご spoken language, literary style based on (modern) spoken language (n)"]
+                    "definition" : "Рот",
+                    "examples" : ["ひと口 ひとくち глоток, кусок, одно слово, （に）в общем","口 くち рот, отверстие","口語 こうご разговорный язык", "口笛　くちぶえ свист"]
                 },{   
                     "kanji" : "名",
                     "onyomi" : "メイ, ミョウ",
                     "kunyomi" : "な, -な",
-                    "definition" : "name, noted, distinguished, reputation",
-                    "examples" : ["国名 こくめい country name (n)","氏名 しめい full name, identity (n)","実名 じつめい real name (n)"]
+                    "definition" : "Имя, название",
+                    "examples" : ["国名 こくめい название страны","氏名 しめい фамилия и имя","実名 じつめい настоящее имя", "名称　めいしょう наименование", "名前　なまえ имя"]
                 },{   
                     "kanji" : "古",
                     "onyomi" : "コ",
                     "kunyomi" : "ふる.い, ふる-, -ふる.す",
-                    "definition" : "old",
-                    "examples" : ["古代 こだい ancient times (adj-na, n-adv, n-t)","古典 こてん old book, classics, classic (n)","古本 こほん secondhand book, ancient book, antiquarian books (n, n)"]
+                    "definition" : "Старый",
+                    "examples" : ["古代 こだい древние времена, древность","古典 こてん древняя рукопись", "古めかしい　ふるめかしい старый на вид", "古本 こほん старая книга, поддержанная книга", "古びる　ふるびる изнашиваться"]
                 },{   
                     "kanji" : "右",
                     "onyomi" : "ウ, ユウ",
                     "kunyomi" : "みぎ",
-                    "definition" : "right",
-                    "examples" : ["右手 みぎて right hand (n)","左右 さゆう left and right, influence, control, domination (n, vs)","右側 うそく right side, right hand (n)"]
+                    "definition" : "Право, правый",
+                    "examples" : ["右手 みぎて правая рука","左右 さゆう правый и левый, контролировать, держать в своих руках","右側 うそく правая сторона, справа"]
                 },{   
                     "kanji" : "四",
                     "onyomi" : "シ",
                     "kunyomi" : "よ, よ.つ, よっ.つ, よん",
-                    "definition" : "four",
-                    "examples" : ["四角 しかく square (adj-na, n)","四角い しかくい square, rectangular (adj)","四季 しき four seasons (n)"]
+                    "definition" : "Четыре",
+                    "examples" : ["四角 しかく квадрат","四角い しかくい квадратный","四季 しき 4 сезона"]
                 },{   
                     "kanji" : "国",
                     "onyomi" : "コク",
