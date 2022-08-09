@@ -5,8 +5,8 @@ const N4 = {
                     "kanji" : "不",
                     "onyomi" : "フ、ブ",
                     "kunyomi" : "",
-                    "definition" : "negative, non-, bad, ugly, clumsy",
-                    "examples" : ["不足 ふそく insufficiency, shortage (na-adj,n)","不安 ふあん anxiety, uneasiness (na-adj,n)","不全 ふぜん partial, incomplete (na-adj,n)"]
+                    "definition" : "Отрицание, не-",
+                    "examples" : ["不足 ふそく нехватка, недостаточный","不安 ふあん волнение, беспокойство","不全 ふぜん неполный, частичный"]
                 },{
                     "kanji" : "世",
                     "onyomi" : "セイ、セ、ソウ",
