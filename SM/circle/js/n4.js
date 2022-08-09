@@ -11,14 +11,14 @@ const N4 = {
                     "kanji" : "世",
                     "onyomi" : "セイ、セ、ソウ",
                     "kunyomi" : "よ",
-                    "definition" : "world, generation, society, public",
-                    "examples" : ["世界 せかい world, society (n)","世話 せわ looking after, help (n, p-suru)","世話人 せわにん manager, sponsor, agent (n)"]
+                    "definition" : "Мир, поколение, общество, окружающие люди",
+                    "examples" : ["世界 せかい мир, общество","世話 せわ забота, хлопоты","世話人 せわにん manager, sponsor, agent (n)"]
                 },{
                     "kanji" : "主",
                     "onyomi" : "シュ、 ス、 シュウ",
                     "kunyomi" : "ぬし、 おも、 あるじ",
-                    "definition" : "lord, chief, master, main thing, principal",
-                    "examples" : ["主人 しゅじん master, landlord, husband, employer (n)","主食 しゅしょく staple food (n)","主語 しゅご subject (n, gram)"]
+                    "definition" : "Главный, основной, хозяин",
+                    "examples" : ["主人 しゅじん хозяин, муж, господин","主食 しゅしょく staple food (n)","主語 しゅご подлежащее"]
                 },{   
                     "kanji" : "乗",
                     "onyomi" : "ジョウ、 ショウ",
@@ -35,7 +35,7 @@ const N4 = {
                     "kanji" : "京",
                     "onyomi" : "キョウ、 ケイ、 キン",
                     "kunyomi" : "みやこ",
-                    "definition" : "capital",
+                    "definition" : "Столица",
                     "examples" : ["東京 とうきょう Tokyo - Capital of Japan (place)","京都 きょうと kyoto (place)","上京 じょうきょう heading to the capital (n, p-suru)"]
                 },{   
                     "kanji" : "仕",
@@ -182,8 +182,8 @@ const N4 = {
                     "kanji" : "医",
                     "onyomi" : "イ",
                     "kunyomi" : "い.やす、 い.する、 くすし",
-                    "definition" : "doctor, medicine",
-                    "examples" : ["医者 いしゃ doctor (medical) (n)","医学 いがく medical science, medicine (n)","医大 いだい medical university, medical school (n)"]
+                    "definition" : "Врач, медицина",
+                    "examples" : ["医者 いしゃ врач","医学 いがく medical science, medicine (n)","医大 いだい medical university, medical school (n)"]
                 },{   
                     "kanji" : "去",
                     "onyomi" : "キョ、 コ",
