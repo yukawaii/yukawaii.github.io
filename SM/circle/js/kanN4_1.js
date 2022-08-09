@@ -15,13 +15,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "料",
     on: "リョウ",
-    kun: "",
+    kun: "リョウ",
     trad: "Оплата, материалы"
 }, {
     "category": "jlptn4",
     jp: "工",
     on: "コウ ク",
-    kun: "",
+    kun: "たくみ　たくむ",
     trad: "Конструкция, производство"
 }, {
     "category": "jlptn4",
@@ -45,7 +45,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "止",
     on: "シ -サ.",
-    kun: "と.まる -ど.まり と.める -と.める -ど.め とど.める とど.め とど.まる や.める や.む -や.む よ.",
+    kun: "と.まる とど.める とど.め とど.まる や.める や.む よ.",
     trad: "Останавливаться"
 }, {
     "category": "jlptn4",
@@ -57,7 +57,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "切",
     on: "セツ サイ -ギ.",
-    kun: "き.る -き.る き.り -き.り -ぎ.り き.れる -き.れる き.れ -き.れ",
+    kun: "き.る き.れる",
     trad: "Резать, отрезать"
 }, {
     "category": "jlptn4",
@@ -81,7 +81,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "究",
     on: "キュウ ク キワ.メ",
-    kun: "",
+    kun: "きわめる",
     trad: "Исследования"
 }, {
     "category": "jlptn4",
@@ -99,7 +99,7 @@ const DATA = {
     "category": "jlptn4",
     jp: "着",
     on: "チャク ジャク",
-    kun: "き.る -ぎ き.せる -き.せ つ.く つ.ける",
+    kun: "き.る き.せる つ.く つ.ける",
     trad: "Одевать, приезжать"
 }, {
     "category": "jlptn4",
@@ -119,7 +119,7 @@ const DATA = {
     trad: "Качество"
 }, {    "category": "jlptn4",
     jp: "待",
-    on: "タイ -マ.",
+    on: "タイ",
     kun: "ま.つ",
     trad: "Ждать"
 }, {    "category": "jlptn4",
@@ -129,13 +129,13 @@ const DATA = {
     trad: "Попытка, пробовать"
 }, {    "category": "jlptn4",
     jp: "族",
-    on: "ゾ",
-    kun: "",
+    on: "ゾク",
+    kun: "やから",
     trad: "Семья, клан"
 }, {    "category": "jlptn4",
     jp: "銀",
-    on: "ギン シロガ",
-    kun: "",
+    on: "ギン",
+    kun: "しろがね",
     trad: "Серебро"
 }, {    "category": "jlptn4",
     jp: "早",
@@ -145,13 +145,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "映",
-    on: "エイ -バ.",
+    on: "エイ",
     kun: "うつ.る うつ.す は.える",
     trad: "Отражение, проекция"
 }, {
     "category": "jlptn4",
     jp: "親",
-    on: "シン シタ.シ",
+    on: "シン",
     kun: "おや おや- した.しい",
     trad: "Родители, близкие"
 }, {
@@ -163,8 +163,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "英",
-    on: "エイ ハナブ",
-    kun: "",
+    on: "エイ",
+    kun: "はなぶさ",
     trad: "Английский"
 }, {
     "category": "jlptn4",
@@ -181,7 +181,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "去",
-    on: "キョ コ -サ.",
+    on: "キョ",
     kun: "さ.る",
     trad: "Прошлое, покидать"
 }, {
@@ -205,7 +205,7 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "答",
-    on: "トウ コタ.",
+    on: "トウ",
     kun: "こた.える",
     trad: "Ответ, решение"
 }, {
@@ -217,8 +217,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "音",
-    on: "オン イン -ノン",
-    kun: "おと",
+    on: "オン イン",
+    kun: "おと ね",
     trad: "Звук"
 }, {
     "category": "jlptn4",
@@ -235,8 +235,8 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "古",
-    on: "コ -フル.",
-    kun: "ふる.い ふる-",
+    on: "コ",
+    kun: "ふる.い",
     trad: "Старый"
 }, {
     "category": "jlptn4",
@@ -254,19 +254,19 @@ const DATA = {
     "category": "jlptn4",
     jp: "悪",
     on: "アク オ",
-    kun: "わる.い わる- あ.し にく.い -にく.い ああ いずくに いずくんぞ にく.む",
+    kun: "わる.い あ.し にく.い -にく.い ああ いずくに いずくんぞ にく.む",
     trad: "Зло, плохой"
 }, {
     "category": "jlptn4",
     jp: "図",
-    on: "ズ ト ハカ.",
-    kun: "え",
+    on: "ズ ト",
+    kun: "はか.る ずず.しい",
     trad: "Карта, чертёж"
 }, {
     "category": "jlptn4",
     jp: "週",
     on: "シュウ",
-    kun: "",
+    kun: "シュウ",
     trad: "Неделя"
 }, {
     "category": "jlptn4",
@@ -277,13 +277,13 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "歩",
-    on: "ホ ブ フ アユ.",
+    on: "ホ ブ フ",
     kun: "ある.く",
     trad: "Идти пешком"
 }, {
     "category": "jlptn4",
     jp: "風",
-    on: "フウ フ -カ",
+    on: "フウ フ",
     kun: "かぜ かざ-",
     trad: "Ветер, стиль"
 }, {
@@ -296,60 +296,60 @@ const DATA = {
     "category": "jlptn4",
     jp: "黒",
     on: "コク",
-    kun: "くろ くろ.ずむ くろ.い",
+    kun: "くろ.い くろ くろ.ずむ",
     trad: "Черный"
 }, {
     "category": "jlptn4",
     jp: "花",
-    on: "カ ケ ハ",
-    kun: "",
+    on: "カ ケ",
+    kun: "はな　はな.やか",
     trad: "Цветочек"
 }, {
     "category": "jlptn4",
     jp: "春",
-    on: "シュン ハ",
-    kun: "",
+    on: "シュン",
+    kun: "はる",
     trad: "Весна, молодость"
 }, {
     "category": "jlptn4",
     jp: "赤",
-    on: "セキ シャク アカ.ラメ",
-    kun: "あか あか- あか.い あか.らむ",
+    on: "セキ シャク",
+    kun: "あか.い あか.らむ",
     trad: "Красный, краснеть"
 }, {
     "category": "jlptn4",
     jp: "青",
-    on: "セイ ショウ アオ.",
-    kun: "あお あお-",
+    on: "セイ ショウ",
+    kun: "あお",
     trad: "Голубой, зелёный"
 }, {
     "category": "jlptn4",
     jp: "館",
-    on: "カン タ",
+    on: "カン",
     kun: "やかた",
     trad: "Строение, дворец, павильон"
 }, {
     "category": "jlptn4",
     jp: "屋",
     on: "オク",
-    kun: "",
+    kun: "や オク",
     trad: "Крыша, дом"
 }, {
     "category": "jlptn4",
     jp: "色",
-    on: "ショク シキ イ",
-    kun: "",
+    on: "ショク シキ",
+    kun: "いろ.めく　いろ.めかしい",
     trad: "Цвет"
 }, {
     "category": "jlptn4",
     jp: "走",
-    on: "ソウ ハシ.",
-    kun: "",
+    on: "ソウ",
+    kun: "はし.る",
     trad: "Бежать"
 }, {
     "category": "jlptn4",
     jp: "秋",
-    on: "シュウ ト",
+    on: "シュウ",
     kun: "あき",
     trad: "Осень"
 }, {
@@ -368,13 +368,13 @@ const DATA = {
     "category": "jlptn4",
     jp: "駅",
     on: "エキ",
-    kun: "",
+    kun: "エキ",
     trad: "Станция"
 }, {
     "category": "jlptn4",
     jp: "洋",
-    on: "ヨ",
-    kun: "",
+    on: "ヨウ",
+    kun: "ヨウ",
     trad: "Океан, западный стиль"
 }, {
     "category": "jlptn4",
@@ -385,14 +385,14 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "服",
-    on: "フ",
-    kun: "",
-    trad: "Одежда"
+    on: "フク",
+    kun: "フクする",
+    trad: "Одежда, подчиняться"
 }, {
     "category": "jlptn4",
     jp: "夕",
-    on: "セキ ユ",
-    kun: "",
+    on: "セキ",
+    kun: "ゆう.べ　ゆう",
     trad: "Вечер, сумерки"
 }, {
     "category": "jlptn4",
@@ -403,37 +403,37 @@ const DATA = {
 }, {
     "category": "jlptn4",
     jp: "曜",
-    on: "ヨ",
-    kun: "",
+    on: "ヨウ",
+    kun: "ヨウ",
     trad: "День недели"
 }, {
     "category": "jlptn4",
     jp: "飲",
     on: "イン オン",
-    kun: "の.む -の.み",
+    kun: "の.む",
     trad: "Пить, напиток"
 }, {
     "category": "jlptn4",
     jp: "肉",
     on: "ニク",
-    kun: "",
+    kun: "ニク",
     trad: "Мясо"
 }, {
     "category": "jlptn4",
     jp: "貸",
     on: "タイ",
-    kun: "か.す か.し- かし-",
+    kun: "か.す",
     trad: "Одалживать"
 }, {
     "category": "jlptn4",
     jp: "堂",
     on: "ドウ",
-    kun: "",
-    trad: "Зал, общественное здание"
+    kun: "ドウ",
+    trad: "Зал, храм, здание"
 }, {
     "category": "jlptn4",
     jp: "鳥",
-    on: "チョウ ト",
+    on: "チョウ",
     kun: "",
     trad: "Птичка"
 }, {
