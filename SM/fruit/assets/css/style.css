@@ -1,0 +1,322 @@
+body{
+    background-color: #20A39E;
+    font-family: 'PT Sans Narrow', sans-serif;
+    line-height: 1.5;
+    font-size: 16px;
+    color: #2E294E;
+    letter-spacing: 1.5px;
+}
+
+/* start of grid */
+
+#content {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-rows: 100px 50px 120px 300px 250px;
+    grid-column-gap: 10px;
+}
+
+/* row 1 heaer */
+h1 {
+    grid-column: 1 / 5;
+    background-color: #EF5B5B;
+    font-family: 'Luckiest Guy', cursive;
+    width: 100%;
+    font-size: 57px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    padding-top: 35px;
+    margin: -10px;
+    padding-bottom: -10px;
+}
+
+/* row 2 sub header */
+#message-area {
+    grid-column: 1 / 5;
+    grid-row: 2 / 3;
+    margin: 0 auto;
+    color: #EF5B5B;;
+    background-color: #EF5B5B;
+    width: 100%;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+#message-area #message {
+    background-color:  #2E294E;
+    padding: 14px;
+    width: 550px;
+    margin: 0 auto;
+    margin-bottom: 0px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+
+/* row 3 stats */
+#target-area {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    background-color: #FFBA49;
+    text-align: center;
+    border: 2px solid #2E294E;;
+    border-radius: 3px;
+    padding: 5px;
+    margin-top: 0px;
+}
+
+#wins-losses {
+    grid-column: 4 / 5;
+    grid-row: 3 / 4;
+    text-align: center;
+    background-color: #FFBA49;
+    text-align: center;
+    border: 2px solid  #2E294E;
+    border-radius: 3px;
+    padding: 5px;
+    line-height: 1.25;
+}
+
+#added-area {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    text-align: center;
+    background-color: #EF5B5B;
+    text-align: center;
+    border: 2px solid  #2E294E;
+    border-radius: 3px;
+    color:  #2E294E;
+    padding: 10px;
+}
+
+#total-area {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
+    background-color: #EF5B5B;
+    text-align: center;
+    border: 2px solid  #2E294E;
+    border-radius: 3px;
+    color:  #2E294E;
+    padding: 10px;
+}
+
+/* row 4 fruit */
+
+#blackberry {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+    padding-top:25px;
+    padding-left: 10px;
+}
+
+#grapefruit {
+    grid-column: 2 / 3;
+    grid-row: 4 / 5;
+    padding-top:25px;
+}
+
+#banana {
+    grid-column: 3 / 4;
+    grid-row: 4 / 5;
+    padding-top:25px;
+}
+
+#pomegranate {
+    grid-column: 4 / 5;
+    grid-row: 4 / 5;
+    padding-top:25px;
+    padding-right: 15px;
+}
+
+/* row 6 instructions */
+
+#instructions {
+    grid-column: 1 / 5;
+    grid-row: 5 / 6;
+    background-color:  #2E294E;
+    color: #EF5B5B;
+    padding: 25px;
+    border: 5px solid #EF5B5B;
+    margin-bottom: -30px;
+    font-size: 20px;
+}
+
+/* fruit size */
+.fruit {
+    height: 200px;
+    width: 200px;
+}
+
+/* font sizes for stats */
+.fruit:hover {
+    opacity: .7;
+}
+
+#target-number {
+    font-size: 50px;
+}
+
+#your-total {
+    font-size: 50px;
+}
+
+#added {
+    font-size: 25px;
+}
+
+#wins {
+    font-size: 25px;
+}
+
+#losses {
+  
+    font-size: 25px;
+}
+
+/* media queries */
+@media only screen and (max-width: 924px) {
+    .fruit {
+        height: 150px;
+        width: 150px;
+    }
+}
+
+@media only screen and (max-width: 915px) {
+    .fruit {
+        height: 100px;
+        width: 100px;
+    }
+
+    #content {
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-rows: 100px 50px 120px 200px 250px;
+        grid-column-gap: 5px;
+    }
+
+}
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 43px;
+    }
+
+    #content {
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-rows: 100px 75px 120px 200px 300px;
+        grid-column-gap: 5px;
+    }
+
+    #message-area #message {
+        background-color:  #2E294E;
+        padding: 14px;
+        width: 400px;
+        margin: 0 auto;
+        margin-bottom: 0px;
+        text-align: center;
+        border-radius: 5px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    h1 {
+        font-size: 35px;
+    }
+
+    #content {
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-rows: 100px 75px 140px 200px 350px;
+        grid-column-gap: 5px;
+    }
+
+    #message-area {
+        grid-column: 1 / 5;
+        grid-row: 2 / 3;
+        margin: 0 auto;
+        color: #EF5B5B;;
+        background-color: #2E294E;
+        width: 105%;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-right: 15px;
+        padding: 8px;
+        padding-top: 3px;
+    }
+
+    #message-area #message {
+        background-color:  #2E294E;
+        padding-bottom: -15px;
+        margin: 0 auto;
+        margin-bottom: -10px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    .fruit {
+        height: 75px;
+        width: 75px;
+        padding-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 373px) {
+    body {
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 30px;
+        width: 94%;
+    }
+
+    #content {
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-rows: 100px 110px 140px 175px 390px;
+        grid-column-gap: 0px;
+    }
+
+    #message-area {
+        grid-column: 1 / 5;
+        grid-row: 2 / 3;
+        margin: 0 auto;
+        color: #EF5B5B;;
+        background-color: #2E294E;
+        width: 100%;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding-right: 15px;
+        padding: 8px;
+        padding-top: 3px;
+    }
+
+    #message-area #message {
+        background-color:  #2E294E;
+        padding-bottom: -15px;
+        margin: 0 auto;
+        margin-bottom: -10px;
+        text-align: center;
+        border-radius: 5px;
+        width: 90%;
+    }
+
+    .fruit {
+        height: 60px;
+        width: 60px;
+        padding-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 329px) {
+    #content {
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-rows: 120px 110px 140px 175px 500px;
+        grid-column-gap: 0px;
+    }
+
+}
