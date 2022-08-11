@@ -4,7 +4,7 @@ const N4 = {
                 {   
                     "kanji" : "不",
                     "onyomi" : "フ、ブ",
-                    "kunyomi" : "",
+                    "kunyomi" : "フ、ブ",
                     "definition" : "Отрицание, не-",
                     "examples" : ["不足 ふそく нехватка, недостаточный","不安 ふあん волнение, беспокойство","不全 ふぜん неполный, частичный"]
                 },{
@@ -29,14 +29,14 @@ const N4 = {
                     "kanji" : "事",
                     "onyomi" : "ジ、 ズ",
                     "kunyomi" : "こと、 つか.う、 つか.える",
-                    "definition" : "matter, thing, fact, business, reason, possibly",
-                    "examples" : ["仕事 しごと work, occupation (no-adj, n)","火事 かじ fire (n)","行事 ぎょうじ event, function (n)"]
+                    "definition" : "Дело, вещь, ыакт, событие. Субстантиватор",
+                    "examples" : ["仕事 しごと работа, служба","火事 かじ пожар","行事 ぎょうじ мероприятие"]
                 },{
                     "kanji" : "京",
                     "onyomi" : "キョウ、 ケイ、 キン",
                     "kunyomi" : "みやこ",
                     "definition" : "Столица",
-                    "examples" : ["東京 とうきょう Tokyo - Capital of Japan (place)","京都 きょうと kyoto (place)","上京 じょうきょう heading to the capital (n, p-suru)"]
+                    "examples" : ["東京 とうきょう Токио","京都 きょうと Киото","上京 じょうきょう приезжать в столицу"]
                 },{   
                     "kanji" : "仕",
                     "onyomi" : "シ、 ジ",
