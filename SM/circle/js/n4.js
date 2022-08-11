@@ -42,7 +42,7 @@ const N4 = {
                     "onyomi" : "シ、 ジ",
                     "kunyomi" : "つか.える",
                     "definition" : "attend, doing, official, serve",
-                    "examples" : ["仕事 しごと work, occupation (no-adj, n)","仕事場 しごとば place where one works (n)","仕上げる しあげる to finish up, to complete (ru-v, trans-verb)"]
+                    "examples" : ["仕事 しごと работа","仕事場 しごとば место работы","仕上げる しあげる завершить, сделать"]
                 },{   
                     "kanji" : "代",
                     "onyomi" : "ダイ、 タイ",
