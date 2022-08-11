@@ -41,7 +41,7 @@ const N4 = {
                     "kanji" : "仕",
                     "onyomi" : "シ、 ジ",
                     "kunyomi" : "つか.える",
-                    "definition" : "Служить",
+                    "definition" : "attend, doing, official, serve",
                     "examples" : ["仕事 しごと работа","仕事場 しごとば место работы","仕上げる しあげる завершить, сделать"]
                 },{   
                     "kanji" : "代",
@@ -54,13 +54,13 @@ const N4 = {
                     "onyomi" : "イ",
                     "kunyomi" : "もっ.て",
                     "definition" : "by means of, because, in view of, compared with",
-                    "examples" : ["以上 いじょう more than, over, this is all (n)","以下 いか less than, below, under (n)","以内 いない within, inside of (n, n-suf)"]
+                    "examples" : ["以上 いじょうболее, чем... ; Это всё","以下 いか меньше, чем...","以内 いない within, inside of (n, n-suf)"]
                 },{   
                     "kanji" : "低",
                     "onyomi" : "テイ",
                     "kunyomi" : "ひく.い、 ひく.める、 ひく.まる",
                     "definition" : "lower, short, humble",
-                    "examples" : ["低音 ていおん low tone, bass (n)","低い ひくい short, low, humble (adj)","高低 こうてい high and low, rise and fall (n)"]
+                    "examples" : ["低音 ていおん низкий тон, бас","低い ひくい низкий, короткий","高低 こうてい high and low, rise and fall (n)"]
                 }
             ],
 
@@ -71,7 +71,7 @@ const N4 = {
                     "onyomi" : "ジュウ、 ヂュウ、 チュウ",
                     "kunyomi" : "す.む、 す.まう、 -ず.まい",
                     "definition" : "dwell, reside, live, inhabit",
-                    "examples" : ["住む すむ to reside, to live in (u-v)","住所 じゅうしょ address (eg house), residence (n)","安住 あんじゅう living peaceably (n, p-suru)"]
+                    "examples" : ["住む すむ жить где-либо","住所 じゅうしょ адрес","安住 あんじゅう living peaceably (n, p-suru)"]
                 },{
                     "kanji" : "体",
                     "onyomi" : "タイ、 テイ",
@@ -83,19 +83,19 @@ const N4 = {
                     "onyomi" : "サク、 サ",
                     "kunyomi" : "つく.る、 つく.り、 -づく.り",
                     "definition" : "make, production, prepare, build",
-                    "examples" : ["作家 さっか author, writer (n)","工作 こうさく work, handicraft (n)","作り話 つくりはなし fiction, made-up story, myth (n)"]
+                    "examples" : ["作家 さっか писатель, автор","工作 こうさく ручная работа","作り話 つくりはなし выдуманная история"]
                 },{   
                     "kanji" : "使",
                     "onyomi" : "シ",
                     "kunyomi" : "つか.う、 つか.い、 -つか.い、 -づか.い",
-                    "definition" : "use, send on a mission, order, messenger, envoy, ambassador, cause",
-                    "examples" : ["使い方 つかいかた way to use something (n)","天使 てんし angel (n)","使者 ししゃ messenger (n)"]
+                    "definition" : "Использовать, send on a mission, order, messenger, envoy, ambassador, cause",
+                    "examples" : ["使い方 つかいかた way to use something (n)","天使 てんし ангел","使者 ししゃ посланник"]
                 },{
                     "kanji" : "便",
                     "onyomi" : "ベン、 ビン",
                     "kunyomi" : "たよ.り",
                     "definition" : "convenience, facility, excrement, feces, letter, chance",
-                    "examples" : ["便 びん mail, post (n)","不便 ふべん inconvenience (na-adj)","便りがないのはよい便り たよりがないのはよいたより no news is good news"]
+                    "examples" : ["便 びん почта","不便 ふべん неудобство, неудобный","便りがないのはよい便り たよりがないのはよいたより no news is good news"]
                 },{
                     "kanji" : "借",
                     "onyomi" : "シャク",
@@ -106,26 +106,26 @@ const N4 = {
                     "kanji" : "動",
                     "onyomi" : "ドウ",
                     "kunyomi" : "はたら.く",
-                    "definition" : "work, (kokuji)",
-                    "examples" : ["働く はたらく to work, to labour (u-v)","働き者 はたらきもの hardworker, hard working person (n)","働き口 はたらきぐち position, opening (n)"]
+                    "definition" : "Работа, работать",
+                    "examples" : ["働く はたらく работать","働き者 はたらきもの трудоголик","働き口 はたらきぐち position, opening (n)"]
                 },{   
                     "kanji" : "元",
                     "onyomi" : "ゲン、 ガン",
                     "kunyomi" : "もと",
-                    "definition" : "beginning, former time, origin",
-                    "examples" : ["元気 げんき health, spirit (na-adj)","元々 もともと originally, by nature, from the start (adv, no-adj)","地元 じもと local (n)"]
+                    "definition" : "Начало, источник, former time, origin",
+                    "examples" : ["元気 げんき бодрость, здравие","元々 もともと изначально, от природы","地元 じもと местный"]
                 },{ 
                     "kanji" : "光",  
                     "onyomi" : "コウ",
                     "kunyomi" : "ひか.る、 ひかり",
-                    "definition" : "ray, light",
-                    "examples" : ["電光 でんこう lightning (n)","月光 げっこう moonlight (n)","日光 にっこう sunlight, Nikko (place name) (n)"]
+                    "definition" : "Свет, луч, блистать",
+                    "examples" : ["電光 でんこう lightning (n)","月光 げっこう лунный свет","日光 にっこう солнечный свет, г. Никко"]
                 },{   
                     "kanji" : "兄",
                     "onyomi" : "ケイ、 キョウ",
                     "kunyomi" : "あに",
-                    "definition" : "elder brother, big brother",
-                    "examples" : ["お兄さん おにいさん (someone else's) elder brother (n)","兄 あに (your own) elder brother (n)","父兄 ふけい guardians, parents and older brothers (n)"]
+                    "definition" : "Старший брат/товарищ",
+                    "examples" : ["お兄さん おにいさん обращение к брату, (чей-то) старший брат","兄 あに (свой) старший брат","父兄 ふけい guardians, parents and older brothers (n)"]
                 }
             ],
     "Ур. 03" : 
@@ -134,20 +134,20 @@ const N4 = {
                     "kanji" : "写",
                     "onyomi" : "うつ.す、 うつ.る、 うつ-、 うつ.し",
                     "kunyomi" : "シャ、 ジャ",
-                    "definition" : "copy, be photographed, describe",
-                    "examples" : ["写す うつす to copy, to duplicate (u-v)","写真 しゃしん photograph (n)","生き写し いきうつし lifelike, exact resemblance (n)"]
+                    "definition" : "Копировать, фотографировать",
+                    "examples" : ["写す うつす копировать, дублировать","写真 しゃしん фото","生き写し いきうつし точная копия, как в жизни"]
                 },{
                     "kanji" : "冬",
                     "onyomi" : "トウ",
                     "kunyomi" : "ふゆ",
-                    "definition" : "winter",
-                    "examples" : ["冬 ふゆ winter (n)","冬物 ふゆもの winter clothing (n)","冬日 ふゆび the winter sun (n)"]
+                    "definition" : "Зима",
+                    "examples" : ["冬 ふゆ зима","冬物 ふゆもの зимняя одежда","冬日 ふゆび зимнее солнце"]
                 },{
                     "kanji" : "切",
                     "onyomi" : "き.る、 -き.る、 き.り、 -き.り、 -ぎ.り、 き.れる、 -き.れる、 き.れ、 -き.れ、 -ぎ.れ",
                     "kunyomi" : "セツ、 サイ",
                     "definition" : "cut, cutoff, be sharp",
-                    "examples" : ["大切 たいせつ important, valuable (na-adj, n)","切手 きって postage stamp (n)","親切 しんせつ kind, gentle (na-adj, n)"]
+                    "examples" : ["大切 たいせつ важный, ценный","切手 きって почтовая марка","親切 しんせつ добрый"]
                 },{   
                     "kanji" : "別",
                     "onyomi" : "ベツ",
