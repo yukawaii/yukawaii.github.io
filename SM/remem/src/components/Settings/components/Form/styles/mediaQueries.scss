@@ -1,0 +1,33 @@
+@media (max-width: 425px) {
+  .modal {
+    padding: 1em;
+    width: 70%;
+  }
+
+  .form {
+    &Value {
+      font-size: 2em;
+      padding: 0.25em;
+    }
+  }
+}
+
+@media (min-width: 426px) and (max-width: 768px) {
+  .modal {
+    padding: 1.25em;
+    width: 35%;
+  }
+
+  .form {
+    &Value {
+      font-size: 2.5em;
+      padding: 0.5em;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .modal {
+    width: 25%;
+  }
+}
