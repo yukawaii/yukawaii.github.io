@@ -1,0 +1,314 @@
+<!-- Created by MD. Jashim Uddin-->
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>Game</title>
+ </head> 
+ <body> 
+  <div style="width:305px;box-shadow:0 0 5px black;display:inline-block;position:relative;"> 
+   <div id="gameblock"> 
+    <div id="player">
+     <svg fill="black" opacity="1.0" baseprofile="full" width="100%" height="100%" viewbox="0 0 24.00 24.00">
+      <path d="M6.997 17h-3c-1.617 0-3.04-1.257-3.24-2.86l-.498-2.992c-.107-.845.132-1.642.649-2.227A2.78 2.78 0 0 1 2.997 8h6c.835 0 1.585.348 2.059.955.119.152.217.318.296.492.425-.09.866-.09 1.292 0 .078-.175.176-.34.295-.492.474-.607 1.224-.955 2.058-.955h6c.812 0 1.572.336 2.09.921a2.78 2.78 0 0 1 .654 2.188l-.51 3.071c-.195 1.564-1.618 2.82-3.233 2.82h-3c-1.562 0-3.079-1.186-3.456-2.699l-.899-2.714a1.11 1.11 0 0 0-1.294.001l-.917 2.785C10.074 15.815 8.556 17 6.997 17z" />
+     </svg> 
+    </div>
+    <div id="block"></div> 
+    <div id="block2" style="display:none;position:absolute"> 
+     <svg fill="black" opacity="1.0" width="20" height="20" viewbox="0 0 28 28">
+      <path d="M8.922 9.203a.99.99 0 0 0-1.297-.547 9.02 9.02 0 0 0-4.969 4.969.99.99 0 0 0 .547 1.297c.125.047.25.078.375.078.406 0 .766-.234.938-.625a6.983 6.983 0 0 1 3.859-3.859 1 1 0 0 0 .547-1.313zm14.719-5.562l.719.719-3.813 3.797 1.062 1.062a1.009 1.009 0 0 1 0 1.422l-1 1A11.03 11.03 0 0 1 22 17c0 6.078-4.922 11-11 11S0 23.078 0 17 4.922 6 11 6c1.953 0 3.781.516 5.359 1.391l1-1a1.009 1.009 0 0 1 1.422 0l1.062 1.062zm.125-.875a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156L21.641 1.36a.53.53 0 0 1 0-.719.53.53 0 0 1 .719 0l1.406 1.422a.482.482 0 0 1 0 .703zm3.593 3.593c-.109.094-.234.141-.359.141s-.25-.047-.359-.141l-1.406-1.422a.482.482 0 0 1 0-.703.482.482 0 0 1 .703 0L27.36 5.64a.53.53 0 0 1 0 .719zM28 3.5c0 .281-.219.5-.5.5H26c-.281 0-.5-.219-.5-.5s.219-.5.5-.5h1.5c.281 0 .5.219.5.5zm-3-3V2c0 .281-.219.5-.5.5S24 2.281 24 2V.5c0-.281.219-.5.5-.5s.5.219.5.5zm2.359.859l-1.422 1.406a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156.482.482 0 0 1 0-.703L26.64.64a.53.53 0 0 1 .719 0 .53.53 0 0 1 0 .719z" />
+     </svg>
+    </div> 
+    <div style="width:100%;position:absolute;top:0;left:0;color:white;font-size:25px;" id="scores">
+     0
+    </div>
+   </div> 
+   <div style="height:20px"></div> 
+   <button class="btn" id="u" ontouchstart="up()">↑↑</button>
+   <br> 
+   <button class="btn" id="l" ontouchstart="left()">&lt;&lt;</button> 
+   <button class="btn" id="r" ontouchstart="right()">&gt;&gt;</button>
+   <br> 
+   <button class="btn" id="d" ontouchstart="down()">↓↓</button> 
+   <button class="btn" id="pausa" onclick="pause()">
+    <svg fill="white" opacity="1.0" width="30" height="30" viewbox="0 0 24 28">
+     <path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z" />
+    </svg></button>
+  </div> 
+  <style type="text/css">
+body{
+text-align:center;
+-webkit-touch-callout:none;
+-webkit-user-select:none;
+-moz-touch-callout:none;
+-moz-user-select:none;
+-o-touch-callout:none
+-o-user-select:none;
+user-select:none;
+touch-callout:none;}
+#pausa{
+position:absolute;
+top:285px;
+width:50px;
+height:50px;
+left:5px;}
+#block{
+width:20px;
+height:20px;
+background:navy;
+position:absolute;
+border-radius:20px;
+top:50px;
+left:50px;}
+.btn{
+width:80px;
+height:50px;
+background:navy;
+color:white;
+border:2px solid royalblue;
+border-radius:50px;}
+#gameblock{
+width:300px;
+height:270px;
+display:inline-block;
+background:royalblue;
+position:relative;
+border:1px solid black;
+overflow:hidden}
+#player{
+width:30px;
+height:30px;
+text-align:center;
+-webkit-transition:width,height,-webkit-transform 0.5s;
+position:absolute;
+border-radius:2px;
+background:red;
+box-shadow:0 0 5px red;}
+</style> 
+  <script type="text/javascript">
+var x = 0;
+var y = 0;
+var cx = 50;
+var cy = 50;
+var bx;
+var by;
+var intcount = 0;
+var intval = (Math.floor(Math.random()*10+15));
+var t = 75;
+var score = 0;
+var xypm = 5;
+var rad = 30;
+var paus = false;
+var int1;
+var int2;
+var int3;
+var int4;
+var iint = "";
+function right(){
+clearInterval(int1);
+clearInterval(int2);
+clearInterval(int3);
+clearInterval(int4);
+r.disabled = true;
+u.disabled = false;
+d.disabled = false;
+l.disabled = false;
+iint = "right()";
+player.style.WebkitTransform = "rotate(270deg)";
+int1 = setTimeout("right()",t);
+if(x > 300-rad){
+clearInterval(int1);
+gameover()}else{
+x += xypm;}
+if (x < cx+20 && x > cx-rad && y > cy-rad && y <= cy+20){
+score += 1;poyman();
+scores.innerHTML = score;}
+if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
+block2.style.display = "none";
+rad -= 10;
+t -= 10;
+x -= 5;
+y -= 5;
+player.style.left = x+"px";
+player.style.top = y+"px";
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+intval = (Math.floor(Math.random()*10+15));}
+player.style.left = x+"px";}
+function left(){
+clearInterval(int1);
+clearInterval(int2);
+clearInterval(int3);
+clearInterval(int4);
+l.disabled = true;
+u.disabled = false;
+r.disabled = false;
+d.disabled = false;
+iint = "left()";
+player.style.WebkitTransform = "rotate(90deg)";
+int2 = setTimeout("left()",t)
+if(x < 0){
+clearInterval(int2);
+gameover()}else{
+x -= xypm;}
+if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
+score += 1;poyman()
+scores.innerHTML = score;}
+if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
+block2.style.display = "none";
+rad -= 10;
+t -= 10;
+x -= 5;
+y -= 5;
+player.style.left = x+"px";
+player.style.top = y+"px";
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+intval = (Math.floor(Math.random()*10+15));}
+player.style.left = x+"px";}
+function down(){
+clearInterval(int1);
+clearInterval(int2);
+clearInterval(int3);
+clearInterval(int4);
+d.disabled = true;
+u.disabled = false;
+r.disabled = false;
+l.disabled = false;
+iint = "down()";
+player.style.WebkitTransform = "rotate(360deg)";
+int3 = setTimeout("down()",t);
+if(y > 270-rad){
+clearInterval(int3);
+gameover()}else{
+y += xypm;}
+if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
+score += 1;poyman()
+scores.innerHTML = score;}
+if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
+block2.style.display = "none";
+rad -= 10;
+t -= 10;
+x -= 5;
+y -= 5;
+player.style.left = x+"px";
+player.style.top = y+"px";
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+intval = (Math.floor(Math.random()*10+15));}
+player.style.top = y+"px";}
+function up(){
+clearInterval(int1);
+clearInterval(int2);
+clearInterval(int3);
+clearInterval(int4);
+u.disabled = true;
+d.disabled = false;
+r.disabled = false;
+l.disabled = false;
+iint = "up()";
+player.style.WebkitTransform = "rotate(180deg)";
+int4 = setTimeout("up()",t);
+if(y < 0){
+clearInterval(int4);
+gameover()}else{
+y -= xypm;}
+if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
+score += 1;
+scores.innerHTML = score;
+poyman()}
+if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
+block2.style.display = "none";
+rad -= 10;
+t -= 10;
+x -= 5;
+y -= 5;
+player.style.left = x+"px";
+player.style.top = y+"px";
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+intval = (Math.floor(Math.random()*10+15));}
+player.style.top = y+"px";}
+function poyman(){
+cx = (Math.floor(Math.random()*240+20));
+cy = (Math.floor(Math.random()*200+20));
+intcount++;
+if(rad == 130){
+rad = 130;}
+else{
+rad++;
+x--;
+y--;
+t++;}
+if(intcount == intval){
+bx = (Math.floor(Math.random()*240+20));
+by = (Math.floor(Math.random()*200+20));
+intcount = 0;
+block2.style.display = "block";
+block2.style.top = by + "px";
+block2.style.left = bx + "px";}
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+player.style.top = y+"px";
+player.style.left = x+"px";
+block.style.top = cy+"px";
+block.style.left = cx+"px";}
+function gameover(){
+u.disabled = false;
+d.disabled = false;
+r.disabled = false;
+l.disabled = false;
+alert("Game over. You score:"+score);
+x = 0;
+y = 0;
+cx = 50;
+cy = 50;
+t = 50;
+iint = 0;
+score = 0;
+rad = 30;
+intcount = 0;
+block2.style.display = "none";
+player.style.left = x+"px";
+player.style.top = y+"px";
+block.style.left = cx+"px";
+block.style.top = cy+"px";
+player.style.width = rad+"px";
+player.style.height = rad+"px";
+player.style.WebkitTransform = "rotate(360deg)";
+scores.innerHTML = score;}
+function pause(){
+clearInterval(int1);
+clearInterval(int2);
+clearInterval(int3);
+clearInterval(int4);
+if(paus == false){
+u.disabled = true;
+d.disabled = true;
+r.disabled = true;
+l.disabled = true;
+pausa.innerHTML = '<svg fill="white" opacity="1.0" width="30" height="30" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+paus = true;}
+else{
+u.disabled = false;
+d.disabled = false;
+r.disabled = false;
+l.disabled = false;
+if(iint == "left()"){
+l.disabled = true;}
+else if(iint == "right()"){
+r.disabled = true;}
+else if(iint == "down()"){
+d.disabled = true;}
+else if(iint == "up()"){
+t.disabled = true;}
+setTimeout(iint,t);
+pausa.innerHTML = '<svg fill="white" opacity="1.0" width="30" height="30" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+paus = false;}}
+</script>
+  <footer> 
+   
+  </footer>
+ </body>
+</html>
