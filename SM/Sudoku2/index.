@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Eldwis Sudoku in HTML5/JS for Web/Mobile</title>
+    <title>Судоку</title>
 	<meta name="viewport" content="width=462,height=device-height"/>
+	    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 	<link rel="icon" type="image/png" href="http://play.eldwis.com/favicon.ico">
     <link rel="stylesheet" href="style.css">
@@ -15,22 +17,17 @@
   	<img src="screenshot.png" alt="Screenshot Preview" style="position:fixed;top:-9999px;"/>
     <div id="GameView"></div>
 	<?php if( !isset($_GET['embed']) || !$_GET['embed'] ): ?><div id="contents">
-	<h4>General Information</h4>
-		<p class="author">Author: Seungmin Kim(<a href="mailto:olimot@gmail.com">olimot@gmail.com</a>)
-		<br>Github: <a class="github" href="https://github.com/olimot/Sudoku">https://github.com/olimot/sudoku</a></p>
-		<p>17-clue sudokus are taken from <a href="http://staffhome.ecm.uwa.edu.au/~00013890/sudokumin.php">the list made by <strong>Gordon Royle</strong></a> of The University of Western Australia without any transformation. this list is licensed under a <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License.</a></p>
-	<h4>Play Instruction</h4>
-How to use interface:
-<ul><li>Swipe left or right the generate button to change the level</li>
-<li>Click the generate button to generate a game in the level shown at the label of button</li>
-<li>Click a number 1~9 below or simply press a key of 1~9 in keyboard to get a number in hand. then, click on the cell to put a number</li>
-<li>Select a selected number below one more time, then you can note a guess number on the board.</li>
+		<h4>Как играть</h4>
+<ul><li>Листайте влево-вправо в меню сверху для смены уровня сложности игры.</li>
+<li>Нажмите Играть</li>
+<li>Используйте кнопки с цифрами, чтобы помещать их на поле игры.</li>
+<li>Вебери число два раза, чтобы увидеть варианты.</li>
 </ul>
-In the table you can use:
+В таблице ты можешь:
 
-<ul><li>Left click : put a number or remove it if numbers in table/hand are same</li>
-<li>Middle click or Ctrl + Left Click : note a guess number or remove it if numbers in table/hand are same</li>
-<li>Right click : remove number</li>
+<ul><li>Левая мышь: поместить/убрать число.</li>
+<li>Средняя мышь или Ctrl + Left Click : поместить догадку на поле</li>
+<li>Правая мышь: удалить число</li>
 	</div><?php endif; ?>
 	<script src="sudoku.js"></script>
 	<script>
@@ -44,7 +41,7 @@ In the table you can use:
 			var playingLevel = 0;
 			var playingNumber = 1;
 
-			var level_label = ['beginners Sudoku','easy Sudoku','normal Sudoku','hard Sudoku', '17-clue Sudoku'];
+			var level_label = ['Новичок','Легко','Приемлемо','Тёртый калач', '17 подсказок'];
 			var generate_label = function(){ return 'Start ' + level_label[generatingLevel] };
 			
 
