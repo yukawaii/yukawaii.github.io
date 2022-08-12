@@ -7,7 +7,7 @@ var yourScore = 0;
 var added = 0;
 var message;
 
-vkBridge.send('VKWebAppInit');
+//vkBridge.send('VKWebAppInit');
 //  1st fruit element with class and image src
 var blackberry = $("<img>");
 blackberry.addClass("fruit blackberry-image");

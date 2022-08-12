@@ -1,17 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <style>
+        body {
+            background: url(./img/background3.jpg) no-repeat center fixed;     
+    background-size: cover;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* background: rgb(140, 186, 247); */
+        } 
+        .btn1{
+            position: absolute;
+    background:url("./img/play.gif") no-repeat;
+    border:none;
+    cursor:pointer;
+   width: 260px;
+    height:100px;
+    top:30%;
+    left:10%;
+ }
+ .myButton {
+    position: relative;
+	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	background-color:#79bbff;
+	border-radius:6px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+    z-index: 10000;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	background-color:#378de5;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+    z-index: 10000;
+}
+
+ </style>
     <title>Фруктовая корзина</title>
-    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|PT+Sans+Narrow" rel="stylesheet">
+   
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script> 
 </head>
 
 <body>
+ 
+    <script>
+    
+        function share2(){
+            vkBridge.send("VKWebAppShowWallPostBox", {
+            "message": "Весёлая игра! Сможете побить мой рекорд??",
+            "attachments": "https://vk.com/app51397074"
+          });
+        }
+        //пригласить друзей в игру
+function infr(){
+ vkBridge.send("VKWebAppShowInviteBox", {})
+         .then(data => console.log(data.success))  
+        .catch(error => console.log(error));
+}
+        function myAdd1(){
+            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+        .then(data => console.log(data.result))
+        .catch(error => console.log(error));
+        }
+        function joingroup(){
+            vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+        }
+        </script>
+    <div>
+        <button class = "myButton" onclick="joingroup()">Группа</button>
+        <button class = "myButton" onclick="share2()">Поделиться</button> 
+        <button class = "myButton" onclick="infr()">Пригласить друзей</button>
+        <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
     <div id="content">
         <h1>Собери корзинку фруктов<!DOCTYPE html>
         <html lang="en">
@@ -29,7 +114,6 @@
             <p>Слева ты видишь вес, который ты можешь унести в этом раунде. Нажимай на фрукты, чтобы положить их в корзину. Фрукты весят по-разному. Тебе надо собрать ровно столько, сколько ты можешь унести, не больше и не меньше.
                 </p><br>
             <p>Ты проиграешь, если не сможешь верно рассчитать свои силы!</p><br>
-            <p>Удачи!</p>
         </div>
         <div id="message-area">
             <p id="message">Нажимай на фрукты. Ты выиграешь, если наберёшь заданный вес! </p>
@@ -71,36 +155,7 @@
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
-    <div>
-        <button class = "myButton" onclick="joingroup()">Группа</button>
-        <button class = "myButton" onclick="share2()">Поделиться</button> <br><br>
-        <button class = "myButton" onclick="infr()">Пригласить друзей</button>
-        <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
-        
-        <script>
-    
-            function share2(){
-                vkBridge.send("VKWebAppShowWallPostBox", {
-                "message": "Весёлая игра! Сможете побить мой рекорд??",
-                "attachments": "https://vk.com/app51397074"
-              });
-            }
-            //пригласить друзей в игру
-    function infr(){
-     vkBridge.send("VKWebAppShowInviteBox", {})
-             .then(data => console.log(data.success))  
-            .catch(error => console.log(error));
-    }
-            function myAdd1(){
-                vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-            .then(data => console.log(data.result))
-            .catch(error => console.log(error));
-            }
-            function joingroup(){
-                vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-            }
-            </script>
-
+  
 </body>
 
 </html>

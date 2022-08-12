@@ -3,7 +3,7 @@ body{
     font-family: 'PT Sans Narrow', sans-serif;
     line-height: 1.5;
     font-size: 16px;
-    color: #2E294E;
+    color: #080808;
     letter-spacing: 1.5px;
 }
 
@@ -19,7 +19,7 @@ body{
 /* row 1 heaer */
 h1 {
     grid-column: 1 / 5;
-    background-color: #EF5B5B;
+    background-color: #C3FBD8;
     font-family: 'Luckiest Guy', cursive;
     width: 100%;
     font-size: 57px;
@@ -27,7 +27,7 @@ h1 {
     text-align: center;
     padding: 20px;
     padding-top: 35px;
-    margin: -10px;
+    margin: -30px;
     padding-bottom: -10px;
 }
 
@@ -36,8 +36,8 @@ h1 {
     grid-column: 1 / 5;
     grid-row: 2 / 3;
     margin: 0 auto;
-    color: #EF5B5B;;
-    background-color: #EF5B5B;
+    color: #B5F2EA;;
+    background-color: #F6FFF8;
     width: 100%;
     margin-left: -10px;
     margin-right: -10px;
@@ -46,7 +46,7 @@ h1 {
 }
 
 #message-area #message {
-    background-color:  #2E294E;
+    background-color:  #B5F2EA;
     padding: 14px;
     width: 550px;
     margin: 0 auto;
@@ -60,9 +60,9 @@ h1 {
 #target-area {
     grid-column: 1 / 2;
     grid-row: 3 / 4;
-    background-color: #FFBA49;
+    background-color: #FFFADD;
     text-align: center;
-    border: 2px solid #2E294E;;
+    border: 2px solid #B5F2EA;;
     border-radius: 3px;
     padding: 5px;
     margin-top: 0px;
@@ -72,9 +72,9 @@ h1 {
     grid-column: 4 / 5;
     grid-row: 3 / 4;
     text-align: center;
-    background-color: #FFBA49;
+    background-color: #FFFADD;
     text-align: center;
-    border: 2px solid  #2E294E;
+    border: 2px solid  #B5F2EA;
     border-radius: 3px;
     padding: 5px;
     line-height: 1.25;
@@ -84,7 +84,7 @@ h1 {
     grid-column: 2 / 3;
     grid-row: 3 / 4;
     text-align: center;
-    background-color: #EF5B5B;
+    background-color: #F6FFF8;
     text-align: center;
     border: 2px solid  #2E294E;
     border-radius: 3px;
@@ -95,7 +95,7 @@ h1 {
 #total-area {
     grid-column: 3 / 4;
     grid-row: 3 / 4;
-    background-color: #EF5B5B;
+    background-color: #F6FFF8;
     text-align: center;
     border: 2px solid  #2E294E;
     border-radius: 3px;
@@ -136,8 +136,8 @@ h1 {
 #instructions {
     grid-column: 1 / 5;
     grid-row: 5 / 6;
-    background-color:  #2E294E;
-    color: #EF5B5B;
+    background-color:  #B5F2EA;
+    color: #0f0f0f;
     padding: 25px;
     border: 5px solid #EF5B5B;
     margin-bottom: -30px;
@@ -211,7 +211,7 @@ h1 {
     }
 
     #message-area #message {
-        background-color:  #2E294E;
+        background-color:  #B5F2EA;
         padding: 14px;
         width: 400px;
         margin: 0 auto;
@@ -237,8 +237,8 @@ h1 {
         grid-column: 1 / 5;
         grid-row: 2 / 3;
         margin: 0 auto;
-        color: #EF5B5B;;
-        background-color: #2E294E;
+        color: #0c0c0c;;
+        background-color: #B5F2EA;
         width: 105%;
         margin-left: -10px;
         margin-right: -10px;
@@ -284,8 +284,8 @@ h1 {
         grid-column: 1 / 5;
         grid-row: 2 / 3;
         margin: 0 auto;
-        color: #EF5B5B;;
-        background-color: #2E294E;
+        color: #0e0d0d;;
+        background-color: #FDEED9;
         width: 100%;
         margin-left: -10px;
         margin-right: -10px;
@@ -295,7 +295,7 @@ h1 {
     }
 
     #message-area #message {
-        background-color:  #2E294E;
+        background-color:  #FDEED9;
         padding-bottom: -15px;
         margin: 0 auto;
         margin-bottom: -10px;
