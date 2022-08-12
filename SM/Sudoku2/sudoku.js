@@ -339,6 +339,7 @@ function hypothesis1() {
     }
 }
 function hypothesis2() {
+    myAdd1();
     var i;
     console.log(hyps);
     for(i=0;i<hyps.length;i++) hyps[i].style.color = col1;
