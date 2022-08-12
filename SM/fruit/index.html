@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Фруктовая корзина</title>
     <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|PT+Sans+Narrow" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -13,32 +13,41 @@
 
 <body>
     <div id="content">
-        <h1>Point Match Game</h1>
+        <h1>Собери корзинку фруктов<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Фруктовая корзина</title>
+        </head>
+        <body>
+            
+        </body>
+        </html></h1>
         <div id="instructions">
-            <p>Click the fruit to get points. If your Point Total matches the Target Number, you win the round! If your
-                Point Total goes over the Target Number you lose the round.</p><br>
-            <p>Each fruit is worth a different number of points. Each round the Target number changes and so does the
-                value
-                of each fruit.</p><br>
-            <p>Good luck!</p>
+            <p>Слева ты видишь вес, который ты можешь унести в этом раунде. Нажимай на фрукты, чтобы положить их в корзину. Фрукты весят по-разному. Тебе надо собрать ровно столько, сколько ты можешь унести, не больше и не меньше.
+                </p><br>
+            <p>Ты проиграешь, если не сможешь верно рассчитать свои силы!</p><br>
+            <p>Удачи!</p>
         </div>
         <div id="message-area">
-            <p id="message">Click Fruit to get points! You win if you match the Target Number. </p>
+            <p id="message">Нажимай на фрукты. Ты выиграешь, если наберёшь заданный вес! </p>
         </div>
 
         <div id="target-area">
-            <p>Target Number:</p>
+            <p>Я могу поднять грамм:</p>
             <p id="target-number"></p>
         </div>
 
         <div id="wins-losses" class="stats">
-            <p>Wins:</p>
+            <p>Побед:</p>
             <p id="wins"></p>
-            <p>Losses:</p>
+            <p>Провалов:</p>
             <p id="losses"></p>
         </div>
         <div id="added-area">
-            <p>You added:</p>
+            <p>Вес выбранного:</p>
             <p id="added"></p>
         </div>
 
@@ -56,14 +65,41 @@
 
 
         <div id="total-area">
-            <p>Point total:</p>
+            <p>В корзинке:</p>
             <p id="your-total"></p>
         </div>
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
-
-
+    <div>
+        <button class = "myButton" onclick="joingroup()">Группа</button>
+        <button class = "myButton" onclick="share2()">Поделиться</button> <br><br>
+        <button class = "myButton" onclick="infr()">Пригласить друзей</button>
+        <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
+        
+        <script>
+    
+            function share2(){
+                vkBridge.send("VKWebAppShowWallPostBox", {
+                "message": "Весёлая игра! Сможете побить мой рекорд??",
+                "attachments": "https://vk.com/app51397074"
+              });
+            }
+            //пригласить друзей в игру
+    function infr(){
+     vkBridge.send("VKWebAppShowInviteBox", {})
+             .then(data => console.log(data.success))  
+            .catch(error => console.log(error));
+    }
+            function myAdd1(){
+                vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+            .then(data => console.log(data.result))
+            .catch(error => console.log(error));
+            }
+            function joingroup(){
+                vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+            }
+            </script>
 
 </body>
 

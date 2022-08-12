@@ -7,7 +7,7 @@ var yourScore = 0;
 var added = 0;
 var message;
 
-
+vkBridge.send('VKWebAppInit');
 //  1st fruit element with class and image src
 var blackberry = $("<img>");
 blackberry.addClass("fruit blackberry-image");
@@ -100,16 +100,21 @@ $(".pomegranate-image").on("click", function () {
     rendor();
 
 });
-
+function myAdd1(){
+    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
 // on click event for all fruits with logic for game and points updates if win/lose
 $(".fruit").on("click", function () {
     if (target === yourScore) {
         wins++;
-        message = "You won that round! Way to go!"
+        message = "Ты выиграл этот раунд! Вперёд!"
         startGame();
     } else if (target < yourScore) {
         losses++;
-        message = "You lost that one!"
+        myAdd1();
+        message = "Этот раунд провален."
         startGame();
     }
 });
