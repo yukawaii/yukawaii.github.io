@@ -1,0 +1,86 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <style>
+        body {
+            background: url(./background.jpg) no-repeat center fixed;     
+    background-size: cover;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* background: rgb(140, 186, 247); */
+        } 
+  .myButton {
+	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	background-color:#79bbff;
+	border-radius:6px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	background-color:#378de5;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+ </style>
+</head>
+<body>
+  <script>
+    // Sends event to client
+    vkBridge.send('VKWebAppInit');
+	function myAdd1(){
+            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+        .then(data => console.log(data.result))
+        .catch(error => console.log(error));
+        }
+        function joingroup(){
+            vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+        }
+        </script>
+  </script> 
+	<script>myAdd1();</script>
+	<div class ="myclass1">
+		<br> 
+		<button class = "myButton" onclick="window.open('https://m.vk.com/app8176436');">Весёлая мошка</button>
+		<button class = "myButton" onclick="window.open('https://m.vk.com/tetrisc');">Весёлый тетрис</button> 
+		<button class = "myButton" onclick="window.open('https://m.vk.com/app51397074');">Весёлая акула</button><br><br>
+		
+		<button class = "myButton" onclick="window.open('https://m.vk.com/crosstheroad');">Цыплёнок и дорога</button>
+		<button class = "myButton" onclick="window.open('https://m.vk.com/hitrixx');">Хитрикс</button><br>
+		<button class = "myButton" onclick="window.open('https://m.vk.com/amebae');">Амёба: эволюция</button><br><br>
+
+	<button class = "myButton" onclick="window.open('https://m.vk.com/katakana_jp');">Японския язык: катакана</button>
+		<button class = "myButton" onclick="window.open('https://m.vk.com/hiragana_jp');">Японския язык: хирагана</button>
+		<button class = "myButton" onclick="window.open('https://m.vk.com/app8181888');">Японския язык Н1-Н5</button><br><br>
+		<br>
+		 <button class = "myButton" onclick="window.open('https://vk.com/app8177204');">Угадай животное!</button> 
+		<button class = "myButton" onclick="window.open('https://m.vk.com/animepuzz');">Аниме-пазлы</button> 
+		<button class = "myButton" onclick="window.open('https://m.vk.com/app8178502');">Реакция</button> 
+		<button class = "myButton" onclick="window.open('https://m.vk.com/app51399437');">Фруктовая корзина</button> 
+		<br><br>
+			<button class = "myButton" onclick="joingroup()">Подписаться</button>
+		<button class = "myButton" onclick="window.location.href = './index.html';">В начало</button><br>
+	</div>
+
+</body>
+</html>
