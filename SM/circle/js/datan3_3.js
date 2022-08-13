@@ -5,828 +5,839 @@ const DATA ={
         jp: "具",
         on: "グ ツブサ.",
         kun: "そな.える",
-        trad: "tool, utensil, means, possess, ingredients, counter for armor, suits, sets of furniture"
+        trad: "Орудие"
     }, {
         "category": "jlptn3",
         jp: "辞",
         on: "ジ",
         kun: "や.める いな.む",
-        trad: "resign, word, term, expression"
+        trad: "Отставка"
     }, {
         "category": "jlptn3",
         jp: "因",
         on: "イン チナ.",
         kun: "よ.る",
-        trad: "cause, factor, be associated with, depend on, be limited to"
+        trad: "Причина"
     }, {
         "category": "jlptn3",
         jp: "馬",
         on: "バ",
         kun: "うま うま-",
-        trad: "horse"
+        trad: "Конь"
     }, {
         "category": "jlptn3",
         jp: "愛",
         on: "アイ イト.シ",
         kun: "",
-        trad: "love, affection, favourite"
+        trad: "Любовь"
     }, {
         "category": "jlptn3",
         jp: "富",
         on: "フ フウ ト",
         kun: "と.む",
-        trad: "wealth, enrich, abundant"
+        trad: "Богатство"
     }, {
         "category": "jlptn3",
         jp: "彼",
         on: "ヒ カ.",
         kun: "かれ かの",
-        trad: "he, that, the"
+        trad: "Он"
     }, {
         "category": "jlptn3",
         jp: "未",
         on: "ミ ビ",
         kun: "いま.だ ま.だ ひつじ",
-        trad: "un-, not yet, hitherto, still, even now, sign of the ram, 1-3PM, eighth sign of Chinese zodiac"
+        trad: "Ещё не"
     }, {
         "category": "jlptn3",
         jp: "舞",
         on: "ブ",
         kun: "ま.う -ま.う まい",
-        trad: "dance, flit, circle, wheel"
+        trad: "Танец"
     }, {
         "category": "jlptn3",
         jp: "亡",
         on: "ボウ モウ",
         kun: "な.い な.き- ほろ.びる ほろ.ぶ ほろ.ぼす",
-        trad: "deceased, the late, dying, perish"
+        trad: "Умирать"
     }, {
         "category": "jlptn3",
         jp: "冷",
         on: "レイ",
         kun: "つめ.たい ひ.える ひ.や ひ.ややか ひ.やす ひ.やかす さ.める さ.ます",
-        trad: "cool, cold (beer, person), chill"
+        trad: "Остужать"
     }, {
         "category": "jlptn3",
         jp: "適",
         on: "テキ",
         kun: "かな.う",
-        trad: "suitable, occasional, rare, qualified, capable"
+        trad: "Надлежащий"
     }, {
         "category": "jlptn3",
         jp: "婦",
-        on: "",
+        on: "フ",
         kun: "",
-        trad: "lady, woman, wife, bride"
+        trad: "Дама"
     }, {
         "category": "jlptn3",
         jp: "寄",
         on: "キ ヨ.セ",
         kun: "よ.る -よ.り",
-        trad: "draw near, stop in, bring near, gather, collect, send, forward"
+        trad: "Приближаться"
     }, {
         "category": "jlptn3",
         jp: "込",
         on: "コ.メ",
         kun: "-こ.む こ.む こ.み -こ.み",
-        trad: "crowded, mixture, in bulk, included, (kokuji)"
+        trad: "Битком"
     }, {
         "category": "jlptn3",
         jp: "顔",
         on: "ガン",
         kun: "かお",
-        trad: "face, expression"
+        trad: "Лицо"
     }, {
         "category": "jlptn3",
         jp: "類",
         on: "ルイ",
         kun: "たぐ.い",
-        trad: "sort, kind, variety, class, genus"
+        trad: "Сорт, вид"
     }, {
         "category": "jlptn3",
         jp: "余",
-        on: "ヨ アマ.",
+        on: "ヨ",
         kun: "あま.る あま.り",
-        trad: "too much, myself, surplus, other, remainder"
+        trad: "Излишек"
     }, {
         "category": "jlptn3",
         jp: "王",
         on: "オウ -ノ",
         kun: "",
-        trad: "king, rule, magnate"
+        trad: "Король"
     }, {
         "category": "jlptn3",
         jp: "返",
         on: "ヘン",
         kun: "かえ.す -かえ.す かえ.る -かえ.る",
-        trad: "return, answer, fade, repay"
+        trad: "Ответ"
     }, {
         "category": "jlptn3",
         jp: "妻",
         on: "サイ ツ",
         kun: "",
-        trad: "wife, spouse"
+        trad: "Супруга"
     }, {
         "category": "jlptn3",
         jp: "背",
         on: "ハイ",
         kun: "せ せい そむ.く そむ.ける",
-        trad: "stature, height, back, behind, disobey, defy, go back on, rebel"
+        trad: "Спина"
     }, {
         "category": "jlptn3",
         jp: "熱",
         on: "ネツ アツ.",
         kun: "",
-        trad: "heat, temperature, fever, mania, passion"
+        trad: "Жар"
     }, {
         "category": "jlptn3",
         jp: "宿",
         on: "シュク ヤド.",
         kun: "やど やど.る",
-        trad: "inn, lodging, relay station, dwell, lodge, be pregnant, home, dwelling"
+        trad: "Гостиница"
     }, {
         "category": "jlptn3",
         jp: "薬",
         on: "ヤク クス",
         kun: "",
-        trad: "medicine, chemical, enamel, gunpowder, benefit"
+        trad: "Лекарство"
     }, {
         "category": "jlptn3",
         jp: "険",
         on: "ケン",
         kun: "けわ.しい",
-        trad: "precipitous, inaccessible place, impregnable position, steep place, sharp eyes"
+        trad: "Обрывистый"
     }, {
         "category": "jlptn3",
         jp: "頼",
         on: "ライ タヨ.",
         kun: "たの.む たの.もしい",
-        trad: "trust, request"
+        trad: "Просьба"
     }, {
         "category": "jlptn3",
         jp: "覚",
         on: "カク",
         kun: "おぼ.える さ.ます さ.める さと.る",
-        trad: "memorize, learn, remember, awake, sober up"
+        trad: "Помнить"
     }, {
         "category": "jlptn3",
         jp: "船",
         on: "セン",
         kun: "ふね ふな",
-        trad: "ship, boat"
+        trad: "Лодка"
     }, {
         "category": "jlptn3",
         jp: "途",
-        on: "",
-        kun: "",
-        trad: "route, way, road"
+        on: "ト",
+        kun: "みち",
+        trad: "Дорога, путь"
     }, {
         "category": "jlptn3",
         jp: "許",
         on: "キョ",
         kun: "ゆる.す もと",
-        trad: "permit, approve"
+        trad: "Разрешение"
     }, {
         "category": "jlptn3",
         jp: "抜",
         on: "バツ ハツ ハイ ヌ.カ",
         kun: "ぬ.く -ぬ.く ぬ.き ぬ.ける ぬ.かす",
-        trad: "slip out, extract, pull out, pilfer, quote, remove, omit"
+        trad: "Извлекать"
     }, {
         "category": "jlptn3",
         jp: "便",
         on: "ベン ビン",
         kun: "たよ.り",
-        trad: "convenience"
+        trad: "Удобство"
     }, {
         "category": "jlptn3",
         jp: "留",
         on: "リュウ ル ルウブ",
         kun: "と.める と.まる とど.める とど.まる",
-        trad: "detain, fasten, halt, stop"
+        trad: "Пребывать"
     }, {
         "category": "jlptn3",
         jp: "罪",
         on: "ザイ",
         kun: "つみ",
-        trad: "guilt, sin, crime, fault, blame, offense"
+        trad: "Грех, вина"
     }, {
         "category": "jlptn3",
         jp: "努",
         on: "ド",
         kun: "つと.める",
-        trad: "toil, diligent, as much as possible"
+        trad: "Трудиться"
     }, {
         "category": "jlptn3",
         jp: "精",
-        on: "セイ ショウ シヤ",
+        on: "セイ ショウ",
         kun: "",
-        trad: "refined, ghost, fairy, energy, vitality, semen, excellence, purity, skill"
+        trad: "Дух, энергия"
     }, {
         "category": "jlptn3",
         jp: "散",
         on: "サン バ",
         kun: "ち.る ち.らす -ち.らす ち.らかす ち.らかる",
-        trad: "scatter, disperse, spend, squander"
+        trad: "Падение"
     }, {
         "category": "jlptn3",
         jp: "静",
         on: "セイ ジョウ シズ.メ",
         kun: "しず- しず.か しず.まる",
-        trad: "quiet"
+        trad: "Тишина"
     }, {
         "category": "jlptn3",
         jp: "婚",
         on: "コン",
         kun: "",
-        trad: "marriage"
+        trad: "Замужество, брак"
     }, {
         "category": "jlptn3",
         jp: "喜",
         on: "キ ヨロコ.バ",
         kun: "よろこ.ぶ",
-        trad: "rejoice, take pleasure in"
+        trad: "Счастье"
     }, {
         "category": "jlptn3",
         jp: "浮",
-        on: "フ ウ.カベ",
+        on: "フ",
         kun: "う.く う.かれる う.かぶ む",
-        trad: "floating, float, rise to surface"
+        trad: "Всплывать"
     }, {
         "category": "jlptn3",
         jp: "絶",
         on: "ゼツ",
         kun: "た.える た.やす た.つ",
-        trad: "discontinue, beyond, sever, cut off, abstain, interrupt, suppress"
+        trad: "Прекращаться"
     }, {
         "category": "jlptn3",
         jp: "幸",
         on: "コウ シアワ.",
         kun: "さいわ.い さち",
-        trad: "happiness, blessing, fortune"
+        trad: "Счастье, удача"
     }, {
         "category": "jlptn3",
         jp: "押",
         on: "オウ オサ.エ",
         kun: "お.す お.し- お.っ- お.さえる",
-        trad: "push, stop, check, subdue, attach, seize, weight, shove, press, seal, do in spite of"
+        trad: "Нажимать"
     }, {
         "category": "jlptn3",
         jp: "倒",
         on: "トウ",
         kun: "たお.れる -だお.れ たお.す",
-        trad: "overthrow, fall, collapse, drop, break down"
+        trad: "Рушиться,падать"
     }, {
         "category": "jlptn3",
         jp: "等",
-        on: "トウ -",
+        on: "トウ",
         kun: "ひと.しい など",
-        trad: "etc., and so forth, class (first), quality, equal, similar"
+        trad: "и т.п., равный"
     }, {
         "category": "jlptn3",
         jp: "老",
         on: "ロウ フ.ケ",
         kun: "お.いる",
-        trad: "old man, old age, grow old"
+        trad: "Стариться"
     }, {
         "category": "jlptn3",
         jp: "曲",
-        on: "キョク マ.ゲ",
+        on: "キョク",
         kun: "ま.がる",
-        trad: "bend, music, melody, composition, pleasure, injustice, fault, curve, crooked, perverse, lean"
+        trad: "Гнуть"
     }, {
         "category": "jlptn3",
         jp: "払",
         on: "フツ ヒツ ホツ -バラ.",
         kun: "はら.う -はら.い",
-        trad: "pay, clear out, prune, banish, dispose of"
+        trad: "Оплачивать"
     }, {
         "category": "jlptn3",
         jp: "庭",
-        on: "テイ ニ",
-        kun: "",
-        trad: "courtyard, garden, yard"
+        on: "テイ",
+        kun: "にわ",
+        trad: "Сад"
     }, {
         "category": "jlptn3",
         jp: "徒",
-        on: "ト ア",
+        on: "ト",
         kun: "いたずら",
-        trad: "junior, emptiness, vanity, futility, uselessness, ephemeral thing, gang, set, party, people"
+        trad: "Последователь"
     }, {
         "category": "jlptn3",
         jp: "勤",
         on: "キン ゴン",
         kun: "つと.める -づと.め つと.まる いそ.しむ",
-        trad: "diligence, become employed, serve"
+        trad: "Служба"
     }, {
         "category": "jlptn3",
         jp: "遅",
         on: "チ オソ.",
         kun: "おく.れる おく.らす",
-        trad: "slow, late, back, later"
+        trad: "Опаздывать"
     }, {
         "category": "jlptn3",
         jp: "居",
-        on: "キョ コ オ.",
+        on: "キョ コ",
         kun: "い.る -い",
-        trad: "reside, to be, exist, live with"
+        trad: "Проживать"
     }, {
         "category": "jlptn3",
         jp: "雑",
         on: "ザツ ゾウ",
         kun: "まじ.える まじ.る",
-        trad: "miscellaneous"
+        trad: "Всякого рода"
     }, {
         "category": "jlptn3",
         jp: "招",
         on: "ショウ",
         kun: "まね.く",
-        trad: "beckon, invite, summon, engage"
+        trad: "Приглашение"
     }, {
         "category": "jlptn3",
         jp: "困",
         on: "コン",
         kun: "こま.る",
-        trad: "quandary, become distressed, annoyed"
+        trad: "Трудности"
     }, {
         "category": "jlptn3",
         jp: "欠",
         on: "",
         kun: "あくび",
-        trad: "lack, gap, fail"
+        trad: "Зевота, нехватка"
     }, {
         "category": "jlptn3",
         jp: "更",
         on: "コウ",
         kun: "さら さら.に ふ.ける ふ.かす",
-        trad: "grow late, night watch, sit up late, of course"
+        trad: "Кроме того"
     }, {
         "category": "jlptn3",
         jp: "刻",
         on: "コク",
         kun: "きざ.む きざ.み",
-        trad: "engrave, cut fine, chop, hash, mince, time, carving"
+        trad: "Высекать"
     }, {
         "category": "jlptn3",
         jp: "賛",
         on: "サン",
         kun: "たす.ける たた.える",
-        trad: "approve, praise, title or inscription on picture, assist, agree with"
+        trad: "Одобрение"
     }, {
         "category": "jlptn3",
         jp: "抱",
         on: "ホウ カカ.エ",
         kun: "だ.く いだ.く",
-        trad: "embrace, hug, hold in arms"
+        trad: "Обнимать"
     }, {
         "category": "jlptn3",
         jp: "犯",
         on: "ハン ボン",
         kun: "おか.す",
-        trad: "crime, sin, offense"
+        trad: "Преступление"
     }, {
         "category": "jlptn3",
         jp: "恐",
         on: "キョウ",
         kun: "おそ.れる おそ.る おそ.ろしい こわ.い こわ.がる",
-        trad: "fear, dread, awe"
+        trad: "Страх"
     }, {
         "category": "jlptn3",
         jp: "息",
         on: "ソク",
         kun: "いき",
-        trad: "breath, respiration, son, interest (on money)"
+        trad: "Вздох"
     }, {
         "category": "jlptn3",
         jp: "遠",
-        on: "エン オン トオ.",
-        kun: "",
-        trad: "distant, far"
+        on: "エン オン",
+        kun: "とお.い",
+        trad: "Далёкий"
     }, {
         "category": "jlptn3",
         jp: "戻",
         on: "レイ",
         kun: "もど.す もど.る",
-        trad: "re-, return, revert, resume, restore, go backwards"
+        trad: "Возвращение"
     }, {
         "category": "jlptn3",
         jp: "願",
         on: "ガン -ネガ",
         kun: "ねが.う",
-        trad: "petition, request, vow, wish, hope"
+        trad: "Просьба"
     }, {
         "category": "jlptn3",
         jp: "絵",
-        on: "カイ エ",
-        kun: "",
-        trad: "picture, drawing, painting, sketch"
+        on: "カイ",
+        kun: "え",
+        trad: "Картина"
     }, {
         "category": "jlptn3",
         jp: "越",
         on: "エツ オツ -ゴ.",
         kun: "こ.す -こ.す -ご.し こ.える",
-        trad: "surpass, cross over, move to, exceed, Vietnam"
+        trad: "Преодоление"
     }, {
         "category": "jlptn3",
         jp: "欲",
         on: "ヨク",
         kun: "ほっ.する ほ.しい",
-        trad: "longing, covetousness, greed, passion, desire, craving"
+        trad: "Хотеть"
     }, {
         "category": "jlptn3",
         jp: "痛",
         on: "ツウ",
         kun: "いた.い いた.む いた.ましい いた.める",
-        trad: "pain, hurt, damage, bruise"
+        trad: "Боль"
     }, {
         "category": "jlptn3",
         jp: "笑",
         on: "ショウ エ.",
         kun: "わら.う",
-        trad: "laugh"
+        trad: "Смех"
     }, {
         "category": "jlptn3",
         jp: "互",
         on: "ゴ",
         kun: "たが.い かたみ.に",
-        trad: "mutually, reciprocally, together"
+        trad: "Взаимно"
     }, {
         "category": "jlptn3",
         jp: "束",
         on: "ソク",
         kun: "たば たば.ねる つか つか.ねる",
-        trad: "bundle, sheaf, ream, tie in bundles, govern, manage, control"
+        trad: "Пучок"
     }, {
         "category": "jlptn3",
         jp: "似",
         on: "ジ ヒ.",
         kun: "に.る",
-        trad: "becoming, resemble, counterfeit, imitate, suitable"
+        trad: "Быть похожим"
     }, {
         "category": "jlptn3",
         jp: "列",
         on: "レツ",
-        kun: "",
-        trad: "file, row, rank, tier, column"
+        kun: "レツ",
+        trad: "Очередь"
     }, {
         "category": "jlptn3",
         jp: "探",
         on: "タン",
         kun: "さぐ.る さが.す",
-        trad: "grope, search, look for"
+        trad: "Разузнавать"
     }, {
         "category": "jlptn3",
         jp: "逃",
         on: "トウ",
         kun: "に.げる に.がす のが.す のが.れる",
-        trad: "escape, flee, shirk, evade, set free"
+        trad: "Побег"
     }, {
         "category": "jlptn3",
         jp: "遊",
         on: "ユウ ユ アソ.バ",
         kun: "あそ.ぶ",
-        trad: "play"
+        trad: "Развлечение"
     }, {
         "category": "jlptn3",
         jp: "迷",
         on: "メイ",
         kun: "まよ.う",
-        trad: "astray, be perplexed, in doubt, lost, err, illusion"
+        trad: "Блуждать"
     }, {
         "category": "jlptn3",
         jp: "夢",
         on: "ム ボウ",
         kun: "ゆめ ゆめ.みる くら.い",
-        trad: "dream, vision, illusion"
+        trad: "Мечта, сон"
     }, {
         "category": "jlptn3",
         jp: "君",
         on: "クン -ギ",
         kun: "きみ",
-        trad: "old boy, name-suffix"
+        trad: "муж. имен.суфф."
     }, {
         "category": "jlptn3",
         jp: "閉",
         on: "ヘイ タ.テ",
         kun: "と.じる と.ざす し.める し.まる",
-        trad: "closed, shut"
+        trad: "Закрыть"
     }, {
         "category": "jlptn3",
         jp: "緒",
-        on: "ショ チョ イトグ",
+        on: "ショ チョ",
         kun: "お",
-        trad: "thong, beginning, inception, end, cord, strap"
+        trad: "Шнур"
     }, {
         "category": "jlptn3",
         jp: "折",
-        on: "セツ オ.レ",
+        on: "セツ",
         kun: "お.る おり お.り -お.り",
-        trad: "fold, break, fracture, bend, yield, submit"
+        trad: "Сгибать"
     }, {
         "category": "jlptn3",
         jp: "草",
         on: "ソウ -グ",
         kun: "くさ くさ-",
-        trad: "grass, weeds, herbs, pasture, write, draft"
+        trad: "Трава"
     }, {
         "category": "jlptn3",
         jp: "暮",
-        on: "ボ ク.ラ",
+        on: "ボ",
         kun: "く.れる",
-        trad: "livelihood, make a living, spend time"
+        trad: "Сумерки"
     }, {
         "category": "jlptn3",
         jp: "酒",
         on: "シュ",
         kun: "さけ さか",
-        trad: "sake, alcohol"
+        trad: "Алкоголь"
     }, {
         "category": "jlptn3",
         jp: "悲",
         on: "ヒ",
         kun: "かな.しい かな.しむ",
-        trad: "jail cell, grieve, sad, deplore, regret"
+        trad: "Печаль"
     }, {
         "category": "jlptn3",
         jp: "晴",
         on: "セイ ハ.ラ",
         kun: "は.れる は.れ は.れ- -ば.れ",
-        trad: "clear up"
+        trad: "Ясный"
     }, {
         "category": "jlptn3",
         jp: "掛",
         on: "カイ ケイ -ガカ",
         kun: "か.ける -か.ける か.け -か.け -が.け か.かる -か.かる -が.かる か.かり -が.かり かかり",
-        trad: "hang, suspend, depend, arrive at, tax, pour"
+        trad: "Вешать"
     }, {
         "category": "jlptn3",
         jp: "到",
         on: "トウ",
         kun: "いた.る",
-        trad: "arrival, proceed, reach, attain, result in"
+        trad: "Достигать"
     }, {
         "category": "jlptn3",
         jp: "寝",
         on: "シン",
         kun: "ね.る ね.かす い.ぬ みたまや や.める",
-        trad: "lie down, sleep, rest, bed, remain unsold"
+        trad: "Спать"
     }, {
         "category": "jlptn3",
         jp: "暗",
         on: "アン",
         kun: "くら.い",
-        trad: "darkness, disappear, shade, informal, grow dark, be blinded"
+        trad: "Тёмный"
     }, {
         "category": "jlptn3",
         jp: "盗",
         on: "トウ",
         kun: "ぬす.む ぬす.み",
-        trad: "steal, rob, pilfer"
+        trad: "Красть"
     }, {
         "category": "jlptn3",
         jp: "吸",
         on: "キュウ",
         kun: "す.う",
-        trad: "suck, imbibe, inhale, sip"
+        trad: "Вдыхать"
     }, {
         "category": "jlptn3",
         jp: "陽",
         on: "ヨウ",
         kun: "",
-        trad: "sunshine, yang principle, positive, male, heaven, daytime"
+        trad: "Ян, солнце"
     }, {
         "category": "jlptn3",
         jp: "御",
         on: "ギョ ゴ",
         kun: "おん- お- み",
-        trad: "honorable, manipulate, govern"
+        trad: "уважаемый"
     }, {
         "category": "jlptn3",
         jp: "歯",
         on: "シ",
         kun: "よわい は よわ.い よわい.する",
-        trad: "tooth, cog"
+        trad: "Зуб"
     }, {
         "category": "jlptn3",
         jp: "忘",
         on: "ボウ",
         kun: "わす.れる",
-        trad: "forget"
+        trad: "Забывать"
     }, {
         "category": "jlptn3",
         jp: "雪",
-        on: "セツ ユ",
-        kun: "",
-        trad: "snow"
+        on: "セツ",
+        kun: "ゆき",
+        trad: "Снег"
     }, {
         "category": "jlptn3",
         jp: "吹",
-        on: "スイ フ.",
-        kun: "",
-        trad: "blow, breathe, puff, emit, smoke"
+        on: "スイ",
+        kun: "ふ.く",
+        trad: "Дуть"
     }, {
         "category": "jlptn3",
         jp: "娘",
         on: "ジョウ",
         kun: "むすめ こ",
-        trad: "daughter, girl"
+        trad: "Дочь"
     }, {
         "category": "jlptn3",
         jp: "誤",
         on: "ゴ",
         kun: "あやま.る -あやま.る",
-        trad: "mistake, err, do wrong, mislead"
+        trad: "Ошибка"
     }, {
         "category": "jlptn3",
         jp: "洗",
-        on: "セン アラ.",
-        kun: "",
-        trad: "wash, inquire into, probe"
+        on: "セン",
+        kun: "あら.う",
+        trad: "Мыть"
     }, {
         "category": "jlptn3",
         jp: "慣",
         on: "カン",
         kun: "な.れる な.らす",
-        trad: "accustomed, get used to, become experienced"
+        trad: "Привыкнуть"
     }, {
         "category": "jlptn3",
         jp: "礼",
         on: "レイ ラ",
         kun: "",
-        trad: "salute, bow, ceremony, thanks, remuneration"
+        trad: "Поклон"
     }, {
         "category": "jlptn3",
         jp: "窓",
         on: "ソウ ス",
-        kun: "まど てんまど けむだし",
-        trad: "window, pane"
+        kun: "まど けむだし",
+        trad: "Окно"
     }, {
         "category": "jlptn3",
         jp: "昔",
         on: "セキ シャク",
         kun: "むかし",
-        trad: "once upon a time, antiquity, old times"
+        trad: "Прошлое"
     }, {
         "category": "jlptn3",
         jp: "貧",
         on: "ヒン ビン",
         kun: "まず.しい",
-        trad: "poverty, poor"
+        trad: "Бедность"
     }, {
         "category": "jlptn3",
         jp: "怒",
         on: "ド ヌ",
         kun: "いか.る おこ.る",
-        trad: "angry, be offended"
+        trad: "Гнев"
     }, {
         "category": "jlptn3",
         jp: "泳",
         on: "エイ",
         kun: "およ.ぐ",
-        trad: "swim"
+        trad: "Плавать"
     }, {
         "category": "jlptn3",
         jp: "祖",
         on: "",
-        kun: "",
-        trad: "ancestor, pioneer, founder"
+        kun: "ソ",
+        trad: "Предок"
     }, {
         "category": "jlptn3",
         jp: "杯",
         on: "ハイ",
         kun: "さかずき",
-        trad: "counter for cupfuls, wine glass, glass, toast"
+        trad: "Чашечка"
     }, {
         "category": "jlptn3",
         jp: "疲",
         on: "ヒ",
         kun: "つか.れる -づか.れ つか.らす",
-        trad: "exhausted, tire, weary"
+        trad: "Усталость"
     }, {
         "category": "jlptn3",
         jp: "皆",
         on: "カイ ミン",
         kun: "みな",
-        trad: "all, everything"
+        trad: "Все"
     }, {
         "category": "jlptn3",
         jp: "鳴",
-        on: "メイ ナ.ラ",
+        on: "メイ",
         kun: "な.く な.る",
-        trad: "chirp, cry, bark, sound, ring, echo, honk"
+        trad: "Щебетать"
     }, {
         "category": "jlptn3",
         jp: "腹",
         on: "フク",
         kun: "はら",
-        trad: "abdomen, belly, stomach"
+        trad: "Живот"
     }, {
         "category": "jlptn3",
         jp: "煙",
-        on: "エン ケム.",
+        on: "エン",
         kun: "けむ.る けむり",
-        trad: "smoke"
+        trad: "Дым"
     }, {
         "category": "jlptn3",
         jp: "眠",
         on: "ミン ネム.",
         kun: "ねむ.る",
-        trad: "sleep, die, sleepy"
+        trad: "Сонный"
     }, {
         "category": "jlptn3",
         jp: "怖",
         on: "フ ホ",
         kun: "こわ.い こわ.がる お.じる おそ.れる",
-        trad: "dreadful, be frightened, fearful"
+        trad: "Страшный"
     }, {
         "category": "jlptn3",
         jp: "耳",
-        on: "ジ ミ",
-        kun: "",
-        trad: "ear"
+        on: "ジ",
+        kun: "みみ",
+        trad: "Ухо"
     }, {
         "category": "jlptn3",
         jp: "頂",
         on: "チョウ",
         kun: "いただ.く いただき",
-        trad: "place on the head, receive, top of head, top, summit, peak"
+        trad: "Получать"
     }, {
         "category": "jlptn3",
         jp: "箱",
         on: "ソウ",
         kun: "はこ",
-        trad: "box, chest, case, bin, railway car"
+        trad: "Коробка"
     }, {
         "category": "jlptn3",
         jp: "晩",
         on: "バン",
         kun: "",
-        trad: "nightfall, night"
+        trad: "Вечер"
     }, {
         "category": "jlptn3",
         jp: "寒",
-        on: "カン サム.",
-        kun: "",
-        trad: "cold"
+        on: "カン ",
+        kun: "さむ.い",
+        trad: "Холод"
     }, {
         "category": "jlptn3",
         jp: "髪",
-        on: "ハツ カ",
-        kun: "",
-        trad: "hair of the head"
+        on: "ハツ ",
+        kun: "かみ",
+        trad: "Волосы"
     }, {
         "category": "jlptn3",
         jp: "忙",
         on: "ボウ モウ",
         kun: "いそが.しい せわ.しい おそ.れる うれえるさま",
-        trad: "busy, occupied, restless"
+        trad: "Занятой"
     }, {
         "category": "jlptn3",
         jp: "才",
         on: "サイ",
         kun: "",
-        trad: "genius, years old, cubic shaku"
+        trad: "Гений"
     }, {
         "category": "jlptn3",
         jp: "靴",
         on: "カ",
         kun: "くつ",
-        trad: "shoes"
+        trad: "Обувь"
     }, {
         "category": "jlptn3",
         jp: "恥",
         on: "チ",
         kun: "は.じる はじ は.じらう は.ずかしい",
-        trad: "shame, dishonor"
+        trad: "Стыд"
     }, {
         "category": "jlptn3",
         jp: "偶",
         on: "グウ",
         kun: "たま",
-        trad: "accidentally, even number, couple, man & wife, same kind"
+        trad: "Случайность"
     }, {
         "category": "jlptn3",
         jp: "偉",
-        on: "イ エラ.",
-        kun: "",
-        trad: "admirable, greatness, remarkable, conceited, famous, excellent"
+        on: "イ",
+        kun: "えら.い",
+        trad: "Великий"
     }, {
         "category": "jlptn3",
         jp: "猫",
         on: "ビョウ",
         kun: "ねこ",
-        trad: "cat"
+        trad: "Кот"
     }, {
         "category": "jlptn3",
         jp: "幾",
-        on: "キ イク.",
-        kun: "いく- いく.つ",
-        trad: "how many, how much, how far, how long"
+        on: "キ",
+        kun: "いく.ら　いく.つ",
+        trad: "Сколько"
     }, 
 
     ],
     vocabulary: [
-        {jp:"とん",trad:"ton",kun:"（1000","romaji":"(","level":3},{jp:"現実",trad:"reality",kun:"げんじつ","romaji":"genjitsu","level":3},{jp:"農業",trad:"agriculture",kun:"のうぎょう","romaji":"nōgyō","level":3},{jp:"現金",trad:"cash, ready money, mercenary, self-interested",kun:"げんきん","romaji":"genkin","level":3},{jp:"変更",trad:"change, modification, alteration",kun:"へんこう","romaji":"henkō","level":3},{jp:"流行",trad:"fashionable, fad, in vogue, prevailing",kun:"りゅうこう","romaji":"ryūkō","level":3},{jp:"図書",trad:"books",kun:"としょ","romaji":"tosho","level":3},{jp:"経営",trad:"management, administration",kun:"けいえい","romaji":"keiei","level":3},{jp:"代表",trad:"representative, representation, delegation, type, example, model",kun:"だいひょう","romaji":"daihyō","level":3},{jp:"明ける",trad:"to dawn, to become daylight",kun:"あける","romaji":"akeru","level":3},{jp:"散歩",trad:"walk, stroll",kun:"さんぽ","romaji":"sanpo","level":3},{jp:"深刻",trad:"serious",kun:"しんこく","romaji":"shinkoku","level":3},{jp:"眺める",trad:"to view, to gaze at",kun:"ながめる","romaji":"nagameru","level":3},{jp:"親戚",trad:"relative",kun:"しんせき","romaji":"shinseki","level":3},{jp:"国会",trad:"National Diet, parliament, congress",kun:"こっかい","romaji":"kokkai","level":3},{jp:"帯",trad:"band (e.g. conduction, valence)",kun:"おび","romaji":"obi","level":3},{jp:"誕生",trad:"birth",kun:"たんじょう","romaji":"tanjō","level":3},{jp:"参加",trad:"participation",kun:"さんか","romaji":"sanka","level":3},{jp:"加える",trad:"to append, to sum up, to add (up)",kun:"くわえる","romaji":"kuwaeru","level":3},{jp:"学ぶ",trad:"to study (in depth), to learn, to take lessons in",kun:"まなぶ","romaji":"manabu","level":3},{jp:"まさか",trad:"by no means",kun:"","romaji":"masaka","level":3},{jp:"追い付く",trad:"to overtake, to catch up (with)",kun:"おいつく","romaji":"oitsuku","level":3},{jp:"当たる",trad:"to be hit, to be successful, to be equivalent to",kun:"あたる","romaji":"ataru","level":3},{jp:"夜明け",trad:"dawn, daybreak",kun:"よあけ","romaji":"yoake","level":3},{jp:"関連",trad:"relation, connection, relevance",kun:"かんれん","romaji":"kanren","level":3},{jp:"順番",trad:"turn (in line), order of things",kun:"じゅんばん","romaji":"junban","level":3},{jp:"叱る",trad:"to scold",kun:"しかる","romaji":"shikaru","level":3},{jp:"穏やか",trad:"calm, gentle, quiet",kun:"おだやか","romaji":"odayaka","level":3},{jp:"弾",trad:"bullet, shot, shell",kun:"たま","romaji":"tama","level":3},{jp:"宗教",trad:"religion",kun:"しゅうきょう","romaji":"shūkyō","level":3},{jp:"完成",trad:"(1) complete, completion, (2) perfection, accomplishment",kun:"かんせい","romaji":"kansei","level":3},{jp:"お互い",trad:"mutual, reciprocal, each other",kun:"おたがい","romaji":"otagai","level":3},{jp:"等しい",trad:"equal",kun:"ひとしい","romaji":"hitoshii","level":3},{jp:"芝生",trad:"lawn",kun:"しばふ","romaji":"shibafu","level":3},{jp:"程度",trad:"degree, amount, grade, standard, of the order of (following a number)",kun:"ていど","romaji":"teido","level":3},{jp:"以来",trad:"since, henceforth",kun:"いらい","romaji":"irai","level":3},{jp:"あした",trad:"tomorrow",kun:"","romaji":"ashita","level":3},{jp:"支店",trad:"branch store (office)",kun:"してん","romaji":"shiten","level":3},{jp:"尊重",trad:"respect, esteem, regard",kun:"そんちょう","romaji":"sonchō","level":3},{jp:"段",trad:"step, stair, flight of steps, grade, rank, level",kun:"だん","romaji":"dan","level":3},{jp:"政府",trad:"government, administration",kun:"せいふ","romaji":"seifu","level":3},{jp:"配達",trad:"delivery, distribution",kun:"はいたつ","romaji":"haitatsu","level":3},{jp:"強盗",trad:"robbery, burglary",kun:"ごうとう","romaji":"gōtō","level":3},{jp:"駐車",trad:"parking (e.g. car)",kun:"ちゅうしゃ","romaji":"chūsha","level":3},{jp:"梅",trad:"plum, plum-tree, lowest (of a three-tier ranking system)",kun:"うめ","romaji":"ume","level":3},{jp:"否",trad:"no, the noes",kun:"いや","romaji":"iya","level":3},{jp:"アウト",trad:"out",kun:"","romaji":"auto","level":3},{jp:"厄介",trad:"trouble, burden, care, bother",kun:"やっかい","romaji":"yakkai","level":3},{jp:"咳",trad:"cough",kun:"せき","romaji":"seki","level":3},{jp:"者",trad:"person",kun:"もの","romaji":"mono","level":3},{jp:"方々",trad:"persons, this and that, here and there, everywhere",kun:"かたがた","romaji":"katagata","level":3},{jp:"国語",trad:"national language",kun:"こくご","romaji":"kokugo","level":3},{jp:"能力",trad:"ability, faculty",kun:"のうりょく","romaji":"nōryoku","level":3},{jp:"都",trad:"capital",kun:"みやこ","romaji":"miyako","level":3},{jp:"支配",trad:"rule, control, direction",kun:"しはい","romaji":"shihai","level":3},{jp:"材料",trad:"ingredients, material",kun:"ざいりょう","romaji":"zairyō","level":3},{jp:"覚める",trad:"to wake, to wake up",kun:"さめる","romaji":"sameru","level":3},{jp:"なかなか",trad:"very, considerably, easily",kun:"","romaji":"nakanaka","level":3},{jp:"名人",trad:"master, expert",kun:"めいじん","romaji":"meijin","level":3},{jp:"空",trad:"sky",kun:"から","romaji":"kara","level":3},{jp:"僅か",trad:"only, merely, a little, small quantity",kun:"わずか","romaji":"wazuka","level":3},{jp:"賢い",trad:"wise, clever, smart",kun:"かしこい","romaji":"kashikoi","level":3},{jp:"画家",trad:"painter, artist",kun:"がか","romaji":"gaka","level":3},{jp:"掴む",trad:"to seize, to catch, to grasp",kun:"つかむ","romaji":"tsukamu","level":3},{jp:"皆",trad:"all, everyone, everybody",kun:"みんな","romaji":"minna","level":3},{jp:"影",trad:"shade, shadow, other side",kun:"かげ","romaji":"kage","level":3},{jp:"ばったり",trad:"with a clash (thud), with a bang, plump, flop",kun:"","romaji":"battari","level":3},{jp:"ありがとう",trad:"(conj, exp, int) Thank you",kun:"","romaji":"arigatō","level":3},{jp:"感動",trad:"being deeply moved, excitement, impression, deep emotion",kun:"かんどう","romaji":"kandō","level":3},{jp:"現在",trad:"present, up to now, nowadays, modern times, current",kun:"げんざい","romaji":"genzai","level":3},{jp:"屋根",trad:"roof",kun:"やね","romaji":"yane","level":3},{jp:"譲る",trad:"to turn over, to assign, to hand over",kun:"ゆずる","romaji":"yuzuru","level":3},{jp:"天候",trad:"weather",kun:"てんこう","romaji":"tenkō","level":3},{jp:"自慢",trad:"pride, boast",kun:"じまん","romaji":"jiman","level":3},{jp:"失業",trad:"unemployment",kun:"しつぎょう","romaji":"shitsugyō","level":3},{jp:"大戦",trad:"great war, great battle",kun:"たいせん","romaji":"taisen","level":3},{jp:"守る",trad:"to protect, to obey, to guard, to abide (by the rules)",kun:"まもる","romaji":"mamoru","level":3},{jp:"価値",trad:"value, worth, merit",kun:"かち","romaji":"kachi","level":3},{jp:"集まり",trad:"gathering, meeting, assembly, collection",kun:"あつまり","romaji":"atsumari","level":3},{jp:"これら",trad:"these",kun:"","romaji":"korera","level":3},{jp:"すごい",trad:"terrible, dreadful, terrific, amazing, great",kun:"","romaji":"sugoi","level":3},{jp:"大使",trad:"ambassador",kun:"たいし","romaji":"taishi","level":3},{jp:"分析",trad:"analysis",kun:"ぶんせき","romaji":"bunseki","level":3},{jp:"先日",trad:"the other day, a few days ago",kun:"せんじつ","romaji":"senjitsu","level":3},{jp:"悲劇",trad:"tragedy",kun:"ひげき","romaji":"higeki","level":3},{jp:"現れる",trad:"(1) to appear, to come in sight, to become visible, (2) to express oneself",kun:"あらわれる","romaji":"arawareru","level":3},{jp:"アルバム",trad:"album",kun:"","romaji":"arubamu","level":3},{jp:"友情",trad:"friendship, fellowship",kun:"ゆうじょう","romaji":"yūjō","level":3},{jp:"泥",trad:"mud",kun:"どろ","romaji":"doro","level":3},{jp:"刀",trad:"sword, saber, knife, engraving tool",kun:"かたな","romaji":"katana","level":3},{jp:"話題",trad:"topic, subject",kun:"わだい","romaji":"wadai","level":3},{jp:"通過",trad:"passage through, passing",kun:"つうか","romaji":"tsūka","level":3},{jp:"滅多に",trad:"rarely (with neg. verb), seldom",kun:"めったに","romaji":"mettani","level":3},{jp:"度",trad:"counter for occurrences",kun:"たび","romaji":"tabi","level":3},{jp:"希望",trad:"hope, wish, aspiration",kun:"きぼう","romaji":"kibō","level":3},{jp:"様子",trad:"aspect, state, appearance",kun:"ようす","romaji":"yōsu","level":3},{jp:"越す",trad:"to go over (e.g. with audience)",kun:"こす","romaji":"kosu","level":3},{jp:"チャンス",trad:"chance, opportunity",kun:"","romaji":"chansu","level":3},{jp:"交際",trad:"company, friendship, association, society, acquaintance",kun:"こうさい","romaji":"kōsai","level":3},{jp:"申し込む",trad:"to apply for, to make an application",kun:"もうしこむ","romaji":"mōshikomu","level":3},{jp:"程",trad:"degree, extent, bounds, limit",kun:"ほど","romaji":"hodo","level":3},{jp:"救助",trad:"relief, aid, rescue",kun:"きゅうじょ","romaji":"kyūjo","level":3},{jp:"新た",trad:"new, fresh, novel",kun:"あらた","romaji":"arata","level":3},{jp:"列車",trad:"train (ordinary)",kun:"れっしゃ","romaji":"ressha","level":3},{jp:"一種",trad:"a species, a kind, a variety",kun:"いっしゅ","romaji":"isshu","level":3},{jp:"考え",trad:"thinking, thought, ideas, intention",kun:"かんがえ","romaji":"kangae","level":3},{jp:"商売",trad:"trade, business, commerce, transaction, occupation",kun:"しょうばい","romaji":"shōbai","level":3},{jp:"欠席",trad:"absence, non-attendance",kun:"けっせき","romaji":"kesseki","level":3},{jp:"絶対",trad:"absolute, unconditional, absoluteness",kun:"ぜったい","romaji":"zettai","level":3},{jp:"農家",trad:"farmer, farm family",kun:"のうか","romaji":"nōka","level":3},{jp:"幾つ",trad:"how many?, how old?",kun:"いくつ","romaji":"ikutsu","level":3},{jp:"信号",trad:"traffic lights, signal, semaphore",kun:"しんごう","romaji":"shingō","level":3},{jp:"付ける",trad:"to attach, to join, to add, to append",kun:"つける","romaji":"tsukeru","level":3},{jp:"そして",trad:"and",kun:"","romaji":"soshite","level":3},{jp:"ぼんやり",trad:"absent-minded, block-head, dim, faint, vague",kun:"","romaji":"bon'yari","level":3},{jp:"スキー",trad:"skiing",kun:"","romaji":"sukī","level":3},{jp:"辛い",trad:"painful, heart-breaking",kun:"つらい","romaji":"tsurai","level":3},{jp:"生命",trad:"life, existence",kun:"せいめい","romaji":"seimei","level":3},{jp:"構う",trad:"to mind, to care about, to be concerned about",kun:"かまう","romaji":"kamau","level":3},{jp:"交換",trad:"exchange, interchange, reciprocity",kun:"こうかん","romaji":"kōkan","level":3},{jp:"知事",trad:"prefectural governor",kun:"ちじ","romaji":"chiji","level":3},{jp:"やはり",trad:"also, as I thought, still, in spite of, absolutely, of course",kun:"","romaji":"yahari","level":3},{jp:"進める",trad:"to advance, to promote, to hasten",kun:"すすめる","romaji":"susumeru","level":3},{jp:"爆発",trad:"explosion, detonation, eruption",kun:"ばくはつ","romaji":"bakuhatsu","level":3},{jp:"かわいそう",trad:"poor, pitiable, pathetic",kun:"","romaji":"kawaisō","level":3},{jp:"横切る",trad:"to cross (e.g. arms), to traverse",kun:"よこぎる","romaji":"yokogiru","level":3},{jp:"害",trad:"injury, harm, evil influence, damage",kun:"がい","romaji":"gai","level":3},{jp:"自殺",trad:"suicide",kun:"じさつ","romaji":"jisatsu","level":3},{jp:"トラック",trad:"(1) truck, (2) (running) track",kun:"","romaji":"torakku","level":3},{jp:"承知",trad:"consent, acceptance, assent, admitting",kun:"しょうち","romaji":"shōchi","level":3},{jp:"宇宙",trad:"universe, cosmos, space",kun:"うちゅう","romaji":"uchū","level":3},{jp:"適切",trad:"pertinent, appropriate, adequate, relevance",kun:"てきせつ","romaji":"tekisetsu","level":3},{jp:"ダイヤ",trad:"(1) dyer, (2) diagram, (3) (railway) schedule, (4) diamond",kun:"","romaji":"daiya","level":3},{jp:"管理",trad:"control, management (e.g. of a business)",kun:"かんり","romaji":"kanri","level":3},{jp:"豊か",trad:"abundant, wealthy, plentiful, rich",kun:"ゆたか","romaji":"yutaka","level":3},{jp:"競技",trad:"game, match, contest",kun:"きょうぎ","romaji":"kyōgi","level":3},{jp:"設計",trad:"plan, design",kun:"せっけい","romaji":"sekkei","level":3},{jp:"汚染",trad:"pollution, contamination",kun:"おせん","romaji":"osen","level":3},{jp:"調子",trad:"tune, tone, key",kun:"ちょうし","romaji":"chōshi","level":3},{jp:"かなり",trad:"considerably, fairly, quite",kun:"","romaji":"kanari","level":3},{jp:"海外",trad:"foreign, abroad, overseas",kun:"かいがい","romaji":"kaigai","level":3},{jp:"安定",trad:"stability, equilibrium",kun:"あんてい","romaji":"antei","level":3},{jp:"それ",trad:"it, that",kun:"（接。感）","romaji":"(.)","level":3},{jp:"きつい",trad:"tight, close, intense",kun:"","romaji":"kitsui","level":3},{jp:"記者",trad:"reporter",kun:"きしゃ","romaji":"kisha","level":3},{jp:"負け",trad:"defeat, loss, losing (a game)",kun:"まけ","romaji":"make","level":3},{jp:"流れ",trad:"stream, current",kun:"ながれ","romaji":"nagare","level":3},{jp:"評価",trad:"valuation, estimation, assessment, evaluation",kun:"ひょうか","romaji":"hyōka","level":3},{jp:"憲法",trad:"constitution",kun:"けんぽう","romaji":"kenpō","level":3},{jp:"劇場",trad:"theatre, playhouse",kun:"げきじょう","romaji":"gekijō","level":3},{jp:"働き",trad:"work, labor",kun:"はたらき","romaji":"hataraki","level":3},{jp:"停留所",trad:"bus or tram stop",kun:"ていりゅうじょ","romaji":"teiryūjo","level":3},{jp:"骨",trad:"bone",kun:"ほね","romaji":"hone","level":3},{jp:"おめでとう",trad:"Congratulations!, an auspicious occasion!",kun:"","romaji":"omedetō","level":3},{jp:"空く",trad:"(1) to open, to become empty, (2) to be less crowded",kun:"すく","romaji":"suku","level":3},{jp:"メンバー",trad:"member",kun:"","romaji":"menbā","level":3},{jp:"癖",trad:"a habit (often a bad habit), peculiarity",kun:"くせ","romaji":"kuse","level":3},{jp:"詩",trad:"poem, verse of poetry",kun:"し","romaji":"shi","level":3},{jp:"感じる",trad:"to feel, to sense, to experience",kun:"かんじる","romaji":"kanjiru","level":3},{jp:"上",trad:"upper, outer, surface",kun:"うわ","romaji":"uwa","level":3},{jp:"いずれ",trad:"where, which, who",kun:"","romaji":"izure","level":3},{jp:"保存",trad:"preservation, conservation, storage, maintenance",kun:"ほぞん","romaji":"hozon","level":3},{jp:"あちこち",trad:"here and there",kun:"","romaji":"achikochi","level":3},{jp:"適度",trad:"moderate",kun:"てきど","romaji":"tekido","level":3},{jp:"横断",trad:"crossing",kun:"おうだん","romaji":"ōdan","level":3},{jp:"いけない",trad:"must not do, bad, wrong, not good",kun:"","romaji":"ikenai","level":3},{jp:"布",trad:"cloth",kun:"ぬの","romaji":"nuno","level":3},{jp:"夕べ",trad:"evening",kun:"ゆうべ","romaji":"yūbe","level":3},{jp:"専攻",trad:"major subject, special study",kun:"せんこう","romaji":"senkō","level":3},{jp:"答案",trad:"examination paper, examination script",kun:"とうあん","romaji":"tōan","level":3},{jp:"寄付",trad:"contribution, donation",kun:"きふ","romaji":"kifu","level":3},{jp:"円",trad:"circle, money",kun:"えん","romaji":"en","level":3},{jp:"罹る",trad:"to suffer from",kun:"かかる","romaji":"kakaru","level":3},{jp:"パイロット",trad:"pilot",kun:"","romaji":"pairotto","level":3},{jp:"係",trad:"official, duty, person in charge",kun:"かかり","romaji":"kakari","level":3},{jp:"偶",trad:"even number, couple, man and wife, friend",kun:"たま","romaji":"tama","level":3},{jp:"コーチ",trad:"coach",kun:"","romaji":"kōchi","level":3},{jp:"検査",trad:"inspection (e.g. customs, factory), examination",kun:"けんさ","romaji":"kensa","level":3},{jp:"位",trad:"grade, rank, about",kun:"くらい","romaji":"kurai","level":3},{jp:"従う",trad:"to abide (by the rules), to obey, to follow, to accompany",kun:"したがう","romaji":"shitagau","level":3},{jp:"維持",trad:"maintenance, preservation",kun:"いじ","romaji":"iji","level":3},{jp:"陰",trad:"shade, shadow, other side",kun:"かげ","romaji":"kage","level":3},{jp:"節約",trad:"economising, saving",kun:"せつやく","romaji":"setsuyaku","level":3},{jp:"光景",trad:"scene, spectacle",kun:"こうけい","romaji":"kōkei","level":3},{jp:"他人",trad:"another person, unrelated person, outsider, stranger",kun:"たにん","romaji":"tanin","level":3},{jp:"祝い",trad:"celebration, festival",kun:"いわい","romaji":"iwai","level":3},{jp:"主婦",trad:"housewife, mistress",kun:"しゅふ","romaji":"shufu","level":3},{jp:"思わず",trad:"unintentional, spontaneous",kun:"おもわず","romaji":"omowazu","level":3},{jp:"移す",trad:"to remove, to transfer, to infect",kun:"うつす","romaji":"utsusu","level":3},{jp:"団体",trad:"organization, association",kun:"だんたい","romaji":"dantai","level":3},{jp:"日常",trad:"ordinary, regular, everyday, usual",kun:"にちじょう","romaji":"nichijō","level":3},{jp:"基本",trad:"foundation, basis, standard",kun:"きほん","romaji":"kihon","level":3},{jp:"敵",trad:"enemy, rival",kun:"てき","romaji":"teki","level":3},{jp:"しまう",trad:"to finish, to close, to do something completely",kun:"（終わる）","romaji":"(waru)","level":3},{jp:"こんにちは",trad:"hello, good day (daytime greeting, id)",kun:"","romaji":"konnichiha","level":3},{jp:"つまり",trad:"in short, in brief, in other words",kun:"","romaji":"tsumari","level":3},{jp:"ゴール",trad:"goal",kun:"","romaji":"gōru","level":3},{jp:"製品",trad:"manufactured goods, finished goods",kun:"せいひん","romaji":"seihin","level":3},{jp:"案内",trad:"information, guidance, leading",kun:"あんない","romaji":"annai","level":3},{jp:"電子",trad:"electron",kun:"でんし","romaji":"denshi","level":3},{jp:"それぞれ",trad:"each, every, either, respectively, severally",kun:"","romaji":"sorezore","level":3},{jp:"拡大",trad:"magnification, enlargement",kun:"かくだい","romaji":"kakudai","level":3},{jp:"とにかく",trad:"anyhow, at any rate, anyway, somehow or other, generally speaking, in any case",kun:"","romaji":"tonikaku","level":3},{jp:"一致",trad:"(1) coincidence, agreement, (2) conformity",kun:"いっち","romaji":"itchi","level":3},{jp:"どこか",trad:"somewhere, anywhere",kun:"","romaji":"dokoka","level":3},{jp:"ノック",trad:"(1) knock, (2) fungo (baseball)",kun:"","romaji":"nokku","level":3},{jp:"鉄",trad:"iron",kun:"てつ","romaji":"tetsu","level":3},{jp:"税金",trad:"tax, duty",kun:"ぜいきん","romaji":"zeikin","level":3},{jp:"四",trad:"four",kun:"し","romaji":"shi","level":3},
+{jp:"現実",trad:"реальность",kun:"げんじつ","romaji":"genjitsu","level":3},{jp:"農業",trad:"земледелие",kun:"のうぎょう","romaji":"nōgyō","level":3},{jp:"現金",trad:"наличные",kun:"げんきん","romaji":"genkin","level":3},{jp:"変更",trad:"обмен",kun:"へんこう","romaji":"henkō","level":3},{jp:"流行",trad:"популярный",kun:"りゅうこう","romaji":"ryūkō","level":3},{jp:"図書",trad:"книги",kun:"としょ","romaji":"tosho","level":3},{jp:"経営",trad:"администрирование",kun:"けいえい","romaji":"keiei","level":3},{jp:"代表",trad:"представительство",kun:"だいひょう","romaji":"daihyō","level":3},{jp:"明ける",trad:"рассветать",kun:"あける","romaji":"akeru","level":3},{jp:"散歩",trad:"прогулка",kun:"さんぽ","romaji":"sanpo","level":3},{jp:"深刻",trad:"серьёзный",kun:"しんこく","romaji":"shinkoku","level":3},{jp:"眺める",trad:"любоваться",kun:"ながめる","romaji":"nagameru","level":3},
+{jp:"親戚",trad:"родня",kun:"しんせき","romaji":"shinseki","level":3},{jp:"国会",trad:"парламент",kun:"こっかい","romaji":"kokkai","level":3},{jp:"帯",trad:"пояс",kun:"おび","romaji":"obi","level":3},{jp:"誕生",trad:"рождение",kun:"たんじょう","romaji":"tanjō","level":3},{jp:"参加",trad:"участвовать",kun:"さんか","romaji":"sanka","level":3},{jp:"加える",trad:"добавлять",kun:"くわえる","romaji":"kuwaeru","level":3},
+{jp:"学ぶ",trad:"изучать",kun:"まなぶ","romaji":"manabu","level":3},{jp:"まさか",trad:"Не может быть!",kun:"","romaji":"masaka","level":3},
+{jp:"追い付く",trad:"догонять",kun:"おいつく","romaji":"oitsuku","level":3},{jp:"当たる",trad:"попадать в цель",kun:"あたる","romaji":"ataru","level":3},{jp:"夜明け",trad:"рассвет",kun:"よあけ","romaji":"yoake","level":3},{jp:"関連",trad:"связь, отношение",kun:"かんれん","romaji":"kanren","level":3},
+
+{jp:"順番",trad:"очередь",kun:"じゅんばん","romaji":"junban","level":3},{jp:"叱る",trad:"ругать",kun:"しかる","romaji":"shikaru","level":3},{jp:"穏やか",trad:"спокойный",kun:"おだやか","romaji":"odayaka","level":3},{jp:"弾",trad:"пуля",kun:"たま","romaji":"tama","level":3},{jp:"宗教",trad:"религия",kun:"しゅうきょう","romaji":"shūkyō","level":3},{jp:"完成",trad:"завершённый",kun:"かんせい","romaji":"kansei","level":3},{jp:"お互い",trad:"взаимно",kun:"おたがい","romaji":"otagai","level":3},{jp:"等しい",trad:"равный",kun:"ひとしい","romaji":"hitoshii","level":3},{jp:"芝生",trad:"лужайка",kun:"しばふ","romaji":"shibafu","level":3},{jp:"程度",trad:"степень",kun:"ていど","romaji":"teido","level":3},{jp:"以来",trad:"с тех пор",kun:"いらい","romaji":"irai","level":3},{jp:"明日",trad:"завтра",kun:"","romaji":"ashita","level":3},{jp:"支店",trad:"филиал",kun:"してん","romaji":"shiten","level":3},{jp:"尊重",trad:"уважение",kun:"そんちょう","romaji":"sonchō","level":3},{jp:"段",trad:"ступень",kun:"だん","romaji":"dan","level":3},
+{jp:"政府",trad:"правительство",kun:"せいふ","romaji":"seifu","level":3},{jp:"配達",trad:"доставка",kun:"はいたつ","romaji":"haitatsu","level":3},{jp:"強盗",trad:"разбой",kun:"ごうとう","romaji":"gōtō","level":3},{jp:"駐車",trad:"парковка",kun:"ちゅうしゃ","romaji":"chūsha","level":3},{jp:"梅",trad:"слива",kun:"うめ","romaji":"ume","level":3},{jp:"否",trad:"нет",kun:"いや","romaji":"iya","level":3},{jp:"アウト",trad:"спорт.аут",kun:"","romaji":"auto","level":3},{jp:"厄介",trad:"хлопоты",kun:"やっかい","romaji":"yakkai","level":3},{jp:"咳",trad:"кашель",kun:"せき","romaji":"seki","level":3},{jp:"者",trad:"человек",kun:"もの","romaji":"mono","level":3},{jp:"方々",trad:"господа",kun:"かたがた","romaji":"katagata","level":3},{jp:"国語",trad:"гос.язык",kun:"こくご","romaji":"kokugo","level":3},{jp:"能力",trad:"способности",kun:"のうりょく","romaji":"nōryoku","level":3},{jp:"都",trad:"столица",kun:"みやこ","romaji":"miyako","level":3},
+{jp:"支配",trad:"управление",kun:"しはい","romaji":"shihai","level":3},{jp:"材料",trad:"ингридиенты",kun:"ざいりょう","romaji":"zairyō","level":3},{jp:"覚める",trad:"просыпаться",kun:"さめる","romaji":"sameru","level":3},{jp:"中々",trad:"весьма, совсем не",kun:"なかなか","romaji":"nakanaka","level":3},{jp:"名人",trad:"мастер",kun:"めいじん","romaji":"meijin","level":3},{jp:"空",trad:"небо",kun:"そら","romaji":"kara","level":3},{jp:"僅か",trad:"всего лишь",kun:"わずか","romaji":"wazuka","level":3},{jp:"賢い",trad:"умный",kun:"かしこい","romaji":"kashikoi","level":3},{jp:"画家",trad:"художник",kun:"がか","romaji":"gaka","level":3},
+{jp:"掴む",trad:"схватить",kun:"つかむ","romaji":"tsukamu","level":3},{jp:"皆",trad:"все",kun:"みんな","romaji":"minna","level":3},{jp:"影",trad:"тень",kun:"かげ","romaji":"kage","level":3},{jp:"ばったり",trad:"как мешок",kun:"","romaji":"battari","level":3},{jp:"感動",trad:"восторг",kun:"かんどう","romaji":"kandō","level":3},{jp:"現在",trad:"наши дни",kun:"げんざい","romaji":"genzai","level":3},{jp:"屋根",trad:"крыша",kun:"やね","romaji":"yane","level":3},{jp:"譲る",trad:"уступать",kun:"ゆずる","romaji":"yuzuru","level":3},{jp:"天候",trad:"погода",kun:"てんこう","romaji":"tenkō","level":3},{jp:"自慢",trad:"гордость",kun:"じまん","romaji":"jiman","level":3},{jp:"失業",trad:"безработица",kun:"しつぎょう","romaji":"shitsugyō","level":3},
+{jp:"大戦",trad:"большая война",kun:"たいせん","romaji":"taisen","level":3},{jp:"守る",trad:"защищать",kun:"まもる","romaji":"mamoru","level":3},{jp:"価値",trad:"ценность",kun:"かち","romaji":"kachi","level":3},{jp:"集まり",trad:"коллекция",kun:"あつまり","romaji":"atsumari","level":3},{jp:"これら",trad:"эти",kun:"","romaji":"korera","level":3},{jp:"すごい",trad:"Круто!",kun:"","romaji":"sugoi","level":3},{jp:"大使",trad:"посол",kun:"たいし","romaji":"taishi","level":3},{jp:"分析",trad:"анализ",kun:"ぶんせき","romaji":"bunseki","level":3},{jp:"先日",trad:"на днях",kun:"せんじつ","romaji":"senjitsu","level":3},{jp:"悲劇",trad:"трагедия",kun:"ひげき","romaji":"higeki","level":3},{jp:"現れる",trad:"появиться",kun:"あらわれる","romaji":"arawareru","level":3},{jp:"アルバム",trad:"альбом",kun:"","romaji":"arubamu","level":3},{jp:"友情",trad:"дружба",kun:"ゆうじょう","romaji":"yūjō","level":3},{jp:"泥",trad:"грязь",kun:"どろ","romaji":"doro","level":3},{jp:"刀",trad:"меч",kun:"かたな","romaji":"katana","level":3},{jp:"話題",trad:"тема",kun:"わだい","romaji":"wadai","level":3},{jp:"通過",trad:"прохождение",kun:"つうか","romaji":"tsūka","level":3},{jp:"滅多に",trad:"редко",kun:"めったに","romaji":"mettani","level":3},{jp:"度",trad:"раз",kun:"たび","romaji":"tabi","level":3},{jp:"希望",trad:"надежда",kun:"きぼう","romaji":"kibō","level":3},{jp:"様子",trad:"вид",kun:"ようす","romaji":"yōsu","level":3},{jp:"越す",trad:"превосходить",kun:"こす","romaji":"kosu","level":3},{jp:"チャンス",trad:"возможность",kun:"","romaji":"chansu","level":3},{jp:"交際",trad:"общение",kun:"こうさい","romaji":"kōsai","level":3},{jp:"申し込む",trad:"подавать заявку",kun:"もうしこむ","romaji":"mōshikomu","level":3},{jp:"程",trad:"градус",kun:"ほど","romaji":"hodo","level":3},{jp:"救助",trad:"спасение",kun:"きゅうじょ","romaji":"kyūjo","level":3},{jp:"新た",trad:"новый",kun:"あらた","romaji":"arata","level":3},{jp:"列車",trad:"поезд",kun:"れっしゃ","romaji":"ressha","level":3},{jp:"一種",trad:"разновидность",kun:"いっしゅ","romaji":"isshu","level":3},{jp:"考え",trad:"мысль, идея",kun:"かんがえ","romaji":"kangae","level":3},{jp:"商売",trad:"торговля, бизнес",kun:"しょうばい","romaji":"shōbai","level":3},
+
+{jp:"欠席",trad:"absence, non-attendance",kun:"けっせき","romaji":"kesseki","level":3},{jp:"絶対",trad:"absolute, unconditional, absoluteness",kun:"ぜったい","romaji":"zettai","level":3},{jp:"農家",trad:"farmer, farm family",kun:"のうか","romaji":"nōka","level":3},{jp:"幾つ",trad:"how many?, how old?",kun:"いくつ","romaji":"ikutsu","level":3},{jp:"信号",trad:"traffic lights, signal, semaphore",kun:"しんごう","romaji":"shingō","level":3},{jp:"付ける",trad:"to attach, to join, to add, to append",kun:"つける","romaji":"tsukeru","level":3},{jp:"そして",trad:"and",kun:"","romaji":"soshite","level":3},{jp:"ぼんやり",trad:"absent-minded, block-head, dim, faint, vague",kun:"","romaji":"bon'yari","level":3},{jp:"スキー",trad:"skiing",kun:"","romaji":"sukī","level":3},{jp:"辛い",trad:"painful, heart-breaking",kun:"つらい","romaji":"tsurai","level":3},{jp:"生命",trad:"life, existence",kun:"せいめい","romaji":"seimei","level":3},{jp:"構う",trad:"to mind, to care about, to be concerned about",kun:"かまう","romaji":"kamau","level":3},{jp:"交換",trad:"exchange, interchange, reciprocity",kun:"こうかん","romaji":"kōkan","level":3},{jp:"知事",trad:"prefectural governor",kun:"ちじ","romaji":"chiji","level":3},{jp:"やはり",trad:"also, as I thought, still, in spite of, absolutely, of course",kun:"","romaji":"yahari","level":3},{jp:"進める",trad:"to advance, to promote, to hasten",kun:"すすめる","romaji":"susumeru","level":3},{jp:"爆発",trad:"explosion, detonation, eruption",kun:"ばくはつ","romaji":"bakuhatsu","level":3},{jp:"かわいそう",trad:"poor, pitiable, pathetic",kun:"","romaji":"kawaisō","level":3},{jp:"横切る",trad:"to cross (e.g. arms), to traverse",kun:"よこぎる","romaji":"yokogiru","level":3},{jp:"害",trad:"injury, harm, evil influence, damage",kun:"がい","romaji":"gai","level":3},{jp:"自殺",trad:"suicide",kun:"じさつ","romaji":"jisatsu","level":3},{jp:"トラック",trad:"(1) truck, (2) (running) track",kun:"","romaji":"torakku","level":3},{jp:"承知",trad:"consent, acceptance, assent, admitting",kun:"しょうち","romaji":"shōchi","level":3},{jp:"宇宙",trad:"universe, cosmos, space",kun:"うちゅう","romaji":"uchū","level":3},{jp:"適切",trad:"pertinent, appropriate, adequate, relevance",kun:"てきせつ","romaji":"tekisetsu","level":3},{jp:"ダイヤ",trad:"(1) dyer, (2) diagram, (3) (railway) schedule, (4) diamond",kun:"","romaji":"daiya","level":3},{jp:"管理",trad:"control, management (e.g. of a business)",kun:"かんり","romaji":"kanri","level":3},{jp:"豊か",trad:"abundant, wealthy, plentiful, rich",kun:"ゆたか","romaji":"yutaka","level":3},{jp:"競技",trad:"game, match, contest",kun:"きょうぎ","romaji":"kyōgi","level":3},{jp:"設計",trad:"plan, design",kun:"せっけい","romaji":"sekkei","level":3},{jp:"汚染",trad:"pollution, contamination",kun:"おせん","romaji":"osen","level":3},{jp:"調子",trad:"tune, tone, key",kun:"ちょうし","romaji":"chōshi","level":3},{jp:"かなり",trad:"considerably, fairly, quite",kun:"","romaji":"kanari","level":3},{jp:"海外",trad:"foreign, abroad, overseas",kun:"かいがい","romaji":"kaigai","level":3},{jp:"安定",trad:"stability, equilibrium",kun:"あんてい","romaji":"antei","level":3},{jp:"それ",trad:"it, that",kun:"（接。感）","romaji":"(.)","level":3},{jp:"きつい",trad:"tight, close, intense",kun:"","romaji":"kitsui","level":3},{jp:"記者",trad:"reporter",kun:"きしゃ","romaji":"kisha","level":3},{jp:"負け",trad:"defeat, loss, losing (a game)",kun:"まけ","romaji":"make","level":3},{jp:"流れ",trad:"stream, current",kun:"ながれ","romaji":"nagare","level":3},{jp:"評価",trad:"valuation, estimation, assessment, evaluation",kun:"ひょうか","romaji":"hyōka","level":3},{jp:"憲法",trad:"constitution",kun:"けんぽう","romaji":"kenpō","level":3},{jp:"劇場",trad:"theatre, playhouse",kun:"げきじょう","romaji":"gekijō","level":3},{jp:"働き",trad:"work, labor",kun:"はたらき","romaji":"hataraki","level":3},{jp:"停留所",trad:"bus or tram stop",kun:"ていりゅうじょ","romaji":"teiryūjo","level":3},{jp:"骨",trad:"bone",kun:"ほね","romaji":"hone","level":3},{jp:"おめでとう",trad:"Congratulations!, an auspicious occasion!",kun:"","romaji":"omedetō","level":3},{jp:"空く",trad:"(1) to open, to become empty, (2) to be less crowded",kun:"すく","romaji":"suku","level":3},{jp:"メンバー",trad:"member",kun:"","romaji":"menbā","level":3},{jp:"癖",trad:"a habit (often a bad habit), peculiarity",kun:"くせ","romaji":"kuse","level":3},{jp:"詩",trad:"poem, verse of poetry",kun:"し","romaji":"shi","level":3},{jp:"感じる",trad:"to feel, to sense, to experience",kun:"かんじる","romaji":"kanjiru","level":3},{jp:"上",trad:"upper, outer, surface",kun:"うわ","romaji":"uwa","level":3},{jp:"いずれ",trad:"where, which, who",kun:"","romaji":"izure","level":3},{jp:"保存",trad:"preservation, conservation, storage, maintenance",kun:"ほぞん","romaji":"hozon","level":3},{jp:"あちこち",trad:"here and there",kun:"","romaji":"achikochi","level":3},{jp:"適度",trad:"moderate",kun:"てきど","romaji":"tekido","level":3},{jp:"横断",trad:"crossing",kun:"おうだん","romaji":"ōdan","level":3},{jp:"いけない",trad:"must not do, bad, wrong, not good",kun:"","romaji":"ikenai","level":3},{jp:"布",trad:"cloth",kun:"ぬの","romaji":"nuno","level":3},{jp:"夕べ",trad:"evening",kun:"ゆうべ","romaji":"yūbe","level":3},{jp:"専攻",trad:"major subject, special study",kun:"せんこう","romaji":"senkō","level":3},{jp:"答案",trad:"examination paper, examination script",kun:"とうあん","romaji":"tōan","level":3},{jp:"寄付",trad:"contribution, donation",kun:"きふ","romaji":"kifu","level":3},{jp:"円",trad:"circle, money",kun:"えん","romaji":"en","level":3},{jp:"罹る",trad:"to suffer from",kun:"かかる","romaji":"kakaru","level":3},{jp:"パイロット",trad:"pilot",kun:"","romaji":"pairotto","level":3},{jp:"係",trad:"official, duty, person in charge",kun:"かかり","romaji":"kakari","level":3},{jp:"偶",trad:"even number, couple, man and wife, friend",kun:"たま","romaji":"tama","level":3},{jp:"コーチ",trad:"coach",kun:"","romaji":"kōchi","level":3},{jp:"検査",trad:"inspection (e.g. customs, factory), examination",kun:"けんさ","romaji":"kensa","level":3},{jp:"位",trad:"grade, rank, about",kun:"くらい","romaji":"kurai","level":3},{jp:"従う",trad:"to abide (by the rules), to obey, to follow, to accompany",kun:"したがう","romaji":"shitagau","level":3},{jp:"維持",trad:"maintenance, preservation",kun:"いじ","romaji":"iji","level":3},{jp:"陰",trad:"shade, shadow, other side",kun:"かげ","romaji":"kage","level":3},{jp:"節約",trad:"economising, saving",kun:"せつやく","romaji":"setsuyaku","level":3},{jp:"光景",trad:"scene, spectacle",kun:"こうけい","romaji":"kōkei","level":3},{jp:"他人",trad:"another person, unrelated person, outsider, stranger",kun:"たにん","romaji":"tanin","level":3},{jp:"祝い",trad:"celebration, festival",kun:"いわい","romaji":"iwai","level":3},{jp:"主婦",trad:"housewife, mistress",kun:"しゅふ","romaji":"shufu","level":3},{jp:"思わず",trad:"unintentional, spontaneous",kun:"おもわず","romaji":"omowazu","level":3},{jp:"移す",trad:"to remove, to transfer, to infect",kun:"うつす","romaji":"utsusu","level":3},{jp:"団体",trad:"organization, association",kun:"だんたい","romaji":"dantai","level":3},{jp:"日常",trad:"ordinary, regular, everyday, usual",kun:"にちじょう","romaji":"nichijō","level":3},{jp:"基本",trad:"foundation, basis, standard",kun:"きほん","romaji":"kihon","level":3},{jp:"敵",trad:"enemy, rival",kun:"てき","romaji":"teki","level":3},{jp:"しまう",trad:"to finish, to close, to do something completely",kun:"（終わる）","romaji":"(waru)","level":3},{jp:"こんにちは",trad:"hello, good day (daytime greeting, id)",kun:"","romaji":"konnichiha","level":3},{jp:"つまり",trad:"in short, in brief, in other words",kun:"","romaji":"tsumari","level":3},{jp:"ゴール",trad:"goal",kun:"","romaji":"gōru","level":3},{jp:"製品",trad:"manufactured goods, finished goods",kun:"せいひん","romaji":"seihin","level":3},{jp:"案内",trad:"information, guidance, leading",kun:"あんない","romaji":"annai","level":3},{jp:"電子",trad:"electron",kun:"でんし","romaji":"denshi","level":3},{jp:"それぞれ",trad:"each, every, either, respectively, severally",kun:"","romaji":"sorezore","level":3},{jp:"拡大",trad:"magnification, enlargement",kun:"かくだい","romaji":"kakudai","level":3},{jp:"とにかく",trad:"anyhow, at any rate, anyway, somehow or other, generally speaking, in any case",kun:"","romaji":"tonikaku","level":3},{jp:"一致",trad:"(1) coincidence, agreement, (2) conformity",kun:"いっち","romaji":"itchi","level":3},{jp:"どこか",trad:"somewhere, anywhere",kun:"","romaji":"dokoka","level":3},{jp:"ノック",trad:"(1) knock, (2) fungo (baseball)",kun:"","romaji":"nokku","level":3},{jp:"鉄",trad:"iron",kun:"てつ","romaji":"tetsu","level":3},{jp:"税金",trad:"tax, duty",kun:"ぜいきん","romaji":"zeikin","level":3},{jp:"四",trad:"four",kun:"し","romaji":"shi","level":3},
         {jp:"強力",trad:"herculean strength, mountain carrier-guide",kun:"きょうりょく","romaji":"kyōryoku","level":3},{jp:"現象",trad:"phenomenon",kun:"げんしょう","romaji":"genshō","level":3},{jp:"罰する",trad:"to punish, to penalize",kun:"ばっする","romaji":"bassuru","level":3},{jp:"主張",trad:"claim, request, insistence, assertion",kun:"しゅちょう","romaji":"shuchō","level":3},{jp:"音",trad:"sound, note",kun:"おん","romaji":"on","level":3},{jp:"轢く",trad:"to run somebody over (with vehicle), to knock someone down",kun:"ひく","romaji":"hiku","level":3},{jp:"小屋",trad:"hut, cabin, shed, (animal) pen",kun:"こや","romaji":"koya","level":3},{jp:"個人",trad:"individual, private person, personal, private",kun:"こじん","romaji":"kojin","level":3},{jp:"苦手",trad:"poor (at), weak (in), dislike (of)",kun:"にがて","romaji":"nigate","level":3},{jp:"通行",trad:"passage, passing",kun:"つうこう","romaji":"tsūkō","level":3},{jp:"宝",trad:"treasure",kun:"たから","romaji":"takara","level":3},{jp:"与える",trad:"to give, to present, to award",kun:"あたえる","romaji":"ataeru","level":3},
         {jp:"知恵",trad:"wisdom, wit, sagacity, sense, intelligence, advice",kun:"ちえ","romaji":"chie","level":3},{jp:"宝石",trad:"gem, jewel",kun:"ほうせき","romaji":"hōseki","level":3},{jp:"婚約",trad:"engagement, betrothal",kun:"こんやく","romaji":"kon'yaku","level":3},{jp:"嬉しい",trad:"happy, glad, pleasant",kun:"うれしい","romaji":"ureshii","level":3},{jp:"城",trad:"castle",kun:"しろ","romaji":"shiro","level":3},{jp:"はあ",trad:"",kun:"（感）","romaji":"()","level":3},{jp:"年寄",trad:"old people, the aged",kun:"としより","romaji":"toshiyori","level":3},{jp:"マーケット",trad:"market",kun:"","romaji":"māketto","level":3},{jp:"外交",trad:"diplomacy",kun:"がいこう","romaji":"gaikō","level":3},{jp:"観客",trad:"audience, spectator(s)",kun:"かんきゃく","romaji":"kankyaku","level":3},
         {jp:"衛星",trad:"satellite",kun:"えいせい","romaji":"eisei","level":3},{jp:"取り上げる",trad:"to take up, to pick up, to disqualify, to confiscate, to deprive",kun:"とりあげる","romaji":"toriageru","level":3},{jp:"義務",trad:"duty, obligation, responsibility",kun:"ぎむ","romaji":"gimu","level":3},{jp:"至る",trad:"to come, to arrive",kun:"いたる","romaji":"itaru","level":3},{jp:"候補",trad:"candidacy",kun:"こうほ","romaji":"kōho","level":3},{jp:"バッグ",trad:"bag, bug",kun:"","romaji":"baggu","level":3},{jp:"水準",trad:"(1) water level, (2) level, standard",kun:"すいじゅん","romaji":"suijun","level":3},{jp:"平ら",trad:"flatness, level, smooth, calm, plain",kun:"たいら","romaji":"taira","level":3},{jp:"作物",trad:"produce (e.g. agricultural), crops",kun:"さくもつ","romaji":"sakumotsu","level":3},{jp:"支払う",trad:"to pay",kun:"しはらう","romaji":"shiharau","level":3},{jp:"飯",trad:"(sl) meals, food",kun:"めし","romaji":"meshi","level":3},{jp:"型",trad:"mold, model, style, shape, data-type",kun:"かた","romaji":"kata","level":3},{jp:"収入",trad:"income, receipts, revenue",kun:"しゅうにゅう","romaji":"shūnyū","level":3},{jp:"広告",trad:"advertisement",kun:"こうこく","romaji":"kōkoku","level":3},{jp:"おじいさん",trad:"grandfather, male senior-citizen",kun:"","romaji":"ojiisan","level":3},{jp:"帰宅",trad:"returning home",kun:"きたく","romaji":"kitaku","level":3},{jp:"暮れ",trad:"year end, sunset, nightfall, end",kun:"くれ","romaji":"kure","level":3},{jp:"禁煙",trad:"No Smoking!",kun:"きんえん","romaji":"kin'en","level":3},{jp:"宜しい",trad:"(hon) good, OK, all right, fine, very well, will do, may, can",kun:"よろしい","romaji":"yoroshii","level":3},{jp:"替える",trad:"to exchange, to interchange, to substitute, to replace",kun:"かえる","romaji":"kaeru","level":3},{jp:"寧ろ",trad:"rather, better, instead",kun:"むしろ","romaji":"mushiro","level":3},{jp:"ビール",trad:"beer",kun:"","romaji":"bīru","level":3},{jp:"疑問",trad:"question, problem, doubt, guess",kun:"ぎもん","romaji":"gimon","level":3},{jp:"供給",trad:"supply, provision",kun:"きょうきゅう","romaji":"kyōkyū","level":3},{jp:"スタイル",trad:"style",kun:"","romaji":"sutairu","level":3},{jp:"議員",trad:"member of the Diet, congress or parliament",kun:"ぎいん","romaji":"giin","level":3},{jp:"スイッチ",trad:"switch",kun:"","romaji":"suitchi","level":3},{jp:"認める",trad:"to recognize, to appreciate, to approve, to admit, to notice",kun:"みとめる","romaji":"mitomeru","level":3},{jp:"最低",trad:"least, lowest, worst",kun:"さいてい","romaji":"saitei","level":3},{jp:"でも",trad:"but, however",kun:"でも","romaji":"demo","level":3},{jp:"科目",trad:"(school) subject, curriculum, course",kun:"かもく","romaji":"kamoku","level":3},{jp:"ほぼ",trad:"almost, roughly, approximately",kun:"","romaji":"hobo","level":3},{jp:"ただ",trad:"free of charge, mere, only",kun:"","romaji":"tada","level":3},{jp:"長期",trad:"long time period",kun:"ちょうき","romaji":"chōki","level":3},{jp:"空き",trad:"room, time to spare, emptiness",kun:"あき","romaji":"aki","level":3},{jp:"限る",trad:"to restrict, to limit, to confine",kun:"かぎる","romaji":"kagiru","level":3},{jp:"芝居",trad:"play, drama",kun:"しばい","romaji":"shibai","level":3},{jp:"土地",trad:"plot of land, lot, soil",kun:"とち","romaji":"tochi","level":3},{jp:"塀",trad:"wall, fence",kun:"へい","romaji":"hei","level":3},{jp:"離婚",trad:"divorce",kun:"りこん","romaji":"rikon","level":3},{jp:"共同",trad:"cooperation, association, collaboration, joint",kun:"きょうどう","romaji":"kyōdō","level":3},{jp:"住民",trad:"citizens, inhabitants, residents, population",kun:"じゅうみん","romaji":"jūmin","level":3},{jp:"街",trad:"(1) town, (2) street, road",kun:"まち","romaji":"machi","level":3},{jp:"感覚",trad:"sense, sensation",kun:"かんかく","romaji":"kankaku","level":3},{jp:"居眠り",trad:"dozing, nodding off",kun:"いねむり","romaji":"inemuri","level":3},{jp:"緊張",trad:"tension, mental strain, nervousness",kun:"きんちょう","romaji":"kinchō","level":3},{jp:"物音",trad:"sounds",kun:"ものおと","romaji":"monōto","level":3},{jp:"変化",trad:"goblin, ghost, apparition, bugbear",kun:"へんか","romaji":"henka","level":3},{jp:"節",trad:"tune, tone, knot, knob, point",kun:"ふし","romaji":"fushi","level":3},{jp:"検討",trad:"consideration, examination, investigation, study, scrutiny",kun:"けんとう","romaji":"kentō","level":3},{jp:"合わせる",trad:"to join together, to be opposite, to face, to unite",kun:"あわせる","romaji":"awaseru","level":3},

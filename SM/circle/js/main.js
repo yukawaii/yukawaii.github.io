@@ -52,7 +52,7 @@ const askQuestion = () => {
 
         const answerValue = document.createElement("div");
         answerValue.className = "answer-value";
-       answerValue.innerHTML = possibleAnswer[questionOrder]+"  " +possibleAnswer["kun"].split(' ')[0];
+       answerValue.innerHTML = possibleAnswer[questionOrder] ; // +"  " +possibleAnswer["kun"].split(' ')[0];
      answerElem.appendChild(answerValue);
     });
 }
