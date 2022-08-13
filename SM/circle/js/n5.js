@@ -575,8 +575,8 @@ const N5 = {
                     "kanji" : "買",
                     "onyomi" : "バイ",
                     "kunyomi" : "か.う",
-                    "definition" : "buy",
-                    "examples" : ["購買 こうばい purchase, buy (n, vs)","買収 ばいしゅう buying, purchase, corruption, bribery (n, vs)","売買 ばいばい trade, buying and selling (n, vs)"]
+                    "definition" : "Покупать, покупки, закупка",
+                    "examples" : ["購買 こうばい закупка, покупать","買収 ばいしゅう приобретать, подкупать, подкуп","売買 ばいばい торговля, купля-продажа"]
                 }
             ],
 
@@ -586,62 +586,62 @@ const N5 = {
                     "kanji" : "足",
                     "onyomi" : "ソク",
                     "kunyomi" : "あし, た.りる, た.る, た.す",
-                    "definition" : "leg, foot, be sufficient, counter for pairs of footwear",
-                    "examples" : ["遠足 えんそく excursion, outing, trip (n, vs)","手足 てあし one's hands and feet, limbs (n)","足す たす to add (numbers), to add (something), to top up (with something) (v5s, vt)"]
+                    "definition" : "Нога; сч.суфф. для обуви, носков, шагов, прыжков",
+                    "examples" : ["遠足 えんそく пешая экскурсия, поход","手足 てあし руки-ноги, конечности","足す たす прибавлять, добавлять", "足りない　たりない　не хватает, недостаточно"]
                 },{   
                     "kanji" : "車",
                     "onyomi" : "シャ",
                     "kunyomi" : "くるま",
-                    "definition" : "car",
-                    "examples" : ["下車 げしゃ alighting (from train, bus, etc.), getting off (n, vs)","貨車 かしゃ freight car, van (n)","外車 がいしゃ foreign automobile (n)"]
+                    "definition" : "Машина, автомобиль, повозка",
+                    "examples" : ["人力車　じんりきしゃ　рикша","下車 げしゃ высадка, высаживаться, сходить","貨車 かしゃ товарный вагон","外車 がいしゃ иностранный автомобиль"]
                 },{   
                     "kanji" : "週",
                     "onyomi" : "シュウ",
                     "kunyomi" : "",
-                    "definition" : "week",
-                    "examples" : ["今週 こんしゅう this week (n-adv, n-t)","週間 しゅうかん week, weekly (n)","週末 しゅうまつ weekend (n-adv, n)"]
+                    "definition" : "Неделя",
+                    "examples" : ["今週 こんしゅう эта неделя","週間 しゅうかん недельный срок","週末 しゅうまつ конец недели, выходные", "隔週に　かくしゅうに　каждую вторую неделю"]
                 },{   
                     "kanji" : "道",
                     "onyomi" : "ドウ, トウ",
                     "kunyomi" : "みち",
-                    "definition" : "road-way, street, district, journey, course, moral, teachings",
-                    "examples" : ["横断歩道 おうだんほどう pedestrian crossing (n)","回り道 まわりみち detour, diversion (n, vs)","横道 よこみち byway, side street, cross street, wrong way, digression (n)"]
+                    "definition" : "Путь, дорога, способ, средство",
+                    "examples" : ["横断歩道 おうだんほどう пешеходный переход","回り道 まわりみち объезд, обход","横道 よこみち ответвление дороги, дурной путь", "書道　しょどう　каллиграфия", "花道　かどう　икэбана, Путь цветка"]
                 },{   
                     "kanji" : "金",
                     "onyomi" : "キン, コン, ゴン",
                     "kunyomi" : "かね, かな-, -がね",
-                    "definition" : "gold",
-                    "examples" : ["金額 きんがく amount of money (n)","金 くがね gold (n, adj-no)","金庫 かねぐら safe, vault, treasury, provider of funds (n)"]
+                    "definition" : "Золото, деньги",
+                    "examples" : ["金額 きんがく сумма денег","金 きん золото","金庫 かねぐら казна", "お金　おかね　деньги", "金持ち　かねもち　богач"]
                 },{   
                     "kanji" : "長",
                     "onyomi" : "チョウ",
                     "kunyomi" : "なが.い, おさ",
-                    "definition" : "long, leader",
-                    "examples" : ["課長 かちょう section manager, section chief (n)","会長 かいちょう president (of a society), chairman (n)","学長 がくちょう university president (n)"]
+                    "definition" : "Длинный, главный",
+                    "examples" : ["課長 かちょう заведующий отделом","会長 かいちょう президент компании","学長 がくちょう президент студ.совета", "長の　ながの　долгий, вечный"]
                 },{   
                     "kanji" : "間",
                     "onyomi" : "カン, ケン",
                     "kunyomi" : "あいだ, ま, あい",
-                    "definition" : "interval, space",
-                    "examples" : ["間に合う まにあう to be in time for (v5s)","間も無く まもなく soon, before long (adv)","間違える まちがえる to make a mistake, to mistake something for something else (Ichidan verb, vt)"]
+                    "definition" : "Пространство, интервал",
+                    "examples" : ["間に合う まにあう успеть, быть вовремя","間も無く まもなく скоро, вскоре","間違える まちがえる ошибиться, перепутать", "昼間　ひるま　днём, дневное время"]
                 },{   
                     "kanji" : "雨",
                     "onyomi" : "ウ",
                     "kunyomi" : "あめ, あま-, -さめ",
                     "definition" : "rain",
-                    "examples" : ["雨戸 あまど sliding storm door (n)","雨天 うてん rainy weather (n)","雨漏り あまもり roof leak (n, vs)"]
+                    "examples" : ["雨戸 あまど раздвижные ставни","五月雨　さみだれ　ранний летний дождь","雨漏り あまもり течь в крыше", "時雨　しぐれ　моросящий дождь поздней осенью"]
                 },{   
                     "kanji" : "電",
                     "onyomi" : "デン",
                     "kunyomi" : "",
-                    "definition" : "electricity",
-                    "examples" : ["電 いなづま (flash of) lightning (n)","停電 ていでん power outage, electricity outage, blackout (n, vs)","終電 しゅうでん last train (n)"]
+                    "definition" : "Электричество",
+                    "examples" : ["電 いなづま молния","停電 ていでん отключение электричества","終電 しゅうでん последний поезд", "充電　じゅうでん　подзарядка, заряжать"]
                 },{   
                     "kanji" : "食",
                     "onyomi" : "ショク, ジキ",
                     "kunyomi" : "く.う, く.らう, た.べる, は.む",
-                    "definition" : "eat, food",
-                    "examples" : ["会食 かいしょく dining together, mess (n, vs)","外食 がいしょく eating out (n, vs)","間食 かんしょく eating between meals, snacking (n, vs)"]
+                    "definition" : "Еда, есть, кушать",
+                    "examples" : ["会食 かいしょく совместный обед/ужин","外食 がいしょく есть вне дома, идти в ресторан/кафе","間食 かんしょく перекус"]
                 }
             ],
     "Ур. 11" : 
@@ -650,26 +650,26 @@ const N5 = {
                     "kanji" : "飲",
                     "onyomi" : "イン, オン",
                     "kunyomi" : "の.む, -の.み",
-                    "definition" : "",
-                    "examples" : ["飲水 のみみず drinking water (n)","飲物 のみもの drink, beverage (n)","飲む のむ to drink (u-v)"]
+                    "definition" : "Пить, напиток",
+                    "examples" : ["飲水 のみみず питьевая вода","飲物 のみもの напиток","飲む のむ пить", "飲んだくれ　のんだくれ　пьянчуга"]
                 },{   
                     "kanji" : "駅",
                     "onyomi" : "エキ",
                     "kunyomi" : "",
-                    "definition" : "station",
-                    "examples" : ["駅員 えきいん station attendant (n)","駅前 えきまえ in front of station (n)","駅弁 えきべん boxed lunch bought at a station (often a local specialty) (n)"]
+                    "definition" : "Станция",
+                    "examples" : ["駅員 えきいん работник станции","駅前 えきまえ перед ж/д станцией","駅弁 えきべん обед в коробки, продающийся на вокзале"]
                 },{   
                     "kanji" : "高",
                     "onyomi" : "コウ",
                     "kunyomi" : "たか.い, たか, -だか, たか.まる, たか.める",
-                    "definition" : "tall, high, expensive",
-                    "examples" : ["高さ たかさ height (n)","高まる たかまる to rise, to swell, to be promoted (v5r, intransitive verb)","高める たかめる to raise, to lift, to boost, to enhance (Ichidan verb, vt)"]
+                    "definition" : "Высокий, дорогой",
+                    "examples" : ["高さ たかさ высота","高まる たかまる повышаться, расти","高める たかめる повышать", "最高　さいこう　наилучший; Класс! Отлично!"]
                 },{   
                     "kanji" : "魚",
                     "onyomi" : "ギョ",
                     "kunyomi" : "うお, さかな, -ざかな",
-                    "definition" : "fish",
-                    "examples" : ["金魚 きんぎょ goldfish (n)","魚 うお fish (n)","魚釣り　さかなつり fishing (n)"]
+                    "definition" : "Рыбка",
+                    "examples" : ["金魚 きんぎょ золотая рыбка","魚 うお рыба","魚釣り　さかなつり рыбалка", "呑舟の魚 どんしゅうのうお　громадная рыба, выдающийся человек, крупная фигура"]
                 }
             ],
 }
