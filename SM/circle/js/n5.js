@@ -176,7 +176,7 @@ const N5 = {
                     "kanji" : "午",
                     "onyomi" : "ゴ",
                     "kunyomi" : "うま",
-                    "definition" : "noon, sign of the horse, 11AM-1PM, seventh sign of Chinese zodiac",
+                    "definition" : "Полдень, лошадь (кит.гороскоп)",
                     "examples" : ["午後 ごご после полудня","午前 ごぜん до полудня","午 うま Лошадь (кит.гороскоп)", "丙午 ひのえうま год Огненной Лошадь"]
                 },{   
                     "kanji" : "半",
@@ -235,26 +235,26 @@ const N5 = {
                     "kanji" : "国",
                     "onyomi" : "コク",
                     "kunyomi" : "くに",
-                    "definition" : "country",
-                    "examples" : ["王国 おうこく kingdom, monarchy (n)","外国 がいこく foreign country (n)","帰国 きこく return to one's country (n, vs)"]
+                    "definition" : "Страна",
+                    "examples" : ["王国 おうこく королевство","外国 がいこく иностранное государство, заграница","帰国 きこく возвращение в свою страну"]
                 },{   
                     "kanji" : "土",
                     "onyomi" : "ド, ト",
                     "kunyomi" : "つち",
-                    "definition" : "soil, earth, ground, Turkey",
-                    "examples" : ["国土 こくど country, territory, domain, realm (n)","土間 どま dirt floor (n)","土産 みやげ present, souvenir (n)"]
+                    "definition" : "Земля, почва",
+                    "examples" : ["国土 こくど территория страны, страна, государственный","土間 どま земляной пол","土産 みやげ сувенир, подарок"]
                 },{   
                     "kanji" : "外",
                     "onyomi" : "ガイ, ゲ",
                     "kunyomi" : "そと, ほか, はず.す, はず.れる, と-",
-                    "definition" : "outside",
-                    "examples" : ["以外 いがい with the exception of, excepting (n-adv)","屋外 おくがい outdoors (n)","海外 かいがい foreign, abroad, overseas (n)"]
+                    "definition" : "Снаружи",
+                    "examples" : ["以外 いがい за исключением, помимо, кроме","屋外 на открытом воздухе, вне помещения, открытое пространство","海外 かいがい зарубежный, заграница"]
                 },{   
                     "kanji" : "多",
                     "onyomi" : "タ",
                     "kunyomi" : "おお.い, まさ.に, まさ.る",
-                    "definition" : "many, frequent, much",
-                    "examples" : ["多湿 たしつ high humidity (adj-na, n)","多少 たしょう more or less, somewhat, a little, some (adj-no, adv, n)","多数 たすう great number, countless, majority (n-adv, n, adj-no)"]
+                    "definition" : "Много, частый, обильный",
+                    "examples" : ["多湿 たしつ высокая влажность","多少 たしょう много или мало, несколько","多数 たすう большое количество, многочисленный", "多目的　たもくてき　универсальный, многоцелевой, многофункциональный"]
                 }
             ],
     "Ур. 05" : 
@@ -263,62 +263,62 @@ const N5 = {
                     "kanji" : "大",
                     "onyomi" : "ダイ, タイ",
                     "kunyomi" : "おお-, おお.きい, -おお.いに",
-                    "definition" : "large, big",
-                    "examples" : ["寛大 かんだい tolerance, liberality, leniency (adj-na, n)","巨大 きょだい huge, gigantic, enormous (adj-na, n)","弘大 こうだい huge, very large, vast, extensive, magnificent, grand (adj-na)"]
+                    "definition" : "Большой",
+                    "examples" : ["寛大 かんだい великодушный, терпимый, толерантный","巨大 きょだい огромный, гигантский","弘大 こうだい величественный, громадный, обширный"]
                 },{   
                     "kanji" : "天",
                     "onyomi" : "テン",
                     "kunyomi" : "あまつ, あめ, あま-",
-                    "definition" : "heavens, sky, imperial",
-                    "examples" : ["雨天 うてん rainy weather (n)","楽天的 らくてんてき optimistic (adj-na, n)","晴天 せいてん fine weather (n)"]
+                    "definition" : "Небеса, небо",
+                    "examples" : ["雨天 うてん дождливая погода","楽天的 らくてんてき оптимистичный","晴天 せいてん ясная погода", "天国　てんごく　рай", "天晴れ　あっぱれ　восхитительный, браво!"]
                 },{   
                     "kanji" : "女",
                     "onyomi" : "ジョ, ニョ, ニョウ",
                     "kunyomi" : "おんな, め",
-                    "definition" : "woman, female",
-                    "examples" : ["悪女 あくじょ wicked or ugly woman (n)","王女 おうじょ princess (n)","処女 しょじょ virgin, maiden (n)"]
+                    "definition" : "Женщина, девочка",
+                    "examples" : ["悪女 あくじょ некрасивая или злая женщина","王女 おうじょ принцесса","処女 しょじょ девственница", "乙女　おとめ　девица, девушка"]
                 },{   
                     "kanji" : "子",
                     "onyomi" : "シ, ス, ツ",
                     "kunyomi" : "こ, -こ, ね",
-                    "definition" : "child, sign of the rat, 11PM-1AM, first sign of Chinese zodiac",
-                    "examples" : ["倚子 いす chair, post, office, position (n)","羽子 はね feather, plume, wing, blade (fan, propeller, etc.) (n)","原子 げんし atom (n)"]
+                    "definition" : "Ребёнок, детёныш, крыса (кит.гороскоп)",
+                    "examples" : ["倚子 いす стул","江戸っ子　えどっこ　(настоящий) токиец","原子 げんし атом", "調子　ちょうし　состояние здоровья, настроение момента, интонация, тональность", "様子　ようす　обстоятельства, вид, облик"]
                 },{   
                     "kanji" : "学",
                     "onyomi" : "ガク",
                     "kunyomi" : "まな.ぶ",
-                    "definition" : "study, learning, science",
-                    "examples" : ["医学 いがく medical science, medicine (n)","化学 ばけがく chemistry, chemical (company) (n)","科学 かがく science (n"]
+                    "definition" : "Учёба, наука",
+                    "examples" : ["医学 いがく медицина","化学 かがく химия, химический", "科学 かがく наука", "文学　ぶんがく　литература","学ぶ　まなぶ　учиться, изучать"]
                 },{   
                     "kanji" : "安",
                     "onyomi" : "アン",
                     "kunyomi" : "やす.い, やす.まる, やす, やす.らか",
-                    "definition" : "relax, cheap, low, quiet, rested, contented, peaceful",
-                    "examples" : ["安神 あんしん relief, peace of mind (adj-na, n, vs)","安静 あんせい rest (adj-na, n)","安全 あんぜん safety, security (adj-na, n)"]
+                    "definition" : "Дешёвый, несложный, безопасный, мирный",
+                    "examples" : ["安心 あんしん душевное спокойствие, облегчение","安静 あんせい покой, отдых","安全 あんぜん безопасность", "安っぽい　やすっぽい　дешёвка, безвкусный"]
                 },{   
                     "kanji" : "小",
                     "onyomi" : "ショウ",
                     "kunyomi" : "ちい.さい, こ-, お-, さ-",
-                    "definition" : "little, small",
-                    "examples" : ["最小 さいしょう smallest, least (n)","小さい ちいさい small, little, tiny (adj)","小雨 こあめ light rain, drizzle (n)"]
+                    "definition" : "Маленький",
+                    "examples" : ["最小 さいしょう наименьший","小さい ちいさい маленький, крохотный","小雨 こさめ мелкий дождик, морось", "小数　しょうすう　десятичная дробь"]
                 },{   
                     "kanji" : "少",
                     "onyomi" : "ショウ",
                     "kunyomi" : "すく.ない, すこ.し",
-                    "definition" : "few, little",
-                    "examples" : ["減少 げんしょう decrease, reduction, decline (n, vs)","少数 しょうすう minority, few (n)","少年 しょうねん boys, juveniles (n)"]
+                    "definition" : "Немного, мало, чуть-чуть",
+                    "examples" : ["減少 げんしょう уменьшение, снижение","少数 しょうすう малое число, меньшинство","少年 しょうねん мальчик, подросток, малолетний"]
                 },{   
                     "kanji" : "山",
                     "onyomi" : "サン, セン",
                     "kunyomi" : "やま",
-                    "definition" : "mountain",
-                    "examples" : ["火山 かざん volcano (n)","山登り やまのぼり mountain climbing, mountaineering (n)","山脈 やまなみ mountain range (n)"]
+                    "definition" : "Гора",
+                    "examples" : ["火山 かざん вулкан","山登り やまのぼり подъём на гору","山脈 やまなみ горный хребет", "富士山　ふじさん　гора Фудзияма", "山出し　やまだし　деревенщина"]
                 },{   
                     "kanji" : "川",
                     "onyomi" : "セン",
                     "kunyomi" : "かわ",
-                    "definition" : "stream, river, river or 3-stroke river radical (no. 47)",
-                    "examples" : ["河川 かせん rivers (n)","小川 おがわ streamlet, brook (n)","川原 かわはら dry river bed, river beach (n)"]
+                    "definition" : "Река, поток",
+                    "examples" : ["河川 かせん реки","小川 おがわ ручей, речушка","川口　かわぐち　устье", "川獺　かわうそ　выдра", "川蝉　かわせみ　зимородок"]
                 }
             ],
 
@@ -328,62 +328,62 @@ const N5 = {
                     "kanji" : "左",
                     "onyomi" : "サ, シャ",
                     "kunyomi" : "ひだり",
-                    "definition" : "left",
-                    "examples" : ["左右 さゆう left and right, influence, control, domination (n, vs)","左手 ひだりて left hand (n)","左翼 さよく left wing (n)"]
+                    "definition" : "Лево, левый, слева",
+                    "examples" : ["左右 さゆう лево и право, контролировать","左手 ひだりて левая рука/сторона","左翼 さよく левое крыло/фланг"]
                 },{   
                     "kanji" : "年",
                     "onyomi" : "ネン",
                     "kunyomi" : "とし",
-                    "definition" : "year, counter for years",
-                    "examples" : ["学年 がくねん year in school, grade in school (n)","去年 きょねん last year (n-adv, n-t)","再来年 さらいねん year after next (n-adv, n-t)"]
+                    "definition" : "Год",
+                    "examples" : ["学年 がくねん школьные годы","去年 きょねん прошлый год","再来年 さらいねん через 2 года, год после следующего", "お年寄り　おとしより　пожилой человек"]
                 },{   
                     "kanji" : "店",
                     "onyomi" : "テン",
                     "kunyomi" : "みせ, たな",
-                    "definition" : "store, shop",
-                    "examples" : ["開店 かいてん (grand) opening of shop (n, vs)","喫茶店 きっさてん coffee lounge, coffee shop, (rather formal) cafe (n)","支店 してん branch store (office) (n)"]
+                    "definition" : "Магазин",
+                    "examples" : ["開店 かいてん первое открытие магазина","喫茶店 きっさてん кофейня, кафе","支店 してん филиал", "店晒し　たなざらし　залежавшийся товар"]
                 },{   
                     "kanji" : "後",
                     "onyomi" : "ゴ, コウ",
                     "kunyomi" : "のち, うし.ろ, うしろ, あと, おく.れる",
-                    "definition" : "behind, back, later",
-                    "examples" : ["後 あと behind, rear, after, later (n, adj-no, n-adv)","後 うしろ back, behind, rear (n)","後回し あとまわし putting off, postponing (n)"]
+                    "definition" : "Позади, сзади; после того, как...",
+                    "examples" : ["後 あと после, позади, потомок, будущее","後 うしろ позади","後回し あとまわし откладывание, отсрочка", "後々　のちのち　отдалённое будущее"]
                 },{   
                     "kanji" : "手",
                     "onyomi" : "シュ, ズ",
                     "kunyomi" : "て, て-, -て, た-",
-                    "definition" : "hand",
-                    "examples" : ["握手 あくしゅ handshake (n, vs)","右手 みぎて right hand (n)","下手 へた unskillful, poor, awkward, imprudent, untactful (adj-na, n)"]
+                    "definition" : "Рука",
+                    "examples" : ["握手 あくしゅ рукопожатие","右手 みぎて правая рука","下手 へた неумелый, неловкий, что-то плохо уметь", "手術　しゅじゅつ　хирургическая операция"]
                 },{   
                     "kanji" : "新",
                     "onyomi" : "シン",
                     "kunyomi" : "あたら.しい, あら.た, あら-, にい-",
-                    "definition" : "new",
-                    "examples" : ["維新 いしん restoration (eg Meiji) (n)","新た あらた new, fresh, novel, newly, freshly, re- (adj-na, n, adv)","新刊 しんかん new book, new publication (n)"]
+                    "definition" : "Новый",
+                    "examples" : ["維新 いしん реставрация","新た あらた новый, заново","新刊 しんかん новая публикация, новая книга", "新教　しんきょう　протестанство"]
                 },{   
                     "kanji" : "日",
                     "onyomi" : "ニチ, ジツ",
                     "kunyomi" : "ひ, -び, -か",
-                    "definition" : "day, sun, Japan, counter for days",
-                    "examples" : ["火曜日 かようび Tuesday (n-adv, n-t)","記念日 きねんび holiday, anniversary, memorial day (n)","休日 きゅうじつ holiday, day off (n-adv, n)"]
+                    "definition" : "День, солнце",
+                    "examples" : ["火曜日 かようび Вторник","記念日 きねんび праздник, юбилей, памятный день","休日 きゅうじつ выходной, праздник", "日々　ひび　ежедневно, день за днём"]
                 },{   
                     "kanji" : "時",
                     "onyomi" : "ジ",
                     "kunyomi" : "とき, -どき",
-                    "definition" : "time, hour",
-                    "examples" : ["時 とき time, hour, occasion, moment (n-adv, n)","時間 じかん time, hours (n-adv, n, counter）","時間割り じかんわり timetable, schedule (n)"]
+                    "definition" : "Время, час",
+                    "examples" : ["時 とき время, час, момент","時間 じかん время","時間割り じかんわり расписание", "時々　ときどき　иногда", "時めく　ときめく　пользоваться успехом, процветать"]
                 },{   
                     "kanji" : "書",
                     "onyomi" : "ショ",
                     "kunyomi" : "か.く, -が.き, -がき",
-                    "definition" : "write",
-                    "examples" : ["下書き したがき rough copy, draft, draught (n, vs)","教科書 きょうかしょ textbook, text book (n)","原書 げんしょ original document (n)"]
+                    "definition" : "Писать, рисовать",
+                    "examples" : ["下書き したがき черновик, набросок","教科書 きょうかしょ учебник","原書 げんしょ оригинальный документ", "証明書　しょうめいしょ　удостоверение, сертификат"]
                 },{   
                     "kanji" : "月",
                     "onyomi" : "ゲツ, ガツ",
                     "kunyomi" : "つき",
-                    "definition" : "month, moo",
-                    "examples" : ["月刊 げっかん monthly publication (n)","月給 げっきゅう monthly salary (n)","月見 つきみ viewing the moon (n)"]
+                    "definition" : "Луна, месяц",
+                    "examples" : ["月刊 げっかん ежемесячный выпуск","月給 げっきゅう месячная зарплата","月見 つきみ лубование луной", "四月　しがつ　апрель"]
                 }
             ],
     "Ур. 07" : 
@@ -392,62 +392,62 @@ const N5 = {
                     "kanji" : "木",
                     "onyomi" : "ボク, モク",
                     "kunyomi" : "き, こ-",
-                    "definition" : "tree, wood",
-                    "examples" : ["材木 ざいもく lumber, timber (n)","木ノ葉 きのは foliage, leaves of trees (n)","木造 もくぞう wooden, made of wood (adj-no, n)"]
+                    "definition" : "Дерево",
+                    "examples" : ["材木 ざいもく лесоматериал","木の葉 きのは лист дерева","木造 もくぞう сделанный из дерева", "木彫り　きぼり　резьба по дерево"]
                 },{   
                     "kanji" : "本",
                     "onyomi" : "ホン",
                     "kunyomi" : "もと",
-                    "definition" : "book, present, main, true, real, counter for long cylindrical things",
-                    "examples" : ["絵本 えほん picture book (n)","基本 きほん foundation, basis, standard (n, adj-no)","脚本 きゃくほん script, screenplay, scenario (n)"]
+                    "definition" : "Основа, источник, книга",
+                    "examples" : ["絵本 えほん иллюстрированная книга","基本 きほん основа, стандарт, база","脚本 きゃくほん сценарий, пьеса, либретто", "本物　ほんもの　настоящий, подлинник"]
                 },{   
                     "kanji" : "来",
                     "onyomi" : "ライ, タイ",
                     "kunyomi" : "く.る, きた.る, きた.す, き.たす, き.たる, き, こ",
-                    "definition" : "come, due, next, cause, become",
-                    "examples" : ["以来 いらい since, henceforth (n-adv, n-t)","外来語 がいらいご borrowed word, foreign origin word (n)","再来年 さらいねん year after next (n-adv, n-t)"]
+                    "definition" : "Приходить, будущее",
+                    "examples" : ["以来 いらい с тех пор, как...","外来語 がいらいご заимствованное слово","再来年 さらいねん год после следующего", "未来　みらい　будущее"]
                 },{   
                     "kanji" : "東",
                     "onyomi" : "トウ",
                     "kunyomi" : "ひがし",
-                    "definition" : "east",
-                    "examples" : ["東欧 とうおう Eastern Europe (n)","東西 とうざい East and West, whole country, Western and Eastern (n)","東部 とうぶ eastern part (n)"]
+                    "definition" : "Восток",
+                    "examples" : ["東欧 とうおう Восточная Европа","東西 とうざい восток и запад","東部 とうぶ восточная часть", "東大　とうだい　Токийский университет"]
                 },{   
                     "kanji" : "校",
                     "onyomi" : "コウ, キョウ",
                     "kunyomi" : "",
-                    "definition" : "exam, school, printing, proof, correction",
-                    "examples" : ["学校 がっこう school (n)","校則 こうそく school regulations (n)","校長 こうちょう principal, headmaster (n)"]
+                    "definition" : "Школа, корректура",
+                    "examples" : ["学校 がっこう школа","校則 こうそく школьные правила","校長 こうちょう директор школы", "校正　こうせい　корректура, калибровка"]
                 },{   
                     "kanji" : "母",
                     "onyomi" : "ボ",
                     "kunyomi" : "はは, も",
-                    "definition" : "mama, mother",
-                    "examples" : ["義母 ぎぼ mother-in-law, foster mother, step mother (n)","祖母 うば grandmother (n)","父母 ちちはは father and mother, parents (n)"]
+                    "definition" : "Мать, мама",
+                    "examples" : ["義母 ぎぼ мачеха, тёща, свекровь","祖母 うば бабушка","父母 ちちはは отец и мать, родители", "賢母　けんぼ　мудрая мать", "保母　ほぼ　няня, воспитательница"]
                 },{   
                     "kanji" : "毎",
                     "onyomi" : "マイ",
                     "kunyomi" : "ごと, -ごと.に",
-                    "definition" : "every",
-                    "examples" : ["毎週 まいしゅう every week (n-adv, n-t)","毎朝 まいちょう every morning (n-adv, n-t)","毎度 まいど each time, thank you for your continued patronage (n-adv, n-t)"]
+                    "definition" : "Каждый",
+                    "examples" : ["毎週 まいしゅう каждую неделю","毎朝 まいちょう каждое утро","毎度 まいど каждый раз, всегда", "夜毎に　よごとに　каждую ночь"]
                 },{   
                     "kanji" : "気",
                     "onyomi" : "キ, ケ",
                     "kunyomi" : "いき",
-                    "definition" : "spirit, mind, air, atmosphere, mood",
-                    "examples" : ["意気地 いきじ self-respect, self-confidence, guts, backbone (n)","陰気 いんき gloom, melancholy (adj-na, n)","外気 がいき open air (n)"]
+                    "definition" : "Дух, энергия, настроение, пар",
+                    "examples" : ["意気地 いきじ самоуважение","陰気 いんき мрачный, угрюмый","外気 がいき на открытом воздухе", "気さく　きさく　искренний, открытый", "排気　はいき　выхлоп"]
                 },{   
                     "kanji" : "水",
                     "onyomi" : "スイ",
                     "kunyomi" : "みず, みず-",
-                    "definition" : "water",
-                    "examples" : ["海水 かいすい ocean water (n)","洪水 こうずい flood (n)","降水 こうすい rainfall, precipitation (n)"]
+                    "definition" : "Вода",
+                    "examples" : ["海水 かいすい морская вода","洪水 こうずい наводнение","降水 こうすい дождевые осадки", "水っぽい　みずっぽい　водянистый"]
                 },{   
                     "kanji" : "火",
                     "onyomi" : "カ",
                     "kunyomi" : "ひ, -び, ほ-",
-                    "definition" : "fire",
-                    "examples" : ["火災 かさい conflagration, fire (n)","火山 かざん volcano (n)","火事 かじ fire, conflagration (n)"]
+                    "definition" : "Огонь",
+                    "examples" : ["火災 かさい пожар","火山 かざん вулкан","火事 かじ возгорание"]
                 }
             ],
 
@@ -457,26 +457,26 @@ const N5 = {
                     "kanji" : "父",
                     "onyomi" : "フ",
                     "kunyomi" : "ちち",
-                    "definition" : "father",
-                    "examples" : ["義父 ぎふ father-in-law, foster father, stepfather (n)","神父 しんぷ Catholic priest, abbe (n)","祖父 そぶ grandfather, old man (n)"]
+                    "definition" : "Отец, папа",
+                    "examples" : ["義父 ぎふ отчим, свёкр, тесть","神父 しんぷ католический священник","祖父 そぶ дедушка", "父親　ちちおや　отец"]
                 },{   
                     "kanji" : "生",
                     "onyomi" : "セイ, ショウ",
                     "kunyomi" : "い.きる, い.かす, い.ける, う.まれる, う.まれ, うまれ, う.む, お.う, は.える, は.やす, き, なま, なま-, な.る, な.す, む.す, -う",
-                    "definition" : "life, genuine, birth",
-                    "examples" : ["一生けん命 いっしょうけんめい very hard, with utmost effort (adj-na, n-adv, n)","生す なす to build up, to establish, to form, to become (a state), to accomplish (v5s, vt, auxiliary verb)","学生 がくせい student (esp. a university student) (n)"]
+                    "definition" : "Жизнь, рождение",
+                    "examples" : ["一生けん命 いっしょうけんめい изо всех сил","生む　うむ　рожать","学生 がくせい студент", "生物学　せいぶつがく　биология", "生年月日　せいねんがっぴ　дата рождения"]
                 },{   
                     "kanji" : "男",
                     "onyomi" : "ダン, ナン",
                     "kunyomi" : "おとこ, お",
-                    "definition" : "male",
-                    "examples" : ["二男 じなん second son (n)","男らしい おとこらしい manly (adj)","男子 だんし youth, young man (n)"]
+                    "definition" : "Мужчина, мальчик",
+                    "examples" : ["二男 じなん второй сын","男らしい おとこらしい мужественный","男子 だんし юноша, парень", "男爵　だんしゃく　барон", "下男　げなん　слуга"]
                 },{   
                     "kanji" : "白",
                     "onyomi" : "ハク, ビャク",
                     "kunyomi" : "しろ, しら-, しろ.い",
-                    "definition" : "white",
-                    "examples" : ["空白 くうはく blank space, vacuum, space, null (NUL) (adj-na, n)","紅白 こうはく red and white, colours for festive or auspicious occasions (colors) (n)","告白 こくはく confession, acknowledgement, acknowledgment, profession of love, confession of sins (eg the confessional) (n, vs)"]
+                    "definition" : "Белый",
+                    "examples" : ["空白 くうはく пустой бланк, белое пятно, пустота, вакуум","紅白 こうはく красный и белый, красно-белый","告白 こくはく признание в любви/преступлении, исповедь"]
                 },{   
                     "kanji" : "百",
                     "onyomi" : "ヒャク, ビャク",
@@ -487,32 +487,32 @@ const N5 = {
                     "kanji" : "目",
                     "onyomi" : "モク, ボク",
                     "kunyomi" : "め, -め, ま-",
-                    "definition" : "eye, class, look, insight, experience, care, favor",
-                    "examples" : ["ひと目 ひとめ (a) glance, (a) look, (a) glimpse, bird's-eye view (n-adv, n-t, n, n)","引け目 ひけめ weakness, drawing back (n)","項目 こうもく item, data item (n)"]
+                    "definition" : "Глаз, взгляд",
+                    "examples" : ["ひと目 ひとめ один взгляд, (で) с одного взгляда","引け目 ひけめ слабое место, чувство неполноценности","項目 こうもく параграф, пункт"]
                 },{   
                     "kanji" : "社",
                     "onyomi" : "シャ",
                     "kunyomi" : "やしろ",
-                    "definition" : "company, firm, office, association, shrine",
-                    "examples" : ["会社 かいしゃ company, corporation (n)","社会 しゃかい society, public (n)","支社 ししゃ branch office (n)"]
+                    "definition" : "Фирма, компания, ассоциация, синтоистский храм",
+                    "examples" : ["会社 かいしゃ компания, корпорация","社会 しゃかい общество","支社 ししゃ филиал", "神社　じんじゃ　синтоистское святилище"]
                 },{   
                     "kanji" : "空",
                     "onyomi" : "クウ",
                     "kunyomi" : "そら, あ.く, あ.き, あ.ける, から, す.く, す.かす, むな.しい",
-                    "definition" : "empty, sky, void, vacant, vacuum",
-                    "examples" : ["空地 くうち vacant land (n)","空っぽ からっぽ empty, vacant, hollow (adj-no, adj-na, n)","空間 くうかん space, room, airspace (n)"]
+                    "definition" : "Небо, воздух, пустота, вакуум",
+                    "examples" : ["空き缶　あきかん　пустая банка","空っぽ からっぽ пустой","空間 くうかん пространство", "空手　からて　пустые руки, каратэ"]
                 },{   
                     "kanji" : "立",
                     "onyomi" : "リツ, リュウ, リットル",
                     "kunyomi" : "た.つ, -た.つ, た.ち-, た.てる, -た.てる, た.て-, たて-, -た.て, -だ.て, -だ.てる",
-                    "definition" : "stand up",
-                    "examples" : ["確立 かくりつ establishment (n, vs)","起立 きりつ standing up (n, vs)","逆立ち さかだち handstand, headstand (n, vs)"]
+                    "definition" : "Стоять, вставать",
+                    "examples" : ["確立 かくりつ устанавливать, утверждать","起立 きりつ подъем; Встать!","逆立ち さかだち стойка на руках/голове"]
                 },{   
                     "kanji" : "耳",
                     "onyomi" : "ジ",
                     "kunyomi" : "みみ",
-                    "definition" : "ear",
-                    "examples" : ["耳障り みみざわり hurting one's ears (adj-na, n)","耳鼻科 じびか otolaryngology, concerning the ear, nose, and throat (n)","耳許 みみもと close to the ear (n)"]
+                    "definition" : "Ухо",
+                    "examples" : ["耳障り みみざわり режущий ухо","耳鼻科 じびか отоларинголог","耳許 みみもと у самого уха", "耳順　じじゅん　60-летний возраст"]
                 }
             ],
     "Ур. 09" : 
@@ -521,56 +521,56 @@ const N5 = {
                     "kanji" : "聞",
                     "onyomi" : "ブン, モン",
                     "kunyomi" : "き.く, き.こえる",
-                    "definition" : "hear, ask, listen",
-                    "examples" : ["見聞 けんもん information, observation (n, vs)","新聞社 しんぶんしゃ newspaper company (n)","聞かす きかす to inform about, to read to, to sing for (v5s, vt)"]
+                    "definition" : "Вопрос, слышать, слушать, спрашивать",
+                    "examples" : ["問わず　とわず　независимо от...","新聞社 しんぶんしゃ газетное издательство","聞かす きかす давать знать, рассказывать", "問題　もんだい　проблема, вопрос"]
                 },{   
                     "kanji" : "花",
                     "onyomi" : "カ, ケ",
                     "kunyomi" : "はな",
-                    "definition" : "flower",
-                    "examples" : ["火花 ひばな spark (n)","花瓣 かべん (flower) petal (n)","花嫁 はなよめ bride (n)"]
+                    "definition" : "Цветочек",
+                    "examples" : ["火花 ひばな искра","花瓣 かべん лепесток","花嫁 はなよめ невеста", "生け花　いけばな　икэбана, живые цветы", "花粉　かふん　пыльца"]
                 },{   
                     "kanji" : "行",
                     "onyomi" : "コウ, ギョウ, アン",
                     "kunyomi" : "い.く, ゆ.く, -ゆ.き, -ゆき, -い.き, -いき, おこな.う, おこ.なう",
-                    "definition" : "going, journey",
-                    "examples" : ["奥行 おくゆき depth, length (n)","急行 きゅうこう express (eg train that bypasses many stations) (n, vs)","強行 きょうこう forcing, enforcement, forced, enforced (n, vs, adj-na)"]
+                    "definition" : "Идти, уходить, организовывать, проводить, осуществлять",
+                    "examples" : ["奥行 おくゆき глубина, длина","急行 きゅうこう скоростной (поезд)","強行 きょうこう форсировать, пробиваться", "行く　いく　идти; испытать оргазм, кончить (слэнг)"]
                 },{   
                     "kanji" : "西",
                     "onyomi" : "セイ, サイ, ス",
                     "kunyomi" : "にし",
-                    "definition" : "west, Spain",
-                    "examples" : ["西欧 せいおう Western Europe (n)","西部 せいぶ the west, western part, the West (n)","西洋人 せいようじん Western people (n)"]
+                    "definition" : "Запад, западный",
+                    "examples" : ["西欧 せいおう Западная Европа","西部 せいぶ западная часть","西洋人 せいようじん европейцы, люди Запада", "西南　せいなん　юго-запад"]
                 },{   
                     "kanji" : "見",
                     "onyomi" : "ケン",
                     "kunyomi" : "み.る, み.える, み.せる",
-                    "definition" : "see, hopes, chances, idea, opinion, look at, visible",
-                    "examples" : ["いけん opinion, view (n, vs)","花見 はなみ cherry blossom viewing, flower viewing (n, vs)","会見 かいけん interview, audience (n, vs)"]
+                    "definition" : "Видеть, смотреть, мнение",
+                    "examples" : ["意見　いけん мнение, точка зрения","花見 はなみ любование сакурой, цветами","会見 かいけん встреча, интервью, аудиенция", "見物　けんぶつ　осмотр, экскурсия"]
                 },{   
                     "kanji" : "言",
                     "onyomi" : "ゲン, ゴン",
                     "kunyomi" : "い.う, こと",
-                    "definition" : "say",
-                    "examples" : ["遺言 いげん will, testament, last request (n, vs","言出す いいだす to start talking, to speak, to tell (v5s, vt)","言返す いいかえす to repeat, to talk back, to answer back (v5s, vt)"]
+                    "definition" : "Говорить, сказать, называться",
+                    "examples" : ["遺言 ゆいごん завещание, последняя воля","言出す いいだす заговорить, начать говорить, предлагать","言返す いいかえす говорить в ответ, возражать"]
                 },{   
                     "kanji" : "話",
                     "onyomi" : "ワ",
                     "kunyomi" : "はな.す, はなし",
-                    "definition" : "tale, talk",
-                    "examples" : ["会話 かいわ conversation (n, vs)","神話 しんわ myth, legend (n)","世話 せわ looking after, help, aid, assistance (n, vs)"]
+                    "definition" : "Разговор, говорить, беседовать",
+                    "examples" : ["会話 かいわ беседа","神話 しんわ миф, легенда","世話 せわ забота, помощь", "世話になる　быть обязанным кому-то","世話をする помогать, заботиться о ком-то"]
                 },{   
                     "kanji" : "語",
                     "onyomi" : "ゴ",
                     "kunyomi" : "かた.る, かた.らう",
-                    "definition" : "word, speech, language",
-                    "examples" : ["英語 えいご English (language) (n)","外国語 がいこくご foreign language (n)","外来語 がいらいご borrowed word, foreign origin word (n)"]
+                    "definition" : "Слово, язык, говорить",
+                    "examples" : ["ロシア語　ろしあご　русский язык","英語 えいご английский язык","外国語 がいこくご иностранный язык","外来語 がいらいご заиствованное слово"]
                 },{   
                     "kanji" : "読",
                     "onyomi" : "ドク, トク, トウ",
                     "kunyomi" : "よ.む, -よ.み",
-                    "definition" : "read",
-                    "examples" : ["愛読 あいどく reading with pleasure (n, vs)","句読点 くとうてん punctuation mark(s) (n)","読み書き よみかき reading and writing (n)"]
+                    "definition" : "Читать, чтение",
+                    "examples" : ["愛読 あいどく любовь к чтению","句読点 くとうてん знаки препинания","読み書き よみかき чтание и письмо", "熟読　じゅくどく　вчитываться, внимательно читать"]
                 },{   
                     "kanji" : "買",
                     "onyomi" : "バイ",
