@@ -101,6 +101,29 @@ function share2(){
             "attachments": "https://vk.com/app51399471"
           });
         }
+        function getinfo(){
+  vkBridge.send('VKWebAppGetUserInfo')
+  .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  sessionStorage.setItem("userid", userid);
+      // *назначение переменных*
+      return userid;
+      
+  })
+  .catch(error => console.log(error));
+ // getsc();
+  
+};
+    getinfo();
+    function sendscore(){
+       vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  {"client_secret":"GsNVs5K5pSgOwwGBFXNf", 
+  "user_id":userid, "activity_id":2, "value":score, "v":"5.131",
+   "access_token":"7628c3d97628c3d97628c3d9bd753888f6776287628c3d914dc3406648f9c0468104d03",
+   "global":1}})
+   .then(data => {console.log("Ответ на добавление очков:" + data.response);
+  })
+  .catch(error => console.log(error)); }
+
         </script>
         <div>
          <button class = "myButton" onclick="joingroup()">Группа</button>
@@ -356,11 +379,13 @@ block.style.top = cy+"px";
 block.style.left = cx+"px";}
 
 function gameover(){
+  myAdd1();
+  sendscore();
 u.disabled = false;
 d.disabled = false;
 r.disabled = false;
 l.disabled = false;
-myAdd1();
+
 myalert();
 x = 0;
 y = 0;
