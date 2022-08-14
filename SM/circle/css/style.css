@@ -223,25 +223,25 @@ html body #question-container .answers .answer .answer-value {
 
 @-webkit-keyframes animationBackground {
   0% {
-    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(75deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(75deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
   50% {
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(90deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px,#000000 8px, #000000 16px), repeating-linear-gradient(90deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
   100% {
-    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(105deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px,#000000 8px, #000000 16px), repeating-linear-gradient(105deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
 }
 
 @keyframes animationBackground {
   0% {
-    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(75deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(75deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
   50% {
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(90deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(90deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
   100% {
-    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px, #DEF7FE 8px, #DEF7FE 16px), repeating-linear-gradient(105deg, #C6D8FF, #C6D8FF 8px, #DEF7FE 8px, #DEF7FE 16px);
+    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(105deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
   }
 }
 /*# sourceMappingURL=style.css.map */
