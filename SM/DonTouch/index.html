@@ -3,11 +3,23 @@
 <html>
  <head> 
   <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   <title>Горячая стена</title>
   <style>
+     body {
+            background: url(./background3.jpg) no-repeat center fixed;     
+    background-size: cover;
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* background: rgb(140, 186, 247); */
+        } 
     .myButton {
     position: relative;
     max-width: 40%;
@@ -81,7 +93,19 @@ function infr(){
          .then(data => console.log(data.success))  
         .catch(error => console.log(error));
 }
+
+function share2(){
+            vkBridge.send("VKWebAppShowWallPostBox", {
+            "message": "Весёлая игра! Сможете побить мой рекорд??",
+            "attachments": "https://vk.com/app51399471"
+          });
+        }
         </script>
+        <div>
+         <button class = "myButton" onclick="joingroup()">Группа</button>
+         <button class = "myButton" onclick="share2()">Поделиться</button> <br><br>
+         <button class = "myButton" onclick="infr()">Пригласить друзей</button>
+         <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
   <div style="width:305px;box-shadow:0 0 5px black;display:inline-block;position:relative;"> 
    <div id="gameblock"> 
     <div id="player">
@@ -382,8 +406,11 @@ setTimeout(iint,t);
 pausa.innerHTML = '<svg fill="white" opacity="1.0" width="30" height="30" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
 paus = false;}}
 </script>
-  <footer> 
-   
-  </footer>
+<div align="center">
+  <audio controls loop>
+      <source src="./bg.ogg" type="audio/ogg">
+      <embed src="./bg.ogg" autostart="false" loop="true" hidden="true"> 
+    </audio> 
+</div>
  </body>
 </html>
