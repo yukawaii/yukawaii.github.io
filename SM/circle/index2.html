@@ -48,24 +48,24 @@ function infr(){
 
 </script>
 	<script> myAdd1(); </script>
-<div style="position: flex">
+<div style="position: flex; margin-top: 30%;">
     <h3>Японский язык: кандзи + лексика <br />
     Выберите уровень Норёку Сикэн</h3>
 	<div class="dropdown">
   <button class="dropbtn">Азбуки, Н5, Н4</button>
   <div class="dropdown-content">
-    <button class = "" onclick="window.location.href = './azb.html';"> Н5 + азбуки</button><br>
-      <button class = "" onclick="window.location.href = './N4_1.html';">Н4: уровень 1</button><br>
-    <button class = "" onclick="window.location.href = './N4_2.html';">Н4: уровень 2</button><br>
+    <button class = "mybtn" onclick="window.location.href = './azb.html';"> Н5 + азбуки</button><br>
+      <button class = "mybtn" onclick="window.location.href = './N4_1.html';">Н4: уровень 1</button><br>
+    <button class = "mybtn" onclick="window.location.href = './N4_2.html';">Н4: уровень 2</button><br>
   </div>
 </div>
 	
 		<div class="dropdown">
   <button class="dropbtn">Норёку Н3</button>
   <div class="dropdown-content">
-	  <button class = "" onclick="window.location.href = './N3_1.html';">Н3: уровень 1</button><br>
-        <button class = "" onclick="window.location.href = './N3_2.html';">Н3: уровень 2</button><br>
-        <button class = "" onclick="window.location.href = './N3_3.html';">Н3: уровень 3</button><br>
+	  <button class = "mybtn" onclick="window.location.href = './N3_1.html';">Н3: уровень 1</button><br>
+        <button class = "mybtn" onclick="window.location.href = './N3_2.html';">Н3: уровень 2</button><br>
+        <button class = "mybtn" onclick="window.location.href = './N3_3.html';">Н3: уровень 3</button><br>
 	    </div>
 </div>
 <!--
@@ -104,11 +104,16 @@ function infr(){
 	    </div>
 </div>
 <br>  -->	
-<div style="position:relative; bottom:0px;">
-	    <button class = "" onclick="window.location.href = './index.html';">В начало</button>
-    <button class = "" onclick="window.location.href = './i.html';">Другие игры</button>
-<button class = "" onclick="joingroup()">Подписаться</button>
-<button class = "" onclick="share2()">Поделиться</button>
+<br>
+<div style="position:absolute; bottom:5px; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+text-align: center;">
+	    <button class = "mybtn" onclick="window.location.href = './index.html';">В начало</button>
+    <button class = "mybtn" onclick="window.location.href = './i.html';">Другие игры</button>
+<button class = "mybtn" onclick="joingroup()">Подписаться</button>
+<button class = "mybtn" onclick="share2()">Поделиться</button>
 <!-- <button class = "" onclick="getinfo()">getinfo</button>
 <button class = "" onclick="getsc()">getsc</button>
 <button class = "" onclick="sendmes()">Пройти опрос</button>
@@ -117,8 +122,8 @@ function infr(){
 </div>
 <div id="image" style="background-color: transparent;">
   <img src="./images/yuka.png" alt="turtle icon"/> 
-  <div id="xp"> Опыт : 1</div>
-  <div id="lvl">Уровень: 1 </div>
+ <!-- <div id="xp"> Опыт : 1</div>
+  <div id="lvl">Уровень: 1 </div> -->
 
 </div>
 <script src="js/main.js"></script>
