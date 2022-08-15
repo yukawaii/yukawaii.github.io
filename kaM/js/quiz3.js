@@ -178,7 +178,7 @@ const myApp = [{
 }, {
     question: "Как читается эта мора? <br> <img src = '../mem/img/33.png' width='100' height='100' />",
     options: ["ТА", "МУ", "РА", "КО"],
-    answer: 2,
+    answer: 1,
 }, {
     question: "Как читается эта мора? <br> <img src = '../mem/img/34.png' width='100' height='100' />",
     options:["НИ", "МЭ", "ЦУ", "О"],
