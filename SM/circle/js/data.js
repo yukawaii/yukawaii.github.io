@@ -283,9 +283,8 @@ const DATA = {
         {
             jp: 'ん',
             trad: 'Н'
-        }
-    ],
-    hiraganaDigraphs: [{
+        },
+{
             jp: 'きゃ',
             trad: 'КЯ'
         },
@@ -701,9 +700,8 @@ const DATA = {
         {
             jp: 'ポ',
             trad: 'ПО'
-        }
-    ],
-    katakanaDigraphs: [{
+        },
+    {
             jp: 'キャ',
             trad: 'КЯ'
         },
