@@ -139,7 +139,7 @@ h1 {
     background-color:  #B5F2EA;
     color: #0f0f0f;
     padding: 25px;
-    border: 5px solid #EF5B5B;
+    border: 5px solid #fda1a1;
     margin-bottom: -30px;
     font-size: 20px;
 }
@@ -248,7 +248,7 @@ h1 {
     }
 
     #message-area #message {
-        background-color:  #2E294E;
+        background-color:  #f7e6b9;
         padding-bottom: -15px;
         margin: 0 auto;
         margin-bottom: -10px;
@@ -295,7 +295,7 @@ h1 {
     }
 
     #message-area #message {
-        background-color:  #FDEED9;
+        background-color:  #FFFADD;
         padding-bottom: -15px;
         margin: 0 auto;
         margin-bottom: -10px;
