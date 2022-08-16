@@ -2,9 +2,9 @@ body{
     background-color: #20A39E;
     font-family: 'PT Sans Narrow', sans-serif;
     line-height: 1.5;
-    font-size: 16px;
+    font-size: 13px;
     color: #080808;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.2px;
 }
 
 /* start of grid */
@@ -22,7 +22,7 @@ h1 {
     background-color: #C3FBD8;
     font-family: 'Luckiest Guy', cursive;
     width: 100%;
-    font-size: 57px;
+    font-size: 47px;
     margin: 0 auto;
     text-align: center;
     padding: 20px;
@@ -48,7 +48,7 @@ h1 {
 #message-area #message {
     background-color:  #B5F2EA;
     padding: 14px;
-    width: 550px;
+    width: 500px;
     margin: 0 auto;
     margin-bottom: 0px;
     text-align: center;
@@ -93,7 +93,7 @@ h1 {
 }
 
 #total-area {
-    grid-column: 3 / 4;
+    grid-column: 3/ 4;
     grid-row: 3 / 4;
     background-color: #F6FFF8;
     text-align: center;
@@ -265,7 +265,7 @@ h1 {
 
 @media only screen and (max-width: 373px) {
     body {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     h1 {
