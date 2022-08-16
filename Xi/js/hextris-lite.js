@@ -496,18 +496,18 @@ function showHelp() {
         }
     }
     $("#inst_main_body").html("<div id = 'instructions_head'>Как играть</div>"
-        + "<p>Цель игры Хитрикс: помешать блокам покинуть серую 6-угольную платформу вокруг Хитрикса.  </p><p>"
+        + "<p>Цель игры: помешать радужным линиям покинуть серую платформу.  </p><p>"
         + (settings.platform != 'mobile'
             ? 'Кликайте слева-справа или нажимайте стрелки'
             : 'Нажмайте слева или справа')
-        + " для вращения Хитрикса. "
+        + " для вращения центра. "
         + (settings.platform != 'mobile'
             ? 'Нажатие стрелки "вниз"" ускорит падение блоков.'
             : '')
-        + "</p><p>Когда 3 или более блоков одного цвета соединяются, они исчезают. </p>"
+        + "</p><p>Когда 3 или более линии одного цвета соединяются, они исчезают. </p>"
         + "<p>Время до того, как Ваша серия комбо оборвётся, показывается "
         + "<span style='color:#f1c40f;'>разноцветной</span> <span style='color:#e74c3c'>линией</span> "
-        + "<span style='color:#3498db'>по</span> <span style='color:#2ecc71'>краям</span> Хитрикса. </p>"
+        + "<span style='color:#3498db'>по</span> <span style='color:#2ecc71'>краям</span> платформы. </p>"
         );
     if (gameState == 1) {
         pause();
@@ -760,7 +760,7 @@ function drawScoreboard() {
             trueCanvas.height / 2.1 + gdy - 155 * settings.scale,
             142,
             "#2c3e50",
-            "Хитрикс"
+            "Радуга"
         );
         renderText(
             trueCanvas.width / 2 + gdx + 242 * settings.scale,
@@ -790,7 +790,7 @@ function drawScoreboard() {
             trueCanvas.height / 2.1 + gdy - 155 * settings.scale,
             142,
             "#2c3e50",
-            "Хитрикс"
+            "Радуга"
         );
         renderText(
             trueCanvas.width / 2 + gdx + 242 * settings.scale,
