@@ -2,7 +2,18 @@
 const bridge = vkBridge.default;
 bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
+var userid=0;
 
+  function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+  }
+  getid();
 //поделиться
 function share1(){
 bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
@@ -30,20 +41,9 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 
-    var userid;
-var score1=sessionStorage.getItem("score");
 
-  function getid(){
-    bridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
-    // *назначение переменных*
-userid = data.id;
-})
-.catch(error => console.log(error));
-  }
   //отправка очков в вк
   function ressend(){
-    getid();
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
