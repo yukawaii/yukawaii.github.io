@@ -40,8 +40,29 @@ function joingroup(){
 function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
+var token="0";
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8165024, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
 
+gettoken();
 
+function getsc(){
+  bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
+ {"user_id":userid,
+   "v": "5.131", 
+   "access_token":token}})
+.then(data => {console.log(data); score=data;
+})
+.catch(error => console.log(error)); }
+
+getsc();
   //отправка очков в вк
   function ressend(){
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
