@@ -37,7 +37,7 @@ userid = data.id;
   var token="0";
 function gettoken(){
     bridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8156273, 
+        "app_id": 8165024, 
         "scope": "friends,status"
       })
       .then(data => {console.log(data);
