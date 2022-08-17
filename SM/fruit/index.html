@@ -72,10 +72,11 @@ function infr(){
         }
         </script>
     <div>
-        <button class = "myButton" onclick="joingroup()">Группа</button>
+        <button class = "myButton" onclick = "myalert()">Как играть?</button>
         <button class = "myButton" onclick="share2()">Поделиться</button> 
+        <button class = "myButton" onclick="joingroup()">Группа</button>
         <button class = "myButton" onclick="infr()">Пригласить друзей</button>
-        <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
+        <button class = "myButton" onclick="window.location.href = './i.html';">Ещё игры</button></div>
     <div id="content">
         <h1>Собери корзинку фруктов<!DOCTYPE html>
         <html lang="en">
@@ -134,7 +135,16 @@ function infr(){
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
-  
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script>
+function myalert() {
+swal({  
+	title: "Правила игры:",  
+	text: "Цель игры: набрать фруктов в корзинку так, чтобы их вес был равен заданному в начале игры весу, который ты можешь поднять. В каждом раунде вес, который надо набрать, и вес каждого отдельного фрукта меняются. Пораскинь мозгами, чтобы справиться с этим заданием! ", 
+	button: "Всё понятно",  
+  });  
+ }
+</script>
 </body>
 
 </html>
