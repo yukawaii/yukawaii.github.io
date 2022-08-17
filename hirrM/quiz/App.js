@@ -31,7 +31,7 @@ function infr(){
 }
 
     var userid;
-var score1=sessionStorage.getItem("score1");
+var score1=sessionStorage.getItem("score");
 
   function getid(){
     bridge.send('VKWebAppGetUserInfo')
@@ -47,7 +47,7 @@ userid = data.id;
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
-   "value":score1, 
+   "value":score, 
    "v": "5.1", 
    "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
 .then(response => {console.log("Ответ на добавление очков:" + response);
@@ -55,7 +55,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 .catch(error => console.log(error)); }
 
   function top1(){
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
