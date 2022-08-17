@@ -34,6 +34,19 @@ userid = data.id;
   }
   getid();
 
+  var token=0;
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8156273, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
+
+gettoken();
+
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
     options: ["СА", "НИ", "У", "О"],
@@ -321,16 +334,6 @@ function nextQuestion() {
     hideTimeUpText();
     startTimer();
 }
-var token=0;
-function gettoken(){
-    bridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8156273, 
-        "scope": "friends,status"
-      })
-      .then(data => {console.log(data);
-        token=data.access_token;
-})
-.catch(error => console.log(error)); }
 
   function ressend(){
    
