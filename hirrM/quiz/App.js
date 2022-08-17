@@ -10,9 +10,9 @@ var userid=0;
     // *назначение переменных*
 userid = data.id;
 })
-.then(data => console.log(data.result))
 .catch(error => console.log(error));
   }
+
   getid();
 //поделиться
 function share1(){
