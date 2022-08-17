@@ -321,6 +321,16 @@ function nextQuestion() {
     hideTimeUpText();
     startTimer();
 }
+var token=0;
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8156273, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
 
   function ressend(){
    
@@ -328,8 +338,8 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
  {"user_id":userid,
   "activity_id":2,
    "value":score, 
-   "v": "5.1", 
-   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+   "v": "5.131", 
+   "access_token":token}})
 .then(data => {console.log("Ответ на добавление очков:" + response);
 })
 .catch(error => console.log(error)); }
