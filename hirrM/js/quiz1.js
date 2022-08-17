@@ -15,6 +15,11 @@ const goHomeBtn = document.querySelector(".go-home-btn");
 const startQuizBtn = document.querySelector(".start-quiz-btn");
 const nameText = document.getElementById("myForm");
 const finalMsg = document.querySelector(".finalMsg");
+//инициализация
+const bridge = vkBridge.default;
+bridge.subscribe((e) => console.log("vkBridge event", e));
+bridge.send("VKWebAppInit", {});
+
 
 let attempt = 0;
 let questionIndex = 0;
@@ -22,6 +27,17 @@ let score = 0;
 let number = 0;
 let myArray = [];
 let interval;
+var userid=0;
+
+function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+  getid();
 
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
@@ -310,18 +326,9 @@ function nextQuestion() {
     hideTimeUpText();
     startTimer();
 }
-var userid;
 
-function getid(){
-    bridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
-    // *назначение переменных*
-userid = data.id;
-})
-.catch(error => console.log(error));
-  }
   function ressend(){
-    getid();
+   
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
@@ -346,7 +353,7 @@ function quizResult() {
 
 function mis1(){
     if (score===25){
-        getid();
+    
         bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
          {"user_id":userid,
           "activity_id":3,
