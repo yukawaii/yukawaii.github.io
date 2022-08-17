@@ -15,11 +15,6 @@ const goHomeBtn = document.querySelector(".go-home-btn");
 const startQuizBtn = document.querySelector(".start-quiz-btn");
 const nameText = document.getElementById("myForm");
 const finalMsg = document.querySelector(".finalMsg");
-//инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-
 
 let attempt = 0;
 let questionIndex = 0;
