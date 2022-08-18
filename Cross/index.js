@@ -12,8 +12,8 @@ let lanes;
 let gameSounds, themeSong;
 let gameOver;
 var mut = true;  
-var score=0;
-/*
+/*var score=0;
+
 function getid(){
     bridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data.id);
@@ -317,7 +317,7 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
-                score=this.maxLane;
+                //score=this.maxLane;
               //  ressend();
                // mis1();
           }

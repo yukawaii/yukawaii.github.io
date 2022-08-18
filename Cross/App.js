@@ -35,7 +35,7 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 //турнирная табличка
-
+/*
 var userid=0;
 
   function getid(){
@@ -46,7 +46,7 @@ userid = data.id;
 })
 .catch(error => console.log(error));
   }
-/*
+
   getid();
   var token="0";
 function gettoken(){
