@@ -55,7 +55,7 @@ function gettoken(){
         "scope": "friends,status"
       })
       .then(data => {console.log(data);
-        token=data.access_token;
+        token=data;
 })
 .catch(error => console.log(error)); }
 
