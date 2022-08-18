@@ -49,7 +49,7 @@ gettoken();
 
   //отправка очков в вк
    function ressend(){
-   
+    sessionStorage.setItem("score", score);
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,

@@ -47,24 +47,28 @@ function gettoken(){
         "scope": "friends,status"
       })
       .then(data => {console.log(data);
-        token=data;
+        token=data.access_token;
+       sessionStorage.setItem("token", token);
 })
 .catch(error => console.log(error)); }
 
 gettoken();
 
 function getsc(){
+  var token=sessionStorage.getItem("token");
   bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
  {"user_id":userid,
    "v": "5.131", 
    "access_token":token}})
 .then(data => {console.log(data); score=data;
+  sessionStorage.setItem("score", score);
 })
 .catch(error => console.log(error)); }
 
 getsc();
   //отправка очков в вк
   function ressend(){
+    sessionStorage.setItem("score", score);
 bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
@@ -76,6 +80,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 .catch(error => console.log(error)); }
 
   function top1(){
+    score = sessionStorage.getItem("score");
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
