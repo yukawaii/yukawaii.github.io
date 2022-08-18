@@ -343,7 +343,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
    "value":score, 
    "v": "5.131", 
    "access_token":token}})
-.then(data => {console.log("Ответ на добавление очков:" + response);
+.then(data => {console.log("Ответ на добавление очков:" + data);
 })
 .catch(error => console.log(error)); }
 
