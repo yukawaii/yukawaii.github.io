@@ -51,7 +51,7 @@ userid = data.id;
   var token="0";
 function gettoken(){
     bridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8165024, 
+        "app_id": 8171561, 
         "scope": "friends,status"
       })
       .then(data => {console.log(data);
@@ -78,7 +78,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
   "activity_id":2,
    "value":score, 
    "v": "5.1", 
-   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+   "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
 .then(response => {console.log("Ответ на добавление очков:" + response);
 })
 .catch(error => console.log(error)); }
