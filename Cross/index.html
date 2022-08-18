@@ -35,6 +35,58 @@
 function favor1(){
 bridge.send("VKWebAppAddToFavorites");
 }
+var userid=0;
+
+  function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+
+  getid();
+  var token="0";
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8171561, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
+
+gettoken();
+
+function getsc(){
+  bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
+ {"user_id":userid,
+   "v": "5.131", 
+   "access_token":token}})
+.then(data => {console.log(data); score=data;
+})
+.catch(error => console.log(error)); }
+
+getsc();
+  //отправка очков в вк
+  function ressend(){
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+ {"user_id":userid,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.1", 
+   "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+.then(response => {console.log("Ответ на добавление очков:" + response);
+})
+.catch(error => console.log(error)); }
+
+  function top1(){
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 
     </script>
     	<script src = "./App.js"></script>
     <div id="score"><br><br></div>
