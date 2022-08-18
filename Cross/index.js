@@ -12,6 +12,63 @@ let lanes;
 let gameSounds, themeSong;
 let gameOver;
 var mut = true;  
+var score=0;
+
+function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+  getid();
+
+  var token="0";
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8171561, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
+
+gettoken();
+
+
+  //отправка очков в вк
+   function ressend(){
+   
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+ {"user_id":userid,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.131", 
+   "access_token":token}})
+.then(data => {console.log("Ответ на добавление очков:" + data);
+})
+.catch(error => console.log(error)); }
+
+
+// миссия 
+function mis1(){
+    if (score===25){
+    
+        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+         {"user_id":userid,
+          "activity_id":3,
+                  "v": "5.1", 
+           "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+        .then(data => {console.log("Ответ на добавление очков:" + data);
+        })
+        .catch(error => console.log(error));  
+    }
+}
+// конец миссии
+
+
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
     stats = new Stats();
@@ -120,7 +177,7 @@ const addLight = () =>{
     //scene.add(new THREE.CameraHelper(sunlight.shadow.camera));    //enable to show shadow properties in scene
     scene.add(sunlight);
 }
-var score1;
+
 //creates chicken
 class Chicken{
     constructor(size = {x: 0.63, y: 0.6, z: 0.63}){
@@ -260,7 +317,9 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
-                score1=this.maxLane;
+                score=this.maxLane;
+                ressend();
+                mis1();
           }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;

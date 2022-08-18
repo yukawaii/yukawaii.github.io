@@ -35,15 +35,56 @@ function infr(){
   bridge.send("VKWebAppShowInviteBox", {})
 }
 //турнирная табличка
-function ressend(){
-  bridge.send("secure.addAppEvent", {
-      activity_id: 2,
-      value: score1
-  })}
+
+var userid=0;
+
+  function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+
+  getid();
+  var token="0";
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8165024, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
+
+gettoken();
+
+function getsc(){
+  bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
+ {"user_id":userid,
+   "v": "5.131", 
+   "access_token":token}})
+.then(data => {console.log(data); score=data;
+})
+.catch(error => console.log(error)); }
+
+getsc();
+  //отправка очков в вк
+  function ressend(){
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+ {"user_id":userid,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.1", 
+   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+.then(response => {console.log("Ответ на добавление очков:" + response);
+})
+.catch(error => console.log(error)); }
 
   function top1(){
-    bridge.send("secure.addAppEvent", {activity_id: 2, value: score1, global:1});
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score1, global:1})
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
