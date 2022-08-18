@@ -46,7 +46,7 @@ userid = data.id;
 })
 .catch(error => console.log(error));
   }
-
+/*
   getid();
   var token="0";
 function gettoken(){
@@ -87,4 +87,4 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
-    } 
+    } */
