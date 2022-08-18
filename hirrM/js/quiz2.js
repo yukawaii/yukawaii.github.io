@@ -23,6 +23,60 @@ let number = 0;
 let myArray = [];
 let interval;
 
+function getid(){
+    bridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data.id);
+    // *назначение переменных*
+userid = data.id;
+})
+.catch(error => console.log(error));
+  }
+  getid();
+
+  var token="0";
+function gettoken(){
+    bridge.send("VKWebAppGetAuthToken", { 
+        "app_id": 8165024, 
+        "scope": "friends,status"
+      })
+      .then(data => {console.log(data);
+        token=data.access_token;
+})
+.catch(error => console.log(error)); }
+
+gettoken();
+
+
+  //отправка очков в вк
+   function ressend(){
+   
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+ {"user_id":userid,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.131", 
+   "access_token":token}})
+.then(data => {console.log("Ответ на добавление очков:" + response);
+})
+.catch(error => console.log(error)); }
+
+
+// миссия 
+function mis1(){
+    if (score===25){
+    
+        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+         {"user_id":userid,
+          "activity_id":3,
+                  "v": "5.1", 
+           "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+        .then(data => {console.log("Ответ на добавление очков:" + response);
+        })
+        .catch(error => console.log(error));  
+    }
+}
+// конец миссии
+
 const myApp = [{
     // ХА СТРОКА
     question: "Как читается эта мора? <br> <img src = '../mem/img/26.png' width='100' height='100' />",
@@ -300,6 +354,8 @@ function quizResult() {
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
     sessionStorage.setItem("score", score);
+    ressend();
+    mis1();
 }
 
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));
@@ -318,28 +374,6 @@ function resetQuiz() {
     number = 0;
     myArray = [];
 }
-function getid(){
-    bridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
-    // *назначение переменных*
-userid = data.id;
-})
-.catch(error => console.log(error));
-  }
-  getid();
-  //отправка очков в вк
-  function ressend(){
-  
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
- {"user_id":userid,
-  "activity_id":2,
-   "value":score, 
-   "v": "5.1", 
-   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
-.then(response => {console.log("Ответ на добавление очков:" + response);
-})
-.catch(error => console.log(error)); }
-
 function quizOver() {
     nextQuestionBtn.classList.remove("show");
     seeResultBtn.classList.add("show");
