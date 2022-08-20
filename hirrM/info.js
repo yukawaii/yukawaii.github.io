@@ -49,7 +49,7 @@ console.log("id^ "+ id);
       .then(data => {console.log(data); score=data.response; console.log("getsc"+score); 
       })
       .catch(error => console.log(error)); }
-      getsc();
+      getid().then(getsc);
 
     function top0(){
           vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
