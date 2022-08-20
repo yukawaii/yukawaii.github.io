@@ -1,6 +1,5 @@
 //инициализация
 const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
 bridge.send("VKWebAppInit", {});
 
 var score,id,token;
