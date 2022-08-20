@@ -18,14 +18,13 @@
 .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
 .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
-	<script src = "./App.js"></script>
+	<script src = "./info.js"></script>
 </head>
 <body>
 	<script>
 		// Sends event to client
 		vkBridge.send('VKWebAppInit');
 	  </script> 
-	<script src = "./App.js"></script>
 	<div class ="myclass1">
 		<br><br>
 		<button class = "iksweb" onclick="window.location.href = './mem/indexmemory.html';">Игра "карты памяти"</button><br>
@@ -39,9 +38,6 @@
 	<script>
 		
 //поделиться
-function share1(){
-	vkBridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
-}
 function share2(){
 	vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Игры для быстрого запоминания хираганы!",
@@ -64,6 +60,11 @@ function joingroup(){
 function infr(){
 	vkBridge.send("VKWebAppShowInviteBox", {})
 }
+function top1(){
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
+    .then(data => console.log(data.success))  
+   .catch(error => console.log(error));
+    } 
 	</script>
 </body>
 </html>

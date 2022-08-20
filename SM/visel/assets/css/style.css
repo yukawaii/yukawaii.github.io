@@ -1,0 +1,193 @@
+body {
+	background-image: url(../images/west-background2.jpg);
+	background-repeat: no-repeat;
+	margin-bottom: 95px;
+}
+
+html {
+	  position: relative;
+	  min-height: 100%;
+}
+
+button:focus { 
+    outline: 0 !important; 
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 95px;
+	background: rgba(200, 54, 54, 0);
+	font-size: 20px;
+	line-height: 30px;
+}
+
+.footer-panel {
+	padding-top: 7px;
+	padding-bottom: 0;
+}
+
+.hangman-game {
+	font-family: 'Rye', cursive;
+}
+
+.jumbotron {
+	margin-top: 30px;
+	border-style: solid;
+	border-width: 8px;
+	padding: 20px;
+	background: rgba(250, 250, 250, 0.8);
+}
+
+.jumbotron h1 {
+	
+	font-family: 'Rye', cursive;
+	margin-top: 0px;
+}
+
+.jumbotron h3, h4 {
+	font-family: 'Berkshire Swash', cursive;
+}
+
+.visibleLetter {
+	display: inline-block;
+	font-size: 20px;
+	font-weight: bold;
+	width: 30px;
+	margin-left: 3px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 50px;
+	height: 50px;
+}
+
+#display span {
+	padding-left: 10px;
+}
+
+.hiddenLetter {
+	visibility: hidden;
+}
+.hiddenLetter:before {
+	visibility: visible;
+	content: "_";
+	padding: 5px;
+}
+
+.filler {
+	color: rgba(250, 250, 250, 0) !important;
+	text-shadow: none !important;
+}
+
+.label {
+	padding: 3px 7px 3px 7px;
+	font-size: 15px;
+}
+
+.panel {
+	font-size: 20px;
+	border-width: 8px;
+	border-radius: 10px;
+	background: rgba(250, 250, 250, 0.7);
+}
+
+.panel-heading, .restart-text  {
+	font-family: 'Berkshire Swash', cursive;
+}
+
+.panel-body {
+	font-family: 'Itim', cursive;
+}
+
+.panel h1 {
+	margin-top: 0;
+}
+
+.panel-heading {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.keyboard-panel {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.trophy-color {
+	color: gold;
+	text-shadow: 1px 1px #c99536;
+}
+
+.label {
+	font-family: 'Rye', cursive;
+}
+
+.reset-btn {
+	width: 155px;
+    height: 50px;
+    font-size: 22px;
+    box-shadow: 3px 3px 5px gray;
+    font-family: 'Rye', cursive;
+}
+
+.psychic {
+	font-family: 'Kaushan Script', cursive;
+}
+
+.btn-game { 
+  color: #ffffff; 
+  background-color: #611BBD; 
+  border-color: #130269; 
+  padding: 5px;
+} 
+
+.btn-link {
+	margin-left: -7px;
+	margin-top: -3px;
+	font-size: 18px;
+}
+
+.letter-button {
+    margin: 3px;
+}
+ 
+.btn-game:hover, 
+.btn-game:focus, 
+.btn-game:active, 
+.btn-game.active, 
+.open .dropdown-toggle.btn-game { 
+  color: #ffffff; 
+  background-color: #49247A; 
+  border-color: #130269; 
+} 
+ 
+.btn-game:active, 
+.btn-game.active, 
+.open .dropdown-toggle.btn-game { 
+  background-image: none; 
+} 
+ 
+.btn-game.disabled, 
+.btn-game[disabled], 
+fieldset[disabled] .btn-game, 
+.btn-game.disabled:hover, 
+.btn-game[disabled]:hover, 
+fieldset[disabled] .btn-game:hover, 
+.btn-game.disabled:focus, 
+.btn-game[disabled]:focus, 
+fieldset[disabled] .btn-game:focus, 
+.btn-game.disabled:active, 
+.btn-game[disabled]:active, 
+fieldset[disabled] .btn-game:active, 
+.btn-game.disabled.active, 
+.btn-game[disabled].active, 
+fieldset[disabled] .btn-game.active { 
+  background-color: #611BBD; 
+  border-color: #130269; 
+} 
+ 
+.btn-game .badge { 
+  color: #611BBD; 
+  background-color: #ffffff; 
+}
