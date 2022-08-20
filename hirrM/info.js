@@ -44,9 +44,21 @@ function gettoken(){
     
     gettoken();    
 
-    scorevk=
-    function top1(){
-        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+ function getsc(){
+        bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
+       {"user_id":id,
+         "v": "5.131", 
+         "access_token":token}})
+      .then(data => {console.log(data); score=data.score;
+      })
+      .catch(error => console.log(error)); }
+      getsc();
+
+    function top0(){
+          bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } 
+    function top1(){
+        getsc().then(top0);
+    }
