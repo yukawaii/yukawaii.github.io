@@ -338,7 +338,8 @@ function nextQuestion() {
 function sendscore(){
   sessionStorage.setItem('score',score);
   vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
- {"user_id":id,
+ {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+    "user_id":id,
   "activity_id":2,
    "value":score, 
    "v": "5.1", 
