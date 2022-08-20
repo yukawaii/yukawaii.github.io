@@ -23,45 +23,8 @@ let number = 0;
 let myArray = [];
 let interval;
 
-function getid(){
-    vkBridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
-    // *назначение переменных*
-userid = data.id;
-})
-.catch(error => console.log(error));
-  }
-  getid();
 
-  var token="0";
-function gettoken(){
-    vkBridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8165024, 
-        "scope": "friends,status"
-      })
-      .then(data => {console.log(data);
-        token=data.access_token;
-})
-.catch(error => console.log(error)); }
-
-gettoken();
-
-
-  //отправка очков в вк
-   function ressend(){
-    sessionStorage.setItem("score", score);
-    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
- {"user_id":userid,
-  "activity_id":2,
-   "value":score, 
-   "v": "5.131", 
-   "access_token":token}})
-.then(data => {console.log("Ответ на добавление очков:" + response);
-})
-.catch(error => console.log(error)); }
-
-
-// миссия 
+  // миссия 
 function mis1(){
     if (score===25){
     
@@ -354,7 +317,7 @@ function quizResult() {
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
     sessionStorage.setItem("score", score);
-    ressend();
+    
     mis1();
 }
 
@@ -377,7 +340,7 @@ function resetQuiz() {
 function quizOver() {
     nextQuestionBtn.classList.remove("show");
     seeResultBtn.classList.add("show");
-    ressend();
+
   }
 
 seeResultBtn.addEventListener("click", () => {
