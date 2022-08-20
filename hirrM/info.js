@@ -6,10 +6,11 @@ var score,id,token;
 
 function getid(){
     bridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
+.then(data => {console.log(data);
     // *назначение переменных*
 id = data.id;
 sessionStorage.setItem('id', id);
+console.log("id^ "+ id);
 })
 .catch(error => console.log(error));
   }
@@ -37,6 +38,7 @@ function gettoken(){
           .then(data => {console.log(data);
             token=data.access_token;
             sessionStorage.setItem('token', token);
+            console.log("token^ for"+ id + "is^  :"+ token);
     })
     .catch(error => console.log(error)); }
     
