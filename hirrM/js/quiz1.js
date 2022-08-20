@@ -363,7 +363,8 @@ function mis1(){
     if (score===25){
     
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
-         {"user_id":id,
+         {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+         "user_id":id,
           "activity_id":3,
                   "v": "5.1", 
            "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
