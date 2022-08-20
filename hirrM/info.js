@@ -1,12 +1,13 @@
 vkBridge.send("VKWebAppInit", {});
 
-var score,id,token;
+var score,id,token, name1;
 
 function getid(){
     vkBridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data);
     // *назначение переменных*
 id = data.id;
+name1=data.first_name;
 sessionStorage.setItem('id', id);
 console.log("id^ "+ id);
 })
@@ -46,7 +47,7 @@ function gettoken(){
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
        {"user_id":id,
          "v": "5.131", 
-         "access_token":token}})
+         "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
       .then(data => {console.log(data); score=data.score;
       })
       .catch(error => console.log(error)); }
