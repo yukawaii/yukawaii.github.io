@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 	<title>Хирагана викторина</title>
 	<link rel="stylesheet" href="../styles/quiz.css">
     <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
@@ -19,6 +20,10 @@
 </head>
 <body>
 	<script src = "../App.js"></script>
+    <script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+	  </script> 
     <script>  myadd1();
     </script>
     <div class="quiz-home-box custom-box show">

@@ -24,7 +24,7 @@ let myArray = [];
 let interval;
 
 function getid(){
-    bridge.send('VKWebAppGetUserInfo')
+    vkBridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data.id);
     // *назначение переменных*
 userid = data.id;
@@ -35,7 +35,7 @@ userid = data.id;
 
   var token="0";
 function gettoken(){
-    bridge.send("VKWebAppGetAuthToken", { 
+    vkBridge.send("VKWebAppGetAuthToken", { 
         "app_id": 8165024, 
         "scope": "friends,status"
       })
@@ -50,7 +50,7 @@ gettoken();
   //отправка очков в вк
    function ressend(){
     sessionStorage.setItem("score", score);
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
    "value":score, 
@@ -65,7 +65,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 function mis1(){
     if (score===25){
     
-        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
          {"user_id":userid,
           "activity_id":3,
                   "v": "5.1", 
