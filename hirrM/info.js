@@ -10,6 +10,7 @@ function getid(){
 .then(data => {console.log(data.id);
     // *назначение переменных*
 id = data.id;
+sessionStorage.setItem('id', id);
 })
 .catch(error => console.log(error));
   }
@@ -36,6 +37,7 @@ function gettoken(){
           })
           .then(data => {console.log(data);
             token=data.access_token;
+            sessionStorage.setItem('token', token);
     })
     .catch(error => console.log(error)); }
     
