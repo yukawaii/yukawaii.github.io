@@ -48,7 +48,7 @@ function gettoken(){
        {"user_id":id,
          "v": "5.131", 
          "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
-      .then(data => {console.log(data); score=data.response;
+      .then(data => {console.log(data); score=data.response; console.log("getsc"+score); 
       })
       .catch(error => console.log(error)); }
       getsc();
