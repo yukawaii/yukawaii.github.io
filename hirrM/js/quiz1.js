@@ -18,7 +18,7 @@ const finalMsg = document.querySelector(".finalMsg");
 
 let attempt = 0;
 let questionIndex = 0;
-let score = 0;
+score = 0;
 let number = 0;
 let myArray = [];
 let interval;
