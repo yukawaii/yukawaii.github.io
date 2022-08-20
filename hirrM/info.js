@@ -37,7 +37,9 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
       "activity_id":2,
        "value":score0, 
        "v": "5.1", 
-       "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+     //  "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f",
+     "access_token":token
+      }})
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
     })
     .catch(error => console.log(error)); }, 3000);}
