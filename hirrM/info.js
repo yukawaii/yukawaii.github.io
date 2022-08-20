@@ -1,11 +1,9 @@
-//инициализация
-const bridge = vkBridge.default;
-bridge.send("VKWebAppInit", {});
+vkBridge.send("VKWebAppInit", {});
 
 var score,id,token;
 
 function getid(){
-    bridge.send('VKWebAppGetUserInfo')
+    vkBridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data);
     // *назначение переменных*
 id = data.id;
@@ -19,7 +17,7 @@ console.log("id^ "+ id);
      //первичная отправка очков в вк, проверка на 0
     function sendscore0(){
         score0=1;
-     bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
      {"user_id":id,
       "activity_id":2,
        "value":score0, 
@@ -31,7 +29,7 @@ console.log("id^ "+ id);
     sendscore0();
 
 function gettoken(){
-        bridge.send("VKWebAppGetAuthToken", { 
+    vkBridge.send("VKWebAppGetAuthToken", { 
             "app_id": 8165024, 
             "scope": "friends,status"
           })
@@ -45,7 +43,7 @@ function gettoken(){
     gettoken();    
 
  function getsc(){
-        bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
        {"user_id":id,
          "v": "5.131", 
          "access_token":token}})
@@ -55,7 +53,7 @@ function gettoken(){
       getsc();
 
     function top0(){
-          bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+          vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } 
