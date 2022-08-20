@@ -29,6 +29,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     gettoken();  
      //первичная отправка очков в вк, проверка на 0
     function sendscore0(){
+
         score0=1;
         setTimeout(function (){
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
@@ -43,7 +44,6 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
     })
     .catch(error => console.log(error)); }, 3000);}
-sendscore0();
 
  function getsc(){
   getid();
