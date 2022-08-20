@@ -39,7 +39,7 @@ console.log("id^ "+ id);
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
     })
     .catch(error => console.log(error)); }
-    sendscore0();
+    getid().then(sendscore0);
 
  function getsc(){
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
