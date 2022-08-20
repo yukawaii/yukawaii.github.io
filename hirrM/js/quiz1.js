@@ -394,7 +394,7 @@ function resetQuiz() {
 function quizOver() {
     nextQuestionBtn.classList.remove("show");
     seeResultBtn.classList.add("show");
-    ressend();
+    sendscore();
 }
 
 seeResultBtn.addEventListener("click", () => {
