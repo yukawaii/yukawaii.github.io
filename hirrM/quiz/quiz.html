@@ -26,12 +26,7 @@
 	<script>
 		// Sends event to client
 		vkBridge.send('VKWebAppInit');
-		function top0(){
-          vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
-        .then(data => console.log(data.success))  
-       .catch(error => console.log(error));
-        } 
-	  </script> 
+		  </script> 
  	<div class ="myclass1">
 		<h3> Bикторина. Выберите уровень игры</h3>
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quiz1.html';">Уровень 1</button>
