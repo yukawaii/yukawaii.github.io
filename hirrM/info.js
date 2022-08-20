@@ -9,8 +9,7 @@ function getid(){
 id = data.id;
 name1=data.first_name;
 sessionStorage.setItem('id', id);
-console.log("id^ "+ id);
-return Promise.resolve(1);
+setTimeout(function (){console.log("id^ "+ id);}, 3000);
 })
 .catch(error => console.log(error));
   }
@@ -31,6 +30,7 @@ return Promise.resolve(1);
      //первичная отправка очков в вк, проверка на 0
     function sendscore0(){
         score0=1;
+        setTimeout(function (){
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
      {"user_id":id,
       "activity_id":2,
@@ -39,8 +39,8 @@ return Promise.resolve(1);
        "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
     })
-    .catch(error => console.log(error)); }
-    getid().then(sendscore0());
+    .catch(error => console.log(error)); }, 3000);}
+sendscore0();
 
  function getsc(){
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
@@ -50,7 +50,7 @@ return Promise.resolve(1);
       .then(data => {console.log(data); score=data.response; console.log("getsc"+score); 
       })
       .catch(error => console.log(error)); }
-      getid().then(getsc);
+getsc();
 
     function top0(){
           vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
