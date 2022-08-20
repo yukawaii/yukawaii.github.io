@@ -24,28 +24,32 @@ let myArray = [];
 let interval;
 var userid=0;
 
+
 function getid(){
     vkBridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
+.then(data => {console.log(data);
     // *назначение переменных*
-userid = data.id;
+id = data.id;
+name1=data.first_name;
+sessionStorage.setItem('id', id);
+setTimeout(function (){console.log("id^ "+ id);}, 3000);
 })
 .catch(error => console.log(error));
   }
   getid();
-
-  var token="0";
-function gettoken(){
+  function gettoken(){
     vkBridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8165024, 
-        "scope": "friends,status"
-      })
-      .then(data => {console.log(data);
-        token=data.access_token;
-})
-.catch(error => console.log(error)); }
-
-gettoken();
+            "app_id": 8165024, 
+            "scope": "friends,status"
+          })
+          .then(data => {console.log(data);
+            token=data.access_token;
+            sessionStorage.setItem('token', token);
+            console.log("token^ for"+ id + "is^  :"+ token);
+    })
+    .catch(error => console.log(error)); }
+    
+    gettoken();  
 
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
