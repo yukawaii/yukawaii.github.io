@@ -25,7 +25,7 @@ let interval;
 var userid=0;
 
 function getid(){
-    bridge.send('VKWebAppGetUserInfo')
+    vkBridge.send('VKWebAppGetUserInfo')
 .then(data => {console.log(data.id);
     // *назначение переменных*
 userid = data.id;
@@ -36,7 +36,7 @@ userid = data.id;
 
   var token="0";
 function gettoken(){
-    bridge.send("VKWebAppGetAuthToken", { 
+    vkBridge.send("VKWebAppGetAuthToken", { 
         "app_id": 8165024, 
         "scope": "friends,status"
       })
