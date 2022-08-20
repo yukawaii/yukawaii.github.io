@@ -26,7 +26,7 @@ function infr(){
 }
 
   function top1(){
-    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score, global:1})
+    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
     .then(data => console.log(data.success))  
    .catch(error => console.log(error));
     } 
