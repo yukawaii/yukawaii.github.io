@@ -43,3 +43,10 @@ function gettoken(){
     .catch(error => console.log(error)); }
     
     gettoken();    
+
+    scorevk=
+    function top1(){
+        bridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        } 
