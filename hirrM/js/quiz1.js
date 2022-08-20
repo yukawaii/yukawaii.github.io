@@ -337,7 +337,7 @@ function nextQuestion() {
 
 function sendscore(){
   sessionStorage.setItem('score',score);
- bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
  {"user_id":id,
   "activity_id":2,
    "value":score, 
@@ -362,7 +362,7 @@ function quizResult() {
 function mis1(){
     if (score===25){
     
-        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
          {"user_id":id,
           "activity_id":3,
                   "v": "5.1", 
