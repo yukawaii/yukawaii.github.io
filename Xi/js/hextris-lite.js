@@ -53,12 +53,45 @@ function sendscore(){
 
      // missiya na 25 ochkov
       function mis1(){
-        if (score===25){
+        if (score===500){
         
             vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
              {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
              "user_id":id,
               "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        else if (score===2000){
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
+             "user_id":id,
+              "activity_id":4,
+                      "v": "5.131", 
+               "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        else if (score===10000){
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
+             "user_id":id,
+              "activity_id":5,
+                      "v": "5.131", 
+               "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        else if (score===50000){
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
+             "user_id":id,
+              "activity_id":6,
                       "v": "5.131", 
                "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
             .then(data => {console.log("Ответ на добавление очков:" + data);

@@ -84,6 +84,18 @@ function sendscore(){
             })
             .catch(error => console.log(error));  
         }
+        else  if (score===46){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"7Fk1w79K5FgI2HPRJZCx",
+             "user_id":id,
+              "activity_id":4,
+                      "v": "5.131", 
+               "access_token":"435fa635435fa635435fa635f943233c254435f435fa6352121dc97157664a5927e4d4f"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
     }
     
 
