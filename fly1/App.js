@@ -26,17 +26,7 @@ function myadd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-function myadd2(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "reward"});
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-}
 
 function joingroup(){
   bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-//Top-table
-function top1(){
-  showLeaderboardBox(user_result(integer));
 }
