@@ -3,7 +3,7 @@ const RAD = Math.PI/180;
  const sctx = scrn.getContext("2d");
  
 
- score=0;
+ var score=0;
 
 
  function getid(){
@@ -81,6 +81,8 @@ const RAD = Math.PI/180;
             bird.flap();
             break;
         case state.gameOver :
+             sendscore();
+            mis1();
             myadd1();
             state.curr = state.getReady;
             bird.speed = 0;
@@ -88,7 +90,6 @@ const RAD = Math.PI/180;
             pipe.pipes=[];
             UI.score.curr = 0;
             SFX.played=false;
-            secure.addAppEvent({activity_ad: 2, value: this.score.curr});
             break;
     }
  })
@@ -345,6 +346,7 @@ function mutebtn() {
             else if(pipe.moved)
             {
                 UI.score.curr++;
+                score=  UI.score.curr;
                 SFX.score.play();
                 pipe.moved = false;
             }
