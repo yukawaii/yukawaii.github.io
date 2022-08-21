@@ -77,7 +77,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
  {"user_id":userid,
   "activity_id":2,
    "value":score, 
-   "v": "5.1", 
+   "v": "5.131", 
    "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
 .then(response => {console.log("Ответ на добавление очков:" + response);
 })

@@ -56,7 +56,7 @@ function mis1(){
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
          {"user_id":id,
           "activity_id":3,
-                  "v": "5.1", 
+                  "v": "5.131", 
            "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
         .then(data => {console.log("Ответ на добавление очков:" + data);
         })
