@@ -1,7 +1,4 @@
 //поделиться
-function share1(){
-  vkBridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "vk.com/app8156273"});
-}
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Игры для быстрого запоминания хираганы!",
@@ -24,9 +21,3 @@ function joingroup(){
 function infr(){
   vkBridge.send("VKWebAppShowInviteBox", {})
 }
-
-  function top1(){
-    vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
-    .then(data => console.log(data.success))  
-   .catch(error => console.log(error));
-    } 
