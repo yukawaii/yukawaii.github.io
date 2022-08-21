@@ -1,8 +1,8 @@
 //поделиться
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
-    "message": "Игры для быстрого запоминания хираганы!",
-    "attachments": "https://vk.com/app8165024"
+    "message": "Игры для быстрого запоминания катаканы!",
+    "attachments": "https://vk.com/app8165904"
   });
 }
 

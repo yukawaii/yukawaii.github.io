@@ -16,7 +16,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
   getid();
   function gettoken(){
     vkBridge.send("VKWebAppGetAuthToken", { 
-            "app_id": 8165024, 
+            "app_id": 8165904, 
             "scope": "friends,status"
           })
           .then(data => {console.log(data);
@@ -33,13 +33,13 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
         score0=1;
         setTimeout(function (){
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
-     {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+     {"client_secret":"7Fk1w79K5FgI2HPRJZCx",
       "user_id":id,
       "activity_id":2,
        "value":score0, 
        "v": "5.131", 
        "global": 1,
-    "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f",
+    "access_token":"435fa635435fa635435fa635f943233c254435f435fa6352121dc97157664a5927e4d4f",
    //  "access_token":token
       }})
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
@@ -53,7 +53,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "32test", "params":
        {"user_id":id,
          "v": "5.131", 
-         "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+         "access_token":"435fa635435fa635435fa635f943233c254435f435fa6352121dc97157664a5927e4d4f"}})
       .then(data => {console.log(data); score=data.response; console.log("getsc=  "+score); 
       })
       .catch(error => console.log(error)); }, 2000);}
