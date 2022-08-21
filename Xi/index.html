@@ -4,7 +4,6 @@
 <title>Весёлая радуга</title>
 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge@2.0.8/dist/index.umd.js"></script>
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimal-ui"/>
 <link rel="icon" type="image/png" href="favicon.ico">
 <link rel="stylesheet" type="text/css" href="style/fa/css/font-awesome.min.css">
@@ -24,41 +23,18 @@
       .iksweb{display: inline-block; position:absolute; bottom: 0; left:30%;  bottom:1%;  cursor: pointer;}            
       .iksweb2{display: inline-block; position:fixed; bottom: 0; right:25%; bottom:1%;   cursor: pointer;}
 	  .iksweb3{display: inline-block; position:absolute; bottom: 0; left:45%; bottom:1%;  cursor: pointer; text-decoration:none;}
+	  .iksweb4{display: inline-block; position:absolute; bottom: 0; left:5%; bottom:1%;  cursor: pointer; text-decoration:none;}
 	</style>
+<script src = "./info.js"></script>
 </head>
 <body>
+	<script src = "./info.js"></script>
+	<script src = "./App.js"></script>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
 <script type="text/javascript" src="js/sound.js"></script>
-
-<script>
-	//инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-
-//поделиться
-function share1(){
-  bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Интересная игра!",
-    "attachments": "https://vk.com/app8180074"
-  });
-}
-
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
-function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-}
-function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-//пригласить друзей в игру
-function infr(){
-  bridge.send("VKWebAppShowInviteBox", {})
-} </script>
 
 <canvas id="canvas"></canvas>
 <div id="overlay" class="faded overlay"></div>
@@ -88,7 +64,11 @@ function infr(){
 		<div id="buttonCont"></div>
 	</div>
 </div>
-<div><button class = "iksweb2"  onclick="mutebtn()"><img id="mute" src="./images/mute.png" /></button>
+
+<div>
+	<button class = "iksweb4"  onclick="top0()"><img id="jg" src="./images/top.png" /></button>
+	<button class = "iksweb2"  onclick="mutebtn()"><img id="mute" src="./images/mute.png" /></button>
+
 		 <button class = "iksweb"  onclick="joingroup()"><img id="jg" src="./images/jg.png" /></button><br />
 	<button class = "iksweb3"  onclick="infr()"><img id="infr" src="./images/infr.png" /></button></div>
 </body>

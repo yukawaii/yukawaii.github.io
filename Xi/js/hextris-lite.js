@@ -1,9 +1,72 @@
 var hextris_lite_version = '2.1.2';
 var pausable = true;
 var spd = 1;
+score=0;
 
 
-// Hex.js
+function getid(){
+    vkBridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data);
+    // *назначение переменных*
+id = data.id;
+name1=data.first_name;
+sessionStorage.setItem('id', id);
+setTimeout(function (){console.log("id^ "+ id);}, 3000);
+})
+.catch(error => console.log(error));
+  }
+  getid();
+  function gettoken(){
+    vkBridge.send("VKWebAppGetAuthToken", { 
+            "app_id": 8180074, 
+            "scope": "friends,status"
+          })
+          .then(data => {console.log(data);
+            token=data.access_token;
+            sessionStorage.setItem('token', token);
+            console.log("token^ for"+ id + "is^  :"+ token);
+    })
+    .catch(error => console.log(error)); }
+    
+    gettoken();  
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+      .then(data => console.log(data.result))
+      .catch(error => console.log(error));
+      }
+
+
+
+
+function sendscore(){
+  sessionStorage.setItem('score',score);
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
+ {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
+    "user_id":id,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.131", 
+   "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
+.then(data => {console.log("Ответ на добавление очков:" + data);
+})
+.catch(error => console.log(error)); }
+
+     // missiya na 25 ochkov
+      function mis1(){
+        if (score===25){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
+             "user_id":id,
+              "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+    }
+    
 
 function Hex(sideLength) {
     this.playThrough = 0;
@@ -471,6 +534,8 @@ function checkGameOver() {
                 highscores.push(score);
             }
             writeHighScores();
+            sendscore();
+            mis1();
             myadd1();
             gameOverDisplay();
             return true;
@@ -881,7 +946,9 @@ function showText(text) {
     if (text == 'gameover') {
         //Clay('client.share.any', {text: 'Think you can beat my score of '+ score + ' in Super Cool Game?'})
         $("#gameoverscreen").fadeIn();
-        myadd1();
+        sendscore();
+    mis1();
+    myadd1();
     }
     $(".overlay").html(messages[text]);
     $(".overlay").fadeIn("1000", "swing");
@@ -926,7 +993,7 @@ function gameOverDisplay() {
     else {
         $("#currentHighScore").text(highscores[0])
     }
-    myadd1();
+
     $("#gameoverscreen").fadeIn();
     $("#buttonCont").fadeIn();
     $("#container").fadeIn();
@@ -1177,6 +1244,8 @@ function consolidateBlocks(hex,side,index){
     hex.texts.push(new Text(hex.x,hex.y,"+ "+adder.toString(),"bold Q ",deletedBlocks[0].color,fadeUpAndOut));
     hex.lastColorScored = deletedBlocks[0].color;
     score += adder;
+    sendscore();
+    mis1();
 }
 
 // comboTimer.js
