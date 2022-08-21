@@ -70,7 +70,43 @@ function sendscore(){
               "activity_id":3,
                       "v": "5.131", 
                "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
-            .then(data => {console.log("Ответ на добавление очков:" + data);
+            .then(data => {console.log("Ответ на добавление misiii:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        else    if (score===50){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"qp47UOdcqJmW94rKknxR",
+             "user_id":id,
+              "activity_id":4,
+                      "v": "5.131", 
+               "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+            .then(data => {console.log("Ответ на добавление missii:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        else    if (score===80){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"qp47UOdcqJmW94rKknxR",
+             "user_id":id,
+              "activity_id":5,
+                      "v": "5.131", 
+               "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+            .then(data => {console.log("Ответ на добавление missii 80: " + data);
+            })
+            .catch(error => console.log(error));  
+        }
+        if (score===100){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"qp47UOdcqJmW94rKknxR",
+             "user_id":id,
+              "activity_id":6,
+                      "v": "5.131", 
+               "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+            .then(data => {console.log("Ответ на добавление missii 100: " + data);
             })
             .catch(error => console.log(error));  
         }
