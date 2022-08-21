@@ -55,7 +55,22 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
       .then(data => console.log(data.result))
       .catch(error => console.log(error));
       }
-
+      // missiya na 25 ochkov
+      function mis1(){
+        if (score===25){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+             "user_id":id,
+              "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+    }
+    
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
     options: ["СА", "НИ", "У", "О"],
@@ -358,32 +373,20 @@ function sendscore(){
 .catch(error => console.log(error)); }
 
 function quizResult() {
+    sessionStorage.setItem("score", score);
+    sendscore();
+    mis1();
     document.querySelector(".total-questions").innerHTML = myApp.length;
     document.querySelector(".total-attempt").innerHTML = attempt;
     document.querySelector(".total-correct").innerHTML = score;
     document.querySelector(".total-wrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
-    sessionStorage.setItem("score", score);
-    sendscore();
-    mis1();
+ 
     myadd1();
 }
 
-function mis1(){
-    if (score===25){
-    
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
-         {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
-         "user_id":id,
-          "activity_id":3,
-                  "v": "5.131", 
-           "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
-        .then(data => {console.log("Ответ на добавление очков:" + data);
-        })
-        .catch(error => console.log(error));  
-    }
-}
+
 let namesAndScores = JSON.parse(localStorage.getItem("namesAndScores"));
 
     if (namesAndScores === null) {
