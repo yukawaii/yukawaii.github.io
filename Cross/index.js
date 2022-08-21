@@ -41,7 +41,7 @@ gettoken();
   //отправка очков в вк
    function ressend(){
    
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
    "value":score, 
@@ -56,7 +56,7 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_i
 function mis1(){
     if (score===25){
     
-        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
          {"user_id":userid,
           "activity_id":3,
                   "v": "5.1", 

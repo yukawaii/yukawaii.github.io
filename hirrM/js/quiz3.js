@@ -53,7 +53,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
 function mis1(){
     if (score===25){
     
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
          {"user_id":id,
           "activity_id":3,
                   "v": "5.1", 

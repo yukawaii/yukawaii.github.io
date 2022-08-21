@@ -346,7 +346,7 @@ function nextQuestion() {
 
 function sendscore(){
   sessionStorage.setItem('score',score);
-  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
  {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
     "user_id":id,
   "activity_id":2,
@@ -373,7 +373,7 @@ function quizResult() {
 function mis1(){
     if (score===25){
     
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "mis1", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
          {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
          "user_id":id,
           "activity_id":3,

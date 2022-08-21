@@ -32,14 +32,14 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
 
         score0=1;
         setTimeout(function (){
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
      {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
       "user_id":id,
       "activity_id":2,
        "value":score0, 
        "v": "5.1", 
-     //  "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f",
-     "access_token":token
+    "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f",
+   //  "access_token":token
       }})
     .then(data => {console.log("Ответ на первичное добавление очков:" + data);
     })

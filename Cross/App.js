@@ -73,7 +73,7 @@ function getsc(){
 getsc();
   //отправка очков в вк
   function ressend(){
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addappEvent", "request_id": "32test", "params":
+bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
  {"user_id":userid,
   "activity_id":2,
    "value":score, 
