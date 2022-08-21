@@ -50,6 +50,11 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     .catch(error => console.log(error)); }
     
     gettoken();  
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+      .then(data => console.log(data.result))
+      .catch(error => console.log(error));
+      }
 
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
@@ -362,6 +367,7 @@ function quizResult() {
     sessionStorage.setItem("score", score);
     sendscore();
     mis1();
+    myadd1();
 }
 
 function mis1(){
