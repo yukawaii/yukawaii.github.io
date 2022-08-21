@@ -34,6 +34,13 @@
 	<script>
 		// Sends event to client
 		vkBridge.send('VKWebAppInit');
+		
+		function top0(){
+      getsc();
+          vkBridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score, "global":1})
+        .then(data => console.log(data.success))  
+       .catch(error => console.log(error));
+        } 
 		  </script> 
 <script type="text/javascript" src="js/sound.js"></script>
 
