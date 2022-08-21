@@ -2,6 +2,71 @@ const RAD = Math.PI/180;
  const scrn = document.getElementById('canvas');
  const sctx = scrn.getContext("2d");
  
+
+ score=0;
+
+
+ function getid(){
+     vkBridge.send('VKWebAppGetUserInfo')
+ .then(data => {console.log(data);
+     // *назначение переменных*
+ id = data.id;
+ name1=data.first_name;
+ sessionStorage.setItem('id', id);
+ setTimeout(function (){console.log("id^ "+ id);}, 3000);
+ })
+ .catch(error => console.log(error));
+   }
+   getid();
+   function gettoken(){
+     vkBridge.send("VKWebAppGetAuthToken", { 
+             "app_id": 8176436, 
+             "scope": "friends,status"
+           })
+           .then(data => {console.log(data);
+             token=data.access_token;
+             sessionStorage.setItem('token', token);
+             console.log("token^ for"+ id + "is^  :"+ token);
+     })
+     .catch(error => console.log(error)); }
+     
+     gettoken();  
+     function myadd1(){
+         vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+       .then(data => console.log(data.result))
+       .catch(error => console.log(error));
+       } 
+ 
+ function sendscore(){
+   sessionStorage.setItem('score',score);
+   vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
+  {"client_secret":"pZjKfwRAYegYXd1g4W8v",
+     "user_id":id,
+   "activity_id":2,
+    "value":score, 
+    "v": "5.131", 
+    "access_token":"6fb478626fb478626fb47862886fc8bb5666fb46fb478620d3a69384cf99ccbba8e4819"}})
+ .then(data => {console.log("Ответ на добавление очков:" + data);
+ })
+ .catch(error => console.log(error)); }
+ 
+      // missiya na 25 ochkov
+       function mis1(){
+         if (score===10){
+         
+             vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+              {"client_secret":"pZjKfwRAYegYXd1g4W8v",
+              "user_id":id,
+               "activity_id":3,
+                       "v": "5.131", 
+                "access_token":"6fb478626fb478626fb47862886fc8bb5666fb46fb478620d3a69384cf99ccbba8e4819"}})
+             .then(data => {console.log("Ответ на добавление очков:" + data);
+             })
+             .catch(error => console.log(error));  
+         }
+     }
+     
+
   // Event handler to resize the canvas when the document view is changed
   window.addEventListener('resize', resizeCanvas, false);
 
@@ -51,6 +116,7 @@ const RAD = Math.PI/180;
    		}
  	}
 }
+
 
 
 

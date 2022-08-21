@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
     	 
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script> 
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Весёлая мошка</title>
     <link rel="stylesheet" href="style.css" > 
@@ -15,21 +16,20 @@
       .iksweb{display: inline-block;cursor: pointer; font-size:14px;text-decoration:none;padding:4px 13px; color:#fcfcfc;background:#28821e;border-radius:37px;border:1px solid #32c734;}
       .iksweb:hover{background:#edb668;color:#fafafa;border:1px solid #c7a732;transition: all 0.2s ease;}
       </style>
+<script src = "./info.js"></script>
 </head>
 <body>
+	<script src = "./info.js"></script>
+	<script src = "./App.js"></script>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
   <div>    
          <button class = "iksweb"  onclick="mutebtn()">Музыка</button>
          <button class="iksweb" onclick = "joingroup()">Группа</button>
          <button id="share" class="iksweb" onclick = "infr()">Друзья</button>
          <button class = "iksweb" onclick="window.location.href = './i.html';">Игры</button><br></div>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js">
-        bridge.send("VKWebAppInit");
-    </script>
-    <script type="text/javascript">
-      // Sends event to client
-      vkBridge.send('VKWebAppInit');
-    </script>
-	<script src = "./App.js"></script>
     <canvas id="canvas"></canvas>
     <script src="game.js"></script>
 </body>

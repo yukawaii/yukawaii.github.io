@@ -1,32 +1,23 @@
-//инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-
 //поделиться
-function share1(){
-  bridge.send("VKWebAppShowWallPostBox", {
-    "message": "Очень сложная и интересная игра!",
-    "attachments": "https://vk.com/app8176436"
+function share2(){
+  vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Игры для быстрого запоминания хираганы!",
+    "attachments": "https://vk.com/app8165024"
   });
 }
 
-//пригласить друзей в игру
-function infr(){
-  bridge.send("VKWebAppShowInviteBox", {})
-}
-
 function favor1(){
-bridge.send("VKWebAppAddToFavorites");
+  vkBridge.send("VKWebAppAddToFavorites");
 }
-
 function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-
 function joingroup(){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+  vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+//пригласить друзей в игру
+function infr(){
+  vkBridge.send("VKWebAppShowInviteBox", {})
 }
