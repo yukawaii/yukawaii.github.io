@@ -4,7 +4,6 @@
     <link href='https://fonts.googleapis.com/css?family=Arvo:400,700' rel='stylesheet' type='text/css'>
     	 
 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <style>
         body {
             background: url(./img/background3.jpg) no-repeat center fixed;     
@@ -54,12 +53,16 @@
 }
 
  </style>
+
+<script src = "./info.js"></script>
 </head>
 <body>
-  <script>
-    // Sends event to client
-    vkBridge.send('VKWebAppInit');
-  </script> 
+	<script src = "./info.js"></script>
+
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
   <div>
     <button class = "btn1" onclick="window.location.href = './index1.html';"></button>
   </div> <br><br>
@@ -67,6 +70,7 @@
     <button class = "myButton" onclick="joingroup()">Группа</button>
     <button class = "myButton" onclick="share2()">Поделиться</button> <br><br>
     <button class = "myButton" onclick="infr()">Пригласить друзей</button>
+    <button class = "myButton" onclick="top0()">Топ</button> 
     <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
     
     <script>
@@ -83,11 +87,7 @@ function infr(){
          .then(data => console.log(data.success))  
         .catch(error => console.log(error));
 }
-        function myAdd1(){
-            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-        .then(data => console.log(data.result))
-        .catch(error => console.log(error));
-        }
+      
         function joingroup(){
             vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
         }
