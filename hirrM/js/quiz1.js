@@ -347,7 +347,7 @@ function sendscore(){
   "activity_id":2,
    "value":score, 
    "v": "5.1", 
-   "access_token":token}})
+   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
 .then(data => {console.log("Ответ на добавление очков:" + data);
 })
 .catch(error => console.log(error)); }
