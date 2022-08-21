@@ -12,37 +12,46 @@ let lanes;
 let gameSounds, themeSong;
 let gameOver;
 var mut = true;  
-/*var score=0;
+
+var score = 0;
+
 
 function getid(){
-    bridge.send('VKWebAppGetUserInfo')
-.then(data => {console.log(data.id);
+    vkBridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data);
     // *назначение переменных*
-userid = data.id;
+id = data.id;
+name1=data.first_name;
+sessionStorage.setItem('id', id);
+setTimeout(function (){console.log("id^ "+ id);}, 3000);
 })
 .catch(error => console.log(error));
   }
   getid();
+  function gettoken(){
+    vkBridge.send("VKWebAppGetAuthToken", { 
+            "app_id": 8171561, 
+            "scope": "friends,status"
+          })
+          .then(data => {console.log(data);
+            token=data.access_token;
+            sessionStorage.setItem('token', token);
+            console.log("token^ for"+ id + "is^  :"+ token);
+    })
+    .catch(error => console.log(error)); }
+    
+    gettoken();  
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+      .then(data => console.log(data.result))
+      .catch(error => console.log(error));
+      }
 
-  var token="0";
-function gettoken(){
-    bridge.send("VKWebAppGetAuthToken", { 
-        "app_id": 8171561, 
-        "scope": "friends,status"
-      })
-      .then(data => {console.log(data);
-        token=data.access_token;
-})
-.catch(error => console.log(error)); }
-
-gettoken();
-
-
-  //отправка очков в вк
-   function ressend(){
-   
-bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
- {"user_id":userid,
+function sendscore(){
+  sessionStorage.setItem('score',score);
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
+ {"client_secret":"qp47UOdcqJmW94rKknxR",
+    "user_id":id,
   "activity_id":2,
    "value":score, 
    "v": "5.131", 
@@ -51,23 +60,21 @@ bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_i
 })
 .catch(error => console.log(error)); }
 
-
-// миссия 
-function mis1(){
-    if (score===25){
-    
-        bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
-         {"user_id":userid,
-          "activity_id":3,
-                  "v": "5.131", 
-           "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
-        .then(data => {console.log("Ответ на добавление очков:" + data);
-        })
-        .catch(error => console.log(error));  
+     // missiya na 25 ochkov
+      function mis1(){
+        if (score===25){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"qp47UOdcqJmW94rKknxR",
+             "user_id":id,
+              "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
     }
-}
-// конец миссии */
-
 
 const firstRun = () =>{
     document.getElementById("instructions").innerText = ((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? "Проведите пальцем туда, куда хотите двигаться." : "Используйте стрелки на клавиатуре") + "\nПереведи цыплёнка через дорогу!";
@@ -317,9 +324,9 @@ class Chicken{
                 lanes.push(lane);
                 scene.add(lane.mesh);
                 document.getElementById("score").innerText = "Очков:" + this.maxLane;
-                //score=this.maxLane;
-              //  ressend();
-               // mis1();
+                score=this.maxLane;
+                sendscore();
+                mis1();
           }
             let finalX = currentX + dX;
             let finalZ = currentZ + dZ;
