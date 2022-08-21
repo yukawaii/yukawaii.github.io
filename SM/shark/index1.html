@@ -746,23 +746,6 @@ function sendscore(){
   };
  
 
-function sendscore(){
-       vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"n34FNAF7MZWUhCKmUEZX", 
-  "user_id":userid, "activity_id":2, "value":score, "v":"5.131",
-   "access_token":"622a2818622a2818622a2818276256f0986622a622a281800bc642eaaa7170413f766fd",
-   "global":1}})
-   .then(data => {console.log("Ответ на добавление очков:" + data.response);
-  })
-  .catch(error => console.log(error)); }
-
-  var setScore = function (value) {
-    score = value;
-    requestAnimationFrame(function () {
-      $scoreText.textContent = score;
-    });
-  };
-
   var drawGameOver = function () {
     if (!gameOverDisplayed) {
       gameOverDisplayed = true;
