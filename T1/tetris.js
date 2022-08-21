@@ -543,7 +543,7 @@ function initAudio() {
 }
 
 function pauseGame(){
-    ressend();
+myadd1();
     introSound.pause();
     loopSound.pause();
     gameState.paused=true
@@ -608,10 +608,15 @@ function homeScreen() {
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } */
-
+        function myadd1(){
+            vkBridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+          .then(data => console.log(data.result))
+          .catch(error => console.log(error));
+          }
 function endGame(){
     stopSounds()
-    ressend();
+  myadd1();
     gameoverSound.pause()
     gameoverSound.currentTime = 0;
     gameoverSound.play() 

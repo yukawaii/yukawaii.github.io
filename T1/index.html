@@ -27,7 +27,11 @@
 .iksweb1:hover{background:#202025;color:#ffffff;border:0px solid #202025;transition: all 0.2s ease;}
         </style>
      </head>
-     <body><div>
+     <body>
+        <script>
+            // Sends event to client
+            vkBridge.send('VKWebAppInit');
+          </script> <div>
         <script src="./App.js"></script>
         <button class = "iksweb" onclick= "window.location.href = './tetcl/index.html';">Дизайн Классика</button><br />
         <button class = "iksweb" onclick="pauseGame(); myadd1();">Пауза</button><br />

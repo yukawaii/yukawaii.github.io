@@ -1,22 +1,22 @@
 //инициализация
-const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
+
+vkBridge.subscribe((e) => console.log("vkBridge event", e));
+vkBridge.send("VKWebAppInit", {});
 
 //поделиться
 function share2(){
-  bridge.send("VKWebAppShowWallPostBox", {
+  vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Тетрис прямо как на приставке!",
     "attachments": "https://vk.com/app8167395"
   });
 }
 
 function favor1(){
-bridge.send("VKWebAppAddToFavorites");
+  vkBridge.send("VKWebAppAddToFavorites");
 }
 function myadd1(){
-  bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+  vkBridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
+  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
