@@ -18,7 +18,7 @@ const finalMsg = document.querySelector(".finalMsg");
 
 let attempt = 0;
 let questionIndex = 0;
-let score = 0;
+score = 0;
 let number = 0;
 let myArray = [];
 let interval;
@@ -48,23 +48,41 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     .catch(error => console.log(error)); }
     
     gettoken();  
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+      .then(data => console.log(data.result))
+      .catch(error => console.log(error));
+      }
 
-  // миссия 
-function mis1(){
-    if (score===25){
-    
-        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
-         {"user_id":id,
-          "activity_id":3,
-                  "v": "5.131", 
-           "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
-        .then(data => {console.log("Ответ на добавление очков:" + data);
-        })
-        .catch(error => console.log(error));  
+function sendscore(){
+  sessionStorage.setItem('score',score);
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
+ {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+    "user_id":id,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.131", 
+   "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+.then(data => {console.log("Ответ на добавление очков:" + data);
+})
+.catch(error => console.log(error)); }
+
+     // missiya na 25 ochkov
+      function mis1(){
+        if (score===25){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"AAM5cxvWtxEMMnRqTK7p",
+             "user_id":id,
+              "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
     }
-}
-// конец миссии
-
+    
 const myApp = [{
     // ХА СТРОКА
     question: "Как читается эта мора? <br> <img src = '../mem/img/26.png' width='100' height='100' />",
@@ -335,6 +353,9 @@ function nextQuestion() {
 }
 
 function quizResult() {
+    sendscore();
+    mis1();
+    myadd1();
     document.querySelector(".total-questions").innerHTML = myApp.length;
     document.querySelector(".total-attempt").innerHTML = attempt;
     document.querySelector(".total-correct").innerHTML = score;

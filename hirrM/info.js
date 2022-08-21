@@ -38,6 +38,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
       "activity_id":2,
        "value":score0, 
        "v": "5.131", 
+       "global": 1,
     "access_token":"2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f",
    //  "access_token":token
       }})
@@ -59,10 +60,8 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
 getsc();
 
     function top0(){
-          vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: score})
+      getsc();
+          vkBridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score, "global":1})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } 
-    function top1(){
-        getsc().then(top0);
-    }

@@ -70,7 +70,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
             .catch(error => console.log(error));  
         }
     }
-    
+
 const myApp = [{
     question: "Как читается эта мора? <br> <img src = '../mem/img/7.png' width='100' height='100' />",
     options: ["СА", "НИ", "У", "О"],
@@ -376,6 +376,7 @@ function quizResult() {
     sessionStorage.setItem("score", score);
     sendscore();
     mis1();
+    myadd1();
     document.querySelector(".total-questions").innerHTML = myApp.length;
     document.querySelector(".total-attempt").innerHTML = attempt;
     document.querySelector(".total-correct").innerHTML = score;
@@ -383,7 +384,6 @@ function quizResult() {
     const percentage = (score / (myApp.length)) * 100;
     document.querySelector(".percentage").innerHTML = Math.floor(percentage) + "%";
  
-    myadd1();
 }
 
 
