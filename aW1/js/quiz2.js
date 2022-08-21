@@ -18,10 +18,73 @@ const finalMsg = document.querySelector(".finalMsg");
 
 let attempt = 0;
 let questionIndex = 0;
-let score = 0;
+ score = 0;
 let number = 0;
 let myArray = [];
 let interval;
+
+function getid(){
+    vkBridge.send('VKWebAppGetUserInfo')
+.then(data => {console.log(data);
+    // *назначение переменных*
+id = data.id;
+name1=data.first_name;
+sessionStorage.setItem('id', id);
+setTimeout(function (){console.log("id^ "+ id);}, 3000);
+})
+.catch(error => console.log(error));
+  }
+  getid();
+  function gettoken(){
+    vkBridge.send("VKWebAppGetAuthToken", { 
+            "app_id": 8177204, 
+            "scope": "friends,status"
+          })
+          .then(data => {console.log(data);
+            token=data.access_token;
+            sessionStorage.setItem('token', token);
+            console.log("token^ for"+ id + "is^  :"+ token);
+    })
+    .catch(error => console.log(error)); }
+    
+    gettoken();  
+    function myadd1(){
+        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+      .then(data => console.log(data.result))
+      .catch(error => console.log(error));
+      }
+
+
+
+
+function sendscore(){
+  sessionStorage.setItem('score',score);
+  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
+ {"client_secret":"R1vw1yvDiH7viQAkPis4",
+    "user_id":id,
+  "activity_id":2,
+   "value":score, 
+   "v": "5.131", 
+   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a"}})
+.then(data => {console.log("Ответ на добавление очков:" + data);
+})
+.catch(error => console.log(error)); }
+
+     // missiya na 25 ochkov
+      function mis1(){
+        if (score===25){
+        
+            vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "mis1", "params":
+             {"client_secret":"R1vw1yvDiH7viQAkPis4",
+             "user_id":id,
+              "activity_id":3,
+                      "v": "5.131", 
+               "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a"}})
+            .then(data => {console.log("Ответ на добавление очков:" + data);
+            })
+            .catch(error => console.log(error));  
+        }
+    }
 
 const myApp = [{
     question: "<img src = '../mem/img/31.png' width='250' height='250' />",
@@ -225,6 +288,9 @@ function nextQuestion() {
 }
 
 function quizResult() {
+    sendscore();
+    mis1();
+    myadd1();
     document.querySelector(".total-questions").innerHTML = myApp.length;
     document.querySelector(".total-attempt").innerHTML = attempt;
     document.querySelector(".total-correct").innerHTML = score;

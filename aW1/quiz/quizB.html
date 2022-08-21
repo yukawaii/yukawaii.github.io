@@ -17,25 +17,16 @@
 .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
 .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
+
+<script src = "../info.js"></script>
 </head>
 <body>
-	  <script>
-        // Sends event to client
-        vkBridge.send('VKWebAppInit');
-      </script>
-	<script>
-        const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-    </script>
+	<script src = "../info.js"></script>
 	<script src = "../App.js"></script>
 	<script>
-				function myAdd1(){
-  vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-}
-		myAdd1(); </script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
 	<div class ="myclass1">
 		<h3> Голарктическая область</h3>
 		<h3> Выбери подобласть обитания животных!</h3>
@@ -47,6 +38,7 @@ bridge.send("VKWebAppInit", {});
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quiz11.html';">Западно-Американская</button>
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quiz12.html';">Восточно-Американская</button>
 		<button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button><br />
+		<button class = "iksweb" onclick="top0()">Победители</button> 
 		<button class = "iksweb" onclick="share2()">Поделиться</button>
 		<button class = "iksweb" onclick="joingroup()">Группа</button>
 		<h5> Охватывает бо́льшую часть Северного полушария и является крупнейшим из всех биогеографических регионов.  </h5> 

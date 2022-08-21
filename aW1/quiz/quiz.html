@@ -16,15 +16,23 @@
 .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
 .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
+
+<script src = "../info.js"></script>
 </head>
 <body>
+	<script src = "../info.js"></script>
 	<script src = "../App.js"></script>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
 	<div class ="myclass1">
 		<h3> Выбери область обитания животных!</h3>
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quizA.html';">Австралийская</button>
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quizB.html';">Голарктическая</button><br />
 		<button class = "iksweb" onclick="window.location.href = '../quiz/quizC.html';">Индо-Малайская</button>
 <br>		<button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button><br />
+<button class = "iksweb" onclick="top0()">Победители</button> 
 		<button class = "iksweb" onclick="share2()">Поделиться</button>
 		<button class = "iksweb" onclick="joingroup()">Подписаться</button>
 		<h3> В следующем обновлении будут добавлены области: <br> 

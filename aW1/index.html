@@ -18,67 +18,20 @@
 .iksweb1{display: inline-block;cursor: pointer; font-size:30px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:8px solid #C6D8FF;}
 .iksweb1:hover{background:#62b0f5;color:#ffffff;border:8px solid #8ad5f2;transition: all 0.4s ease;}
 	</style>
+<<script src = "./info.js"></script>
 </head>
 <body>
+	<script src = "./info.js"></script>
 	<script src = "./App.js"></script>
 	<script>
-		const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-		var userid;
-var score2; var scorsum;
-		 sessionStorage.setItem("score1", 0);
-		 sessionStorage.setItem("scorsum", 0);
-		getinfo();
-		bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
-  "user_id":userid, "activity_id":2, "value":1, "v":"5.131",
-   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
-   "global":1}})
-  .then(r => {console.log("Ответ на добавление очков:" + r.response);
-  })
-  .catch(error => console.log(error));
-		
-		 //получение очков из вк
-   function getsc(){
-      bridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
-       {"user_id": userid, "v":"5.131",
-        "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a", global:1}})
-      .then(data => {console.log("Очков на вк:" + data.response);
-        // *назначение переменных*
-     (score2 = data.response);
-        return data.response;
-      })
-      .catch(error => console.log(error));} ;
-		
-		//отправка очков в вк
-  function sendscore(){
-    getsc();
-    var userid = sessionStorage.getItem('userid');
-    var score1 = sessionStorage.getItem('score1');
-     scorsum= score1+score2;
-    sessionStorage.setItem("scorsum", scorsum);
-  bridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"R1vw1yvDiH7viQAkPis4", 
-  "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
-   "access_token":"6926f8496926f8496926f84999695a3e7d669266926f8490ba9c86b1a91f45b9c54eb0a",
-   "global":1}})
-   .then(data => {console.log("Ответ на добавление очков:" + data.response);
-  })
-  .catch(error => console.log(error)); }; 
-		
-		 function showLeaderBoard()
-{
-  var scorsum = sessionStorage.getItem('scorsum');
-	bridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
-         .then(data => console.log(data.success))  
-         .catch(error => console.log(error));
-}
-	</script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
 	<div class ="myclass1">
 		<br> 
 		<h3> Попробуй угадать всех животных! </h3> 
 		<button class = "iksweb1" onclick="window.location.href = './quiz/quiz.html';">Викторина</button><br>
+		<button class = "iksweb" onclick="top0()">Топ</button> 
 			<button class = "iksweb" onclick="joingroup()">Подписаться</button>
 		<button class = "iksweb" onclick="share2()">Поделиться</button>
 		<button class = "iksweb" onclick="infr()">Пригласить друзей</button>

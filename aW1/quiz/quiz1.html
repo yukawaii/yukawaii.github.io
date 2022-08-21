@@ -17,15 +17,16 @@
   .iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
   .iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
   </style>
-</head>
 
+<script src = "../info.js"></script>
+</head>
 <body>
-    <script src = "../App.js"></script>
-    <script>
-        const bridge = vkBridge.default;
-bridge.subscribe((e) => console.log("vkBridge event", e));
-bridge.send("VKWebAppInit", {});
-    </script>
+	<script src = "../info.js"></script>
+	<script src = "../App.js"></script>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+		  </script> 
     <div align="center">
         <audio controls loop>
             <source src="../resources/bgmusic.mp3" type="audio/ogg">
@@ -39,6 +40,7 @@ bridge.send("VKWebAppInit", {});
         30 вопросов. </h3>
         <button type="button" class="start-quiz-btn btn">Начать игру</button>
         <button class = "iksweb" onclick="joingroup()">Группа</button>
+        <button class = "iksweb" onclick="top0()">Топ</button> 
    <button class = "iksweb" onclick="lev1();">Другой уровень</button>
         <button class = "iksweb" onclick="infr()">Пригласить друзей</button>
     </div>
@@ -83,6 +85,8 @@ bridge.send("VKWebAppInit", {});
         <h4>Процент верных ответов: <span class="percentage"></span></h4>
  
        <button type="button" class="start-again-quiz-btn btn">Играть ещё раз</button>
+       <button class = "iksweb" onclick="top0()">Топ</button> 
+       <button class = "iksweb" onclick="joingroup()">Группа</button>
         <button type="button" class="go-home-btn btn">В начало уровня</button>
             </h4>
         </div>
@@ -90,11 +94,6 @@ bridge.send("VKWebAppInit", {});
 
     <script src="../js/quiz1.js"></script>
  <script>
-    function myAdd1(){
-  bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-}
     function lev1(){
         
         window.location.href = '../quiz/quiz.html';
