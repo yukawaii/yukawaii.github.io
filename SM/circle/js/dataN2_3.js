@@ -47,19 +47,19 @@ const DATA = {
             "character": "玉",
             "onyomi": "ギョク -ダ",
             "kunyomi": "たま たま-",
-            "meaning": "jewel, ball"
+            "meaning": "Драгоценность"
         }, {
             "category": "jlptn2",
             "character": "波",
             "onyomi": "ハ ナ",
             "kunyomi": "",
-            "meaning": "waves, billows, Poland"
+            "meaning": "Волна"
         }, {
             "category": "jlptn2",
             "character": "帯",
             "onyomi": "タイ オ",
             "kunyomi": "お.びる",
-            "meaning": "sash, belt, obi, zone, region"
+            "meaning": "Пояс"
         }, {
             "category": "jlptn2",
             "character": "延",
@@ -71,25 +71,25 @@ const DATA = {
             "character": "羽",
             "onyomi": "ウ ハ",
             "kunyomi": "は わ",
-            "meaning": "feathers, counter for birds, rabbits"
+            "meaning": "Крыло"
         }, {
             "category": "jlptn2",
             "character": "固",
             "onyomi": "コ",
             "kunyomi": "かた.める かた.まる かた.まり かた.い",
-            "meaning": "harden, set, clot, curdle"
+            "meaning": "Твердеть"
         }, {
             "category": "jlptn2",
             "character": "則",
             "onyomi": "ソク ノット.",
             "kunyomi": "",
-            "meaning": "rule, follow, based on, model after"
+            "meaning": "Правило"
         }, {
             "category": "jlptn2",
             "character": "乱",
             "onyomi": "ラン ロン ワタ.",
             "kunyomi": "みだ.れる みだ.る みだ.す みだ おさ.める",
-            "meaning": "riot, war, disorder, disturb"
+            "meaning": "Беспорядок"
         }, {
             "category": "jlptn2",
             "character": "普",
@@ -101,37 +101,37 @@ const DATA = {
             "character": "測",
             "onyomi": "ソク",
             "kunyomi": "はか.る",
-            "meaning": "fathom, plan, scheme, measure"
+            "meaning": "Измерять"
         }, {
             "category": "jlptn2",
             "character": "豊",
             "onyomi": "ホウ ブ ト",
             "kunyomi": "ゆた.か",
-            "meaning": "bountiful, excellent, rich"
+            "meaning": "Изобильный"
         }, {
             "category": "jlptn2",
             "character": "厚",
             "onyomi": "コウ ア",
             "kunyomi": "あつ.い",
-            "meaning": "thick, heavy, rich, kind, cordial, brazen, shameless"
+            "meaning": "Толстый"
         }, {
             "category": "jlptn2",
             "character": "齢",
             "onyomi": "レイ",
             "kunyomi": "よわ.い とし",
-            "meaning": "age"
+            "meaning": "Возраст"
         }, {
             "category": "jlptn2",
             "character": "囲",
             "onyomi": "イ",
             "kunyomi": "かこ.む かこ.う かこ.い",
-            "meaning": "surround, besiege, store, paling, enclosure, encircle, preserve, keep"
+            "meaning": "Окружать"
         }, {
             "category": "jlptn2",
             "character": "卒",
             "onyomi": "ソツ シュツ",
             "kunyomi": "そっ.する お.える お.わる ついに にわか",
-            "meaning": "graduate, soldier, private, die"
+            "meaning": "Оканчивать школу"
         }, {
             "category": "jlptn2",
             "character": "略",
@@ -167,7 +167,7 @@ const DATA = {
             "character": "軽",
             "onyomi": "ケイ",
             "kunyomi": "かる.い かろ.やか かろ.んじる",
-            "meaning": "lightly, trifling, unimportant"
+            "meaning": "Лёгкий"
         }, {
             "category": "jlptn2",
             "character": "了",
@@ -185,7 +185,7 @@ const DATA = {
             "character": "城",
             "onyomi": "ジョウ シ",
             "kunyomi": "",
-            "meaning": "castle"
+            "meaning": "Дворец, замок"
         }, {
             "category": "jlptn2",
             "character": "患",
@@ -203,19 +203,19 @@ const DATA = {
             "character": "版",
             "onyomi": "ハン",
             "kunyomi": "",
-            "meaning": "printing block, printing plate, edition, impression, label"
+            "meaning": "Издание, выпуск"
         }, {
             "category": "jlptn2",
             "character": "令",
             "onyomi": "レ",
             "kunyomi": "",
-            "meaning": "orders, ancient laws, command, decree"
+            "meaning": "Приказ"
         }, {
             "category": "jlptn2",
             "character": "角",
             "onyomi": "カク ツ",
             "kunyomi": "かど",
-            "meaning": "angle, corner, square, horn, antlers"
+            "meaning": "Угол"
         }, {
             "category": "jlptn2",
             "character": "絡",
@@ -227,7 +227,7 @@ const DATA = {
             "character": "損",
             "onyomi": "ソン",
             "kunyomi": "そこ.なう そこな.う -そこ.なう そこ.ねる -そこ.ねる",
-            "meaning": "damage, loss, disadvantage, hurt, injure"
+            "meaning": "Вредить"
         }, {
             "category": "jlptn2",
             "character": "募",
@@ -239,13 +239,13 @@ const DATA = {
             "character": "裏",
             "onyomi": "リ",
             "kunyomi": "うら",
-            "meaning": "back, amidst, in, reverse, inside, palm, sole, rear, lining, wrong side"
-        }, {
+            "meaning": "Изнанка"     
+   }, {
             "category": "jlptn2",
             "character": "仏",
             "onyomi": "ブツ フツ",
             "kunyomi": "ほとけ",
-            "meaning": "Buddha, the dead, France"
+            "meaning": "Будда"
         }, {
             "category": "jlptn2",
             "character": "績",
@@ -269,43 +269,43 @@ const DATA = {
             "character": "混",
             "onyomi": "コン",
             "kunyomi": "ま.じる -ま.じり ま.ざる ま.ぜる こ.む",
-            "meaning": "mix, blend, confuse"
+            "meaning": "Смешивать"
         }, {
             "category": "jlptn2",
             "character": "昇",
             "onyomi": "ショウ ノボ.",
             "kunyomi": "",
-            "meaning": "rise up"
+            "meaning": "Подниматься"
         }, {
             "category": "jlptn2",
             "character": "池",
             "onyomi": "チ",
             "kunyomi": "いけ",
-            "meaning": "pond, cistern, pool, reservoir"
+            "meaning": "Пруд, озеро"
         }, {
             "category": "jlptn2",
             "character": "血",
             "onyomi": "ケツ",
             "kunyomi": "ち",
-            "meaning": "blood"
+            "meaning": "Кровь"
         }, {
             "category": "jlptn2",
             "character": "温",
             "onyomi": "オン ヌ",
             "kunyomi": "あたた.か あたた.かい あたた.まる あたた.める",
-            "meaning": "warm"
+            "meaning": "Тёплый"
         }, {
             "category": "jlptn2",
             "character": "季",
             "onyomi": "",
             "kunyomi": "",
-            "meaning": "seasons"
+            "meaning": "Время года"
         }, {
             "category": "jlptn2",
             "character": "星",
             "onyomi": "セイ ショウ",
             "kunyomi": "ほし -ぼし",
-            "meaning": "star, spot, dot, mark"
+            "meaning": "Звезда"
         }, {
             "category": "jlptn2",
             "character": "永",
@@ -329,49 +329,49 @@ const DATA = {
             "character": "庫",
             "onyomi": "コ ク",
             "kunyomi": "くら",
-            "meaning": "warehouse, storehouse"
+            "meaning": "Склад"
         }, {
             "category": "jlptn2",
             "character": "刊",
             "onyomi": "カン",
             "kunyomi": "",
-            "meaning": "publish, carve, engrave"
+            "meaning": "Публикация"
         }, {
             "category": "jlptn2",
             "character": "像",
             "onyomi": "ゾ",
             "kunyomi": "",
-            "meaning": "statue, picture, image, figure, portrait"
+            "meaning": "Изваяние"
         }, {
             "category": "jlptn2",
             "character": "香",
             "onyomi": "コウ キョウ カオ.",
             "kunyomi": "か かお.り",
-            "meaning": "incense, smell, perfume"
+            "meaning": "Аромат"
         }, {
             "category": "jlptn2",
             "character": "坂",
             "onyomi": "ハン サ",
             "kunyomi": "",
-            "meaning": "slope, incline, hill"
+            "meaning": "Селон, холм"
         }, {
             "category": "jlptn2",
             "character": "底",
             "onyomi": "テイ",
             "kunyomi": "そこ",
-            "meaning": "bottom, sole, depth, bottom price, base, kind, sort"
+            "meaning": "Дно"
         }, {
             "category": "jlptn2",
             "character": "布",
             "onyomi": "フ ヌ",
             "kunyomi": "",
-            "meaning": "linen, cloth"
+            "meaning": "Ткань"
         }, {
             "category": "jlptn2",
             "character": "寺",
             "onyomi": "ジ",
             "kunyomi": "てら",
-            "meaning": "Buddhist temple"
+            "meaning": "Буд.храм"
         }, {
             "category": "jlptn2",
             "character": "宇",
@@ -383,29 +383,29 @@ const DATA = {
             "character": "巨",
             "onyomi": "キ",
             "kunyomi": "",
-            "meaning": "gigantic, big, large, great"
+            "meaning": "Огромный"
         }, {
             "category": "jlptn2",
             "character": "震",
             "onyomi": "シン",
             "kunyomi": "ふる.う ふる.える",
-            "meaning": "quake, shake, tremble, quiver, shiver"
+            "meaning": "Дрожать"
         }, {
             "category": "jlptn2",
             "character": "希",
             "onyomi": "キ ケ マ",
             "kunyomi": "",
-            "meaning": "hope, beg, request, pray, beseech, Greece, dilute (acid), rare, few, phenomenal"
+            "meaning": "Надежда"
         }, {
             "category": "jlptn2",
             "character": "触",
             "onyomi": "ショク",
             "kunyomi": "ふ.れる さわ.る さわ",
-            "meaning": "contact, touch, feel, hit, proclaim, announce, conflict"
+            "meaning": "Прикосновение"
         }, {
             "category": "jlptn2",
             "character": "依",
-            "onyomi": "イ エ ヨ.",
+            "onyomi": "イ エ ",
             "kunyomi": "",
             "meaning": "reliant, depend on, consequently, therefore, due to"
         }, {
@@ -419,7 +419,7 @@ const DATA = {
             "character": "汚",
             "onyomi": "オ",
             "kunyomi": "けが.す けが.れる けが.らわしい よご.す よご.れる きたな.い",
-            "meaning": "dirty, pollute, disgrace, rape, defile"
+            "meaning": "Загрязнение"
         }, {
             "category": "jlptn2",
             "character": "枚",
@@ -431,17 +431,17 @@ const DATA = {
             "character": "複",
             "onyomi": "フク",
             "kunyomi": "",
-            "meaning": "duplicate, double, compound, multiple"
+            "meaning": "compound, multiple"
         }, {
             "category": "jlptn2",
             "character": "郵",
             "onyomi": "ユウ",
             "kunyomi": "",
-            "meaning": "mail, stagecoach stop"
+            "meaning": "Почта"
         }, {
             "category": "jlptn2",
             "character": "仲",
-            "onyomi": "チュウ ナ",
+            "onyomi": "チュウ",
             "kunyomi": "",
             "meaning": "go-between, relationship"
         }, {
@@ -467,7 +467,7 @@ const DATA = {
             "character": "骨",
             "onyomi": "コツ",
             "kunyomi": "ほね",
-            "meaning": "skeleton, bone, remains, frame"
+            "meaning": "Кость"
         }, {
             "category": "jlptn2",
             "character": "傾",
@@ -479,43 +479,43 @@ const DATA = {
             "character": "届",
             "onyomi": "カイ",
             "kunyomi": "とど.ける -とど.け とど.く",
-            "meaning": "deliver, reach, arrive, report, notify, forward"
+            "meaning": "Доходить, доставка"
         }, {
             "category": "jlptn2",
             "character": "巻",
             "onyomi": "カン ケン",
             "kunyomi": "ま.く まき ま.き",
-            "meaning": "scroll, volume, book, part, roll up, wind up, tie, coil, counter for texts (or book scrolls)"
+            "meaning": "Свиток"
         }, {
             "category": "jlptn2",
             "character": "燃",
             "onyomi": "ネン",
             "kunyomi": "も.える も.やす も.す",
-            "meaning": "burn, blaze, glow"
+            "meaning": "Гореть"
         }, {
             "category": "jlptn2",
             "character": "跡",
             "onyomi": "セキ",
             "kunyomi": "あと",
-            "meaning": "tracks, mark, print, impression"
+            "meaning": "След"
         }, {
             "category": "jlptn2",
             "character": "包",
             "onyomi": "ホウ クル.",
             "kunyomi": "つつ.む",
-            "meaning": "wrap, pack up, cover, conceal"
+            "meaning": "Заворачивать"
         }, {
             "category": "jlptn2",
             "character": "駐",
             "onyomi": "チュウ",
             "kunyomi": "",
-            "meaning": "stop-over, reside in, resident"
+            "meaning": "Парковка"
         }, {
             "category": "jlptn2",
             "character": "弱",
             "onyomi": "ジャク",
             "kunyomi": "よわ.い よわ.る よわ.まる よわ.める",
-            "meaning": "weak, frail"
+            "meaning": "Слабость"
         }, {
             "category": "jlptn2",
             "character": "紹",
@@ -527,7 +527,7 @@ const DATA = {
             "character": "雇",
             "onyomi": "コ",
             "kunyomi": "やと.う",
-            "meaning": "employ, hire"
+            "meaning": "Нанимать"
         }          
     ],
     vocabulary: [
