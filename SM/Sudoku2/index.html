@@ -80,7 +80,10 @@ background-color:#378de5;
 position:relative;
 top:1px;
 }
-
+.iksweb{display: inline-block; position:absolute; bottom: 0; left:30%;  bottom:1%;  cursor: pointer;}            
+      .iksweb2{display: inline-block; position:fixed; bottom: 0; right:25%; bottom:1%;   cursor: pointer;}
+	  .iksweb3{display: inline-block; position:absolute; bottom: 0; left:45%; bottom:1%;  cursor: pointer; text-decoration:none;}
+	  .iksweb4{display: inline-block; position:absolute; right:4%; top:2%;  cursor: pointer; text-decoration:none;}
 </style>
   </head>
   <script>
@@ -142,17 +145,21 @@ function infr(){
             <ul id="buttons1">
                 <li id="but1" class="ion-fork-repo" data-pack="default" onclick="hypothesis1();"></li>
                 <li id="but2" class="ion-pull-request" data-pack="default" onclick="hypothesis2();"></li>
-                <li id="but3" class="ion-android-close" data-pack="android" onclick="hypothesis3();"></li>
-            </ul>
-        </div>
-        <div>
-            <ul id="buttons2">
+                <li id="but3" class="ion-android-close" data-pack="android" onclick="hypothesis3();"></li>   
                 <li class="ion-android-refresh" data-pack="android" onclick='$( "#restart" ).popup( "open" );'></li>
                 <li class="ion-code-working" data-pack="default" onclick='$( "#newGrid" ).popup( "open" );'></li>
                 <li class="ion-map" data-pack="default" onclick='$( "#help" ).popup( "open" );'></li>
-            </ul>
-        </div>
 
+            </ul>
+        </div>      <div>
+          <ul id="buttons3">
+        <li id="but7" class="ion-ios-chatboxes-outline" data-pack="default" onclick="joingroup();"></li>
+        <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
+        <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
+        <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="window.location.href = './i.html';"></li>
+
+      </ul>
+    </div>  
       </div>
 
       <!--
@@ -210,12 +217,8 @@ function infr(){
 
 
     <!-- End of the page -->
-    <div>
-      <button class = "myButton" onclick="joingroup()">Группа</button>
-      <button class = "myButton" onclick="share2()">Поделиться</button> 
-      <button class = "myButton" onclick="infr()">Друзья
-      </button>
-      <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
-  </div>
+
+  
+
   </body>
 </html>
