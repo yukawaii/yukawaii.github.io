@@ -115,13 +115,10 @@ function infr(){
         -->
 
       <div role="main" class="ui-content">
-
         <h1>Судоку для самых умных</h1>
-
         <div class="table">
         <table id="grid"></table>
         </div>
-
         <div class="table panel">
         <table id="digits">
             <tr>
@@ -149,13 +146,17 @@ function infr(){
                 <li class="ion-android-refresh" data-pack="android" onclick='$( "#restart" ).popup( "open" );'></li>
                 <li class="ion-android-settings" data-pack="default" onclick='$( "#newGrid" ).popup( "open" );'></li>
                 <li class="ion-help" data-pack="default" onclick='$( "#help" ).popup( "open" );'></li>
-
+<br>
         
         <li id="but7" class="ion-ios-chatboxes-outline" data-pack="default" onclick="joingroup();"></li>
         <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
         <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
         <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="window.location.href = './i.html';"></li>
-
+        <li id="ASong" class="ion-ios-musical-notes" data-pack="default" onclick="playPause();">   <audio
+          src="./images/katamari.mp3"
+          autoplay
+          loop
+        ></audio></li>  
       </ul>
     </div>  
       </div>
@@ -215,8 +216,36 @@ function infr(){
 
 
     <!-- End of the page -->
-
-  
+<script>
+    var lastSeen;
+    var loop = function (){
+        lastSeen = Date.now();
+        setTimeout(loop, 50);
+    };
+    loop();
+    
+    var music = document.getElementById('ASong');
+    music.addEventListener('timeupdate', function (){
+        if(Date.now() - lastSeen > 100){
+            this.pause();
+        }
+    }, false);
+    </script>
+   
+    <script>
+      var aud = document.getElementById("ASong").children[0];
+      var isPlaying = false;
+      aud.pause();
+    
+      function playPause() {
+        if (isPlaying) {
+          aud.pause();
+        } else {
+          aud.play();
+        }
+        isPlaying = !isPlaying;
+      }
+    </script>
 
   </body>
 </html>
