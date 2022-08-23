@@ -5,13 +5,13 @@ const DATA = {
             "character": "圧",
             "onyomi": "アツ エン オウ",
             "kunyomi": "お.す へ.す おさ.える お.さえる",
-            "meaning": "pressure, push, overwhelm, oppress, dominate"
+            "meaning": "Давление"
         }, {
             "category": "jlptn2",
             "character": "芸",
             "onyomi": "ゲイ ウン ワ",
             "kunyomi": "う.える のり",
-            "meaning": "technique, art, craft, performance, acting, trick, stunt"
+            "meaning": "Искусство"
         }, {
             "category": "jlptn2",
             "character": "署",
@@ -23,7 +23,7 @@ const DATA = {
             "character": "伸",
             "onyomi": "シン ノ.",
             "kunyomi": "の.びる の.ばす の.べる",
-            "meaning": "expand, stretch, extend, lengthen, increase"
+            "meaning": "Вытягивать"
         }, {
             "category": "jlptn2",
             "character": "停",
