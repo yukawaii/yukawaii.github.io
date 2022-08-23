@@ -5,7 +5,7 @@ const DATA = {
             "character": "亜",
             "onyomi": "ア アシア ツ.",
             "kunyomi": "",
-            "meaning": "Asia, rank next, come after, -ous"
+            "meaning": "Азия, rank next, come after, -ous"
         }, {
             "category": "jlptn1",
             "character": "覧",
@@ -23,7 +23,7 @@ const DATA = {
             "character": "壇",
             "onyomi": "ダン タン",
             "kunyomi": "",
-            "meaning": "podium, stage, rostrum, terrace"
+            "meaning": "Сцена, подиум, stage, rostrum, terrace"
         }, {
             "category": "jlptn1",
             "character": "勲",
@@ -35,7 +35,7 @@ const DATA = {
             "character": "魔",
             "onyomi": "マ",
             "kunyomi": "",
-            "meaning": "witch, demon, evil spirit"
+            "meaning": "Злой дух, демон, ведьма"
         }, {
             "category": "jlptn1",
             "character": "酬",
@@ -45,9 +45,9 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "紫",
-            "onyomi": "シ ムラサ",
+            "onyomi": "シ",
             "kunyomi": "",
-            "meaning": "purple, violet"
+            "meaning": "Сиреневый, фиолетовый"
         }, {
             "category": "jlptn1",
             "character": "曙",
@@ -101,13 +101,13 @@ const DATA = {
             "character": "眼",
             "onyomi": "ガン ゲン",
             "kunyomi": "まなこ め",
-            "meaning": "eyeball"
+            "meaning": "Глаз, глазное яблоко"
         }, {
             "category": "jlptn1",
             "character": "獄",
             "onyomi": "ゴク",
             "kunyomi": "",
-            "meaning": "prison, jail"
+            "meaning": "Тюрьма, заключение, ад"
         }, {
             "category": "jlptn1",
             "character": "尚",
@@ -129,15 +129,15 @@ const DATA = {
         }, {
             "category": "jlptn1",
             "character": "顕",
-            "onyomi": "ケン アラワ.レ",
+            "onyomi": "ケン",
             "kunyomi": "あきらか",
             "meaning": "appear, existing"
         }, {
             "category": "jlptn1",
             "character": "巧",
-            "onyomi": "コウ ウマ.",
+            "onyomi": "コウ",
             "kunyomi": "たく.み たく.む",
-            "meaning": "adroit, skilled, ingenuity"
+            "meaning": "Мастерство, умение, кудесник"
         }, {
             "category": "jlptn1",
             "character": "矛",
@@ -161,11 +161,11 @@ const DATA = {
             "character": "釣",
             "onyomi": "チョウ",
             "kunyomi": "つ.る つ.り つ.り",
-            "meaning": "angling, fish, catch, allure, ensnare"
+            "meaning": "Рыбалка, ловить рыбу, allure, ensnare"
         }, {
             "category": "jlptn1",
             "character": "萩",
-            "onyomi": "シュウ ハ",
+            "onyomi": "シュウ",
             "kunyomi": "",
             "meaning": "bush clover"
         }, {
@@ -208,8 +208,8 @@ const DATA = {
             "category": "jlptn1",
             "character": "鬼",
             "onyomi": "キ",
-            "kunyomi": "おに おに-",
-            "meaning": "ghost, devil"
+            "kunyomi": "おに",
+            "meaning": "демон, злой дух"
         }, {
             "category": "jlptn1",
             "character": "庶",
@@ -233,25 +233,25 @@ const DATA = {
             "character": "幻",
             "onyomi": "ゲン",
             "kunyomi": "まぼろし",
-            "meaning": "phantasm, vision, dream, illusion, apparition"
+            "meaning": "Фантазия, иллюзия, vision, dream, illusion, apparition"
         }, {
             "category": "jlptn1",
             "character": "煮",
             "onyomi": "シャ",
             "kunyomi": "に.る -に に.える に.やす",
-            "meaning": "boil, cook"
+            "meaning": "Варить, тушить"
         }, {
             "category": "jlptn1",
             "character": "姫",
             "onyomi": "キ",
             "kunyomi": "ひめ ひめ-",
-            "meaning": "princess"
+            "meaning": "Принцесса"
         }, {
             "category": "jlptn1",
             "character": "誓",
             "onyomi": "セイ",
             "kunyomi": "ちか.う",
-            "meaning": "vow, swear, pledge"
+            "meaning": "Клясться, клятва"
         }, {
             "category": "jlptn1",
             "character": "把",
@@ -281,7 +281,7 @@ const DATA = {
             "character": "仰",
             "onyomi": "ギョウ コウ",
             "kunyomi": "あお.ぐ おお.せ お.っしゃる おっしゃ.る",
-            "meaning": "face-up, look up, depend, seek, respect, rever, drink, take"
+            "meaning": "Смотреть вверх depend, seek, respect, rever, drink, take"
         }, {
             "category": "jlptn1",
             "character": "剛",
@@ -317,7 +317,7 @@ const DATA = {
             "character": "嫁",
             "onyomi": "カ",
             "kunyomi": "よめ とつ.ぐ",
-            "meaning": "marry into, bride"
+            "meaning": "Невеста"
         }, {
             "category": "jlptn1",
             "character": "謙",
