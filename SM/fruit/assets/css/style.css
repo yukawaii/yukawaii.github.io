@@ -24,7 +24,7 @@ h1 {
     background-color: #C3FBD8;
     font-family: 'Luckiest Guy', cursive;
     width: 100%;
-    font-size: 47px;
+    font-size: 40px;
     margin: 0 auto;
     text-align: center;
     padding: 20px;
@@ -203,7 +203,7 @@ h1 {
 }
 @media only screen and (max-width: 600px) {
     h1 {
-        font-size: 43px;
+        font-size: 23px;
     }
 
     #content {
