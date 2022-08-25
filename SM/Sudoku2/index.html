@@ -90,13 +90,31 @@ top:1px;
     // Sends event to client
     vkBridge.send('VKWebAppInit');
 	  
-	  function handleVisibilityChange() {
+	  
+		  function handleVisibilityChange() {
     if (document.hidden){
         stopAllSounds();
     }
+}  
+	  
+	  //for simplicity reason,checking for webkitHidden vendor prefix
+var hidden, visibilityChange; 
+if (typeof document.hidden !== "undefined") { 
+  hidden = "hidden";
+  visibilityChange = "visibilitychange";
+} else if (typeof document.webkitHidden !== "undefined") {
+  hidden = "webkitHidden";
+  visibilityChange = "webkitvisibilitychange";
 }
-
-document.addEventListener("visibilitychange", handleVisibilityChange, false);
+ 
+if (typeof document[hidden] === "undefined") {
+  console.log("Browser doesn't supports the Page Visibility API.");
+} else {
+  // Handle page visibility change   
+  document.addEventListener(visibilityChange, handleVisibilityChange(), false);
+}
+	
+document.addEventListener("visibilitychange", handleVisibilityChange(), false);
 	  
 	  
 	function myAdd1(){
