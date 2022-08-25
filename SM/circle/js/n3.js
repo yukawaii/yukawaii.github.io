@@ -5,19 +5,19 @@ const N3 = {
                     "kanji" : "丁",
                     "onyomi" : "チョウ, テイ, チン, トウ, チ",
                     "kunyomi" : "ひのと",
-                    "definition" : "street, ward, town, counter for guns, tools, even number, 4th calendar sign",
-                    "examples" : ["丁目 ちょうめ district of a town, city block (of irregular size) (n)","庖丁 ほうちょう kitchen knife, carving knife (n)","丁度 チョウド exactly, precisely, just, right, as if, as though, quite"]
+                    "definition" : "Улица, чётный, четвёртый, 4-й знак китайского календаря",
+                    "examples" : ["丁目 ちょうめ квартал, район","庖丁 ほうちょう нож","丁度 チョウド как надо, как раз, точно, ровно", "丁々 ちょうちょう ономат. звон, лязг (оружия, мечей)"]
                 },{
                     "kanji" : "両",
                     "onyomi" : "リョウ",
                     "kunyomi" : "てる, ふたつ",
-                    "definition" : "both, old Japanese coin, counter for carriages (eg, in a train), two",
-                    "examples" : ["両替 りょうがえ change, money exchange (n, vs)","両方 りょうほう both sides, both parties (n)","両立 りょうりつ compatibility, coexistence, standing together (n, vs)"]
+                    "definition" : "Оба, обе, тот и другой; рё (кит. лян ; голл. таэль), старинная мера веса, а также денежная единица (возникла в Китае и распространилась по всей восточной Азии, включая Японию. Вес в разные эпохи различался)",
+                    "examples" : ["両替 りょうがえ обмен валюты, обменивать деньги","両方 りょうほう обе стороны, оба","両立 りょうりつ совместимость, совмещаться"]
                 },{
                     "kanji" : "丸",
                     "onyomi" : "ガン",
                     "kunyomi" : "まる, まる.める, まる.い",
-                    "definition" : "round, full, month, perfection, -ship, pills, make round",
+                    "definition" : "Круг, круглый",
                     "examples" : ["丸味 まるみ roundness, rotundity (n)","丸める まるめる to make round, to roll up, to curl up, to seduce, to explain away (Ichidan verb, vt)","日の丸 ひのまる outline of the sun (esp. represented as a red circle), the Japanese flag (n)"]
                 },{   
                     "kanji" : "予",
