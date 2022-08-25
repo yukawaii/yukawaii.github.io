@@ -17,8 +17,8 @@ const N3 = {
                     "kanji" : "丸",
                     "onyomi" : "ガン",
                     "kunyomi" : "まる, まる.める, まる.い",
-                    "definition" : "Круг, круглый",
-                    "examples" : ["丸味 まるみ roundness, rotundity (n)","丸める まるめる to make round, to roll up, to curl up, to seduce, to explain away (Ichidan verb, vt)","日の丸 ひのまる outline of the sun (esp. represented as a red circle), the Japanese flag (n)"]
+                    "definition" : "Круг, круглый, округлость, скруглённый",
+                    "examples" : ["丸味 まるみ округлость","丸める まるめる придавать круглую форму, заговаривать зубы, надувать","日の丸 ひのまる солнечный круг, японский флаг"]
                 },{   
                     "kanji" : "予",
                     "onyomi" : "ヨ, シャ",
