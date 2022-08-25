@@ -89,6 +89,18 @@ top:1px;
   <script>
     // Sends event to client
     vkBridge.send('VKWebAppInit');
+	  
+	  function handleVisibilityChange() {
+    if (document.hidden){
+        stopAllSounds();
+    }else{
+        playAllSounds();
+    }
+}
+
+document.addEventListener("visibilitychange", handleVisibilityChange, false);
+	  
+	  
 	function myAdd1(){
             vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
         .then(data => console.log(data.result))
