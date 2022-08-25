@@ -120,12 +120,12 @@ function infr(){
             <p>В корзине:</p>
             <p id="your-total"></p>
         </div>
-        <div id ="instructions" text-align="center">
+       <!-- <div id ="instructions" text-align="center">
             <audio controls loop id="music">
                 <source src="./katamari.mp3" type="audio/ogg">
                 <embed src="./katamari.mp3" autostart="false" loop="true" hidden="true"> 
               </audio> 
-          </div>
+          </div>  -->
     </div> 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="assets/javascript/game.js"></script>
@@ -138,20 +138,7 @@ swal({
 	button: "Всё понятно",  
   });  
  }
- var lastSeen;
-var loop = function (){
-    lastSeen = Date.now();
-    setTimeout(loop, 50);
-};
-loop();
-
-var music = document.getElementById('music');
-music.addEventListener('timeupdate', function (){
-    if(Date.now() - lastSeen > 100){
-        this.pause();
-    }
-}, false);
-
+ 
 </script>
 
 </body>

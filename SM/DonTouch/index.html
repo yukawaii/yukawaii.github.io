@@ -454,25 +454,13 @@ swal({
   });  
  } 
 
- var lastSeen;
-var loop = function (){
-    lastSeen = Date.now();
-    setTimeout(loop, 50);
-};
-loop();
 
-var music = document.getElementById('music');
-music.addEventListener('timeupdate', function (){
-    if(Date.now() - lastSeen > 100){
-        this.pause();
-    }
-}, false);
 </script>
-<div align="center">
+<!-- <div align="center">
   <audio controls loop id="music">
       <source src="./bg.ogg" type="audio/ogg">
       <embed src="./bg.ogg" autostart="false" loop="true" hidden="true"> 
     </audio> 
-</div>
+</div> -->
  </body>
 </html>

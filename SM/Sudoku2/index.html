@@ -89,34 +89,7 @@ top:1px;
   <script>
     // Sends event to client
     vkBridge.send('VKWebAppInit');
-	  
-	  
-		  function handleVisibilityChange() {
-    if (document.hidden){
-        stopAllSounds();
-    }
-}  
-	  
-	  //for simplicity reason,checking for webkitHidden vendor prefix
-var hidden, visibilityChange; 
-if (typeof document.hidden !== "undefined") { 
-  hidden = "hidden";
-  visibilityChange = "visibilitychange";
-} else if (typeof document.webkitHidden !== "undefined") {
-  hidden = "webkitHidden";
-  visibilityChange = "webkitvisibilitychange";
-}
- 
-if (typeof document[hidden] === "undefined") {
-  console.log("Browser doesn't supports the Page Visibility API.");
-} else {
-  // Handle page visibility change   
-  document.addEventListener(visibilityChange, handleVisibilityChange(), false);
-}
-	
-document.addEventListener("visibilitychange", handleVisibilityChange(), false);
-	  
-	  
+	  	  
 	function myAdd1(){
             vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
         .then(data => console.log(data.result))
@@ -188,11 +161,11 @@ function share2(){
         <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
         <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
         <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="window.location.href = './i.html';"></li>
-        <li id="ASong" class="ion-ios-musical-notes" data-pack="default" onclick="playPause();">   <audio
+       <!-- <li id="ASong" class="ion-ios-musical-notes" data-pack="default" onclick="playPause();">   <audio
           src="./images/katamari.mp3"
           autoplay
           loop
-        ></audio></li>  
+        ></audio></li>  -->
       </ul>
     </div>  
       </div>
@@ -252,36 +225,6 @@ function share2(){
 
 
     <!-- End of the page -->
-<script>
-    var lastSeen;
-    var loop = function (){
-        lastSeen = Date.now();
-        setTimeout(loop, 50);
-    };
-    loop();
-    
-    var music = document.getElementById('ASong');
-    music.addEventListener('timeupdate', function (){
-        if(Date.now() - lastSeen > 100){
-            this.pause();
-        }
-    }, false);
-    </script>
-   
-    <script>
-      var aud = document.getElementById("ASong").children[0];
-      var isPlaying = false;
-      aud.pause();
-    
-      function playPause() {
-        if (isPlaying) {
-          aud.pause();
-        } else {
-          aud.play();
-        }
-        isPlaying = !isPlaying;
-      }
-    </script>
 
   </body>
 </html>
