@@ -23,44 +23,44 @@ const N3 = {
                     "kanji" : "予",
                     "onyomi" : "ヨ, シャ",
                     "kunyomi" : "あらかじ.め",
-                    "definition" : "beforehand, previous, myself, I",
-                    "examples" : ["猶予 ゆうよ postponement, deferment, extension (of time) (n, vs)","予告 よこく advance notice, previous note, preliminary announcement (n, vs)","予算 よさん estimate, budget (n, vs)"]
+                    "definition" : "Заранее, предварительно, загодя, наперёд",
+                    "examples" : ["猶予 ゆうよ промедление, задержка, отсрочка","予告 よこく предварительное уведомление, предупреждение, сообщить заранее","予算 よさん бюджет, смета"]
                 },{
                     "kanji" : "争",
                     "onyomi" : "ソウ",
                     "kunyomi" : "あらそ.う, いか.でか",
-                    "definition" : "contend, dispute, argue",
-                    "examples" : ["競争 きょうそう competition, contest, to compete (n, vs)","争う あらそう to compete, to contest, to contend, to quarrel, to argue, to dispute, to be at variance, to oppose, (usu. in negative form) to deny (eg evidence) (v5s, intransitive verb)","争議 そうぎ dispute, quarrel, strike (n)"]
+                    "definition" : "Бороться, спорить, состязаться",
+                    "examples" : ["競争 きょうそう состязание, соревнование, конкурировать","争う あらそう спорить, дискутировать, соревноваться, ссориться","争議 そうぎ спор, конфликт, забастовка "]
                 },{
                     "kanji" : "交",
                     "onyomi" : "コウ",
                     "kunyomi" : "まじ.わる, まじ.える, ま.じる, まじ.る, ま.ざる, ま.ぜる, -か.う, か.わす, かわ.す, こもごも",
-                    "definition" : "mingle, mixing, association, coming and going",
-                    "examples" : ["外交 がいこう diplomacy (n)","交わる まじわる to cross, to intersect, to associate with, to mingle with, to interest, to join (v5r, intransitive verb)","交響曲 こうきょうきょく symphony (n)"]
+                    "definition" : "Пересекаться, скрещиваться, смешивать, поочерёдно",
+                    "examples" : ["外交 がいこう дипломатия","交わる まじわる  общаться, встречаться, пересекаться","交響曲 こうきょうきょく  симфония"]
                 },{   
                     "kanji" : "他",
                     "onyomi" : "タ",
                     "kunyomi" : "ほか",
-                    "definition" : "other, another, the others",
-                    "examples" : ["他 ほか other (esp. places and things), the rest (adj-no, n, n-adv)","他殺 たさつ a murder (n)","他方 たほう another side, different direction, (on) the other hand (adv, n)"]
+                    "definition" : "Другой, другие",
+                    "examples" : ["他 ほか другой","他殺 たさつ убийство","他方 たほう другое направление, другая сторона", "他人　たにん другой человек, другие люди", "利他　りた альтруизм"]
                 },{   
                     "kanji" : "付",
                     "onyomi" : "フ",
                     "kunyomi" : "つ.ける, -つ.ける, -づ.ける, つ.け, つ.け-, -つ.け, -づ.け, -づけ, つ.く, -づ.く, つ.き, -つ.き, -つき, -づ.き, -づき",
-                    "definition" : "adhere, attach, refer to, append",
-                    "examples" : ["近付く ちかづく to approach, to get near, to get acquainted with, to get closer (v5k)","交付 こうふ delivering, furnishing (with copies) (n, vs)","受付ける うけつける to be accepted, to receive (an application) (Ichidan verb, vt)"]
+                    "definition" : "Прикреплять, накладывать, насыпать, прилипать, приставать",
+                    "examples" : ["近付く ちかづく приближаться","交付 こうふ вручение, выдача, вручать, выдавать","受付ける うけつける принимать (заявления и т.п.)", "見付ける　みつける замечать, находить", "保証付き　ほそうつき сертифицированный"]
                 },{   
                     "kanji" : "令",
                     "onyomi" : "レイ",
-                    "kunyomi" : "orders, ancient laws, command, decree",
-                    "definition" : "orders, ancient laws, command, decree",
-                    "examples" : ["法令 ほうれい laws and ordinances, acts (of parliament, congress, etc.) (n)","命令 めいれい order, command, decree, directive, (software) instruction (n, vs)","年令 ねんれい age, years (n)"]
+                    "kunyomi" : "",
+                    "definition" : "Приказ, постановление, команда, распоряжение",
+                    "examples" : ["法令 ほうれい закон, законы и постановления","命令 めいれい приказ, команда","年令 ねんれい возраст", "令和時代 れいわじだい эпоха Рэйва (началась 1 мая 2019 г.)"]
                 },{   
                     "kanji" : "仲",
                     "onyomi" : "チュウ",
                     "kunyomi" : "なか",
-                    "definition" : "go-between, relationship",
-                    "examples" : ["仲間 なかま company, fellow, colleague, associate, comrade, mate, group, circle of friends, partner (n)","仲断 ちゅうだん interruption, suspension, break (n, vs)","仲裁 ちゅうさい arbitration, intercession, mediation (n, vs)"]
+                    "definition" : "Посредник",
+                    "examples" : ["仲間 なかま приятель, товарищ, компаньон, круг друзей","仲断 ちゅうだん interruption, suspension, break (n, vs)","仲裁 ちゅうさい arbitration, intercession, mediation (n, vs)"]
                 }
             ],
     "Ур. 02" :
