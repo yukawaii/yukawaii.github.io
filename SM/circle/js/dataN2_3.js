@@ -173,13 +173,13 @@ const DATA = {
             "character": "了",
             "onyomi": "リョ",
             "kunyomi": "",
-            "meaning": "complete, finish"
+            "meaning": "Завершение"
         }, {
             "category": "jlptn2",
             "character": "庁",
             "onyomi": "チョウ テイ",
             "kunyomi": "やくしょ",
-            "meaning": "government office"
+            "meaning": "Министерство"
         }, {
             "category": "jlptn2",
             "character": "城",
@@ -189,15 +189,15 @@ const DATA = {
         }, {
             "category": "jlptn2",
             "character": "患",
-            "onyomi": "カン ワズラ.",
+            "onyomi": "カン",
             "kunyomi": "",
-            "meaning": "afflicted, disease, suffer from, be ill"
+            "meaning": "Страдать от"
         }, {
             "category": "jlptn2",
             "character": "層",
             "onyomi": "ソウ",
             "kunyomi": "",
-            "meaning": "stratum, social class, layer, story, floor"
+            "meaning": "Слой, соц.класс"
         }, {
             "category": "jlptn2",
             "character": "版",
@@ -221,7 +221,7 @@ const DATA = {
             "character": "絡",
             "onyomi": "ラク",
             "kunyomi": "から.む から.まる",
-            "meaning": "entwine, coil around, get caught in"
+            "meaning": "Цепляться"
         }, {
             "category": "jlptn2",
             "character": "損",
@@ -233,7 +233,7 @@ const DATA = {
             "character": "募",
             "onyomi": "ボ",
             "kunyomi": "つの.る",
-            "meaning": "recruit, campaign, gather (contributions), enlist, grow violent"
+            "meaning": "Насилие"
         }, {
             "category": "jlptn2",
             "character": "裏",
@@ -255,15 +255,15 @@ const DATA = {
         }, {
             "category": "jlptn2",
             "character": "築",
-            "onyomi": "チク キズ.",
+            "onyomi": "チク",
             "kunyomi": "",
-            "meaning": "fabricate, build, construct"
+            "meaning": "Строить"
         }, {
             "category": "jlptn2",
             "character": "貨",
             "onyomi": "カ",
             "kunyomi": "",
-            "meaning": "freight, goods, property"
+            "meaning": "Собственность"
         }, {
             "category": "jlptn2",
             "character": "混",
