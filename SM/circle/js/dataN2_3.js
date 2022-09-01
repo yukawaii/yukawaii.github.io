@@ -17,7 +17,7 @@ const DATA = {
             "character": "署",
             "onyomi": "ショ",
             "kunyomi": "",
-            "meaning": "signature, govt office, police station"
+            "meaning": "Подпись"
         }, {
             "category": "jlptn2",
             "character": "伸",
@@ -29,19 +29,19 @@ const DATA = {
             "character": "停",
             "onyomi": "テイ",
             "kunyomi": "と.める と.まる",
-            "meaning": "halt, stopping"
+            "meaning": "Остановка"
         }, {
             "category": "jlptn2",
             "character": "爆",
             "onyomi": "バク",
             "kunyomi": "は.ぜる",
-            "meaning": "bomb, burst open, pop, split"
+            "meaning": "Взрыв"
         }, {
             "category": "jlptn2",
             "character": "陸",
             "onyomi": "リク ロク オ",
             "kunyomi": "",
-            "meaning": "land, six"
+            "meaning": "Материк"
         }, {
             "category": "jlptn2",
             "character": "玉",
@@ -65,7 +65,7 @@ const DATA = {
             "character": "延",
             "onyomi": "エン ノ.バ",
             "kunyomi": "の.びる の.べる の.べ",
-            "meaning": "prolong, stretching"
+            "meaning": "Продлевать"
         }, {
             "category": "jlptn2",
             "character": "羽",
@@ -95,7 +95,7 @@ const DATA = {
             "character": "普",
             "onyomi": "フ アマネ",
             "kunyomi": "あまね.く",
-            "meaning": "universal, wide(ly), generally, Prussia"
+            "meaning": "Обычно"
         }, {
             "category": "jlptn2",
             "character": "測",
@@ -137,25 +137,25 @@ const DATA = {
             "character": "略",
             "onyomi": "リャク",
             "kunyomi": "ほぼ おか.す おさ.める はかりごと はか.る はぶ.く りゃく.す りゃく.する",
-            "meaning": "abbreviation, omission, outline, shorten, capture, plunder"
+            "meaning": "Сокращённый, краткий"
         }, {
             "category": "jlptn2",
             "character": "承",
             "onyomi": "ショウ ウ.ケ",
             "kunyomi": "うけたまわ.る",
-            "meaning": "acquiesce, hear, listen to, be informed, receive"
+            "meaning": "Спрашивать"
         }, {
             "category": "jlptn2",
             "character": "順",
             "onyomi": "ジュ",
             "kunyomi": "",
-            "meaning": "obey, order, turn, right, docility, occasion"
+            "meaning": "Очередь"
         }, {
             "category": "jlptn2",
             "character": "岩",
             "onyomi": "ガン",
             "kunyomi": "いわ",
-            "meaning": "boulder, rock, cliff"
+            "meaning": "Скала"
         }, {
             "category": "jlptn2",
             "character": "練",
