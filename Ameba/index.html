@@ -62,20 +62,20 @@ bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
-bridge.send("VKWebAppShowWallPostBox", {
+vkBridge.send("VKWebAppShowWallPostBox", {
 "message": "Интересная игра!",
 "attachments": "https://vk.com/app8179835"
 });
 }
 
 function myadd1(){
-bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+
+vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
 function joingroup(){
-bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
 }         
   </script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
