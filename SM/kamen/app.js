@@ -34,7 +34,7 @@ const game = () =>{
         });
         
         // computer choise list
-        const computerList = ["rock","paper","scissors"];
+        const computerList = ["камень","бумага","ножницы"];
 
         options.forEach(option =>{
             option.addEventListener("click",()=>{
@@ -43,8 +43,8 @@ const game = () =>{
                 const computerChoise = computerList[computerIndex];
                 
                 // default images
-                playerHand.src = './assets/rock.png';
-                computerHand.src = './assets/rock.png';
+                playerHand.src = './assets/камень.png';
+                computerHand.src = './assets/камень.png';
 
                 // add animation
                 playerHand.style.animation = "shakePlayer 2s ease";
@@ -78,44 +78,44 @@ const game = () =>{
 
         // checking for a tie
         if(playerChoise === computerChoise){
-            winner.textContent = "it's a tie";
+            winner.textContent = "Ничья";
             return;
         }
 
         // checking for a rock
-        if(playerChoise === "rock"){
-            if(computerChoise === "paper"){
-                winner.textContent = "Computer wins";
+        if(playerChoise === "камень"){
+            if(computerChoise === "бумага"){
+                winner.textContent = "Ты проиграл";
                 cScore++;
                 return;
             }else{
-                winner.textContent = "Player wins";
+                winner.textContent = "Это победа!";
                 pScore++;
                 return;
             }
         }
 
         // checking for a paper
-        if(playerChoise === "paper"){
-            if(computerChoise === "scissors"){
-                winner.textContent = "Computer wins";
+        if(playerChoise === "бумага"){
+            if(computerChoise === "ножницы"){
+                winner.textContent = "Комп победил";
                 cScore++;
                 return;
             }else{
-                winner.textContent = "Player wins";
+                winner.textContent = "Победа твоя!";
                 pScore++;
                 return;
             }
         }
 
         // checking for a scissors
-        if(playerChoise === "scissors"){
-            if(computerChoise === "rock"){
-                winner.textContent = "Computer wins";
+        if(playerChoise === "ножницы"){
+            if(computerChoise === "камень"){
+                winner.textContent = "Проигрыш";
                 cScore++;
                 return;
             }else{
-                winner.textContent = "Player wins";
+                winner.textContent = "Победа!";
                 pScore++;
                 return;
             }
@@ -138,14 +138,14 @@ const game = () =>{
         const end = document.querySelector(".end");
 
         if(pScore === 5){
-            matchWinner.textContent = "You Win";
+            matchWinner.textContent = "Кубок твой!";
             match.classList.remove("fadeIn");
             match.classList.add("fadeOut");
             end.classList.remove("fadeOut");
             end.classList.add("fadeIn");
             
         }else if(cScore === 5){
-            matchWinner.textContent = "Computer Wins";
+            matchWinner.textContent = "Кубок у компьютера.";
             match.classList.remove("fadeIn");
             match.classList.add("fadeOut");
             end.classList.remove("fadeOut");
@@ -163,8 +163,8 @@ const game = () =>{
 
 
         PlayAgainBtn.addEventListener("click",() => {
-            playerHand.src = "./assets/rock.png";
-            computerHand.src = "./assets/rock.png";
+            playerHand.src = "./assets/камень.png";
+            computerHand.src = "./assets/камень.png";
             pScore = 0;
             cScore = 0;
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Hangman</title>
+	<link rel="stylesheet" href="coloursForHangmanV2.css">
+	<script type="text/javascript" src="hangmanV2.js"></script>
+</head>
+
+<body onload="startGame(turnCount, answerArray)">
+	<div id="exit"><button id="exitButton" onclick="exitGame(word)">Выход</button></div>
+	<h1>Виселица</h1>
+	<div id="displayStatus"></div>
+	<div id="interactWithPlayer">
+		<div>
+			<div id='showAlreadyUsedLetters'></div>
+		</div>
+		<input id="guessOfPlayer" type="text" maxlength="1"><br>
+		<button id="confirmActions" onclick="confirmActions(word, answerArray)">Далее</button>
+	</div>
+	<div>
+		<button id="restartGame" onClick="window.location.reload()">Играть снова</button>
+	</div>
+</body>
+</html>
