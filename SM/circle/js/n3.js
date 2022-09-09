@@ -69,20 +69,20 @@ const N3 = {
                     "kanji" : "伝",
                     "onyomi" : "デン, テン",
                     "kunyomi" : "つた.わる, つた.える, つた.う, つだ.う, -づた.い, つて",
-                    "definition" : "transmit, go along, walk along, follow, report, communicate, legend, tradition",
-                    "examples" : ["手伝う てつだう to help, to assist, to take part in (v5s, vt)","宣伝 せんでん propaganda, publicity, advertisement, advertising (n, vs)","伝う つたう to go along, to walk along, to follow (v5s)"]
+                    "definition" : "Передавать, сообщать, распространять",
+                    "examples" : ["手伝う てつだう помогать кому-либо","宣伝 せんでん пропаганда, рекламировать","伝う つたう двигаться вдоль чего-либо", "伝える　つたえる передавать сообщение", "伝わる　つたわる распространяться, передаваться"]
                 },{
                     "kanji" : "位",
                     "onyomi" : "イ",
                     "kunyomi" : "くらい, ぐらい",
-                    "definition" : "rank, grade, throne, crown, about, some",
-                    "examples" : ["学位 がくい (university) degree (n)","順位 じゅんい order, rank, precedence (n)","地位 ちい (social) position, status (n)"]
+                    "definition" : "Ранг, чин, звание",
+                    "examples" : ["学位 がくい учёная степень","順位 じゅんい очерёдность, порядок, последовательность","地位 ちい общественное положение, статус", "方位　ほうい направление по компасу, курс, азимут"]
                 },{
                     "kanji" : "例",
                     "onyomi" : "レイ",
                     "kunyomi" : "たと.える",
-                    "definition" : "example, custom, usage, precedent",
-                    "examples" : ["恒例 こうれい established practice, established practise, custom (n)","条例 じょうれい regulations, rules, laws, acts, ordinance (n)","先例 せんれい precedent (n)"]
+                    "definition" : "Пример, сравнивать",
+                    "examples" : ["恒例 こうれい заведённый порядок, обычная практика, привычный, обычный","条例 じょうれい правила, устав, законоположение","先例 せんれい precedent (n)"]
                 },{   
                     "kanji" : "係",
                     "onyomi" : "ケイ",
