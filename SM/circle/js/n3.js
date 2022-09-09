@@ -117,14 +117,14 @@ const N3 = {
                     "kanji" : "停",
                     "onyomi" : "テイ",
                     "kunyomi" : "と.める, と.まる",
-                    "definition" : "halt, stopping",
-                    "examples" : ["停学 ていがく suspension from school (n)","停止 ていし suspension, interruption, stoppage, ban, standstill, halt (n, vs)","停車 ていしゃ stopping (eg train) (n, vs)"]
+                    "definition" : "Приостанавливать, остановка",
+                    "examples" : ["停学 ていがく временный запрет на посещение занятий, отстранение от занятий в школе","停止 ていし приостановка, мораторий, приостановить, застой","停車 ていしゃ остановка (поезда, автобусная и т.п.)"]
                 },{   
                     "kanji" : "健",
                     "onyomi" : "ケン",
                     "kunyomi" : "すこ.やか",
-                    "definition" : "healthy, health, strength, persistence",
-                    "examples" : ["健康 けんこう health, sound, wholesome (adj-na, n)","健やか すこやか vigorous, healthy, sound (adj-na, n)","保健 ほけん health preservation, hygiene, sanitation (n)"]
+                    "definition" : "Здоровый, крепкий",
+                    "examples" : ["健康 けんこう здоровье, здоровый","健やか すこやか здоровый","保健 ほけん здравоохранение, гигиена, санитария", "健闘　けんとう　упорная борьба, мужественно бороться"]
                 }
             ],
     "Ур. 03" : 
@@ -133,14 +133,14 @@ const N3 = {
                     "kanji" : "側",
                     "onyomi" : "ソク",
                     "kunyomi" : "かわ, がわ, そば",
-                    "definition" : "side, lean, oppose, regret",
-                    "examples" : ["片側 かたがわ one side (n)","内側 うちがわ inside, interior, inner part (n)","縁側 えんがわ veranda, porch, balcony, open corridor (n)"]
+                    "definition" : "Сторона, сбоку, рядом",
+                    "examples" : ["片側 かたがわ односторонний, одна сторона","内側 うちがわ внутренняя сторона, внутренний, внутри, изнутри","縁側 えんがわ веранда, энгава (дощатый настил по периметру японского дома, связывающий его с садом"]
                 },{
                     "kanji" : "億",
                     "onyomi" : "オク",
                     "kunyomi" : "",
-                    "definition" : "hundred million",
-                    "examples" : ["億 おく 10^8, 100,000,000, hundred million (numeric)","億万 オクマン millions and millions","十億 ジュウオク 1,000,000,000, billion"]
+                    "definition" : "Сто миллионов",
+                    "examples" : ["億 おく 10^8, 100,000,000, сто миллионов","億万 オクマン миллиарды","十億 ジュウオク 1,000,000,000, биллион", "千億　せんおく сто миллиардов"]
                 },{
                     "kanji" : "兆",
                     "onyomi" : "チョウ",
