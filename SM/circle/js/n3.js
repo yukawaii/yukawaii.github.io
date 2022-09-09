@@ -52,7 +52,7 @@ const N3 = {
                 },{   
                     "kanji" : "令",
                     "onyomi" : "レイ",
-                    "kunyomi" : "",
+                    "kunyomi" : "れい.する",
                     "definition" : "Приказ, постановление, команда, распоряжение",
                     "examples" : ["法令 ほうれい закон, законы и постановления","命令 めいれい приказ, команда","年令 ねんれい возраст", "令和時代 れいわじだい эпоха Рэйва (началась 1 мая 2019 г.)"]
                 },{   
@@ -87,26 +87,26 @@ const N3 = {
                     "kanji" : "係",
                     "onyomi" : "ケイ",
                     "kunyomi" : "かか.る, かかり, -がかり, かか.わる",
-                    "definition" : "person in charge, connection, duty, concern oneself",
-                    "examples" : ["関係 かんけい relation, connection (n, vs)","無関係 むかんけい unrelated (adj-na, n, adj-no)","係り かかり official, duty, person in charge (n)"]
+                    "definition" : "Ответственный, заведующий",
+                    "examples" : ["関係 かんけい связь, отношение, причастность","無関係 むかんけい никак не связанный, не имеющий отношения к чему-либо, （に）не зависимо от...","係り かかり ответственность, отвечающий за что-либо человек"]
                 },{
                     "kanji" : "信",
                     "onyomi" : "シン",
-                    "kunyomi" : "",
-                    "definition" : "faith, truth, fidelity, trust",
-                    "examples" : ["確信 かくしん conviction, belief, confidence (n, vs)","自信 じしん self-confidence (n, vs)","信じる しんじる to believe, to believe in, to place trust in, to confide in, to have faith in (Ichidan verb, vt)"]
+                    "kunyomi" : "しん.じる",
+                    "definition" : "Вера, доверие, искренность, верить, верность",
+                    "examples" : ["確信 かくしん ","自信 じしん уверенность в себе","信じる しんじる верить, доверять"]
                 },{
                     "kanji" : "倉",
                     "onyomi" : "ソウ",
                     "kunyomi" : "くら",
-                    "definition" : "godown, warehouse, storehouse, cellar, treasury",
-                    "examples" : ["倉庫 そうこ storehouse, warehouse, godown (n)","船倉 センソウ ship's hold, hatch","鎌倉 かまくら Kamakura (city)"]
+                    "definition" : "Склад, амбар, кладовая, хранилище",
+                    "examples" : ["倉庫 そうこ склад, складское помещение","船倉 センソウ трюм","鎌倉 かまくら Камакура (город, эпоха)", "穀倉　こくそう зернохранилище, житница"]
                 },{   
                     "kanji" : "倍",
                     "onyomi" : "バイ",
                     "kunyomi" : "",
-                    "definition" : "double, twice, times, fold",
-                    "examples" : ["倍 ばい twice, double, times, -fold (n, suffix)","倍増 ばいぞう double (n, vs)","倍率 ばいりつ magnification, leverage, amplification, scaling factor, scale factor (n)"]
+                    "definition" : "Удваивать, двойной",
+                    "examples" : ["倍 ばい удваивать, двойной, в (несколько) раз ","倍増 ばいぞう double (n, vs)","倍率 ばいりつ magnification, leverage, amplification, scaling factor, scale factor (n)"]
                 },{   
                     "kanji" : "候",
                     "onyomi" : "コウ",
