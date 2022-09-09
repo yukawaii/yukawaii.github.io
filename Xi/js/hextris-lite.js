@@ -987,13 +987,6 @@ function showText(text) {
     $(".overlay").fadeIn("1000", "swing");
 }
 
-function myadd1(){
-    bridge.send("VKWebAppCheckNativeAds", {"ad_format": "interstitial"});
-    bridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-  .then(data => console.log(data.result))
-  .catch(error => console.log(error));
-  }
-
 function setMainMenu() {
     gameState = 4;
     canRestart = false;
