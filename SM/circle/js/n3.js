@@ -94,7 +94,7 @@ const N3 = {
                     "onyomi" : "シン",
                     "kunyomi" : "しん.じる",
                     "definition" : "Вера, доверие, искренность, верить, верность",
-                    "examples" : ["確信 かくしん ","自信 じしん уверенность в себе","信じる しんじる верить, доверять"]
+                    "examples" : ["確信 かくしん ","自信 じしん уверенность в себе","信じる しんじる верить, доверять", "信者　しんじゃ верующий", "信仰　しんこう религ. вера", "信用　しんよう доверие, надёжность"]
                 },{
                     "kanji" : "倉",
                     "onyomi" : "ソウ",
@@ -145,38 +145,38 @@ const N3 = {
                     "kanji" : "兆",
                     "onyomi" : "チョウ",
                     "kunyomi" : "きざ.す, きざ.し",
-                    "definition" : "portent, 10^12, trillion, sign, omen, symptoms",
-                    "examples" : ["兆 ちょう sign, omen, indication, portent, 10^12, 1,000,000,000,000, trillion (American), (obs) billion (British) (numeric)","兆す きざす to show signs, to have symptoms, to give indications (of), to bud, to germinate, to sprout","吉兆 キッチョウ lucky omen, good omen"]
+                    "definition" : "Триллион, признак, симптом, примета, знак",
+                    "examples" : ["兆 ちょう симптом, примета, знак, 10^12, 1,000,000,000,000, триллион","兆す きざす прорастать, проявляться, зарождаться, обнаруживать признаки чего-либо","吉兆 キチョウ доброе предзнаменование"]
                 },{   
                     "kanji" : "児",
-                    "onyomi" : "ジ, ニ, ゲイ",
+                    "onyomi" : "ジ, ニ",
                     "kunyomi" : "こ, -こ, -っこ",
                     "definition" : "newborn babe, child, young of animals",
-                    "examples" : ["育児 いくじ childcare, nursing, upbringing (n, vs)","児童 じどう children, juvenile (n)","小児科 しょうにか pediatrics (n)"]
+                    "examples" : ["育児 いくじ воспитание детей","児童 じどう ребёнок, дети, детский","小児科 しょうにか педиатрия", "幸運児　こううんじ счастливчик", "胎児　たいじ эмбрион"]
                 },{
                     "kanji" : "全",
                     "onyomi" : "ゼン",
                     "kunyomi" : "まった.く, すべ.て",
-                    "definition" : "whole, entire, all, complete, fulfill",
-                    "examples" : ["安全 あんぜん safety, security (adj-na, n)","全員 ぜんいん all members (unanimity), all hands, the whole crew, everyone, everybody (n-adv, n)","完全 かんぜん perfection, completeness (adj-na, n)"]
+                    "definition" : "Весь, все, полностью, целиком",
+                    "examples" : ["安全 あんぜん безопасность, сохранность","全員 ぜんいん все члены (сообщества)","完全 かんぜん совершенство, безупречный, полный, целый, целиком", "全部　ぜんぶ　всё, целиком, весь"]
                 },{
                     "kanji" : "公",
                     "onyomi" : "コウ, ク",
                     "kunyomi" : "おおやけ",
-                    "definition" : "public, prince, official, governmental",
-                    "examples" : ["公園 こうえん (public) park (n)","公開 こうかい open to the public (n, vs, adj-no)","公害 こうがい pollution, public nuisance, contamination (n)"]
+                    "definition" : "Открытый, гласный, публичный, государственный, общественный",
+                    "examples" : ["公園 こうえん парк", "公論　こうろん общественное мнение, беспристрастный взгляд", "公開 こうかい открытость для публики, публичный, делать открытым","公害 こうがい загрязнение окружающей среды"]
                 },{   
                     "kanji" : "共",
                     "onyomi" : "キョウ",
                     "kunyomi" : "とも, とも.に, -ども",
-                    "definition" : "together, both, neither, all, and, alike, with",
-                    "examples" : ["何共 なんとも nothing (with neg. verb), quite, not a bit (adv)","共に ともに sharing with, participate in, both, alike, together, along with, with, including (adv, vs)","共感 きょうかん sympathy, empathy, response (n, vs)"]
+                    "definition" : "Вместе",
+                    "examples" : ["何共 なんとも ничего не...","共に ともに вместе с кем-то", "二人共　ふたりとも оба (человека)", "共感 きょうかん эмпатия, сопереживание, сочувствие", "共同　きょうどう сотрудничество"]
                 },{   
                     "kanji" : "兵",
                     "onyomi" : "ヘイ, ヒョウ",
                     "kunyomi" : "つわもの",
-                    "definition" : "soldier, private, troops, army, warfare, strategy, tactics",
-                    "examples" : ["徴兵 ちょうへい conscription, recruitment, enlistment (n, vs)","兵器 へいき arms, weapons, ordinance (n)","兵士 へいし soldier (n)"]
+                    "definition" : "Солдат, воин, боец, рядовой, войска",
+                    "examples" : ["徴兵 ちょうへい воинская повинность, призыв, новобранец, призывник","兵器 へいき оружие, вооружение","兵士 へいし солдат", "歩兵　ほへい пехота"]
                 },{   
                     "kanji" : "具",
                     "onyomi" : "グ",
