@@ -106,13 +106,13 @@ const N3 = {
                     "onyomi" : "バイ",
                     "kunyomi" : "",
                     "definition" : "Удваивать, двойной",
-                    "examples" : ["倍 ばい удваивать, двойной, в (несколько) раз ","倍増 ばいぞう double (n, vs)","倍率 ばいりつ magnification, leverage, amplification, scaling factor, scale factor (n)"]
+                    "examples" : ["倍 ばい удваивать, двойной, в (несколько) раз ","倍増 ばいぞう удвоение","倍率 ばいりつ коэффициент увеличения", "倍額　ばいがく двойная сумма", "三倍　さんばい в три раза"]
                 },{   
                     "kanji" : "候",
                     "onyomi" : "コウ",
                     "kunyomi" : "そうろう",
-                    "definition" : "climate, season, weather",
-                    "examples" : ["気候 きこう climate (n)","候補 こうほ candidate, contender, prospect, pick, choice, list (n)","天候 てんこう weather (n)"]
+                    "definition" : "Погода, климат, сезон, время года",
+                    "examples" : ["気候 きこう климат","候補 こうほ кандидатура, кандидат","天候 てんこう погода", "測候所　そっこうじょ метеорологическая станция", "斥候　せっこう разведка, дозор, дозорный, разведчик"]
                 },{   
                     "kanji" : "停",
                     "onyomi" : "テイ",
