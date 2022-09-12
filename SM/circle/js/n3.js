@@ -181,14 +181,14 @@ const N3 = {
                     "kanji" : "具",
                     "onyomi" : "グ",
                     "kunyomi" : "そな.える, つぶさ.に",
-                    "definition" : "tool, utensil, means, possess, ingredients, counter for armor, suits, sets of furniture",
-                    "examples" : ["雨具 あまぐ rain gear (n)","家具 かぐ furniture (n)","器具 きぐ utensil (n)"]
+                    "definition" : "Инструмент, принадлежности, орудие, запасать",
+                    "examples" : ["雨具 あまぐ защита от дождя (плащ, зонтик и т.п.)","家具 かぐ мебель","器具 きぐ аппаратура, принадлежности, инструменты, утварь"]
                 },{   
                     "kanji" : "典",
                     "onyomi" : "テン, デン",
                     "kunyomi" : "",
-                    "definition" : "code, ceremony, law, rule",
-                    "examples" : ["古典 こてん old book, classics, classic (n)","典型 てんけい type, pattern, archetypal (n, adj-no)","典型的 てんけいてき typical, prototypical, representative, stereotypical, model, ideal (adj-na)"]
+                    "definition" : "Церемония, обряд, справочник, словарь, закон, принцип",
+                    "examples" : ["古典 こてん старинная книга, классика","典型 てんけい классическая форма, образец, типовый экземпляр","典型的 てんけいてき типичный, образцовый, стереотипный, прототипный, репрезентативный"]
                 }
             ],
 
@@ -198,20 +198,20 @@ const N3 = {
                     "kanji" : "内",
                     "onyomi" : "ナイ, ダイ",
                     "kunyomi" : "うち",
-                    "definition" : "inside, within, between, among, house, home",
-                    "examples" : ["案内 あんない information, guidance, leading, to guide, to show (around), to conduct (n, vs)","以内 いない within, inside of, less than (n, n-suf)","屋内 おくない indoor (court, pool, etc.) (n)"]
+                    "definition" : "Внутри, дом, семья, частный, конфиденциальный",
+                    "examples" : ["案内 あんない информация, извещение, гид, быть продником, показывать (дорогу, город, музей и т.п.)","以内 いない в пределах чего-либо, внутри, не свыше, в течение","屋内 おくない внутри дома, в помещении, комнатный"]
                 },{
                     "kanji" : "冷",
                     "onyomi" : "レイ",
                     "kunyomi" : "つめ.たい, ひ.える, ひ.や, ひ.ややか, ひ.やす, ひ.やかす, さ.める, さ.ます",
-                    "definition" : "cool, cold (beer, person), chill",
-                    "examples" : ["寒冷 かんれい cold, coldness, chilliness (adj-na, n)","冷める さめる to become cool, to come down (fever), to cool down (interest), to abate, to subside, to dampen (Ichidan verb, intransitive verb)","冷え込む ひえこむ to get colder, to get chilled (v5m, intransitive verb)"]
+                    "definition" : "Прохлада, холодный, прохладный, остывать, охлаждать, замораживать",
+                    "examples" : ["寒冷 かんれい холод, холодный","冷める さめる остывать, охладевать","冷え込む ひえこむ мёрзнуть, цоченеть, становиться всё холоднее", "冷蔵庫　れいぞうこ холодильник"]
                 },{
                     "kanji" : "刀",
                     "onyomi" : "トウ",
                     "kunyomi" : "かたな, そり",
                     "definition" : "sword, saber, knife",
-                    "examples" : ["刀 とう (single-edged) sword, katana, dagger, knife, scalpel (n)","刀 【かたな】 (single-edged) sword, katana, dagger, knife, scalpel, chisel, burin, graver, knife money, knife-shaped commodity money used in Zhou dynasty China","一刀 【いっとう】 sword, blade, single stroke"]
+                    "examples" : ["刀 とう меч, клинок, холодное оружие","刀 【かたな】катана, одноручный японский меч","一刀 【いっとう】 один меч, один удар меча"]
                 },{   
                     "kanji" : "列",
                     "onyomi" : "レツ, レ",
