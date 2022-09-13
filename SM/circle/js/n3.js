@@ -1,4 +1,4 @@
-const N3 = { 
+Tconst N3 = { 
     "Ур. 01" : 
             [
                 {   
@@ -2306,8 +2306,8 @@ const N3 = {
                     "kanji" : "黄",
                     "onyomi" : "コウ, オウ",
                     "kunyomi" : "き, こ-",
-                    "definition" : "yellow",
-                    "examples" : ["黄色い きいろい yellow (adj)","黄葉 もみじ autumn colours, fall colors, leaves changing color (colour), leaves turning red, red leaves (n, vs, n)","黄昏 こうこん dusk, twilight (n)"]
+                    "definition" : "Жёлтый",
+                    "examples" : ["黄色い きいろい жёлтый цвет (adj)","黄葉 もみじ autumn colours, fall colors, leaves changing color (colour), leaves turning red, red leaves (n, vs, n)","黄昏 こうこん dusk, twilight (n)"]
                 }
             ],
     "Ур. 37" : 
@@ -2316,7 +2316,7 @@ const N3 = {
                     "kanji" : "鼻",
                     "onyomi" : "ビ",
                     "kunyomi" : "はな",
-                    "definition" : "nose, snout",
+                    "definition" : "Нос",
                     "examples" : ["耳鼻科 じびか otolaryngology, concerning the ear, nose, and throat (n)","鼻 はな nose (n)","目鼻 【めはな】 eyes and nose, looks, facial features, shape, form"]
                 }
             ]
