@@ -2295,19 +2295,19 @@ Tconst N3 = {
                     "onyomi" : "メイ",
                     "kunyomi" : "な.く, な.る, な.らす",
                     "definition" : "chirp, cry, bark, sound, ring, echo, honk",
-                    "examples" : ["怒鳴る どなる to shout, to yell (v5r, intransitive verb)","悲鳴 ひめい shriek, scream (n, vs)","鳴らす ならす to ring, to sound, to chime, to beat, to snort (nose) (v5s, vt)"]
+                    "examples" : ["怒鳴る どなる крикнуть, рявкнуть","悲鳴 ひめい shriek, scream (n, vs)","鳴らす ならす to ring, to sound, to chime, to beat, to snort (nose) (v5s, vt)"]
                 },{   
                     "kanji" : "麦",
                     "onyomi" : "バク",
                     "kunyomi" : "むぎ",
-                    "definition" : "barley, wheat",
-                    "examples" : ["小麦 こむぎ wheat (n)","蕎麦 そまむぎ buckwheat (Fagopyrum esculentum), soba (Japanese buckwheat noodles) (n)","麦 むぎ wheat, barley, oat (oats) (n)"]
+                    "definition" : "Хлебные злаки, зерновые, хлеба",
+                    "examples" : ["小麦 こむぎ пшеница", "小麦粉 こむぎこ пшеничная мука", "蕎麦 そば гречиха, соба (лапша из гречневой муки и блюда на её основе)","麦 むぎ Хлебные злаки, зерновые, хлеба"]
                 },{   
                     "kanji" : "黄",
                     "onyomi" : "コウ, オウ",
-                    "kunyomi" : "き, こ-",
+                    "kunyomi" : "き, こ-, き.ばむ, き.ばみ",
                     "definition" : "Жёлтый",
-                    "examples" : ["黄色い きいろい жёлтый цвет (adj)","黄葉 もみじ autumn colours, fall colors, leaves changing color (colour), leaves turning red, red leaves (n, vs, n)","黄昏 こうこん dusk, twilight (n)"]
+                    "examples" : ["黄色い きいろい жёлтый цвет","黄葉 もみじ осенние листья клёна, осенние краски, жёлтая и красная листва","黄昏 こうこん / たそがれ сумерки", "黄ばむ　きばむ желтеть"]
                 }
             ],
     "Ур. 37" : 
@@ -2317,7 +2317,7 @@ Tconst N3 = {
                     "onyomi" : "ビ",
                     "kunyomi" : "はな",
                     "definition" : "Нос",
-                    "examples" : ["耳鼻科 じびか otolaryngology, concerning the ear, nose, and throat (n)","鼻 はな nose (n)","目鼻 【めはな】 eyes and nose, looks, facial features, shape, form"]
+                    "examples" : ["耳鼻科 じびか отоларинголог, врач ухо-горло-нос ","鼻 はな нос","目鼻 【めはな】глаза и нос, черты лица", "目鼻が付く めはながつく принимать конкретные очертания, обретать форму"]
                 }
             ]
     
