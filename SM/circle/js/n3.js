@@ -229,7 +229,7 @@ Tconst N3 = {
                     "onyomi" : "リ",
                     "kunyomi" : "き.く",
                     "definition" : "Выгода, преимущество, польза, быть эффективным",
-                    "examples" : ["勝利 しょうり victory, triumph, conquest, success, win (n, vs)","金利 きんり interest rates (n)","不利 ふり disadvantage, handicap, unfavorable, unfavourable, drawback (adj-na, n)"]
+                    "examples" : ["勝利 しょうり ","金利 きんり interest rates (n)","不利 ふり disadvantage, handicap, unfavorable, unfavourable, drawback (adj-na, n)"]
                 },{   
                     "kanji" : "刷",
                     "onyomi" : "サツ",
