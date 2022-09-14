@@ -205,30 +205,30 @@ Tconst N3 = {
                     "onyomi" : "レイ",
                     "kunyomi" : "つめ.たい, ひ.える, ひ.や, ひ.ややか, ひ.やす, ひ.やかす, さ.める, さ.ます",
                     "definition" : "Прохлада, холодный, прохладный, остывать, охлаждать, замораживать",
-                    "examples" : ["寒冷 かんれい холод, холодный","冷める さめる остывать, охладевать","冷え込む ひえこむ мёрзнуть, цоченеть, становиться всё холоднее", "冷蔵庫　れいぞうこ холодильник"]
+                    "examples" : ["寒冷 かんれい холод, холодный","冷める さめる остывать, охладевать","冷え込む ひえこむ мёрзнуть, коченеть, становиться всё холоднее", "冷蔵庫　れいぞうこ холодильник"]
                 },{
                     "kanji" : "刀",
                     "onyomi" : "トウ",
                     "kunyomi" : "かたな, そり",
-                    "definition" : "sword, saber, knife",
-                    "examples" : ["刀 とう меч, клинок, холодное оружие","刀 【かたな】катана, одноручный японский меч","一刀 【いっとう】 один меч, один удар меча"]
+                    "definition" : "Меч, катана, клинок",
+                    "examples" : ["刀 とう меч, клинок, холодное оружие","刀 【かたな】катана, одноручный японский меч","一刀 【いっとう】 один меч, один удар меча", "剃刀 かみそり бритва"]
                 },{   
                     "kanji" : "列",
                     "onyomi" : "レツ, レ",
-                    "kunyomi" : "",
-                    "definition" : "file, row, rank, tier, column",
-                    "examples" : ["陳列 ちんれつ exhibition, display, show (n, vs)","直列 ちょくれつ series (eg electrical), serial (n, adj-f)","整列 せいれつ standing in a row, forming a line, alignment (n, vs)"]
+                    "kunyomi" : "つら.なる",
+                    "definition" : "Ряд, шеренга, очередь, колонна",
+                    "examples" : ["陳列 ちんれつ показ, выставка, выставлять","直列 ちょくれつ последовательное соединение, последовательный","整列 せいれつ строиться, выстраиваться"]
                 },{
                     "kanji" : "初",
                     "onyomi" : "ショ",
                     "kunyomi" : "はじ.め, はじ.めて, はつ, はつ-, うい-, -そ.める, -ぞ.め",
-                    "definition" : "first time, beginning",
-                    "examples" : ["最初 さいしょ beginning, outset, first, onset (adj-no, n-adv, n-t)","初 はつ first, new (n, adj-no, n-suf)","初級 しょきゅう elementary level (n)"]
+                    "definition" : "Первый, начало, начинать",
+                    "examples" : ["最初 さいしょ сначала, начало, начальный, первый, сперва","初 はつ первый, новый","初級 しょきゅう начальный уровень, уровень начинающих"]
                 },{
                     "kanji" : "利",
                     "onyomi" : "リ",
                     "kunyomi" : "き.く",
-                    "definition" : "profit, advantage, benefit",
+                    "definition" : "Выгода, преимущество, польза, быть эффективным",
                     "examples" : ["勝利 しょうり victory, triumph, conquest, success, win (n, vs)","金利 きんり interest rates (n)","不利 ふり disadvantage, handicap, unfavorable, unfavourable, drawback (adj-na, n)"]
                 },{   
                     "kanji" : "刷",
