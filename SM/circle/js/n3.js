@@ -229,31 +229,31 @@ Tconst N3 = {
                     "onyomi" : "リ",
                     "kunyomi" : "き.く",
                     "definition" : "Выгода, преимущество, польза, быть эффективным",
-                    "examples" : ["勝利 しょうり ","金利 きんり interest rates (n)","不利 ふり disadvantage, handicap, unfavorable, unfavourable, drawback (adj-na, n)"]
+                    "examples" : ["勝利 しょうり победа, выигрыш, триумф","金利 きんり процент","不利 ふり невыгодный, неблагоприятный, невгодность", "利他　りた альтруизм","効く　きく оказывать эффект"]
                 },{   
                     "kanji" : "刷",
                     "onyomi" : "サツ",
                     "kunyomi" : "す.る, -ず.り, -ずり, は.く",
-                    "definition" : "printing, print",
-                    "examples" : ["印刷 いんさつ printing (n, vs)","刷る する to print, to color or pattern fabric using a wooden mold","刷く はく to daub, to brush, to touch up"]
+                    "definition" : "Печатать, печать, тираж, подметать",
+                    "examples" : ["印刷 いんさつ печатать, типографский, печать","刷る する печатать","刷く はく подметать, смахивать", "刷毛　はけ малярная кисть, щётка"]
                 },{   
                     "kanji" : "副",
                     "onyomi" : "フク",
-                    "kunyomi" : "",
-                    "definition" : "vice-, duplicate, copy",
-                    "examples" : ["副作用 ふくさよう reaction, secondary effect, side effect (n)","副 とりわけ especially, above all (adv, n)","副作用 フクサヨウ side effect, adverse reaction"]
+                    "kunyomi" : "そ.う",
+                    "definition" : "Вспомогательный, побочный, заместитель, вице-, копия, дубликат, одобрять",
+                    "examples" : ["副作用 ふくさよう побочное действие","副 フク копия, дубликат","副手　ふくしゅ ассистент", "副大統領　ふくだいとうりょう заместитель президента государства"]
                 },{   
                     "kanji" : "功",
                     "onyomi" : "コウ, ク",
                     "kunyomi" : "いさお",
-                    "definition" : "achievement, merits, success, honor, credit",
-                    "examples" : ["功夫 くふう device, scheme, devising, scheming, dedication to spiritual improvement (esp. through Zen meditation) (n, vs)","成功 せいこう success, hit (n, vs)","効能 コウノウ effect, efficacy, virtue, benefit"]
+                    "definition" : "Заслуга, подвиг, достижение",
+                    "examples" : ["","成功 せいこう успех","功績　こうせき заслуги, достижения", "功徳　くどく благотворительность", "功労　こうろう выдающееся достижение, заслуга"]
                 },{   
                     "kanji" : "加",
                     "onyomi" : "カ",
                     "kunyomi" : "くわ.える, くわ.わる",
-                    "definition" : "add, addition, increase, join, include, Canada",
-                    "examples" : ["加える くわえる to append, to sum up, to add (up), to include, to increase, to inflict (Ichidan verb, vt)","加害者 かがいしゃ assailant (n)","加工 かこう manufacturing, processing, treatment, machining (n, vs)"]
+                    "definition" : "Добавлять, прибавлять, присоединять, вдобавок, увеличивать",
+                    "examples" : ["加える くわえる добавлять, прилагать, прикладывать","加害者 かがいしゃ обидчик, оскорбитель","加工 かこう обработка, переработка, выделка", "ラミネート加工	ламинирование"]
                 }
             ],
     "Ур. 05" : 
@@ -262,14 +262,14 @@ Tconst N3 = {
                     "kanji" : "助",
                     "onyomi" : "ジョ",
                     "kunyomi" : "たす.ける, たす.かる, す.ける, すけ",
-                    "definition" : "help, rescue, assist",
-                    "examples" : ["救助 きゅうじょ relief, aid, rescue (n, vs)","助かる たすかる to be saved, to be rescued, to survive, to be helpful (v5r, intransitive verb)","助詞 じょし particle, postposition (n)"]
+                    "definition" : "Помощь, спасение, помогать, спасать, выручать",
+                    "examples" : ["救助 きゅうじょ спасение, помощь, спасать","助かる たすかる быть спасённым","助詞 じょし грам. частица", "助産　じょさん акушерство", "補助　ほじょ помощь, пособие"]
                 },{
                     "kanji" : "努",
                     "onyomi" : "ド",
                     "kunyomi" : "つと.める",
-                    "definition" : "toil, diligent, as much as possible",
-                    "examples" : ["努力 どりょく great effort, exertion, endeavour, endeavor, effort (n, vs)","努める つとめる to endeavor (endeavour), to try, to strive, to make an effort, to exert oneself, to be diligent, to be committed (to doing something)","努 ド third principle of the Eight Principles of Yong, downward stroke"]
+                    "definition" : "Стараться, прилагать усилия, усердно",
+                    "examples" : ["努力 どりょく старания, усилия","努める つとめる  прилагать усилия, работать, стараться","奮励努力　ふんれいどりょく энергичные усилия"]
                 },{
                     "kanji" : "労",
                     "onyomi" : "ロウ",
