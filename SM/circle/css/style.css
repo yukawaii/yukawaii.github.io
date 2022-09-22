@@ -16,8 +16,8 @@ html body {
       -ms-user-select: none;
           user-select: none;
   color: #000;
-  -webkit-animation: animationBackground 1s ease-in-out infinite alternate;
-          animation: animationBackground 1s ease-in-out infinite alternate;
+  -webkit-animation: animationBackground 3s ease-in-out infinite alternate;
+          animation: animationBackground 3s ease-in-out infinite alternate;
 
 }
 
@@ -273,10 +273,25 @@ html body  #pausebut {
   padding: 0px;
   z-index: 3;
 }
-html body  #homebut {
+html body  #homebut  {
   position: absolute;
   top: 0;
   right: 10%;
+  margin: 0px;
+  padding: 0px;
+  font-size: 20px;
+  text-align: center;
+  line-height: 0px;
+  width: 30px;
+  margin: 0px;
+  padding: 0px;
+  background-color: transparent;
+  z-index: 3;
+}
+html body  #backbtn  {
+  position: absolute;
+  top: 0;
+  right: 30%;
   margin: 0px;
   padding: 0px;
   font-size: 20px;
@@ -293,6 +308,12 @@ html body  #homebut {
   background-image: url("./btn_home.png");
   height: 75px; 
   width: auto;
+}
+#backbtn {
+  background-image: url("../images/backbtn.png");
+  height: 75px; 
+  width: auto;
+
 }
 #main-container {
     width: 95vw;
