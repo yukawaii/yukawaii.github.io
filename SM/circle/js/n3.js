@@ -2178,8 +2178,8 @@ Tconst N3 = {
                     "kanji" : "鉄",
                     "onyomi" : "テツ",
                     "kunyomi" : "くろがね",
-                    "definition" : "iron",
-                    "examples" : ["国鉄 こくてつ national railway (n)","私鉄 してつ private railway (n)","鉄 てつ iron (n)"]
+                    "definition" : "Железо",
+                    "examples" : ["国鉄 こくてつ государственная железная дорога","私鉄 してつ частная ж\д","鉄 てつ железо", "鋼鉄　こうてつ сталь"]
                 }
             ],
     "Ур. 35" : 
@@ -2188,62 +2188,63 @@ Tconst N3 = {
                     "kanji" : "録",
                     "onyomi" : "ロク",
                     "kunyomi" : "",
-                    "definition" : "record",
-                    "examples" : ["記録 きろく record, minutes, document, a record (eg in sports), results, score, to record, to document, to set a record (eg in sports), to show a result, to reach a value (n, vs)","登録 とうろく registration, accession, register, entry, record (n, vs)","目録 もくろく catalogue, catalog, list (n)"]
+                    "definition" : "Запись, записывать, регистрировать",
+                    "examples" : ["記録 きろく запись; реестр; протокол; документ; архивы; анналы; ~suru записывать, вести запись; протоколировать; регистрировать; спорт. рекорд","登録 とうろく регистрация","目録 もくろく каталог, опись, перечень; оглавление"]
                 },{
                     "kanji" : "鏡",
                     "onyomi" : "キョウ, ケイ",
                     "kunyomi" : "かがみ",
-                    "definition" : "mirror, speculum, barrel-head, round rice-cake offering",
-                    "examples" : ["鏡 かがみ mirror (n)","眼鏡 めがね spectacles, glasses (n)","望遠鏡 ぼうえんきょう telescope (n)"]
+                    "definition" : "Зеркало, линза, оптический инструмент",
+                    "examples" : ["鏡 かがみ зеркало","眼鏡 めがね очки с линзами","望遠鏡 ぼうえんきょう подзорная труба, телескоп", "顕微鏡	けんびきょう микроскоп", "鏡面　きょうめん зеркальная поверхность"]
                 },{
                     "kanji" : "関",
                     "onyomi" : "カン",
                     "kunyomi" : "せき, -ぜき, かか.わる, からくり, かんぬき",
-                    "definition" : "connection, barrier, gateway, involve, concerning",
-                    "examples" : ["関する かんする to concern, to be related (suru verb - special class)","関係 かんけい relation, connection (n, vs)","関心 かんしん concern, interest (n)"]
+                    "definition" : "Застава, барьер, иметь отношение к чему-либо, причастность",
+                    "examples" : ["関する かんする иметь отношение к чему-либо","関係 かんけい связь, отношение, причастность","関心 かんしん интерес", "関節　かんせつ сустав"]
                 },{   
                     "kanji" : "陸",
                     "onyomi" : "リク, ロク",
                     "kunyomi" : "おか",
-                    "definition" : "land, six",
-                    "examples" : ["大陸 たいりく continent (n)","着陸 ちゃくりく landing, alighting, touch down (n, vs)","離陸 りりく takeoff (n, vs)"]
+                    "definition" : "Суша, земля, шесть (в документах, ценных бумагах и т. п.)",
+                    "examples" : ["大陸 たいりく материк, континент","着陸 ちゃくりく приземление, посадка, приземлиться","離陸 りりく взлёт, отчаливание"]
                 },{
                     "kanji" : "陽",
                     "onyomi" : "ヨウ",
                     "kunyomi" : "ひ",
-                    "definition" : "sunshine, yang principle, positive, male, heaven, daytime",
-                    "examples" : ["太陽 たいよう sun, solar (n)","陽射し ひざし sunlight, rays of the sun (n)","陽気 ようき cheerful, merry, season, weather (adj-na, n)"]
+                    "definition" : "Солнце, принцип ян, солнечный, положительный",
+                    "examples" : ["太陽 たいよう солнце","陽射し ひざし солнечный свет, лучи солнца","陽気 ようき погода, сезон; жизнерадостность, весёлый", "陽　よう Ян, солнечное (светлое, мужское) начало"]
                 },{
                     "kanji" : "隊",
                     "onyomi" : "タイ",
                     "kunyomi" : "",
-                    "definition" : "regiment, party, company, squad",
-                    "examples" : ["機動隊 きどうたい riot police, riot squad (n)","自衛隊 じえいたい self-defence force, self-defense force, Japan Self-Defence Force, JSDF (n)","兵隊 へいたい soldier, sailor (n)"]
+                    "definition" : "Отряд, подразделение, команда, группа",
+                    "examples" : ["自衛隊 じえいたい Силы Самообороны (название вооружённых сил Японии с 1954 г.)","兵隊 へいたい солдат; войска, армия; ~[no] армейский, солдатский"]
                 },{   
                     "kanji" : "階",
                     "onyomi" : "カイ",
                     "kunyomi" : "きざはし",
-                    "definition" : "storey, stair, counter for storeys of a building",
-                    "examples" : ["階 かい stories, storeys, counter for storeys and floors of a building (n, n-suf, counter)","階級 かいきゅう class, rank, grade (n)","階段 かいだん stairs, stairway, staircase (n)"]
+                    "definition" : "Этаж, ярус, ступени, лестница",
+                    "examples" : ["階 かい этаж; ярус, лестница, ступени, уровень, ступень, разряд","階級 かいきゅう сословие, каста, общественный клас; звание, ранг","階段 かいだん лестница", "震度階　しんどかい сейсмическая шкала"]
                 },{   
                     "kanji" : "雪",
                     "onyomi" : "セツ",
                     "kunyomi" : "ゆき",
-                    "definition" : "snow",
-                    "examples" : ["初雪 はつゆき first snow (of season) (n)","吹雪 ふぶき snow storm (n)","積雪 せきせつ fallen snow (n)"]
+                    "definition" : "Снег, снежок",
+                    "examples" : ["雪合戦　ゆきがっせん игра/играть в снежки", "初雪 はつゆき первый снег","吹雪 ふぶき метель","積雪 せきせつ лежащий снег", "除雪　じょせつ уборка снега"]
                 },{   
                     "kanji" : "雲",
                     "onyomi" : "ウン",
                     "kunyomi" : "くも, -ぐも",
-                    "definition" : "cloud",
-                    "examples" : ["雲 くも cloud (n)","白雲 しらくも white clouds","八重雲 やえぐも layers of clouds"]
+                    "definition" : "Облако, туча",
+                    "examples" : ["雲 くも облако, туча","白雲 しらくも белые облака","八重雲 やえぐも 	многослойные облака", "雨雲　あまぐも дождевое облако", "雲水　うんすい странствующий монах (подобный плывущим облакам и бегущей воде)
+"]
                 },{   
                     "kanji" : "静",
                     "onyomi" : "セイ, ジョウ",
                     "kunyomi" : "しず-, しず.か, しず.まる, しず.める",
-                    "definition" : "quiet",
-                    "examples" : ["冷静 れいせい calm, composure, coolness, serenity (adj-na, n)","静粛 せいしゅく silent (adj-na, n)","安静 あんせい rest (adj-na, n)"]
+                    "definition" : "Тишина, тихий, спокойный, утихать, успокаивать",
+                    "examples" : ["冷静 れいせい хладнокровие, хладнокровный, невозмутимый","静粛 せいしゅく тишина","安静 あんせい покой, отдых"]
                 }
             ],
     "Ур. 36" :
@@ -2252,32 +2253,32 @@ Tconst N3 = {
                     "kanji" : "面",
                     "onyomi" : "メン, ベン",
                     "kunyomi" : "おも, おもて, つら",
-                    "definition" : "mask, face, features, surface",
-                    "examples" : ["一面 いちめん one face, one surface, the whole surface, one aspect, one side, (on) the other hand, one broad, flat object, front page (n, n, n-adv)","仮面 かめん mask, disguise (n)","外面 げめん outer surface, outward appearance, outside, exterior, outside, outer, outward, exterior, external (n, adj-no)"]
+                    "definition" : "Лицо, поверхность, маска, физиономия",
+                    "examples" : ["一面 いちめん 1.одна сторона (аспект, угол зрения) 2.нареч. с другой стороны 3.вся поверхность; ~no сплошной; ~ni сплошь 4.первая страница (газеты)","仮面 かめん маска","外面 がいめん внешняя (наружная) сторона"]
                 },{
                     "kanji" : "順",
                     "onyomi" : "ジュン",
                     "kunyomi" : "",
-                    "definition" : "obey, order, turn, right, docility, occasion",
-                    "examples" : ["手順 てじゅん process, procedure, sequence, protocol, instruction (n)","順 じゅん order, turn (adj-na, n, n-suf)","順調 じゅんちょう favourable, favorable, doing well, OK, all right (adj-na, n)"]
+                    "definition" : "Порядок, последовательность, очередь",
+                    "examples" : ["手順 てじゅん ход, процесс, порядок, протокол","順 じゅん порядок, последовательность, очередь; ~ni по порядку; один за другим","順調 じゅんちょう благоприятный (ход, течение)"]
                 },{
                     "kanji" : "願",
                     "onyomi" : "ガン",
                     "kunyomi" : "ねが.う, -ねがい",
-                    "definition" : "petition, request, vow, wish, hope",
-                    "examples" : ["出願 しゅつがん application (n, vs)","祈願 きがん prayer (n, vs)","願う ねがう to desire, to wish, to hope, to beg, to request, to implore, to pray, to have something done for oneself (v5s, vt, auxiliary verb)"]
+                    "definition" : "Просьба, молитва, прошение, мольба, желание",
+                    "examples" : ["出願 しゅつがん подавать заявление, подавать прошение","祈願 きがん молитва, мольба; ~suru молить, взывать","願う ねがう 1. просить, молить2. хотеть, желать"]
                 },{   
                     "kanji" : "類",
                     "onyomi" : "ルイ",
                     "kunyomi" : "たぐ.い",
-                    "definition" : "sort, kind, variety, class, genus",
-                    "examples" : ["種類 しゅるい variety, kind, type, category, counter for different sorts of things (n, counter)","人類 じんるい mankind, humanity (n)","同類 どうるい the same kind, accomplice (n)"]
+                    "definition" : "Разновидность, вид, сорт, класс, разряд",
+                    "examples" : ["種類 しゅるい вид, род, сорт, тип","人類 じんるい человечество","同類 どうるい 1. тот же сорт (класс, категория); ~no того же сорта; подобный 2. партнёр; соучастник"]
                 },{
                     "kanji" : "飛",
                     "onyomi" : "ヒ",
                     "kunyomi" : "と.ぶ, と.ばす, -と.ばす",
-                    "definition" : "fly, skip (pages), scatter",
-                    "examples" : ["飛行機 ひこうき aeroplane, airplane, aircraft (n)","飛行 ひこう aviation (n, vs)","飛ばす とばす to fly, to fire, to hurl, to skip over, to omit, to drop (eg stitch), to run or drive fast, to gallop, to spread a rumour (rumor), to tell a story, to remove, to get rid of, to transfer, to attack, to jeer at (v5s, vt)"]
+                    "definition" : "Полёт, летать, лететь, мчаться, прыгать, скакать, бросать вверх, поразительный, неожиданный",
+                    "examples" : ["飛行機 ひこうき самолёт","飛行 ひこう авиация","飛ばす とばす бросать вверх, пускать по воздуху, сдувать, разбрасывать, расплёскивать, гнать лошадей, гнать автомобиль"]
                 },{
                     "kanji" : "養",
                     "onyomi" : "ヨウ, リョウ",
