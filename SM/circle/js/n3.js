@@ -2282,20 +2282,21 @@ Tconst N3 = {
                     "kanji" : "養",
                     "onyomi" : "ヨウ, リョウ",
                     "kunyomi" : "やしな.う",
-                    "definition" : "foster, bring up, rear, develop, nurture",
-                    "examples" : ["営養 えいよう nutrition, nourishment (n)","養う やしなう to rear, to maintain, to support (eg family), to cultivate (v5s, vt)","扶養 ふよう support, maintenance (n, vs)"]
+                    "definition" : "Вскармливать, растить, воспитывать, выращивать",
+                    "examples" : ["営養 えいよう питание, питательность","養う やしなう 1. растить, воспитывать 2.кормить, содержать 3. держать, выкармливать (скот) 4. развивать (ум, силу и т. п. ) 5. лелеять (здоровье)","扶養 ふよう support, maintenance (n, vs)"]
                 },{   
                     "kanji" : "馬",
                     "onyomi" : "バ",
                     "kunyomi" : "うま, うま-, ま",
-                    "definition" : "horse",
-                    "examples" : ["競馬 けいば horse racing (n)","馬 うま horse, promoted bishop (shogi) (n)",""]
+                    "definition" : "Конь, лошадь",
+                    "examples" : ["競馬 けいば скачки, бега","馬 うま лошадь, конь","乗馬　じょうば верховая езда", "桂馬　けいま конь (фигура в японских шахматах сёги)", "縞馬　しまうま зебра"]
                 },{   
                     "kanji" : "鳴",
                     "onyomi" : "メイ",
                     "kunyomi" : "な.く, な.る, な.らす",
-                    "definition" : "chirp, cry, bark, sound, ring, echo, honk",
-                    "examples" : ["怒鳴る どなる крикнуть, рявкнуть","悲鳴 ひめい shriek, scream (n, vs)","鳴らす ならす to ring, to sound, to chime, to beat, to snort (nose) (v5s, vt)"]
+                    "definition" : "петь, щебетать, чирикать; кудахтать; кукарекать; крякать; лаять; мяукать; мычать; блеять; ржать; реветь; выть; жужжать; стрекотать; пищать и т. п.",
+
+                    "examples" : ["怒鳴る どなる крикнуть, рявкнуть","悲鳴 ひめい вопль, крик","鳴らす ならす 1.вызывать или производить звук при помощи чего-л. 2. перен. раззвонить, разнести, рассказать повсюду, 3.перен. быть знаменитым"]
                 },{   
                     "kanji" : "麦",
                     "onyomi" : "バク",
