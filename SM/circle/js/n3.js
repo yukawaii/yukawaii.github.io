@@ -1,4 +1,4 @@
-Tconst N3 = { 
+const N3 = { 
     "Ур. 01" : 
             [
                 {   
@@ -2124,32 +2124,32 @@ Tconst N3 = {
                     "kanji" : "遊",
                     "onyomi" : "ユウ, ユ",
                     "kunyomi" : "あそ.ぶ, あそ.ばす",
-                    "definition" : "play",
-                    "examples" : ["遊び あそび playing (n, n-suf)","遊ぶ あそぶ to play, to make a visit (esp. for pleasure), to be idle, to do nothing (v5b, intransitive verb)","遊園地 ゆうえんち amusement park (n)"]
+                    "definition" : "Игра, играть, развлекаться, веселиться",
+                    "examples" : ["遊び あそび игра, развлечение","遊ぶ あそぶ играть, развлекаться, веселиться, кутить, ходить в гости","遊園地 ゆうえんち парк аттакционов"]
                 },{
                     "kanji" : "達",
                     "onyomi" : "タツ, ダ",
                     "kunyomi" : "-たち",
-                    "definition" : "accomplished, reach, arrive, attain",
-                    "examples" : ["上達 じょうたつ improvement, advance, progress (n, vs)","速達 そくたつ express, special delivery (n, vs)","達成 たっせい achievement (n, vs)"]
+                    "definition" : "Достигать, доходить до чего-либо, издавать приказ, распоряжение",
+                    "examples" : ["上達 じょうたつ успехи в учёбе, продвижения","速達 そくたつ срочная доставка, экспресс-почта","達成 たっせい достижение, достигать, выполнять"]
                 },{
                     "kanji" : "選",
                     "onyomi" : "セン",
                     "kunyomi" : "えら.ぶ",
-                    "definition" : "elect, select, choose, prefer",
-                    "examples" : ["選挙 せんきょ election (n, vs)","選手 せんしゅ player (in game), team member (n)","選択 せんたく selection, choice, option (n, vs)"]
+                    "definition" : "Выбор, выбирать, избирать, делать отбор",
+                    "examples" : ["選挙 せんきょ выборы","選手 せんしゅ спортсмен, атлет, член команды","選択 せんたく выбор, выбирать", "再選　さいせん перевыборы", "予選　よせん отборочные соревнования, предварительные выборы"]
                 },{   
                     "kanji" : "郡",
                     "onyomi" : "グン",
                     "kunyomi" : "こうり",
-                    "definition" : "county, district",
-                    "examples" : ["郡 こおり district, county (n)","郡部 グンブ rural districts, counties",""]
+                    "definition" : "Уезд, район",
+                    "examples" : ["郡 こおり уезд","郡部 グンブ уезды, сельская местность","荏原郡 えばらぐん уезд Эбара"]
                 },{
                     "kanji" : "部",
                     "onyomi" : "ブ",
                     "kunyomi" : "-べ",
                     "definition" : "Часть, секция, отдел, категория, разряд, экземпляр (печатного издания)",
-                    "examples" : ["一部 いちぶ one part, one portion, one section, some, one copy (eg of a document) (n-adv, n)","幹部 かんぶ management, (executive) staff, leaders (n)","学部 がくぶ department of a university, undergraduate (n)"]
+                    "examples" : ["一部 いちぶ одна часть, одна порция, один экземпляр документов","幹部 かんぶ руководство, правление, верхушка","学部 がくぶ факультет"]
                 },{
                     "kanji" : "配",
                     "onyomi" : "ハイ",
