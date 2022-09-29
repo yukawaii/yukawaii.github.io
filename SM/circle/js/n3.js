@@ -2148,26 +2148,26 @@ Tconst N3 = {
                     "kanji" : "部",
                     "onyomi" : "ブ",
                     "kunyomi" : "-べ",
-                    "definition" : "section, bureau, dept, class, copy, part, portion, counter for copies of a newspaper or magazine",
+                    "definition" : "Часть, секция, отдел, категория, разряд, экземпляр (печатного издания)",
                     "examples" : ["一部 いちぶ one part, one portion, one section, some, one copy (eg of a document) (n-adv, n)","幹部 かんぶ management, (executive) staff, leaders (n)","学部 がくぶ department of a university, undergraduate (n)"]
                 },{
                     "kanji" : "配",
                     "onyomi" : "ハイ",
                     "kunyomi" : "くば.る",
                     "definition" : "distribute, spouse, exile, rationing",
-                    "examples" : ["心配 しんぱい worry, concern, anxiety, care (adj-na, n, vs)","支配 しはい rule, control, direction (n, vs)","気配 きはい indication, sign, hint, presence, trend, quotation (esp. stock market) (n)"]
+                    "examples" : ["心配 しんぱい беспокойство, волноваться","支配 しはい управление, руководить, управлять","気配 きはい настроение (тенденции) рынка", "配る　くばる распределять, раздавать"]
                 },{   
                     "kanji" : "酒",
                     "onyomi" : "シュ",
                     "kunyomi" : "さけ, さか-",
-                    "definition" : "sake, alcohol",
-                    "examples" : ["居酒屋 いざかや bar, pub, tavern (n)","禁酒 きんしゅ prohibition, temperance, abstinence (n, vs)","日本酒 にほんしゅ sake, Japanese rice wine (n)"]
+                    "definition" : "Сакэ, алкоголь",
+                    "examples" : ["居酒屋 いざかや таверна, бар, паб","禁酒 きんしゅ трезвость, быть трезвенником, не употреблять алкогольные яды ","日本酒 にほんしゅ японское вино"]
                 },{   
                     "kanji" : "里",
                     "onyomi" : "リ",
                     "kunyomi" : "さと",
                     "definition" : "ri, village, parent's home, league",
-                    "examples" : ["郷里 きょうり birth-place, home town (n)","旧里 きゅうり home town, birthplace, old village, historic village, native place, one's old home (n)",""]
+                    "examples" : ["古里　ふるさと родина, родной город", "郷里 きょうり родные места, родина","旧里 きゅうり родная деревня, родные места","万里の長城　ばんりのちょうじょう Великая китайская стена"]
                 },{   
                     "kanji" : "量",
                     "onyomi" : "リョウ",
