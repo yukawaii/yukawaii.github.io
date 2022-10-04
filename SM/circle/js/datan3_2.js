@@ -5,7 +5,7 @@ const DATA ={
     jp: "例",
     on: "レイ",
     kun: "たと.える",
-    trad: "example, custom, usage, precedent"
+    trad: "пример"
 }, {
     "category": "jlptn3",
     jp: "然",
@@ -17,61 +17,61 @@ const DATA ={
     jp: "限",
     on: "ゲン",
     kun: "かぎ.る かぎ.り -かぎ.り",
-    trad: "limit, restrict, to best of ability"
+    trad: "ограничиваться"
 }, {
     "category": "jlptn3",
     jp: "追",
-    on: "ツイ オ.",
+    on: "ツイ",
     kun: "",
-    trad: "chase, drive away, follow, pursue, meanwhile"
+    trad: "преследовать"
 }, {
     "category": "jlptn3",
     jp: "商",
-    on: "ショウ アキナ.",
+    on: "ショウ",
     kun: "",
-    trad: "make a deal, selling, dealing in, merchant"
+    trad: "торговля"
 }, {
     "category": "jlptn3",
     jp: "葉",
     on: "ヨウ",
     kun: "",
-    trad: "leaf, plane, lobe, needle, blade, spear, counter for flat things, fragment, piece"
+    trad: "листья"
 }, {
     "category": "jlptn3",
     jp: "伝",
     on: "デン テン ツ",
     kun: "つた.わる つた.える つた.う つだ.う -づた.い",
-    trad: "transmit, go along, walk along, follow, report, communicate, legend, tradition"
+    trad: "сообщать"
 }, {
     "category": "jlptn3",
     jp: "働",
     on: "ドウ リュク リキ ロク リョク",
     kun: "はたら.く",
-    trad: "work, (kokuji)"
+    trad: "работать"
 }, {
     "category": "jlptn3",
     jp: "形",
     on: "ケイ ギョウ ナ",
     kun: "かた -がた かたち",
-    trad: "shape, form, style"
+    trad: "форма предмета"
 }, {
     "category": "jlptn3",
     jp: "景",
     on: "ケ",
     kun: "",
-    trad: "scenery, view"
+    trad: "пейзаж"
 }, {
     "category": "jlptn3",
     jp: "落",
     on: "ラク オ.ト",
     kun: "お.ちる お.ち",
-    trad: "fall, drop, come down"
+    trad: "падать"
 }, {
     "category": "jlptn3",
     jp: "好",
     on: "コウ イ.",
     kun: "この.む す.く よ.い",
-    trad: "fond, pleasing, like something"
+    trad: "любимый"
 }, {
     "category": "jlptn3",
     jp: "退",
@@ -83,79 +83,79 @@ const DATA ={
     jp: "頭",
     on: "トウ ズ ト カブ",
     kun: "あたま かしら -がしら",
-    trad: "head, counter for large animals"
+    trad: "голова"
 }, {
     "category": "jlptn3",
     jp: "負",
     on: "フ",
     kun: "ま.ける ま.かす お.う",
-    trad: "defeat, negative, -, minus, bear, owe, assume a responsibility"
+    trad: "поражение"
 }, {
     "category": "jlptn3",
     jp: "渡",
     on: "ト ワタ.",
     kun: "わた.る -わた.る",
-    trad: "transit, ford, ferry, cross, import, deliver, diameter, migrate"
+    trad: "переходить через"
 }, {
     "category": "jlptn3",
     jp: "失",
     on: "シツ",
     kun: "うしな.う う.せる",
-    trad: "lose, error, fault, disadvantage, loss"
+    trad: "терять"
 }, {
     "category": "jlptn3",
     jp: "差",
     on: "サ",
     kun: "さ.す さ.し",
-    trad: "distinction, difference, variation, discrepancy, margin, balance"
+    trad: "разница"
 }, {
     "category": "jlptn3",
     jp: "末",
     on: "マツ バツ",
     kun: "すえ",
-    trad: "end, close, tip, powder, posterity"
+    trad: "конец"
 }, {
     "category": "jlptn3",
     jp: "守",
     on: "シュ ス カ",
     kun: "まも.る まも.り もり -もり",
-    trad: "guard, protect, defend, obey"
+    trad: "защита"
 }, {
     "category": "jlptn3",
     jp: "若",
     on: "ジャク ニャク ニャ モ.シク",
     kun: "わか.い わか- も.しくわ も.し",
-    trad: "young, if, perhaps, possibly, low number, immature"
+    trad: "молодой"
 }, {
     "category": "jlptn3",
     jp: "種",
     on: "シュ -グ",
     kun: "たね",
-    trad: "species, kind, class, variety, seed"
+    trad: "вид, сорт"
 }, {
     "category": "jlptn3",
     jp: "美",
-    on: "ビ ミ ウツク.シ",
+    on: "ビ ミ",
     kun: "",
-    trad: "beauty, beautiful"
+    trad: "красота"
 }, {
     "category": "jlptn3",
     jp: "命",
     on: "メイ ミョウ",
     kun: "いのち",
-    trad: "fate, command, decree, destiny, life, appoint"
+    trad: "жизнь, судьба"
 }, {
     "category": "jlptn3",
     jp: "福",
     on: "フ",
     kun: "",
-    trad: "blessing, fortune, luck, wealth"
+    trad: "счастье"
 }, {
     "category": "jlptn3",
     jp: "望",
     on: "ボウ モウ モ",
     kun: "のぞ.む",
-    trad: "ambition, full moon, hope, desire, aspire to, expect"
+    trad: "надеяться"
 }, {
     "category": "jlptn3",
     jp: "非",
@@ -179,7 +179,7 @@ const DATA ={
     jp: "段",
     on: "ダン タン",
     kun: "",
-    trad: "grade, steps, stairs"
+    trad: "ступень"
 }, {
     "category": "jlptn3",
     jp: "横",
@@ -191,7 +191,7 @@ const DATA ={
     jp: "深",
     on: "シン",
     kun: "ふか.い -ぶか.い ふか.まる ふか.める み-",
-    trad: "deep, heighten, intensify, strengthen"
+    trad: "глубокий"
 }, {
     "category": "jlptn3",
     jp: "申",
@@ -225,9 +225,9 @@ const DATA ={
 }, {
     "category": "jlptn3",
     jp: "呼",
-    on: "コ ヨ.",
+    on: "コ",
     kun: "",
-    trad: "call, call out to, invite"
+    trad: "звать"
 }, {
     "category": "jlptn3",
     jp: "達",
@@ -237,9 +237,9 @@ const DATA ={
 }, {
     "category": "jlptn3",
     jp: "良",
-    on: "リョウ -イ.",
+    on: "リョウ",
     kun: "よ.い -よ.い い.い",
-    trad: "good, pleasing, skilled"
+    trad: "хороший"
 }, {
     "category": "jlptn3",
     jp: "候",
@@ -251,13 +251,13 @@ const DATA ={
     jp: "程",
     on: "テイ -ホ",
     kun: "ほど",
-    trad: "extent, degree, law, formula, distance, limits, amount"
+    trad: "степень"
 }, {
     "category": "jlptn3",
     jp: "満",
     on: "マン バン ミ.タ",
     kun: "み.ちる み.つ",
-    trad: "full, enough, pride, satisfy"
+    trad: "удовлетворение"
 }, {
     "category": "jlptn3",
     jp: "敗",
@@ -269,7 +269,7 @@ const DATA ={
     jp: "値",
     on: "チ アタ",
     kun: "ね",
-    trad: "price, cost, value"
+    trad: "ценность, цена"
 }, {
     "category": "jlptn3",
     jp: "突",
@@ -281,13 +281,13 @@ const DATA ={
     jp: "光",
     on: "コウ ヒカ",
     kun: "ひか.る",
-    trad: "ray, light"
+    trad: "свет"
 }, {
     "category": "jlptn3",
     jp: "路",
     on: "ロ ル",
     kun: "-じ みち",
-    trad: "path, route, road, distance"
+    trad: "дорога"
 }, {
     "category": "jlptn3",
     jp: "科",
@@ -305,7 +305,7 @@ const DATA ={
     jp: "他",
     on: "タ",
     kun: "ほか",
-    trad: "other, another, the others"
+    trad: "другой"
 }, {
     "category": "jlptn3",
     jp: "処",
