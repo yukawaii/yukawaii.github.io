@@ -323,37 +323,37 @@ const DATA ={
     jp: "客",
     on: "キャク カク",
     kun: "",
-    trad: "guest, visitor, customer, client"
+    trad: "гость"
 }, {
     "category": "jlptn3",
     jp: "否",
     on: "ヒ",
     kun: "いな いや",
-    trad: "negate, no, noes, refuse, decline, deny"
+    trad: "отказ, не-"
 }, {
     "category": "jlptn3",
     jp: "師",
     on: "",
     kun: "",
-    trad: "expert, teacher, master, army, war"
+    trad: "учитель"
 }, {
     "category": "jlptn3",
     jp: "登",
     on: "トウ ト ドウ ショウ チョウ ア.ガ",
     kun: "のぼ.る",
-    trad: "ascend, climb up"
+    trad: "взбираться"
 }, {
     "category": "jlptn3",
     jp: "易",
     on: "エキ イ",
     kun: "やさ.しい やす.い",
-    trad: "easy, ready to, simple, fortune-telling, divination"
+    trad: "простой, лёгкий"
 }, {
     "category": "jlptn3",
     jp: "速",
     on: "ソク スミ.ヤ",
     kun: "はや.い はや- はや.める",
-    trad: "quick, fast"
+    trad: "быстрый"
 }, {
     "category": "jlptn3",
     jp: "存",
@@ -365,31 +365,31 @@ const DATA ={
     jp: "飛",
     on: "ヒ -ト.バ",
     kun: "と.ぶ と.ばす",
-    trad: "fly, skip (pages), scatter"
+    trad: "летать"
 }, {
     "category": "jlptn3",
     jp: "殺",
     on: "サツ サイ セツ",
     kun: "ころ.す -ごろ.し そ.ぐ",
-    trad: "kill, murder, butcher, slice off, split, diminish, reduce, spoil"
+    trad: "убивать"
 }, {
     "category": "jlptn3",
     jp: "号",
     on: "ゴウ",
     kun: "さけ.ぶ よびな",
-    trad: "nickname, number, item, title, pseudonym, name, call"
+    trad: "знак, номер"
 }, {
     "category": "jlptn3",
     jp: "単",
     on: "タン",
     kun: "ひとえ",
-    trad: "simple, one, single, merely"
+    trad: "простой, единичный"
 }, {
     "category": "jlptn3",
     jp: "座",
     on: "ザ",
     kun: "すわ.る",
-    trad: "squat, seat, cushion, gathering, sit"
+    trad: "садиться"
 }, {
     "category": "jlptn3",
     jp: "破",
@@ -401,49 +401,49 @@ const DATA ={
     jp: "除",
     on: "ジョ ジ",
     kun: "のぞ.く -よ.け",
-    trad: "exclude, division (x, 3), remove, abolish, cancel, except"
+    trad: "удалять, исключать"
 }, {
     "category": "jlptn3",
     jp: "完",
     on: "カン",
     kun: "",
-    trad: "perfect, completion, end"
+    trad: "завершене"
 }, {
     "category": "jlptn3",
     jp: "降",
     on: "コウ ゴ クダ.",
     kun: "お.りる お.ろす ふ.る ふ.り くだ.る",
-    trad: "descend, precipitate, fall, surrender"
+    trad: "сходить, падать"
 }, {
     "category": "jlptn3",
     jp: "責",
     on: "セキ",
     kun: "せ.める",
-    trad: "blame, condemn, censure"
+    trad: "винить, корить"
 }, {
     "category": "jlptn3",
     jp: "捕",
     on: "ホ",
     kun: "と.らえる と.らわれる と.る とら.える とら.われる つか.まえる つか.まる",
-    trad: "catch, capture"
+    trad: "поймать, ловить"
 }, {
     "category": "jlptn3",
     jp: "危",
     on: "キ",
     kun: "あぶ.ない あや.うい あや.ぶむ",
-    trad: "dangerous, fear, uneasy"
+    trad: "опасный"
 }, {
     "category": "jlptn3",
     jp: "給",
     on: "キュウ -タマ.",
     kun: "たま.う たも.う",
-    trad: "salary, wage, gift, allow, grant, bestow on"
+    trad: "зарплата"
 }, {
     "category": "jlptn3",
     jp: "苦",
     on: "ク",
     kun: "くる.しい -ぐる.しい くる.しむ くる.しめる にが.い にが.る",
-    trad: "suffering, trial, worry, hardship, feel bitter, scowl"
+    trad: "мучительный"
 }, {
     "category": "jlptn3",
     jp: "迎",
