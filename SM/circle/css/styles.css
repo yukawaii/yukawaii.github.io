@@ -39,8 +39,15 @@ html, body {
     text-align: center;
     color: rgba(93, 87, 107, 1);
     font-size: 45px;
+    margin: 0px;}
+
+    .heading1 {
+    text-align: center;
+    color: rgba(93, 87, 107, 1);
+    font-size: 19px;
     margin: 0px;
 }
+
 img {
     height: 80px;
     width: 80px;
