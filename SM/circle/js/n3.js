@@ -151,7 +151,7 @@ const N3 = {
                     "kanji" : "児",
                     "onyomi" : "ジ, ニ",
                     "kunyomi" : "こ, -こ, -っこ",
-                    "definition" : "newborn babe, child, young of animals",
+                    "definition" : "Дитя, ребёнок",
                     "examples" : ["育児 いくじ воспитание детей","児童 じどう ребёнок, дети, детский","小児科 しょうにか педиатрия", "幸運児　こううんじ счастливчик", "胎児　たいじ эмбрион"]
                 },{
                     "kanji" : "全",
@@ -186,7 +186,7 @@ const N3 = {
                 },{   
                     "kanji" : "典",
                     "onyomi" : "テン, デン",
-                    "kunyomi" : "",
+                    "kunyomi" : "のり",
                     "definition" : "Церемония, обряд, справочник, словарь, закон, принцип",
                     "examples" : ["古典 こてん старинная книга, классика","典型 てんけい классическая форма, образец, типовый экземпляр","典型的 てんけいてき типичный, образцовый, стереотипный, прототипный, репрезентативный"]
                 }
@@ -274,25 +274,25 @@ const N3 = {
                     "kanji" : "労",
                     "onyomi" : "ロウ",
                     "kunyomi" : "ろう.する, いたわ.る, いた.ずき, ねぎら, つか.れる, ねぎら.う",
-                    "definition" : "labor, thank for, reward for, toil, trouble",
-                    "examples" : ["ご苦労様 ごくろうさま thank you very much for your ..., I appreciate your efforts (exp, adj-na)","苦労 くろう troubles, hardships (adj-na, n, vs)","疲労 ひろう fatigue, weariness (n, vs)"]
+                    "definition" : "Труд, стараться, трудиться, заботы, беспокойства, сочувствовать, жалеть",
+                    "examples" : ["ご苦労様 ごくろうさま Спасибо за Вашу работу, Ваш труд","苦労 くろう тяжкий труд, испытания, трудности, хлопоты, волнения","疲労 ひろう утомление, усталость, утомляться", "労る　いらわる жалеть, сочувствовать, заботиться, хорошо относиться"]
                 },{   
                     "kanji" : "勇",
                     "onyomi" : "ユウ",
-                    "kunyomi" : "いさ.む",
-                    "definition" : "courage, cheer up, be in high spirits, bravery, heroism",
-                    "examples" : ["勇ましい いさましい brave, valiant, gallant, courageous (adj)","勇敢 ゆうかん brave, heroic, gallant (adj-na)","勇気 ゆうき courage, bravery, valour, valor, nerve, boldness (n)"]
+                    "kunyomi" : "いさ.む, いさ.ましい",
+                    "definition" : "Храбрость, мужество, храбрый, смелый, воспрять духом",
+                    "examples" : ["勇ましい いさましい храбрый, смелый; волнующий","勇敢 ゆうかん отвага, доблесть, отважный","勇気 ゆうき храбрость, доблесть, смелость, мужество"]
                 },{
                     "kanji" : "勝",
                     "onyomi" : "ショウ",
                     "kunyomi" : "か.つ, -が.ち, まさ.る, すぐ.れる, かつ",
-                    "definition" : "victory, win, prevail, excel",
-                    "examples" : ["決勝 けっしょう decision of a contest, finals (in sports) (n)","勝手 かって one's own convenience, one's way, convenience or ease of use, knowledge of how to use, circumstances, situation (eg financial), environment, kitchen, arbitrary","勝利 しょうり victory, triumph, conquest, success, win (n, vs)"]
+                    "definition" : "Победа, побеждать, брать верх, выигрывать, превосходить, чрезвычайно, весьма",
+                    "examples" : ["決勝 けっしょう финальное состязание","勝手 かって (に) по-совему, без оглядки на других ", "勝ち目　かちめ шансы на победу","勝利 しょうり победа; успех; выигрыш; триумф "]
                 },{
                     "kanji" : "包",
                     "onyomi" : "ホウ",
                     "kunyomi" : "つつ.む, くる.む",
-                    "definition" : "wrap, pack up, cover, conceal",
+                    "definition" : "Обёртывать, закутывать, заворачивать, покрывать",
                     "examples" : ["包み つつみ bundle, package, parcel, bale (n)","包装 ほうそう packing, wrapping (n, vs)","小包み こづつみ parcel, package (n)"]
                 },{   
                     "kanji" : "化",
