@@ -293,25 +293,25 @@ const N3 = {
                     "onyomi" : "ホウ",
                     "kunyomi" : "つつ.む, くる.む",
                     "definition" : "Обёртывать, закутывать, заворачивать, покрывать",
-                    "examples" : ["包み つつみ bundle, package, parcel, bale (n)","包装 ほうそう packing, wrapping (n, vs)","小包み こづつみ parcel, package (n)"]
+                    "examples" : ["包み つつみ свёрток, пакет, обёртка","包装 ほうそう обёртка, упаковка, упаковывать","小包み こづつみ почтовая посылка, свёрток", "包帯　ほうたい бинт", "包丁　ほうちょう кухонный нож"]
                 },{   
                     "kanji" : "化",
                     "onyomi" : "カ, ケ",
                     "kunyomi" : "ば.ける, ば.かす, ふ.ける, け.する",
-                    "definition" : "change, take the form of, influence, enchant, delude, -ization",
-                    "examples" : ["化ける ばける to appear in disguise, to take the form of, to change for the worse, to corrupt (Ichidan verb, intransitive verb)","化学 ばけがく chemistry, chemical (company) (n)","化石 かせき fossil, petrifaction, fossilization, fossilisation (n, vs)"]
+                    "definition" : "Превращаться, изменяться, принимать облик, околдовывать, оборотень",
+                    "examples" : ["化ける ばける принять чей-либо облик","化学 かがく химия","化石 かせき окаменелости, фоссилии", "化粧　けしょう косметика, макияж", "権化　ごんげ будд. инкарнация, воплощение"]
                 },{   
                     "kanji" : "卒",
                     "onyomi" : "ソツ, シュツ",
                     "kunyomi" : "そっ.する, お.える, お.わる, ついに, にわか",
-                    "definition" : "graduate, soldier, private, die",
-                    "examples" : ["卒業 そつぎょう graduation, completion (eg of a course), outgrowing something, moving on (n, vs)","卒先 そっせん taking the initiative (n, vs)","卒直 そっちょく frankness, candour, candor, openheartedness (adj-na, n)"]
+                    "definition" : "Солдат, рядовой, выпускник, скончаться",
+                    "examples" : ["卒業 そつぎょう выпуск, окончание курсов/университета/школы","兵卒　へいそつ солдат, рядовой, солдаты, рядовой состав","卒直 そっちょく прямой, искренний, откровенный, открытый"]
                 },{   
                     "kanji" : "協",
                     "onyomi" : "キョウ",
                     "kunyomi" : "",
-                    "definition" : "co-, cooperation",
-                    "examples" : ["協議 きょうぎ conference, consultation, discussion, negotiation (n, vs)","妥協 だきょう compromise, giving in (n, vs)","協同 きょうどう doing together (as equals), sharing, cooperation, co-operation, collaboration (n, vs)"]
+                    "definition" : "Сотрудничество, взаимодействие, соглашение",
+                    "examples" : ["協議 きょうぎ совещание; консультация; конференция, совещаться","妥協 だきょう компромисс; соглашение","協同 きょうどう сотрудничество, партнёрство; содружество, ~shite согласованно, совместно; ~no совместный, общий"]
                 },{   
                     "kanji" : "単",
                     "onyomi" : "タン",
