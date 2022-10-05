@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>YuKawaii's Kanji Японский язык N1-N5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta charset="utf-8">
+	    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru|Concert+One|Darker+Grotesque|Didact+Gothic|Fugaz+One|Nanum+Gothic|Sigmar+One&display=swap" rel="stylesheet">
+    	 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+<script src="../../App.js"></script>
+</head>
+
+<body oncontextmenu="return false;">
+	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+	 <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
+    <script type="text/javascript">
+
+//поделиться
+
+function share2(){
+    vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Классная игра для изучения японского языка!",
+    "attachments": "https://vk.com/app8181888"
+  });
+}
+
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
+
+function joingroup(){
+    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+
+//пригласить друзей в игру
+function infr(){
+    vkBridge.send("VKWebAppShowInviteBox", {})
+  .then(data => console.log(data.success))  
+ .catch(error => console.log(error));
+}
+
+</script>
+	<script> myAdd1(); </script>
+<div style="position: flex; margin-top: 40%; color:white; text-align: center; margin-left: 10%;">
+    <h3>Уроки по "Стругова. Японский язык для начинающих." <br />
+    Выполняйте задания вместе с обучением по этому учебнику.</h3>
+
+		<div class="dropdown">
+  <button class="dropbtn">Уроки 1-10</button>
+  <div class="dropdown-content">
+	  <button class = "mybtn" onclick="window.location.href = './1.html';">Урок 1</button><br>
+        <button class = "mybtn" onclick="window.location.href = './2.html';">Урок 2</button><br>
+        <button class = "mybtn" onclick="window.location.href = './3.html';">Урок 3</button><br>
+        <button class = "mybtn" onclick="window.location.href = './4.html';">Урок 4</button><br>
+        <button class = "mybtn" onclick="window.location.href = './5.html';">Урок 5</button><br>
+        <button class = "mybtn" onclick="window.location.href = './6.html';">Урок 6</button><br>
+        <button class = "mybtn" onclick="window.location.href = './7.html';">Урок 7</button><br>
+        <button class = "mybtn" onclick="window.location.href = './8.html';">Урок 8</button><br>
+        <button class = "mybtn" onclick="window.location.href = './9.html';">Урок 9</button><br>
+        <button class = "mybtn" onclick="window.location.href = './10.html';">Урок 10</button><br>
+
+	    </div>
+</div>
+<div class="dropdown">
+  <button class="dropbtn">Уроки 11-20</button>
+  <div class="dropdown-content">
+	  <button class = "mybtn" onclick="window.location.href = './11.html';">Урок 11</button><br>
+        <button class = "mybtn" onclick="window.location.href = './12.html';">Урок 12</button><br>
+        <button class = "mybtn" onclick="window.location.href = './13.html';">Урок 13</button><br>
+        <button class = "mybtn" onclick="window.location.href = './14.html';">Урок 14</button><br>
+        <button class = "mybtn" onclick="window.location.href = './15.html';">Урок 15</button><br>
+        <button class = "mybtn" onclick="window.location.href = './16.html';">Урок 16</button><br>
+        <button class = "mybtn" onclick="window.location.href = './17.html';">Урок 17</button><br>
+        <button class = "mybtn" onclick="window.location.href = './18.html';">Урок 18</button><br>
+        <button class = "mybtn" onclick="window.location.href = './19.html';">Урок 19</button><br>
+        <button class = "mybtn" onclick="window.location.href = './110.html';">Урок 20</button><br>
+
+	    </div>
+</div>
+	
+<br>
+<div style="position:absolute; bottom:15px; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;
+text-align: center;">
+           <button id="opros" class = "mybtn" onclick="window.location.href = './lessons/opros.html';">Пройти опрос</button>
+	    <button class = "mybtn" onclick="window.location.href = './index.html';">В начало</button>
+    <button class = "mybtn" onclick="window.location.href = './i.html';">Другие игры</button>
+<button class = "mybtn" onclick="joingroup()">Подписаться</button>
+<button class = "mybtn" onclick="share2()">Поделиться</button>
+<!-- <button class = "" onclick="getinfo()">getinfo</button>
+<button class = "" onclick="getsc()">getsc</button>
+<button class = "" onclick="sendmes()">Пройти опрос</button>
+<button class = "" onclick="showLeaderboard()">ntop</button> -->
+</div>
+</div>
+<div id="image" style="background-color: transparent; position:absolute; margin-left: auto;
+margin-right: auto; color: white;
+left: 0;
+right: 0;text-align: center;">
+  <button class = "mybtn" onclick="window.location.href = './index.html';"><img src="./images/yuka1.png" alt="turtle icon"/> </button>
+ <!-- <div id="xp"> Опыт : 1</div>
+  <div id="lvl">Уровень: 1 </div> -->
+
+</div>
+
+</body>
+
+</html>
