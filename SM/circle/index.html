@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru|Concert+One|Darker+Grotesque|Didact+Gothic|Fugaz+One|Nanum+Gothic|Sigmar+One&display=swap" rel="stylesheet">
     	 
 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
     <script src="js/pomodoro.js"></script>
   <script src="./js/n5.js"></script>
     <script src="./js/n4.js"></script>
@@ -32,41 +32,34 @@
     <div id="main-container">
         <h1 class="heading">漢字 <span class="divider">|</span> YuKawaii's Kanji beta</h1>
         <div id="how-to-container" class="container">
-            <h1 id="how-to"><span id="detail-arrow"> &#8227; </span>Как играть</h1>
+            <h3 id="how-to"><span id="detail-arrow"> &#8227; </span>Как играть</h1>
             <div id="how-to-details" class="details">
                 <div class="box"> 
                     <h2>Режим учёбы</h2>
                     <p>Выбери уровень Норёку: Н5 - Н3.</p>
                     <p>Выбери группу из 10 иероглифов и сфокусируйся на их изучении. Выписывай себе в тетрадь кандзи, чтения и примеры.</p>
-                    <p>Нажми на "Режим учёбы".</p>
-                    <p>Установи временной отрезок для изучения.</p>
-                    <p>Нажми начать, чтобы запусть таймер, и приступай!</p>
+     <p>Ты можешь установить таймер!</p>
                     <p>База данных пополняется. В разработке уровни Н2-Н1. Следи за обновлениями!</p>
                 </div>
-                <div class="box">
-                    <h2>Перерыв</h2>
-            <!-- <p><img src="assets/images/turtle.png" alt="turtle icon"/>　Will let you know when the pomodoro reaches |00時 00分 00秒|</p> -->
-                    <p>Отдых очень важен для работы мозга и твоей памяти. Не забывай делать небольшие перерывы на чай с печенькой.<span class="asterisk">*</span></p>
-                </div>
-                <div class="box">
+                                <div class="box">
                     <h2>Карточки</h2>
-                    <p>Выбери режим "Карточки"</p>
-                    <p>Выбери группу иероглифов и уровень, которые ты изучал.</p>
+                          <p>Выбери группу иероглифов и уровень, которые ты изучал.</p>
                     <p>Нажимай на карточки, чтобы перевернуть их.</p>
                     <p>Проверь, как хорошо, ты выучил иероглифы.</p>
-                    <p>Повторение - залог успеха! Возвращайся завтра, чтобы повторить пройденный материал. </p>
-                </div>
+                                    </div>
                <div class="box">
-                    <h2>Проверь себя</h2>
-                    <p>Выбери режим "Викторина".</p>
-                    <p>Выбери уровень Норёку и группу кандзи.</p>
-                    <p>В настройках ты можешь поменять местами формат вопросов/ответов. </p>
+                    <h2>Викторина</h2>
+                <p>В настройках викторины ты можешь поменять местами формат вопросов/ответов. </p>
                     <p>Ты можешь увеличить/уменьшить время на каждый ответ или вовсе отключить временное ограничение в настройках.</p>
-                    <p>Возвращайся завтра, чтобы закрепить в памяти пройдленные кандзи!</p>
-                </div>
+                    </div>
+                    <div class="box">
+                        <h2>Уроки</h2>
+                       <p> В режиме Уроков ты можешь проверить себя, после занятий с учебником.</p>
+                       <p>Повторение - залог успеха! Возвращайся завтра, чтобы повторить пройденный материал. </p>
+                    </div>
             </div>
         </div>
-        <div id="tips-container" class="container">
+   <!--    <div id="tips-container" class="container">
             <h1 id="tips"><span id="detail-arrow"> &#8227; </span>Советы<span class="asterisk">*</span></h1>
             <div id="tips-details" class="details">
                 <div class="box"> 
@@ -89,6 +82,7 @@
                 </div>
             </div>
         </div>
+    -->
         <div id="list-container" class="float-left">
             <div id="level-container">
                 <button id="n5" class="level-button">Н5</button>
@@ -106,26 +100,12 @@
             <div id="mode-button-container">
                 <button id="learning-mode" class="selected">Режим учёбы</button>
                 <button id="flash-card-mode" class="" onclick="myAdd1();">Карточки</button>
-         <button id="vic-mode" class="" onclick="myAdd1(); window.location.href = './index2.html';">ВИКТОРИНА</button>
+         <button id="vic-mode" class="" onclick="myAdd1(); window.location.href = './index2.html';">Викторина</button>
+         <button id="vic-mode" class="" onclick="myAdd1(); window.location.href = './uroki/strugova1/0.html';">Уроки</button>
                </div>
-            <div id="pomodoro-container">
-                <div id="set-timer">
-                    <button id="add-time"> &plus; </button>
-                    <span id="minute-kanji"><span id="set-minutes">10</span>分</span>
-                    <button id="subtract-time"> &minus; </button>
-                </div>
-                <div id="pomodoro-buttons-container">
-                    <button id="start" onclick="start()">Начать</button>
-                    <button id="pause" onclick="pause(); myAdd1();">Пауза</button>
-                    <button id="resume" onclick="resume()">Продолжить</button>
-                    <button id="reset" onclick="reset()">Заново</button>
-                </div>
-                <div id="pomodoro-display">
-                    <span id="showtime">00時 00分 00秒</span>
-                </div>
-            </div>
+  
     <div id="level-group-title">
-                <h1 class="heading"><span id="level">Выбери Норёку</span><span class="divider">|</span><span id="group">и уровень</span></h1>
+                <h1 class="heading1"><span id="level">Выбери Норёку</span><span class="divider">|</span><span id="group">и уровень</span></h1>
             </div>
             <div id="kanji-buttons-container">
             </div>
@@ -180,8 +160,26 @@
            <button id="previous"> &lt; Назад </button>
                 <button id="next"> Вперёд &gt; </button> 
             </div> -->
-        </div></div><div id="asterisk-container" class="container"><div id="image" style="background-color: transparent;">
-            <img src="./images/yuka.png" alt="turtle icon"/></div>
+        </div></div>
+        <div id="pomodoro-container">
+            <div id="set-timer">
+                <button id="add-time"> &plus; </button>
+                <span id="minute-kanji"><span id="set-minutes">10</span>分</span>
+                <button id="subtract-time"> &minus; </button>
+            </div>
+            <div id="pomodoro-buttons-container">
+                <button id="start" onclick="start()">Начать</button>
+                <button id="pause" onclick="pause(); myAdd1();">Пауза</button>
+                <button id="resume" onclick="resume()">Продолжить</button>
+                <button id="reset" onclick="reset()">Заново</button>
+            </div>
+            <div id="pomodoro-display">
+                <span id="showtime">00時 00分 00秒</span>
+            </div>
+        </div>
+        
+        <div id="asterisk-container" class="container"><div id="image" style="background-color: transparent;">
+            <img src="./images/yuka.png" alt="yukawaii's games"/></div>
     </div>
     <footer>
     <p> 2022 | YuKawaii's games <br> https://vk.com/yugamess</a></p>

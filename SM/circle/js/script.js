@@ -21,11 +21,12 @@ document.querySelector('#close-alert').addEventListener('click', function(){
 document.getElementById('how-to-container').addEventListener('click', function(){
     document.getElementById('how-to-details').classList.toggle('details')
 })
+/*
 document.getElementById('tips-container').addEventListener('click', function(){
     document.getElementById('tips-details').classList.toggle('details')
 })
 
-
+*/
 /*---------------------------
 	  BUTTONS
 ---------------------------*/

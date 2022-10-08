@@ -13,10 +13,44 @@ $color4: rgba(255, 255, 255, 1);
 $color5: rgba(93, 87, 107, 1); 
 
 
-Turtle Dark Green
-#3C7317
-*/
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: auto;
+    height: auto;
+    max-height: 20em;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    overflow: auto;
+}
 
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #d4f3d0; }
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: transparent;
+}
 html, body {
     margin: 0;
     padding: 0;
@@ -60,6 +94,15 @@ img {
  background-color: transparent;
     
 }
+
+#niz {
+    position:absolute;
+    bottom: 30%;
+}
+#niz0 {
+    position:absolute;
+    bottom: 0%;
+}
 .divider {
     font-weight: 50;
     color: rgba(254, 215, 102, 1);
@@ -93,8 +136,8 @@ img {
 .container {
     background-color: rgba(93, 87, 107, 1);
     padding: 5px 0px;
-    margin: 15px auto;
-    border-radius: 10px;
+    margin: 5px auto;
+    border-radius: 30px;
     width: 100%;
     max-width: 880px;    
     overflow: auto;
@@ -143,12 +186,13 @@ button{
     border-radius: 10px;
     /* height: 30px; */
     margin: 5px auto;
-    font-size: 15px;
+    font-size: 20px;
     color: rgba(93, 87, 107, 1);
 }
 .selected, button:hover {
     border: #78B354 solid 2px;
     color: #78B354;
+
 }
 
 #mode-button-container, #prevnext-button-container {
@@ -158,6 +202,7 @@ button{
 #learning-mode, #flash-card-mode, #previous, #next {
     width: 30vw;
     margin: 5px 0px;
+  
 }
 .float-left {
     float: left;
@@ -174,7 +219,7 @@ button{
 #level-container button, #group-button {
     display: block;
     width: 100%;
-    min-width: 40px;
+    min-width: 20px;
 }
 hr {
     margin: 10px auto;
@@ -209,8 +254,8 @@ hr {
 }
 @media (max-width: 450px){
     #learning-mode, #flash-card-mode, #previous, #next {
-        display: block;
-        width: 100%;
+        display: inline-block;
+        width: auto;
     }
     .float-right, .float-left {
         float: none;
@@ -487,6 +532,7 @@ hr {
 	  ASTERISK
 ----------------*/
 #asterisk-container {
+
     clear: both;
     margin: 0px 0px;
     width: 95vw;
@@ -508,6 +554,7 @@ hr {
 	  FOOTER
 ----------------*/
 footer {
+ 
     background-color: rgba(93, 87, 107, 1);
     min-height: 50px;
     width: 100%;

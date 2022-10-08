@@ -1,62 +1,42 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-    <title>YuKawaii's Kanji Японский язык N1-N5</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-    <meta charset="utf-8">
-	    <link rel="stylesheet" href="../../css/style.css">
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../css/styles.css">
     <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru|Concert+One|Darker+Grotesque|Didact+Gothic|Fugaz+One|Nanum+Gothic|Sigmar+One&display=swap" rel="stylesheet">
-    	 <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-<script src="../../App.js"></script>
+
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <title>YuKawaii's Kanji</title>
 </head>
+<body>
 
-<body oncontextmenu="return false;">
-	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-	 <script>
-        // Sends event to client
-        vkBridge.send('VKWebAppInit');
-      </script>
-    <script type="text/javascript">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 
-//поделиться
-
-function share2(){
-    vkBridge.send("VKWebAppShowWallPostBox", {
-    "message": "Классная игра для изучения японского языка!",
-    "attachments": "https://vk.com/app8181888"
-  });
-}
-
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
-
-function joingroup(){
-    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-
-//пригласить друзей в игру
-function infr(){
-    vkBridge.send("VKWebAppShowInviteBox", {})
-  .then(data => console.log(data.success))  
- .catch(error => console.log(error));
-}
-
-</script>
-<div id="main-container">
-  <h1 class="heading">漢字 <span class="divider">|</span> YuKawaii's Kanji beta</h1>
-<div style="position: flex; margin-top: 40%; color:white; text-align: center; margin-left: 10%;">
-    <h3>Выберите учебник и выполняйте задания вместе с обучением по нему.</h3>
-    
-    <h3> 1) Стругова Е.В., Шефтелевич Н.С. Читаем, пишем и говорим по-японски». Том 1. </h3>
+    <div id="main-container">
+        <h1 class="heading1">漢字 <span class="divider">|</span> YuKawaii's Kanji beta</h1>
+        <div> <center>
+          <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+          <script>
+            function myalert() {
+            swal({  
+              title: "Уроки с учебником",  
+              text: "Позанимайся с учебником, а затем проверь себя в приложении. Ты можешь проходить уроки-тесты повторно для повторения и закрепления материала.", 
+              button: "Всё понятно",  
+              });  
+             }
+            </script>
+		<button onclick = "myalert()">Как заниматься?</button> 
+  </center>
+            </div>
+        </div>
+             <center><h3> Стругова Е.В., Шефтелевич Н.С. "Читаем, пишем и говорим по-японски". Том 1. </h3>
 		<div class="dropdown">
   <button class="dropbtn">Уроки 1-10</button>
   <div class="dropdown-content">
-	  <button class = "mybtn" onclick="window.location.href = './1.html';">Урок 1</button><br>
-        <button class = "mybtn" onclick="window.location.href = './2.html';">Урок 2</button><br>
+	  <button class = "mybtn" onclick="window.location.href = './1.html';">    Урок 1  </button><br>
+        <button class = "mybtn" onclick="window.location.href = './2.html';">  Урок 2  </button><br>
         <button class = "mybtn" onclick="window.location.href = './3.html';">Урок 3</button><br>
         <button class = "mybtn" onclick="window.location.href = './4.html';">Урок 4</button><br>
   <!--  <button class = "mybtn" onclick="window.location.href = './5.html';">Урок 5</button><br>
@@ -87,34 +67,105 @@ function infr(){
 	    </div>
 </div>
 	  -->
+               </div>
 
-<div style="position:absolute; bottom:15px; margin-left: auto;
-margin-right: auto;
-left: 0;
-right: 0;
-text-align: center;">
-           <button id="opros" class = "mybtn" onclick="window.location.href = '../../lessons/opros.html';">Пройти опрос</button>
-	    <button class = "mybtn" onclick="window.location.href = '../../index.html';">Домой</button>
+     <h2> Раздел находится в разработке. Другие уроки добавляются. <p>Следите за обновлениями!</p> </h2>
+    </center>
+           <div id="niz0"> 
+         <center>  <button id="vic-mode" class="" onclick="myAdd1(); window.location.href = '../../index2.html';">Викторина</button>
+            <button class = "mybtn" onclick="window.location.href = '../../index.html';">В начало</button>   
+          </center> 
+     <div id="asterisk-container" class="container"><div id="image" style="background-color: transparent;">
+            <img src="../../images/yuka.png" alt="yukawaii's games"/></div>
+    </div>
+    <footer>
+    <p> 2022 | YuKawaii's games <br> https://vk.com/yugamess</a></p>
+    </footer>  
+  </div> 
+     <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
+    <script type="text/javascript">
 
-    <button class = "mybtn" onclick="window.location.href = '../../.i.html';">Другие игры</button>
-<button class = "mybtn" onclick="joingroup()">Подписаться</button>
-<button class = "mybtn" onclick="share2()">Поделиться</button>
-<!-- <button class = "" onclick="getinfo()">getinfo</button>
-<button class = "" onclick="getsc()">getsc</button>
-<button class = "" onclick="sendmes()">Пройти опрос</button>
-<button class = "" onclick="showLeaderboard()">ntop</button> -->
-</div>
-</div>
-<div id="image" style="background-color: transparent; position:absolute; margin-left: auto;
-margin-right: auto; color: white;
-left: 0;
-right: 0;text-align: center;">
-  <button class = "mybtn" onclick="window.location.href = '../../index.html';"><img src="../../images/yuka1.png" alt="turtle icon"/> </button>
- <!-- <div id="xp"> Опыт : 1</div>
-  <div id="lvl">Уровень: 1 </div> -->
+//поделиться
+function share1(){
+bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.com/app8181888"});
+}
+function share2(){
+    vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Игра для изучения японского языка!",
+    "attachments": "https://vk.com/app8181888"
+  });
+}
 
-</div></div>
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
 
+function myAdd1(){
+    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+.then(data => console.log(data.result))
+.catch(error => console.log(error));
+}
+function joingroup(){
+    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+
+
+function getinfo(){
+    vkBridge.send('VKWebAppGetUserInfo')
+  .then(data => {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
+  sessionStorage.setItem("userid", userid);
+      // *назначение переменных*
+      return userid;
+      
+  })
+  .catch(error => console.log(error));
+ // getsc();
+  
+};
+    
+     //получение очков из вк
+   function getsc(){
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "apps.getScore", "request_id": "getscore", "params":
+       {"user_id": userid, "v":"5.131",
+        "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac", global:1}})
+      .then(data => {console.log("Очков на вк:" + data.response);
+        // *назначение переменных*
+     (score2 = data.response);
+        return data.response;
+      })
+      .catch(error => console.log(error));} ;
+  
+  //отправка очков в вк
+  function sendscore(){
+    getsc();
+    var userid = sessionStorage.getItem('userid');
+    var score1 = sessionStorage.getItem('score1');
+    var scorsum= score1+score2;
+    sessionStorage.setItem("scorsum", scorsum);
+    vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
+  {"client_secret":"Pl4TYB00x4HZc4SiqXhj", 
+  "user_id":userid, "activity_id":2, "value":scorsum, "v":"5.131",
+   "access_token":"bd17d005bd17d005bd17d00549bd6b1b43bbd17bd17d005df87316362d28b5eab868dac",
+   "global":1}})
+   .then(data => {console.log("Ответ на добавление очков:" + data.response);
+  })
+  .catch(error => console.log(error)); }
+
+  //доска топ
+
+  function showLeaderBoard(scorsum)
+{
+  var scorsum = sessionStorage.getItem('scorsum');
+  vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:scorsum, global:1})
+         .then(data => console.log(data.success))  
+         .catch(error => console.log(error));
+}
+
+</script>
+
+ 
 </body>
-
 </html>
