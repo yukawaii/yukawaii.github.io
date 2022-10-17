@@ -152,6 +152,9 @@ function groupButtonAction(n) {
         case 'N1':
             groupObjectPropertyNames = Object.keys(N1)
             break
+ 	case 'onomatopea':
+            groupObjectPropertyNames = Object.keys(onomatopea)
+            break
     }
     
     deleteCurrentGroupButtons()
@@ -223,6 +226,9 @@ function groupButtonSelected () {
             case 'N1':
                 obj = N1
                 break
+	 case 'onomatopea':
+                obj = onomatopea
+                break
         }
         return obj[prop];
     }
@@ -271,6 +277,7 @@ let getExamples2 = document.getElementsByClassName('examples2')
 let getExamples3 = document.getElementsByClassName('examples3')
 let getExamples4 = document.getElementsByClassName('examples4')
 let getExamples5 = document.getElementsByClassName('examples5')
+let getExamples5 = document.getElementsByClassName('examples6')
 
 
 
