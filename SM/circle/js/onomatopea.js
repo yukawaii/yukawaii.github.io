@@ -215,61 +215,61 @@ const onomatopea = {
     "Ур. 04" :
             [
                  {   
-                    "kanji" : "",
+                    "kanji" : "1",
                     "onyomi" : "",
-                    "kunyomi" : "かんかん",
-                    "definition" : "",
-                    "examples" : ["","","", ""]
+                    "kunyomi" : "ちらり(と), ちらっ(と)",
+                    "definition" : "Просмотрить мельком, взглянуть мельком, не присматриваясь",
+                    "examples" : ["彼女は彼の顔をちらりと見た。","彼女は僕をちらりとも見ずに通り過ぎた。","彼は彼女の名札をちらりと見た。", "書類をちらりと見た"]
                 },{   
-                    "kanji" : "",
+                    "kanji" : "2",
                     "onyomi" : "",
-                    "kunyomi" : "ぷんぷん",
+                    "kunyomi" : "きょろきょろ",
+                    "definition" : "Взволнованно смотреть по сторонам, туда-сюда",
+                    "examples" : ["きょろきょろと落ち着かない様子であたりを見まわす","彼の目は部屋をきょろきょろ見回した.","きょろきょろして落ち着かない"]
+                },{   
+                    "kanji" : "3",
+                    "onyomi" : "",
+                    "kunyomi" : "よちよち",
+                    "definition" : "Неуверенные первые шаги младенца",
+                    "examples" : ["彼女はよちよち歩いています。","水から上がり、入江のほとりの砂の上を、よちよち歩き出しました。","よちよち歩きの幼児でもできるのだから家族で楽しんでいただきたい。", "乳母はよちよち歩きの小児を素早く捕まえ、彼を湿ったタオルで覆った"]
+                },{   
+                    "kanji" : "4",
+                    "onyomi" : "",
+                    "kunyomi" : "すたすた",
+                    "definition" : "Уверенно идти вперёд, не обращая внимания на то, что происходит вокруг",
+                    "examples" : ["私は家の前をすたすた歩く音を聞いた.","彼はコンパスの長い足ですたすたと立ち去った.","私は家の前をすたすた歩く音を聞いた", "彼はコンパスの長い足ですたすたと立ち去った."]
+                },{   
+                    "kanji" : "5",
+                    "onyomi" : "",
+                    "kunyomi" : "とぼとぼ",
+                    "definition" : "Депрессивная медленная походка, походка грустного одинокого человека",
+                    "examples" : ["疲れてとぼとぼ歩く","老人がとぼとぼ歩いていた。","彼は深い雪の中を 20 マイルもとぼとぼと歩いていった.", "彼は退屈そうにとぼとぼ歩いた"]
+                },{   
+                    "kanji" : "6",
+                    "onyomi" : "",
+                    "kunyomi" : "のしのし",
                     "definition" : "",
                     "examples" : ["","",""]
                 },{   
-                    "kanji" : "",
+                    "kanji" : "7",
                     "onyomi" : "",
-                    "kunyomi" : "いらいら",
+                    "kunyomi" : "うろうろ",
                     "definition" : "",
                     "examples" : ["","",""]
                 },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "ぴりぴり",
-                    "definition" : "",
-                    "examples" : ["","","", ""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "がみがみ",
-                    "definition" : "",
-                    "examples" : ["","","", ""]
-                },{   
-                    "kanji" : "",
+                    "kanji" : "8",
                     "onyomi" : "",
                     "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","",""]
                 },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
-                    "onyomi" : "",
-                    "kunyomi" : "",
-                    "definition" : "",
-                    "examples" : ["","",""]
-                },{   
-                    "kanji" : "",
+                    "kanji" : "9",
                     "onyomi" : "",
                     "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","","", ""]
                 },{   
-                    "kanji" : "",
+                    "kanji" : "10",
                     "onyomi" : "",
                     "kunyomi" : "",
                     "definition" : "",
@@ -281,31 +281,31 @@ const onomatopea = {
                  {   
                     "kanji" : "",
                     "onyomi" : "",
-                    "kunyomi" : "かんかん",
+                    "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","","", ""]
                 },{   
                     "kanji" : "",
                     "onyomi" : "",
-                    "kunyomi" : "ぷんぷん",
+                    "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","",""]
                 },{   
                     "kanji" : "",
                     "onyomi" : "",
-                    "kunyomi" : "いらいら",
+                    "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","",""]
                 },{   
                     "kanji" : "",
                     "onyomi" : "",
-                    "kunyomi" : "ぴりぴり",
+                    "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","","", ""]
                 },{   
                     "kanji" : "",
                     "onyomi" : "",
-                    "kunyomi" : "がみがみ",
+                    "kunyomi" : "",
                     "definition" : "",
                     "examples" : ["","","", ""]
                 },{   
