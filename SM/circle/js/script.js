@@ -90,18 +90,6 @@ let n3ButtonClick = document.getElementById('n3').addEventListener('click', func
 })
 
 /*
-let n2ButtonClick = document.getElementById('onomatopea').addEventListener('click', function(){
-    for (let i = 0; i < levelButtons.length; i++) {
-            levelButtons[i].classList.remove('selected')
-    }
-    this.classList.add('selected')
-    n = 'onomatopea'
-    levelTitle.innerHTML = 'Ономатопея'
-    groupTitle.innerHTML = 'Выбери уровень'
-    groupButtonAction(n)
-}) */
-
-/*
 let n2ButtonClick = document.getElementById('n2').addEventListener('click', function(){
     for (let i = 0; i < levelButtons.length; i++) {
             levelButtons[i].classList.remove('selected')
@@ -124,7 +112,16 @@ let n1ButtonClick = document.getElementById('n1').addEventListener('click', func
     groupButtonAction(n)
 })
 */
-
+let onomatopeaButtonClick = document.getElementById('onomatopea').addEventListener('click', function(){
+    for (let i = 0; i < levelButtons.length; i++) {
+            levelButtons[i].classList.remove('selected')
+    }
+    this.classList.add('selected')
+    n = 'onomatopea'
+    levelTitle.innerHTML = 'Ономатопея'
+    groupTitle.innerHTML = 'Выбери уровень'
+    groupButtonAction(n)
+})
 
 
 // Group Buttons - Working
