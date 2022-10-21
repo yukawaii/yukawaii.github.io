@@ -50,7 +50,7 @@ $color5: rgba(93, 87, 107, 1);
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
-    background-color: transparent;
+    background-color: #80a67b;
 }
 html, body {
     margin: 0;
