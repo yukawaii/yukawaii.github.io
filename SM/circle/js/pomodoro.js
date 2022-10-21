@@ -61,7 +61,7 @@ function workCountDown(){
 function pause(){
     clearInterval(workSession);
     workSession = null;
-    myAdd1();
+  
 }
 
 
