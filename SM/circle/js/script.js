@@ -8,10 +8,12 @@
 
 /*---------------------------
 	  ALERT BOX
----------------------------*/
+---------------------------
 document.querySelector('#close-alert').addEventListener('click', function(){
     this.parentNode.setAttribute('class', 'hide');
 })
+
+*/
 
 /*---------------------------
 	  TIPS SECTION
