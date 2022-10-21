@@ -47,7 +47,7 @@ function workCountDown(){
     count --;
 
     if (count < 0){
-    myAdd1();
+
                clearInterval(workSession);
         workSession = null;
         document.getElementById("showtime").innerHTML = "00時 00分 00秒";
