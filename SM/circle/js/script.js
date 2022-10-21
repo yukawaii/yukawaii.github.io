@@ -277,7 +277,7 @@ let getExamples2 = document.getElementsByClassName('examples2')
 let getExamples3 = document.getElementsByClassName('examples3')
 let getExamples4 = document.getElementsByClassName('examples4')
 let getExamples5 = document.getElementsByClassName('examples5')
-let getExamples5 = document.getElementsByClassName('examples6')
+let getExamples6 = document.getElementsByClassName('examples6')
 
 
 
