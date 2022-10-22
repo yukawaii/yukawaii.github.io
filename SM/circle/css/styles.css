@@ -22,7 +22,7 @@ $color5: rgba(93, 87, 107, 1);
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color:  #4fb641;
+    background-color:  #317c27;
     min-width: auto;
     height: auto;
     max-height: 20em;
@@ -41,7 +41,7 @@ $color5: rgba(93, 87, 107, 1);
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #d4f3d0; }
+.dropdown-content a:hover {background-color: #32752a; }
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
