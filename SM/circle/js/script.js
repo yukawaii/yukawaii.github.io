@@ -113,7 +113,7 @@ let n1ButtonClick = document.getElementById('n1').addEventListener('click', func
     groupTitle.innerHTML = 'Выбери уровень'
     groupButtonAction(n)
 })
-*/
+*/ 
 let onomatopeaButtonClick = document.getElementById('onomatopea').addEventListener('click', function(){
     for (let i = 0; i < levelButtons.length; i++) {
             levelButtons[i].classList.remove('selected')
