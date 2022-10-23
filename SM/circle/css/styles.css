@@ -22,7 +22,7 @@ $color5: rgba(93, 87, 107, 1);
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color:  #317c27;
+  background-color:  #ffffff; 
     min-width: auto;
     height: auto;
     max-height: 20em;
@@ -40,18 +40,18 @@ $color5: rgba(93, 87, 107, 1);
     display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #32752a; }
+/* Change color of dropdown links on hover 
+.dropdown-content a:hover {background-color: #32752a; } */
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/* Change the background color of the dropdown button when the dropdown content is shown 
 .dropdown:hover .dropbtn {
-    background-color: #80a67b;
-}
+    background-color: #80a67b; 
+}  */
 html, body {
     margin: 0;
     padding: 0;
