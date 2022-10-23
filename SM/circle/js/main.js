@@ -136,11 +136,11 @@ const answerQuestion = (answer, guess) => {
         answerElem.onclick = () => false;
         // цвета фона: верно- зелёные, невверно- красные
       
-        answerElem.style.backgroundColor = (answerElem.firstChild.innerHTML === answer || answerElem.lastChild.innerHTML === answer) ? "#85bb65 " : "#AB2524";
+        answerElem.style.backgroundColor = (answerElem.firstChild.innerHTML === answer || answerElem.lastChild.innerHTML === answer) ? "#C3FBD8 " : "#FED6BC";
         answerElem.firstChild.style.height = "48px";
         answerElem.firstChild.style.lineHeight = "48px";
         answerElem.style.fontSize = "24px";
-        answerElem.lastChild.style.color = "#F6FFF8";
+        answerElem.lastChild.style.color = "#000000";
     });
     setTimeout(() => askQuestion(), 4000);
 }

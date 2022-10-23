@@ -15,7 +15,7 @@ html body {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  color: #000;
+  color:  rgba(93, 87, 107, 1);
   -webkit-animation: animationBackground 3s ease-in-out infinite alternate;
           animation: animationBackground 3s ease-in-out infinite alternate;
 
@@ -223,25 +223,25 @@ html body #question-container .answers .answer .answer-value {
 
 @-webkit-keyframes animationBackground {
   0% {
-    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(75deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #ffffff 8px, #ffffff 16px), repeating-linear-gradient(75deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
   50% {
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px,#000000 8px, #000000 16px), repeating-linear-gradient(90deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px,#ffffff 8px, #ffffff 16px), repeating-linear-gradient(90deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
   100% {
-    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px,#000000 8px, #000000 16px), repeating-linear-gradient(105deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px,#ffffff 8px, #ffffff 16px), repeating-linear-gradient(105deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
 }
 
 @keyframes animationBackground {
   0% {
-    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(75deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(-15deg, transparent, transparent 8px, #ffffff 8px, #ffffff 16px), repeating-linear-gradient(75deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
   50% {
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(90deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 8px, #ffffff 8px, #ffffff 16px), repeating-linear-gradient(90deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
   100% {
-    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px, #000000 8px, #000000 16px), repeating-linear-gradient(105deg, #184e2a, #184e2a 8px, #000000 8px, #000000 16px);
+    background-image: repeating-linear-gradient(15deg, transparent, transparent 8px, #ffffff 8px, #ffffff 16px), repeating-linear-gradient(105deg, #DEF7FE, #DEF7FE 8px, #ffffff 8px, #ffffff 16px);
   }
 }
 /*# sourceMappingURL=style.css.map */
@@ -254,8 +254,8 @@ html body #pausebut-container {
   margin: 0px;
   padding: 0px;
   background-color: #FDEED9;
-  -webkit-box-shadow: inset 0 0 0 2px #211, inset 0 0 0 4px #884, 8px 8px #211;
-          box-shadow: inset 0 0 0 2px #211, inset 0 0 0 4px #884, 8px 8px #211;
+  -webkit-box-shadow: inset 0 0 0 2px #ffffff, inset 0 0 0 4px #DEF7FE, 8px 8px #ffffff;
+          box-shadow: inset 0 0 0 2px #ffffff, inset 0 0 0 4px #DEF7FE, 8px 8px #ffffff;
   z-index: 3;
 }
 
@@ -302,6 +302,7 @@ html body  #backbtn  {
   padding: 0px;
   background-color: transparent;
   z-index: 3;
+color:  rgba(93, 87, 107, 1);
 }
 
 #homebtn {
@@ -323,7 +324,7 @@ html body  #backbtn  {
 
 /* Style The Dropdown Button */
 .dropbtn {
-       color: white;
+       color:  rgba(93, 87, 107, 1);
     padding: 16px;
     font-size: 16px;
     border: none;
@@ -340,7 +341,7 @@ html body  #backbtn  {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     min-width: auto;
     height: auto;
     max-height: 20em;
@@ -358,11 +359,12 @@ html body  #backbtn  {
 }
 
 .mybtn {
-  color: rgb(252, 245, 245);
+  font-size: 16px;
+  color:  rgba(93, 87, 107, 1);
   padding: 12px 16px;
   text-decoration: none;
 /*  display:inline-block;*/
-  background-color: #3c833e;
+  background-color: #ffffff;
   margin-left: auto;
   margin-right: auto;
   left: 0;
@@ -370,17 +372,17 @@ html body  #backbtn  {
   text-align: center;
 }
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #d4f3d0; }
+.dropdown-content a:hover {background-color: #ffffff; }
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/* Change the background color of the dropdown button when the dropdown content is shown 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
-}
+}  */
 img {
   height: 90px;
   width: 200px;
