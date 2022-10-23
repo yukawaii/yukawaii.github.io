@@ -252,12 +252,12 @@ function groupButtonSelected () {
     getExamples1[0].innerHTML = q[0].examples[0]
     getExamples2[0].innerHTML = q[0].examples[1]
     getExamples3[0].innerHTML = q[0].examples[2]
-	  getExamples3[0].innerHTML = q[0].examples[3]
-	  getExamples4[0].innerHTML = q[0].examples[4]
-	  getExamples5[0].innerHTML = q[0].examples[5]
-	  getExamples6[0].innerHTML = q[0].examples[6]
+    	  getExamples4[0].innerHTML = q[0].examples[3] 
+         
+	  getExamples5[0].innerHTML = q[0].examples[4] 
 
-
+ //    getExamples6[0].innerHTML = q[0].examples[5]
+ 
     getKanji[1].innerHTML = q[0].kanji
     getOnyomi[1].innerHTML = q[0].onyomi
     getKunyomi[1].innerHTML = q[0].kunyomi
@@ -265,10 +265,10 @@ function groupButtonSelected () {
     getExamples1[1].innerHTML = q[0].examples[0]
     getExamples2[1].innerHTML = q[0].examples[1]
     getExamples3[1].innerHTML = q[0].examples[2]
-		  getExamples3[0].innerHTML = q[0].examples[3]
-	  getExamples4[0].innerHTML = q[0].examples[4]
-	  getExamples5[0].innerHTML = q[0].examples[5]
-	  getExamples6[0].innerHTML = q[0].examples[6]
+   		  getExamples4[0].innerHTML = q[0].examples[3] 
+   getExamples5[0].innerHTML = q[0].examples[4] 
+
+//	  getExamples6[0].innerHTML = q[0].examples[5]
   
 }
 
@@ -333,10 +333,10 @@ function kanjiButtonSelected () {
     getExamples1[0].innerHTML = q[this.id].examples[0]
     getExamples2[0].innerHTML = q[this.id].examples[1]
     getExamples3[0].innerHTML = q[this.id].examples[2]
-		  getExamples3[0].innerHTML = q[0].examples[3]
-	  getExamples4[0].innerHTML = q[0].examples[4]
-	  getExamples5[0].innerHTML = q[0].examples[5]
-	  getExamples6[0].innerHTML = q[0].examples[6]
+ 		  getExamples4[0].innerHTML = q[0].examples[3] 
+	//  getExamples5[0].innerHTML = q[0].examples[4] 
+//	  getExamples6[0].innerHTML = q[0].examples[5] 
+	
 
     getKanji[1].innerHTML = q[this.id].kanji
     getOnyomi[1].innerHTML = q[this.id].onyomi
@@ -345,10 +345,11 @@ function kanjiButtonSelected () {
     getExamples1[1].innerHTML = q[this.id].examples[0]
     getExamples2[1].innerHTML = q[this.id].examples[1]
     getExamples3[1].innerHTML = q[this.id].examples[2]
-		  getExamples3[0].innerHTML = q[0].examples[3]
-	  getExamples4[0].innerHTML = q[0].examples[4]
-	  getExamples5[0].innerHTML = q[0].examples[5]
-	  getExamples6[0].innerHTML = q[0].examples[6]
+		  getExamples4[0].innerHTML = q[0].examples[3]
+    	//  getExamples5[0].innerHTML = q[0].examples[4] 
+    
+//	  getExamples6[0].innerHTML = q[0].examples[5] 
+
 }
 
 
