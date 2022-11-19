@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Kosugi+Maru|Concert+One|Darker+Grotesque|Didact+Gothic|Fugaz+One|Nanum+Gothic|Sigmar+One&display=swap" rel="stylesheet">
+    <script src="../../App.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+   
+        <title>YuKawaii's Kanji</title>
+</head>
+
+<body>
+	 <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
+    <script type="text/javascript">
+
+//поделиться
+
+function share2(){
+    vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Классная игра для изучения японского языка!",
+    "attachments": "https://vk.com/app8181888"
+  });
+}
+
+function favor1(){
+bridge.send("VKWebAppAddToFavorites");
+}
+
+function joingroup(){
+    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+}
+
+//пригласить друзей в игру
+function infr(){
+    vkBridge.send("VKWebAppShowInviteBox", {})
+  .then(data => console.log(data.success))  
+ .catch(error => console.log(error));
+}
+
+</script>
+<div id="main-container">
+  <h3 class="heading1">漢字 <span class="divider">|</span> YuKawaii's Kanji beta</h3>
+<!-- <div style="position: flex; margin-top: 1%; color:white; text-align: center; margin-left: 10%;">  -->
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdXBjwBzWNnGImhxMsCa1D_T6lDDG1kx9sfff_Dr75Q4gowcg/viewform?embedded=true" width="100%" height="520" frameborder="0" marginheight="0" marginwidth="0">Загрузка…</iframe>    <div class="float-right">
+      <hr id="hide">
+      <div id="mode-button-container">
+                  <!-- <button class = "mybtn" onclick="myAdd1(); window.location.href = './2.html';">Урок 14</button> -->
+                    <button class = "mybtn" onclick="window.location.href = './0.html';">Уроки</button>
+                    <button class = "mybtn" onclick="window.location.href = '../../index.html';">Домой</button>
+         <button id="vic-mode" class="mybtn" onclick="window.location.href = '../../index2.html';">Викторина</button>
+     <!--  <button class = "mybtn" onclick="joingroup()">Группа</button>
+   <button class = "" onclick="getinfo()">getinfo</button>
+   <button class = "" onclick="getsc()">getsc</button>
+   <button class = "" onclick="sendmes()">Пройти опрос</button>
+   <button class = "" onclick="showLeaderboard()">ntop</button> -->
+   </div>
+   
+    <div id="asterisk-container" class="container"><div id="image" style="background-color: transparent;">
+    <img src="../../images/yuka.png" alt="turtle icon"/></div>
+</div>
+<footer>
+<p> 2022 | YuKawaii's games <br> https://vk.com/yugamess</a></p>
+</footer>
+ <!-- <div id="xp"> Опыт : 1</div>
+  <div id="lvl">Уровень: 1 </div> -->
+
+</div>
+
+</body>
+
+</html>
