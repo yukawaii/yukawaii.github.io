@@ -5,13 +5,13 @@ n5kanji = ['一', '七', '万', '三', '上', '下', '中', '九', '二', '五',
            '土', '外', '多', /**/ '週', '道', '金', '長', '間', '雨', '電', '食',
            '飲', '駅', '高', '魚'];
 
-n5meaning = ['one', 'seven', '10000', '3', 'up', 'down', 'inside', 'nine', 'two',
-             'five', 'person', 'now', 'rest', 'meet', 'what', 'before', 'enter',
-             'eight', 'six', 'yen', 'exit', 'part', 'infront', 'north', '10', '1000',
-             'noon', 'half', 'south', 'friend', 'mouth', 'old', 'right', 'name',
-             '4', 'country', 'soil', 'outside', 'many', /**/ 'week', 'road', 'gold',
-             'long', 'space', 'rain', 'electricity', 'eat', 'drink', 'station',
-             'tall', 'fish'];
+n5meaning = ['один', 'семь', '10000', 'три', 'верх', 'низ', 'внутри', 'девять', 'два',
+             'пять', 'человек', 'сейчас', 'отдых', 'встреча', 'что', 'ранее', 'вход',
+             'eight', 'шесть', 'йена', 'exit', 'part', 'infront', 'север', '10', '1000',
+             'полдень', 'половина', 'юг', 'друг', 'рот', 'old', 'правый', 'имя',
+             '4', 'страна', 'земля', 'снаружи', 'много', /**/ 'week', 'дорога', 'деньги',
+             'длинный', 'пространство', 'дождь', 'электро', 'есть', 'пить', 'станция',
+             'высокий', 'рыбка'];
 
 
 /* Generate list of cards from kanjis and their meanings */
