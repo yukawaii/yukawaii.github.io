@@ -11,7 +11,7 @@ const DATA ={
     jp: "然",
     on: "ゼン ネン",
     kun: "しか しか.り しか.し さ",
-    trad: "sort of thing, so, if so, in that case, well"
+    trad: "однако"
 }, {
     "category": "jlptn3",
     jp: "限",
@@ -77,7 +77,7 @@ const DATA ={
     jp: "退",
     on: "タイ",
     kun: "しりぞ.く しりぞ.ける ひ.く の.く の.ける ど.く",
-    trad: "retreat, withdraw, retire, resign, repel, expel, reject"
+    trad: "отступать"
 }, {
     "category": "jlptn3",
     jp: "頭",
@@ -161,19 +161,19 @@ const DATA ={
     jp: "非",
     on: "ヒ",
     kun: "あら.ず",
-    trad: "un-, mistake, negative, injustice, non-"
+    trad: "не-, ошибка"
 }, {
     "category": "jlptn3",
     jp: "観",
     on: "カン",
     kun: "み.る しめ.す",
-    trad: "outlook, look, appearance, condition, view"
+    trad: "наблюдать"
 }, {
     "category": "jlptn3",
     jp: "察",
     on: "サツ",
     kun: "",
-    trad: "guess, presume, surmise, judge, understand"
+    trad: "догадка"
 }, {
     "category": "jlptn3",
     jp: "段",
@@ -185,7 +185,7 @@ const DATA ={
     jp: "横",
     on: "オウ",
     kun: "よこ",
-    trad: "sideways, side, horizontal, width, woof"
+    trad: "сбоку"
 }, {
     "category": "jlptn3",
     jp: "深",
@@ -197,43 +197,43 @@ const DATA ={
     jp: "申",
     on: "シン",
     kun: "もう.す もう.し- さる",
-    trad: "have the honor to, sign of the monkey, 3-5PM, ninth sign of Chinese zodiac"
+    trad: "называться"
 }, {
     "category": "jlptn3",
     jp: "様",
     on: "ヨウ ショウ",
     kun: "さま さん",
-    trad: "Esq., way, manner, situation, polite suffix"
+    trad: "похожий"
 }, {
     "category": "jlptn3",
     jp: "財",
     on: "ザイ サイ ゾ",
     kun: "",
-    trad: "property, money, wealth, assets"
+    trad: "финансы"
 }, {
     "category": "jlptn3",
     jp: "港",
     on: "コウ",
     kun: "みなと",
-    trad: "harbor"
+    trad: "гавань"
 }, {
     "category": "jlptn3",
     jp: "識",
-    on: "シ",
+    on: "シキ",
     kun: "",
-    trad: "discriminating, know, write"
+    trad: "сознание"
 }, {
     "category": "jlptn3",
     jp: "呼",
     on: "コ",
-    kun: "",
+    kun: "よ.ぶ",
     trad: "звать"
 }, {
     "category": "jlptn3",
     jp: "達",
-    on: "タツ ダ -タ",
-    kun: "",
-    trad: "accomplished, reach, arrive, attain"
+    on: "タツ",
+    kun: "たっ.する",
+    trad: "достигать"
 }, {
     "category": "jlptn3",
     jp: "良",
@@ -245,7 +245,7 @@ const DATA ={
     jp: "候",
     on: "コウ",
     kun: "そうろう",
-    trad: "climate, season, weather"
+    trad: "погода"
 }, {
     "category": "jlptn3",
     jp: "程",
@@ -263,7 +263,7 @@ const DATA ={
     jp: "敗",
     on: "ハイ",
     kun: "やぶ.れる",
-    trad: "failure, defeat, reversal"
+    trad: "разбивать"
 }, {
     "category": "jlptn3",
     jp: "値",
@@ -275,7 +275,7 @@ const DATA ={
     jp: "突",
     on: "トツ カ",
     kun: "つ.く",
-    trad: "stab, protruding, thrusting, thrust, pierce, prick"
+    trad: "ударять"
 }, {
     "category": "jlptn3",
     jp: "光",
@@ -291,15 +291,15 @@ const DATA ={
 }, {
     "category": "jlptn3",
     jp: "科",
-    on: "",
-    kun: "",
-    trad: "department, course, section"
+    on: "カ",
+    kun: "か",
+    trad: "отделение"
 }, {
     "category": "jlptn3",
     jp: "積",
     on: "セキ ツ.モ",
     kun: "つ.む -づ.み つ.もる",
-    trad: "volume, product (x*y), acreage, contents, pile up, stack, load, amass"
+    trad: "нагромождать"
 }, {
     "category": "jlptn3",
     jp: "他",
@@ -310,14 +310,14 @@ const DATA ={
     "category": "jlptn3",
     jp: "処",
     on: "ショ",
-    kun: "ところ -こ お.る",
-    trad: "dispose, manage, deal with, sentence, condemn, act, behave, place"
+    kun: "ところ, しょっ.する",
+    trad: "распоряжаться"
 }, {
     "category": "jlptn3",
     jp: "太",
     on: "タイ タ フト.",
     kun: "ふと.い",
-    trad: "plump, thick, big around"
+    trad: "толстый"
 }, {
     "category": "jlptn3",
     jp: "客",
@@ -357,9 +357,9 @@ const DATA ={
 }, {
     "category": "jlptn3",
     jp: "存",
-    on: "ソン ゾ",
-    kun: "",
-    trad: "suppose, be aware of, believe, feel"
+    on: "ソン ",
+    kun: "そん.する、ぞん.じる",
+    trad: "существовать"
 }, {
     "category": "jlptn3",
     jp: "飛",
@@ -395,7 +395,7 @@ const DATA ={
     jp: "破",
     on: "ハ ヤブ.レ",
     kun: "やぶ.る",
-    trad: "rend, rip, tear, break, destroy, defeat, frustrate"
+    trad: "ломать"
 }, {
     "category": "jlptn3",
     jp: "除",
@@ -447,320 +447,299 @@ const DATA ={
 }, {
     "category": "jlptn3",
     jp: "迎",
-    on: "ゲイ ムカ.エ",
-    kun: "",
-    trad: "welcome, meet, greet"
+    on: "ゲイ",
+    kun: "むかえる",
+    trad: "встречать"
 }, {
     "category": "jlptn3",
     jp: "園",
-    on: "エン ソ",
-    kun: "",
-    trad: "park, garden, yard, farm"
+    on: "エン",
+    kun: "その",
+    trad: "парк"
 },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {
     "category": "jlptn3",
     jp: "置",
     on: "チ -オ.",
     kun: "お.く",
-    trad: "placement, put, set, deposit, leave behind, keep, employ, pawn"
+    trad: "класть"
 }, {
     "category": "jlptn3",
     jp: "流",
     on: "リュウ ル -ナガ.",
     kun: "なが.れる なが.れ なが.す",
-    trad: "current, a sink, flow, forfeit"
+    trad: "поток"
 }, {
     "category": "jlptn3",
     jp: "格",
     on: "カク コウ キャク ゴ",
     kun: "",
-    trad: "status, rank, capacity, jp, case (law, grammar)"
+    trad: "ранг"
 }, {
     "category": "jlptn3",
     jp: "疑",
     on: "ギ",
     kun: "うたが.う",
-    trad: "doubt, distrust, be suspicious, question"
+    trad: "подозревать"
 }, {
     "category": "jlptn3",
     jp: "過",
     on: "カ",
     kun: "す.ぎる -す.ぎる -す.ぎ す.ごす あやま.つ あやま.ち",
-    trad: "overdo, exceed, go beyond, error"
+    trad: "миновать"
 }, {
     "category": "jlptn3",
     jp: "局",
     on: "キョク",
     kun: "つぼね",
-    trad: "bureau, board, office, affair, conclusion, court lady, lady-in-waiting, her apartment"
+    trad: "департамент"
 }, {
     "category": "jlptn3",
     jp: "放",
     on: "ホウ ホウ.",
     kun: "はな.す -っぱな.し はな.つ はな.れる こ.く",
-    trad: "set free, release, fire, shoot, emit, banish, liberate"
+    trad: "отпускать"
 }, {
     "category": "jlptn3",
     jp: "常",
     on: "ジョウ",
     kun: "つね とこ",
-    trad: "usual, ordinary, normal, regular"
+    trad: "обычно"
 }, {
     "category": "jlptn3",
     jp: "状",
     on: "ジョウ",
     kun: "",
-    trad: "status quo, conditions, circumstances, form, appearance"
+    trad: "ситуация"
 }, {
     "category": "jlptn3",
     jp: "球",
     on: "キュウ タ",
     kun: "",
-    trad: "ball, sphere"
+    trad: "шар"
 }, {
     "category": "jlptn3",
     jp: "職",
     on: "ショク ソ",
     kun: "",
-    trad: "post, employment, work"
+    trad: "работа"
 }, {
     "category": "jlptn3",
     jp: "与",
     on: "ヨ トモ",
     kun: "あた.える あずか.る くみ.する",
-    trad: "bestow, participate in, give, award, impart, provide, cause, gift, godsend"
+    trad: "предоставлять"
 }, {
     "category": "jlptn3",
     jp: "供",
     on: "キョウ ク クウ グ",
     kun: "そな.える とも -ども",
-    trad: "submit, offer, present, serve (meal), accompany"
+    trad: "сопровождать"
 }, {
     "category": "jlptn3",
     jp: "役",
     on: "ヤク エ",
     kun: "",
-    trad: "duty, war, campaign, drafted labor, office, service, role"
+    trad: "роль"
 }, {
     "category": "jlptn3",
     jp: "構",
-    on: "コウ カマ.",
+    on: "コウ",
     kun: "かま.える",
-    trad: "posture, build, pretend"
+    trad: "конструкция"
 }, {
     "category": "jlptn3",
     jp: "割",
     on: "カツ",
     kun: "わ.る わり わ.り わ.れる さ.く",
-    trad: "proportion, comparatively, divide, cut, separate, split"
+    trad: "пропорция"
 }, {
     "category": "jlptn3",
     jp: "費",
     on: "ヒ",
     kun: "つい.やす つい.える",
-    trad: "expense, cost, spend, consume, waste"
+    trad: "тратить"
 }, {
     "category": "jlptn3",
     jp: "付",
     on: "フ -ヅ",
     kun: "つ.ける -つ.ける -づ.ける つ.け つ.け- -つ.け -づ.け -づけ つ.く -づ.く つ.き -つ.き -つ",
-    trad: "adhere, attach, refer to, append"
+    trad: "присоединять"
 }, {
     "category": "jlptn3",
     jp: "由",
     on: "ユ ユウ ユイ",
     kun: "よし よ.る",
-    trad: "wherefore, a reason"
+    trad: "причина"
 }, {
     "category": "jlptn3",
     jp: "説",
     on: "セツ ゼイ ト.",
     kun: "",
-    trad: "rumor, opinion, theory"
+    trad: "разъяснять"
 }, {
     "category": "jlptn3",
     jp: "難",
     on: "ナン -ニク.",
     kun: "かた.い -がた.い むずか.しい むづか.しい むつか.しい",
-    trad: "difficult, impossible, trouble, accident, defect"
+    trad: "сложный"
 }, {
     "category": "jlptn3",
     jp: "優",
     on: "ユウ ウ マサ.",
     kun: "やさ.しい すぐ.れる",
-    trad: "tenderness, excel, surpass, actor, superiority, gentleness"
+    trad: "превосходить"
 }, {
     "category": "jlptn3",
     jp: "夫",
     on: "フ フウ ブ ソ.",
     kun: "おっと",
-    trad: "husband, man"
+    trad: "супруг"
 }, {
     "category": "jlptn3",
     jp: "収",
     on: "シュウ オサ.マ",
     kun: "おさ.める",
-    trad: "income, obtain, reap, pay, supply, store"
+    trad: "доход"
 }, {
     "category": "jlptn3",
     jp: "断",
     on: "ダン",
     kun: "た.つ ことわ.る さだ.める",
-    trad: "severance, decline, refuse, apologize, warn, dismiss, prohibit, decision, judgement, cutting"
+    trad: "отказываться"
 }, {
     "category": "jlptn3",
     jp: "石",
     on: "セキ シャク コク イ",
     kun: "",
-    trad: "stone"
+    trad: "камень"
 }, {
     "category": "jlptn3",
     jp: "違",
     on: "イ",
     kun: "ちが.う ちが.い ちが.える -ちが.える たが.う たが.える",
-    trad: "difference, differ"
+    trad: "отличаться"
 }, {
     "category": "jlptn3",
     jp: "消",
     on: "ショウ",
     kun: "き.える け.す",
-    trad: "extinguish, blow out, turn off, neutralize, cancel"
+    trad: "гасить"
 }, {
     "category": "jlptn3",
     jp: "神",
     on: "シン ジン",
     kun: "かみ かん- こう",
-    trad: "gods, mind, soul"
+    trad: "боги"
 }, {
     "category": "jlptn3",
     jp: "番",
     on: "バン ツガ.",
     kun: "",
-    trad: "turn, number in a series"
+    trad: "черёд"
 }, {
     "category": "jlptn3",
     jp: "規",
     on: "",
     kun: "",
-    trad: "standard, measure"
+    trad: "правило"
 }, {
     "category": "jlptn3",
     jp: "術",
     on: "ジュツ",
     kun: "すべ",
-    trad: "art, technique, skill, means, trick, resources, magic"
+    trad: "искусство"
 }, {
     "category": "jlptn3",
     jp: "備",
     on: "ビ ツブサ.",
     kun: "そな.える そな.わる",
-    trad: "equip, provision, preparation"
+    trad: "запасать"
 }, {
     "category": "jlptn3",
     jp: "宅",
-    on: "タ",
-    kun: "",
-    trad: "home, house, residence, our house, my husband"
+    on: "たく",
+    kun: "たく",
+    trad: "жилище"
 }, {
     "category": "jlptn3",
     jp: "害",
     on: "ガイ",
     kun: "",
-    trad: "harm, injury"
+    trad: "ущерб"
 }, {
     "category": "jlptn3",
     jp: "配",
     on: "ハイ",
     kun: "くば.る",
-    trad: "distribute, spouse, exile, rationing"
+    trad: "распределять"
 }, {
     "category": "jlptn3",
     jp: "警",
     on: "ケイ",
     kun: "いまし.める",
-    trad: "admonish, commandment"
+    trad: "предостерегать"
 }, {
     "category": "jlptn3",
     jp: "育",
     on: "イク ハグク.",
     kun: "そだ.つ そだ.ち そだ.てる",
-    trad: "bring up, grow up, raise, rear"
+    trad: "воспитывать"
 }, {
     "category": "jlptn3",
     jp: "席",
     on: "セキ",
     kun: "むしろ",
-    trad: "seat, mat, occasion, place"
+    trad: "место"
 }, {
     "category": "jlptn3",
     jp: "訪",
     on: "ホウ ト.",
     kun: "おとず.れる たず.ねる",
-    trad: "call on, visit, look up, offer sympathy"
+    trad: "посещать"
 }, {
     "category": "jlptn3",
     jp: "乗",
     on: "ジョウ ショウ ノ.セ",
     kun: "の.る -の.り",
-    trad: "ride, power, multiplication, record, counter for vehicles, board, mount, join"
+    trad: "ехать"
 }, {
     "category": "jlptn3",
     jp: "残",
     on: "ザン サン",
     kun: "のこ.る のこ.す そこな.う のこ.り",
-    trad: "remainder, leftover, balance"
+    trad: "остаток"
 }, {
     "category": "jlptn3",
     jp: "想",
     on: "ソウ ソ",
     kun: "おも.う",
-    trad: "concept, think, idea, thought"
+    trad: "думать"
 }, {
     "category": "jlptn3",
     jp: "声",
     on: "セイ ショウ",
     kun: "こえ こわ-",
-    trad: "voice"
+    trad: "голос"
 }, {
     "category": "jlptn3",
     jp: "念",
     on: "ネン",
     kun: "",
-    trad: "wish, sense, idea, thought, feeling, desire, attention"
+    trad: "мысль, сознание"
 }, {
     "category": "jlptn3",
     jp: "助",
     on: "ジョ",
     kun: "たす.ける たす.かる す.ける すけ",
-    trad: "help, rescue, assist"
+    trad: "помощь"
 }, {
     "category": "jlptn3",
     jp: "労",
     on: "ロウ",
     kun: "ろう.する いたわ.る いた.ずき ねぎら つか.れる ねぎら.う",
-    trad: "labor, thank for, reward for, toil, trouble"
+    trad: "труд, забота"
 }
     ],
     vocabulary: [
