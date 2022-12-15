@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+   <script src="../../App.js"></script>
     <title>Карты памяти</title>
     <link href="https://fonts.googleapis.com/css?family=Finger+Paint" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
@@ -14,7 +15,7 @@
     <div class="container">
 
       <header>
-        <p class="header">Kanji Memory Game <img src="img/cat.gif" alt="cat" align="bottom" class="icon"></p>
+        <p class="header">Карты памяти<img src="img/cat.gif" alt="cat" align="bottom" class="icon"></p>
         <!--Match the Kanji with their meaning in 3 turns! 失敗したら猫が怒ちゃう！！-->
       </header>
 
@@ -59,22 +60,22 @@
     <!-- Modal to appear up if game won -->
     <div class="modal-happy">
       <img src="img/happy-cat.gif" alt="happy-cat" align ="center" class="image">
-      <h2>Congratulations!</h2>
-      <p> It took you:
-        <span class="mov">0</span> moves &
-        <span class="tim">0</span> sec
+      <h2>Ура!</h2>
+      <p> Заняло:
+        <span class="mov">0</span> ходов &
+        <span class="tim">0</span> сек
       </p>
-      <p> Number of frogs won:
+      <p> Выйграно лягушек:
         <span class="frog">0</span>
       </p>
-      <p class="reload">Want to play again?</p>
+      <p class="reload">Играть ещё?</p>
     </div>
 
     <!-- Modal to appear if game lost -->
     <div class="modal-angry">
       <img src="img/angry-cat.gif" alt="angry-cat" align ="center" class="image">
-      <h2>You failed to match the cards in time!!</h2>
-      <p class="reload">Try again?</p>
+      <h2>Время вышло!!</h2>
+      <p class="reload">Ещё раз?</p>
     </div>
 
     <!-- Overlay background to bring focus on modal -->
