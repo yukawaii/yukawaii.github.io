@@ -316,8 +316,8 @@ const N3 = {
                     "kanji" : "単",
                     "onyomi" : "タン",
                     "kunyomi" : "ひとえ",
-                    "definition" : "simple, one, single, merely",
-                    "examples" : ["単に たんに simply, merely, only, solely (adv, n)","単一 たんいつ single, simple, sole, individual, unitary (adj-na, n)","単語 たんご word, vocabulary, (usually) single-character word (n) "," "," "," "," "," "]
+                    "definition" : "одиночный, простой, явный",
+                    "examples" : ["単に たんに просто, только","単一 たんいつ отдельный, единичный, индивидуальный","単語 たんご слово","単に話をするために彼に会ったわけではない "," "," "," "," "]
                 }
             ],
 
@@ -326,63 +326,63 @@ const N3 = {
                 {   
                     "kanji" : "博",
                     "onyomi" : "ハク, バク",
-                    "kunyomi" : "",
-                    "definition" : "Dr., command, esteem, win acclaim, Ph.D., exposition, fair",
+                    "kunyomi" : "はく.する",
+                    "definition" : "докторская степень, завоевать (славу, уважение, доверие)",
                     "examples" : ["博愛 はくあい charity, benevolence, philanthropy, (love for) humanity (n)","博物館 はくぶつかん museum (n)","博士 はくし doctorate, PhD, Dr (as a title), expert, learned person (n, n-suf, n) "," "," "," "," "," "]
                 },{
                     "kanji" : "印",
                     "onyomi" : "イン",
                     "kunyomi" : "しるし, -じるし, しる.す",
-                    "definition" : "stamp, seal, mark, imprint, symbol, emblem, trademark, evidence, souvenir, India",
-                    "examples" : ["印鑑 いんかん stamp, seal (n)","印象 いんしょう impression (n, vs)","印紙 いんし (revenue) stamp (n) "," "," "," "," "," "]
+                    "definition" : "печать, штемпель, метка, симптом, признак",
+                    "examples" : ["印鑑 いんかん печать, оттиск печати","印象 いんしょう впечатление","印紙 いんし гербовая печать ","彼はとても聡明な人だという印象を与えた "," "," "," "," "]
                 },{
                     "kanji" : "原",
                     "onyomi" : "ゲン",
                     "kunyomi" : "はら",
-                    "definition" : "meadow, original, primitive, field, plain, prairie, tundra, wilderness",
-                    "examples" : ["原因 げんいん cause, origin, source (n, vs)","原稿 げんこう manuscript, copy (n)","原告 げんこく plaintiff, accuser, prosecutor (n) "," "," "," "," "," "]
+                    "definition" : "равнина, поле, степь",
+                    "examples" : ["原因 げんいん причина, фактор, источник","原稿 げんこう рукопись","原告 げんこく (юр.) истец "," "," "," "," "," "]
                 },{   
                     "kanji" : "参",
                     "onyomi" : "サン, シン",
                     "kunyomi" : "まい.る, まい-, まじわる, みつ",
-                    "definition" : "nonplussed, three, going, coming, visiting, visit, be defeated, die",
-                    "examples" : ["降参 こうさん giving in to (n, vs)","参る まいる to go, to come, to call, to visit (shrine, grave) (v5r)","参加 さんか participation (n, vs) "," "," "," "," "," "]
+                    "definition" : "участвовать, посещать храм, (разг.) вымотаться",
+                    "examples" : ["降参 こうさん капитуляция","参る まいる идти, прибывать","参加 さんか участвовать "," "," "," "," "," "]
                 },{
                     "kanji" : "反",
                     "onyomi" : "ハン, ホン, タン, ホ",
                     "kunyomi" : "ハン, ホン, タン, ホ",
-                    "definition" : "anti-",
-                    "examples" : ["反する はんする to be inconsistent with, to oppose, to contradict (suru verb - special class)","反応 はんのう reaction, response (n, vs)","反撃 はんげき counterattack, counteroffensive, counterblow (n, vs) "," "," "," "," "," "]
+                    "definition" : "против, переворачивать, антитезис",
+                    "examples" : ["反する はんする идти вразрез, противоречить","反応 はんのう реакция, ответ","反撃 はんげき ответный удар, контратака "," "," "," "," "," "]
                 },{
                     "kanji" : "取",
                     "onyomi" : "シュ",
                     "kunyomi" : "と.る, と.り, と.り-, とり, -ど.り",
-                    "definition" : "take, fetch, take up",
-                    "examples" : ["引取る ひきとる to take charge of, to take over, to retire to a private place (v5r, vt)","搾取 さくしゅ exploitation, squeezing, sweating (n, vs)","取り扱う とりあつかう to treat, to handle, to deal in (v5s, vt) "," "," "," "," "," "]
+                    "definition" : "брать, собирать, делать фото",
+                    "examples" : ["引取る ひきとる брать обратно, получать","搾取 さくしゅ сцеживать, доить; эксплуатировать, угнетать","取り扱う とりあつかう обходиться с кем/чем; пользоваться, ведать чем-либо"," "," "," "," "," "]
                 },{   
                     "kanji" : "受",
                     "onyomi" : "ジュ",
                     "kunyomi" : "う.ける, -う.け, う.かる",
-                    "definition" : "accept, undergo, answer (phone), take, get, catch, receive",
-                    "examples" : ["受かる うかる to pass (examination) (v5r, intransitive verb)","受けつぐ うけつぐ to inherit, to succeed, to take over (v5g, vt)","受け止める うけとめる to catch, to stop the blow, to react to, to take (Ichidan verb, vt) "," "," "," "," "," "]
+                    "definition" : "получать, наследовать, ",
+                    "examples" : ["受かる うかる выдержать (экзамен и т.п.)","受けつぐ うけつぐ перенимать, наследовать","受け止める うけとめる поймать (мяч), парировать, отразить нападение "," "," "," "," "," "]
                 },{   
                     "kanji" : "史",
                     "onyomi" : "シ",
                     "kunyomi" : "",
-                    "definition" : "history, chronicle",
-                    "examples" : ["史上 しじょう historical (adj-no, n-adv, n-t)","歴史 れきし history (n)","歴史的 れきしてき historic, historical, traditional (adj-na) "," "," "," "," "," "]
+                    "definition" : "история, хроника",
+                    "examples" : ["史上 しじょう на  страницах истории, в истории","歴史 れきし история","歴史的 れきしてき исторический"," "," "," "," "," "]
                 },{   
                     "kanji" : "号",
                     "onyomi" : "ゴウ",
                     "kunyomi" : "さけ.ぶ, よびな",
-                    "definition" : "nickname, number, item, title, pseudonym, name, call",
-                    "examples" : ["記号 きごう symbol, code, sign (n, adj-no)","信号 しんごう traffic lights, signal, semaphore (n, vs)","号 ごう number, edition, make, model, issue, part of that group, sobriquet, pen-name (n, n-suf) "," "," "," "," "," "]
+                    "definition" : "номер (журнала и т.п.), псевдоним",
+                    "examples" : ["記号 きごう знак, муз.ключ","信号 しんごう светофор, сигнал, знак, сигнализация","号 ごう номер, псевдоним, именовать "," "," "," "," "," "]
                 },{   
                     "kanji" : "司",
                     "onyomi" : "シ",
                     "kunyomi" : "つかさど.る",
-                    "definition" : "director, official, govt office, rule, administer",
-                    "examples" : ["司会 しかい chairmanship, leading a meeting (n, vs)","司法 しほう administration of justice (n)","上司 じょうし superior authorities, boss (n) "," "," "," "," "," "]
+                    "definition" : "управляющий, управлять, править",
+                    "examples" : ["司会 しかい председательство, ведение собрания","司法 しほう правосудие, юридический","上司 じょうし начальник, старший по чину "," "," "," "," "," "]
                 }
             ],
     "Ур. 07" : 
@@ -391,32 +391,32 @@ const N3 = {
                     "kanji" : "各",
                     "onyomi" : "カク",
                     "kunyomi" : "おのおの",
-                    "definition" : "each, every, either",
-                    "examples" : ["各位 かくい everyone, ladies and gentlemen, attention media representatives (eg heading on a press release) (n)","各自 かくじ individual, each (n-adv, n-t)","各 おのおの each, every, either, respectively, severally (n-t) "," "," "," "," "," "]
+                    "definition" : "каждый, всё",
+                    "examples" : ["各位 かくい (кн.) господа","各自 かくじ каждый, отдельный, по отдельности","各 おのおの каждый, все"," "," "," "," "," "]
                 },{
                     "kanji" : "向",
                     "onyomi" : "コウ",
                     "kunyomi" : "む.く, む.い, -む.き, む.ける, -む.け, む.かう, む.かい, む.こう, む.こう-, むこ, むか.い",
-                    "definition" : "yonder, facing, beyond, confront, defy, tend toward, approach",
-                    "examples" : ["向こう むこう opposite side, other side, opposite direction, over there, that way, far away, beyond, the other party, the other person, future (starting now) (n)","あお向け あおむけ face up (n)","後向き うしろむき back facing, turning one's back to (n) "," "," "," "," "," "]
+                    "definition" : "направленность, направление, вон там, напротив",
+                    "examples" : ["向こう むこう быть обращённым куда-либо, идти против, развиваться в сторону чего-либо","仰向け あおむけ навзничь, лицом вверх, на спине","後向き うしろむき задом-наперёд, повернувшись спиной, ретроградный"," "," "," "," "," "]
                 },{
                     "kanji" : "君",
                     "onyomi" : "クン",
                     "kunyomi" : "きみ, -ぎみ",
-                    "definition" : "old boy, name-suffix",
-                    "examples" : ["諸君 しょくん Gentlemen!, Ladies! (n)",""," "," "," "," "," "," "]
+                    "definition" : "ты, твой",
+                    "examples" : ["諸君 しょくん господин; Дамы и господа!","暴君 ぼうくん тиран, деспот","君が代 きみがよ гимн Японии "," "," "," "," "," "]
                 },{   
                     "kanji" : "告",
                     "onyomi" : "コク",
-                    "kunyomi" : "つ.げる",
-                    "definition" : "revelation, tell, inform, announce",
-                    "examples" : ["広告 こうこく advertisement (n, vs)","原告 げんこく plaintiff, accuser, prosecutor (n)","告訴 こくそ accusation, complaint (n, vs) "," "," "," "," "," "]
+                    "kunyomi" : "つ.げる, こくる",
+                    "definition" : "объявлять, сообщать; (слэнг) признаваться",
+                    "examples" : ["広告 こうこく объявление, афиша, реклама","原告 げんこく (юр.) истец","告訴 こくそ (юр.) предъявлять иск "," "," "," "," "," "]
                 },{
                     "kanji" : "周",
                     "onyomi" : "シュウ",
                     "kunyomi" : "まわ.り",
-                    "definition" : "circumference, circuit, lap",
-                    "examples" : ["周囲 しゅうい surroundings, environs, circumference (n)","周期 しゅうき cycle, period (n)","周辺 しゅうへん circumference, outskirts, around, in the area of (n) "," "," "," "," "," "]
+                    "definition" : "окрестности, круг, окружность",
+                    "examples" : ["周囲 しゅうい окрестности, периметр, окружность","周期 しゅうき период, цикл","周辺 しゅうへん окрестности, периферия"," "," "," "," "," "]
                 },{
                     "kanji" : "命",
                     "onyomi" : "メイ, ミョウ",
@@ -959,8 +959,8 @@ const N3 = {
                     "kanji" : "星",
                     "onyomi" : "セイ, ショウ",
                     "kunyomi" : "ほし, -ぼし",
-                    "definition" : "star, spot, dot, mark",
-                    "examples" : ["衛星 えいせい satellite (n)","火星 かせい Mars (planet) (n)","星座 せいざ constellation (n) "," "," "," "," "," "]
+                    "definition" : "звезда, пятнышко, центр мишени",
+                    "examples" : ["衛星 えいせい спутник","火星 かせい планета Марс","星座 せいざ созвездие "," "," "," "," "," "]
                 }
             ],
 
