@@ -60,7 +60,7 @@ const N3 = {
                     "onyomi" : "チュウ",
                     "kunyomi" : "なか",
                     "definition" : "Посредник",
-                    "examples" : ["仲間 なかま приятель, товарищ, компаньон, круг друзей","仲断 ちゅうだん interruption, suspension, break (n, vs)","仲裁 ちゅうさい arbitration, intercession, mediation (n, vs) "," "," "," "," "," "]
+                    "examples" : ["仲間 なかま приятель, товарищ, компаньон, круг друзей","仲断 ちゅうだん приостановка, перерыв","仲裁 ちゅうさい третейский суд, арбитраж"," "," "," "," "," "]
                 }
             ],
     "Ур. 02" :
@@ -328,7 +328,7 @@ const N3 = {
                     "onyomi" : "ハク, バク",
                     "kunyomi" : "はく.する",
                     "definition" : "докторская степень, завоевать (славу, уважение, доверие)",
-                    "examples" : ["博愛 はくあい charity, benevolence, philanthropy, (love for) humanity (n)","博物館 はくぶつかん museum (n)","博士 はくし doctorate, PhD, Dr (as a title), expert, learned person (n, n-suf, n) "," "," "," "," "," "]
+                    "examples" : ["博愛 はくあい благотворительность, филантропия","博物館 はくぶつかん музей","博士 はくし доктор наук"," "," "," "," "," "]
                 },{
                     "kanji" : "印",
                     "onyomi" : "イン",
@@ -421,32 +421,32 @@ const N3 = {
                     "kanji" : "命",
                     "onyomi" : "メイ, ミョウ",
                     "kunyomi" : "いのち",
-                    "definition" : "fate, command, decree, destiny, life, appoint",
-                    "examples" : ["一生けん命 いっしょうけんめい very hard, with utmost effort, with all one's might, for dear life (adj-na, n-adv, n)","運命 うんめい fate (n)","使命 しめい mission, errand, message (n) "," "," "," "," "," "]
+                    "definition" : "жизнь, судьба",
+                    "examples" : ["一生けん命 いっしょうけんめい изо всех сил","運命 うんめい судьба","使命 しめい задание, миссия "," "," "," "," "," "]
                 },{   
                     "kanji" : "和",
                     "onyomi" : "ワ, オ, カ",
                     "kunyomi" : "やわ.らぐ, やわ.らげる, なご.む, なご.やか",
-                    "definition" : "harmony, Japanese style, peace, soften, Japan",
-                    "examples" : ["英和 えいわ English-Japanese (eg dictionary) (n)","昭和 しょうわ Showa era (1926.12.25-1989.1.7) (n)","中和 ちゅうわ neutralize, neutralise, counteract (adj-na, n, vs) "," "," "," "," "," "]
+                    "definition" : "гармония, Япония, японский стиль, мир, согласие, смягчаться, утихать, спокойный",
+                    "examples" : ["英和 えいわ англо-японский словарь","昭和 しょうわ эра Сёва (1926.12.25-1989.1.7)","中和 ちゅうわ нейтрализация"," "," "," "," "," "]
                 },{   
                     "kanji" : "唱",
                     "onyomi" : "ショウ",
                     "kunyomi" : "とな.える",
-                    "definition" : "chant, recite, call upon, yell",
-                    "examples" : ["合唱 がっしょう chorus, singing in a chorus (n, vs)","首唱 しゅしょう advocacy, promotion (n, vs)","主唱 シュショウ advocacy, promotion "," "," "," "," "," "]
+                    "definition" : "распевать, монотонно повторять, петь, кричать, провозглашать",
+                    "examples" : ["合唱 がっしょう хор, петь хором","首唱 しゅしょう выдвигать, предлагать","主唱 シュショウ горячо отстаивать"," "," "," "," "," "]
                 },{   
                     "kanji" : "商",
                     "onyomi" : "ショウ",
                     "kunyomi" : "あきな.う",
-                    "definition" : "make a deal, selling, dealing in, merchant",
-                    "examples" : ["商業 しょうぎょう commerce, trade, business (n)","商談 しょうだん business discussion, negotiation (n, vs)","商売 しょうばい trade, business, commerce, transaction, occupation (n, vs) "," "," "," "," "," "]
+                    "definition" : "коммерция, торговать, бизнес",
+                    "examples" : ["商業 しょうぎょう коммерция, торговля","商談 しょうだん деловые переговоры","商売 しょうばい торговля, сделка"," "," "," "," "," "]
                 },{   
                     "kanji" : "喜",
                     "onyomi" : "キ",
                     "kunyomi" : "よろこ.ぶ, よろこ.ばす",
-                    "definition" : "rejoice, take pleasure in",
-                    "examples" : ["喜劇 きげき comedy, funny show (n)","大喜び おおよろこび great joy (adj-na, n)","喜ばす よろこばす to delight, to give pleasure (v5s) "," "," "," "," "," "]
+                    "definition" : "радость, радоваться",
+                    "examples" : ["喜劇 きげき комедия","大喜び おおよろこび большая радость, восторг","喜ばす よろこばす радовать"," "," "," "," "," "]
                 }
             ],
 
@@ -456,13 +456,13 @@ const N3 = {
                     "kanji" : "器",
                     "onyomi" : "キ",
                     "kunyomi" : "うつわ",
-                    "definition" : "utensil, vessel, receptacle, implement, instrument, ability, container, tool, set",
-                    "examples" : ["核兵器 かくへいき nuclear weapons (n)","楽器 がっき musical instrument (n)","器 うつわ bowl, vessel, container, ability, capacity, calibre, caliber (n) "," "," "," "," "," "]
+                    "definition" : "сосуд, вместилище, инструмент",
+                    "examples" : ["核兵器 かくへいき ядерное оружие","楽器 がっき муз.инструмент","器 うつわ сосуд, орудие, способности "," "," "," "," "," "]
                 },{
                     "kanji" : "囲",
                     "onyomi" : "イ",
                     "kunyomi" : "かこ.む, かこ.う, かこ.い",
-                    "definition" : "surround, besiege, store, paling, enclosure, encircle, preserve, keep",
+                    "definition" : "окружать, собираться вокруг",
                     "examples" : ["囲う かこう to enclose (v5s, vt)","囲む かこむ to surround, to encircle (v5m, vt)","周囲 しゅうい surroundings, environs, circumference (n) "," "," "," "," "," "]
                 },{
                     "kanji" : "固",
