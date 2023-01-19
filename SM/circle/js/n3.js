@@ -463,25 +463,25 @@ const N3 = {
                     "onyomi" : "イ",
                     "kunyomi" : "かこ.む, かこ.う, かこ.い",
                     "definition" : "окружать, собираться вокруг",
-                    "examples" : ["囲う かこう to enclose (v5s, vt)","囲む かこむ to surround, to encircle (v5m, vt)","周囲 しゅうい surroundings, environs, circumference (n) "," "," "," "," "," "]
+                    "examples" : ["囲う かこう обносить оградой","囲む かこむ собираться вокруг, окружать","周囲 しゅうい окрестности, окружение"," "," "," "," "," "]
                 },{
                     "kanji" : "固",
                     "onyomi" : "コ",
                     "kunyomi" : "かた.める, かた.まる, かた.まり, かた.い",
-                    "definition" : "harden, set, clot, curdle",
-                    "examples" : ["頑固 がんこ stubbornness, obstinacy (adj-na, n)","固まる かたまる to harden, to solidify, to become firm, to become certain (v5r, intransitive verb)","固体 こたい solid (body), solid matter, solid-state (n, adj-no) "," "," "," "," "," "]
+                    "definition" : "твёрдый, крепкий, утрамбовывать, глыба, ком",
+                    "examples" : ["頑固 がんこ упрямство, упрямый","固まる かたまる твердеть, крепнуть, застывать, сгущаться, собираться группами","固体 こたい твёрдое тело"," "," "," "," "," "]
                 },{   
                     "kanji" : "園",
                     "onyomi" : "エン",
                     "kunyomi" : "その",
-                    "definition" : "park, garden, yard, farm",
-                    "examples" : ["公園 こうえん (public) park (n)","植物園 しょくぶつえん botanical garden (n)","庭園 ていえん garden, park (n) "," "," "," "," "," "]
+                    "definition" : "парк, сад",
+                    "examples" : ["公園 こうえん парк","植物園 しょくぶつえん ботанический сад","庭園 ていえん сад"," "," "," "," "," "]
                 },{
                     "kanji" : "坂",
                     "onyomi" : "ハン",
                     "kunyomi" : "さか",
-                    "definition" : "slope, incline, hill",
-                    "examples" : ["坂路 ハンロ ramp, slope","登坂 トウハン climbing a slope (hill), ascending a hill","急な坂 きゅうなさか sudden drop, precipitous slope "," "," "," "," "," "]
+                    "definition" : "склон, холм",
+                    "examples" : ["坂路 ハンロ дорога идёт вверх (на ипподроме)","登坂 トウハン подъём, дорога идёт вверх","急な坂 きゅうなさか крутой подъём"," "," "," "," "," "]
                 },{
                     "kanji" : "型",
                     "onyomi" : "ケイ",
