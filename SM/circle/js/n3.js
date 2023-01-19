@@ -609,14 +609,14 @@ const N3 = {
                     "kanji" : "察",
                     "onyomi" : "サツ",
                     "kunyomi" : "",
-                    "definition" : "guess, presume, surmise, judge, understand",
-                    "examples" : ["警察 けいさつ police (n)","察する さっする to guess, to sense, to presume, to judge, to sympathise with (suru verb - special class)","視察 しさつ inspection, observation (n, vs) "," "," "," "," "," "]
+                    "definition" : "догадка, предположение, инспекция, инспектировать",
+                    "examples" : ["警察 けいさつ полиция","察する さっする предполагать, представлять себе","視察 しさつ инспекция, осмотр"," "," "," "," "," "]
                 },{
                     "kanji" : "寺",
                     "onyomi" : "ジ",
                     "kunyomi" : "てら",
                     "definition" : "Buddhist temple",
-                    "examples" : ["寺 てら temple (Buddhist) (n)","寺院 じいん буддийский храм","古寺 【コジ】 старый буддийский храм"," "," "," "," "," "]
+                    "examples" : ["寺 てら буддийский храм","寺院 じいん буддийский храмовый комплекс, храм","古寺 【コジ】 старый буддийский храм"," "," "," "," "," "]
                 },{   
                     "kanji" : "対",
                     "onyomi" : "タイ, ツイ",
@@ -634,7 +634,7 @@ const N3 = {
                     "onyomi" : "ガン",
                     "kunyomi" : "いわ",
                     "definition" : "скала, утёс",
-                    "examples" : ["岩石 ガンセキ rock","砂岩 サガン камень, скала; камни и скалы; в сочетаниях каменный","石灰岩 セッカイガン известняк"," "," "," "," "," "]
+                    "examples" : ["岩石 ガンセキ камень, скала","砂岩 サガン камень, скала; камни и скалы; в сочетаниях каменный","石灰岩 セッカイガン известняк"," "," "," "," "," "]
                 },{   
                     "kanji" : "岸",
                     "onyomi" : "ガン",
@@ -667,43 +667,43 @@ const N3 = {
                     "kanji" : "差",
                     "onyomi" : "サ",
                     "kunyomi" : "さ.す, さ.し",
-                    "definition" : "distinction, difference, variation, discrepancy, margin, balance",
-                    "examples" : ["格差 かくさ qualitative difference, disparity (n)","誤差 ごさ measurement error, calculation error (n)","差し引き さしひき deduction, subtraction, balance, ebb and flow, rise and fall (n) "," "," "," "," "," "]
+                    "definition" : "разница, отличие, линейка, раскрывать над собой (зонтик)",
+                    "examples" : ["格差 かくさ разница (в уровне, качестве, цене и т. п. )","誤差 ごさ погрешность, отклонение (при вычислениях)","差し引き さしひき остаток, баланс, вычет; прилив и отлив"," "," "," "," "," "]
                 },{
                     "kanji" : "希",
                     "onyomi" : "キ, ケ",
                     "kunyomi" : "まれ",
-                    "definition" : "hope, beg, request, pray, beseech, Greece, dilute (acid), rare, few, phenomenal",
-                    "examples" : ["希 まれ rare, seldom (adj-na)","類稀 【たぐいまれ】 unique, rare, exceptional, unparalleled, incomparable","ごく稀 【ごくまれ】 extremely rare "," "," "," "," "," "]
+                    "definition" : "редкий, редкостный, умолять, просить, желать, надеяться; кн. искренне желаю, чтобы. . .",
+                    "examples" : ["希 まれ редкий, редкостный","類稀 たぐいまれ уникальный, крайне редкий","ごく稀 ごくまれ очень редкий"," "," "," "," "," "]
                 },{
                     "kanji" : "席",
                     "onyomi" : "セキ",
                     "kunyomi" : "むしろ",
-                    "definition" : "seat, mat, occasion, place",
-                    "examples" : ["客席 きゃくせき guest seating (n)","欠席 けっせき absence, non-attendance (n, vs)","出席 しゅっせき attendance, presence (n, vs) "," "," "," "," "," "]
+                    "definition" : "место, сидение, помещение, зал; эстрадный театр Ёсэ",
+                    "examples" : ["客席 きゃくせき guest seating (n)","欠席 けっせき место (в театре и т. п. ); пассажирское сидение (в такси и т. п. )","出席 しゅっせき посещение (занятий и т. п. ); присутствие"," "," "," "," "," "]
                 },{   
                     "kanji" : "帯",
                     "onyomi" : "タイ",
                     "kunyomi" : "お.びる, おび",
-                    "definition" : "sash, belt, obi, zone, region",
-                    "examples" : ["温帯 おんたい temperate zone (n)","地帯 ちたい area, zone (n)","携帯 ケータイ something carried (in the hand), handheld, mobile telephone, cell phone (n, vs, n) "," "," "," "," "," "]
+                    "definition" : "пояс, осить (меч и т. п. ), быть облечённым (властью и т. п. ), носить, иметь (оттенок, привкус)",
+                    "examples" : ["温帯 おんたい умеренный климатический пояс","地帯 ちたい зона, область, пояс, полоса","携帯 ケータイ носить (иметь) при себе, брать с собой; переносной, мобильный; смартфон"," "," "," "," "," "]
                 },{   
                     "kanji" : "帳",
                     "onyomi" : "チョウ",
                     "kunyomi" : "とばり",
-                    "definition" : "notebook, account book, album",
-                    "examples" : ["通帳 つうちょう passbook, bankbook (n)","台帳 ダイチョウ account book, ledger, register","帳消し チョウケシ writing off (a debt), cancellation, balancing the books, cancelling out (gains or losses), making even, making up (for), offsetting, undoing, wiping out "," "," "," "," "," "]
+                    "definition" : "книга для записей, альбом, занавеска",
+                    "examples" : ["通帳 つうちょう банковская книжка","台帳 ダイチョウ гроссбух, регистр; кадастр; постановочный текст пьесы","帳消し チョウケシ аннулирование, списание; ~ni suru аннулировать, списывать, зачёркивать"," "," "," "," "," "]
                 },{   
                     "kanji" : "平",
                     "onyomi" : "ヘイ, ビョウ, ヒョウ",
                     "kunyomi" : "たい.ら, -だいら, ひら, ひら-",
-                    "definition" : "even, flat, peace",
-                    "examples" : ["不公平 ふこうへい unfairness, injustice, partiality (adj-na, n)","水平線 すいへいせん horizon (related to sea or lakes) (n)","地平線 ちへいせん horizon (related to land) (n) "," "," "," "," "," "]
+                    "definition" : "плоский, гладкий, ровный, спокойный, обычный, равнина; усмирять, подавлять",
+                    "examples" : ["不公平 ふこうへい нечестный, несправедливый; пристрастный","水平線 すいへいせん горизонт над водой","地平線 ちへいせん горизонт, линия горизонта над землёй"," "," "," "," "," "]
                 },{   
                     "kanji" : "幸",
                     "onyomi" : "コウ",
                     "kunyomi" : "さいわ.い, さち, しあわ.せ",
-                    "definition" : "happiness, blessing, fortune",
+                    "definition" : "счастье",
                     "examples" : ["幸い さいわい happiness, blessedness (adj-na, adv, n)","幸福 こうふく happiness, blessedness (adj-na, n)","不幸 ふこう unhappiness, sorrow, misfortune, disaster, accident, death (adj-na, n) "," "," "," "," "," "]
                 }
             ],
