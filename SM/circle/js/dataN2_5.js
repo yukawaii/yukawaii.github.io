@@ -5,31 +5,31 @@ const DATA = {
             "character": "紅",
             "onyomi": "コウ ク アカ.",
             "kunyomi": "べに くれない",
-            "meaning": "crimson, deep red"
+            "meaning": "алый цвет, помада"
         }, {
             "category": "jlptn2",
             "character": "郊",
             "onyomi": "コウ",
             "kunyomi": "",
-            "meaning": "outskirts, suburbs, rural area"
+            "meaning": "пригород"
         }, {
             "category": "jlptn2",
             "character": "腰",
-            "onyomi": "ヨウ コ",
-            "kunyomi": "",
-            "meaning": "loins, hips, waist, low wainscoting"
+            "onyomi": "ヨウ",
+            "kunyomi": "こし",
+            "meaning": "поясница"
         }, {
             "category": "jlptn2",
             "character": "炭",
             "onyomi": "タン",
             "kunyomi": "すみ",
-            "meaning": "charcoal, coal"
+            "meaning": "уголь"
         }, {
             "category": "jlptn2",
             "character": "踊",
             "onyomi": "ヨウ",
             "kunyomi": "おど.る",
-            "meaning": "jump, dance, leap, skip"
+            "meaning": "танец"
         }, {
             "category": "jlptn2",
             "character": "冊",
@@ -39,9 +39,9 @@ const DATA = {
         }, {
             "category": "jlptn2",
             "character": "勇",
-            "onyomi": "ユウ イサ.",
+            "onyomi": "ユウ",
             "kunyomi": "",
-            "meaning": "courage, cheer up, be in high spirits, bravery, heroism"
+            "meaning": "том"
         }, {
             "category": "jlptn2",
             "character": "械",
