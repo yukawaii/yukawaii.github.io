@@ -486,32 +486,32 @@ const N3 = {
                     "kanji" : "型",
                     "onyomi" : "ケイ",
                     "kunyomi" : "かた, -がた",
-                    "definition" : "mould, type, model",
-                    "examples" : ["型 がた model, type (eg of machine, goods, etc.), type, style, pattern, mold (mould), template, model, kata (standard form of a movement, posture, etc) (n)","体型 たいけい figure (body) (n)","典型 てんけい type, pattern, archetypal (n, adj-no) "," "," "," "," "," "]
+                    "definition" : "тип, форма, модель, шаблон, образец, трафарет",
+                    "examples" : ["型 がた тип, форма","体型 たいけい человеческая фигура","典型 てんけい классическая форма, образец, типовой экземпляр"," "," "," "," "," "]
                 },{   
                     "kanji" : "塩",
                     "onyomi" : "エン",
                     "kunyomi" : "しお",
-                    "definition" : "salt",
-                    "examples" : ["塩分 えんぶん salt, salt content (n)","塩水 えんすい salt water, brine (n)","塩辛い しおからい salty (taste) (adj) "," "," "," "," "," "]
+                    "definition" : "соль",
+                    "examples" : ["塩分 えんぶん содержание соли, солёность; соль","塩水 えんすい соляной раствор, рассол","塩辛い しおからい пересоленный, очень солёный"," "," "," "," "," "]
                 },{   
                     "kanji" : "士",
                     "onyomi" : "シ",
                     "kunyomi" : "",
-                    "definition" : "gentleman, samurai, samurai radical (no. 33)",
-                    "examples" : ["修士 しゅうし Masters degree program (programme) (n)","代議士 だいぎし parliamentarian, member of a congress (n)","博士 はくし doctorate, PhD, Dr (as a title), expert, learned person (n, n-suf, n) "," "," "," "," "," "]
+                    "definition" : "воин, самурай, джентельмен, благородный муж",
+                    "examples" : ["修士 しゅうし магистр (академическая степень)","代議士 だいぎし парламентарий, депутат","博士 はくし、はかせ 1.доктор наук 2.перен. знаток (''хакасэ'')"," "," "," "," "," "]
                 },{   
                     "kanji" : "変",
                     "onyomi" : "ヘン",
                     "kunyomi" : "か.わる, か.わり, か.える",
-                    "definition" : "unusual, change, strange",
-                    "examples" : ["相変らず あいかわらず as ever, as usual, the same (adv, n)","急変 きゅうへん sudden turn, sudden change, (suddenly occurring) accident (n, vs)","大変 たいへん very, greatly, immense, enormous, great, serious, grave, dreadful, terrible, difficult, hard, major incident, disaster (adv, adj-na, n) "," "," "," "," "," "]
+                    "definition" : "изменение, перемена, необычный, странный",
+                    "examples" : ["相変らず あいかわらず по-прежнему, как и всегда","急変 きゅうへん 1.внезапная (резкая) перемена; ~suru резко меняться 2.непредвиденное происшествие, неожиданность","大変 たいへん очень, крайне, страшно, кошмар! ужасный"," "," "," "," "," "]
                 },{   
                     "kanji" : "夫",
                     "onyomi" : "フ, フウ, ブ",
                     "kunyomi" : "おっと, そ.れ",
-                    "definition" : "husband, man",
-                    "examples" : ["大丈夫 だいじょうぶ safe, all right, OK (adj-na, adv, n)","夫妻 ふさい man and wife, married couple (n)","夫 おっと husband (n) "," "," "," "," "," "]
+                    "definition" : "супруг, муж",
+                    "examples" : ["大丈夫 だいじょうぶ всё в порядке, всё номрально, сойдёт","夫妻 ふさい супруги, муж и жена","夫 おっと супруг, муж"," "," "," "," "," "]
                 }
             ],
     "Ур. 09" : 
@@ -520,8 +520,8 @@ const N3 = {
                     "kanji" : "央",
                     "onyomi" : "オウ",
                     "kunyomi" : "",
-                    "definition" : "center, middle",
-                    "examples" : ["中央 ちゅうおう centre, central, center, middle (n)","道央 ドウオウ central Hokkaido","月央 ゲツオウ middle of the month "," "," "," "," "," "]
+                    "definition" : "центр, середина",
+                    "examples" : ["中央 ちゅうおう центр, центральный","道央 ドウオウ центр о.Хоккайдо","月央 ゲツオウ середина месяца," "," "," "," "," "," "]
                 },{
                     "kanji" : "失",
                     "onyomi" : "シツ",
