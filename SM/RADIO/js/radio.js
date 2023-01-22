@@ -1,7 +1,7 @@
 $(document).ready(function() {
     'use strict';
 
-    var liveRadioListUrl = "./live-radio.json" // + new Date().getTime();;
+    var liveRadioListUrl = "https://raw.githubusercontent.com/yukawaii/yukawaii.github.io/main/SM/RADIO/js/live-radio.json?id="  + new Date().getTime();;
 
     var stationList = {};
     var selectedStationList = [];
