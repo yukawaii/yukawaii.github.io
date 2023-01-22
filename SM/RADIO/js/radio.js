@@ -11,7 +11,11 @@ $(document).ready(function() {
 
     var trigger = $('.hamburger'),
         isClosed = false;
-
+        function myAdd1(){
+            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
+          .then(data => console.log(data.result))
+          .catch(error => console.log(error));
+          }
     // ========================================================================
     // Event Listeners
     // ========================================================================
@@ -40,7 +44,7 @@ $(document).ready(function() {
             $(this).addClass("play").removeClass("pause");
         } else {
             $(this).addClass("pause").removeClass("play");
-
+myAdd1();
             
         }
     });
