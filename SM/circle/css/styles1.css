@@ -55,6 +55,7 @@ body {
     top: 0;
     width: 100%;
   }
+  
   .active .overlay {
     opacity: 1;
   }
