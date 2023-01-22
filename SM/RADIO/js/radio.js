@@ -40,6 +40,8 @@ $(document).ready(function() {
             $(this).addClass("play").removeClass("pause");
         } else {
             $(this).addClass("pause").removeClass("play");
+
+            
         }
     });
 
