@@ -463,55 +463,55 @@ const N3 = {
                     "onyomi" : "イ",
                     "kunyomi" : "かこ.む, かこ.う, かこ.い",
                     "definition" : "окружать, собираться вокруг",
-                    "examples" : ["囲う かこう to enclose (v5s, vt)","囲む かこむ to surround, to encircle (v5m, vt)","周囲 しゅうい surroundings, environs, circumference (n) "," "," "," "," "," "]
+                    "examples" : ["囲う かこう обносить оградой","囲む かこむ собираться вокруг, окружать","周囲 しゅうい окрестности, окружение"," "," "," "," "," "]
                 },{
                     "kanji" : "固",
                     "onyomi" : "コ",
                     "kunyomi" : "かた.める, かた.まる, かた.まり, かた.い",
-                    "definition" : "harden, set, clot, curdle",
-                    "examples" : ["頑固 がんこ stubbornness, obstinacy (adj-na, n)","固まる かたまる to harden, to solidify, to become firm, to become certain (v5r, intransitive verb)","固体 こたい solid (body), solid matter, solid-state (n, adj-no) "," "," "," "," "," "]
+                    "definition" : "твёрдый, крепкий, утрамбовывать, глыба, ком",
+                    "examples" : ["頑固 がんこ упрямство, упрямый","固まる かたまる твердеть, крепнуть, застывать, сгущаться, собираться группами","固体 こたい твёрдое тело"," "," "," "," "," "]
                 },{   
                     "kanji" : "園",
                     "onyomi" : "エン",
                     "kunyomi" : "その",
-                    "definition" : "park, garden, yard, farm",
-                    "examples" : ["公園 こうえん (public) park (n)","植物園 しょくぶつえん botanical garden (n)","庭園 ていえん garden, park (n) "," "," "," "," "," "]
+                    "definition" : "парк, сад",
+                    "examples" : ["公園 こうえん парк","植物園 しょくぶつえん ботанический сад","庭園 ていえん сад"," "," "," "," "," "]
                 },{
                     "kanji" : "坂",
                     "onyomi" : "ハン",
                     "kunyomi" : "さか",
-                    "definition" : "slope, incline, hill",
-                    "examples" : ["坂路 ハンロ ramp, slope","登坂 トウハン climbing a slope (hill), ascending a hill","急な坂 きゅうなさか sudden drop, precipitous slope "," "," "," "," "," "]
+                    "definition" : "склон, холм",
+                    "examples" : ["坂路 ハンロ дорога идёт вверх (на ипподроме)","登坂 トウハン подъём, дорога идёт вверх","急な坂 きゅうなさか крутой подъём"," "," "," "," "," "]
                 },{
                     "kanji" : "型",
                     "onyomi" : "ケイ",
                     "kunyomi" : "かた, -がた",
-                    "definition" : "mould, type, model",
-                    "examples" : ["型 がた model, type (eg of machine, goods, etc.), type, style, pattern, mold (mould), template, model, kata (standard form of a movement, posture, etc) (n)","体型 たいけい figure (body) (n)","典型 てんけい type, pattern, archetypal (n, adj-no) "," "," "," "," "," "]
+                    "definition" : "тип, форма, модель, шаблон, образец, трафарет",
+                    "examples" : ["型 がた тип, форма","体型 たいけい человеческая фигура","典型 てんけい классическая форма, образец, типовой экземпляр"," "," "," "," "," "]
                 },{   
                     "kanji" : "塩",
                     "onyomi" : "エン",
                     "kunyomi" : "しお",
-                    "definition" : "salt",
-                    "examples" : ["塩分 えんぶん salt, salt content (n)","塩水 えんすい salt water, brine (n)","塩辛い しおからい salty (taste) (adj) "," "," "," "," "," "]
+                    "definition" : "соль",
+                    "examples" : ["塩分 えんぶん содержание соли, солёность; соль","塩水 えんすい соляной раствор, рассол","塩辛い しおからい пересоленный, очень солёный"," "," "," "," "," "]
                 },{   
                     "kanji" : "士",
                     "onyomi" : "シ",
                     "kunyomi" : "",
-                    "definition" : "gentleman, samurai, samurai radical (no. 33)",
-                    "examples" : ["修士 しゅうし Masters degree program (programme) (n)","代議士 だいぎし parliamentarian, member of a congress (n)","博士 はくし doctorate, PhD, Dr (as a title), expert, learned person (n, n-suf, n) "," "," "," "," "," "]
+                    "definition" : "воин, самурай, джентельмен, благородный муж",
+                    "examples" : ["修士 しゅうし магистр (академическая степень)","代議士 だいぎし парламентарий, депутат","博士 はくし、はかせ 1.доктор наук 2.перен. знаток (''хакасэ'')"," "," "," "," "," "]
                 },{   
                     "kanji" : "変",
                     "onyomi" : "ヘン",
                     "kunyomi" : "か.わる, か.わり, か.える",
-                    "definition" : "unusual, change, strange",
-                    "examples" : ["相変らず あいかわらず as ever, as usual, the same (adv, n)","急変 きゅうへん sudden turn, sudden change, (suddenly occurring) accident (n, vs)","大変 たいへん very, greatly, immense, enormous, great, serious, grave, dreadful, terrible, difficult, hard, major incident, disaster (adv, adj-na, n) "," "," "," "," "," "]
+                    "definition" : "изменение, перемена, необычный, странный",
+                    "examples" : ["相変らず あいかわらず по-прежнему, как и всегда","急変 きゅうへん 1.внезапная (резкая) перемена; ~suru резко меняться 2.непредвиденное происшествие, неожиданность","大変 たいへん очень, крайне, страшно, кошмар! ужасный"," "," "," "," "," "]
                 },{   
                     "kanji" : "夫",
                     "onyomi" : "フ, フウ, ブ",
                     "kunyomi" : "おっと, そ.れ",
-                    "definition" : "husband, man",
-                    "examples" : ["大丈夫 だいじょうぶ safe, all right, OK (adj-na, adv, n)","夫妻 ふさい man and wife, married couple (n)","夫 おっと husband (n) "," "," "," "," "," "]
+                    "definition" : "супруг, муж",
+                    "examples" : ["大丈夫 だいじょうぶ всё в порядке, всё номрально, сойдёт","夫妻 ふさい супруги, муж и жена","夫 おっと супруг, муж"," "," "," "," "," "]
                 }
             ],
     "Ур. 09" : 
@@ -520,62 +520,62 @@ const N3 = {
                     "kanji" : "央",
                     "onyomi" : "オウ",
                     "kunyomi" : "",
-                    "definition" : "center, middle",
-                    "examples" : ["中央 ちゅうおう centre, central, center, middle (n)","道央 ドウオウ central Hokkaido","月央 ゲツオウ middle of the month "," "," "," "," "," "]
+                    "definition" : "центр, середина",
+                    "examples" : ["中央 ちゅうおう центр, центральный","道央 ドウオウ центр о.Хоккайдо","月央 ゲツオウ середина месяца," "," "," "," "," "," "]
                 },{
                     "kanji" : "失",
                     "onyomi" : "シツ",
                     "kunyomi" : "うしな.う, う.せる",
-                    "definition" : "lose, error, fault, disadvantage, loss",
-                    "examples" : ["過失 かしつ error, blunder, accident, fault, defect (n)","見失う みうしなう to lose sight of, to miss (v5s, vt)","失格 しっかく disqualification, elimination, incapacity (legal) (n, vs) "," "," "," "," "," "]
+                    "definition" : "потеря, ошибка, промах, убыток, терять, лишаться, утрачивать, пропадать, исчезать",
+                    "examples" : ["過失 かしつ ошибка, промах, упущение; случайность; неосторожность, небрежность, халатность; ~[no] случайный; нечаянный, неумышленный","見失う みうしなう терять из вида, упускать из поля зрения","失格 しっかく дисквалификация, юр. признание недееспособным; ~suru быть дисквалифицированным (снятым)"," "," "," "," "," "]
                 },{
                     "kanji" : "委",
                     "onyomi" : "イ",
                     "kunyomi" : "ゆだ.ねる",
-                    "definition" : "committee, entrust to, leave to, devote, discard",
-                    "examples" : ["委員 いいん committee member (n)","委員会 いいんかい committee meeting, committee (n)","委しい くわしい knowing very well, detailed, full, accurate (adj) "," "," "," "," "," "]
+                    "definition" : "комитет, комиссия, поручать, вверять, сведущий ",
+                    "examples" : ["委員 いいん член комиссии или комитета","委員会 いいんかい комиссия, комитет, заседание комиссии (комитета)","委しい くわしい сведущий"," "," "," "," "," "]
                 },{   
                     "kanji" : "季",
                     "onyomi" : "キ",
                     "kunyomi" : "",
-                    "definition" : "seasons",
-                    "examples" : ["季節 きせつ season (n)","四季 しき four seasons (n)","雨季 うき rainy season (n) "," "," "," "," "," "]
+                    "definition" : "время года",
+                    "examples" : ["季節 きせつ время года","四季 しき четыре времени года","雨季 うき сезон дождей "," "," "," "," "," "]
                 },{
                     "kanji" : "孫",
                     "onyomi" : "ソン",
                     "kunyomi" : "まご",
-                    "definition" : "grandchild, descendants",
-                    "examples" : ["子孫 しそん descendants, posterity, offspring (n)","孫 まご grandchild (n)","孫子の兵法 ソンシノヘイホウ The Art of War (military text by Sun Tzu, 512 BCE) "," "," "," "," "," "]
+                    "definition" : "внук, потомок",
+                    "examples" : ["子孫 しそん потомок, отпрыск","孫 まご внук, внучка","孫子の兵法 ソンシノヘイホウ книга Искусство войны Сунь-цзы"," "," "," "," "," "]
                 },{
                     "kanji" : "守",
                     "onyomi" : "シュ, ス",
                     "kunyomi" : "まも.る, まも.り, もり, -もり, かみ",
-                    "definition" : "guard, protect, defend, obey",
-                    "examples" : ["見守る みまもる to watch over, to watch attentively (v5r, vt)","守備 しゅび defense, defence (n, vs)","厳守 げんしゅ strict observance (n, vs) "," "," "," "," "," "]
+                    "definition" : "защита, защищать, охранять, уход за детьми, амулет, ист. правитель провинции; князь",
+                    "examples" : ["見守る みまもる присматривать за кем-либо; пристально смотреть, не сводить глаз с чего-л.","守備 しゅび охрана; гарнизонная служба; ~o suru охранять; нести гарнизонную службу","厳守 げんしゅ строго соблюдать (правила и т. п. )"," "," "," "," "," "]
                 },{   
                     "kanji" : "完",
                     "onyomi" : "カン",
                     "kunyomi" : "",
-                    "definition" : "perfect, completion, end",
-                    "examples" : ["完成 かんせい complete, completion, perfection, accomplishment (n, vs)","完全 かんぜん perfection, completeness (adj-na, n)","完壁 かんべき perfect, complete, flawless (adj-na) "," "," "," "," "," "]
+                    "definition" : "завершение, окончание, совершенство, идеал",
+                    "examples" : ["完成 かんせい завершение, окончание","完全 かんぜん завершение, окончание, безупречный, доводить до совершенства","完壁 かんべき идеальный, безупречный, совершенство"," "," "," "," "," "]
                 },{   
                     "kanji" : "官",
                     "onyomi" : "カン",
                     "kunyomi" : "",
-                    "definition" : "bureaucrat, the government",
-                    "examples" : ["官庁 かんちょう government office, authorities (n)","官僚 かんりょう bureaucrat, bureaucracy (n)","官邸 かんてい official residence (n) "," "," "," "," "," "]
+                    "definition" : "брюрократия, чиновник, государственная служба, государственное учреждение",
+                    "examples" : ["官庁 かんちょう государственное учреждение; официальная инстанция","官僚 かんりょう бюрократия","官邸 かんてい официальная резиденция (премьер-министра и т. п. )"," "," "," "," "," "]
                 },{   
                     "kanji" : "定",
                     "onyomi" : "テイ, ジョウ",
                     "kunyomi" : "さだ.める, さだ.まる, さだ.か",
-                    "definition" : "determine, fix, establish, decide",
-                    "examples" : ["安定 あんてい stability, equilibrium (adj-na, n, vs)","一定 いちじょう fixed, settled, constant, definite, uniform, regularized, regularised, defined, standardized (n, adj-no, vs)","仮定 かてい assumption, supposition, hypothesis (n, vs) "," "," "," "," "," "]
+                    "definition" : "устанавливать, определять; назначать (срок, место и т. п.), судьба, правило, закон, норма",
+                    "examples" : ["安定 あんてい равновесие; устойчивость; стабильность; стабилизация","一定 いってい станавливать, предписывать; ~no определённый, установленный, предписанный; регулярный, постоянный","仮定 かてい допущение, предположение; гипотеза; постулат; ~suru допускать, предполагать; постулировать; (-to) ~shite допустим что... "," "," "," "," "," "]
                 },{   
                     "kanji" : "実",
                     "onyomi" : "ジツ, シツ",
                     "kunyomi" : "み, みの.る, まこと, まことに, みの, みち.る",
-                    "definition" : "reality, truth",
-                    "examples" : ["確実 かくじつ certainty, reliability, soundness (adj-na, n)","現実 げんじつ reality (n)","口実 こうじつ excuse, pretext (n) "," "," "," "," "," "]
+                    "definition" : "настоящий, действительность, суть, плод, плодоносить, правда, искренность",
+                    "examples" : ["確実 かくじつ надёжность; ~na достоверный, верный; надёжный, заслуживающий доверия; солидный; ~ni наверняка, твёрдо, определённо","現実 げんじつ реальность","口実 こうじつ предлог, отговорка"," "," "," "," "," "]
                 }
             ],
 
@@ -585,62 +585,62 @@ const N3 = {
                     "kanji" : "客",
                     "onyomi" : "キャク, カク",
                     "kunyomi" : "",
-                    "definition" : "guest, visitor, customer, client",
-                    "examples" : ["観客 かんきゃく audience, spectator(s) (n)","客 きゃく guest, customer (n)","客観 かくかん object (as opposed to subject) (n, adj-no) "," "," "," "," "," "]
+                    "definition" : "гость, посетитель, клиент",
+                    "examples" : ["観客 かんきゃく зрители, публика, аудитория","客 きゃく гость, покупатель","客観 かくかん филос. объект, объективно существующее; в сочетаниях объективный"," "," "," "," "," "]
                 },{
                     "kanji" : "宮",
                     "onyomi" : "キュウ, グウ, ク, クウ",
                     "kunyomi" : "みや",
-                    "definition" : "Shinto shrine, constellations, palace, princess",
-                    "examples" : ["宮 キュウ palace","宮中 キュウチュウ imperial cour","宮司 グウジ chief priest "," "," "," "," "," "]
+                    "definition" : "Синтоистский храм, императорский дворец, павильон",
+                    "examples" : ["宮 キュウ дворец","宮中 キュウチュウ императорский двор","宮司 グウジ управляющий делами синтоистского храма"," "," "," "," "," "]
                 },{
                     "kanji" : "害",
                     "onyomi" : "ガイ",
                     "kunyomi" : "",
-                    "definition" : "harm, injury",
-                    "examples" : ["加害者 かがいしゃ assailant (n)","害虫 がいちゅう harmful insect, noxious insect (n)","災害 さいがい calamity, disaster, misfortune (n) "," "," "," "," "," "]
+                    "definition" : "вред, вредить, портить",
+                    "examples" : ["加害者 かがいしゃ оскорбитель [действием] , обидчик; убийца","害虫 がいちゅう вредители (насекомые)","災害 さいがい стихийное бедствие"," "," "," "," "," "]
                 },{   
                     "kanji" : "宿",
                     "onyomi" : "シュク",
                     "kunyomi" : "やど, やど.る, やど.す",
-                    "definition" : "inn, lodging, dwell, lodge, be pregnant, home, dwelling",
-                    "examples" : ["宿題 しゅくだい homework (n)","下宿 げしゅく boarding, lodging, boarding house (n, vs)","合宿 がっしゅく lodging together, boarding house (n, vs) "," "," "," "," "," "]
+                    "definition" : "пристанище, ночлег, гостиница",
+                    "examples" : ["宿題 しゅくだい домашнее задание","下宿 げしゅく съёмное жильё; ~suru квартировать, снимать комнату","合宿 がっしゅく жить вместе (в лагере и т. п. ), выезжать на сборы"," "," "," "," "," "]
                 },{
                     "kanji" : "察",
                     "onyomi" : "サツ",
                     "kunyomi" : "",
-                    "definition" : "guess, presume, surmise, judge, understand",
-                    "examples" : ["警察 けいさつ police (n)","察する さっする to guess, to sense, to presume, to judge, to sympathise with (suru verb - special class)","視察 しさつ inspection, observation (n, vs) "," "," "," "," "," "]
+                    "definition" : "догадка, предположение, инспекция, инспектировать",
+                    "examples" : ["警察 けいさつ полиция","察する さっする предполагать, представлять себе","視察 しさつ инспекция, осмотр"," "," "," "," "," "]
                 },{
                     "kanji" : "寺",
                     "onyomi" : "ジ",
                     "kunyomi" : "てら",
                     "definition" : "Buddhist temple",
-                    "examples" : ["寺 てら temple (Buddhist) (n)","寺院 じいん temple (n)","古寺 【コジ】 old temple "," "," "," "," "," "]
+                    "examples" : ["寺 てら буддийский храм","寺院 じいん буддийский храмовый комплекс, храм","古寺 【コジ】 старый буддийский храм"," "," "," "," "," "]
                 },{   
                     "kanji" : "対",
                     "onyomi" : "タイ, ツイ",
                     "kunyomi" : "あいて, こた.える, そろ.い, つれあ.い, なら.ぶ, むか.う",
-                    "definition" : "vis-a-vis, opposite, even, equal, versus, anti-, compare",
-                    "examples" : ["絶対 ぜったい absoluteness, absolute, unconditional, unmistakable (n, adj-no)","対決 たいけつ confrontation, showdown (n, vs)","対応 たいおう interaction, correspondence, coping with, dealing with, support (n, vs) "," "," "," "," "," "]
+                    "definition" : "противоположность; антоним, против,быть направленным против, парный комплект",
+                    "examples" : ["絶対 ぜったい абсолютно, категорически, безусловно","対決 たいけつ прямое противостояние, конфронтация; юр. очная ставка; ~suru противостоять друг другу","対応 たいおう 	соответствие, эквивалентность; ~suru соответствовать; (-ni) ~suru иметь дело, справляться с чем-л."," "," "," "," "," "]
                 },{   
                     "kanji" : "局",
                     "onyomi" : "キョク",
                     "kunyomi" : "つぼね",
-                    "definition" : "bureau, board, office, affair, conclusion, court lady, lady-in-waiting, her apartment",
-                    "examples" : ["結局 けっきょく after all, eventually (n-adv, n)","支局 しきょく branch office (n)","政局 せいきょく political situation (n) "," "," "," "," "," "]
+                    "definition" : "управление; бюро; департамент, комната придворной дамы, почтовое отделение; телефонная станция, положение, обстоятельства (в идиомах)",
+                    "examples" : ["結局 けっきょく в конце концов, в конечном счёте","支局 しきょく отделение, филиал (газеты, агентства и т. п. )","政局 せいきょく политическая ситуация"," "," "," "," "," "]
                 },{   
                     "kanji" : "岩",
                     "onyomi" : "ガン",
                     "kunyomi" : "いわ",
-                    "definition" : "boulder, rock, cliff",
-                    "examples" : ["岩石 ガンセキ rock","砂岩 サガン sandstone","石灰岩 セッカイガン limestone "," "," "," "," "," "]
+                    "definition" : "скала, утёс",
+                    "examples" : ["岩石 ガンセキ камень, скала","砂岩 サガン камень, скала; камни и скалы; в сочетаниях каменный","石灰岩 セッカイガン известняк"," "," "," "," "," "]
                 },{   
                     "kanji" : "岸",
                     "onyomi" : "ガン",
                     "kunyomi" : "きし",
-                    "definition" : "beach",
-                    "examples" : ["海岸 かいがん coast, beach (n)","岸 きし bank, coast, shore (n)","河岸 かし river bank, riverside, fish market (n) "," "," "," "," "," "]
+                    "definition" : "берег",
+                    "examples" : ["海岸 かいがん морской берег, побережье","岸 きし берег","河岸 かし берег реки; набережная, рыбный рынок"," "," "," "," "," "]
                 }
             ],
     "Ур. 11" : 
@@ -649,61 +649,61 @@ const N3 = {
                     "kanji" : "島",
                     "onyomi" : "トウ",
                     "kunyomi" : "しま",
-                    "definition" : "island",
-                    "examples" : ["半島 はんとう peninsula (n)","列島 れっとう archipelago, chain of islands (n)","広島 【ひろしま】 Hiroshima (city), atomic bombing of Hiroshima "," "," "," "," "," "]
+                    "definition" : "остров",
+                    "examples" : ["半島 はんとう полуостров","列島 れっとう архипелаг","広島 ひろしま г.Хиросима"," "," "," "," "," "]
                 },{
                     "kanji" : "州",
                     "onyomi" : "シュウ, ス",
                     "kunyomi" : "す",
-                    "definition" : "state, province",
-                    "examples" : ["中州 なかす sandbank (in a river), sandbar","州政府 シュウセイフ state government","州 【す】 sandbank, sandbar "," "," "," "," "," "]
+                    "definition" : "провинция, область, штат",
+                    "examples" : ["中州 なかす отмель","州政府 シュウセイフ правительство штата","州 す мель, отмель"," "," "," "," "," "]
                 },{
                     "kanji" : "巣",
                     "onyomi" : "ソウ",
                     "kunyomi" : "す, す.くう",
-                    "definition" : "nest, rookery, hive, cobweb, den",
-                    "examples" : ["巣食う 【すくう】 to build (a nest), to nest, to haunt (a place), to hang out (somewhere)","巣穴 【スアナ】 nesting hole, burrow, den","病巣 【ビョウソウ】 focus, nidus, lesion "," "," "," "," "," "]
+                    "definition" : "гнездо; улей; нора, логово, берлога;паутина; нерестилище; перен. притон",
+                    "examples" : ["巣食う すくう вить гнездо, гнездиться","巣穴 スアナ нора","病巣 ビョウソウ мед. очаг, фокус (поражения, воспаления и т. п. )"," "," "," "," "," "]
                 },{   
                     "kanji" : "差",
                     "onyomi" : "サ",
                     "kunyomi" : "さ.す, さ.し",
-                    "definition" : "distinction, difference, variation, discrepancy, margin, balance",
-                    "examples" : ["格差 かくさ qualitative difference, disparity (n)","誤差 ごさ measurement error, calculation error (n)","差し引き さしひき deduction, subtraction, balance, ebb and flow, rise and fall (n) "," "," "," "," "," "]
+                    "definition" : "разница, отличие, линейка, раскрывать над собой (зонтик)",
+                    "examples" : ["格差 かくさ разница (в уровне, качестве, цене и т. п. )","誤差 ごさ погрешность, отклонение (при вычислениях)","差し引き さしひき остаток, баланс, вычет; прилив и отлив"," "," "," "," "," "]
                 },{
                     "kanji" : "希",
                     "onyomi" : "キ, ケ",
                     "kunyomi" : "まれ",
-                    "definition" : "hope, beg, request, pray, beseech, Greece, dilute (acid), rare, few, phenomenal",
-                    "examples" : ["希 まれ rare, seldom (adj-na)","類稀 【たぐいまれ】 unique, rare, exceptional, unparalleled, incomparable","ごく稀 【ごくまれ】 extremely rare "," "," "," "," "," "]
+                    "definition" : "редкий, редкостный, умолять, просить, желать, надеяться; кн. искренне желаю, чтобы. . .",
+                    "examples" : ["希 まれ редкий, редкостный","類稀 たぐいまれ уникальный, крайне редкий","ごく稀 ごくまれ очень редкий"," "," "," "," "," "]
                 },{
                     "kanji" : "席",
                     "onyomi" : "セキ",
                     "kunyomi" : "むしろ",
-                    "definition" : "seat, mat, occasion, place",
-                    "examples" : ["客席 きゃくせき guest seating (n)","欠席 けっせき absence, non-attendance (n, vs)","出席 しゅっせき attendance, presence (n, vs) "," "," "," "," "," "]
+                    "definition" : "место, сидение, помещение, зал; эстрадный театр Ёсэ",
+                    "examples" : ["客席 きゃくせき guest seating (n)","欠席 けっせき место (в театре и т. п. ); пассажирское сидение (в такси и т. п. )","出席 しゅっせき посещение (занятий и т. п. ); присутствие"," "," "," "," "," "]
                 },{   
                     "kanji" : "帯",
                     "onyomi" : "タイ",
                     "kunyomi" : "お.びる, おび",
-                    "definition" : "sash, belt, obi, zone, region",
-                    "examples" : ["温帯 おんたい temperate zone (n)","地帯 ちたい area, zone (n)","携帯 ケータイ something carried (in the hand), handheld, mobile telephone, cell phone (n, vs, n) "," "," "," "," "," "]
+                    "definition" : "пояс, осить (меч и т. п. ), быть облечённым (властью и т. п. ), носить, иметь (оттенок, привкус)",
+                    "examples" : ["温帯 おんたい умеренный климатический пояс","地帯 ちたい зона, область, пояс, полоса","携帯 ケータイ носить (иметь) при себе, брать с собой; переносной, мобильный; смартфон"," "," "," "," "," "]
                 },{   
                     "kanji" : "帳",
                     "onyomi" : "チョウ",
                     "kunyomi" : "とばり",
-                    "definition" : "notebook, account book, album",
-                    "examples" : ["通帳 つうちょう passbook, bankbook (n)","台帳 ダイチョウ account book, ledger, register","帳消し チョウケシ writing off (a debt), cancellation, balancing the books, cancelling out (gains or losses), making even, making up (for), offsetting, undoing, wiping out "," "," "," "," "," "]
+                    "definition" : "книга для записей, альбом, занавеска",
+                    "examples" : ["通帳 つうちょう банковская книжка","台帳 ダイチョウ гроссбух, регистр; кадастр; постановочный текст пьесы","帳消し チョウケシ аннулирование, списание; ~ni suru аннулировать, списывать, зачёркивать"," "," "," "," "," "]
                 },{   
                     "kanji" : "平",
                     "onyomi" : "ヘイ, ビョウ, ヒョウ",
                     "kunyomi" : "たい.ら, -だいら, ひら, ひら-",
-                    "definition" : "even, flat, peace",
-                    "examples" : ["不公平 ふこうへい unfairness, injustice, partiality (adj-na, n)","水平線 すいへいせん horizon (related to sea or lakes) (n)","地平線 ちへいせん horizon (related to land) (n) "," "," "," "," "," "]
+                    "definition" : "плоский, гладкий, ровный, спокойный, обычный, равнина; усмирять, подавлять",
+                    "examples" : ["不公平 ふこうへい нечестный, несправедливый; пристрастный","水平線 すいへいせん горизонт над водой","地平線 ちへいせん горизонт, линия горизонта над землёй"," "," "," "," "," "]
                 },{   
                     "kanji" : "幸",
                     "onyomi" : "コウ",
                     "kunyomi" : "さいわ.い, さち, しあわ.せ",
-                    "definition" : "happiness, blessing, fortune",
+                    "definition" : "счастье",
                     "examples" : ["幸い さいわい happiness, blessedness (adj-na, adv, n)","幸福 こうふく happiness, blessedness (adj-na, n)","不幸 ふこう unhappiness, sorrow, misfortune, disaster, accident, death (adj-na, n) "," "," "," "," "," "]
                 }
             ],
