@@ -39,8 +39,8 @@ $(document).ready(function() {
     $(document).on('click', '.volume-ctrl', function() {
         var muted = $("#audio-src").prop('muted');
       
-        // $("#audio-src").prop('muted', !muted);
-$("#audio-src").prop('muted', muted);
+         $("#audio-src").prop('muted', !muted);
+
         
         if(!muted) {
             $(this).addClass("play").removeClass("pause");
