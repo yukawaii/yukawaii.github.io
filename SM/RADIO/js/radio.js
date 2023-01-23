@@ -42,9 +42,10 @@ $(document).ready(function() {
 
         if(!muted) {
             $(this).addClass("play").removeClass("pause");
+myAdd1();
         } else {
             $(this).addClass("pause").removeClass("play");
-myAdd1();
+
             
         }
     });
