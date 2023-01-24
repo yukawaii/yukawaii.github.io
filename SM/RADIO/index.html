@@ -15,86 +15,15 @@
 	  background-color: #c7b39b
 	 }
 /* Стили кнопки */
-*:focus {
-    outline: 0 !important;
-}
-         .div-1 {
-        background-color: #474545;
-    }    
-    .btn:link,
-    button:focus { outline: none; }
-.btn:visited {
- 
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 1px 0px;
-    display: inline-block;
-    border-radius: 1px;
-    transition: all .2s;
-    position: absolute;
-}
 
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
-}
-
-.btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
-}
-
-.btn-white {
-    background-color: #fff;
-    color: #777;
-}
-
-.btn::after {
-    content: "";
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    border-radius: 1px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transition: all .4s;
-}
-
-.btn-white::after {
-    background-color: #fff;
-}
-
-.btn:hover::after {
-    transform: scaleX(1.4) scaleY(1.6);
-    opacity: 0;
-}
-
-.btn-animated {
-    animation: moveInBottom 5s ease-out;
-    animation-fill-mode: backwards;
-}
-
-@keyframes moveInBottom {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-}
 </style>
 </head>
 <body>
 
 	<script src = "./App.js"></script>
   <div class="div-1"> <center>
-        <button class = "btn btn-white btn-        animate" onclick="joingroup();" style="border-radius: 100px;  background-color: transparent;"><img id="jg"  src="./img/group.png"  width="25" height="25"/></button>
-        <button class = "btn btn-white btn-        animate" onclick="infr();"  style="border-radius: 100px; background-color: transparent;"><img id="jg" src="./img/fr.png"  width="25" height="25"/></button>
+        <button class = "btn" onclick="joingroup();" style="border-radius: 100px;  background-color: transparent;"><img id="jg"  src="./img/group.png"  width="25" height="25"/></button>
+        <button class = "btn" onclick="infr();"  style="border-radius: 100px; background-color: transparent;"><img id="jg" src="./img/fr.png"  width="25" height="25"/></button>
          </center> </div>
 <div><center>
 <button class="btn" onclick=""window.location.href = './index1.html';"">
