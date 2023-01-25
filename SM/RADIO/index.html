@@ -22,7 +22,7 @@
   justify-content: center;
 }
 
-.button1 {
+.button {
   min-width: 300px;
   min-height: 60px;
   font-family: 'Nunito', sans-serif;
@@ -43,7 +43,7 @@ background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 10
   padding: 10px;
   }
 
-button1::before {
+button::before {
 content: '';
   border-radius: 1000px;
   min-width: calc(300px + 12px);
@@ -58,16 +58,16 @@ content: '';
   transition: all .3s ease-in-out 0s;
 }
 
-.button1:hover, .button:focus {
+.button:hover, .button:focus {
   color: #313133;
   transform: translateY(-6px);
 }
 
-button1:hover::before, button:focus::before {
+button:hover::before, button:focus::before {
   opacity: 1;
 }
 
-button1::after {
+button::after {
   content: '';
   width: 30px; height: 30px;
   border-radius: 100%;
@@ -80,7 +80,7 @@ button1::after {
   animation: ring 1.5s infinite;
 }
 
-button1:hover::after, button:focus::after {
+button:hover::after, button:focus::after {
   animation: none;
   display: none;
 }
@@ -115,7 +115,7 @@ button1:hover::after, button:focus::after {
 	</div>
 <br> <br>
 <div class="wrap">
-  <button class="button1" onclick="window.location.href = './index1.html';">Запустить радио</button>
+  <button class="button" onclick="window.location.href = './index1.html';">Запустить радио</button>
 </div>
 </body>
 </html>
