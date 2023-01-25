@@ -1,17 +1,17 @@
-[{"name":"Япония","channels":[{"map":"r_PK61Dt","href":"/listen/coop-radio/r_PK61Dt","title":"Камэяма","subtitle":" ","id":"1674031155553","name":"Камэяма","src":"https://radio.garden/api/ara/content/listen/3Zw4BXZR/channel.mp3?1674031155553"},
+[{"name":"Япония","channels":[{"map":"r_PK61Dt","href":"/listen/coop-radio/3Zw4BXZR","title":"Камэяма","subtitle":" ","id":"1674031155553","name":"Камэяма","src":"https://radio.garden/api/ara/content/listen/3Zw4BXZR/channel.mp3?1674031155553"},
 
-{"map":"99999","href":"/listen/free-fm/fo8bhE4s","title":"Осака","subtitle":" ","id":"1674031363282","name":"Осака","src":"http://radio.garden/api/ara/content/listen/GUNJYSam/channel.mp3?1674031363282"},
+{"map":"99999","href":"/listen/free-fm/GUNJYSam","title":"Осака","subtitle":" ","id":"1674031363282","name":"Осака","src":"http://radio.garden/api/ara/content/listen/GUNJYSam/channel.mp3?1674031363282"},
 
 {"href":"/listen/hirufm/xyIbSGbn","title":"Кобэ","id":"1674031857667","name":"Кобэ","src":"https://radio.garden/api/ara/content/listen/VBZNZCLB/channel.mp3?1674031857667"},
 
-{"map":"Асия","href":"/listen/hirufm/xyIbSGbn","title":"Асия","subtitle":" ","id":"1674031924165","name":"Асия","src":"https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?1674031924165"},
-{"map":"xu3Wcxh7","href":"/listen/lakhanda/xu3Wcxh7","title":"Кахоку","subtitle":" ","id":"1674032043151","name":"Кахоку","src":"http://radio.garden/api/ara/content/listen/T-biqYed/channel.mp3?1674032043151"},
+{"map":"Асия","href":"/listen/hirufm/agGPOrdP","title":"Асия","subtitle":" ","id":"1674031924165","name":"Асия","src":"https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?1674031924165"},
+{"map":"xu3Wcxh7","href":"/listen/lakhanda/T-biqYed","title":"Кахоку","subtitle":" ","id":"1674032043151","name":"Кахоку","src":"http://radio.garden/api/ara/content/listen/T-biqYed/channel.mp3?1674032043151"},
 
 {"map":"36c7Fdkm","href":"/listen/laksara/36c7Fdkm","title":"Ниигата","subtitle":" ","id":"1674032095888","name":"Ниигата","src":"http://radio.garden/api/ara/content/listen/pZRZwukg/channel.mp3?1674032095888"},
 
 {"href":"/listen/mindfm/-0aVvh68","title":"Ямагата","id":"1674032317065","name":"Ямагата","src":"https://radio.garden/api/ara/content/listen/ofMcMOvq/channel.mp3?1674032317065"},
 
-{"href":"/listen/muslim-vanoli/60EzDh8p","title":"Хамамацу","id":"1674032469254","name":"Хамамацу","src":"http://radio.garden/api/ara/content/listen/E_2LzNdE/channel.mp3?1674032469254"},
+{"href":"/listen/muslim-vanoli/60EzDh8p","title":"Хамамацу","id":"1674032469254","name":"Хамамацу","src":"http://radio.garden/api/ara/content/listen/E_2LzNdE/channel.mp3?1674641065506"},
 
 {"href":"/listen/neth-fm/WaFLj4e4","title":"Кисивада","id":"1674032605457","name":"Кисивада","src":"http://radio.garden/api/ara/content/listen/b2nTNOJr/channel.mp3?1674032605457"},
 
