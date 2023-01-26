@@ -704,7 +704,7 @@ const N3 = {
                     "onyomi" : "コウ",
                     "kunyomi" : "さいわ.い, さち, しあわ.せ",
                     "definition" : "счастье",
-                    "examples" : ["幸い さいわい happiness, blessedness (adj-na, adv, n)","幸福 こうふく happiness, blessedness (adj-na, n)","不幸 ふこう unhappiness, sorrow, misfortune, disaster, accident, death (adj-na, n) "," "," "," "," "," "]
+                    "examples" : ["幸い さいわい счастье, благополучие, удача","幸福 こうふく счастье, благополучие","不幸 ふこう несчастье, беда, горе"," "," "," "," "," "]
                 }
             ],
     "Ур. 12" :
@@ -713,50 +713,50 @@ const N3 = {
                     "kanji" : "底",
                     "onyomi" : "テイ",
                     "kunyomi" : "そこ",
-                    "definition" : "bottom, sole, depth, bottom price, base, kind, sort",
-                    "examples" : ["海底 かいてい bottom of the ocean (n)","底 そこ bottom, sole (n)","徹底 てってい thoroughness, completeness (n, vs) "," "," "," "," "," "]
+                    "definition" : "дно, донышко, днище, биржевый низкий курс; род, тип, сорт (непременно с определением)",
+                    "examples" : ["海底 かいてい дно океана","底 そこ дно","徹底 てってい 1.	~suru идти в чём-л. до конца, быть последовательным; ~shita последовательный; исчерпывающий, полный, окончательный; доскональный; радикальный 2.	~suru проникаться чем-л. ; ~saseru доводить (до сознания, до понимания, до полной ясности)"," "," "," "," "," "]
                 },{
                     "kanji" : "府",
                     "onyomi" : "フ",
                     "kunyomi" : "",
-                    "definition" : "borough, urban prefecture, govt office, representative body, storehouse",
-                    "examples" : ["政府 せいふ government, administration (n)","府庁 ふちょう prefectural office (n)","府立 ふりつ managed by an urban prefecture (adj-no, n) "," "," "," "," "," "]
+                    "definition" : "правительство, 1.	 город со статусом префектуры (Осака либо Киото) 2.	 центр, средоточие (в идиомах)",
+                    "examples" : ["政府 せいふ правительство","府庁 ふちょう префектуральное управление","府立 ふりつ управляемый городской префектурой  "," "," "," "," "," "]
                 },{
                     "kanji" : "庫",
                     "onyomi" : "コ, ク",
                     "kunyomi" : "くら",
-                    "definition" : "warehouse, storehouse",
-                    "examples" : ["冷蔵庫 れいぞうこ refrigerator (n)","文庫 ぶんこ library, book collection, paperback book (n)","車庫 しゃこ garage, car shed, carport (n) "," "," "," "," "," "]
+                    "definition" : "склад, хранилище, кладовая",
+                    "examples" : ["冷蔵庫 れいぞうこ холодильник","文庫 ぶんこ книжный фонд, книгохранилище, библиотека","車庫 しゃこ гараж, депо, парк "," "," "," "," "," "]
                 },{   
                     "kanji" : "庭",
                     "onyomi" : "テイ",
                     "kunyomi" : "にわ",
-                    "definition" : "courtyard, garden, yard",
-                    "examples" : ["家庭 かてい home, family, household (n)","校庭 こうてい schoolyard, campus (n)","市庭 いちば (town) market, (the) marketplace (n) "," "," "," "," "," "]
+                    "definition" : "сад, двор",
+                    "examples" : ["家庭 かてい семья, дом, домашний очаг","校庭 こうてい школьный двор","市庭 いちば рынок"," "," "," "," "," "]
                 },{
                     "kanji" : "康",
                     "onyomi" : "コウ",
                     "kunyomi" : "",
-                    "definition" : "ease, peace",
-                    "examples" : ["健康 けんこう health, sound, wholesome (adj-na, n)","小康 ショウコウ lull","安康 アンコウ calm and peaceful period of time "," "," "," "," "," "]
+                    "definition" : "здоровье, затишье",
+                    "examples" : ["健康 けんこう здоровье","小康 ショウコウ временное затишье, мед. ремиссия, временное успокоение","安康 アンコウ мирное и спокойное время, мир, спокойствие"," "," "," "," "," "]
                 },{
                     "kanji" : "式",
                     "onyomi" : "シキ",
                     "kunyomi" : "",
-                    "definition" : "style, ceremony, rite, function, method, system, form, expression",
-                    "examples" : ["形式的 けいしきてき formal (adj-na)","儀式 ぎしき ceremony, rite, ritual, service (n)","株式 かぶしき stock (company) (n) "," "," "," "," "," "]
+                    "definition" : "церемония, стиль, модель, система, мат.формула",
+                    "examples" : ["形式的 けいしきてき формальный","儀式 ぎしき церемония, обряд, ритуал","株式 かぶしき акция, пай "," "," "," "," "," "]
                 },{   
                     "kanji" : "弓",
                     "onyomi" : "キュウ",
                     "kunyomi" : "ゆみ",
-                    "definition" : "bow, bow (archery, violin)",
-                    "examples" : ["弓 ゆみ bow (and arrow) (n)","大弓 だいきゅう bow, longbow","弓矢 ゆみや bow and arrow, weapon, arms "," "," "," "," "," "]
+                    "definition" : "лук (оружие), муз. смычок, стрельба из лука",
+                    "examples" : ["弓 ゆみ лук (и стрелы)","大弓 だいきゅう длинный лук (оружие)","弓矢 ゆみや лук и стрелы"," "," "," "," "," "]
                 },{   
                     "kanji" : "当",
                     "onyomi" : "トウ",
                     "kunyomi" : "あ.たる, あ.たり, あ.てる, あ.て, まさ.に, まさ.にべし",
-                    "definition" : "hit, right, appropriate, himself",
-                    "examples" : ["正当 せいとう just, justifiable, right, due, proper, equitable, reasonable, legitimate, legal, lawful (adj-na, n)","該当 がいとう corresponding, answering to, coming under, applying to (n, vs)","割当てる わりあてる to assign, to allot, to allocate, to divide among, to distribute, to prorate (Ichidan verb, vt) "," "," "," "," "," "]
+                    "definition" : "Данный, попадание в цель, иметь успех, улика, ожидания, надежды, цели; уместность, правильность; сказанное наобум; игра в угадывание",
+                    "examples" : ["正当 せいとう правильный, надлежащий, уместный, разумный; справедливый; законный","該当 がいとう 1.	попадать (под статью закона) 2.	соответствовать чему-л. ; удовлетворять (условиям и т. п. )","割当てる わりあてる распределять, раскладывать [на нескольких] (расходы и т. п. ) "," "," "," "," "," "]
                 },{   
                     "kanji" : "形",
                     "onyomi" : "ケイ, ギョウ",
