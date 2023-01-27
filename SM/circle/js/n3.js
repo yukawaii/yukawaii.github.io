@@ -840,9 +840,9 @@ const N3 = {
                 {   
                     "kanji" : "感",
                     "onyomi" : "カン",
-                    "kunyomi" : "emotion, feeling, sensation",
+                    "kunyomi" : "эмоции, чувства, чувствовать, ощущать",
                     "definition" : "",
-                    "examples" : ["感じる かんじる to feel, to sense, to experience (Ichidan verb, intransitive verb)","感覚 かんかく sense, sensation (n, vs)","感謝 かんしゃ thanks, gratitude (adj-na, n, vs) "," "," "," "," "," "]
+                    "examples" : ["感じる かんじる чувствовать, ощущуать, быть тронутым","感覚 かんかく чувство чего-л. , ощущение; ~no aru чувствительный, воспринимающий; ~no nai нечувствительный; в сочетаниях сенсорный, чувствительный","感謝 かんしゃ благодарность, признательность; ~suru благодарить, выражать признательность "," "," "," "," "," "]
                 },{
                     "kanji" : "成",
                     "onyomi" : "セイ, ジョウ",
