@@ -761,14 +761,14 @@ const N3 = {
                     "kanji" : "形",
                     "onyomi" : "ケイ, ギョウ",
                     "kunyomi" : "かた, -がた, かたち, なり",
-                    "definition" : "shape, form, style",
-                    "examples" : ["形見 かたみ memento, souvenir (n)","形式 けいしき form, formality, format, appearance, mode, math expression (n)","形容詞 けいようし (true) adjective, i-adjective (n) "," "," "," "," "," "]
+                    "definition" : "формаль, стиль, фасон, фигура, узор, формат, размер; залог, заклад",
+                    "examples" : ["形見 かたみ сувенир","形式 けいしき форма, внешняя форма, формальность","形容詞 けいようし прилагательное"," "," "," "," "," "]
                 },{   
                     "kanji" : "役",
                     "onyomi" : "ヤク, エキ",
                     "kunyomi" : "",
-                    "definition" : "duty, war, campaign, drafted labor, office, service, role",
-                    "examples" : ["区役所 くやくしょ ward office, council (regional) (n)","現役 げんえき active duty, active service (n)","主役 しゅやく leading part, leading actor (actress) (n) "," "," "," "," "," "]
+                    "definition" : "роль, служба, должность, обязанности, карты у игрока, карточная раздача; война, военная кампания, поход, битва; трудовая повинность, мобилизовать на принудительную работу",
+                    "examples" : ["区役所 くやくしょ районная администрация","現役 げんえき действительная военная служба","主役 しゅやく главная роль; ведущий актёр","役に立つ やくにたつ годиться, быть пригодным"," "," "," "," "]
                 }
             ],
     "Ур. 13" : 
@@ -778,31 +778,31 @@ const N3 = {
                     "onyomi" : "ケイ",
                     "kunyomi" : "みち, こみち, さしわたし, ただちに",
                     "definition" : "diameter, path, method",
-                    "examples" : ["径 みち road, street, way, method (n)","半径 はんけい radius (n)","径 ケイ diameter "," "," "," "," "," "]
+                    "examples" : ["径 みち дорога, путь","半径 はんけい радиус","径 ケイ кратчайшее расстояние; диаметр"," "," "," "," "," "]
                 },{
                     "kanji" : "徒",
                     "onyomi" : "ト",
                     "kunyomi" : "いたずら, あだ",
-                    "definition" : "junior, emptiness, vanity, futility, uselessness, ephemeral thing, gang, set, party, people",
-                    "examples" : ["生徒 せいと pupil (n)","徒歩 とほ walking, going on foot (n)","いたずら書き 【いたずらがき】 scribbling, doodling, graffiti "," "," "," "," "," "]
+                    "definition" : "последователь, ученик; напрасно, попусту, бесполезный; всего лишь, только, просто...; человек, группа ",
+                    "examples" : ["生徒 せいと ученик","徒歩 とほ пешком, арх. пеший воин","いたずら書き いたずらがき каракули, мазня","仏教徒 ぶっきょうと буддист"," "," "," "," "]
                 },{
                     "kanji" : "得",
                     "onyomi" : "トク",
                     "kunyomi" : "え.る, う.る",
-                    "definition" : "gain, get, find, earn, acquire, can, may, able to, profit, advantage, benefit",
-                    "examples" : ["所得 しょとく income, earnings (n)","取得 しゅとく acquisition (n, vs)","拾得 しゅうとく picking up, finding (n, vs) "," "," "," "," "," "]
+                    "definition" : "прибыль, выгода, получать, завоёвывать, ",
+                    "examples" : ["所得 しょとく доходы, поступления","取得 しゅとく приобретение, получать, приобретать, доставать","拾得 しゅうとく найти, поднять, подобрать"," "," "," "," "," "]
                 },{   
                     "kanji" : "必",
                     "onyomi" : "ヒツ",
                     "kunyomi" : "かなら.ず",
-                    "definition" : "invariably, certain, inevitable",
-                    "examples" : ["必ず かならず necessarily, certainly, without fail, positively, invariably (adv)","必然 ひつぜん inevitable, necessary (n)","必須 ひっす indispensable, required (adj-na, n) "," "," "," "," "," "]
+                    "definition" : "непременно, обязательно, определённо",
+                    "examples" : ["必ず かならず непременно, обязательно","必然 ひつぜん обязательный; непременный; необходимый; неизбежный","必須 ひっす необходимый, обязательный, принципиально важный","必見　ひっけん стоящий просмотра, стоящий того, чтобы увидеть "," "," "," "," "]
                 },{
                     "kanji" : "念",
                     "onyomi" : "ネン",
                     "kunyomi" : "",
                     "definition" : "wish, sense, idea, thought, feeling, desire, attention",
-                    "examples" : ["記念日 きねんび holiday, anniversary, memorial day (n)","概念 がいねん general idea, concept, notion (n)","懸念 けねん worry, fear, anxiety, concern (n, vs) "," "," "," "," "," "]
+                    "examples" : ["記念日 きねんび holiday, anniversary, memorial day (n)","概念 がいねん general idea, concept, notion (n)","懸念 けねん опасение, беспокойство, тревога, опасаться"," "," "," "," "," "]
                 },{
                     "kanji" : "息",
                     "onyomi" : "ソク",
