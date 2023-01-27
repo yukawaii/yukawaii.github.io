@@ -801,38 +801,38 @@ const N3 = {
                     "kanji" : "念",
                     "onyomi" : "ネン",
                     "kunyomi" : "",
-                    "definition" : "wish, sense, idea, thought, feeling, desire, attention",
-                    "examples" : ["記念日 きねんび holiday, anniversary, memorial day (n)","概念 がいねん general idea, concept, notion (n)","懸念 けねん опасение, беспокойство, тревога, опасаться"," "," "," "," "," "]
+                    "definition" : "мысль, сознание, чувство, внимание, забота, желание; на всякий случай, для верности; иметь в мыслях, думать; будд. каждое мгновение; в сочетаниях непрестанный",
+                    "examples" : ["記念日 きねんび памятный день, праздник","概念 がいねん общее понятие, концепция","懸念 けねん опасение, беспокойство, тревога, опасаться"," "," "," "," "," "]
                 },{
                     "kanji" : "息",
                     "onyomi" : "ソク",
                     "kunyomi" : "いき",
-                    "definition" : "breath, respiration, son, interest (on money)",
-                    "examples" : ["休息 きゅうそく rest, relief, relaxation (n, vs)","消息 しょうそく news, letter, circumstances (n)","息切れ いきぎれ shortness of breath (n, vs) "," "," "," "," "," "]
+                    "definition" : "дыхание, вздох, дышать, переводить дух, взядыхать; напрягаться, тужиться, родовые потуги; сын ",
+                    "examples" : ["休息 きゅうそく отдых, покой, отдыхать,","消息 しょうそく известия, сведения, данные, новости","息切れ いきぎれ одышка, прерывистое дыхание; ~ga suru задыхаться, страдать одышкой"," "," "," "," "," "]
                 },{   
                     "kanji" : "悲",
                     "onyomi" : "ヒ",
                     "kunyomi" : "かな.しい, かな.しむ",
-                    "definition" : "jail cell, grieve, sad, deplore, regret",
-                    "examples" : ["悲鳴 ひめい shriek, scream (n, vs)","悲劇 ひげき tragedy, disaster (n)","悲観 ひかん pessimism, disappointment (n, vs) "," "," "," "," "," "]
+                    "definition" : "печальный, грустный, грустить, грусть, скорбь, горевать",
+                    "examples" : ["悲鳴 ひめい вопль, крик","悲劇 ひげき драма, трагедия","悲観 ひかん пессимизм, разочарование "," "," "," "," "," "]
                 },{   
                     "kanji" : "想",
                     "onyomi" : "ソウ, ソ",
                     "kunyomi" : "おも.う",
-                    "definition" : "concept, think, idea, thought",
-                    "examples" : ["感想 かんそう impressions, thoughts (n, vs)","回想 かいそう reflection, reminiscence (n, vs)","構想 こうそう plan, plot, idea, conception (n, vs) "," "," "," "," "," "]
+                    "definition" : "мысль, идея, думать, представлять себе, воспоминание, воображение",
+                    "examples" : ["感想 かんそう впечатления от чего-л.","回想 かいそう воспоминаниe, реминисценция; ~suru вспоминать","構想 こうそう идея, концепция, замысел, план"," "," "," "," "," "]
                 },{   
                     "kanji" : "愛",
                     "onyomi" : "アイ",
                     "kunyomi" : "いと.しい",
-                    "definition" : "love, affection, favourite",
-                    "examples" : ["愛情 あいじょう love, affection (n)","愛する あいする to love (suru verb - special class, vt)","愛しい いとしい lovely, dear, beloved, darling (adj) "," "," "," "," "," "]
+                    "definition" : "любовь, симпатия, любимый, любить, ценить, восхищаться, милый, хорошенький",
+                    "examples" : ["愛情 あいじょう любовное чувство","愛する あいする любить","愛しい いとしい любимый, дорогой; бедный, жалкий "," "," "," "," "," "]
                 },{   
                     "kanji" : "指",
                     "onyomi" : "シ",
                     "kunyomi" : "ゆび, さ.す, -さ.し",
-                    "definition" : "finger, point to, indicate, put into, play (chess), measure (ruler)",
-                    "examples" : ["指 ゆび finger (n)","指す さす to point, to nominate, to select someone, to specify some person, to identify, to indicate, to point out (v5s, vt)","指示 しじ indication, instruction, designation, directions (n, vs) "," "," "," "," "," "]
+                    "definition" : "палец, указывать пальцем, ходить в шахматах",
+                    "examples" : ["指 ゆび палец","指す さす указывать на что-то, ходить в шахматах","指示 しじ указание, директива "," "," "," "," "," "]
                 }
             ],
     "Ур. 14" :
