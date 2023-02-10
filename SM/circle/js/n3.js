@@ -970,49 +970,49 @@ const N3 = {
                     "kanji" : "昨",
                     "onyomi" : "サク",
                     "kunyomi" : "",
-                    "definition" : "yesterday, previous",
-                    "examples" : ["一昨日 おととい day before yesterday (n-adv, n-t)","一昨年 おととし year before last (n-adv, n-t)","昨年 さくねん last year (n-adv, n-t) "," "," "," "," "," "]
+                    "definition" : "вчера, ранее, предыдущий",
+                    "examples" : ["一昨日 おととい позавчера","一昨年 おととし позапрошлый год","昨年 さくねん прошлый год, в прошлом году "," "," "," "," "," "]
                 },{
                     "kanji" : "昭",
                     "onyomi" : "ショウ",
                     "kunyomi" : "",
-                    "definition" : "shining, bright",
-                    "examples" : ["昭和 しょうわ Showa era (1926.12.25-1989.1.7) (n)","昭昭 ショウショウ clear, bright, plain, obvious"," "," "," "," "," "," "]
+                    "definition" : "светлый, сверкающий",
+                    "examples" : ["昭和 しょうわ эпоха Сёва (1926.12.25-1989.1.7) ","昭昭 ショウショウ ясный","昭代 しょうだい (возвыш.) эра процветания  "," "," "," "," "," "]
                 },{
                     "kanji" : "景",
                     "onyomi" : "",
                     "kunyomi" : "ケイ",
-                    "definition" : "scenery, view",
-                    "examples" : ["景色 けしき scenery, scene, landscape (n)","背景 はいけい background, scenery, setting, circumstance (n)","景気 けいき condition, state, business (condition) (n) "," "," "," "," "," "]
+                    "definition" : "пейзаж, вид",
+                    "examples" : ["景色 けしき пейзаж, вид","背景 はいけい фон, задний план, задник, тыл","景気 けいき состояние рынка, бизнеса, конъюктура; бодрость, живость; дела "," "," "," "," "," "]
                 },{   
                     "kanji" : "晴",
                     "onyomi" : "セイ",
                     "kunyomi" : "は.れる, は.れ, は.れ-, -ば.れ, は.らす",
-                    "definition" : "clear up",
-                    "examples" : ["素晴しい すばらしい wonderful, splendid, magnificent (adj)","快晴 かいせい good weather (n)","晴天 せいてん fine weather (n) "," "," "," "," "," "]
+                    "definition" : "ясная погода, проясняться",
+                    "examples" : ["素晴しい すばらしい замечательный","快晴 かいせい хорошая приятная погода","晴天 せいてん ясная погода "," "," "," "," "," "]
                 },{
                     "kanji" : "曲",
                     "onyomi" : "キョク",
                     "kunyomi" : "ま.がる, ま.げる",
-                    "definition" : "bend, music, melody, composition, pleasure, injustice, fault, curve, crooked, perverse, lean",
-                    "examples" : ["曲る まがる to bend, to curve, to warp, to wind, to twist, to turn, to be awry, to be askew, to be crooked (v5r, intransitive verb)","曲り角 まがりかど street corner, road turn, bend in the road, turning point (n)","歌謡曲 かようきょく popular song (n) "," "," "," "," "," "]
+                    "definition" : "мелодия; поворот, поворачивать, сгибать, гнуться; ''кусэ'', часть представления в театре Но",
+                    "examples" : ["曲る まがる поворачивать, огибать; гнуться, быть изогнутым","曲り角 まがりかど 1.	угол (улицы); поворот (дороги) 2.перен. поворотный пункт (момент)","歌謡曲 かようきょく современная японская поп-музыка"," "," "," "," "," "]
                 },{
                     "kanji" : "最",
                     "onyomi" : "サイ, シュ",
                     "kunyomi" : "もっと.も, つま",
-                    "definition" : "utmost, most, extreme",
-                    "examples" : ["最も もっとも most, extremely (adv)","最悪 さいあく the worst (adj-na, n)","最近 さいきん latest, most recent, nowadays (adj-no, n-adv, n-t) "," "," "," "," "," "]
+                    "definition" : "самый, наиболее",
+                    "examples" : ["最も もっとも наиболее, самый","最悪 さいあく наихудший, хуже всего; отстой","最近 さいきん недавно, в последнее время "," "," "," "," "," "]
                 },{   
                     "kanji" : "望",
                     "onyomi" : "ボウ, モウ",
                     "kunyomi" : "のぞ.む, もち",
-                    "definition" : "ambition, full moon, hope, desire, aspire to, expect",
-                    "examples" : ["冀望 きぼう hope, wish, aspiration (n, vs)","待望 たいぼう expectant waiting, long-awaited (n, vs, adj-no)","絶望 ぜつぼう despair, hopelessness (n, vs) "," "," "," "," "," "]
+                    "definition" : "желать, надеяться, видеть вдалеке; полнолуние",
+                    "examples" : ["冀望 (希望)きぼう надежда","待望 たいぼう ожидания и надежды, долгожданный","絶望 ぜつぼう отчаяние, безнадёжный, терять надежду, отчаиваться"," "," "," "," "," "]
                 },{   
                     "kanji" : "期",
                     "onyomi" : "キ, ゴ",
                     "kunyomi" : "",
-                    "definition" : "period, time, date, term",
+                    "definition" : "период",
                     "examples" : ["学期 がっき school term, semester (n)","期間 きかん period, term (n)","期限 きげん term, period, time frame, time limit, deadline, cutoff (date) (n) "," "," "," "," "," "]
                 },{   
                     "kanji" : "未",
