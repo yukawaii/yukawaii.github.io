@@ -14,7 +14,7 @@
 <body>
 
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-
+    <div class="overlay"></div>    <div class="phone-screen">
     <div id="main-container">
         <h1 class="heading1">漢字 <span class="divider">|</span> YuKawaii's Kanji beta</h1>
         <div> <center>
@@ -30,8 +30,7 @@
             </script>
 		<button onclick = "myalert()">Как заниматься?</button> 
   </center>
-            </div>
-        </div> <center>
+            <center>
         <details>    
           <summary> <h3>Стругова Е.В., Шефтелевич Н.С. Том 1. </h3></summary>
       		<div class="dropdown">
@@ -69,19 +68,21 @@
 	    </div>
 </div>
 	  -->
-               </div>
+            
               </details>
 
                <details>
                 <summary> <h3>皆の日本語中級２</h3></summary>
                 <div class="dropdown">
-                  <button class="dropbtn">Уроки 13-18</button>
+                  <button class="dropbtn">Уроки 13-23</button>
                   <div class="dropdown-content">
               <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/13.html';">Урок 13</button><br>
                         <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/13-15.html';">13-15</button><br>
 			           <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/17.html';">Урок 17</button><br>
 			             <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/18.html';">Урок 18</button><br>
 			           <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/19.html';">Урок 19</button><br>
+ <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/22.html';">Урок 22</button><br>
+ <button class = "mybtn" onclick="myAdd1(); window.location.href = '../MNNchyu2/23goi.html';">23 Лексика</button><br>
                         <!-- 
                 <div class="dropdown">
                   <button class="dropbtn">Уроки 11-20</button>
@@ -128,7 +129,7 @@
 
 
      <h3> Раздел находится в разработке. Другие уроки добавляются. <p>Следите за обновлениями!</p> </h3>
-    </center>
+ <!-- </center>
            <div id="niz0"> 
          <center>  <button id="vic-mode" class="" onclick="myAdd1(); window.location.href = '../../index2.html';">Викторина</button>
             <button class = "mybtn" onclick="window.location.href = '../../index.html';">В начало</button>   
@@ -139,7 +140,7 @@
     <footer>
     <p> 2022 | YuKawaii's games <br> https://vk.com/yugamess</a></p>
     </footer>  
-  </div> 
+  </div>  -->  
      <script>
         // Sends event to client
         vkBridge.send('VKWebAppInit');
@@ -224,6 +225,48 @@ function getinfo(){
 
 </script>
 
+<div class="button-menu button-menu1" onclick="document.querySelector('.phone-screen').classList.toggle('active')">
+  <svg style="color: #91ee7a" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-filter-circle-fill" viewBox="0 0 16 16"> <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM3.5 5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1zM5 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z" fill="green"></path> </svg>
+  </div>
+  
+  <div class="menu" onclick="document.querySelector('.phone-screen').classList.remove('active')">
+    <div class="option" onclick="window.location.href = '../../cards.html';">
+      <svg class="food" xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 16 16" data-name="Camada 1">
+        <title>Sushi</title>
+        <path d="M0 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2H2a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H2z"/>         </svg>
+      <div class="japanese">カード</div>
+      <div class="roman">Карточки</div>
+    </div>
+    <div class="option" onclick="window.location.href = './0.html';">
+      <svg class="food" xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 16 16" data-name="Camada 1">
+        <title>Тесты</title>
+        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/> <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>         </svg>
+      <div class="japanese">テスト</div>
+      <div class="roman">Тесты</div>
+    </div>
+    <div class="option" onclick="window.location.href = '../../index2.html';">
+      <svg class="food" xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 16 16" data-name="Camada 1" >
+        <title>Викторина</title>
+        <path d="M14 10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/> <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM14 3a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/> <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>        </svg>
+      <div class="japanese">クイズ</div>
+      <div class="roman">Викторина</div>
+    </div>
+    <div class="option" onclick="window.location.href = '../../games/grafs/grafs.html';">
+      <svg class="food" xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 16 16" data-name="Camada 1">
+        <title>Паутинка</title>
+        <path fill-rule="evenodd" d="M0 10.5A1.5 1.5 0 0 1 1.5 9h1A1.5 1.5 0 0 1 4 10.5v1A1.5 1.5 0 0 1 2.5 13h-1A1.5 1.5 0 0 1 0 11.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm10.5.5A1.5 1.5 0 0 1 13.5 9h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM6 4.5A1.5 1.5 0 0 1 7.5 3h1A1.5 1.5 0 0 1 10 4.5v1A1.5 1.5 0 0 1 8.5 7h-1A1.5 1.5 0 0 1 6 5.5v-1zM7.5 4a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/> <path d="M6 4.5H1.866a1 1 0 1 0 0 1h2.668A6.517 6.517 0 0 0 1.814 9H2.5c.123 0 .244.015.358.043a5.517 5.517 0 0 1 3.185-3.185A1.503 1.503 0 0 1 6 5.5v-1zm3.957 1.358A1.5 1.5 0 0 0 10 5.5v-1h4.134a1 1 0 1 1 0 1h-2.668a6.517 6.517 0 0 1 2.72 3.5H13.5c-.123 0-.243.015-.358.043a5.517 5.517 0 0 0-3.185-3.185z"/> 
+          </svg>
+        <div class="japanese">クモの網</div>
+      <div class="roman">Паутинка</div>
+    </div>
+    <div class="option" onclick="window.location.href = '../../games/radio/index.html';">
+      <svg class="food" xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 16 16" data-name="Camada 1">
+        <title>Игры</title>
+        <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>        </svg>
+      <div class="japanese">ラヂオ</div>
+      <div class="roman">Радио</div>
+    </div>
+</div>
  
 </body>
 </html>

@@ -521,7 +521,7 @@ const N3 = {
                     "onyomi" : "オウ",
                     "kunyomi" : "",
                     "definition" : "центр, середина",
-                    "examples" : ["中央 ちゅうおう центр, центральный","道央 ドウオウ центр о.Хоккайдо","月央 ゲツオウ середина месяца," "," "," "," "," "," "]
+                    "examples" : ["中央 ちゅうおう центр, центральный","道央 ドウオウ центр о.Хоккайдо","月央 ゲツオウ середина месяца"]
                 },{
                     "kanji" : "失",
                     "onyomi" : "シツ",
@@ -704,7 +704,7 @@ const N3 = {
                     "onyomi" : "コウ",
                     "kunyomi" : "さいわ.い, さち, しあわ.せ",
                     "definition" : "счастье",
-                    "examples" : ["幸い さいわい happiness, blessedness (adj-na, adv, n)","幸福 こうふく happiness, blessedness (adj-na, n)","不幸 ふこう unhappiness, sorrow, misfortune, disaster, accident, death (adj-na, n) "," "," "," "," "," "]
+                    "examples" : ["幸い さいわい счастье, благополучие, удача","幸福 こうふく счастье, благополучие","不幸 ふこう несчастье, беда, горе"," "," "," "," "," "]
                 }
             ],
     "Ур. 12" :
@@ -713,62 +713,62 @@ const N3 = {
                     "kanji" : "底",
                     "onyomi" : "テイ",
                     "kunyomi" : "そこ",
-                    "definition" : "bottom, sole, depth, bottom price, base, kind, sort",
-                    "examples" : ["海底 かいてい bottom of the ocean (n)","底 そこ bottom, sole (n)","徹底 てってい thoroughness, completeness (n, vs) "," "," "," "," "," "]
+                    "definition" : "дно, донышко, днище, биржевый низкий курс; род, тип, сорт (непременно с определением)",
+                    "examples" : ["海底 かいてい дно океана","底 そこ дно","徹底 てってい 1.	~suru идти в чём-л. до конца, быть последовательным; ~shita последовательный; исчерпывающий, полный, окончательный; доскональный; радикальный 2.	~suru проникаться чем-л. ; ~saseru доводить (до сознания, до понимания, до полной ясности)"," "," "," "," "," "]
                 },{
                     "kanji" : "府",
                     "onyomi" : "フ",
                     "kunyomi" : "",
-                    "definition" : "borough, urban prefecture, govt office, representative body, storehouse",
-                    "examples" : ["政府 せいふ government, administration (n)","府庁 ふちょう prefectural office (n)","府立 ふりつ managed by an urban prefecture (adj-no, n) "," "," "," "," "," "]
+                    "definition" : "правительство, 1.	 город со статусом префектуры (Осака либо Киото) 2.	 центр, средоточие (в идиомах)",
+                    "examples" : ["政府 せいふ правительство","府庁 ふちょう префектуральное управление","府立 ふりつ управляемый городской префектурой  "," "," "," "," "," "]
                 },{
                     "kanji" : "庫",
                     "onyomi" : "コ, ク",
                     "kunyomi" : "くら",
-                    "definition" : "warehouse, storehouse",
-                    "examples" : ["冷蔵庫 れいぞうこ refrigerator (n)","文庫 ぶんこ library, book collection, paperback book (n)","車庫 しゃこ garage, car shed, carport (n) "," "," "," "," "," "]
+                    "definition" : "склад, хранилище, кладовая",
+                    "examples" : ["冷蔵庫 れいぞうこ холодильник","文庫 ぶんこ книжный фонд, книгохранилище, библиотека","車庫 しゃこ гараж, депо, парк "," "," "," "," "," "]
                 },{   
                     "kanji" : "庭",
                     "onyomi" : "テイ",
                     "kunyomi" : "にわ",
-                    "definition" : "courtyard, garden, yard",
-                    "examples" : ["家庭 かてい home, family, household (n)","校庭 こうてい schoolyard, campus (n)","市庭 いちば (town) market, (the) marketplace (n) "," "," "," "," "," "]
+                    "definition" : "сад, двор",
+                    "examples" : ["家庭 かてい семья, дом, домашний очаг","校庭 こうてい школьный двор","市庭 いちば рынок"," "," "," "," "," "]
                 },{
                     "kanji" : "康",
                     "onyomi" : "コウ",
                     "kunyomi" : "",
-                    "definition" : "ease, peace",
-                    "examples" : ["健康 けんこう health, sound, wholesome (adj-na, n)","小康 ショウコウ lull","安康 アンコウ calm and peaceful period of time "," "," "," "," "," "]
+                    "definition" : "здоровье, затишье",
+                    "examples" : ["健康 けんこう здоровье","小康 ショウコウ временное затишье, мед. ремиссия, временное успокоение","安康 アンコウ мирное и спокойное время, мир, спокойствие"," "," "," "," "," "]
                 },{
                     "kanji" : "式",
                     "onyomi" : "シキ",
                     "kunyomi" : "",
-                    "definition" : "style, ceremony, rite, function, method, system, form, expression",
-                    "examples" : ["形式的 けいしきてき formal (adj-na)","儀式 ぎしき ceremony, rite, ritual, service (n)","株式 かぶしき stock (company) (n) "," "," "," "," "," "]
+                    "definition" : "церемония, стиль, модель, система, мат.формула",
+                    "examples" : ["形式的 けいしきてき формальный","儀式 ぎしき церемония, обряд, ритуал","株式 かぶしき акция, пай "," "," "," "," "," "]
                 },{   
                     "kanji" : "弓",
                     "onyomi" : "キュウ",
                     "kunyomi" : "ゆみ",
-                    "definition" : "bow, bow (archery, violin)",
-                    "examples" : ["弓 ゆみ bow (and arrow) (n)","大弓 だいきゅう bow, longbow","弓矢 ゆみや bow and arrow, weapon, arms "," "," "," "," "," "]
+                    "definition" : "лук (оружие), муз. смычок, стрельба из лука",
+                    "examples" : ["弓 ゆみ лук (и стрелы)","大弓 だいきゅう длинный лук (оружие)","弓矢 ゆみや лук и стрелы"," "," "," "," "," "]
                 },{   
                     "kanji" : "当",
                     "onyomi" : "トウ",
                     "kunyomi" : "あ.たる, あ.たり, あ.てる, あ.て, まさ.に, まさ.にべし",
-                    "definition" : "hit, right, appropriate, himself",
-                    "examples" : ["正当 せいとう just, justifiable, right, due, proper, equitable, reasonable, legitimate, legal, lawful (adj-na, n)","該当 がいとう corresponding, answering to, coming under, applying to (n, vs)","割当てる わりあてる to assign, to allot, to allocate, to divide among, to distribute, to prorate (Ichidan verb, vt) "," "," "," "," "," "]
+                    "definition" : "Данный, попадание в цель, иметь успех, улика, ожидания, надежды, цели; уместность, правильность; сказанное наобум; игра в угадывание",
+                    "examples" : ["正当 せいとう правильный, надлежащий, уместный, разумный; справедливый; законный","該当 がいとう 1.	попадать (под статью закона) 2.	соответствовать чему-л. ; удовлетворять (условиям и т. п. )","割当てる わりあてる распределять, раскладывать [на нескольких] (расходы и т. п. ) "," "," "," "," "," "]
                 },{   
                     "kanji" : "形",
                     "onyomi" : "ケイ, ギョウ",
                     "kunyomi" : "かた, -がた, かたち, なり",
-                    "definition" : "shape, form, style",
-                    "examples" : ["形見 かたみ memento, souvenir (n)","形式 けいしき form, formality, format, appearance, mode, math expression (n)","形容詞 けいようし (true) adjective, i-adjective (n) "," "," "," "," "," "]
+                    "definition" : "формаль, стиль, фасон, фигура, узор, формат, размер; залог, заклад",
+                    "examples" : ["形見 かたみ сувенир","形式 けいしき форма, внешняя форма, формальность","形容詞 けいようし прилагательное"," "," "," "," "," "]
                 },{   
                     "kanji" : "役",
                     "onyomi" : "ヤク, エキ",
                     "kunyomi" : "",
-                    "definition" : "duty, war, campaign, drafted labor, office, service, role",
-                    "examples" : ["区役所 くやくしょ ward office, council (regional) (n)","現役 げんえき active duty, active service (n)","主役 しゅやく leading part, leading actor (actress) (n) "," "," "," "," "," "]
+                    "definition" : "роль, служба, должность, обязанности, карты у игрока, карточная раздача; война, военная кампания, поход, битва; трудовая повинность, мобилизовать на принудительную работу",
+                    "examples" : ["区役所 くやくしょ районная администрация","現役 げんえき действительная военная служба","主役 しゅやく главная роль; ведущий актёр","役に立つ やくにたつ годиться, быть пригодным"," "," "," "," "]
                 }
             ],
     "Ур. 13" : 
@@ -778,61 +778,61 @@ const N3 = {
                     "onyomi" : "ケイ",
                     "kunyomi" : "みち, こみち, さしわたし, ただちに",
                     "definition" : "diameter, path, method",
-                    "examples" : ["径 みち road, street, way, method (n)","半径 はんけい radius (n)","径 ケイ diameter "," "," "," "," "," "]
+                    "examples" : ["径 みち дорога, путь","半径 はんけい радиус","径 ケイ кратчайшее расстояние; диаметр"," "," "," "," "," "]
                 },{
                     "kanji" : "徒",
                     "onyomi" : "ト",
                     "kunyomi" : "いたずら, あだ",
-                    "definition" : "junior, emptiness, vanity, futility, uselessness, ephemeral thing, gang, set, party, people",
-                    "examples" : ["生徒 せいと pupil (n)","徒歩 とほ walking, going on foot (n)","いたずら書き 【いたずらがき】 scribbling, doodling, graffiti "," "," "," "," "," "]
+                    "definition" : "последователь, ученик; напрасно, попусту, бесполезный; всего лишь, только, просто...; человек, группа ",
+                    "examples" : ["生徒 せいと ученик","徒歩 とほ пешком, арх. пеший воин","いたずら書き いたずらがき каракули, мазня","仏教徒 ぶっきょうと буддист"," "," "," "," "]
                 },{
                     "kanji" : "得",
                     "onyomi" : "トク",
                     "kunyomi" : "え.る, う.る",
-                    "definition" : "gain, get, find, earn, acquire, can, may, able to, profit, advantage, benefit",
-                    "examples" : ["所得 しょとく income, earnings (n)","取得 しゅとく acquisition (n, vs)","拾得 しゅうとく picking up, finding (n, vs) "," "," "," "," "," "]
+                    "definition" : "прибыль, выгода, получать, завоёвывать, ",
+                    "examples" : ["所得 しょとく доходы, поступления","取得 しゅとく приобретение, получать, приобретать, доставать","拾得 しゅうとく найти, поднять, подобрать"," "," "," "," "," "]
                 },{   
                     "kanji" : "必",
                     "onyomi" : "ヒツ",
                     "kunyomi" : "かなら.ず",
-                    "definition" : "invariably, certain, inevitable",
-                    "examples" : ["必ず かならず necessarily, certainly, without fail, positively, invariably (adv)","必然 ひつぜん inevitable, necessary (n)","必須 ひっす indispensable, required (adj-na, n) "," "," "," "," "," "]
+                    "definition" : "непременно, обязательно, определённо",
+                    "examples" : ["必ず かならず непременно, обязательно","必然 ひつぜん обязательный; непременный; необходимый; неизбежный","必須 ひっす необходимый, обязательный, принципиально важный","必見　ひっけん стоящий просмотра, стоящий того, чтобы увидеть "," "," "," "," "]
                 },{
                     "kanji" : "念",
                     "onyomi" : "ネン",
                     "kunyomi" : "",
-                    "definition" : "wish, sense, idea, thought, feeling, desire, attention",
-                    "examples" : ["記念日 きねんび holiday, anniversary, memorial day (n)","概念 がいねん general idea, concept, notion (n)","懸念 けねん worry, fear, anxiety, concern (n, vs) "," "," "," "," "," "]
+                    "definition" : "мысль, сознание, чувство, внимание, забота, желание; на всякий случай, для верности; иметь в мыслях, думать; будд. каждое мгновение; в сочетаниях непрестанный",
+                    "examples" : ["記念日 きねんび памятный день, праздник","概念 がいねん общее понятие, концепция","懸念 けねん опасение, беспокойство, тревога, опасаться"," "," "," "," "," "]
                 },{
                     "kanji" : "息",
                     "onyomi" : "ソク",
                     "kunyomi" : "いき",
-                    "definition" : "breath, respiration, son, interest (on money)",
-                    "examples" : ["休息 きゅうそく rest, relief, relaxation (n, vs)","消息 しょうそく news, letter, circumstances (n)","息切れ いきぎれ shortness of breath (n, vs) "," "," "," "," "," "]
+                    "definition" : "дыхание, вздох, дышать, переводить дух, взядыхать; напрягаться, тужиться, родовые потуги; сын ",
+                    "examples" : ["休息 きゅうそく отдых, покой, отдыхать,","消息 しょうそく известия, сведения, данные, новости","息切れ いきぎれ одышка, прерывистое дыхание; ~ga suru задыхаться, страдать одышкой"," "," "," "," "," "]
                 },{   
                     "kanji" : "悲",
                     "onyomi" : "ヒ",
                     "kunyomi" : "かな.しい, かな.しむ",
-                    "definition" : "jail cell, grieve, sad, deplore, regret",
-                    "examples" : ["悲鳴 ひめい shriek, scream (n, vs)","悲劇 ひげき tragedy, disaster (n)","悲観 ひかん pessimism, disappointment (n, vs) "," "," "," "," "," "]
+                    "definition" : "печальный, грустный, грустить, грусть, скорбь, горевать",
+                    "examples" : ["悲鳴 ひめい вопль, крик","悲劇 ひげき драма, трагедия","悲観 ひかん пессимизм, разочарование "," "," "," "," "," "]
                 },{   
                     "kanji" : "想",
                     "onyomi" : "ソウ, ソ",
                     "kunyomi" : "おも.う",
-                    "definition" : "concept, think, idea, thought",
-                    "examples" : ["感想 かんそう impressions, thoughts (n, vs)","回想 かいそう reflection, reminiscence (n, vs)","構想 こうそう plan, plot, idea, conception (n, vs) "," "," "," "," "," "]
+                    "definition" : "мысль, идея, думать, представлять себе, воспоминание, воображение",
+                    "examples" : ["感想 かんそう впечатления от чего-л.","回想 かいそう воспоминаниe, реминисценция; ~suru вспоминать","構想 こうそう идея, концепция, замысел, план"," "," "," "," "," "]
                 },{   
                     "kanji" : "愛",
                     "onyomi" : "アイ",
                     "kunyomi" : "いと.しい",
-                    "definition" : "love, affection, favourite",
-                    "examples" : ["愛情 あいじょう love, affection (n)","愛する あいする to love (suru verb - special class, vt)","愛しい いとしい lovely, dear, beloved, darling (adj) "," "," "," "," "," "]
+                    "definition" : "любовь, симпатия, любимый, любить, ценить, восхищаться, милый, хорошенький",
+                    "examples" : ["愛情 あいじょう любовное чувство","愛する あいする любить","愛しい いとしい любимый, дорогой; бедный, жалкий "," "," "," "," "," "]
                 },{   
                     "kanji" : "指",
                     "onyomi" : "シ",
                     "kunyomi" : "ゆび, さ.す, -さ.し",
-                    "definition" : "finger, point to, indicate, put into, play (chess), measure (ruler)",
-                    "examples" : ["指 ゆび finger (n)","指す さす to point, to nominate, to select someone, to specify some person, to identify, to indicate, to point out (v5s, vt)","指示 しじ indication, instruction, designation, directions (n, vs) "," "," "," "," "," "]
+                    "definition" : "палец, указывать пальцем, ходить в шахматах",
+                    "examples" : ["指 ゆび палец","指す さす указывать на что-то, ходить в шахматах","指示 しじ указание, директива "," "," "," "," "," "]
                 }
             ],
     "Ур. 14" :
@@ -840,9 +840,9 @@ const N3 = {
                 {   
                     "kanji" : "感",
                     "onyomi" : "カン",
-                    "kunyomi" : "emotion, feeling, sensation",
+                    "kunyomi" : "эмоции, чувства, чувствовать, ощущать",
                     "definition" : "",
-                    "examples" : ["感じる かんじる to feel, to sense, to experience (Ichidan verb, intransitive verb)","感覚 かんかく sense, sensation (n, vs)","感謝 かんしゃ thanks, gratitude (adj-na, n, vs) "," "," "," "," "," "]
+                    "examples" : ["感じる かんじる чувствовать, ощущуать, быть тронутым","感覚 かんかく чувство чего-л. , ощущение; ~no aru чувствительный, воспринимающий; ~no nai нечувствительный; в сочетаниях сенсорный, чувствительный","感謝 かんしゃ благодарность, признательность; ~suru благодарить, выражать признательность "," "," "," "," "," "]
                 },{
                     "kanji" : "成",
                     "onyomi" : "セイ, ジョウ",
@@ -970,49 +970,49 @@ const N3 = {
                     "kanji" : "昨",
                     "onyomi" : "サク",
                     "kunyomi" : "",
-                    "definition" : "yesterday, previous",
-                    "examples" : ["一昨日 おととい day before yesterday (n-adv, n-t)","一昨年 おととし year before last (n-adv, n-t)","昨年 さくねん last year (n-adv, n-t) "," "," "," "," "," "]
+                    "definition" : "вчера, ранее, предыдущий",
+                    "examples" : ["一昨日 おととい позавчера","一昨年 おととし позапрошлый год","昨年 さくねん прошлый год, в прошлом году "," "," "," "," "," "]
                 },{
                     "kanji" : "昭",
                     "onyomi" : "ショウ",
                     "kunyomi" : "",
-                    "definition" : "shining, bright",
-                    "examples" : ["昭和 しょうわ Showa era (1926.12.25-1989.1.7) (n)","昭昭 ショウショウ clear, bright, plain, obvious"," "," "," "," "," "," "]
+                    "definition" : "светлый, сверкающий",
+                    "examples" : ["昭和 しょうわ эпоха Сёва (1926.12.25-1989.1.7) ","昭昭 ショウショウ ясный","昭代 しょうだい (возвыш.) эра процветания  "," "," "," "," "," "]
                 },{
                     "kanji" : "景",
                     "onyomi" : "",
                     "kunyomi" : "ケイ",
-                    "definition" : "scenery, view",
-                    "examples" : ["景色 けしき scenery, scene, landscape (n)","背景 はいけい background, scenery, setting, circumstance (n)","景気 けいき condition, state, business (condition) (n) "," "," "," "," "," "]
+                    "definition" : "пейзаж, вид",
+                    "examples" : ["景色 けしき пейзаж, вид","背景 はいけい фон, задний план, задник, тыл","景気 けいき состояние рынка, бизнеса, конъюктура; бодрость, живость; дела "," "," "," "," "," "]
                 },{   
                     "kanji" : "晴",
                     "onyomi" : "セイ",
                     "kunyomi" : "は.れる, は.れ, は.れ-, -ば.れ, は.らす",
-                    "definition" : "clear up",
-                    "examples" : ["素晴しい すばらしい wonderful, splendid, magnificent (adj)","快晴 かいせい good weather (n)","晴天 せいてん fine weather (n) "," "," "," "," "," "]
+                    "definition" : "ясная погода, проясняться",
+                    "examples" : ["素晴しい すばらしい замечательный","快晴 かいせい хорошая приятная погода","晴天 せいてん ясная погода "," "," "," "," "," "]
                 },{
                     "kanji" : "曲",
                     "onyomi" : "キョク",
                     "kunyomi" : "ま.がる, ま.げる",
-                    "definition" : "bend, music, melody, composition, pleasure, injustice, fault, curve, crooked, perverse, lean",
-                    "examples" : ["曲る まがる to bend, to curve, to warp, to wind, to twist, to turn, to be awry, to be askew, to be crooked (v5r, intransitive verb)","曲り角 まがりかど street corner, road turn, bend in the road, turning point (n)","歌謡曲 かようきょく popular song (n) "," "," "," "," "," "]
+                    "definition" : "мелодия; поворот, поворачивать, сгибать, гнуться; ''кусэ'', часть представления в театре Но",
+                    "examples" : ["曲る まがる поворачивать, огибать; гнуться, быть изогнутым","曲り角 まがりかど 1.	угол (улицы); поворот (дороги) 2.перен. поворотный пункт (момент)","歌謡曲 かようきょく современная японская поп-музыка"," "," "," "," "," "]
                 },{
                     "kanji" : "最",
                     "onyomi" : "サイ, シュ",
                     "kunyomi" : "もっと.も, つま",
-                    "definition" : "utmost, most, extreme",
-                    "examples" : ["最も もっとも most, extremely (adv)","最悪 さいあく the worst (adj-na, n)","最近 さいきん latest, most recent, nowadays (adj-no, n-adv, n-t) "," "," "," "," "," "]
+                    "definition" : "самый, наиболее",
+                    "examples" : ["最も もっとも наиболее, самый","最悪 さいあく наихудший, хуже всего; отстой","最近 さいきん недавно, в последнее время "," "," "," "," "," "]
                 },{   
                     "kanji" : "望",
                     "onyomi" : "ボウ, モウ",
                     "kunyomi" : "のぞ.む, もち",
-                    "definition" : "ambition, full moon, hope, desire, aspire to, expect",
-                    "examples" : ["冀望 きぼう hope, wish, aspiration (n, vs)","待望 たいぼう expectant waiting, long-awaited (n, vs, adj-no)","絶望 ぜつぼう despair, hopelessness (n, vs) "," "," "," "," "," "]
+                    "definition" : "желать, надеяться, видеть вдалеке; полнолуние",
+                    "examples" : ["冀望 (希望)きぼう надежда","待望 たいぼう ожидания и надежды, долгожданный","絶望 ぜつぼう отчаяние, безнадёжный, терять надежду, отчаиваться"," "," "," "," "," "]
                 },{   
                     "kanji" : "期",
                     "onyomi" : "キ, ゴ",
                     "kunyomi" : "",
-                    "definition" : "period, time, date, term",
+                    "definition" : "период",
                     "examples" : ["学期 がっき school term, semester (n)","期間 きかん period, term (n)","期限 きげん term, period, time frame, time limit, deadline, cutoff (date) (n) "," "," "," "," "," "]
                 },{   
                     "kanji" : "未",
