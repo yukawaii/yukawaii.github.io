@@ -1,217 +1,124 @@
 <!DOCTYPE html>
-<html
- lang="en">
+<html>
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+		 
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+	<title>Радио онлайн</title>
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="./App.js"></script>
-  
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-
-    <style id="bg-image" type="text/css"></style>
-    <style>
-*:focus {
-    outline: 0 !important;
-}
-         .div-1 {
-        background-color: #474545;
-    }    
-    .btn:link,
-    button:focus { outline: none; }
-.btn:visited {
  
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 1px 0px;
-    display: inline-block;
-    border-radius: 100px;
-    transition: all .2s;
-    position: absolute;
+ 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<style type="text/css">
+	 BODY {
+	  background: url(img/13.jpg) no-repeat 1px 1px; /* Параметры фона */
+	  background-color: #c7b39b
+	 }
+/* Стили кнопки */
+.wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+.button {
+  min-width: 300px;
+  min-height: 60px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #313133;
+  background: #4FD1C5;
+background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
+  border: none;
+  border-radius: 1000px;
+  box-shadow: 12px 12px 24px rgba(79,209,197,.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  padding: 10px;
+  }
+
+button::before {
+content: '';
+  border-radius: 1000px;
+  min-width: calc(300px + 12px);
+  min-height: calc(60px + 12px);
+  border: 6px solid #00FFCB;
+  box-shadow: 0 0 60px rgba(0,255,203,.64);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all .3s ease-in-out 0s;
 }
 
-.btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2);
+.button:hover, .button:focus {
+  color: #313133;
+  transform: translateY(-6px);
 }
 
-.btn-white {
-    background-color: #fff;
-    color: #777;
+button:hover::before, button:focus::before {
+  opacity: 1;
 }
 
-.btn::after {
-    content: "";
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    border-radius: 100px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transition: all .4s;
+button::after {
+  content: '';
+  width: 30px; height: 30px;
+  border-radius: 100%;
+  border: 6px solid #00FFCB;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
 }
 
-.btn-white::after {
-    background-color: #fff;
+button:hover::after, button:focus::after {
+  animation: none;
+  display: none;
 }
 
-.btn:hover::after {
-    transform: scaleX(1.4) scaleY(1.6);
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
     opacity: 0;
+  }
 }
 
-.btn-animated {
-    animation: moveInBottom 5s ease-out;
-    animation-fill-mode: backwards;
-}
-
-@keyframes moveInBottom {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-}
- </style>
+</style>
 </head>
-
 <body>
-    <div class="div-1"> <center>
-        <button class = "btn btn-white btn-        animate" onclick="joingroup();" style="border-radius: 100px;  background-color: transparent;"><img id="jg"  src="./img/group.png"  width="25" height="25"/></button>
-        <button class = "btn btn-white btn-        animate" onclick="infr();"  style="border-radius: 100px; background-color: transparent;"><img id="jg" src="./img/fr.png"  width="25" height="25"/></button>
-         </center> </div>
-    <script>
-        // Sends event to client
-        vkBridge.send('VKWebAppInit');
-        //поделиться
-function share1(){
-bridge.send("VKWebAppShare", {"text": "Японское радио!", "link": "https://vk.com/app51531990"});
-}
-function share2(){
-    vkBridge.send("VKWebAppShowWallPostBox", {
-    "message": "Японские радио онлайн!",
-    "attachments": "https://vk.com/app51531990"
-  });
-}
 
-function favor1(){
-bridge.send("VKWebAppAddToFavorites");
-}
+	<script src = "./App.js"></script>
+ <!-- <div class="div-1"> <center>
+        <button class = "btn" onclick="joingroup();" style="border-radius: 100px;  background-color: transparent;"><img id="jg"  src="./img/group.png"  width="25" height="25"/></button>
+        <button class = "btn" onclick="infr();"  style="border-radius: 100px; background-color: transparent;"><img id="jg" src="./img/fr.png"  width="25" height="25"/></button>
+         </center> </div> -->
+<br><br>
 
-function joingroup(){
-    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-
-//пригласить друзей в игру
-function infr(){
-    vkBridge.send("VKWebAppShowInviteBox", {})
-  .then(data => console.log(data.success))  
- .catch(error => console.log(error));
-}
-
-function myAdd1(){
-    vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-.then(data => console.log(data.result))
-.catch(error => console.log(error));
-}
-function joingroup(){
-    vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
-
-      </script>
-    <div class="bg-img">
-        <div class="dummy-bg"></div>
-    </div>
-
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
-                <!-- Station Names -->
-                <li class="sidebar-brand">
-                    <a>
-                       City
-                    </a>
-                </li>
-                <span class="city">
-                    
-                </span>                
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <button type="button" class="hamburger is-closed" data-toggle="offcanvas" onclick="myAdd1();">
-                <span class="hamb-top"></span>
-                <span class="hamb-middle"></span>
-                <span class="hamb-bottom"></span>
-            </button>
-            <div class="container-fluid space-top">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-xs-12">
-                        <!-- <h1>Stations</h1> -->
-                        <ul class="stations">
-                            
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-    <div class="hide">
-        <video controls="true" autoplay="false" name="media" id="audio-src"></video>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar-fixed-bottom">
-        <div class="container-fluid">
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a class="station-site" target="_blank"><h3 class="station-name">Город станции</h3></a>
-                    </li>
-                    <li>
-                        <a class="volume-ctrl pause"></a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-    <script src="js/radio.js"></script>
-   
+<br> <br><br>
+<div class="wrap">
+  <button class="button" onclick="window.location.href = './index1.html';">Запустить радио</button>
+</div>
+<br><br><br><br><br>
+<div class="wrap">
+  <button class="button" onclick="infr();">Пригласить друзей</button>
+</div><br>
+<div class="wrap">
+  <button class="button" onclick="joingroup();">Группа</button>
+</div>
 </body>
-
 </html>
