@@ -78,35 +78,33 @@
                     </ul>
                 </div>
                 <div id="study-container" class="section-container" style="display:none">
-                    <p id="explain-text">Not sure how this works? <a class="faq-link" id="show-study-faq">Learn
-                            more.</a></p>
+                    <p id="explain-text">Не понимаешь, как это работает? <a class="faq-link" id="show-study-faq">Узнать подробности.</a></p>
                     <p id="cards-due">
-                        Cards due: <span id="card-due-count"></span>
+                        Карточки: <span id="card-due-count"></span>
                     </p>
                     <p id="study-call-to-action" class="study-call-to-action">
-                        <span id="task-description">What does the text below mean?</span>
-                        <span id="task-complete">Studying complete. Check later for more reviews, or add more
-                            cards.</span>
+                        <span id="task-description">Что значит текст ниже?</span>
+                        <span id="task-complete">Обучение завершено. Заходи позже, чтобы повторить или добавь ещё карточек!</span>
                     </p>
                     <p id="card-question-container"></p>
-                    <span id="show-answer-button" class="study-call-to-action">Show Answer</span>
+                    <span id="show-answer-button" class="study-call-to-action">Показать ответ</span>
                     <div id="card-answer-container" style="display:none">
                         <p id="card-answer"></p>
                         <ul id="result-buttons">
                             <li id="wrong-button">✕</li>
                             <li id="right-button">✔</li>
                         </ul>
-                        <p id="delete-card-button">Delete this card</p>
+                        <p id="delete-card-button">Удалить эту карту</p>
                         <div id="past-performance-container" class="card-detail">
-                            <p id="card-new-message" style="display:none">This is a new card!</p>
+                            <p id="card-new-message" style="display:none">Это новая карта!</p>
                             <div id="card-old-message" style="display: none;">
-                                <p>Previous attempts: <span id="card-percentage"></span>% correct.</p>
-                                <p>Right <span id="card-right-count"></span>; Wrong <span id="card-wrong-count"></span>.
+                                <p>Было попыток: <span id="card-percentage"></span>% верно.</p>
+                                <p>Верно <span id="card-right-count"></span>; Ошибка <span id="card-wrong-count"></span>.
                                 </p>
                             </div>
                         </div>
                         <div id="related-cards-container" class="card-detail" style="display:none">
-                            Other cards with <span id="related-card-query"></span>:
+                            Другие карты с <span id="related-card-query"></span>:
                             <div id="related-cards" class="related-cards"></div>
                         </div>
                     </div>
@@ -116,7 +114,7 @@
                 <div id="graph"></div>
                 <div id="legend">
                     <p>
-                        Colors indicate frequency or JLPT level.
+                        Цвета показывают уровень Норёку Сикэн.
                     </p>
                     <div id="level-container">
                         <div class="circle" style="background:#ff635f">Top1k</div>
@@ -132,46 +130,39 @@
     <div id="stats-container" style="display:none">
         <header class="header">
             <div class="exit-container"><i id="exit-button" class="exit-arrow"></i></div>
-            <h1 class="main-header">JapaneseGraph</h1>
+            <h1 class="main-header">YuKawaii's Kanji</h1>
             <div class="stats-container"></div>
         </header>
         <main class="stats">
             <section>
                 <div id="visited-container" style="display:none">
-                    <h2>Kanji Seen</h2>
-                    <h3>You've viewed examples for:</h3>
+                    <h2>Кандзи статистика</h2>
+                    <h3>Ты видел примеры для:</h3>
                     <div id="visited-graph"></div>
-                    <p id="visited-graph-detail" class="stats-detail">Percentages are kanji seen, not words. Click a bar
-                        in the chart for details.</p>
+                    <p id="visited-graph-detail" class="stats-detail">Проценты - это просмотренные кандзи, а не слова. Щелкните по таблице для подробностей.</p>
                 </div>
-                <h3>You've studied examples for:</h3>
+                <h3>Ты учил примеров:</h3>
                 <div id="studied-graph"></div>
-                <p id="studied-graph-detail" class="stats-detail">Percentages are kanji seen, not words. Click a bar in
-                    the chart for details.</p>
+                <p id="studied-graph-detail" class="stats-detail">Проценты - это просмотренные кандзи, а не слова. Щелкните по таблице для подробностей.</p>
             </section>
             <section>
-                <h2>Study Stats</h2>
+                <h2>Статистика учёбы</h2>
                 <div id="study-calendar-container" style="display: none;">
-                    <h3>Study stats by day:</h3>
+                    <h3>Календарь:</h3>
                     <div id="study-calendar"></div>
-                    <p id='study-calendar-detail' class="stats-detail">Click a box in the calendar for details. Brighter
-                        colors mean more
-                        studying.
+                    <p id='study-calendar-detail' class="stats-detail">Нажми на статистику для подробностей. Чем светлее цвет, тем больше ты занимался.
                     </p>
                 </div>
-                <h3>Cards added by day:</h3>
+                <h3>Карт в день:</h3>
                 <div id="added-calendar"></div>
-                <p id='added-calendar-detail' class="stats-detail">Click a box in the calendar for details. Brighter
-                    colors mean more cards
-                    added.
+                <p id='added-calendar-detail' class="stats-detail">Чем светлее цвет, тем больше карт ты добавил.
                 </p>
                 <div id="hourly-container" style="display: none;">
-                    <h3>Study stats by hour:</h3>
-                    <p id='hourly-graph-detail' class="stats-detail">Click a bar in the chart for details. <br />Green:
-                        75% correct or
-                        better.
-                        Blue:
-                        between 50% and 75%. Orange: between 25% and 50%. Red: less than 25% correct.</p>
+                    <h3>Часы:</h3>
+                    <p id='hourly-graph-detail' class="stats-detail">Click a bar in the chart for details. <br />Зелёный:
+                        75% или более верно.
+                        Голубой:
+                        50% - 75%. Оранжевый: 25% - 50%. Красный: менее 25% верно.</p>
                     <div id="hourly-graph"></div>
                 </div>
             </section>
