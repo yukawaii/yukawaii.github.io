@@ -158,8 +158,8 @@
                 <p id='added-calendar-detail' class="stats-detail">Чем светлее цвет, тем больше карт ты добавил.
                 </p>
                 <div id="hourly-container" style="display: none;">
-                    <h3>Часы:</h3>
-                    <p id='hourly-graph-detail' class="stats-detail">Click a bar in the chart for details. <br />Зелёный:
+                    <h3>По часам:</h3>
+                    <p id='hourly-graph-detail' class="stats-detail"> Зелёный:
                         75% или более верно.
                         Голубой:
                         50% - 75%. Оранжевый: 25% - 50%. Красный: менее 25% верно.</p>
@@ -171,7 +171,7 @@
     <div id="faq-container" style="display:none">
         <header class="header">
             <div class="exit-container"><i id="faq-exit-button" class="exit-arrow"></i></div>
-            <h1 class="main-header">JapaneseGraph</h1>
+            <h1 class="main-header">YuKawaii's Kanji</h1>
             <div class="stats-container"></div>
         </header>
         <main class="faq">
@@ -321,24 +321,21 @@
     <div id="menu-container" style="display:none">
         <header class="header">
             <div class="exit-container"><i id="menu-exit-button" class="exit-arrow"></i></div>
-            <h1 class="main-header">JapaneseGraph</h1>
+            <h1 class="main-header">YuKawaii's Kanji</h1>
             <div class="stats-container"></div>
         </header>
         <main class="menu">
             <div class="menu-item" id="welcome-message-container" style="display:none">
                 <span id="welcome-message" class="welcome-message"></span>
             </div>
-            <div id="signin" class="menu-item">
-                <a id="signin-button" class="authn-button" href="login.html">Sign in</a>
-                <a id="signout-button" class="authn-button" style="display:none">Sign out</a>
-            </div>
+           
             <div class="menu-item">
                 <label id="toggle-transcript-label" class="menu-item-text menu-item-clickable" for="show-transcript">
-                    Turn on furigana in examples
+                   Включить фуригану в примерах.
                 </label>
             </div>
             <div class="menu-item">
-                <label class="menu-item-text" for="level-selector">Choose max level in the graph:</label>
+                <label class="menu-item-text" for="level-selector">Выбери максимальный уровень кандзи:</label>
                 <select id="level-selector">
                     <option>1</option>
                     <option>2</option>
@@ -348,30 +345,26 @@
                 </select>
             </div>
             <div class="menu-item">
-                <span class="menu-item-text">Recommendations:</span>
+                <span class="menu-item-text">Советы:</span>
                 <label for="recommendations-difficulty">
-                    show me
+                    показывать
                     <select id="recommendations-difficulty">
-                        <option selected>any</option>
-                        <option>easy</option>
-                        <option>hard</option>
+                        <option selected>все</option>
+                        <option>простые</option>
+                        <option>сложные</option>
                     </select>
-                    kanji</label>
+                    кандзи</label>
             </div>
             <div class="menu-item">
-                <label class="menu-item-text" for="graph-selector">Color code based on:</label>
+                <label class="menu-item-text" for="graph-selector">Цвета основаны на:</label>
                 <select id="graph-selector">
                     <!--TODO generate this in js-->
-                    <option selected>Word Frequency</option>
-                    <option>JLPT Level</option>
+                    <option selected>частоте употребления</option>
+                    <option>уровене Норёку Сикэн</option>
                 </select>
             </div>
-            <div class="menu-item">
-                <a href="https://github.com/mreichhoff/JapaneseGraph/blob/main/README.md">See acknowledgements and more
-                    info on github</a>
-            </div>
-            <div class="menu-item menu-item-clickable" id="exportStudyListButton" style="display:none">Export study
-                list</div>
+            
+            <div class="menu-item menu-item-clickable" id="exportStudyListButton" style="display:none">Экспорт учебного списка кандзи</div>
         </main>
     </div>
     <script type="module" src="./js/bundle.js"></script>
