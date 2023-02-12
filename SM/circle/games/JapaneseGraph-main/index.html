@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>JapaneseGraph</title>
+    <title>YuKawaii's Kanji</title>
     <meta charset="utf-8">
     <meta name="description"
         content="Learn Japanese by exploring the relationships between kanji alongside examples that illustrate their use.">
@@ -29,15 +29,15 @@
                 </label>
             </div>
             <!--TODO get rid of this ID-->
-            <h1 id="main-header" class="main-header">JapaneseGraph</h1>
+            <h1 id="main-header" class="main-header">YuKawaii's Kanji</h1>
             <div class="stats-container"><a id="stats-show"><i class="stats-button"></i></a></div>
         </header>
         <div id="container">
             <!-- lol, like control plane -->
             <div id="control-pane">
                 <div class="tabs">
-                    <div id="show-explore" class="tab left active">Explore</div>
-                    <div id="show-study" class="tab">Study</div>
+                    <div id="show-explore" class="tab left active">Поиск</div>
+                    <div id="show-study" class="tab">Учить</div>
                 </div>
                 <div id="explore-container" class="section-container">
                     <div id="controls">
@@ -49,33 +49,31 @@
                             <input id="submit-button" type="submit" value="Go!" style="display:none" />
                         </form>
                     </div>
-                    <div style="display:none" id="not-found-message">😞 That word was not found. Please try another.
+                    <div style="display:none" id="not-found-message">😞 Слово не найдено. Попробуйте другое.
                     </div>
                     <div id="recommendations-container" class="recommendations" style="display:none"></div>
                     <input id="show-transcript" type="checkbox" style="display:none" />
                     <div id="walkthrough" class="walkthrough" style="display:none">
                         <!-- i18n :-( -->
                         <p>
-                            Learn Japanese by exploring the relationships between kanji alongside examples that
-                            illustrate their use.
+                            Изучайте японский язык, исследуя взаимосвязи между кандзи с примерами,
+                            иллюстрирующими их использование.
                         </p>
                         <p>
-                            Quickly build mental connections among kanji by searching, exploring the diagram, and
-                            finding example sentences.
-                            Anywhere you see a kanji, assume you can click or tap it and something will happen.
+                            Быстро устанавливайте связи между кандзи, выполняя поиск, изучая диаграмму и
+                            находя примеры предложений.
+                            В любом месте, где вы видите иероглиф, вы можете щелкнуть по нему, и что-то произойдет.
                         </p>
                         <p>
-                            Color coding is available via word frequency or by JLPT level.
+                            Цвета показывают уровень кандзи согласно уровням Норёку Сикэн в основном.
                         </p>
                         <p>
-                            Note that you can also zoom, drag, and re-arrange the diagram however you please.
+                            Вы можете увеличивать, перетаскивать и изменять порядок диаграммы по своему усмотрению.
                         </p>
                         <p>
-                            Check out <a href="https://github.com/mreichhoff/JapaneseGraph">the code on GitHub</a>, or
-                            <a class="faq-link" id="show-general-faq">see the FAQ for more information.</a>
+                          <a class="faq-link" id="show-general-faq">Ещё инструкций.</a>
                         </p>
-                        <p>Looking for Chinese? Check out <a href="https://hanzigraph.com">HanziGraph</a>.</p>
-                    </div>
+                                          </div>
                     <ul id="examples">
                     </ul>
                 </div>
