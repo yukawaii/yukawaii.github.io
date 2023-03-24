@@ -25,6 +25,18 @@
 <script>
   // Sends event to client
   vkBridge.send('VKWebAppInit');
+vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+ .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
   </script>
 <script type="text/javascript" src="app-1.0.1.js"></script> </div></body>
 </html>
