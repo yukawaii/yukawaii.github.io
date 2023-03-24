@@ -30,6 +30,18 @@
      // Sends event to client
 		vkBridge.send('VKWebAppInit');
   myadd1();
+vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+ .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
     </script>
     <div id="score"><br><br></div>
     <div id = "splash">
@@ -54,6 +66,7 @@
     <button class = "iksweb" onclick="window.location.href = './i.html';">Другие игры</button>
     </div>
     <script src="index.js"></script>
+
 
 </body>
 </html>
