@@ -27,6 +27,18 @@
 	<script>
 		// Sends event to client
 		vkBridge.send('VKWebAppInit');
+bridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+ .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
 		  </script> 
  	<div class ="myclass1">
 		<h3> Bикторина. Выберите уровень игры</h3>
