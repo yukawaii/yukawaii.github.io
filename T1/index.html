@@ -32,6 +32,18 @@
         <script>
             // Sends event to client
             vkBridge.send('VKWebAppInit');
+vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+ .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
           </script> <div>
         <script src="./App.js"></script>
         <button class = "iksweb" onclick= "window.location.href = './tetcl/index.html';">Дизайн Классика</button><br />
