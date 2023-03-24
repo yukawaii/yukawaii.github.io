@@ -87,6 +87,18 @@ swal({
 	button: "Всё понятно",  
   });  
  }
+vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom'
+  })
+ .then((data) => { 
+    if (data.result) {
+      // Баннерная реклама отобразилась
+    }
+  })
+  .catch((error) => {
+    // Ошибка
+    console.log(error);
+  });
 </script>
         <canvas id='mainCanv' style='width:100%;height:100%;position:absolute;'></canvas></div>
 
