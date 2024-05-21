@@ -20,9 +20,9 @@ function myAdd1(){
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-function joingroup(){
-  vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
+// function joingroup(){
+//  vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+// }
 
 //пригласить друзей в игру
 function infr(){
