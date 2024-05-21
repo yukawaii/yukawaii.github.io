@@ -26,9 +26,9 @@ vkBridge.send("VKWebAppAddToFavorites");
 .catch(error => console.log(error));
 }
 
-function joingroup(){
-vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
+// function joingroup(){
+// vkBridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+// }
 
 /*
 	<script src = "../App.js"></script>
