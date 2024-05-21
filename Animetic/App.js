@@ -21,7 +21,7 @@ function myadd1(){
 .catch(error => console.log(error));
 }
 
-function joingroup (){
-  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
-}
+// function joingroup (){
+//  bridge.send("VKWebAppJoinGroup", {"group_id": 213417231});
+// }
 
