@@ -5,12 +5,12 @@ bridge.send("VKWebAppInit", {});
 
 //поделиться
 function share1(){
-bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.com/app8177204"});
+bridge.send("VKWebAppShare", {"text": "Интересные игры!", "link": "https://vk.ru/app8177204"});
 }
 function share2(){
   bridge.send("VKWebAppShowWallPostBox", {
     "message": "Классная викторина про животных!",
-    "attachments": "https://vk.com/app8177204"
+    "attachments": "https://vk.ru/app8177204"
   });
 }
 

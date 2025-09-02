@@ -2,7 +2,7 @@
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Игры для быстрого запоминания катаканы!",
-    "attachments": "https://vk.com/app8165904"
+    "attachments": "https://vk.ru/app8165904"
   });
 }
 

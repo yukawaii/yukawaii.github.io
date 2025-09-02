@@ -7,7 +7,7 @@ vkBridge.send("VKWebAppInit", {});   */
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Японское радио!",
-    "attachments": "https://vk.com/app51531990"
+    "attachments": "https://vk.ru/app51531990"
   });
 }
 

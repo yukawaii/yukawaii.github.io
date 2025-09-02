@@ -7,7 +7,7 @@ vkBridge.send("VKWebAppInit", {});
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Тетрис прямо как на приставке!",
-    "attachments": "https://vk.com/app8167395"
+    "attachments": "https://vk.ru/app8167395"
   });
 }
 

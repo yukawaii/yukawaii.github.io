@@ -2,7 +2,7 @@
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Интересная викторина про животных!",
-    "attachments": "https://vk.com/app8177204"
+    "attachments": "https://vk.ru/app8177204"
   });
 }
 

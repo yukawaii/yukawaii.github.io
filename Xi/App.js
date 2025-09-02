@@ -2,7 +2,7 @@
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Классная игра!",
-    "attachments": "https://vk.com/app8180074"
+    "attachments": "https://vk.ru/app8180074"
   });
 }
 

@@ -7,7 +7,7 @@ vkBridge.send("VKWebAppInit", {});   */
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Классная игра для изучения японского языка!",
-    "attachments": "https://vk.com/app8181888"
+    "attachments": "https://vk.ru/app8181888"
   });
 }
 

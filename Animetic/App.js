@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit", {});
 function share1(){
   bridge.send("VKWebAppShowWallPostBox", {
     "message": "Аниме-пазлы на каждый день!",
-    "attachments": "https://vk.com/animepuzz"
+    "attachments": "https://vk.ru/animepuzz"
   });
 }
 function favor1(){
