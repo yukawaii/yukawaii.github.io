@@ -2,7 +2,7 @@
 function share2(){
   vkBridge.send("VKWebAppShowWallPostBox", {
     "message": "Весёлая игра! Побей мой рекорд!",
-    "attachments": "https://vk.com/app8171561"
+    "attachments": "https://vk.ru/app8171561"
   });
 }
 
@@ -21,3 +21,4 @@ function myadd1(){
 function infr(){
   vkBridge.send("VKWebAppShowInviteBox", {})
 }
+
