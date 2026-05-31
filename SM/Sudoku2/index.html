@@ -42,24 +42,17 @@
     border: 1px solid #ddd !important;
     cursor: pointer;
 }
-
-
-
-
-
 /* Назначаем картинку напрямую активному экрану игры */
 .ui-page-active, .ui-page {
     background-image: url('./background.jpg') !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-attachment: fixed !important;
-    background-size: cover !important;
-    
+    background-size: cover !important;    
     /* Добавляем растягивание контейнера JQM по высоте экрана */
     width: 100% !important;
     min-height: 100vh !important;
 }
-
 /* Фикс для мобильных браузеров, чтобы убрать прыжки фона из-за скрытия адресной строки */
 @media screen and (max-width: 768px) {
     .ui-page-active, .ui-page {
