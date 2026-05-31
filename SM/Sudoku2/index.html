@@ -16,22 +16,13 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ionic/ionicons.min.css">
   <style>
-body {
-    /* 1. Задаем фоновую картинку и её правильное поведение */
-    background-image: url('./background.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
-    
-    /* 2. Гарантируем, что body растянется на весь экран смартфона и ПК */
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    width: 100%;
-    
-    /* 3. Временный фоновый цвет на случай, если картинка долго грузится */
-    background-color: #8cbaf7; 
+/* Назначаем картинку напрямую активному экрану игры */
+.ui-page-active, .ui-page {
+    background-image: url('./background.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
 }
     .myButton {
     position: relative;
