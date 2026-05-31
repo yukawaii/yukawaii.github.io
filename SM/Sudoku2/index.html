@@ -16,18 +16,23 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ionic/ionicons.min.css">
   <style>
-    body {
-        background: url(./background.jpg) no-repeat center fixed;     
-background-size: cover;
-        position: absolute;
-        margin: 0;
-        padding: 0;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        /* background: rgb(140, 186, 247); */
-    } 
+body {
+    /* 1. Задаем фоновую картинку и её правильное поведение */
+    background-image: url('./background.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    
+    /* 2. Гарантируем, что body растянется на весь экран смартфона и ПК */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    
+    /* 3. Временный фоновый цвет на случай, если картинка долго грузится */
+    background-color: #8cbaf7; 
+}
     .myButton {
     position: relative;
     max-width: 40%;
