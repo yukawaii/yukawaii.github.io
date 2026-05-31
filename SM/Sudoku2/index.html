@@ -254,13 +254,14 @@ function toggleMusic() {
         <li id="but7" class="ion-ios-chatboxes-outline" data-pack="default" onclick="joingroup();"></li>
         <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
         <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
+         <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="window.location.href = './i.html';"></li> 
         <!-- Кнопка динамика. По умолчанию класс выключенного звука -->
 <li id="music-toggle" class="ion-volume-mute" onclick="toggleMusic();">
     <!-- Тег audio БЕЗ атрибута autoplay. Загружается только по требованию -->
     <audio id="game-audio" src="./images/katamari.mp3" loop prefetch="auto"></audio>
 </li>
 
-       <!-- <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="myAdd1(); setTimeout(() => {window.location.href = './i.html';}, 500);"></li> -->
+      
        <!-- <li id="ASong" class="ion-ios-musical-notes" data-pack="default" onclick="playPause();">   <audio
           src="./images/katamari.mp3"
           autoplay
