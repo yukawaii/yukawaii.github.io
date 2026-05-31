@@ -479,6 +479,24 @@
     background: transparent !important; /* Убирает возможные белые квадраты вокруг картинки */
     background-color: transparent !important;
 }
+/* Выстраиваем все кнопки верхнего меню строго в один красивый горизонтальный ряд */
+.top-menu {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important; /* Одинаковые аккуратные отступы между кнопками */
+    width: 100% !important;
+    flex-wrap: nowrap !important; /* Запрещает кнопкам переноситься на новую строку вниз */
+}
+
+/* Делаем так, чтобы кнопки пропорционально уменьшались и всегда влезали в пульт */
+.top-menu button, .top-menu .iksweb, .top-menu .iksweb1 {
+    flex: 1 !important;
+    max-width: 120px !important; /* Ограничиваем максимальную ширину каждой кнопки */
+    padding: 6px 4px !important; /* Немного уменьшаем внутренние отступы для компактности */
+    font-size: 13px !important; /* Оптимальный размер шрифта для ПК и мобильных */
+    white-space: nowrap !important; /* Запрещает тексту внутри кнопок переноситься */
+}
 
 
 </style>
@@ -544,7 +562,8 @@
                 </div>
                     <!-- НОВОЕ МЕСТО: Кнопка таблицы лидеров в выделенной желтой зоне -->
     <div class="leaderboard-pad" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
-        <button class="iksweb1" onclick="showVKLeaderboard(score)" id="btn-leader" style="width: 55px; height: 55px; background: #282836; border: none; border-radius: 50%; box-shadow: 0 4px 0 #14141a; display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 0;">
+        <button class="iksweb1" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);"
+ id="btn-leader" style="width: 55px; height: 55px; background: #282836; border: none; border-radius: 50%; box-shadow: 0 4px 0 #14141a; display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 0;">
             <img src="icons8.png" style="height: 22px; width: 22px; object-fit: contain;" />
         </button>
         <span style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Лидеры</span>
