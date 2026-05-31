@@ -115,6 +115,40 @@ top:1px;
       .iksweb2{display: inline-block; position:fixed; bottom: 0; right:25%; bottom:1%;   cursor: pointer;}
 	  .iksweb3{display: inline-block; position:absolute; bottom: 0; left:45%; bottom:1%;  cursor: pointer; text-decoration:none;}
 	  .iksweb4{display: inline-block; position:absolute; right:4%; top:2%;  cursor: pointer; text-decoration:none;}
+      #game-clock {
+    position: absolute !important;
+    font-family: 'Arvo', Arial, sans-serif !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: #378de5 !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    border: 2px solid #84bbf3 !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+    text-shadow: 0px 1px 0px #fff;
+    
+    /* По умолчанию на ПК: размещаем справа от центра */
+    top: 40px !important;
+    right: 5vw !important;
+}
+
+/* Адаптивность для мобильных телефонов (узкие экраны) */
+@media screen and (max-width: 1024px) {
+    #game-clock {
+        /* На смартфонах переносим в самый верх по центру, чтобы не перекрывать игру */
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        margin: 10px auto !important;
+        display: block !important;
+        width: max-content !important;
+        font-size: 20px !important;
+        padding: 5px 15px !important;
+    }
+}
+
 </style>
   </head>
   <script>
@@ -235,5 +269,29 @@ function share2(){
           <h3 id="check" class="helpButton" onclick='check();$( "#help" ).popup( "close" );'>Показать мои ошибки</h3>
           <h3 id="solve" class="helpButton" onclick='solve();$( "#help" ).popup( "close" );'>Решить эту задачу</h3>
       </div>
+      <!-- Независимый блок для отображения времени -->
+<div id="game-clock">00:00:00</div>
+
+<script>
+function startClock() {
+    const clockElement = document.getElementById('game-clock');
+    
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    
+    updateTime(); // Запускаем сразу при загрузке
+    setInterval(updateTime, 1000); // Обновляем каждую секунду
+}
+
+// Запускаем часы аккуратно, чтобы не мешать функции init() в body
+window.addEventListener('DOMContentLoaded', startClock);
+</script>
+
   </body>
 </html>
