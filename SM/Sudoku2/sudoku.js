@@ -338,8 +338,7 @@ function hypothesis1() {
         hyp = true;
     }
 }
-function hypothesis2() {
-    myAdd1();
+function hypothesis2() {  
     var i;
     console.log(hyps);
     for(i=0;i<hyps.length;i++) hyps[i].style.color = col1;
@@ -350,6 +349,7 @@ function hypothesis2() {
     document.getElementById("but3").style.color="#B8B8B8";
 }
 function hypothesis3() {
+      myAdd1();
     var i;
     console.log(hyps);
     for(i=0;i<hyps.length;i++) {
