@@ -148,6 +148,23 @@ top:1px;
         padding: 5px 15px !important;
     }
 }
+/* Стили для кнопки переключения музыки */
+#music-toggle {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Эффект, когда музыка активна (ноты подсвечиваются) */
+#music-toggle.ion-ios-musical-notes {
+    color: #378de5 !important; /* Делает иконку синей, сигнализируя об активности */
+    text-shadow: 0 0 8px rgba(55, 141, 229, 0.4);
+}
+
+/* Стандартный вид при выключенной музыке */
+#music-toggle.ion-volume-mute {
+    color: #64748b !important; /* Спокойный серый цвет */
+}
+
 
 </style>
   </head>
@@ -175,6 +192,31 @@ function share2(){
     "attachments": "https://vk.ru/app51399364"
   });
 }
+
+function toggleMusic() {
+    const audio = document.getElementById('game-audio');
+    const button = document.getElementById('music-toggle');
+    
+    if (audio.paused) {
+        // Если музыка стояла на паузе — включаем её
+        audio.play()
+            .then(() => {
+                // Меняем иконку на играющие ноты при успешном старте
+                button.className = 'ion-ios-musical-notes';
+                console.log("Музыка включена игроком");
+            })
+            .catch(error => {
+                console.error("Браузер заблокировал аудио: ", error);
+            });
+    } else {
+        // Если музыка играла — ставим на паузу
+        audio.pause();
+        // Возвращаем иконку выключенного звука
+        button.className = 'ion-volume-mute';
+        console.log("Музыка выключена игроком");
+    }
+}
+
         </script>
   <body onload="init();" onclick="elsewhere();">
     <!-- Start of the page -->
@@ -212,7 +254,13 @@ function share2(){
         <li id="but7" class="ion-ios-chatboxes-outline" data-pack="default" onclick="joingroup();"></li>
         <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
         <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
-        <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="myAdd1(); setTimeout(() => {window.location.href = './i.html';}, 500);"></li>
+        <!-- Кнопка динамика. По умолчанию класс выключенного звука -->
+<li id="music-toggle" class="ion-volume-mute" onclick="toggleMusic();">
+    <!-- Тег audio БЕЗ атрибута autoplay. Загружается только по требованию -->
+    <audio id="game-audio" src="./images/katamari.mp3" loop prefetch="auto"></audio>
+</li>
+
+       <!-- <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick="myAdd1(); setTimeout(() => {window.location.href = './i.html';}, 500);"></li> -->
        <!-- <li id="ASong" class="ion-ios-musical-notes" data-pack="default" onclick="playPause();">   <audio
           src="./images/katamari.mp3"
           autoplay
@@ -245,8 +293,8 @@ function share2(){
           data-theme="b" data-overlay-theme="b">
           <h2>Очистить поле?</h2>
           <ul>
-              <li onclick='restart();$( "#restart" ).popup( "close" );'>Да</li>
-              <li id="cancel" onclick='$( "#restart" ).popup( "close" );'>Нет</li>
+              <li onclick='restart();$( "#restart" ).popup( "close" );'>Да </li>
+              <li id="cancel" onclick='$( "#restart" ).popup( "close" );'> Нет</li>
           </ul>
       </div>
       <div data-role="popup" id ="help" class="ui-content"

@@ -365,6 +365,7 @@ function hypothesis3() {
     document.getElementById("but3").style.color="#B8B8B8";
 }
 function restart() {
+    myAdd1();
     var i,j;
     for(i=0;i<9;i++) {
         for(j=0;j<9;j++) {
