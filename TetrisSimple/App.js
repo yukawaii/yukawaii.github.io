@@ -3,15 +3,24 @@ let lastAdShowTime = 0; // Запоминаем время последнего 
 
 function initVKSDK() {
     if (typeof vkBridge !== 'undefined') {
-        // Инициализация VK Bridge
         vkBridge.send('VKWebAppInit')
             .then(() => {
                 console.log('VK Games SDK успешно инициализирован.');
                 vkInitialized = true;
                 
-                // Автоматически загружаем личный рекорд игрока из облачного хранилища ВК при старте
-                loadVKHighScore();
-               
+                // ЗАПРАШИВАЕМ ДОСТУП, ЧТОБЫ ВК РАЗРЕШИЛ ЧИТАТЬ ИЗ STORAGE
+                vkBridge.send("VKWebAppGetUserInfo")
+                    .then((userInfo) => {
+                        console.log("Пользователь авторизован:", userInfo.first_name);
+                        // Только ПОСЛЕ авторизации загружаем рекорд
+                        loadVKHighScore();
+                    })
+                    .catch((err) => {
+                        console.warn("Пользователь отклонил авторизацию, пробуем загрузить так:", err);
+                        loadVKHighScore();
+                    });
+
+                showVKFullscreenAd();
             })
             .catch(err => {
                 console.error('Ошибка при инициализации VK Bridge:', err);
