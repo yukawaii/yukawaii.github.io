@@ -739,17 +739,31 @@ function endGame() {
     window.isGameOver = true;
     gameState.over = true;
 
-    // Звуковое сопровождение проигрыша
     stopSounds();
-    gameOverSound.pause();
-    gameOverSound.currentTime = 0;
-    gameOverSound.play();
+    gameoverSound.pause();
+    gameoverSound.currentTime = 0;
+    gameoverSound.play();
 
- // Сохраняем рекорд в localStorage и VK Storage
-saveHighscoreIfNeeded(player.score);
-if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
-    saveVKScore(player.score);
-}
+    // ===== НЕМЕДЛЕННОЕ СОХРАНЕНИЕ =====
+    if (typeof saveVKScore === 'function') {
+        saveVKScore(player.score);
+    }
+    
+    // ===== ПОВТОРНАЯ ПОПЫТКА ЧЕРЕЗ 1 СЕКУНДУ =====
+    setTimeout(function() {
+        if (typeof saveVKScore === 'function') {
+            console.log('🔄 Повторная попытка сохранения рекорда:', player.score);
+            saveVKScore(player.score);
+        }
+    }, 1000);
+    
+    // ===== И ЕЩЁ ОДНА ЧЕРЕЗ 3 СЕКУНДЫ =====
+    setTimeout(function() {
+        if (typeof saveVKScore === 'function') {
+            console.log('🔄 Третья попытка сохранения рекорда:', player.score);
+            saveVKScore(player.score);
+        }
+    }, 3000);
 
     // // ИЗМЕНЕННЫЙ ВЫЗОВ SWEETALERT СО СЛУШАТЕЛЕМ НАЖАТИЯ КНОПКИ «OK»
     swal({
@@ -767,8 +781,6 @@ if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
         }
     });
 }
-
-
 
 // Функции-обертки для кнопок HTML (Пауза и Дальше)
 function pauseGame() {
