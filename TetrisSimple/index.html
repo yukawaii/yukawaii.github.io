@@ -645,11 +645,10 @@
     const isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent);
     const isRealPC = !isMobileDevice && !isTablet;
     
-    // Если это VK на реальном ПК — скрываем мобильный джойстик
+    // Если это VK на реальном ПК
     if (isVK && isRealPC) {
-        // Ждём загрузки DOM
         document.addEventListener('DOMContentLoaded', function() {
-            // Скрываем мобильные элементы
+            // 1. Скрываем мобильные элементы
             const mobileElements = document.querySelectorAll('.mobile-joystick, .d-pad, .action-pad, .rotate-btn, .leaderboard-pad, #btn-leader, #btn-left, #btn-right, #btn-down, #btn-rot');
             mobileElements.forEach(el => {
                 if (el) {
@@ -659,25 +658,49 @@
                 }
             });
             
-            // Показываем ПК-кнопку лидеров
+            // 2. Восстанавливаем ПК-интерфейс (панель управления)
+            const controlsContainer = document.querySelector('.controls-container');
+            if (controlsContainer) {
+                controlsContainer.style.width = '320px';
+                controlsContainer.style.maxWidth = '320px';
+                controlsContainer.style.padding = '25px';
+                controlsContainer.style.gap = '20px';
+            }
+            
+            // 3. Восстанавливаем топ-меню (вертикально)
+            const topMenu = document.querySelector('.top-menu');
+            if (topMenu) {
+                topMenu.style.flexDirection = 'column';
+                topMenu.style.gap = '12px';
+            }
+            
+            // 4. Восстанавливаем кнопки
+            const buttons = document.querySelectorAll('.iksweb');
+            buttons.forEach(btn => {
+                btn.style.width = '100%';
+                btn.style.fontSize = '14px';
+                btn.style.padding = '14px';
+            });
+            
+            // 5. Показываем ПК-кнопку лидеров
             const pcLeader = document.querySelector('.pc-only-leader');
             if (pcLeader) {
                 pcLeader.style.display = 'inline-flex';
             }
             
-            // Показываем инструкцию
+            // 6. Показываем инструкцию
             const instructions = document.querySelector('.instructions');
             if (instructions) {
                 instructions.style.display = 'block';
             }
             
-            // Возвращаем нормальный вид топ-меню
-            const topMenu = document.querySelector('.top-menu');
-            if (topMenu) {
-                topMenu.style.flexDirection = 'column';
+            // 7. Показываем рекорд в панели
+            const sideRecord = document.getElementById('yandex-highscore-side');
+            if (sideRecord) {
+                sideRecord.style.display = 'block';
             }
             
-            console.log('🔧 VK на ПК: мобильный джойстик скрыт');
+            console.log('🔧 VK на ПК: интерфейс восстановлен');
         });
     }
 })();
