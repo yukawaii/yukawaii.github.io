@@ -203,12 +203,11 @@ setTimeout(function() {
 }, 1000);
 
 setTimeout(function() {
-    if (typeof updateHighscoreDisplay === 'function') {s
+    if (typeof updateHighscoreDisplay === 'function') {
         updateHighscoreDisplay();
         console.log('🔥 Вторая принудительная попытка обновления рекорда');
     }
 }, 3000);
-
 // Функция приглашения друзей через VK
 function inviteFriends() {
     if (typeof vkBridge === 'undefined') {
