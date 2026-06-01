@@ -250,3 +250,40 @@ setTimeout(function() {
         console.log('🔥 Вторая принудительная попытка обновления рекорда');
     }
 }, 3000);
+
+// Функция приглашения друзей через VK
+function inviteFriends() {
+    if (typeof vkBridge === 'undefined') {
+        console.warn('VK Bridge не найден');
+        swal({
+            title: "Пригласить друзей",
+            text: "Функция доступна только в приложении ВКонтакте",
+            icon: "info",
+            button: "OK"
+        });
+        return;
+    }
+    
+    vkBridge.send("VKWebAppShowInviteBox")
+        .then((data) => {
+            console.log("Приглашение отправлено:", data);
+            if (data.result) {
+                swal({
+                    title: "Спасибо!",
+                    text: "Приглашение отправлено друзьям",
+                    icon: "success",
+                    button: "OK",
+                    timer: 1500
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при открытии окна приглашения:", error);
+            // Запасной вариант — открываем стандартное окно шеринга
+            vkBridge.send("VKWebAppShare", {
+                link: window.location.href,
+                title: "Тетрис Black — сыграем?",
+                description: "Отличная игра в тетрис! Попробуй побить мой рекорд!"
+            }).catch(e => console.error("Ошибка шаринга:", e));
+        });
+}

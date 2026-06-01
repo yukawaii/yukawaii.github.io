@@ -338,45 +338,64 @@ function drawGame(){
     drawNextMatrix(player.nextMatrix, {x: canvas.width /5 * 4 , y: 10})
 }
 
-function drawPausedScreen(){
-    context.fillStyle='#333'
-    context.fillRect(0,0, canvas.width, canvas.height)
-    context.fillStyle='white'
-    context.font = '32px Russo One';
-    context.textAlign = "center";
-    context.fillText("Пауза", canvas.width /2, canvas.height /2)
-    context.font = '18px Russo One';
-    context.fillText("Нажмите кнопку ДАЛЬШЕ", canvas.width /2, canvas.height /1.8)
+function drawPausedScreen() {
+    context.fillStyle = '#333';
+    context.fillRect(0, 0, canvas.width, canvas.height);
     
+    const titleFontSize = 48;
+    const subFontSize = 28;
+    
+    context.fillStyle = 'white';
+    context.font = titleFontSize + 'px Russo One';
+    context.textAlign = "center";
+    context.fillText("Пауза", canvas.width / 2, canvas.height / 2);
+    
+    context.font = subFontSize + 'px Russo One';
+    context.fillText("Нажмите кнопку ДАЛЬШЕ", canvas.width / 2, canvas.height / 1.65);
 }
 
-function drawGameOverScreen(){
+function drawGameOverScreen() {
     context.fillStyle = 'rgba(30,25,25,0.075)';
-    context.fillRect(0,100, canvas.width, canvas.height)
-    context.fillStyle='white'
-    context.font = '32px Russo One';
-    context.textAlign = "center";
-    context.fillText("Игра окончена", canvas.width /2, canvas.height /2)
-    context.font = '18px Russo One';
-    context.fillText("Попробуйте ещё раз", canvas.width /2, canvas.height /1.8)
+    context.fillRect(0, 100, canvas.width, canvas.height);
     
+    const titleFontSize = 48;
+    const subFontSize = 28;
+    
+    context.fillStyle = 'white';
+    context.font = titleFontSize + 'px Russo One';
+    context.textAlign = "center";
+    context.fillText("Игра окончена", canvas.width / 2, canvas.height / 2);
+    
+    context.font = subFontSize + 'px Russo One';
+    context.fillText("Попробуйте ещё раз", canvas.width / 2, canvas.height / 1.65);
 }
 
-function drawMainMenu(){
-    context.fillStyle='#303040'
-    context.fillRect(0,0, canvas.width, canvas.height)
-    context.fillStyle='white'
-    context.font = '32px Russo One';
-    context.textAlign = "center";
-    context.fillText("Поиграем в тетрис?", canvas.width /2, canvas.height /2)
-
-    if(window.localStorage.getItem('highscore') !== null){
-        context.font = '18px Russo One';
-        context.fillText("Рекорды: " + window.localStorage.getItem('highscore'), canvas.width /2, canvas.height /3)
-    };
+function drawMainMenu() {
+    context.fillStyle = '#303040';
+    context.fillRect(0, 0, canvas.width, canvas.height);
     
-    context.font = '18px Russo One';
-    context.fillText("Нажмите кнопку СТАРТ, чтобы начать", canvas.width /2, canvas.height /1.8)
+    // Увеличенные шрифты для всех устройств
+    const titleFontSize = 48;
+    const highscoreFontSize = 28;
+    const startFontSize = 24;
+    
+    context.fillStyle = 'white';
+    context.font = titleFontSize + 'px Russo One';
+    context.textAlign = "center";
+    context.fillText("Поиграем в тетрис?", canvas.width / 2, canvas.height / 2.2);
+    
+    // Показываем рекорд из VK или localStorage
+    let highscoreText = "Рекорд: 0";
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highscoreText = "Рекорд: " + window.vkHighscore;
+    } else if (window.localStorage.getItem('highscore') !== null) {
+        highscoreText = "Рекорд: " + window.localStorage.getItem('highscore');
+    }
+    context.font = highscoreFontSize + 'px Russo One';
+    context.fillText(highscoreText, canvas.width / 2, canvas.height / 3);
+    
+    context.font = startFontSize + 'px Russo One';
+    context.fillText("Нажмите кнопку СТАРТ, чтобы начать", canvas.width / 2, canvas.height / 1.6);
 }
 
 function drawMatrix(matrix, offset) {
