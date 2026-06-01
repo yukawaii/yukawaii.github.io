@@ -533,8 +533,8 @@
         /* Сам канвас не трогаем, но текст внутри будет крупнее через JS */
     }
 }
-/* === АБСОЛЮТНОЕ ПРАВИЛО ДЛЯ ПК === */
-@media screen and (min-width: 900px) and (min-resolution: 1dppx) {
+/* === ДЛЯ ПК (есть мышь, ширина большая) === */
+@media screen and (min-width: 900px) and (pointer: fine) {
     /* Уничтожаем мобильный джойстик */
     .mobile-joystick,
     .d-pad,
@@ -555,24 +555,20 @@
         pointer-events: none !important;
     }
     
-    /* Принудительно показываем ПК-элементы */
+    /* Показываем ПК-элементы */
     .pc-only-leader {
         display: inline-flex !important;
-        visibility: visible !important;
     }
     
     .instructions {
         display: block !important;
-        visibility: visible !important;
     }
     
-    /* Фиксим панель */
     .controls-container {
         width: 320px !important;
         max-width: 320px !important;
     }
     
-    /* Топ-меню вертикально */
     .top-menu {
         flex-direction: column !important;
     }
@@ -660,21 +656,21 @@
     <script src="App.js"></script>
 <script>
 (function() {
-    // Самый надёжный детект ПК — по ширине и отсутствию сенсора
     function killMobileOnPC() {
-        if (window.innerWidth >= 900) {
-            // Скрываем мобильные элементы
-            const mobileBlock = document.querySelector('.mobile-joystick');
-            if (mobileBlock) mobileBlock.style.display = 'none';
+        // Проверяем: ширина >= 900px И есть мышь (не сенсор)
+        const isPCLike = window.innerWidth >= 900 && window.matchMedia('(pointer: fine)').matches;
+        
+        if (isPCLike) {
+            const mobileJoystick = document.querySelector('.mobile-joystick');
+            if (mobileJoystick) mobileJoystick.style.display = 'none';
             
-            // Показываем ПК-блоки
             const pcLeader = document.querySelector('.pc-only-leader');
             if (pcLeader) pcLeader.style.display = 'inline-flex';
             
             const instructions = document.querySelector('.instructions');
             if (instructions) instructions.style.display = 'block';
             
-            console.log('💀 Принудительно убит мобильный интерфейс на ПК');
+            console.log('💀 ПК-режим (есть мышь, ширина большая)');
         }
     }
     
