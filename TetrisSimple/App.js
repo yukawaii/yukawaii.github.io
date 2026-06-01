@@ -156,19 +156,16 @@ function updateRecordText(text) {
 // Запускаем инициализацию ВК вместо Яндекса
 initVKSDK();
 
-// Функция вызова и открытия встроенной нативной таблицы лидеров ВК
 // Функция вызова таблицы лидеров (работает и на ПК, и на телефонах)
 function showVKLeaderboard(currentScore = 0) {
     console.log('📊 Открываем таблицу лидеров, текущий счёт:', currentScore);
     
-    // Ставим игру на паузу, если она активна
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
     
     if (!vkInitialized) {
         console.warn("⚠️ VK Bridge не инициализирован");
-        // Показываем заглушку
         swal({
             title: "Таблица лидеров",
             text: "Не удалось загрузить. Попробуйте позже.",
@@ -178,25 +175,30 @@ function showVKLeaderboard(currentScore = 0) {
         return;
     }
     
-    // ПЕРВЫЙ СПОСОБ — для мобильных устройств
-    if (window.innerWidth < 768 || 'ontouchstart' in window) {
-        console.log('📱 Мобильное устройство, используем VKWebAppShowLeaderBoard');
+    // ПРОВЕРЯЕМ: мобильное устройство или ПК
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // МОБИЛЬНЫЙ СПОСОБ — через внешнюю ссылку (пока не работает нативный)
+        console.log('📱 Мобильное устройство, пробуем открыть лидерборд через ссылку');
         
-        vkBridge.send('VKWebAppShowLeaderBoard', {
-            leaderboard_id: 1,  // ID таблицы лидеров (можно оставить 1, ВК сам подставит)
-            user_result: parseInt(currentScore, 10) || 0
-        })
-        .then((data) => {
-            console.log('✅ Лидерборд на мобилке открыт', data);
-        })
-        .catch((error) => {
-            console.error('❌ Ошибка открытия лидерборда на мобилке:', error);
-            // ВТОРОЙ СПОСОБ — через кнопку по умолчанию
-            fallbackLeaderboard(currentScore);
-        });
-    } 
-    // ВТОРОЙ СПОСОБ — для ПК
-    else {
+        // Получаем ID приложения
+        vkBridge.send('VKWebAppGetLaunchParams')
+            .then((params) => {
+                const appId = params.vk_app_id;
+                if (appId) {
+                    const url = `https://vk.com/app${appId}#leaderboard`;
+                    vkBridge.send('VKWebAppOpenURL', { url: url })
+                        .catch(e => console.error('Не удалось открыть URL:', e));
+                } else {
+                    fallbackLeaderboard(currentScore);
+                }
+            })
+            .catch(() => {
+                fallbackLeaderboard(currentScore);
+            });
+    } else {
+        // ПК — используем нативный метод
         console.log('💻 ПК устройство, используем VKWebAppShowLeaderBoardBox');
         
         vkBridge.send('VKWebAppShowLeaderBoardBox', {
@@ -212,29 +214,15 @@ function showVKLeaderboard(currentScore = 0) {
     }
 }
 
-// ЗАПАСНОЙ ВАРИАНТ — открываем через внешнюю ссылку
+// ЗАПАСНОЙ ВАРИАНТ — показываем текущий рекорд через alert
 function fallbackLeaderboard(currentScore) {
-    console.log('🔄 Использую запасной вариант открытия лидерборда');
-    
-    // Пытаемся получить ссылку на приложение
-    vkBridge.send('VKWebAppGetLaunchParams')
-        .then((params) => {
-            const appId = params.vk_app_id || 'YOUR_APP_ID';
-            const url = `https://vk.com/app${appId}#leaderboard`;
-            
-            // Открываем в новой вкладке
-            vkBridge.send('VKWebAppOpenURL', { url: url })
-                .catch(e => console.error('Не удалось открыть URL:', e));
-        })
-        .catch(() => {
-            // Самый последний вариант — показываем alert с текущим рекордом
-            swal({
-                title: "🏆 Ваш рекорд",
-                text: `${currentScore} очков`,
-                icon: "info",
-                button: "OK"
-            });
-        });
+    console.log('🔄 Использую запасной вариант');
+    swal({
+        title: "🏆 Ваш рекорд",
+        text: `${currentScore} очков`,
+        icon: "info",
+        button: "OK"
+    });
 }
 // После инициализации VK, принудительно обновляем рекорд
 setTimeout(function() {
