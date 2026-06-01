@@ -156,7 +156,7 @@ function updateRecordText(text) {
 // Запускаем инициализацию ВК вместо Яндекса
 initVKSDK();
 
-// Функция вызова таблицы лидеров (работает и на ПК, и на телефонах)
+// Функция вызова таблицы лидеров (работает на ПК и мобилках)
 function showVKLeaderboard(currentScore = 0) {
     console.log('📊 Открываем таблицу лидеров, текущий счёт:', currentScore);
     
@@ -175,53 +175,23 @@ function showVKLeaderboard(currentScore = 0) {
         return;
     }
     
-    // ПРОВЕРЯЕМ: мобильное устройство или ПК
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        // МОБИЛЬНЫЙ СПОСОБ — через внешнюю ссылку (пока не работает нативный)
-        console.log('📱 Мобильное устройство, пробуем открыть лидерборд через ссылку');
+    // Единый метод для всех платформ (ПК и мобильные)
+    vkBridge.send('VKWebAppShowLeaderBoardBox', {
+        user_result: parseInt(currentScore, 10) || 0
+    })
+    .then((data) => {
+        console.log('✅ Таблица лидеров успешно открыта', data);
+    })
+    .catch((error) => {
+        console.error('❌ Ошибка открытия таблицы лидеров:', error);
         
-        // Получаем ID приложения
-        vkBridge.send('VKWebAppGetLaunchParams')
-            .then((params) => {
-                const appId = params.vk_app_id;
-                if (appId) {
-                    const url = `https://vk.com/app${appId}#leaderboard`;
-                    vkBridge.send('VKWebAppOpenURL', { url: url })
-                        .catch(e => console.error('Не удалось открыть URL:', e));
-                } else {
-                    fallbackLeaderboard(currentScore);
-                }
-            })
-            .catch(() => {
-                fallbackLeaderboard(currentScore);
-            });
-    } else {
-        // ПК — используем нативный метод
-        console.log('💻 ПК устройство, используем VKWebAppShowLeaderBoardBox');
-        
-        vkBridge.send('VKWebAppShowLeaderBoardBox', {
-            user_result: parseInt(currentScore, 10) || 0
-        })
-        .then((data) => {
-            console.log('✅ Лидерборд на ПК открыт', data);
-        })
-        .catch((error) => {
-            console.error('❌ Ошибка открытия лидерборда на ПК:', error);
-            fallbackLeaderboard(currentScore);
+        // Если ошибка — показываем рекорд через swal
+        swal({
+            title: "🏆 Ваш рекорд",
+            text: `${currentScore} очков`,
+            icon: "info",
+            button: "OK"
         });
-    }
-}
-
-// ЗАПАСНОЙ ВАРИАНТ — показываем текущий рекорд через alert
-function fallbackLeaderboard(currentScore) {
-    console.log('🔄 Использую запасной вариант');
-    swal({
-        title: "🏆 Ваш рекорд",
-        text: `${currentScore} очков`,
-        icon: "info",
-        button: "OK"
     });
 }
 // После инициализации VK, принудительно обновляем рекорд
@@ -233,7 +203,7 @@ setTimeout(function() {
 }, 1000);
 
 setTimeout(function() {
-    if (typeof updateHighscoreDisplay === 'function') {
+    if (typeof updateHighscoreDisplay === 'function') {s
         updateHighscoreDisplay();
         console.log('🔥 Вторая принудительная попытка обновления рекорда');
     }

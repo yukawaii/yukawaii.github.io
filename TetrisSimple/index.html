@@ -150,5 +150,29 @@
     </div>
     <script src="tetris.js"></script>
     <script src="App.js"></script>
+    <script>
+// Принудительная привязка кнопки лидеров на мобилках
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим кнопку лидеров в мобильном джойстике
+    const mobileLeaderBtn = document.getElementById('btn-leader');
+    if (mobileLeaderBtn) {
+        // Убираем старый onclick, если был
+        mobileLeaderBtn.removeAttribute('onclick');
+        // Вешаем новый обработчик
+        mobileLeaderBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('📱 Нажата мобильная кнопка лидеров');
+            if (typeof showVKLeaderboard === 'function') {
+                const currentScore = (typeof player !== 'undefined' && player.score) ? player.score : 0;
+                showVKLeaderboard(currentScore);
+            } else {
+                console.error('❌ showVKLeaderboard не определена');
+            }
+        });
+        console.log('🔘 Кнопка лидеров на мобилке привязана');
+    }
+});
+</script>
 </body>
 </html>
