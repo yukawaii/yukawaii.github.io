@@ -116,14 +116,8 @@ function saveVKScore(scoreValue) {
 // Загружаем рекорд из VK, а если не получилось — из localStorage
 function loadVKHighScore() {
     if (!vkInitialized) {
-        // Пытаемся загрузить из localStorage
-        const backupScore = localStorage.getItem('tetris_high_score_backup');
-        if (backupScore) {
-            updateRecordText(`Рекорд: ${backupScore}`);
-            window.vkHighscore = parseInt(backupScore, 10) || 0;
-        } else {
-            updateRecordText('Рекорд: 0');
-        }
+        updateRecordText('Рекорд: 0');
+        // ДОБАВИТЬ — обновляем отображение в игре
         if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
         return;
     }
@@ -135,31 +129,19 @@ function loadVKHighScore() {
                 updateRecordText(`Рекорд: ${highScore}`);
                 window.vkHighscore = parseInt(highScore, 10) || 0;
                 
-                // Сохраняем также в localStorage для резерва
-                localStorage.setItem('tetris_high_score_backup', highScore);
-            } else {
-                // Пытаемся загрузить из localStorage
-                const backupScore = localStorage.getItem('tetris_high_score_backup');
-                if (backupScore) {
-                    updateRecordText(`Рекорд: ${backupScore}`);
-                    window.vkHighscore = parseInt(backupScore, 10) || 0;
-                } else {
-                    updateRecordText('Рекорд: 0');
-                    window.vkHighscore = 0;
-                }
-            }
-            if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
-        })
-        .catch(err => {
-            console.log('Ошибка получения рекорда из VK:', err);
-            const backupScore = localStorage.getItem('tetris_high_score_backup');
-            if (backupScore) {
-                updateRecordText(`Рекорд: ${backupScore}`);
-                window.vkHighscore = parseInt(backupScore, 10) || 0;
+                // ===== ЭТО ГЛАВНОЕ =====
+                if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
+                // =======================
             } else {
                 updateRecordText('Рекорд: 0');
                 window.vkHighscore = 0;
+                if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
             }
+        })
+        .catch(err => {
+            console.log('Ошибка получения рекорда:', err);
+            updateRecordText('Рекорд: 0');
+            window.vkHighscore = 0;
             if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
         });
 }
@@ -175,28 +157,96 @@ function updateRecordText(text) {
 initVKSDK();
 
 // Функция вызова и открытия встроенной нативной таблицы лидеров ВК
+// Функция вызова таблицы лидеров (работает и на ПК, и на телефонах)
 function showVKLeaderboard(currentScore = 0) {
-    // Включаем паузу в игре при открытии таблицы
+    console.log('📊 Открываем таблицу лидеров, текущий счёт:', currentScore);
+    
+    // Ставим игру на паузу, если она активна
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
-
+    
     if (!vkInitialized) {
-        console.warn("Лидерборд недоступен локально");
+        console.warn("⚠️ VK Bridge не инициализирован");
+        // Показываем заглушку
+        swal({
+            title: "Таблица лидеров",
+            text: "Не удалось загрузить. Попробуйте позже.",
+            icon: "info",
+            button: "OK"
+        });
         return;
     }
-
-    // ВК сам откроет красивое модальное окно поверх фрейма игры
-    vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        user_result: parseInt(currentScore, 10) || 0 // Передаем текущие очки игрока для сравнения
-    })
-    .then((data) => {
-        if (data.success) {
-            console.log('Таблица лидеров успешно закрыта пользователем');
-        }
-    })
-    .catch((error) => {
-        console.error('Ошибка открытия таблицы лидеров ВК:', error);
-    });
+    
+    // ПЕРВЫЙ СПОСОБ — для мобильных устройств
+    if (window.innerWidth < 768 || 'ontouchstart' in window) {
+        console.log('📱 Мобильное устройство, используем VKWebAppShowLeaderBoard');
+        
+        vkBridge.send('VKWebAppShowLeaderBoard', {
+            leaderboard_id: 1,  // ID таблицы лидеров (можно оставить 1, ВК сам подставит)
+            user_result: parseInt(currentScore, 10) || 0
+        })
+        .then((data) => {
+            console.log('✅ Лидерборд на мобилке открыт', data);
+        })
+        .catch((error) => {
+            console.error('❌ Ошибка открытия лидерборда на мобилке:', error);
+            // ВТОРОЙ СПОСОБ — через кнопку по умолчанию
+            fallbackLeaderboard(currentScore);
+        });
+    } 
+    // ВТОРОЙ СПОСОБ — для ПК
+    else {
+        console.log('💻 ПК устройство, используем VKWebAppShowLeaderBoardBox');
+        
+        vkBridge.send('VKWebAppShowLeaderBoardBox', {
+            user_result: parseInt(currentScore, 10) || 0
+        })
+        .then((data) => {
+            console.log('✅ Лидерборд на ПК открыт', data);
+        })
+        .catch((error) => {
+            console.error('❌ Ошибка открытия лидерборда на ПК:', error);
+            fallbackLeaderboard(currentScore);
+        });
+    }
 }
 
+// ЗАПАСНОЙ ВАРИАНТ — открываем через внешнюю ссылку
+function fallbackLeaderboard(currentScore) {
+    console.log('🔄 Использую запасной вариант открытия лидерборда');
+    
+    // Пытаемся получить ссылку на приложение
+    vkBridge.send('VKWebAppGetLaunchParams')
+        .then((params) => {
+            const appId = params.vk_app_id || 'YOUR_APP_ID';
+            const url = `https://vk.com/app${appId}#leaderboard`;
+            
+            // Открываем в новой вкладке
+            vkBridge.send('VKWebAppOpenURL', { url: url })
+                .catch(e => console.error('Не удалось открыть URL:', e));
+        })
+        .catch(() => {
+            // Самый последний вариант — показываем alert с текущим рекордом
+            swal({
+                title: "🏆 Ваш рекорд",
+                text: `${currentScore} очков`,
+                icon: "info",
+                button: "OK"
+            });
+        });
+}
+// После инициализации VK, принудительно обновляем рекорд
+setTimeout(function() {
+    if (typeof updateHighscoreDisplay === 'function') {
+        updateHighscoreDisplay();
+        console.log('🔥 Принудительное обновление рекорда после задержки');
+    }
+}, 1000);
+
+setTimeout(function() {
+    if (typeof updateHighscoreDisplay === 'function') {
+        updateHighscoreDisplay();
+        console.log('🔥 Вторая принудительная попытка обновления рекорда');
+    }
+}, 3000);

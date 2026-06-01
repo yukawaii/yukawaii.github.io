@@ -21,15 +21,15 @@ pauseSound = new Audio('audio/tetrispause.mp3')
 gameoverSound = new Audio('audio/tetrisgameover.wav') 
 highspinsSound = new Audio('audio/tetrishighspins.wav') 
 levelupSound = new Audio('audio/tetrislevelup.wav') 
-introSound.volume = .03
-loopSound.volume = .015
-collideSound.volume = .04
-rotateSound.volume = .015
-sweepSound.volume = .25
-pauseSound.volume = .1
-gameoverSound.volume = .03
-highspinsSound.volume = .02
-levelupSound.volume = .1
+introSound.volume = 0.15   // было 0.03
+loopSound.volume = 0.08    // было 0.015
+collideSound.volume = 0.15 // было 0.04
+rotateSound.volume = 0.08  // было 0.015
+sweepSound.volume = 0.6    // было 0.25
+pauseSound.volume = 0.3    // было 0.1
+gameoverSound.volume = 0.15 // было 0.03
+highspinsSound.volume = 0.1 // было 0.02
+levelupSound.volume = 0.3   // было 0.1
 
  isGameStarted = false;
 isGameOver = false;
@@ -66,32 +66,60 @@ function sound(src) {
 var mut = false;
 //выключить звуки
 function mutebtn() {
-    if (mut===false){
-    introSound.volume = .0
-    loopSound.volume = .0
-    collideSound.volume = .0
-    rotateSound.volume = .0
-    sweepSound.volume = .0
-    pauseSound.volume = .0
-    gameoverSound.volume = .0
-    highspinsSound.volume = .0
-    levelupSound.volume = .0
-    mut=true;
-    document.getElementById("mute").src = "./muteoff.png";
-}
-    // иначе - включить. Кнопка одна для вкл выкл
-    else {
-        introSound.volume = .03
-        loopSound.volume = .015
-        collideSound.volume = .04
-        rotateSound.volume = .015
-        sweepSound.volume = .25
-        pauseSound.volume = .1
-        gameoverSound.volume = .03
-        highspinsSound.volume = .02
-        levelupSound.volume = .1
+    // ГРОМКИЕ ЗНАЧЕНИЯ (как мы установили ранее)
+    const LOUD_VOLUMES = {
+        intro: 0.15,
+        loop: 0.08,
+        collide: 0.15,
+        rotate: 0.08,
+        sweep: 0.6,
+        pause: 0.3,
+        gameover: 0.15,
+        highspins: 0.1,
+        levelup: 0.3
+    };
+    
+    // ТИХИЕ ЗНАЧЕНИЯ (полностью выключено)
+    const MUTE_VOLUMES = {
+        intro: 0,
+        loop: 0,
+        collide: 0,
+        rotate: 0,
+        sweep: 0,
+        pause: 0,
+        gameover: 0,
+        highspins: 0,
+        levelup: 0
+    };
+    
+    if (mut === false) {
+        // ВЫКЛЮЧАЕМ звук
+        introSound.volume = MUTE_VOLUMES.intro;
+        loopSound.volume = MUTE_VOLUMES.loop;
+        collideSound.volume = MUTE_VOLUMES.collide;
+        rotateSound.volume = MUTE_VOLUMES.rotate;
+        sweepSound.volume = MUTE_VOLUMES.sweep;
+        pauseSound.volume = MUTE_VOLUMES.pause;
+        gameoverSound.volume = MUTE_VOLUMES.gameover;
+        highspinsSound.volume = MUTE_VOLUMES.highspins;
+        levelupSound.volume = MUTE_VOLUMES.levelup;
+        mut = true;
+        document.getElementById("mute").src = "./muteoff.png";
+        console.log('🔇 Звук выключен');
+    } else {
+        // ВКЛЮЧАЕМ звук (с нормальной громкостью)
+        introSound.volume = LOUD_VOLUMES.intro;
+        loopSound.volume = LOUD_VOLUMES.loop;
+        collideSound.volume = LOUD_VOLUMES.collide;
+        rotateSound.volume = LOUD_VOLUMES.rotate;
+        sweepSound.volume = LOUD_VOLUMES.sweep;
+        pauseSound.volume = LOUD_VOLUMES.pause;
+        gameoverSound.volume = LOUD_VOLUMES.gameover;
+        highspinsSound.volume = LOUD_VOLUMES.highspins;
+        levelupSound.volume = LOUD_VOLUMES.levelup;
         mut = false;
         document.getElementById("mute").src = "./mute.png";
+        console.log('🔊 Звук включен (громкий)');
     }
 }
 
@@ -102,27 +130,26 @@ function levelUp(){
     levelupSound.play()
 }
 // Обновление отображения рекорда на экране
+// Обновление зелёного рекорда на экране
 function updateHighscoreDisplay() {
     let currentHighscore = 0;
     
-    // Сначала проверяем VK Storage (если есть)
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         currentHighscore = window.vkHighscore;
-    } 
-    // Иначе берём из localStorage
-    else if (window.localStorage.getItem('highscore') !== null) {
+    } else if (window.localStorage.getItem('highscore') !== null) {
         currentHighscore = parseInt(window.localStorage.getItem('highscore')) || 0;
     }
     
-    // Обновляем все места, где показывается рекорд
     const sideElement = document.getElementById('yandex-highscore-side');
     const topElement = document.getElementById('yandex-highscore-top');
     
     if (sideElement) {
         sideElement.innerHTML = 'Рекорд: ' + currentHighscore;
+        console.log('📊 Обновлён боковой рекорд:', currentHighscore);
     }
     if (topElement) {
         topElement.innerHTML = 'Рекорд: ' + currentHighscore;
+        console.log('📊 Обновлён верхний рекорд:', currentHighscore);
     }
 }
 
@@ -703,7 +730,9 @@ function startGame(){
     isGameOver = false;
     gameState.over = false;
     gameState.paused = false;
-
+// Обновляем рекорд перед началом игры
+    updateHighscoreDisplay();
+    
     gameoverSound.pause();
     gameoverSound.currentTime = 0;
     arena.forEach(row => row.fill(0));
