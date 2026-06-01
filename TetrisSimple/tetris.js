@@ -101,6 +101,61 @@ function levelUp(){
     levelupSound.currentTime = 0;
     levelupSound.play()
 }
+// Обновление отображения рекорда на экране
+function updateHighscoreDisplay() {
+    let currentHighscore = 0;
+    
+    // Сначала проверяем VK Storage (если есть)
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        currentHighscore = window.vkHighscore;
+    } 
+    // Иначе берём из localStorage
+    else if (window.localStorage.getItem('highscore') !== null) {
+        currentHighscore = parseInt(window.localStorage.getItem('highscore')) || 0;
+    }
+    
+    // Обновляем все места, где показывается рекорд
+    const sideElement = document.getElementById('yandex-highscore-side');
+    const topElement = document.getElementById('yandex-highscore-top');
+    
+    if (sideElement) {
+        sideElement.innerHTML = 'Рекорд: ' + currentHighscore;
+    }
+    if (topElement) {
+        topElement.innerHTML = 'Рекорд: ' + currentHighscore;
+    }
+}
+
+// Сохранение рекорда (если текущий счёт больше)
+function saveHighscoreIfNeeded(currentScore) {
+    let currentHighscore = 0;
+    
+    // Получаем текущий рекорд
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        currentHighscore = window.vkHighscore;
+    } else if (window.localStorage.getItem('highscore') !== null) {
+        currentHighscore = parseInt(window.localStorage.getItem('highscore')) || 0;
+    }
+    
+    // Если новый рекорд больше - сохраняем
+    if (currentScore > currentHighscore) {
+        window.localStorage.setItem('highscore', currentScore);
+        
+        // Если есть VK Storage - сохраняем и туда
+        if (typeof saveVKScore === 'function') {
+            saveVKScore(currentScore);
+        }
+        
+        // Обновляем глобальную переменную
+        window.vkHighscore = currentScore;
+        
+        // Обновляем отображение
+        updateHighscoreDisplay();
+        
+        return true; // Рекорд обновлён
+    }
+    return false; // Рекорд не обновлён
+}
 function arenaSweep(){
     let rowCount = 1;
     
@@ -116,6 +171,8 @@ function arenaSweep(){
         player.lines ++
         ++y;
         player.score += rowCount * 10;
+        // Обновляем рекорд после изменения счёта
+saveHighscoreIfNeeded(player.score);
         rowCount *= 2
 
         // handle level ups
@@ -640,6 +697,7 @@ function resumeGame() {
 
 
 function startGame(){
+    updateHighscoreDisplay();
     // Сбрасываем флаги при старте новой игры
     isGameStarted = true;
     isGameOver = false;
@@ -687,11 +745,11 @@ function endGame() {
     gameOverSound.currentTime = 0;
     gameOverSound.play();
 
-    // // --- ОТПРАВЛЯЕМ РЕКОРД НАДЁЖНО ДО РЕКЛАМЫ ---
-    // Вызываем нашу новую функцию сохранения в VK Storage
-    if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
-        saveVKScore(player.score);
-    }
+ // Сохраняем рекорд в localStorage и VK Storage
+saveHighscoreIfNeeded(player.score);
+if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
+    saveVKScore(player.score);
+}
 
     // // ИЗМЕНЕННЫЙ ВЫЗОВ SWEETALERT СО СЛУШАТЕЛЕМ НАЖАТИЯ КНОПКИ «OK»
     swal({

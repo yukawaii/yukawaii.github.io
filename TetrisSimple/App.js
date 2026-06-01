@@ -63,7 +63,6 @@ function saveVKScore(scoreValue) {
     }
     if (scoreValue <= 0) return;
 
-    // Сначала проверяем сохраненный ранее рекорд в облаке (VK Storage)
     vkBridge.send('VKWebAppStorageGet', { keys: ['tetris_high_score'] })
         .then((data) => {
             let previousHighScore = 0;
@@ -71,7 +70,6 @@ function saveVKScore(scoreValue) {
                 previousHighScore = parseInt(data.keys[0].value, 10) || 0;
             }
 
-            // Если новый счет больше предыдущего рекорда — перезаписываем его
             if (scoreValue > previousHighScore) {
                 vkBridge.send('VKWebAppStorageSet', {
                     key: 'tetris_high_score',
@@ -80,6 +78,10 @@ function saveVKScore(scoreValue) {
                 .then(() => {
                     console.log(`Новый рекорд в ${scoreValue} очков успешно сохранен в VK Storage!`);
                     updateRecordText(`Рекорд: ${scoreValue}`);
+                    
+                    // ДОБАВИТЬ: обновляем глобальную переменную и дисплей в tetris.js
+                    window.vkHighscore = scoreValue;
+                    if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
                 })
                 .catch(err => console.error('Ошибка сохранения в VK Storage:', err));
             }
@@ -87,10 +89,13 @@ function saveVKScore(scoreValue) {
         .catch(err => console.error('Ошибка получения данных из VK Storage:', err));
 }
 
+
 // Функция загрузки рекорда с серверов ВКонтакте
 function loadVKHighScore() {
     if (!vkInitialized) {
         updateRecordText('Рекорд: 0');
+        // ДОБАВИТЬ: обновляем рекорд в tetris.js
+        if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
         return;
     }
     
@@ -99,13 +104,21 @@ function loadVKHighScore() {
             if (data.keys && data.keys[0] && data.keys[0].value) {
                 const highScore = data.keys[0].value;
                 updateRecordText(`Рекорд: ${highScore}`);
+                
+                // ДОБАВИТЬ: сохраняем рекорд в глобальную переменную и обновляем дисплей
+                window.vkHighscore = parseInt(highScore, 10) || 0;
+                if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
             } else {
                 updateRecordText('Рекорд: 0');
+                window.vkHighscore = 0;
+                if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
             }
         })
         .catch(err => {
             console.log('Рекорд в облаке VK не найден (возможно, первая игра):', err);
             updateRecordText('Рекорд: 0');
+            window.vkHighscore = 0;
+            if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
         });
 }
 
@@ -145,3 +158,4 @@ function showVKLeaderboard(currentScore = 0) {
         console.error('Ошибка открытия таблицы лидеров ВК:', error);
     });
 }
+
