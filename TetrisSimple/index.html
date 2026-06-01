@@ -578,26 +578,58 @@
           
     <script src="tetris.js"></script>
     <script src="App.js"></script>
-    <script>
-// ФИКС ДЛЯ VK НА ПК (БЕЗ ЛОМАНИЯ МОБИЛОК И ПК)
+<script>
 (function() {
-    // Проверяем, открыто ли в VK и на реальном ПК (не мобилка)
-    const isVK = window.location.href.includes('vk.com') || typeof vkBridge !== 'undefined';
-    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isTablet = /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent);
-    const isRealPC = !isMobile && !isTablet;
-    
-    if (isVK && isRealPC) {
-        document.addEventListener('DOMContentLoaded', function() {
-            // Просто фиксим ширину панели на ПК в VK
-            const container = document.querySelector('.controls-container');
-            if (container) {
-                container.style.width = '320px';
-                container.style.maxWidth = '320px';
+    function setInterfaceMode() {
+        // Проверяем, есть ли у устройства точный указатель (мышь)
+        const hasMouse = window.matchMedia('(pointer: fine)').matches;
+        
+        // Если есть мышь И ширина экрана больше 800px — это ПК
+        if (hasMouse && window.innerWidth > 800) {
+            // ПК-режим: скрываем мобильный джойстик
+            const mobileJoystick = document.querySelector('.mobile-joystick');
+            if (mobileJoystick) mobileJoystick.style.display = 'none';
+            
+            // Показываем ПК-кнопку лидеров
+            const pcLeader = document.querySelector('.pc-only-leader');
+            if (pcLeader) pcLeader.style.display = 'inline-flex';
+            
+            // Показываем инструкцию
+            const instructions = document.querySelector('.instructions');
+            if (instructions) instructions.style.display = 'block';
+            
+            // Возвращаем панели нормальную ширину
+            const controls = document.querySelector('.controls-container');
+            if (controls) {
+                controls.style.width = '320px';
+                controls.style.maxWidth = '320px';
             }
-            console.log('🖥️ VK на ПК: ширина панели исправлена');
-        });
+            
+            console.log('🖥️ ПК-режим (есть мышь, ширина > 800px)');
+        } else {
+            // Мобильный/планшетный режим: возвращаем как было
+            const mobileJoystick = document.querySelector('.mobile-joystick');
+            if (mobileJoystick) mobileJoystick.style.display = '';
+            
+            const controls = document.querySelector('.controls-container');
+            if (controls) {
+                controls.style.width = '';
+                controls.style.maxWidth = '';
+            }
+            
+            console.log('📱 Мобильный/планшетный режим (нет мыши или узкий экран)');
+        }
     }
+    
+    // Запускаем сразу после загрузки
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setInterfaceMode);
+    } else {
+        setInterfaceMode();
+    }
+    
+    // Также запускаем при изменении размера окна
+    window.addEventListener('resize', setInterfaceMode);
 })();
 </script>
 </body>
