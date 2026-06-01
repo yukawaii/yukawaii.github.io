@@ -67,37 +67,42 @@
         .action-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-align: center; display: block; width: 100%; }
     }
 
-    /* ПК — скрываем мобильный джойстик */
-    @media (pointer: fine) and (min-width: 769px) {
-        .mobile-joystick,
-        .d-pad,
-        .action-pad,
-        .rotate-btn,
-        .leaderboard-pad,
-        #btn-leader,
-        #btn-left,
-        #btn-right,
-        #btn-down,
-        #btn-rot {
-            display: none !important;
-        }
-        .pc-only-leader {
-            display: inline-flex !important;
-        }
-        .instructions {
-            display: block !important;
-        }
+/* ПК — только если есть мышь И ширина большая */
+@media (pointer: fine) and (min-width: 769px) {
+    .mobile-joystick,
+    .d-pad,
+    .action-pad,
+    .rotate-btn,
+    .leaderboard-pad,
+    #btn-leader,
+    #btn-left,
+    #btn-right,
+    #btn-down,
+    #btn-rot {
+        display: none !important;
     }
+    .pc-only-leader {
+        display: inline-flex !important;
+    }
+    .instructions {
+        display: block !important;
+    }
+}
 
-    /* Иконки */
-    #mute, button[onclick="mutebtn()"] img {
-        filter: none !important;
-        background: transparent !important;
+    /* Горизонтальные телефоны и планшеты — мобильный интерфейс */
+@media (pointer: coarse) and (min-width: 769px) and (orientation: landscape) {
+    /* Мобильный интерфейс уже есть через @media (max-width: 768px) и (orientation: portrait) */
+    /* Но для горизонтальных — нужно принудительно показать джойстик */
+    .mobile-joystick {
+        display: flex !important;
     }
-    #btn-leader img, .leaderboard-pad img {
-        filter: none !important;
-        background: transparent !important;
+    .pc-only-leader {
+        display: none !important;
     }
+    .instructions {
+        display: none !important;
+    }
+}
 </style>
 </head>
 <body>
