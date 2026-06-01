@@ -501,6 +501,55 @@
         /* Сам канвас не трогаем, но текст внутри будет крупнее через JS */
     }
 }
+/* === ПК — ЖЁСТКОЕ ПРАВИЛО (скрываем мобильный джойстик на ПК) === */
+@media (pointer: fine) and (min-width: 769px) {
+    .mobile-joystick,
+    .d-pad,
+    .action-pad,
+    .rotate-btn,
+    .leaderboard-pad,
+    #btn-leader,
+    #btn-left,
+    #btn-right,
+    #btn-down,
+    #btn-rot {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: absolute !important;
+        z-index: -9999 !important;
+    }
+    
+    .pc-only-leader {
+        display: inline-flex !important;
+    }
+    
+    .instructions {
+        display: block !important;
+    }
+    
+    /* Возвращаем ПК-кнопки в нормальный вид */
+    .top-menu {
+        flex-direction: column !important;
+    }
+    
+    .iksweb {
+        width: 100% !important;
+        font-size: 14px !important;
+        padding: 14px !important;
+    }
+    
+    .top-menu-icons {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        margin-top: 10px !important;
+    }
+}
 </style>
 </head>
 <body>
