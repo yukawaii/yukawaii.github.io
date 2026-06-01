@@ -340,13 +340,13 @@
     }
 }
 /* АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ С ТАЧ-ЭКРАНОМ (ВКЛЮЧАЯ SURFACE PRO 7) В ГОРИЗОНТАЛЬНОМ РЕЖИМЕ */
-/* Условие pointer: coarse гарантирует, что код сработает ТОЛЬКО на сенсорных экранах */
-@media (orientation: landscape) and (pointer: coarse) {
-    
-    /* На вертикальных мобилках скрываем ПК-версию кнопки лидеров, так как там есть мобильная */
-    .pc-only-leader { 
-        display: none !important; 
-    }
+@media (orientation: landscape) and (pointer: coarse), 
+       (orientation: landscape) and (max-width: 1400px) {
+        /* На вертикальных мобилках скрываем ПК-версию кнопки лидеров, так как там есть мобильная */
+            .pc-only-leader { 
+                display: none !important; 
+            }
+
     
     /* 1. Выстраиваем стакан слева, а пульт управления справа */
     .game-wrapper {
@@ -478,7 +478,51 @@
     background: transparent !important; /* Убирает возможные белые квадраты вокруг картинки */
     background-color: transparent !important;
 }
+/* Проверяем, если игра открыта на ПК, намертво прячем мобильный джойстик ВК */
+@media screen and (min-width: 769px) {
+    /* Находим нижний блок с наэкранными стрелками и кнопкой "ЛИДЕРЫ" */
+    .mobile-controls, 
+    div:has(> #rotate-button), 
+    div:has(> .iksweb1),
+    .bottom-joystick { 
+        display: none !important; 
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+    }
+}
 
+/* Фикс для ВК: Принудительно выстраиваем СТАРТ, ПАУЗА, ДАЛЬШЕ вертикально */
+.top-menu, 
+div:has(> #yandex-highscore-side) {
+    display: flex !important;
+    flex-direction: column !important; /* Сверху вниз */
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    gap: 12px !important;
+}
+
+/* Возвращаем кнопкам Старт/Пауза их нормальный ПК-размер, отменяя сжатие ВК */
+.top-menu button, 
+.top-menu .iksweb, 
+.top-menu .iksweb1 {
+    display: block !important;
+    width: 85% !important;
+    max-width: 160px !important;
+    height: 38px !important;
+    margin: 5px auto !important;
+}
+
+/* Выравниваем иконку кубка (Лидеры) и динамик по центру под кнопками */
+.pc-only-leader, 
+#music-toggle {
+    display: inline-flex !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin: 8px 10px !important; /* Делаем аккуратный отступ по бокам, чтобы они стояли рядышком */
+    border-radius: 50% !important;
+}
 
 </style>
 </head>
