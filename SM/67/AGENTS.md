@@ -113,7 +113,7 @@ The main container for every app.
 ```html
 <div class="title-bar">
     <div class="title-stripes"></div>
-    <div class="close-box" onclick="window.location.href='index'">X</div>
+    <div class="close-box" onclick="window.location.href='/index'">X</div>
     <span class="title-text" data-i18n="app.title">My App</span>
 </div>
 ```

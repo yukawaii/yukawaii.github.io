@@ -69,7 +69,32 @@
             transition: none !important;
             animation: none !important;
         }
+/* Скрываем платные приложения (ReKindle+) */
+.app-icon.pro-locked,
+.featured-card.pro-locked,
+.plus-label,
+[data-i18n*="paywall"],
+[onclick*="pay.html"],
+a[href*="pay.html"] {
+    display: none !important;
+}
 
+/* Скрываем конкретные приложения по ID */
+#icon-oracle,
+#icon-mail,
+#icon-quicktodo,
+#icon-airtype,
+#icon-flipbook,
+#icon-reader-plus,
+#icon-aiassistant,
+[href="oracle.html"],
+[href="mail.html"],
+[href="quicktodo.html"],
+[href="airtype.html"],
+[href="flipbook.html"],
+[href="pay.html"] {
+    display: none !important;
+}
         :root {
             --stripe-pattern: repeating-linear-gradient(0deg, transparent, transparent 2px, #000 3px, #000 4px);
             --bg-color: #ffffff;
@@ -1262,6 +1287,7 @@
     </div>
 
     <script>
+      
     (function() {
         // Note: Global variables and logic mostly unchanged, specific fixes applied inside functions.
         let currentFilter = 'all';
@@ -1341,199 +1367,198 @@
             appId: "1:748026882518:web:6877dd4329318070c11c77"
         };
 
-        window.onload = () => {
-            // Safe Check: Wait for deferred Firebase
-            try {
-                if (typeof firebase !== 'undefined') {
-                    firebase.initializeApp(firebaseConfig);
-                    auth = firebase.auth();
-                    db = firebase.firestore();
-                    rtdb = firebase.database();
-                    isFirebaseAvailable = true;
-                    console.log("Firebase initialized successfully.");
+        const ENABLE_FIREBASE = false; // ВКЛЮЧАЕМ FIREBASE: true / false
 
-                    // Global Matchmaking Listener for Tab Badge
-                    if (rtdb) {
-                        let badgeListener = null;
-                        let badgeListenerRef = null;
-                        let badgeDebounceTimer = null;
-                        // Cache presence lookups: uid -> { value: bool, ts: number }
-                        const presenceCache = new Map();
-                        const PRESENCE_TTL = 30000;
+window.onload = () => {
+    // MERGE BETA APPS (это не Firebase, оставляем)
+    if (typeof APPS !== 'undefined' && Array.isArray(APPS) &&
+        typeof APPS_BETA !== 'undefined' && Array.isArray(APPS_BETA)) {
+        APPS.push(...APPS_BETA);
+    }
 
-                        async function cachedPresence(uid) {
-                            const cached = presenceCache.get(uid);
-                            if (cached && (Date.now() - cached.ts) < PRESENCE_TTL) return cached.value;
-                            try {
-                                const snap = await rtdb.ref('presence/' + uid).once('value');
-                                const val = snap.val() === true;
-                                presenceCache.set(uid, { value: val, ts: Date.now() });
-                                return val;
-                            } catch (e) {
-                                return false;
-                            }
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('login') === 'true') {
+        openLogin();
+    }
+
+    checkExitButtonVisibility();
+    if (window.rekindleApplyWallpaper) window.rekindleApplyWallpaper();
+    gamesDisabled = areGamesDisabled();
+    autoDetectScale();
+
+    filterApps('all', document.querySelector('#nav-all'));
+    renderAboutContent();
+    updateProUI();
+
+    // ========== FIREBASE БЛОК (ОТКЛЮЧЁН ФЛАГОМ) ==========
+    if (ENABLE_FIREBASE) {
+        try {
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                rtdb = firebase.database();
+                isFirebaseAvailable = true;
+                console.log("Firebase initialized successfully.");
+
+                // Global Matchmaking Listener for Tab Badge
+                if (rtdb) {
+                    let badgeListener = null;
+                    let badgeListenerRef = null;
+                    let badgeDebounceTimer = null;
+                    const presenceCache = new Map();
+                    const PRESENCE_TTL = 30000;
+
+                    async function cachedPresence(uid) {
+                        const cached = presenceCache.get(uid);
+                        if (cached && (Date.now() - cached.ts) < PRESENCE_TTL) return cached.value;
+                        try {
+                            const snap = await rtdb.ref('presence/' + uid).once('value');
+                            const val = snap.val() === true;
+                            presenceCache.set(uid, { value: val, ts: Date.now() });
+                            return val;
+                        } catch (e) {
+                            return false;
                         }
+                    }
 
-                        function attachBadgeListener() {
-                            if (badgeListener) return;
-                            // Server-filter to only waiting matches
-                            badgeListenerRef = rtdb.ref('matchmaking');
-                            badgeListener = badgeListenerRef.on('value', (snap) => {
-                                // Debounce rapid deltas (5s) to reduce GC churn
-                                clearTimeout(badgeDebounceTimer);
-                                badgeDebounceTimer = setTimeout(async () => {
-                                    let count = 0;
-                                    if (snap.exists()) {
-                                        const games = snap.val();
-                                        const checks = [];
-                                        for (const gameType in games) {
-                                            for (const matchId in games[gameType]) {
-                                                const match = games[gameType][matchId];
-                                                if (match && match.status === 'waiting') {
-                                                    checks.push(match.hostUid
-                                                        ? cachedPresence(match.hostUid)
-                                                        : Promise.resolve(true));
-                                                }
+                    function attachBadgeListener() {
+                        if (badgeListener) return;
+                        badgeListenerRef = rtdb.ref('matchmaking');
+                        badgeListener = badgeListenerRef.on('value', (snap) => {
+                            clearTimeout(badgeDebounceTimer);
+                            badgeDebounceTimer = setTimeout(async () => {
+                                let count = 0;
+                                if (snap.exists()) {
+                                    const games = snap.val();
+                                    const checks = [];
+                                    for (const gameType in games) {
+                                        for (const matchId in games[gameType]) {
+                                            const match = games[gameType][matchId];
+                                            if (match && match.status === 'waiting') {
+                                                checks.push(match.hostUid ? cachedPresence(match.hostUid) : Promise.resolve(true));
                                             }
                                         }
-                                        const results = await Promise.all(checks);
-                                        count = results.filter(Boolean).length;
                                     }
-                                    const badge = document.getElementById('live-games-count');
-                                    if (badge) {
-                                        badge.innerText = count;
-                                        badge.style.display = count > 0 ? 'inline-flex' : 'none';
-                                    }
-                                }, 5000);
-                            });
-                        }
-
-                        function detachBadgeListener() {
-                            clearTimeout(badgeDebounceTimer);
-                            if (badgeListenerRef && badgeListener) {
-                                badgeListenerRef.off('value', badgeListener);
-                                badgeListener = null;
-                                badgeListenerRef = null;
-                            }
-                        }
-
-                        attachBadgeListener();
-
-                        // Detach when page is hidden, reattach when visible
-                        document.addEventListener('visibilitychange', () => {
-                            if (document.hidden) detachBadgeListener();
-                            else attachBadgeListener();
+                                    const results = await Promise.all(checks);
+                                    count = results.filter(Boolean).length;
+                                }
+                                const badge = document.getElementById('live-games-count');
+                                if (badge) {
+                                    badge.innerText = count;
+                                    badge.style.display = count > 0 ? 'inline-flex' : 'none';
+                                }
+                            }, 5000);
                         });
-
-                        window._badgeDetach = detachBadgeListener;
-                        window._badgeAttach = attachBadgeListener;
-                        window._presenceCache = presenceCache;
                     }
-                } else {
-                    console.warn("Firebase SDK not loaded. Running in offline mode.");
+
+                    function detachBadgeListener() {
+                        clearTimeout(badgeDebounceTimer);
+                        if (badgeListenerRef && badgeListener) {
+                            badgeListenerRef.off('value', badgeListener);
+                            badgeListener = null;
+                            badgeListenerRef = null;
+                        }
+                    }
+
+                    attachBadgeListener();
+
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) detachBadgeListener();
+                        else attachBadgeListener();
+                    });
+
+                    window._badgeDetach = detachBadgeListener;
+                    window._badgeAttach = attachBadgeListener;
+                    window._presenceCache = presenceCache;
                 }
-            } catch (e) {
-                console.error("Firebase initialization failed:", e);
-                isFirebaseAvailable = false;
+            } else {
+                console.warn("Firebase SDK not loaded. Running in offline mode.");
+            }
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+            isFirebaseAvailable = false;
+        }
+    } else {
+        console.log("Firebase DISABLED by ENABLE_FIREBASE flag");
+        isFirebaseAvailable = false;
+    }
+    // ========== КОНЕЦ FIREBASE БЛОКА ==========
+
+    let lastUid = localStorage.getItem('rekindle_uid');
+
+    if (ENABLE_FIREBASE && isFirebaseAvailable && auth) {
+        auth.onAuthStateChanged(user => {
+            const currentUid = user ? user.uid : null;
+            if (currentUid !== lastUid) {
+                clearServiceWorkerCache();
+                lastUid = currentUid;
             }
 
-            // MERGE BETA APPS
-            if (typeof APPS !== 'undefined' && Array.isArray(APPS) &&
-                typeof APPS_BETA !== 'undefined' && Array.isArray(APPS_BETA)) {
-                APPS.push(...APPS_BETA);
-            }
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('rekindle_uid', user.uid);
+                let displayUser = user.email.split('@')[0];
+                if (user.email.endsWith("@rekindle.ink")) {
+                    displayUser = user.email.replace("@rekindle.ink", "");
+                }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('login') === 'true') {
-                openLogin();
-            }
+                document.getElementById('user-badge').onclick = function () {
+                    location.href = 'neighbourhood?uid=' + user.uid;
+                };
 
-            checkExitButtonVisibility();
-            if (window.rekindleApplyWallpaper) window.rekindleApplyWallpaper();
-            gamesDisabled = areGamesDisabled();
-            autoDetectScale();
+                document.getElementById('user-display').innerText = displayUser;
+                document.getElementById('auth-btn').innerText = "Log Out";
+                document.getElementById('auth-btn').onclick = openLogoutModal;
 
-            filterApps('all', document.querySelector('#nav-all'));
-            renderAboutContent();
-            updateProUI();
+                const modalAuthBtn = document.getElementById('modal-auth-btn');
+                if (modalAuthBtn) {
+                    modalAuthBtn.innerText = "Log Out";
+                    modalAuthBtn.onclick = openLogoutModal;
+                }
 
-            let lastUid = localStorage.getItem('rekindle_uid');
+                closeModal('login-modal');
 
-            if (isFirebaseAvailable && auth) {
-                auth.onAuthStateChanged(user => {
-                    const currentUid = user ? user.uid : null;
-                    if (currentUid !== lastUid) {
-                        clearServiceWorkerCache();
-                        lastUid = currentUid;
-                    }
-
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('rekindle_uid', user.uid);
-                        let displayUser = user.email.split('@')[0];
-                        if (user.email.endsWith("@rekindle.ink")) {
-                            displayUser = user.email.replace("@rekindle.ink", "");
+                const cachedFavs = localStorage.getItem('rekindle_favorites');
+                if (cachedFavs) {
+                    try {
+                        const parsed = JSON.parse(cachedFavs);
+                        if (Array.isArray(parsed)) {
+                            favoriteApps = parsed;
+                            hiddenApps = [];
+                        } else {
+                            favoriteApps = parsed.favorites || [];
+                            hiddenApps = parsed.hidden || [];
                         }
+                        renderFavoriteSection();
+                    } catch (e) { console.error("Error parsing favorites cache", e); }
+                }
 
-                        document.getElementById('user-badge').onclick = function () {
-                            location.href = 'neighbourhood?uid=' + user.uid;
-                        };
+                monitorUserProfile(user.uid);
+                RekindleIpBan.enforceOnAuthStateChanged(user);
 
-                        document.getElementById('user-display').innerText = displayUser;
-                        document.getElementById('auth-btn').innerText = "Log Out";
-                        document.getElementById('auth-btn').onclick = openLogoutModal;
-
-                        const modalAuthBtn = document.getElementById('modal-auth-btn');
-                        if (modalAuthBtn) {
-                            modalAuthBtn.innerText = "Log Out";
-                            modalAuthBtn.onclick = openLogoutModal;
+                if (rtdb) {
+                    rtdb.ref('user_cards/' + user.uid).on('value', snap => {
+                        if (snap.exists()) {
+                            const card = snap.val();
+                            const avatarSeed = card.customAvatar || card.avatarSeed || user.uid;
+                            drawAvatar('user-badge-icon', avatarSeed);
+                            window.rekindleInvalidateUserCard && window.rekindleInvalidateUserCard(user.uid);
+                        } else {
+                            drawAvatar('user-badge-icon', user.uid);
                         }
-
-                        closeModal('login-modal');
-
-                        const cachedFavs = localStorage.getItem('rekindle_favorites');
-                        if (cachedFavs) {
-                            try {
-                                const parsed = JSON.parse(cachedFavs);
-                                if (Array.isArray(parsed)) {
-                                    favoriteApps = parsed;
-                                    hiddenApps = [];
-                                } else {
-                                    favoriteApps = parsed.favorites || [];
-                                    hiddenApps = parsed.hidden || [];
-                                }
-                                renderFavoriteSection();
-                            } catch (e) { console.error("Error parsing favorites cache", e); }
-                        }
-
-                        monitorUserProfile(user.uid);
-
-                        RekindleIpBan.enforceOnAuthStateChanged(user);
-
-                        if (rtdb) {
-                            // Listen on /user_cards (tiny) instead of /users_public so the
-                            // listener only re-fires when avatar/name actually changes.
-                            rtdb.ref('user_cards/' + user.uid).on('value', snap => {
-                                if (snap.exists()) {
-                                    const card = snap.val();
-                                    const avatarSeed = card.customAvatar || card.avatarSeed || user.uid;
-                                    drawAvatar('user-badge-icon', avatarSeed);
-                                    window.rekindleInvalidateUserCard && window.rekindleInvalidateUserCard(user.uid);
-                                } else {
-                                    drawAvatar('user-badge-icon', user.uid);
-                                }
-                            });
-                        }
-                    } else {
-                        handleGuestMode();
-                    }
-                });
+                    });
+                }
             } else {
                 handleGuestMode();
-                document.getElementById('user-display').innerText = "Offline Mode";
             }
-            updateNavVisibility();
-        };
+        });
+    } else {
+        handleGuestMode();
+        document.getElementById('user-display').innerText = "Local Mode";
+    }
+    updateNavVisibility();
+};
 
         // ... [Helper functions like handleGuestMode, updateNavVisibility, etc. remain unchanged] ...
 
