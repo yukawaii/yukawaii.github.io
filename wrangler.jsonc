@@ -6,7 +6,7 @@
     "enabled": true
   },
   "assets": {
-    "directory": "SM/67/workers/worker.js"
+    "directory": "SM/67/workers/rekindle-reader/worker.js"
   },
   "compatibility_flags": [
     "nodejs_compat"
