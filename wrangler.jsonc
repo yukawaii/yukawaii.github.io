@@ -6,7 +6,7 @@
     "enabled": true
   },
   "assets": {
-    "directory": "SM/67/workers"
+    "directory": "SM/67/workers/worker.js"
   },
   "compatibility_flags": [
     "nodejs_compat"
