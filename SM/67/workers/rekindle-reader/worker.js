@@ -15,10 +15,23 @@ import { parseHTML } from "linkedom";
 
 
 const ALLOWED_ORIGINS = [
-    "https://beta.rekindle.ink",
-    "https://rekindle.ink",
-    "https://lite.rekindle.ink",
-    "https://legacy.rekindle.ink",
+// Локальная разработка
+    "http://localhost:8080",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",    
+    // GitHub Pages 
+    "https://yukawaii.github.io",     
+    // VK Игры (основные домены)
+    "https://vk.com",
+    "https://vk.ru",
+    "https://vkontakte.ru",
+    "https://vkplay.ru",
+    "https://vkplay.com",
+    "https://vkvideo.ru",    
+    // Одноклассники (OK)
+    "https://ok.ru",
+    "https://odnoklassniki.ru",
+    "https://okgames.ru"
 ];
 
 const USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
