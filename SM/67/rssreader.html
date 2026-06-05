@@ -2181,38 +2181,6 @@
             <div id="modal-btns" class="modal-btns"></div>
         </div>
     </div>
-
-<script>
-(function() {
-    // Перехватываем оригинальный fetch и конвертируем Windows-1251 в UTF-8
-    const originalFetch = window.fetch;
-    window.fetch = function(url, options) {
-        if (url.includes('api.rss2json.com')) {
-            return originalFetch(url, options).then(async response => {
-                const text = await response.text();
-                // Пробуем декодировать как Windows-1251
-                try {
-                    const decoder = new TextDecoder('windows-1251');
-                    const uint8Array = new Uint8Array([...text].map(c => c.charCodeAt(0)));
-                    const decoded = decoder.decode(uint8Array);
-                    // Возвращаем исправленный ответ
-                    return new Response(decoded, {
-                        status: response.status,
-                        headers: response.headers
-                    });
-                } catch(e) {
-                    return new Response(text, {
-                        status: response.status,
-                        headers: response.headers
-                    });
-                }
-            });
-        }
-        return originalFetch(url, options);
-    };
-})();
-</script>
-
 </body>
 
 </html>
