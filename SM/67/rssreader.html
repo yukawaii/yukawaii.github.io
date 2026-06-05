@@ -15,6 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions-compat.js"></script>
 
     <style>
+
         /* SYSTEM 7 AESTHETICS */
         :root {
             --bg-color: #ffffff;
@@ -722,18 +723,63 @@
                     <!-- Injected via JS -->
                 </div>
 
-                <div style="margin-top:20px; border-top:1px solid #ccc; padding-top:20px;">
-                    <strong>Preset Feeds:</strong>
-                    <div class="tag-list" style="display: flex; margin-top: 10px; flex-wrap: wrap;">
+               
+<div style="margin-top:20px;border-top:1px solid #ccc;padding-top:20px;">
+    <strong>🇷🇺 Новости на русском:</strong>
+    <div style="margin-top:15px;">
+        <strong style="font-size:0.9rem;">📰 Общие новости:</strong>
+        <div class="tag-list" style="display:flex;margin-top:8px;flex-wrap:wrap;">          
+            <button class="sys-btn" onclick="addPreset('РИА Новости', 'https://ria.ru/export/rss2/index.xml')">РИА</button>
+            <button class="sys-btn" onclick="addPreset('RT на русском', 'https://russian.rt.com/rss')">RT</button>
+              <button class="sys-btn" onclick="addPreset('Lenta.ru', 'https://lenta.ru/rss')">Lenta.ru</button>
+            <button class="sys-btn" onclick="addPreset('Коммерсантъ', 'https://www.kommersant.ru/RSS/news.xml')">Коммерсантъ</button>
+            <button class="sys-btn" onclick="addPreset('РБК', 'https://www.rbc.ru/rss/')">РБК</button>
+            <button class="sys-btn" onclick="addPreset('Вести.Ru', 'https://www.vesti.ru/vesti.rss')">Вести</button>
+            <button class="sys-btn" onclick="addPreset('Известия', 'https://iz.ru/xml/rss.xml')">Известия</button>
+        </div>
+    </div>
+
+    <div style="margin-top:15px;">
+        <strong style="font-size:0.9rem;">🎭Наука и Культура:</strong>
+        <div class="tag-list" style="display:flex;margin-top:8px;flex-wrap:wrap;">
+            <button class="sys-btn" onclick="addPreset('Научная Россия', 'https://naked-science.ru/?yandex_feed=news')">Голая Наука</button>
+            <button class="sys-btn" onclick="addPreset('Научная Россия', 'https://scientificrussia.ru/rss')">Научная Россия</button>
+            <button class="sys-btn" onclick="addPreset('Газета Культура', 'https://portal-kultura.ru/rss/')">Культура</button>
+            <button class="sys-btn" onclick="addPreset('Литература', 'https://media.rss.com/newwordorder/feed.xml')">Литература</button>  
+            <button class="sys-btn" onclick="addPreset('Космонавтика', 'https://naked-science.ru/article/category/cosmonautics/feed')">Космонавтика</button>    
+            <button class="sys-btn" onclick="addPreset('Биология', 'https://naked-science.ru/article/category/biology/feed')">Биология</button>   
+            <button class="sys-btn" onclick="addPreset('НИА Экология', 'https://nia.eco/feed/')">Экология</button>      
+            <button class="sys-btn" onclick="addPreset('История', 'https://naked-science.ru/article/category/history/feed')">История</button>  
+            <button class="sys-btn" onclick="addPreset('Астрономия', 'https://naked-science.ru/article/category/astronomy/feed')">Астрономия</button>  
+            <button class="sys-btn" onclick="addPreset('Медицина', 'https://naked-science.ru/article/category/medicine/feed')">Медицина</button> 
+             <button class="sys-btn" onclick="addPreset('Психология', 'https://naked-science.ru/article/category/psy/feed')">Психология</button> 
+        </div>
+    </div>
+    <div style="margin-top:15px;">
+        <strong style="font-size:0.9rem;">🐾 Юмор, разное:</strong>
+        <div class="tag-list" style="display:flex;margin-top:8px;flex-wrap:wrap;">
+            <button class="sys-btn" onclick="addPreset('Сад Огород', 'https://www.tut-news.ru/sad-i-ogorod_g.xml')">Сад Огород</button>
+            <button class="sys-btn" onclick="addPreset('Бездна', 'https://bezdna.su/rss.php')">Бездна</button>          
+            <button class="sys-btn" onclick="addPreset('Афоризмы', 'https://www.anekdot.ru/rss/export_a.xml')">Афоризмы</button> 
+             
+                   <button class="sys-btn" onclick="addPreset('Животные', 'https://www.tut-news.ru/fauna_g.xml')">Животные</button>     
+
+        </div>
+    </div>
+
+</div>
+
+<div style="margin-top:20px;border-top:1px solid #ccc;padding-top:20px;">
+    <strong>🌍 International News (English):</strong>
+    <div class="tag-list" style="display:flex;margin-top:10px;flex-wrap:wrap;">
+        <!-- Здесь остаются старые кнопки (BBC, NPR и т.д.) -->               
                         <button class="sys-btn"
                             onclick="addPreset('BBC World', 'http://feeds.bbci.co.uk/news/world/rss.xml')">BBC</button>
                         <button class="sys-btn"
                             onclick="addPreset('NPR', 'https://feeds.npr.org/1001/rss.xml')">NPR</button>
                         <button class="sys-btn"
                             onclick="addPreset('Reuters', 'https://www.reutersagency.com/feed/')">Reuters</button>
-                        <button class="sys-btn"
-                            onclick="addPreset('AP News', 'https://rsshub.app/apnews/topics/apf-topnews')">AP
-                            News</button>
+                        <button class="sys-btn"  onclick="addPreset('AP News', 'https://rsshub.app/apnews/topics/apf-topnews')">AP   News</button>
                         <button class="sys-btn"
                             onclick="addPreset('The Guardian', 'https://www.theguardian.com/world/rss')">Guardian</button>
                         <button class="sys-btn"
@@ -786,8 +832,8 @@
                     <button class="sys-btn small" onclick="openExternal()" data-i18n="rss.btn.web">Open Ext</button>
                 </div>
             </div>
-            <iframe id="article-frame" src=""></iframe>
-            <div class="modal-footer"
+           <iframe id="article-frame" src=""></iframe>
+            <div class="modal-footer" 
                 style="border-top: 2px solid black; padding: 8px; display: flex; justify-content: space-between; align-items: center; background: #eee; flex-shrink: 0;">
                 <button class="sys-btn" onclick="prevPage()" id="btn-prev">Previous</button>
                 <span id="page-indicator" style="font-weight: bold; font-family: sans-serif; font-size: 0.9rem;">Page
@@ -1648,7 +1694,8 @@
         async function fetchFeed(feed, targetArray) {
             // Request more items if available by using count parameter
             // Add cache buster time to avoid stale data if we just increased count
-            const api = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=' + fetchCount;
+         const api = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&count=' + fetchCount; 
+        
 
             try {
                 const res = await fetch(api);
@@ -1844,6 +1891,7 @@
                 frame.srcdoc = `
                 <html>
                 <head>
+                    <meta charset="utf-8">
                     <style>
                         html { font-size: ${readerFontSize}px; }
                         body {
@@ -1927,6 +1975,7 @@
                 const html = `
                 <html>
                 <head>
+                    <meta charset="UTF-8">
                 <style>
                     *, *::before, *::after {
                         animation: none !important;
@@ -2133,6 +2182,36 @@
         </div>
     </div>
 
+<script>
+(function() {
+    // Перехватываем оригинальный fetch и конвертируем Windows-1251 в UTF-8
+    const originalFetch = window.fetch;
+    window.fetch = function(url, options) {
+        if (url.includes('api.rss2json.com')) {
+            return originalFetch(url, options).then(async response => {
+                const text = await response.text();
+                // Пробуем декодировать как Windows-1251
+                try {
+                    const decoder = new TextDecoder('windows-1251');
+                    const uint8Array = new Uint8Array([...text].map(c => c.charCodeAt(0)));
+                    const decoded = decoder.decode(uint8Array);
+                    // Возвращаем исправленный ответ
+                    return new Response(decoded, {
+                        status: response.status,
+                        headers: response.headers
+                    });
+                } catch(e) {
+                    return new Response(text, {
+                        status: response.status,
+                        headers: response.headers
+                    });
+                }
+            });
+        }
+        return originalFetch(url, options);
+    };
+})();
+</script>
 
 </body>
 

@@ -95,6 +95,31 @@ a[href*="pay.html"] {
 [href="pay.html"] {
     display: none !important;
 }
+/* Скрываем надпись "Guest Mode" / "Local Mode" снизу */
+#user-display,
+.user-display,
+[data-i18n="home.guest_mode"] {
+    display: none !important;
+}
+/* Скрываем иконку и надпись Guest Mode, но оставляем остальное меню */
+#user-badge {
+    display: none !important;
+}
+
+/* Скрываем кнопку "LOG IN / REGISTER" сверху справа */
+#auth-btn,
+.auth-btn,
+[data-i18n="home.nav.login"],
+[onclick*="openLogin"] {
+    display: none !important;
+}
+
+/* Скрываем любые элементы с текстом "Guest" или "Login" */
+.sys-menu-item:contains("Guest"),
+.sys-menu-item:contains("Login"),
+.sys-menu-item:contains("Register") {
+    display: none !important;
+}
         :root {
             --stripe-pattern: repeating-linear-gradient(0deg, transparent, transparent 2px, #000 3px, #000 4px);
             --bg-color: #ffffff;
@@ -1011,6 +1036,25 @@ a[href*="pay.html"] {
             display: none;
             margin-top: 10px;
         }
+        /* Скрываем кнопки, требующие логина */
+#nav-kindlechat,
+#nav-topics,
+[href="kindlechat.html"],
+[href="topics.html"] {
+    display: none !important;
+}
+/* Скрываем по data-i18n атрибуту */
+.featured-title[data-i18n="app.neighbourhood.name"] {
+    display: none !important;
+}
+
+/* И скрываем родительскую карточку */
+.featured-title[data-i18n="app.neighbourhood.name"] {
+    display: none !important;
+}
+.featured-card:has([data-i18n="app.neighbourhood.name"]) {
+    display: none !important;
+}
     </style>
 </head>
 
@@ -1084,7 +1128,7 @@ a[href*="pay.html"] {
             <div class="folder-tab" id="nav-games" onclick="filterApps('games', this)" data-i18n="home.nav.games"
                 style="margin-left: 20px;">Games</div>
             <div class="folder-tab" id="nav-two_player" onclick="filterApps('two_player', this)">
-                <span data-i18n="home.nav.two_player">Multiplayer Games</span>
+                <span data-i18n="home.nav.two_player">Games for 2</span>
                 <span id="live-games-count" class="tab-badge" style="display:none;">0</span>
             </div>
         </div>
