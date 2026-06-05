@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "patient-band-e0f8",
+  "compatibility_date": "2026-06-05",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "Ameba"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
