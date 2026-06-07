@@ -660,6 +660,10 @@
             margin-right: 10px;
             margin-bottom: 10px;
         }
+                /* Скрываем нижнюю строку статуса */
+#status-bar {
+    display: none !important;
+}
     </style>
     <script src="time.js"></script>
     <script src="theme.js?v=18"></script>
@@ -742,7 +746,7 @@
     <div style="margin-top:15px;">
         <strong style="font-size:0.9rem;">🎭Наука и Культура:</strong>
         <div class="tag-list" style="display:flex;margin-top:8px;flex-wrap:wrap;">
-            <button class="sys-btn" onclick="addPreset('Научная Россия', 'https://naked-science.ru/?yandex_feed=news')">Голая Наука</button>
+            <button class="sys-btn" onclick="addPreset('Голая Россия', 'https://naked-science.ru/?yandex_feed=news')">Голая Наука</button>
             <button class="sys-btn" onclick="addPreset('Научная Россия', 'https://scientificrussia.ru/rss')">Научная Россия</button>
             <button class="sys-btn" onclick="addPreset('Газета Культура', 'https://portal-kultura.ru/rss/')">Культура</button>
             <button class="sys-btn" onclick="addPreset('Литература', 'https://media.rss.com/newwordorder/feed.xml')">Литература</button>  
