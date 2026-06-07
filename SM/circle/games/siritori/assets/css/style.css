@@ -1,0 +1,197 @@
+html {
+    padding: 0;
+    margin: 0;
+    background-color: #eee;
+}
+
+body {
+    position: relative;
+    text-align: center;
+    margin: auto;
+}
+
+#heading {
+    font-size: 48pt;
+}
+
+#subheading {
+    font-size: 22pt;
+}
+
+#board {
+    display: inline-block;
+    margin: 30px auto;
+    height: 200px;
+}
+
+#slot-0, #slot-1, #slot-2 {
+    width: 300px;
+    height: 150px;
+    float: left;
+    position: relative;
+    right: 150px;
+}
+
+#slot-1-ja, #slot-2-ja, #slot-0-ja {
+    font-size: 30pt;
+}
+
+#slot-1-en, #slot-2-en, #slot-0-en {
+    font-size: 20pt;
+}
+
+#textEntryDiv {
+    clear: both;
+}
+
+input, button {
+    font-size: 18pt;
+}
+
+#slot-1-ja-last, #slot-2-ja-first, #slot-1-en-last, #slot-2-en-first, #slot-0-ja-last, #slot-0-en-last {
+    background-color: rgb(137, 170, 229);
+}
+
+#slot-2-ja-last, #slot-2-en-last {
+    background-color: rgb(158, 229, 137);
+}
+
+.cyan {
+    background-color: rgb(106, 233, 212) !important;
+}
+
+.invalid {
+    text-decoration: line-through;
+    background-color: rgb(255, 115, 115) !important;
+}
+
+.fadeIn {
+    animation-name: fade-in;
+    animation-duration: 750ms;
+    animation-fill-mode: forwards;
+}
+
+.translate {
+    animation-name: translate-left;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.translateFadeIn {
+    animation-name: translate-left, fade-in;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.translateFadeOut {
+    animation-name: translate-left, fade-out;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+    0% {opacity: 0}
+    100% {opacity: 1}
+}
+
+@keyframes fade-out {
+    0% {opacity: 1}
+    100% {opacity: 0; display: initial;}
+}
+
+@keyframes translate-left {
+    0% {left: 150px}
+    100% {left: -150px}
+}
+
+@media only screen and (max-width: 900px) {
+    #slot-0, #slot-1, #slot-2 {
+        width: 250px;
+        right: 125px;
+    }
+
+    @keyframes translate-left {
+        0% {left: 125px}
+        100% {left: -125px}
+    }
+
+    #slot-1-ja, #slot-2-ja, #slot-0-ja {
+        font-size: 28pt;
+    }
+    
+    #slot-1-en, #slot-2-en, #slot-0-en {
+        font-size: 18pt;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    #slot-0, #slot-1, #slot-2 {
+        width: 200px;
+        right: 100px;
+    }
+
+    @keyframes translate-left {
+        0% {left: 100px}
+        100% {left: -100px}
+    }
+
+    #slot-1-ja, #slot-2-ja, #slot-0-ja {
+        font-size: 24pt;
+    }
+    
+    #slot-1-en, #slot-2-en, #slot-0-en {
+        font-size: 16pt;
+    }
+}
+
+@media only screen and (max-width: 610px) {
+    #board {
+        height: 150px;
+    }
+
+    #slot-0, #slot-1, #slot-2 {
+        width: 150px;
+        right: 75px;
+    }
+
+    @keyframes translate-left {
+        0% {left: 75px}
+        100% {left: -75px}
+    }
+
+    #slot-1-ja, #slot-2-ja, #slot-0-ja {
+        font-size: 18pt;
+    }
+    
+    #slot-1-en, #slot-2-en, #slot-0-en {
+        font-size: 12pt;
+    }
+}
+
+@media only screen and (max-width: 460px) {
+    #board {
+        height: 130px;
+    }
+
+    #slot-0, #slot-1, #slot-2 {
+        width: 120px;
+        right: 60px;
+    }
+
+    @keyframes translate-left {
+        0% {left: 60px}
+        100% {left: -60px}
+    }
+
+    #slot-1-ja, #slot-2-ja, #slot-0-ja {
+        font-size: 14pt;
+    }
+    
+    #slot-1-en, #slot-2-en, #slot-0-en {
+        font-size: 10pt;
+    }
+
+    input, button {
+        font-size: 14pt;
+    }
+}

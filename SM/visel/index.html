@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Itim|Kaushan Script|Berkshire+Swash|Rye" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="https://use.fontawesome.com/97c54c0629.js"></script>
+</head>
+
+<body class="text-center">
+<div class="container">
+    <div class="jumbotron">
+        <h1>Hangman</h1>
+        <h3>Guess 3 or more words to win a trophy!</h3>
+        <h4>Type any letter to make a guess. No keyboard?<button class="btn btn-link">Click here.</button></h4>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title ">Winning Words - <span id="wins" class="label label-success">0</span></h3>
+                </div>
+                <div class="panel-body">        
+                    <span id="winningWords" class="filler">(none)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Losing Words - <span id="losses" class="label label-danger">0</span></h3>
+                </div>
+                <div class="panel-body">        
+                    <span id="losingWords" class="filler">(none)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-trophy" aria-hidden="true"></i> Trophy Case <i class="fa fa-trophy" aria-hidden="true"></i></h3>
+                </div>
+                <div class="panel-body">        
+                    <span id="userTrophies" class="trophy-color filler">(none)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-md-push-6 col-sm-6 col-xs-4">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 id="guessesLeft" class="panel-title">Wrong Guesses (7 left)</h3>
+                </div>
+                <div class="panel-body">        
+                    <span id="guessesMade" class="filler">(none)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-pull-3 col-sm-12 col-xs-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                     <h3 id="wordsLeft" class="panel-title">Word 1 of 5:</h3>
+                </div>
+                <div class="panel-body">        
+                    <span id="display"></span>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+<div id="mobileKeyboard"></div>
+
+<footer class="footer">
+     <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">   
+                <div class="panel panel-default">
+                    <div class="panel-body footer-panel">   
+                        <p>Enjoying <span class="hangman-game">Hangman</span>? Check out my other game: <a href="https://awberez.github.io/Psychic-Game/" class="btn btn-game psychic" target="_blank">The Psychic Game</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</footer>
+
+<script src="assets/javascript/game.js" type="text/javascript"></script>
+
+</body>
+
+</html>

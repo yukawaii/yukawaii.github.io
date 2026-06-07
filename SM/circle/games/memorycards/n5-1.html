@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+   <script src="../../App.js"></script>
+    <title>Карты памяти</title>
+    <link href="https://fonts.googleapis.com/css?family=Finger+Paint" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+  </head>
+
+  <body>
+    	<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+	 <script>
+        // Sends event to client
+        vkBridge.send('VKWebAppInit');
+      </script>
+    <div class="container">
+
+      <header>
+        <p class="header">Карты памяти<img src="img/cat.gif" alt="cat" align="bottom" class="icon"></p>
+        <!--Match the Kanji with their meaning in 3 turns! 失敗したら猫が怒ちゃう！！-->
+      </header>
+
+      <!-- Score panel -->
+      <section class="score-panel">
+        <!-- Number of frogs left to win -->
+        <ul class="frogs">
+          <li><i class="fas fa-frog"></i></li>
+          <li><i class="fas fa-frog"></i></li>
+          <li><i class="fas fa-frog"></i></li>
+        </ul>
+        <!-- Moves left -->
+        <span class="moves">0</span> moves
+        <!-- Time left -->
+        <span class="timer">0</span> sec
+        <!-- Game reset button -->
+        <i class="fas fa-redo redo"></i>
+      </section>
+
+      <!-- Deck of cards -->
+      <ul class="deck">
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+        <li class="card"></li>
+      </ul>
+
+    </div>
+
+    <!-- Modal to appear up if game won -->
+    <div class="modal-happy">
+      <img src="img/happy-cat.gif" alt="happy-cat" align ="center" class="image">
+      <h2>Ура!</h2>
+      <p> Заняло:
+        <span class="mov">0</span> ходов &
+        <span class="tim">0</span> сек
+      </p>
+      <p> Выйграно лягушек:
+        <span class="frog">0</span>
+      </p>
+      <p class="reload">Играть ещё?</p>
+    </div>
+
+    <!-- Modal to appear if game lost -->
+    <div class="modal-angry">
+      <img src="img/angry-cat.gif" alt="angry-cat" align ="center" class="image">
+      <h2>Время вышло!!</h2>
+      <p class="reload">Ещё раз?</p>
+    </div>
+
+    <!-- Overlay background to bring focus on modal -->
+    <div class="modal-overlay">
+    </div>
+
+  </body>
+
+<script src="js/n5-1.js"></script>
+
+</html>

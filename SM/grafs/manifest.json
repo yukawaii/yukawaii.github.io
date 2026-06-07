@@ -1,0 +1,8 @@
+{
+    "name": "YuKawaii's Kanji",
+    "short_name": "YuKawaii's Kanji",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#121212",
+    "description": "Изучение японского языка уровней Н1, Н2, Н3, Н4, Н5."
+}

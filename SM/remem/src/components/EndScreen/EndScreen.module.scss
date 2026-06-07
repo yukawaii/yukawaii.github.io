@@ -1,0 +1,24 @@
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.container {
+  animation: fadein 5s;
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.8s linear;
+}
+
+.text {
+  font-size: 10vw;
+  margin-bottom: 0.5em;
+  user-select: none;
+}

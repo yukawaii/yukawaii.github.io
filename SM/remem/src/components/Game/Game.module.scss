@@ -1,0 +1,26 @@
+.board {
+  $border: 0.1em solid lightgrey;
+  border-bottom: $border;
+  border-top: $border;
+  display: grid;
+  grid-row-gap: 4em;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 2em;
+  padding: 2em 0;
+}
+
+.score {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .board {
+    margin-bottom: 1em;
+  }
+
+  .score {
+    font-size: 1.5em;
+  }
+}

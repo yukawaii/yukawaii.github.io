@@ -1,0 +1,37 @@
+[{"name":"Япония","channels":[{"map":"r_PK61Dt","href":"/listen/coop-radio/r_PK61Dt","title":"Камэяма","subtitle":" ","id":"1674031155553","name":"Камэяма","src":"https://radio.garden/api/ara/content/listen/3Zw4BXZR/channel.mp3?1674031155553"},
+
+{"map":"99999","href":"/listen/free-fm/fo8bhE4s","title":"Осака","subtitle":" ","id":"1674031363282","name":"Осака","src":"http://radio.garden/api/ara/content/listen/GUNJYSam/channel.mp3?1674031363282"},
+
+{"href":"/listen/hirufm/xyIbSGbn","title":"Кобэ","id":"1674031857667","name":"Кобэ","src":"https://radio.garden/api/ara/content/listen/VBZNZCLB/channel.mp3?1674031857667"},
+
+{"map":"Асия","href":"/listen/hirufm/xyIbSGbn","title":"Асия","subtitle":" ","id":"1674031924165","name":"Асия","src":"https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?1674031924165"},
+{"map":"xu3Wcxh7","href":"/listen/lakhanda/xu3Wcxh7","title":"Кахоку","subtitle":" ","id":"1674032043151","name":"Кахоку","src":"http://radio.garden/api/ara/content/listen/T-biqYed/channel.mp3?1674032043151"},
+
+{"map":"36c7Fdkm","href":"/listen/laksara/36c7Fdkm","title":"Ниигата","subtitle":" ","id":"1674032095888","name":"Ниигата","src":"http://radio.garden/api/ara/content/listen/pZRZwukg/channel.mp3?1674032095888"},
+
+{"href":"/listen/mindfm/-0aVvh68","title":"Ямагата","id":"1674032317065","name":"Ямагата","src":"https://radio.garden/api/ara/content/listen/ofMcMOvq/channel.mp3?1674032317065"},
+
+{"href":"/listen/muslim-vanoli/60EzDh8p","title":"Хамамацу","id":"1674032469254","name":"Хамамацу","src":"http://radio.garden/api/ara/content/listen/E_2LzNdE/channel.mp3?1674032469254"},
+
+{"href":"/listen/neth-fm/WaFLj4e4","title":"Кисивада","id":"1674032605457","name":"Кисивада","src":"http://radio.garden/api/ara/content/listen/b2nTNOJr/channel.mp3?1674032605457"},
+
+{"href":"/listen/radioranlanka/BVNu5Csc","title":"Саппоро","id":"id1b15a3ba-ce5c-791a-11bc-cefcb3283d2f","name":"Саппоро","src":"http://radio.garden/api/ara/content/listen/YeMatLFV/channel.mp3?1674032764199"}]},
+
+
+{"name":"Корея","channels":
+
+[{"map":"Wg-SA81w","href":"/listen/arni-city-fm/Wg-SA81w","title":"Ульсан","subtitle":" ","id":"1674033563616","name":"Ульсан","src":"https://radio.garden/api/ara/content/listen/xiGLaqaN/channel.mp3?1674033563616"},
+
+{"href":"/listen/chennaichristianradio/27crn0Ax","title":"Йонджу","id":"1674033655447","name":"Йонджу","src":"http://radio.garden/api/ara/content/listen/FNyIujAo/channel.mp3?1674033655447"},
+
+{"href":"/listen/comforter-radio/JbYDjgvX","title":"Сеул","id":"1674033753923","name":"Сеул","src":"https://radio.garden/api/ara/content/listen/v200SfvM/channel.mp3?1674033753923"},
+
+{"href":"/listen/divine-fm/qI-zc6oV","title":"Пхеньян","id":"1674033801137","name":"Пхеньян","src":"https://radio.garden/api/ara/content/listen/NPzavm5p/channel.mp3?1674033801137"}]
+},
+{"name":"Китай","channels":
+
+[{"map":"Wg-SA81w","href":"/listen/arni-city-fm/Wg-SA81w","title":"Макао","subtitle":" ","id":"1674034081950","name":"Макао","src":"http://radio.garden/api/ara/content/listen/E1Q0HQYq/channel.mp3?1674034081950"}
+
+]  }
+]
+

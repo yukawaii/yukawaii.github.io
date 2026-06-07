@@ -1,0 +1,17 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/yukawaii.github.io/FileContentIndex
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+SM/67/data/1/links.csv
+SM/67/data/1/sentences.csv
+
+ 
+ 

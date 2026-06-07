@@ -1,0 +1,4002 @@
+[
+  [
+    "Один раз в жизни я делаю хорошее дело... И оно бесполезно.",
+    "Per una volta nella vita che faccio una buona azione... Ed è inutile."
+  ],
+  [
+    "Давайте что-нибудь попробуем!",
+    "Proviamo qualcosa!"
+  ],
+  [
+    "Мне пора идти спать.",
+    "Devo andare a dormire."
+  ],
+  [
+    "Мне пора идти спать.",
+    "È ora che vada a dormire."
+  ],
+  [
+    "Что ты делаешь?",
+    "Che stai facendo?"
+  ],
+  [
+    "Что ты делаешь?",
+    "Che fai?"
+  ],
+  [
+    "Что ты делаешь?",
+    "Cosa stai facendo?"
+  ],
+  [
+    "Что ты делаешь?",
+    "Cosa fai?"
+  ],
+  [
+    "Что ты делаешь?",
+    "Che cosa fai?"
+  ],
+  [
+    "Что ты делаешь?",
+    "Che cosa stai facendo?"
+  ],
+  [
+    "Что это?",
+    "Che cos'è?"
+  ],
+  [
+    "Что это?",
+    "Cos'è questo?"
+  ],
+  [
+    "Что это?",
+    "Che cos'è questo?"
+  ],
+  [
+    "Сегодня 18 июня, и это день рождения Мюриэл!",
+    "Oggi è il 18 di giugno ed è il compleanno di Muiriel!"
+  ],
+  [
+    "С днём рождения, Мюриэл!",
+    "Buon compleanno, Muiriel!"
+  ],
+  [
+    "Мюриэл сейчас 20.",
+    "Muiriel ha 20 anni adesso."
+  ],
+  [
+    "Пароль «Muiriel».",
+    "La parola d'accesso è \"Muiriel\"."
+  ],
+  [
+    "У меня нет слов.",
+    "Non trovo le parole."
+  ],
+  [
+    "У меня нет слов.",
+    "Sono senza parole."
+  ],
+  [
+    "У меня нет слов.",
+    "Non ho parole."
+  ],
+  [
+    "Не знаю, что и сказать.",
+    "Non so cosa dire."
+  ],
+  [
+    "Это был злой кролик.",
+    "Era un coniglietto cattivo."
+  ],
+  [
+    "Это новая фотография?",
+    "È una fotografia recente?"
+  ],
+  [
+    "Я не знаю, будет ли у меня время.",
+    "Non so se avrò tempo."
+  ],
+  [
+    "Микрофон по какой-то причине до этого не работал.",
+    "Il microfono, per qualche motivo, fino a quel momento non aveva funzionato."
+  ],
+  [
+    "Каждый, в итоге, должен учиться сам.",
+    "Ognuno deve imparare per se stesso alla fine."
+  ],
+  [
+    "Нелегко решать, что правильно, а что нет, но приходится это делать.",
+    "È un compito difficile scegliere tra cos'è \"bene\" o \"male\", ma bisogna farlo."
+  ],
+  [
+    "Это ничего не изменит.",
+    "Non cambierà niente."
+  ],
+  [
+    "Это ничего не изменит.",
+    "Questo non cambierà niente."
+  ],
+  [
+    "Я зарабатываю сто евро в день.",
+    "Guadagno 100 euro al giorno."
+  ],
+  [
+    "Я, может, скоро сдамся и вместо этого пойду вздремну.",
+    "Forse rinuncerò presto e andrò a farmi un sonnellino."
+  ],
+  [
+    "Не беспокойся.",
+    "Non ti preoccupare."
+  ],
+  [
+    "Я скучаю по тебе.",
+    "Mi manchi."
+  ],
+  [
+    "Я позвоню им завтра, когда вернусь домой.",
+    "Li chiamerò domani, quando torno a casa."
+  ],
+  [
+    "Я так жить не могу.",
+    "Non posso fare questa vita."
+  ],
+  [
+    "Я так жить не могу.",
+    "Non posso vivere in questo modo."
+  ],
+  [
+    "Я так жить не могу.",
+    "Non posso vivere così."
+  ],
+  [
+    "Большинство людей думает, что я сумасшедший.",
+    "La maggior parte delle persone pensa che io sia pazzo."
+  ],
+  [
+    "Нет, не я, а ты!",
+    "No, non io, tu!"
+  ],
+  [
+    "Ты уверен?",
+    "Sei sicuro?"
+  ],
+  [
+    "О, здесь бабочка!",
+    "Oh, c'è una farfalla!"
+  ],
+  [
+    "Почему-то по ночам я бодрее.",
+    "Per qualche motivo, mi sento più vitale la notte."
+  ],
+  [
+    "Я такой жирный.",
+    "Sono così grasso."
+  ],
+  [
+    "Я такой жирный.",
+    "Io sono così grasso."
+  ],
+  [
+    "Так что?",
+    "E allora?"
+  ],
+  [
+    "Я пристрелю его.",
+    "Gli sparo."
+  ],
+  [
+    "Я всего лишь говорю!",
+    "Sto soltanto parlando!"
+  ],
+  [
+    "Мне потребуется вечность, чтобы всё объяснить.",
+    "Mi ci vorrebbe una vita per spiegare tutto."
+  ],
+  [
+    "Это потому, что ты девушка.",
+    "È perché sei una ragazza."
+  ],
+  [
+    "Это потому, что ты девушка.",
+    "Quello è perché sei una ragazza."
+  ],
+  [
+    "Это потому, что ты девушка.",
+    "È perché tu sei una ragazza."
+  ],
+  [
+    "Иногда я не могу сдержать эмоций.",
+    "A volte non riesco a trattenere le emozioni."
+  ],
+  [
+    "Это и есть то слово, для которого я хотел бы найти замену.",
+    "Questa è la parola della quale vorrei trovare un sinonimo."
+  ],
+  [
+    "Я не хочу быть эгоистичным.",
+    "Non voglio essere egoista."
+  ],
+  [
+    "Сколько у тебя близких друзей?",
+    "Quanti amici stretti hai?"
+  ],
+  [
+    "Думаю, лучше вести себя воспитанно.",
+    "Penso che sia meglio comportarsi con creanza."
+  ],
+  [
+    "Многие люди пишут о своей обыденной жизни.",
+    "Molte persone tengono un diario quotidiano."
+  ],
+  [
+    "Ты должен рискнуть, чтобы сделать это.",
+    "Per farlo, bisogna correre dei rischi."
+  ],
+  [
+    "Почему ты спрашиваешь?",
+    "Perché lo chiedi?"
+  ],
+  [
+    "Я не художник. Я совсем не гожусь для этого.",
+    "Non sono un artista. Non ho mai avuto lo spirito per queste cose."
+  ],
+  [
+    "Невинность - это прекрасная штука.",
+    "L'innocenza è una cosa bella."
+  ],
+  [
+    "Если кто-либо спросит, в чем суть истории, я действительно не знаю.",
+    "Se qualcuno chiede quale sia il senso della storia, effettivamente non lo so."
+  ],
+  [
+    "Это не важно.",
+    "Non è importante."
+  ],
+  [
+    "Это не важно.",
+    "Questo non è importante."
+  ],
+  [
+    "Это не важно.",
+    "Non è una cosa importante."
+  ],
+  [
+    "Мне это не нравилось.",
+    "Non mi è piaciuto."
+  ],
+  [
+    "Она спрашивает, как это возможно.",
+    "Lei sta chiedendo come sia possibile."
+  ],
+  [
+    "Ты просто убегаешь от жизненных проблем.",
+    "Stai solo scappando dai problemi della vita."
+  ],
+  [
+    "Если взглянуть на текст песни, ясно, что он на самом деле ничего не значит.",
+    "Se dai un'occhiata al testo della canzone, è evidente che esso non significa veramente qualcosa."
+  ],
+  [
+    "Я хотела бы иметь возможность поехать в Японию.",
+    "Mi piacerebbe tanto andare in Giappone."
+  ],
+  [
+    "Я хотела бы иметь возможность поехать в Японию.",
+    "Vorrei avere la possibilità di andare in Giappone."
+  ],
+  [
+    "Я не буду вас сегодня больше ни о чем спрашивать.",
+    "Non vi chiederò nient'altro oggi."
+  ],
+  [
+    "Спасибо за то, что наконец объяснили, почему люди принимают меня за идиота.",
+    "Grazie per avermi finalmente spiegato perché la gente mi considera un idiota."
+  ],
+  [
+    "Ты хотел мне рассказать о свободе?",
+    "Mi volevi parlare di libertà?"
+  ],
+  [
+    "Я нашел решение, но я нашел его настолько быстро, что оно определенно не может быть верным.",
+    "Una soluzione l'ho trovata, ma l'ho trovata talmente in fretta che non può essere giusta."
+  ],
+  [
+    "Тогда я поразгадываю судоку, вместо того чтобы беспокоить тебя.",
+    "Allora risolverò un sudoku, al posto di annoiarti."
+  ],
+  [
+    "В чем проблема?",
+    "Dov'è il problema?"
+  ],
+  [
+    "В чем проблема?",
+    "Qual è il problema?"
+  ],
+  [
+    "Я могу только ждать.",
+    "Non posso far altro che aspettare."
+  ],
+  [
+    "Я люблю тебя!",
+    "Ti amo."
+  ],
+  [
+    "Я любопытный.",
+    "Sono curioso."
+  ],
+  [
+    "Мои поздравления.",
+    "Congratulazioni!"
+  ],
+  [
+    "Ты, наверно, догадываешься, что случится.",
+    "Tu forse immagini quello che sta succedendo."
+  ],
+  [
+    "Это лишь показывает, что ты не робот.",
+    "Mostra solo che non sei un robot."
+  ],
+  [
+    "Это лишь показывает, что ты не робот.",
+    "Mostra soltanto che non sei un robot."
+  ],
+  [
+    "Это лишь показывает, что ты не робот.",
+    "Mostra solamente che non sei un robot."
+  ],
+  [
+    "Что ты думаешь, я делал?",
+    "Cosa credi che stessi facendo?"
+  ],
+  [
+    "Я не говорю по-французски настолько хорошо.",
+    "Io non parlo il francese sufficientemente bene."
+  ],
+  [
+    "Тебе ничего не остаётся, кроме того, как довериться кому-либо.",
+    "Non puoi fare altro che credere in qualcuno."
+  ],
+  [
+    "Зачем ты сожалеешь о том, чего не сделал?",
+    "Perché ti dispiace di una cosa che non hai fatto?"
+  ],
+  [
+    "Ты недостаточно быстр.",
+    "Non sei abbastanza veloce."
+  ],
+  [
+    "Я не говорю по-японски.",
+    "Non parlo giapponese."
+  ],
+  [
+    "Я не говорю по-японски.",
+    "Io non parlo giapponese."
+  ],
+  [
+    "Это игра слов.",
+    "È un gioco di parole."
+  ],
+  [
+    "Я научился жить без неё.",
+    "Ho imparato a vivere senza di lei."
+  ],
+  [
+    "Не может быть!",
+    "Non è possibile."
+  ],
+  [
+    "Не может быть!",
+    "È impossibile."
+  ],
+  [
+    "Пожалуйста, не плачь.",
+    "Ti prego, non piangere."
+  ],
+  [
+    "Пожалуйста, не плачь.",
+    "Per favore, non piangere."
+  ],
+  [
+    "Единственные полезные ответы - те, которые поднимают новые вопросы.",
+    "Le sole risposte utili sono quelle che propongono nuove domande."
+  ],
+  [
+    "Сомневаться в себе есть первый признак ума.",
+    "Dubitare di sé stessi è il primo segno di intelligenza."
+  ],
+  [
+    "Всё то, что было изобретено, правильно.",
+    "Ogni cosa inventata è vera."
+  ],
+  [
+    "Изумление, удивление - это первый шаг на пути к постижению.",
+    "Sorprendersi, stupirsi, è cominciare a capire."
+  ],
+  [
+    "Нет сомненья: вселенная бесконечна.",
+    "Non c'è dubbio che il tutto è infinito."
+  ],
+  [
+    "Тем не менее, обратное также верно.",
+    "Nondimeno, è vero anche il contrario."
+  ],
+  [
+    "Мы видим вещи не такими, какие они есть, а такими, каковы мы сами.",
+    "Non vediamo le cose come sono, ma come siamo."
+  ],
+  [
+    "Мир - это клетка для безумных.",
+    "Il mondo è una gabbia di matti."
+  ],
+  [
+    "Меня зовут Джек.",
+    "Mi chiamo Jack."
+  ],
+  [
+    "Меня зовут Джек.",
+    "Io mi chiamo Jack."
+  ],
+  [
+    "Мне это очень нравится.",
+    "Mi piace molto."
+  ],
+  [
+    "Любовь не пропадает даром.",
+    "Non c'è amore sprecato."
+  ],
+  [
+    "Жизнь — то, что с тобой случается, пока ты занят другими делами.",
+    "La vita è quello che ti succede mentre sei impegnato a fare altri progetti."
+  ],
+  [
+    "Не желать обладать - всё равно что обладать.",
+    "Non desiderare è lo stesso che avere."
+  ],
+  [
+    "Не желать обладать - всё равно что обладать.",
+    "Non volerlo è come averlo già."
+  ],
+  [
+    "Ты знаешь, как говорят: «что посеешь, то и пожнёшь». Я посеял ветер, а вот и буря.",
+    "Tu sai come dicono: \"Chi semina, raccoglie\". Io ho seminato vento, ed ecco la tempesta."
+  ],
+  [
+    "Это слишком дорого!",
+    "È troppo caro!"
+  ],
+  [
+    "Это слишком дорого!",
+    "È troppo costoso!"
+  ],
+  [
+    "Я проголодался!",
+    "Muoio di fame!"
+  ],
+  [
+    "Реальных видений не бывает.",
+    "Non ci sono le visioni reali."
+  ],
+  [
+    "Всё возможно - было бы желание.",
+    "Volere è potere."
+  ],
+  [
+    "Возьми книгу и прочитай её!",
+    "Prendi un libro e leggilo!"
+  ],
+  [
+    "Он уже мужчина.",
+    "Ormai è un uomo."
+  ],
+  [
+    "Ты прав.",
+    "Hai ragione."
+  ],
+  [
+    "Жизнь прекрасна.",
+    "La vita è bella!"
+  ],
+  [
+    "Мнение шокирует лишь тогда, когда это убеждение.",
+    "Un parere è scioccante solo quanto è una convinzione."
+  ],
+  [
+    "Маленький огонь в лесу может легко распространиться и быстро стать огромным пожаром.",
+    "Un piccolo fuoco nella foresta può diffondersi facilmente e diventare velocemente un enorme incendio."
+  ],
+  [
+    "Жизнь начинается, когда определяешься, чего от неё хочешь.",
+    "La vita comincia quando si stabilisce cosa aspettarsi da essa."
+  ],
+  [
+    "О чём ты?",
+    "Di cosa parli?"
+  ],
+  [
+    "О чём ты?",
+    "Di cosa parlate?"
+  ],
+  [
+    "О чём ты?",
+    "Di che cosa parlate?"
+  ],
+  [
+    "О чём ты?",
+    "Di cosa parla?"
+  ],
+  [
+    "О чём ты?",
+    "Di che cosa parla?"
+  ],
+  [
+    "Зима — моё любимое время года.",
+    "L'inverno è la mia stagione preferita."
+  ],
+  [
+    "Из какой ты страны?",
+    "Da che paese vieni?"
+  ],
+  [
+    "Не важно.",
+    "Non importa."
+  ],
+  [
+    "Сделай что-нибудь!",
+    "Fai qualcosa!"
+  ],
+  [
+    "Я сейчас уставший.",
+    "Sono stanco ora."
+  ],
+  [
+    "Ты слишком много думаешь.",
+    "Tu pensi troppo."
+  ],
+  [
+    "Подумай об этом.",
+    "Ci pensi."
+  ],
+  [
+    "Пойди к врачу взять прописанное лекарство!",
+    "Vai dal dottore a prendere la prescrizione per le medicine."
+  ],
+  [
+    "Символ «&» ставится вместо «и».",
+    "Il carattere «&» sta per «и»."
+  ],
+  [
+    "Во Вселенной есть много галактик.",
+    "Ci sono molte galassie nell'universo."
+  ],
+  [
+    "Я прочитал этот рассказ в какой-то книге.",
+    "Ho letto questa storia in qualche libro."
+  ],
+  [
+    "Я бегу как можно быстрее, чтобы догнать его.",
+    "Corro più velocemente che posso per raggiungerlo."
+  ],
+  [
+    "Я случайно нашёл этот ресторан.",
+    "Ho trovato questo ristorante per caso."
+  ],
+  [
+    "Этот кондиционер потребляет много электричества.",
+    "Questo condizionatore consuma molta corrente."
+  ],
+  [
+    "Этот сад лучше всего выглядит весной.",
+    "Questo giardino è più bello durante la primavera."
+  ],
+  [
+    "Я не могу позволить себе зря потратить хоть одну иену.",
+    "Non posso permettermi di sprecare nemmeno un singolo yen."
+  ],
+  [
+    "Не вини в этом её.",
+    "Non darle la colpa di questo."
+  ],
+  [
+    "Было очень приятно увидеть тебя снова.",
+    "È stato molto bello rivederti."
+  ],
+  [
+    "Есть случаи, когда это правило не выполняется.",
+    "Ci sono casi i cui la regola non si applica."
+  ],
+  [
+    "Она бросила курить.",
+    "Lei ha smesso di fumare."
+  ],
+  [
+    "Фильм взволновал всех зрителей.",
+    "Il film ha entusiasmato tutti gli spettatori."
+  ],
+  [
+    "На фотографии у девушки корона не из золота, а из цветов.",
+    "Nella fotografia la corona della ragazza non è d'oro ma di fiori."
+  ],
+  [
+    "Выпало много снега.",
+    "È caduta tanta neve."
+  ],
+  [
+    "Идёт снег.",
+    "Nevica."
+  ],
+  [
+    "Может пойти снег.",
+    "Potrebbe nevicare."
+  ],
+  [
+    "Дождь перешёл в снег.",
+    "La pioggia si trasformò in neve."
+  ],
+  [
+    "Маюко приснился странный сон.",
+    "Mayuko ha fatto un sogno strano."
+  ],
+  [
+    "Рейн течёт между Францией и Германией.",
+    "Il Reno scorre tra la Francia e la Germania."
+  ],
+  [
+    "Добро пожаловать в Японию.",
+    "Benvenuta in Giappone."
+  ],
+  [
+    "Добро пожаловать в Японию.",
+    "Benvenuti in Giappone."
+  ],
+  [
+    "Добро пожаловать в Японию.",
+    "Benvenute in Giappone."
+  ],
+  [
+    "Танабата празднуется в июле.",
+    "Il Tanabata si celebra in luglio."
+  ],
+  [
+    "Она не боится ничего.",
+    "Lei non ha paura di niente."
+  ],
+  [
+    "Билл старше меня на два года.",
+    "Bill è di due anni più vecchio di me."
+  ],
+  [
+    "Боб — мой друг.",
+    "Bob è il mio amico."
+  ],
+  [
+    "Боб — мой друг.",
+    "Bob è mio amico."
+  ],
+  [
+    "Я не понимаю.",
+    "Non capisco."
+  ],
+  [
+    "Я не понимаю.",
+    "Non comprendo."
+  ],
+  [
+    "Хороший вопрос.",
+    "Bella domanda."
+  ],
+  [
+    "Войдите!",
+    "Entrate!"
+  ],
+  [
+    "Добро пожаловать!",
+    "Benvenuto!"
+  ],
+  [
+    "Я очень устал, хочу лечь пораньше.",
+    "Sono molto stanco, voglio andare a letto presto."
+  ],
+  [
+    "Поторапливайся!",
+    "Sbrigati!"
+  ],
+  [
+    "Наконец-то мы встретились! Я так долго ждал этого дня!",
+    "Finalmente ci siamo incontrati! Da quanto aspettavo questo giorno!"
+  ],
+  [
+    "Вы должны заботиться о своей больной матери.",
+    "Dovreste prendervi cura della mamma malata."
+  ],
+  [
+    "Он странствовал по Европе несколько месяцев.",
+    "Lui ha girato per l'europa per qualche mese."
+  ],
+  [
+    "Стиральная машина - замечательное изобретение.",
+    "La lavatrice è un'invenzione magnifica."
+  ],
+  [
+    "Мэри выглядит не очень дружественно, но у нее доброе сердце.",
+    "Mary non sembra molto amichevole, ma ha un cuore buono."
+  ],
+  [
+    "Женщина, что сидит на диване, - моя бабушка.",
+    "La donna seduta sul divano è mia nonna."
+  ],
+  [
+    "О нём я не знаю ничего, кроме имени.",
+    "Di lui non so altro che il nome."
+  ],
+  [
+    "Папа купил мне фотоаппарат.",
+    "Papà mi ha comprato una macchina fotografica."
+  ],
+  [
+    "Папа купил мне фотоаппарат.",
+    "Il papà mi ha comprato una macchina fotografica."
+  ],
+  [
+    "Даже если постирать, цвет не полиняет.",
+    "Anche lavandolo, il colore non andrà via."
+  ],
+  [
+    "Лимоны кислые.",
+    "Il limone è acido."
+  ],
+  [
+    "Эксперимент закончился неудачей.",
+    "L'esperimento è terminato con un fallimento."
+  ],
+  [
+    "Приехав на станцию, я позвонил своему другу.",
+    "Arrivato in stazione, ho telefonato al mio amico."
+  ],
+  [
+    "В комнате не было ничего, кроме старого стула.",
+    "In camera non c'era niente, a parte una sedia vecchia."
+  ],
+  [
+    "Город находится западнее Лондона.",
+    "La città si trova ad ovest di Londra."
+  ],
+  [
+    "Как только дверь открылась, они убежали.",
+    "Appena la porta si aprì, loro scapparono fuori."
+  ],
+  [
+    "Выставка уже открыта.",
+    "La mostra è già aperta."
+  ],
+  [
+    "У него есть \"тойота\".",
+    "Lui ha una Toyota."
+  ],
+  [
+    "У автора красивый стиль.",
+    "L'autore ha un bello stile."
+  ],
+  [
+    "Если бы не мой совет, ты бы потерпел неудачу.",
+    "Se non fosse stato per il mio consiglio, avresti fallito."
+  ],
+  [
+    "Он решил отложить свой отъезд.",
+    "Lui decise di rinviare la sua partenza."
+  ],
+  [
+    "Ты занят в воскресенье после полудня?",
+    "Sei occupato domenica pomeriggio?"
+  ],
+  [
+    "Холодно.",
+    "Fa freddo."
+  ],
+  [
+    "Мой отец вернётся в начале следующего месяца.",
+    "Mio padre tornerà all'inizio del prossimo mese."
+  ],
+  [
+    "Перед тем как выйти из дома, не забудьте выключить газ.",
+    "Prima di uscire di casa non dimenticate di spegnere il gas."
+  ],
+  [
+    "Он написал письмо.",
+    "Egli scrisse una lettera."
+  ],
+  [
+    "Он написал письмо.",
+    "Lui ha scritto una lettera."
+  ],
+  [
+    "Он любит рыбалку.",
+    "Ama pescare."
+  ],
+  [
+    "Он любит рыбалку.",
+    "Lui ama pescare."
+  ],
+  [
+    "Они не искупались, потому что было холодно.",
+    "Non hanno nuotato perché faceva freddo."
+  ],
+  [
+    "Она всегда к нему придирается.",
+    "Lei se la prende sempre con lui."
+  ],
+  [
+    "Ты должен извиниться перед ней за то, что был невежлив.",
+    "Devi scusarti con lei per essere stato scortese."
+  ],
+  [
+    "Они поздравили его с женитьбой.",
+    "Loro si congratularono con lui per il matrimonio."
+  ],
+  [
+    "Он починил мне часы.",
+    "Lui mi ha riparato l'orologio."
+  ],
+  [
+    "Должно быть, ему за 60.",
+    "Lui deve avere più di 60 anni."
+  ],
+  [
+    "Он сдержал крик боли.",
+    "Lui ha trattenuto un urlo di dolore."
+  ],
+  [
+    "В этой стране среднее количество детей в семье сократилось с 2 до 1,5.",
+    "In questo paese la media dei figli per famiglia è scesa da 2 a 1,5."
+  ],
+  [
+    "Они женаты 4 года.",
+    "Sono stati sposati per quattro anni."
+  ],
+  [
+    "Матч отменили из-за дождя.",
+    "La partita è stata annullata a causa della pioggia."
+  ],
+  [
+    "Если бы было немного теплее, мы могли бы выпить чаю в саду.",
+    "Se ci fosse un po' più di caldo potremmo bere in tè in giardino."
+  ],
+  [
+    "У него раздвоение личности.",
+    "Lui ha una personalità dissociata."
+  ],
+  [
+    "Она завидует моему успеху.",
+    "Lei è gelosa del mio successo."
+  ],
+  [
+    "В следующем году я должен сдавать вступительные экзамены.",
+    "Il prossimo anno devo dare gli esami di ammissione."
+  ],
+  [
+    "Лёд растаял.",
+    "Il ghiaccio si sciolse."
+  ],
+  [
+    "Никто не опоздал.",
+    "Nessuno ha fatto tardi."
+  ],
+  [
+    "Я бросил курить.",
+    "Ho smesso di fumare."
+  ],
+  [
+    "Эта книга хорошо продавалась в Японии.",
+    "Questo libro è stato venduto bene in Giappone."
+  ],
+  [
+    "Спокойной ночи, мама.",
+    "Buona notte, mamma."
+  ],
+  [
+    "Как называется эта улица?",
+    "Come si chiama questa via?"
+  ],
+  [
+    "Кошка пьёт молоко.",
+    "Il gatto beve il latte."
+  ],
+  [
+    "Это мнение дилетанта.",
+    "È il parere di un dilettante."
+  ],
+  [
+    "Юридическая терминология непонятна для большинства непрофессионалов.",
+    "La terminologia giuridica non è comprensibile per la maggior parte dei non specialisti."
+  ],
+  [
+    "Её дочь сбежала с молодым писателем.",
+    "Sua figlia è scappata con un giovane scrittore."
+  ],
+  [
+    "Я не могу больше терпеть.",
+    "Non posso più tollerarlo."
+  ],
+  [
+    "Мне не нравится ни одна из этих картин.",
+    "Non mi piace nessuna di queste immagini."
+  ],
+  [
+    "Я вчера видел удивительный сон.",
+    "Ho fatto uno strano sogno la scorsa notte."
+  ],
+  [
+    "Я вчера прочитал очень интересный рассказ.",
+    "Ieri ho letto un racconto molto interessante."
+  ],
+  [
+    "Я ему заплатил на прошлой неделе.",
+    "L'ho pagato la settimana scorsa."
+  ],
+  [
+    "Мой отец высокий.",
+    "Mio padre è alto."
+  ],
+  [
+    "Она должна заботиться о том пожилом человеке.",
+    "Lei deve prendersi cura di una persona anziana."
+  ],
+  [
+    "Когда я тебя вижу, я всегда вспоминаю о Кене.",
+    "Quando ti vedo, penso sempre a Ken."
+  ],
+  [
+    "Я вегетарианец.",
+    "Sono vegetariano."
+  ],
+  [
+    "Я вегетарианец.",
+    "Io sono vegetariano."
+  ],
+  [
+    "Девушка стояла перед аудиторией.",
+    "La ragazza stava davanti all'uditorio."
+  ],
+  [
+    "Я был один в аудитории.",
+    "Ero da solo in aula."
+  ],
+  [
+    "Как тебя зовут?",
+    "Come ti chiami?"
+  ],
+  [
+    "Я забыл, как его зовут.",
+    "Mi sono dimenticato come si chiama."
+  ],
+  [
+    "Я забыл, как его зовут.",
+    "Mi son dimenticato come si chiama."
+  ],
+  [
+    "У него странное имя.",
+    "Lui ha un nome strano."
+  ],
+  [
+    "Меня зовут Тамако, а тебя?",
+    "Il mio nome è Tamako, e il tuo?"
+  ],
+  [
+    "Ты нужен мне.",
+    "Ho bisogno di te."
+  ],
+  [
+    "Стены имеют уши, а сёдзи - глаза.",
+    "I muri hanno orecchi e gli shōji occhi."
+  ],
+  [
+    "Не откладывай на завтра то, что можно сделать сегодня.",
+    "Non rimandare a domani ciò che puoi fare oggi."
+  ],
+  [
+    "Не откладывай на завтра то, что можно сделать сегодня.",
+    "Quel che puoi far oggi, non differirlo a domani."
+  ],
+  [
+    "Нет лекарства от болезни любви.",
+    "Non c'è medicina per il mal d'amore."
+  ],
+  [
+    "Невозможно поймать тигрёнка, не войдя в логово тигра.",
+    "Chi non risica non rosica."
+  ],
+  [
+    "Десять человек - десять вкусов.",
+    "Ognuno ha i suoi gusti."
+  ],
+  [
+    "Всё, что существует на свете, — только сон.",
+    "Tutto ciò che esiste nel mondo è soltanto un sogno."
+  ],
+  [
+    "На дороге смерти не бывает королей.",
+    "Non c'è alcun re nella strada della morte."
+  ],
+  [
+    "Дитя змеи — змея.",
+    "La mela non cade lontano dall'albero."
+  ],
+  [
+    "Когда говорят о будущем, черти смеются.",
+    "Quando parlate del futuro, il diavolo se la ride."
+  ],
+  [
+    "Жизнь прожить трудно, а умереть легко.",
+    "Si vive duramente, ma si muore facilmente."
+  ],
+  [
+    "Мужчина и в сорок и в пятьдесят лет все ещё мальчик.",
+    "Un uomo a quaranta o cinquanta anni è ancora un ragazzo."
+  ],
+  [
+    "Угощайся чем угодно.",
+    "Serviti di tutto quello che vuoi mangiare."
+  ],
+  [
+    "Его женили рано, когда он был ещё студентом второго курса, и теперь его жена казалась в полтора раза старше его.",
+    "Si è sposato presto, quando ancora era uno studente del secondo anno, e oramai sua moglie sembrava una volta e mezzo più vecchia di lui."
+  ],
+  [
+    "Потом у себя в номере он думал о ней, о том что завтра она, наверное, встретится с ним.",
+    "Più tardi nella sua camera, lui pensò a lei, al fatto che l'indomani lei, forse, lo avrebbe incontrato."
+  ],
+  [
+    "Это хорошо, что я уезжаю, — говорила она Гурову. — Это сама судьба.",
+    "È un bene che me ne vada. - disse lei a Gurov. - È destino."
+  ],
+  [
+    "Возможно ли, чтобы слух был обоснован?",
+    "È possibile che la voce sia fondata?"
+  ],
+  [
+    "Странно, что ты ничего не знаешь на этот счёт.",
+    "Strano che tu non abbia mai saputo niente al riguardo."
+  ],
+  [
+    "Скоро весна.",
+    "Presto sarà primavera."
+  ],
+  [
+    "Скоро наступит весна.",
+    "Presto arriverà primavera."
+  ],
+  [
+    "Я скоро вернусь.",
+    "Torno subito."
+  ],
+  [
+    "Я пять лет изучал английский язык.",
+    "Io ho studiato inglese per cinque anni."
+  ],
+  [
+    "Ты наконец написал своё домашнее задание?",
+    "Hai finito i tuoi compiti per casa?"
+  ],
+  [
+    "Он живёт на квартире.",
+    "Lui abita in un appartamento."
+  ],
+  [
+    "Я не люблю, когда ты гуляешь одна.",
+    "Non mi piace quando vai in giro da sola."
+  ],
+  [
+    "С нетерпением жду от вас новости.",
+    "Aspetto con ansia novità da voi."
+  ],
+  [
+    "Я забронировал место.",
+    "Ho prenotato un posto."
+  ],
+  [
+    "Я люблю ходить в кино.",
+    "Mi piace andare al cinema."
+  ],
+  [
+    "Она вдруг рассердилась.",
+    "Lei si arrabbiò improvvisamente."
+  ],
+  [
+    "Я так и знал.",
+    "Me lo aspettavo."
+  ],
+  [
+    "Этот певец нравится многим девушкам.",
+    "Questo cantante piace a molte ragazze."
+  ],
+  [
+    "Я проверяю слова в своём словаре.",
+    "Io controllo le parole sul mio dizionario."
+  ],
+  [
+    "Каждый раз, когда я смотрю на эту фотографию, я вспоминаю счастливые дни деревенской жизни.",
+    "Ogni volta che guardo questa fotografia ricordo i giorni felici della vita di campagna."
+  ],
+  [
+    "Мне надо будет об этом подумать.",
+    "Ci dovrò pensare sopra."
+  ],
+  [
+    "Услышав новость, она зарыдала.",
+    "Dopo aver ascoltato la notizia, lei scoppio a piangere."
+  ],
+  [
+    "Он будет дома чуть раньше пяти.",
+    "Lui sarà a casa un pochino prima delle cinque."
+  ],
+  [
+    "Я бы хотел поехать во Францию.",
+    "Vorrei andare in Francia."
+  ],
+  [
+    "Мне чай с лимоном, пожалуйста.",
+    "Per me del tè al limone, per favore."
+  ],
+  [
+    "Но она ни о чём не думала и только плакала.",
+    "Ma lei non pensava a nessuno, ha solo pianto."
+  ],
+  [
+    "Джим пошёл ловить рыбу на молу.",
+    "Jim andò a pescare sul molo."
+  ],
+  [
+    "Дядя дал мне книгу.",
+    "Lo zio mi ha dato un libro."
+  ],
+  [
+    "Ты можешь выбрать чего хочешь.",
+    "Puoi scegliere quello che vuoi."
+  ],
+  [
+    "Я знаю, что он любит джаз.",
+    "So che a lui piace il jazz."
+  ],
+  [
+    "Спасибо!",
+    "Grazie!"
+  ],
+  [
+    "Я доволен своей работой.",
+    "Sono contento del mio lavoro."
+  ],
+  [
+    "Она была красивой в своё время.",
+    "Lei era bella ai suoi tempi."
+  ],
+  [
+    "Он уверен, что придёт.",
+    "Lui è sicuro che verrà."
+  ],
+  [
+    "Он стал милиционером.",
+    "Lui è diventato un poliziotto."
+  ],
+  [
+    "Он только что пришёл.",
+    "Lui è appena arrivato."
+  ],
+  [
+    "Урок начался в назначенный час.",
+    "Il corso comincerà all'ora stabilita."
+  ],
+  [
+    "Мне рыбу, пожалуйста.",
+    "A me del pesce, per favore."
+  ],
+  [
+    "Пожалуйста, папаша, приласкай его. Я не могу тебе выразить, до какой степени я дорожу его дружбой.",
+    "Per favore, paparino, trattalo con affetto. Non riesco a spiegare fino a che punto tengo alla sua amicizia."
+  ],
+  [
+    "Отец у меня золотой человек.",
+    "Mio padre è una persona d'oro."
+  ],
+  [
+    "Это что за глупость?",
+    "Che cos'è questa assurdità?"
+  ],
+  [
+    "Я вчера купил книгу.",
+    "Ho comprato un libro ieri."
+  ],
+  [
+    "Вчера было холодно.",
+    "Ieri faceva freddo."
+  ],
+  [
+    "Я вчера туда пошел.",
+    "Ieri sono andato lì."
+  ],
+  [
+    "Сегодня жарко.",
+    "Fa caldo oggi."
+  ],
+  [
+    "Сегодня жарко.",
+    "Oggi fa caldo."
+  ],
+  [
+    "Вчера был четверг.",
+    "Ieri era giovedì."
+  ],
+  [
+    "Ещё утром, на вокзале, ему бросилась в глаза афиша с очень крупными буквами.",
+    "Al mattino alla stazione gli balzò agli occhi un poster con lettere molto grandi."
+  ],
+  [
+    "Папа, а почему зимой не бывает грома?",
+    "Papà, ma perché in inverno non ci sono tuoni?"
+  ],
+  [
+    "Он снял шубу внизу, поднялся наверх и тихо постучал в дверь.",
+    "Lui si tolse la pelliccia di sotto, andò di sopra e bussò piano alla porta."
+  ],
+  [
+    "Он был вдов, но через год после свадьбы сына не выдержал и сам женился.",
+    "Era vedovo, ma, dopo un anno dal matrimonio del figlio, non ha resistito e si è sposato anche lui."
+  ],
+  [
+    "Лет двенадцать — пятнадцать тому назад в городе, на самой главной улице, в собственном доме проживал чиновник Громов, человек солидный и зажиточный.",
+    "Dodici o quindici anni or sono, viveva in città, proprio nella via principale, in una casa di sua proprietà, l'impiegato Gromov, uomo posato e agiato."
+  ],
+  [
+    "Он никогда, даже в молодые студенческие годы, не производил впечатления здорового.",
+    "Lui non ha mai, nemmeno negli anni dell'università, dato l'impressione di una persona sana."
+  ],
+  [
+    "Читал он очень много.",
+    "Lui leggeva molto."
+  ],
+  [
+    "Дома у себя читал он всегда лёжа.",
+    "A casa sua lui leggeva sempre sdraiato."
+  ],
+  [
+    "Я хочу поговорить с твоим дядей.",
+    "Voglio parlare con tuo zio."
+  ],
+  [
+    "Можно ли вам помочь?",
+    "Posso aiutarvi?"
+  ],
+  [
+    "Мне скучно.",
+    "Mi annoio."
+  ],
+  [
+    "Никогда в жизни я такого не видела, ни разу!",
+    "Mai in vita mia ho visto una cosa del genere, mai!"
+  ],
+  [
+    "До чего же хорошо, что у меня есть бабушка!",
+    "Che buona cosa avere una nonna!"
+  ],
+  [
+    "Передайте дедушке привет.",
+    "Salutatemi il nonno."
+  ],
+  [
+    "Вы должны вести себя очень тихо и ходить на цыпочках. Малышка спит.",
+    "Dovete fare pianissimo e camminare in punta dei piedi. Il bimbo sta dormendo."
+  ],
+  [
+    "Я иду играть на улицу. Пойдёшь со мной?",
+    "Vado fuori a giocare. Vieni con me?"
+  ],
+  [
+    "Не зайдёте ли вы ко мне на чай?",
+    "Verreste da me per il tè?"
+  ],
+  [
+    "В спальне у неё стоял столик. А на нём маленькая бутылочка.",
+    "Nella sua camera da letto c'era un tavolo. E su di esso una piccola bottiglia."
+  ],
+  [
+    "Какие вы безобразники!",
+    "Che teppisti siete!"
+  ],
+  [
+    "Никогда больше не трогайте эту бутылочку!",
+    "Non toccate mai più questa bottiglia!"
+  ],
+  [
+    "Придёшь ко мне есть блинчики?",
+    "Vieni da me a mangiare i pancake?"
+  ],
+  [
+    "Как громко ни кричи \"У-у!\", в волка не превратишься.",
+    "Per quanto forte gridi \"Uh-uh!\", non ti trasformerai in un lupo."
+  ],
+  [
+    "На голове у Саши была огромная шишка.",
+    "Sulla testa di Sasha c'era un bernoccolo enorme."
+  ],
+  [
+    "В такую погоду никто не выходит из дома.",
+    "Con questo tempo nessuno esce di casa."
+  ],
+  [
+    "Приятного аппетита!",
+    "Buon appetito!"
+  ],
+  [
+    "Смотри, мальчишки ходят босиком по воде.",
+    "Guarda, i ragazzi vanno a piedi nudi sull'acqua."
+  ],
+  [
+    "Ну давай же!",
+    "Su, coraggio!"
+  ],
+  [
+    "Пёсик посмотрел на неё очень грустно.",
+    "Il cagnolino la guardò molto tristemente."
+  ],
+  [
+    "Ну что за дети! Посылаешь их за конфетами, а они приводят собаку!",
+    "I bambini! Li mandi a prendere delle caramelle e loro tornano con un cane."
+  ],
+  [
+    "Ни за что на свете!",
+    "Per niente al mondo!"
+  ],
+  [
+    "Когда я вырасту, стану лётчиком. А ты кем будешь?",
+    "Quando diventerò grande, farò il pilota. E tu cosa farai?"
+  ],
+  [
+    "Вот это да. Какие чудесные подарки! Как я рад!",
+    "Che bello. Che regali stupendi! Come sono contento!"
+  ],
+  [
+    "Я ищу свой ключ.",
+    "Stò cercando la mia chiave."
+  ],
+  [
+    "Суета сует, и всё — суета.",
+    "Vanità delle vanità, tutto è vanità."
+  ],
+  [
+    "Пожалуйста.",
+    "Prego."
+  ],
+  [
+    "Пожалуйста.",
+    "Di nulla."
+  ],
+  [
+    "Он, кажется, болел.",
+    "Lui sembrava malato."
+  ],
+  [
+    "Здесь очень опасно ходить ночью.",
+    "Qui è molto pericoloso andare in giro la notte."
+  ],
+  [
+    "К тому времени, как солнце сядет, мы дойдём до места назначения.",
+    "Arriveremo a destinazione al tramontar del sole."
+  ],
+  [
+    "Принимайте это лекарство раз в шесть часов.",
+    "Prendete questa pastiglia una volta ogni sei ore."
+  ],
+  [
+    "Я очень сильно по тебе скучаю.",
+    "Sento tanto la tua mancanza."
+  ],
+  [
+    "Тебе надо всего лишь передать ему эту книгу.",
+    "Devi solamente dargli questo libro."
+  ],
+  [
+    "Его, должно быть, назвали в честь дедушки.",
+    "Deve essere che lui abbia il nome del nonno."
+  ],
+  [
+    "Извините за опоздание, у меня было много работы.",
+    "Scusate per il ritardo, ho avuto molto da fare."
+  ],
+  [
+    "Мы ждали долго, но он не пришёл.",
+    "Abbiamo aspettato a lungo, ma lui non è venuto."
+  ],
+  [
+    "Из-за болезни я не смог уехать за границу.",
+    "A causa della malattia non potrò andare all'estero."
+  ],
+  [
+    "Какой бы язык ты ни учил, без словаря ты не обойдёшься.",
+    "Qualsiasi sia la lingua che studi, non te la caverai senza vocabolario."
+  ],
+  [
+    "Не волнуйся за меня.",
+    "Non preoccuparti di me."
+  ],
+  [
+    "Он работает машинистом поезда.",
+    "Lui lavora come macchinista di treni."
+  ],
+  [
+    "Будь что будет, я не отступлюсь.",
+    "Sia quel che sia, non mi tirerò indietro."
+  ],
+  [
+    "Какая там погода?",
+    "Com'è il tempo lì?"
+  ],
+  [
+    "Какая там погода?",
+    "Là come è il tempo?"
+  ],
+  [
+    "Друзья завтра устраивают для меня вечеринку.",
+    "Domani gli amici organizzano una festa per me."
+  ],
+  [
+    "Я живу здесь с 1990-го года.",
+    "Abito qui dal 1990."
+  ],
+  [
+    "Летом здесь часто идёт дождь.",
+    "In estate qui piove spesso."
+  ],
+  [
+    "Она уехала в Америку.",
+    "Lei è partita per l'America."
+  ],
+  [
+    "Как часто ты его видишь?",
+    "Quanto spesso lo vedi?"
+  ],
+  [
+    "Можешь опустить подробности.",
+    "Puoi trascurare i dettagli."
+  ],
+  [
+    "Я уже был в Саппоро до этого.",
+    "Sono già stata a Sapporo prima d'ora."
+  ],
+  [
+    "Прекрати шутить над своим братом.",
+    "Smettila di prendere in giro tuo fratello."
+  ],
+  [
+    "Не превышай скорость.",
+    "Non superare i limiti di velocità."
+  ],
+  [
+    "Воскресенье для меня — особенный день.",
+    "Per me la domenica è un giorno speciale."
+  ],
+  [
+    "Если бы он знал эти факты, аварии можно было бы избежать.",
+    "Se lui avesse conosciuto questi fatti, l'incidente sarebbe stato evitato."
+  ],
+  [
+    "Она в саду, садит розы.",
+    "Lei è in giardino a piantare rose."
+  ],
+  [
+    "Она в саду, садит розы.",
+    "Lei è in giardino che pianta le rose."
+  ],
+  [
+    "Я помню, я уже читал этот роман.",
+    "Ricordo di aver già letto questo romanzo."
+  ],
+  [
+    "Прошло почти 50 лет с тех пор, как закончилась Вторая мировая война.",
+    "Sono passati quasi 50 anni da quando è finita la Seconda Guerra Mondiale."
+  ],
+  [
+    "Один из близнецов жив, но второй умер.",
+    "Uno dei gemelli è vivo, ma l'altro è morto."
+  ],
+  [
+    "Я хочу однажды съездить в Африку.",
+    "Un giorno voglio visitare l'Africa."
+  ],
+  [
+    "Не могли бы Вы мне его немного уменьшить?",
+    "Non potreste restringermelo un po'?"
+  ],
+  [
+    "Он пришёл, когда мы сидели за столом.",
+    "Lui venne mentre eravamo seduti a tavola."
+  ],
+  [
+    "Давай перейдём через дорогу.",
+    "Attraversiamo la strada."
+  ],
+  [
+    "Я проснулся и обнаружил в комнате вора.",
+    "Mi sono svegliato e ho trovato un ladro in camera."
+  ],
+  [
+    "Почини часы.",
+    "Ripara l'orologio."
+  ],
+  [
+    "Он попросил меня разбудить его в шесть.",
+    "Mi ha chiesto di svegliarlo alle sei."
+  ],
+  [
+    "Хотя я понимаю то, что Вы говорите, я не могу с Вами согласиться.",
+    "Sebbene capisca quello che state dicendo, io non posso essere d'accordo con Voi."
+  ],
+  [
+    "Будь осторожен по дороге домой.",
+    "Sii prudente sulla via di casa."
+  ],
+  [
+    "Я встретил друга на станции.",
+    "Ho incontrato un amico alla stazione."
+  ],
+  [
+    "Он сделал одну и ту же ошибку дважды.",
+    "Lui ha fatto lo stesso errore due volte."
+  ],
+  [
+    "Пожалуйста, угощайтесь пиццей.",
+    "Prego, servitevi di pizza."
+  ],
+  [
+    "Майк ездит в школу на автобусе.",
+    "Mike va a scuola in autobus."
+  ],
+  [
+    "Он по ошибке взял не ту шляпу.",
+    "Per errore lui prese il cappello sbagliato."
+  ],
+  [
+    "Куда бы он ни пошёл, он везде с кем-нибудь знакомится.",
+    "Ovunque lui vada, farà sicuramente amicizia con qualcuno."
+  ],
+  [
+    "Пожалуйста, поднимите этот вопрос на следующей встрече.",
+    "Per favore, portate avanti la questione per il prossimo incontro."
+  ],
+  [
+    "У Вас есть прачечная?",
+    "Avete la lavanderia?"
+  ],
+  [
+    "Нью-Йорк — самый большой город на свете.",
+    "New York è la città più grande al mondo."
+  ],
+  [
+    "Прежде чем я смог что-то возразить, на меня надели наручники и повезли в тюрьму.",
+    "Prima che potessi replicare mi hanno ammanettato e portato in prigione."
+  ],
+  [
+    "Слишком быстрая езда опасна.",
+    "Guidare troppo veloce è pericoloso."
+  ],
+  [
+    "Она дала путешественнику еду и одежду.",
+    "Lei diede cibo e vestiti al viaggiante."
+  ],
+  [
+    "Я заплатила двести долларов за эту сумочку.",
+    "Ho pagato duecento dollari per questa borsetta."
+  ],
+  [
+    "Один из моих друзей знает тебя.",
+    "Uno dei miei amici ti conosce."
+  ],
+  [
+    "Он как раз это и сказал.",
+    "Questo è esattamente quello che ha detto."
+  ],
+  [
+    "Он как раз это и сказал.",
+    "Questo è proprio quello che ha detto."
+  ],
+  [
+    "Я предпочитаю театр но театру кабуки, так как первый выглядит элегантнее второго.",
+    "Preferisco il teatro nō al teatro kabuki, perché il primo mi sembra più elegante del secondo."
+  ],
+  [
+    "Война вступила в завершающую стадию.",
+    "La guerra è entrata nella sua fase finale."
+  ],
+  [
+    "В его глазах появился радостный блеск.",
+    "Nei suoi occhi è apparso un bagliore di gioia."
+  ],
+  [
+    "Он живёт не в университетском городке.",
+    "Lei non vive nel campus."
+  ],
+  [
+    "Эта песня мне знакома.",
+    "Questa canzone mi è familiare."
+  ],
+  [
+    "Это очень просто, если знаешь правила.",
+    "È molto facile se conosci le regole."
+  ],
+  [
+    "Он не понял её шутку.",
+    "Lui non ha capito il suo scherzo."
+  ],
+  [
+    "Мне очень нравится эта квартира, положение хорошее, и, кроме того, плата за аренду небольшая.",
+    "Mi piace molto questo appartamento, la posizione è ottima, e inoltre il prezzo per l'affitto non è alto."
+  ],
+  [
+    "Я обжёг руку утюгом.",
+    "Mi sono bruciato la mano col ferro da stiro."
+  ],
+  [
+    "Николь очень хорошо говорит по-японски.",
+    "Nicole parla molto bene il giapponese."
+  ],
+  [
+    "Я ищу кошелёк.",
+    "Sto cercando il portafoglio."
+  ],
+  [
+    "В настоящее время эта группа очень активна.",
+    "Attualmente questo gruppo è molto attivo."
+  ],
+  [
+    "Выучите это предложение наизусть.",
+    "Imparate questa frase a memoria."
+  ],
+  [
+    "Он живёт в маленьком уютном доме.",
+    "Lui abita in una accogliente piccola casa."
+  ],
+  [
+    "Знаешь, где находится Токийская башня?",
+    "Sai dove si trova la torre di Tokyo?"
+  ],
+  [
+    "Его друзья покинули его.",
+    "I suoi amici lo hanno abbandonato."
+  ],
+  [
+    "У этой газеты большой тираж.",
+    "Questo giornale ha una buona tiratura."
+  ],
+  [
+    "Её улыбка выражала благодарность.",
+    "Il suo sorriso espresse la sua gratitudine."
+  ],
+  [
+    "В целях общественной безопасности аварийные выходы не должны быть перекрыты.",
+    "Per motivi di pubblica sicurezza le uscite di emergenza devono rimanere sgombre."
+  ],
+  [
+    "Ни один из этих автобусов не идёт в Синдзюку.",
+    "Nessuno di questi autobus va a Shinjuku."
+  ],
+  [
+    "Я решил, что приготовлю на обед.",
+    "Ho deciso cosa preparare per pranzo."
+  ],
+  [
+    "Я готов тебе помочь.",
+    "Sono pronto ad aiutarti."
+  ],
+  [
+    "Мы играли в эту игру по новым правилам.",
+    "Abbiamo giocato secondo le nuove regole."
+  ],
+  [
+    "Я очень рад тебя встретить.",
+    "Sono molto felice di incontrarti."
+  ],
+  [
+    "Мы каждый день смотрим телевизор.",
+    "Ogni giorno guardiamo la televisione."
+  ],
+  [
+    "Или я ошибаюсь, или ты.",
+    "Sbaglio io oppure tu."
+  ],
+  [
+    "Смешай красную краску с синей.",
+    "Mescola il colore rosso con il blu."
+  ],
+  [
+    "Новости её удивили.",
+    "Le notizie la sorpresero."
+  ],
+  [
+    "Он и пальцем не пошевелит.",
+    "Lui non poteva muovere nemmeno un dito."
+  ],
+  [
+    "Завтра я поеду в Хоккайдо.",
+    "Domani andrò ad Hokkaido."
+  ],
+  [
+    "В гостях хорошо, а дома лучше.",
+    "Ognuno è padrone in casa sua."
+  ],
+  [
+    "Не всё то золото, что блестит.",
+    "Non è tutto oro quello che luccica."
+  ],
+  [
+    "Все дороги ведут в Рим.",
+    "Tutte le strade portano a Roma."
+  ],
+  [
+    "Предупреждён — значит вооружён.",
+    "Uomo avvisato, mezzo salvato."
+  ],
+  [
+    "Меньше знаешь — крепче спишь.",
+    "Quanto meno si conosce, tanto meglio."
+  ],
+  [
+    "С глаз долой — из сердца вон.",
+    "Lontano dagli occhi, lontano dal cuore."
+  ],
+  [
+    "Хватит дурака валять!",
+    "Smettila di perdere tempo."
+  ],
+  [
+    "Все люди рождаются свободными и равными в своем достоинстве и правах. Они наделены разумом и совестью и должны поступать в отношении друг друга в духе братства.",
+    "Tutti gli esseri umani nascono liberi ed eguali in dignità e diritti. Essi sono dotati di ragione e di coscienza e devono agire gli uni verso gli altri in spirito di fratellanza."
+  ],
+  [
+    "Один, два, три, четыре, пять, шесть, семь, восемь, девять, десять.",
+    "Uno, due, tre, quattro, cinque, sei, sette, otto, nove, dieci."
+  ],
+  [
+    "Добрый вечер, как ваши дела?",
+    "Buonasera, come state?"
+  ],
+  [
+    "Он немного тяжёлый на подъём.",
+    "Ci vuole un po' per rilassarsi."
+  ],
+  [
+    "Он немного тяжёлый на подъём.",
+    "È un po' pesante lungo la salita."
+  ],
+  [
+    "У меня это вылетело из головы.",
+    "Me ne sono dimenticato."
+  ],
+  [
+    "Ты член бейсбольного клуба?",
+    "Sei membro del club del baseball?"
+  ],
+  [
+    "Дорога идёт параллельно реке.",
+    "La strada costeggia il fiume."
+  ],
+  [
+    "Почему он жил в Соединённых Штатах?",
+    "Perché viveva negli Stati Uniti?"
+  ],
+  [
+    "Сегодня национальный праздник.",
+    "Oggi è una festa nazionale."
+  ],
+  [
+    "Льёт как из ведра.",
+    "Piove a catinelle!"
+  ],
+  [
+    "Старайся изо всех сил, и ты добьёшься успеха.",
+    "Dai il massimo, e avrai successo."
+  ],
+  [
+    "Но ему повезло.",
+    "Ma lui è stato fortunato."
+  ],
+  [
+    "Сегодня я видел скворца.",
+    "Oggi ho visto uno storno."
+  ],
+  [
+    "Куда ты хочешь поехать этим летом?",
+    "Dove vuoi andare questa estate?"
+  ],
+  [
+    "Они живут неподалёку.",
+    "Vivono vicini."
+  ],
+  [
+    "Они живут неподалёку.",
+    "Vivono vicine."
+  ],
+  [
+    "Джон не может сейчас жить в Лондоне.",
+    "John non può vivere a Londra ora."
+  ],
+  [
+    "Что касается меня, я не против.",
+    "Per quanto mi riguarda, non ho obiezioni."
+  ],
+  [
+    "У моего отца много книг.",
+    "Mio padre ha molti libri."
+  ],
+  [
+    "Это твой зонтик?",
+    "Questo è il tuo ombrello?"
+  ],
+  [
+    "Тебе понравился фильм?",
+    "Ti è piaciuto il film?"
+  ],
+  [
+    "Услышав новости, она расплакалась.",
+    "Dopo aver ascoltato le notizie, lei scoppiò a piangere."
+  ],
+  [
+    "Идёт сильный дождь.",
+    "Sta piovendo forte."
+  ],
+  [
+    "Бесстыдный лжец говорит улыбаясь.",
+    "Uno spudorato mentitore parla sorridendo."
+  ],
+  [
+    "Ты помнишь, как его зовут?",
+    "Ti ricordi il suo nome?"
+  ],
+  [
+    "Где чай с молоком?",
+    "Dov'è il tè con il latte?"
+  ],
+  [
+    "Где чай с молоком?",
+    "Dov'è il tè col latte?"
+  ],
+  [
+    "«Когда Вы встаёте?» — «В 8 утра».",
+    "A che ora vi alzate? - \"Alle 8 di mattina\"."
+  ],
+  [
+    "Моего языка нет в списке!",
+    "La mia lingua non si trova nella lista!"
+  ],
+  [
+    "Адвокат ждал Бена.",
+    "L'avvocato aspettava Ben."
+  ],
+  [
+    "Давайте выучим это стихотворение наизусть.",
+    "Impariamo questa poesia a memoria."
+  ],
+  [
+    "Запах роз наполнил комнату.",
+    "Il profumo di rose riempì la stanza."
+  ],
+  [
+    "В мае все птицы откладывают яйца.",
+    "In maggio tutti gli uccelli depongono un uovo."
+  ],
+  [
+    "Дождь, дождь, уходи.",
+    "Pioggia, pioggia, vai via."
+  ],
+  [
+    "Прошу вас, пожалуйста, дайте мне визу.",
+    "Vi prego, per favore, datemi il visto."
+  ],
+  [
+    "Наконец!",
+    "Finalmente!"
+  ],
+  [
+    "Когда Вин Дизель отжимается, он не поднимает себя, а опускает Землю.",
+    "Quando Vin Diesel fa le flessioni, lui non si solleva ma abbassa la Terra."
+  ],
+  [
+    "Гораздо лучше, когда будят птички, чем когда будит будильник.",
+    "Molto meglio essere svegliati dagli uccellini, che dalla sveglia."
+  ],
+  [
+    "Существует ли объективная история?",
+    "Esiste l'obiettività storica?"
+  ],
+  [
+    "Мне больше всего нравится чай \"English Breakfast\".",
+    "Mi piace più di tutti il tè \"English Breakfast\"."
+  ],
+  [
+    "Ты умеешь вести бухгалтерию?",
+    "Sai fare la contabilità?"
+  ],
+  [
+    "Я любопытная.",
+    "Sono curiosa."
+  ],
+  [
+    "Он выпил стакан красного вина.",
+    "Lui ha bevuto un bicchiere di vino rosso."
+  ],
+  [
+    "Возможно, что она знала ответ.",
+    "È probabile che lei conoscesse la risposta."
+  ],
+  [
+    "Как прошёл урок французского?",
+    "Com'è andata la lezione di francese?"
+  ],
+  [
+    "Сумасшествие полезно для здоровья.",
+    "La pazzia fa bene alla salute."
+  ],
+  [
+    "Голландия — маленькая страна.",
+    "L'Olanda è un paese piccolo."
+  ],
+  [
+    "Учиться никогда не поздно.",
+    "Non è mai troppo tardi per imparare."
+  ],
+  [
+    "Учиться никогда не поздно.",
+    "Non si è mai troppo vecchi per imparare."
+  ],
+  [
+    "Рот открой!",
+    "Apri la bocca!"
+  ],
+  [
+    "О, да, помню.",
+    "Oh, si, ricordo."
+  ],
+  [
+    "Студент оптимистичен, а его научный руководитель - пессимист.",
+    "Lo studente è ottimista, ma il suo consigliere è pessimista."
+  ],
+  [
+    "Слава богу.",
+    "Grazie a Dio."
+  ],
+  [
+    "У жирафов очень длинные шеи.",
+    "Le giraffe hanno un collo molto lungo."
+  ],
+  [
+    "Я их знаю.",
+    "Le conosco."
+  ],
+  [
+    "Я случайно!",
+    "Non l'ho fatto apposta!"
+  ],
+  [
+    "Каково точное значение слова «precise»?",
+    "Qual è il significato esatto della parola \"precise\"?"
+  ],
+  [
+    "Лично я никогда не видел НЛО.",
+    "Non ho mai visto personalmente un UFO."
+  ],
+  [
+    "До свидания!",
+    "Arrivederci."
+  ],
+  [
+    "Поезда в Сербии ужасно медленные.",
+    "I treni in Serbia sono terribilmente lenti."
+  ],
+  [
+    "Где ты?",
+    "Dove sei?"
+  ],
+  [
+    "Я привык.",
+    "Sono abituato."
+  ],
+  [
+    "Студенты вернулись.",
+    "Gli studenti sono tornati."
+  ],
+  [
+    "Не опаздывай.",
+    "Non fare tardi."
+  ],
+  [
+    "Не опаздывай.",
+    "Non essere in ritardo."
+  ],
+  [
+    "Где вы видели эту женщину?",
+    "Dove avete visto la donna?"
+  ],
+  [
+    "Где вы видели эту женщину?",
+    "Voi dove avete visto la donna?"
+  ],
+  [
+    "Не сердись.",
+    "Non sia arrabbiato."
+  ],
+  [
+    "Не сердись.",
+    "Non sia arrabbiata."
+  ],
+  [
+    "Я инженер.",
+    "Sono un ingegnere."
+  ],
+  [
+    "Я инженер.",
+    "Io sono un ingegnere."
+  ],
+  [
+    "Я инженер.",
+    "Sono ingegnere."
+  ],
+  [
+    "Я инженер.",
+    "Io sono ingegnere."
+  ],
+  [
+    "Это не нож. Вот ЭТО - это нож.",
+    "Quello non è un coltello. QUESTO è un coltello."
+  ],
+  [
+    "Я обожаю лазанью.",
+    "Adoro le lasagne."
+  ],
+  [
+    "Понятия не имею.",
+    "Non ne ho idea."
+  ],
+  [
+    "Понятия не имею.",
+    "Io non ne ho idea."
+  ],
+  [
+    "Где есть трава — нету воды. Где есть вода — нету травы.",
+    "Dove c'è erba, non c'è acqua. Dove c'è acqua, non c'è erba."
+  ],
+  [
+    "Посылаю тебе смешные видео.",
+    "Ti sto mandando dei video divertenti."
+  ],
+  [
+    "Я только что встал.",
+    "Mi sono appena alzato."
+  ],
+  [
+    "Ну давай!",
+    "Forza!"
+  ],
+  [
+    "Я шучу.",
+    "Sto scherzando."
+  ],
+  [
+    "Я шучу.",
+    "Io sto scherzando."
+  ],
+  [
+    "У меня была возможность поехать за границу.",
+    "Avevo la possibilità di andare all'estero."
+  ],
+  [
+    "Я не понимаю, почему Германия победила на Евровидении.",
+    "Non capisco perché la Germania ha vinto l'Eurovision."
+  ],
+  [
+    "Здравствуй, мир!",
+    "Ciao mondo!"
+  ],
+  [
+    "Она провела в комнату старого мужчину.",
+    "Lei accompagnò il vecchio uomo in camera."
+  ],
+  [
+    "День начинается.",
+    "La giornata inizia."
+  ],
+  [
+    "Я не курю.",
+    "Non fumo."
+  ],
+  [
+    "Новости меня очень удивили.",
+    "Le notizie mi hanno sorpreso molto."
+  ],
+  [
+    "Ты хочешь сказать, что не знаешь?!",
+    "Vuoi dire ciò che non sai?"
+  ],
+  [
+    "Что, ты не знаешь?!",
+    "Come, non sai?!"
+  ],
+  [
+    "Поэтому нам лучше было бы остаться дома.",
+    "Perciò sarebbe meglio che restassimo a casa."
+  ],
+  [
+    "Джон говорил так громко, что я слышал его на втором этаже.",
+    "John parlava così ad alta voce, che lo sentivo dal piano di sopra."
+  ],
+  [
+    "Не давайте ему больше денег, чем нужно.",
+    "Non dategli più soldi del necessario."
+  ],
+  [
+    "Я перевожу.",
+    "Sto traducendo."
+  ],
+  [
+    "Нет, пожалуй нет.",
+    "No, suppongo di no."
+  ],
+  [
+    "Я уверен.",
+    "Sono sicuro."
+  ],
+  [
+    "Вам остаётся только доверять друг другу.",
+    "Tutto quello che potete fare è fidarvi l'uno dell'altro."
+  ],
+  [
+    "Не могли бы вы объяснить, почему почти в каждой деревне есть по два храма?",
+    "Non potreste spiegarmi perché quasi in ogni villaggio ci sono due chiese?"
+  ],
+  [
+    "«Он придёт?» — «Нет, не думаю».",
+    "Lui verrà? - \"No, non penso\"."
+  ],
+  [
+    "Её опять обманули.",
+    "L'hanno ingannata di nuovo."
+  ],
+  [
+    "И на Марсе есть кошки.",
+    "Ci sono gatti anche su Marte."
+  ],
+  [
+    "Пожалуйста, подождите вашу очередь.",
+    "Per cortesia, aspettate il vostro turno."
+  ],
+  [
+    "Добрый вечер.",
+    "Buonasera!"
+  ],
+  [
+    "Добрый день, чем я могу Вам помочь?",
+    "Buongiorno, come posso aiutarla?"
+  ],
+  [
+    "Добрый день, чем я могу Вам помочь?",
+    "Buongiorno, come posso aiutarVi?"
+  ],
+  [
+    "Я не хочу тебя торопить, но давай попробуем успеть на следующий автобус.",
+    "Non voglio farti fretta, ma proviamo a prendere il prossimo autobus."
+  ],
+  [
+    "Делай так, как тебе сказали.",
+    "Fai quello che ti hanno detto di fare."
+  ],
+  [
+    "У неё хорошая фигура.",
+    "Lei ha una bella linea."
+  ],
+  [
+    "Она хвастается своей красотой.",
+    "Lei ostenta la sua bellezza."
+  ],
+  [
+    "В таком случае пошли.",
+    "In questo caso, andiamo."
+  ],
+  [
+    "Поспеши, иначе опоздаешь на поезд.",
+    "Sbrigati, o perderai il treno."
+  ],
+  [
+    "Мои мысли липнут к паутине львовских улиц.",
+    "I miei pensieri si attaccano alle ragnatele delle strade di Leopoli."
+  ],
+  [
+    "Это аниме про то, как обычный японский школьник женился на своей учительнице-инопланетянке. Это Япония, там такое бывает.",
+    "È un anime su un normale studente giapponese che sposò la sua professoressa aliena. Cose come queste accadono in Giappone."
+  ],
+  [
+    "Мой отец живёт и работает в Токио.",
+    "Mio padre vive e lavora a Tokyo."
+  ],
+  [
+    "Я хочу поехать в Лондон.",
+    "Voglio andare a Londra."
+  ],
+  [
+    "Большое спасибо!",
+    "Grazie mille!"
+  ],
+  [
+    "Для меня это не проблема.",
+    "Non è un problema per me."
+  ],
+  [
+    "Заранее спасибо.",
+    "Grazie mille in anticipo."
+  ],
+  [
+    "«Тебе нравится путешествовать?» — «Да».",
+    "Le piace viaggiare? \"Sì.\""
+  ],
+  [
+    "Да, я из Саппоро.",
+    "Sì, sono di Sapporo."
+  ],
+  [
+    "Я учусь за рубежом.",
+    "Io studio all'estero."
+  ],
+  [
+    "Я учусь за рубежом.",
+    "Studio all'estero."
+  ],
+  [
+    "Что ты об этом думаешь?",
+    "Cosa ne pensi di questo?"
+  ],
+  [
+    "Здравствуй.",
+    "Salve."
+  ],
+  [
+    "Он знаменитый художник.",
+    "Lui è un artista famoso."
+  ],
+  [
+    "Ты не можешь этого доказать.",
+    "Non puoi dimostrare questo."
+  ],
+  [
+    "Мне нужна твоя помощь.",
+    "Ho bisogno del tuo aiuto."
+  ],
+  [
+    "Все это знают.",
+    "Tutti lo sanno."
+  ],
+  [
+    "Нет дыма без огня.",
+    "Non c'è fumo senza arrosto."
+  ],
+  [
+    "Этот автобус едет в Минск.",
+    "Questo autobus sta andando a Minsk."
+  ],
+  [
+    "Мы арабы.",
+    "Siamo arabi."
+  ],
+  [
+    "Мы арабы.",
+    "Noi siamo arabi."
+  ],
+  [
+    "«Чего ты желаешь?» — спросил белый крольчонок.",
+    "Cosa desideri? - chiese il coniglio bianco."
+  ],
+  [
+    "Сделай радио чуть громче.",
+    "Alza un po' il volume della radio."
+  ],
+  [
+    "Он ест яблоко.",
+    "Lui sta mangiando una mela."
+  ],
+  [
+    "Может быть, попозже.",
+    "Magari più tardi."
+  ],
+  [
+    "А потом?",
+    "E poi?"
+  ],
+  [
+    "Ещё чего?",
+    "Cos'altro?"
+  ],
+  [
+    "Это вопрос жизни и смерти.",
+    "È una questione di vita e di morte."
+  ],
+  [
+    "У него слишком много книг.",
+    "Ha troppi libri."
+  ],
+  [
+    "Он вообще не смотрит телевизор.",
+    "Lui non guarda per niente la televisione."
+  ],
+  [
+    "Какая красивая у тебя сестра!",
+    "Com'è carina tua sorella!"
+  ],
+  [
+    "Наша компания планирует построить в России новый химический завод.",
+    "La nostra impresa ha il progetto di costruire una nuova fabbrica chimica in Russia."
+  ],
+  [
+    "Я должен признаться, что храплю.",
+    "Vi devo confessare che russo."
+  ],
+  [
+    "Она может и говорить, и писать по-русски.",
+    "Sa sia parlare che scrivere in russo."
+  ],
+  [
+    "Он говорит на идеальном русском языке.",
+    "Parla perfettamente il russo."
+  ],
+  [
+    "Ей нравится русская поп-музыка.",
+    "A lei piace il pop russo."
+  ],
+  [
+    "Доказательство оставим читателю.",
+    "La prova è lasciata al lettore."
+  ],
+  [
+    "Наступила весна.",
+    "È arrivata la primavera."
+  ],
+  [
+    "Мир и любовь.",
+    "Pace e bene."
+  ],
+  [
+    "Спасибо, это всё.",
+    "Grazie, è tutto."
+  ],
+  [
+    "Счет, пожалуйста.",
+    "Il conto, per favore."
+  ],
+  [
+    "Сколько это стоит?",
+    "Quanto costa?"
+  ],
+  [
+    "Мы не можем спать из-за шума.",
+    "Non riusciamo a dormire dal rumore."
+  ],
+  [
+    "Как там погода?",
+    "Com'è il tempo lì?"
+  ],
+  [
+    "Как там погода?",
+    "Là come è il tempo?"
+  ],
+  [
+    "Какая ваша группа крови?",
+    "Qual è il tuo gruppo sanguigno?"
+  ],
+  [
+    "Со своей стороны, я не возражаю.",
+    "Da parte mia, sono d'accordo."
+  ],
+  [
+    "Футбол популярнее бейсбола.",
+    "Il calcio è più popolare del baseball."
+  ],
+  [
+    "Мне нравится джаз.",
+    "Mi piace il jazz."
+  ],
+  [
+    "Если будут какие-нибудь затруднения, попроси меня о помощи.",
+    "Se dovesse essrci qualche difficoltà, chiedimi aiuto."
+  ],
+  [
+    "Он сейчас будет здесь.",
+    "Sarà qui presto."
+  ],
+  [
+    "Мне нужна ваша помощь.",
+    "Ho bisogno del vostro aiuto."
+  ],
+  [
+    "Она продолжила работать.",
+    "Lei ha continuato a lavorare."
+  ],
+  [
+    "Ты решил поехать в Японию?",
+    "Hai deciso di andare in Giappone?"
+  ],
+  [
+    "Врач предписал ей следовать строгой диете.",
+    "Il dottore le ha ordinato di seguira una dieta rigida."
+  ],
+  [
+    "Сегодня понедельник.",
+    "Oggi è lunedì."
+  ],
+  [
+    "С тех пор он так и не вернулся.",
+    "Da allora lui non è più tornato."
+  ],
+  [
+    "Пожалуйста, держись подальше от пруда.",
+    "Per favore, stai alla larga dallo stagno."
+  ],
+  [
+    "У меня есть мечта.",
+    "Ho un sogno."
+  ],
+  [
+    "У меня есть мечта.",
+    "Io ho un sogno."
+  ],
+  [
+    "Пожалуйста, дай мне на несколько дней эту книгу.",
+    "Per favore, prestami questo libro per qualche giorno."
+  ],
+  [
+    "Я тебя никогда не подведу.",
+    "Non ti deluderò mai."
+  ],
+  [
+    "Ты проводишь меня до ворот?",
+    "MI accompagni al cancello?"
+  ],
+  [
+    "Ты проводишь меня до ворот?",
+    "Mi porti al cancello?"
+  ],
+  [
+    "Раз уж мы заговорили о Шекспире, вы уже прочитали его сочинение?",
+    "Visto che abbiamo cominciato a parlare di Shakespeare, avete già letto la sua opera?"
+  ],
+  [
+    "Официант принёс новую тарелку.",
+    "Il cameriere portò un piatto nuovo."
+  ],
+  [
+    "У этой девушки нет матери.",
+    "Questa ragazza non ha una madre."
+  ],
+  [
+    "Том не любит сыр.",
+    "A Tom non piace il formaggio."
+  ],
+  [
+    "Кто ваш учитель?",
+    "Chi è il vostro professore?"
+  ],
+  [
+    "Кто ваш учитель?",
+    "Chi è il vostro insegnante?"
+  ],
+  [
+    "Не могли бы Вы показать мне дорогу к порту?",
+    "Potete indicarmi la via per il porto?"
+  ],
+  [
+    "Не могли бы Вы показать мне дорогу к порту?",
+    "Può indicarmi la via per il porto?"
+  ],
+  [
+    "Обычно я иду пешком.",
+    "Vado a piedi di solito."
+  ],
+  [
+    "Я делю квартиру со своим братом.",
+    "Condivido l'appartamento con mio fratello."
+  ],
+  [
+    "Невозможно жить без воды.",
+    "È impossibile vivere senz'acqua."
+  ],
+  [
+    "Молекула воды состоит из двух атомов водорода и одного атома кислорода.",
+    "Una molecola d'acqua ha due atomi di idrogeno e un atomo di ossigeno."
+  ],
+  [
+    "Почему я?",
+    "Perché io?"
+  ],
+  [
+    "Следователь записал его показания, слово в слово.",
+    "L'investigatore annotò la sua testimonianza, parola per parola."
+  ],
+  [
+    "Это компьютер, на котором он пишет свои статьи.",
+    "Quello è il computer col quale scrive i suoi articoli."
+  ],
+  [
+    "Он живёт этажом выше меня.",
+    "Lui abita un piano sopra al mio."
+  ],
+  [
+    "Какой красивый закат!",
+    "Ma che bellissimo tramonto!"
+  ],
+  [
+    "У меня нет времени читать.",
+    "Non ho tempo di leggere."
+  ],
+  [
+    "Идёт дождь.",
+    "Sta piovendo."
+  ],
+  [
+    "Идёт дождь.",
+    "Piove."
+  ],
+  [
+    "Все студенты были против войны.",
+    "Gli studenti erano tutti contro la guerra."
+  ],
+  [
+    "Откуда берут начало Олимпийские игры?",
+    "Dove hanno avuto inizio i Giochi Olimpici?"
+  ],
+  [
+    "Даже супергероям нужно отдыхать время от времени.",
+    "Perfino i supereroi hanno bisogno riposare di tanto in tanto."
+  ],
+  [
+    "С каждым годом загрязнение всё хуже.",
+    "L'inquinamento peggiora ogni anno."
+  ],
+  [
+    "Это заняло весь вечер.",
+    "C'è voluta tutta la sera."
+  ],
+  [
+    "Когда похолодало, ему стало ещё хуже.",
+    "Quando fece più freddo, peggiorò ulteriormente."
+  ],
+  [
+    "Телефон сейчас не работает.",
+    "Il telefono ora è fuori servizio."
+  ],
+  [
+    "Вы хотите мне что-то сказать?",
+    "Volete dirmi qualcosa?"
+  ],
+  [
+    "Даже супергерои должны отдыхать время от времени.",
+    "Perfino i supereroi devono riposare di tanto in tanto."
+  ],
+  [
+    "У меня нет наличных, могу я выписать чек?",
+    "Non ho contante, posso compilare un assegno?"
+  ],
+  [
+    "Ты хочешь знать мою тайну? Это очень просто...",
+    "Vuoi conoscere il mio segreto? È molto semplice..."
+  ],
+  [
+    "Как погода?",
+    "Che tempo fa?"
+  ],
+  [
+    "Как погода?",
+    "Com'è il tempo?"
+  ],
+  [
+    "Она любит апельсины.",
+    "A lei piacciono le arance."
+  ],
+  [
+    "Она любит апельсины.",
+    "Le piacciono le arance."
+  ],
+  [
+    "Не перебивай меня.",
+    "Non interrompermi!"
+  ],
+  [
+    "Слово — серебро, молчание — золото.",
+    "La parola è d'argento ma il silenzio è d'oro."
+  ],
+  [
+    "Слово — серебро, молчание — золото.",
+    "Il silenzio è d'oro, la parola d'argento."
+  ],
+  [
+    "У тебя много книг.",
+    "Tu hai molti libri."
+  ],
+  [
+    "Все склонны к лени.",
+    "Sono tutti inclini alla pigrizia."
+  ],
+  [
+    "Потребление алкоголя растёт с каждым годом.",
+    "Ogni anno aumenti il consumo dell'alcol."
+  ],
+  [
+    "Они услышали за спиной шум.",
+    "Loro sentirono un rumore alle spalle."
+  ],
+  [
+    "Это очень редкий случай.",
+    "Questo è un caso molto raro."
+  ],
+  [
+    "У меня есть словарь.",
+    "Ho un dizionario."
+  ],
+  [
+    "Писатель работает над новой книгой.",
+    "Lo scrittore sta lavorando su un nuovo libro."
+  ],
+  [
+    "Что это за камень?",
+    "Che pietra è questa?"
+  ],
+  [
+    "Спор окончился дракой.",
+    "La discussione finì in rissa."
+  ],
+  [
+    "Листья медленно опадают.",
+    "Le foglie cadono lentamente."
+  ],
+  [
+    "Ты должен вести себя спокойнее.",
+    "Tom dovrebbe comportarsi più tranquillamente."
+  ],
+  [
+    "Она носила очки.",
+    "Lei portava gli occhiali."
+  ],
+  [
+    "Она носила очки.",
+    "Indossava degli occhiali."
+  ],
+  [
+    "Она носила очки.",
+    "Lei indossava degli occhiali."
+  ],
+  [
+    "Они не пользуются столом и стульями.",
+    "Loro non utilizzano tavoli e sedie."
+  ],
+  [
+    "У вас есть какие-нибудь вопросы по поводу меню?",
+    "Avete qualche domanda riguardo al menù?"
+  ],
+  [
+    "У нас две кошки: одна белая, а другая чёрная.",
+    "Abbiamo due gatti; uno è bianco e l'altro è nero."
+  ],
+  [
+    "Он скопил огромное состояние.",
+    "Lui ha accumulato un'enorme fortuna."
+  ],
+  [
+    "У меня аллергия на рыбу.",
+    "Sono allergica al pesce."
+  ],
+  [
+    "Аэропорт был закрыт из-за тумана.",
+    "L'aeroporto era chiuso a causa della nebbia."
+  ],
+  [
+    "Я увидел, как в дом забежала чёрная кошка.",
+    "Ho visto un gatto nero correre in casa."
+  ],
+  [
+    "Да, Боб помог мне.",
+    "Sì, Bob mi ha aiutato."
+  ],
+  [
+    "Я беру свои слова обратно.",
+    "Mi rimangio le parole."
+  ],
+  [
+    "Он её друг.",
+    "È il suo amico."
+  ],
+  [
+    "Он её друг.",
+    "Lui è il suo amico."
+  ],
+  [
+    "Ты должен усерднее учиться.",
+    "Devi studiare più coscienziosamente."
+  ],
+  [
+    "Его сыну восемь лет.",
+    "Suo figlio ha otto anni."
+  ],
+  [
+    "Телефон продолжал звонить.",
+    "Il telefono continuava a suonare."
+  ],
+  [
+    "Которая книга твоя?",
+    "Qual è il tuo libro?"
+  ],
+  [
+    "Которая книга твоя?",
+    "Quale libro è il tuo?"
+  ],
+  [
+    "Новая машина будет использоваться.",
+    "La nuova macchina andrà in funzionamento."
+  ],
+  [
+    "Во что бы то ни стало я хочу жить в Америке.",
+    "Voglio vivere in America ad ogni costo."
+  ],
+  [
+    "Мясо жёсткое.",
+    "La carne è dura."
+  ],
+  [
+    "Никто не знает, что стало с Ямадой.",
+    "Nessuno sa cosa è successo a Yamada."
+  ],
+  [
+    "Я могу вести автомобиль.",
+    "Sono in grado di guidare la macchina."
+  ],
+  [
+    "Весь класс сдал экзамен.",
+    "Tutta la classe ha superato l'esame."
+  ],
+  [
+    "Услышав новости, она разрыдалась.",
+    "Dopo aver ascoltato le notizie, lei scoppiò a piangere."
+  ],
+  [
+    "Тебе не следовало этого делать без моего разрешения.",
+    "Non avresti dovuto farlo senza il mio permesso."
+  ],
+  [
+    "Перед тем как идти спать, запри окна.",
+    "Chiudi la finestra prima di andare a dormire."
+  ],
+  [
+    "Дойти досюда заняло всего десять минут.",
+    "Ci sono voluti solo dieci minuti di cammino per arrivare là."
+  ],
+  [
+    "Она молодо выглядит.",
+    "Lei ha un aspetto giovanile."
+  ],
+  [
+    "Сколько у вас детей?",
+    "Quanti figli avete?"
+  ],
+  [
+    "Она предана спорту.",
+    "Lei si dedica allo sport."
+  ],
+  [
+    "Учитель указал на сделанные учениками грамматические ошибки.",
+    "L'insegnante fece notare gli errori grammaticali commessi dagli studenti."
+  ],
+  [
+    "У тебя хорошая память.",
+    "Hai una buona memoria."
+  ],
+  [
+    "У тебя хорошая память.",
+    "Tu hai una buona memoria."
+  ],
+  [
+    "Мне нужно поспать.",
+    "Ho bisogno di dormire."
+  ],
+  [
+    "Вставай.",
+    "Alzati."
+  ],
+  [
+    "Все счастливые семьи похожи друг на друга, каждая несчастливая семья несчастлива по-своему.",
+    "Le famiglie felici sono tutte simili, ogni famiglia infelice lo è a modo suo."
+  ],
+  [
+    "Вообще-то, мужчина рассердился.",
+    "In realtà l'uomo si è arrabbiato."
+  ],
+  [
+    "Я медлил покидать его могилу.",
+    "Esitavo ad abbandonare la sua tomba."
+  ],
+  [
+    "Я жажду приключений.",
+    "Ho sete di avventure."
+  ],
+  [
+    "Лучше поздно, чем никогда.",
+    "Meglio tardi che mai."
+  ],
+  [
+    "Я не знаю.",
+    "Non so."
+  ],
+  [
+    "Он член комитета.",
+    "Lui è un membro del comitato."
+  ],
+  [
+    "На каком языке говорят в Бразилии?",
+    "Che lingua si parla in Brasile?"
+  ],
+  [
+    "Сядьте, пожалуйста.",
+    "Prego, si sieda."
+  ],
+  [
+    "Твои идеи устарели.",
+    "Le tue idee sono sorpassate."
+  ],
+  [
+    "Они сравнили новый автомобиль со старым.",
+    "Confrontarono la macchina nuova con quella vecchia."
+  ],
+  [
+    "Если бы я умел пользоваться компьютером, может, они бы платили мне больше.",
+    "Se sapessi usare il computer forse mi pagherebbero di più."
+  ],
+  [
+    "Он был слеп с рождения.",
+    "Era cieco dalla nascita."
+  ],
+  [
+    "Он был слеп с рождения.",
+    "Lui era cieco dalla nascita."
+  ],
+  [
+    "Изучая английский, он хорошо проводил время.",
+    "Lui si divertiva studiando inglese."
+  ],
+  [
+    "Изучая английский, он хорошо проводил время.",
+    "Mentre studiava inglese, lui si divertiva."
+  ],
+  [
+    "Он такой невнимательный мальчик, что часто делает ошибки.",
+    "È un bambino così distratto da commettere spesso errori."
+  ],
+  [
+    "Я не могу обойтись летом без кондиционера.",
+    "In estate non ce la faccio senza il condizionatore."
+  ],
+  [
+    "Я не могу обойтись летом без кондиционера.",
+    "In estate non posso fare a meno del condizionatore."
+  ],
+  [
+    "Сегодня холодновато, но завтра, думаю, будет довольно тепло.",
+    "Oggi è piuttosto freddo, ma penso che domani farà abbastanza caldo."
+  ],
+  [
+    "Кит — вид млекопитающих.",
+    "La balena è un tipo di mammifero."
+  ],
+  [
+    "Вена — красивый город.",
+    "Vienna è una bella città."
+  ],
+  [
+    "Фильм начинается.",
+    "Il film inizia."
+  ],
+  [
+    "Этот словарь во всех отношениях столь же хорош, как и тот.",
+    "Questo dizionario è a tutti gli effetti buono come quello."
+  ],
+  [
+    "Насколько я знаю, он честный человек.",
+    "Per quel che so, è un uomo onesto."
+  ],
+  [
+    "Я постоянно пишу статьи.",
+    "Scrivo articoli in continuazione."
+  ],
+  [
+    "Мои часы спешат на пять минут в день.",
+    "Il mio orologio va avanti di cinque minuti al giorno."
+  ],
+  [
+    "Благослови тебя Бог!",
+    "Che Dio ti benedica!"
+  ],
+  [
+    "Анкеты были распределены случайно.",
+    "I questionari sono stati distribuiti casualmente."
+  ],
+  [
+    "Я не помню, где купил это.",
+    "Non mi ricordo più dove l'ho comprata."
+  ],
+  [
+    "Не твоё дело.",
+    "Non sono affari tuoi."
+  ],
+  [
+    "Интересно, что она имеет в виду под этими словами?",
+    "Mi chiedo cosa intenda con quelle parole."
+  ],
+  [
+    "Привет, Том.",
+    "Ciao, Tom."
+  ],
+  [
+    "Он рано встаёт.",
+    "Lui si alza presto."
+  ],
+  [
+    "Я присмотрю за собакой, пока тебя нет.",
+    "Avrò cura del cane mentre tu sei via."
+  ],
+  [
+    "В твоём сочинении нет ошибок.",
+    "Non ci sono errori nella tua composizione."
+  ],
+  [
+    "Закрой дверь.",
+    "Chiudi la porta."
+  ],
+  [
+    "После зимы приходит весна.",
+    "Dopo l'inverno viene la primavera."
+  ],
+  [
+    "Думаю, этот слух - правда.",
+    "Penso che queste voci siano vere."
+  ],
+  [
+    "Солнце село, и мы остались на ночь.",
+    "Il sole tramontò e noi rimanemmo per la notte."
+  ],
+  [
+    "Она была вымотана и прислонилась к яблоне.",
+    "Era sfinita e si appoggiò al melo."
+  ],
+  [
+    "Я думаю поехать за границу.",
+    "Sto pensando di andare all'estero."
+  ],
+  [
+    "Ребёнку нужна мать.",
+    "Il bambino ha bisogno della sua mamma."
+  ],
+  [
+    "Включи радио.",
+    "Accendi la radio."
+  ],
+  [
+    "Ни с того ни с сего моя мать запела.",
+    "Di punto in bianco mia mamma si mise a cantare."
+  ],
+  [
+    "Я забыл выключить газ!",
+    "Mi sono scordato di spegnere il gas!"
+  ],
+  [
+    "Это крупное войсковое соединение, состоящее из пяти тысяч солдат.",
+    "Questo è un grande battaglione che consiste di cinque mila soldati."
+  ],
+  [
+    "Какая красивая радуга!",
+    "Che bell'arcobaleno!"
+  ],
+  [
+    "У чашки отбита ручка.",
+    "La tazza ha il manico rotto."
+  ],
+  [
+    "У чашки отбита ручка.",
+    "Il manico della tazza è rotto."
+  ],
+  [
+    "Я промок до нитки.",
+    "Sono bagnato fradicio."
+  ],
+  [
+    "Откуда вы?",
+    "Di dove siete?"
+  ],
+  [
+    "Я уже давно её знаю.",
+    "La conosco da tanto tempo."
+  ],
+  [
+    "Нельзя оставлять дверь открытой.",
+    "Non si può lasciare la porta aperta."
+  ],
+  [
+    "Три года он ходил в старшую школу, не пропустив ни дня и ни разу не опоздав.",
+    "Per tre anni ha frequentato la scuola superiore, senza saltare un giorno o arrivare in ritardo una volta."
+  ],
+  [
+    "Вчера я не играл в теннис.",
+    "Ieri non ho giocato a tennis."
+  ],
+  [
+    "Пожалуйста, принесите мне какие-нибудь очки.",
+    "Per favore, portatemi degli occhiali."
+  ],
+  [
+    "Мне полагаются какие-нибудь купоны на скидку?",
+    "C'è qualche buono sconto per me?"
+  ],
+  [
+    "Она спасла малыша ценой собственной жизни.",
+    "Ha salvato il bambino a costo della propria vita."
+  ],
+  [
+    "Мне следует проверить масло?",
+    "Vuole che verifichi l'olio?"
+  ],
+  [
+    "Проблема в том, что у нас недостаточно денег.",
+    "Il problema è che non abbiamo abbastanza soldi."
+  ],
+  [
+    "Проблема в том, что у нас недостаточно денег.",
+    "Il problema è che non abbiamo abbastanza denaro."
+  ],
+  [
+    "Я вписал в бумагу своё имя.",
+    "Ho iscritto il mio nome sul foglio."
+  ],
+  [
+    "Я был очень расстроен, когда Хингис выбили в первом же раунде.",
+    "È stata una grande delusione quando Hingis è stato eliminato nel primo round."
+  ],
+  [
+    "Мы говорили о многих вещах.",
+    "Abbiamo parlato di molte cose."
+  ],
+  [
+    "У нас получилось!",
+    "Ci siamo riusciti!"
+  ],
+  [
+    "Если боишься, держи меня за руку.",
+    "Se hai paura, tienimi per mano."
+  ],
+  [
+    "Она всё равно хотела пойти.",
+    "Lei voleva comunque andare."
+  ],
+  [
+    "Этот кофе такой горячий, что я не могу его пить.",
+    "Questo caffè è troppo caldo per me da bere."
+  ],
+  [
+    "Потеря дочери отняла у меня волю к жизни.",
+    "La perdita di mia figlia mi ha tolto la voglia di vivere."
+  ],
+  [
+    "Мне сложно выразить свои мысли в словах.",
+    "Trovo difficile esprimere i miei pensieri in parole."
+  ],
+  [
+    "Воды больше, чем нужно.",
+    "C'è più acqua di quanta ne serva."
+  ],
+  [
+    "Я могу использовать этот карандаш?",
+    "Posso usare questa matita?"
+  ],
+  [
+    "На входе нам следует снимать обувь.",
+    "All'ingresso dovremmo toglierci le scarpe."
+  ],
+  [
+    "Я начал читать книгу.",
+    "Ho cominciato a leggere il libro."
+  ],
+  [
+    "Я начал читать книгу.",
+    "Cominciai a leggere il libro."
+  ],
+  [
+    "Я начал читать книгу.",
+    "Iniziai il libro."
+  ],
+  [
+    "Я начал читать книгу.",
+    "Ho iniziato a leggere il libro."
+  ],
+  [
+    "Я начал читать книгу.",
+    "Iniziai a leggere il libro."
+  ],
+  [
+    "Я предпочитаю писать курсивом.",
+    "Preferisco scrivere in corsivo."
+  ],
+  [
+    "Во что бы то ни стало заскочи посмотреть на нас.",
+    "Costi quel che costi, passa a trovarci."
+  ],
+  [
+    "Завтра будет жарко.",
+    "Farà caldo domani."
+  ],
+  [
+    "Он привык сидеть допоздна.",
+    "Lui ha l'abitudine di sedersi in ritardo."
+  ],
+  [
+    "Вдали мигали огоньки.",
+    "In lontananza lampeggiavano piccoli fuochi."
+  ],
+  [
+    "Никого не было.",
+    "Non c'era nessuno."
+  ],
+  [
+    "Он отправился в путешествие на один день.",
+    "È partito per un viaggio di un giorno."
+  ],
+  [
+    "Было жарко, и к тому же влажно.",
+    "C'era caldo, e in aggiunta, umido."
+  ],
+  [
+    "Вместо того, чтобы пойти самому, я послал подарок.",
+    "Invece di andare di persona, ho spedito un regalo."
+  ],
+  [
+    "Какой он высокий!",
+    "Com'è alto!"
+  ],
+  [
+    "Вы когда-нибудь слушали, как она играет на пианино?",
+    "L'avete mai sentita suonare il piano?"
+  ],
+  [
+    "Автомобиль сам по себе не хороший и не плохой, всё зависит от водителя.",
+    "L'automobile di per sé non è né buona, né cattiva, tutto dipende dal conducente."
+  ],
+  [
+    "У вас инфекция дёсен.",
+    "Hai una gengivite."
+  ],
+  [
+    "Я собираюсь уходить.",
+    "Sto per andarmene."
+  ],
+  [
+    "Сколько будет стоить починка моей обуви?",
+    "Quanto costerà la riparazione delle mie scarpe?"
+  ],
+  [
+    "Одна ласточка весны не делает.",
+    "Una rondine non fa primavera."
+  ],
+  [
+    "Любишь кататься, люби и саночки возить.",
+    "Non puoi avere tutto in una sola volta."
+  ],
+  [
+    "Ни рыба ни мясо.",
+    "Né carne né pesce."
+  ],
+  [
+    "От добра добра не ищут.",
+    "Chi lascia la via vecchia per la nuova, sa quel che lascia ma non quel che trova."
+  ],
+  [
+    "Ты очень хорошо шьёшь.",
+    "Sei molto bravo a cucire."
+  ],
+  [
+    "Тебе пойдёт на пользу жить в сельской местности.",
+    "Vivere in campagna ti farà bene."
+  ],
+  [
+    "Осенью листья становятся коричневыми.",
+    "In autunno le foglie diventano marroni."
+  ],
+  [
+    "Что бы ни случилось, я не передумаю.",
+    "Qualsiasi cosa accada, non cambierò idea."
+  ],
+  [
+    "Эта картина мне начинает нравиться.",
+    "Questo dipinto comincia a piacermi."
+  ],
+  [
+    "Звучит как довольно хорошее предложение.",
+    "Sembra una proposta abbastanza buona."
+  ],
+  [
+    "Прошлой ночью я хорошо провёл время на вечеринке.",
+    "La scorsa notte mi sono divertito alla festa."
+  ],
+  [
+    "Дверь не закрывается.",
+    "Questa porta non si chiuderà."
+  ],
+  [
+    "Ты ведь не боишься привидений, правда?",
+    "Non hai paura dei serpenti, vero?"
+  ],
+  [
+    "Революционный совет встретился, чтобы составить стратегию.",
+    "Il Consiglio di Rivoluzione si è riunito per organizzare una strategia."
+  ],
+  [
+    "На летних каникулах в Каруидзаву нахлынули туристы.",
+    "I turisti sono affluiti a Karuizawa durante le vacanza estive."
+  ],
+  [
+    "Я пишу письмо.",
+    "Sto scrivendo una lettera."
+  ],
+  [
+    "Сократи новость до ста слов.",
+    "Accorcia le notizie fino a cento parole."
+  ],
+  [
+    "Если скрестить лошадь с ослом, то получится мул.",
+    "Se fai accoppiare un cavallo con un asino, ottieni un mulo."
+  ],
+  [
+    "Стоимость жизни становится выше.",
+    "Il costo della vita sta aumentando."
+  ],
+  [
+    "Он старше меня на два года, но ниже меня ростом.",
+    "Lui è più vecchio di me di due anni, ma è più basso di me."
+  ],
+  [
+    "Ему не нравится теннис.",
+    "Non gli piace il tennis."
+  ],
+  [
+    "К несчастью, запасы продуктов закончились ещё до окончания зимы.",
+    "Sfortunatamente, le riserve di cibo finirono prima della fine dell'inverno."
+  ],
+  [
+    "Меня это устраивает.",
+    "Mi soddisfa del tutto."
+  ],
+  [
+    "На сцене есть какие-нибудь известные музыканты?",
+    "C'è qualche musicista famoso sul palco?"
+  ],
+  [
+    "В Японии учебный год начинается в апреле.",
+    "In Giappone la scuola comincia in aprile."
+  ],
+  [
+    "Слон — очень крупное животное.",
+    "Un elefante è un animale molto grande."
+  ],
+  [
+    "Я знаю, какой я счастливчик.",
+    "So che ragazzo fortunato sono."
+  ],
+  [
+    "Моя мать говорит медленно.",
+    "Mia madre parla lentamente."
+  ],
+  [
+    "Он только что вышел.",
+    "È appena uscito."
+  ],
+  [
+    "Это твоя ответственность.",
+    "È responsabilità tua."
+  ],
+  [
+    "Лучше я умру с голоду, чем буду работать под его руководством.",
+    "Preferisco morire di fame che lavorare sotto di lui."
+  ],
+  [
+    "Я хочу услышать все твои новости.",
+    "Voglio sentire tutte le tua novità."
+  ],
+  [
+    "Мы навсегда уезжаем из этой страны.",
+    "Ce ne stiamo andando definitivamente da questo paese."
+  ],
+  [
+    "Джим хвастается, что сдал экзамен.",
+    "Jim si vanta di aver passato l'esame."
+  ],
+  [
+    "Я всегда хожу пешком.",
+    "Vado sempre a piedi."
+  ],
+  [
+    "Вы когда-нибудь читали какие-нибудь стихи Теннисона?",
+    "Avete mai letto qualche poesia di Tennison?"
+  ],
+  [
+    "Они могут преодолеть свой страх.",
+    "Possono vincere la propria paura."
+  ],
+  [
+    "И немного хлеба.",
+    "E un po' di pane."
+  ],
+  [
+    "Мы идём в центр города, чтобы пройтись по магазинам.",
+    "Andiamo in centro città a fare compere."
+  ],
+  [
+    "Моя одежда была испачкана маслом.",
+    "I miei vestiti erano macchiati d'olio."
+  ],
+  [
+    "Я думал, ты вырос в Лос-Анджелесе.",
+    "Pensavo che fossi cresciuto a Los Angeles."
+  ],
+  [
+    "Можно взять твою ручку?",
+    "Posso prendere la tua penna?"
+  ],
+  [
+    "Долина не видна из-за тумана.",
+    "La vallata non era visibile a causa della nebbia."
+  ],
+  [
+    "Здесь где-то есть такси?",
+    "Ci sono taxi qui da qualche parte?"
+  ],
+  [
+    "Что имеем — не храним, потерявши — плачем.",
+    "Non diamo valore alle cose che possediamo, ma quando sono perse, le rimpiangiamo."
+  ],
+  [
+    "Что имеем — не храним, потерявши — плачем.",
+    "Non diamo valore alle cose che possediamo, ma una volta perse, le rimpiangiamo."
+  ],
+  [
+    "Мужчина молил о пощаде, но всё равно за своё преступление был приговорён к двадцатилетнему заточению.",
+    "L'uomo chiese clemenza, ma fu condannato a venti anni di prigione per il suo crimine."
+  ],
+  [
+    "Девочка казалась смущена его грубым вопросом.",
+    "La ragazza sembrò imbarazzata per la sua domanda scortese."
+  ],
+  [
+    "Линкольн умер в 1865.",
+    "Lincoln è morto nel 1865."
+  ],
+  [
+    "Линкольн умер в 1865.",
+    "Lincoln morì nel 1865."
+  ],
+  [
+    "Это не покроет даже стоимость проезда.",
+    "Questo non coprirà nemmeno le spese del viaggio."
+  ],
+  [
+    "Новое здание нашей школы сейчас строится.",
+    "Il nuovo edificio della nostra scuola adesso è in costruzione."
+  ],
+  [
+    "В декабре на Бали крайне жарко и влажно.",
+    "In dicembre a Bali c'è estremamente caldo e umido."
+  ],
+  [
+    "Она притворилась, что не слышала меня.",
+    "Lei finse di non avermi ascoltato."
+  ],
+  [
+    "Сокращение «США» означает «Соединённые Штаты Америки».",
+    "L'abbreviazione \"USA\" sta ad indicare \"Stati Uniti d'America\"."
+  ],
+  [
+    "На вечер пришли все ученики.",
+    "Tutti gli studenti sono venuti alla festa."
+  ],
+  [
+    "Мне жаль, что она не присутствует на конференции.",
+    "Peccato che lei no abbia partecipato alla conferenza."
+  ],
+  [
+    "Я пожелал ей спокойной ночи.",
+    "Le augurai una buona notte."
+  ],
+  [
+    "Чем он занимается?",
+    "Che cos'è lui?"
+  ],
+  [
+    "Бери сколько хочешь.",
+    "Prendine quanto ne vuoi."
+  ],
+  [
+    "Вы говорите по-итальянски?",
+    "Parlate italiano?"
+  ],
+  [
+    "Рэзван только что ушёл.",
+    "Razvan se n'è appena andato."
+  ],
+  [
+    "Я люблю бегать.",
+    "A me piace correre."
+  ],
+  [
+    "Сварите одно яйцо.",
+    "Fate bollire un uovo."
+  ],
+  [
+    "Вы каждый день ходите по магазинам?",
+    "Andate a fare shopping ogni giorno?"
+  ],
+  [
+    "Я готов пойти с тобой.",
+    "Sono pronto ad andare con te."
+  ],
+  [
+    "Вы интересуетесь иностранными языками?",
+    "Siete interessati alle lingue straniere?"
+  ],
+  [
+    "Я смог ответить на вопрос верно.",
+    "Sono riuscito a rispondere esattamente alla domanda."
+  ],
+  [
+    "Я смог ответить на вопрос верно.",
+    "Ho potuto rispondere correttamente alla domanda."
+  ],
+  [
+    "Она описала его как симпатичного.",
+    "L'ha descritto come bello."
+  ],
+  [
+    "Она описала его как симпатичного.",
+    "Lei lo descrisse come bello."
+  ],
+  [
+    "Я продолжил своё чтение.",
+    "Continuai la mia lettura."
+  ],
+  [
+    "Я бы хотел как можно скорее увидеть врача.",
+    "Vorrei vedere un dottore il più presto possibile."
+  ],
+  [
+    "Поверните ручку, и коробка откроется.",
+    "Girate la maniglia e la scatola si aprirà."
+  ],
+  [
+    "Каков отец — таков и сын.",
+    "Tale padre, tale figlio."
+  ],
+  [
+    "Ты идёшь в кино?",
+    "Stai andando al cinema?"
+  ],
+  [
+    "Люди, которые не считают латынь красивейшим языком, ничего не понимают.",
+    "Le persone che non ritengono che il latino sia la lingua più bella non capiscono niente."
+  ],
+  [
+    "Его провал ко мне совсем не относится.",
+    "Il suo fallimento non ha niente a che fare con me."
+  ],
+  [
+    "Ты почему такой счастливый?",
+    "Perché sei così felice?"
+  ],
+  [
+    "Она настоящая красавица.",
+    "Lei è una vera bellezza."
+  ],
+  [
+    "Работа, которою ты не любишь, — это... работа.",
+    "Un lavoro che non si ama è... un lavoro."
+  ],
+  [
+    "Закон суров, но это закон.",
+    "La legge è dura ma è la legge."
+  ],
+  [
+    "Мы ходим в школу, чтобы учиться.",
+    "Andiamo a scuola per imparare."
+  ],
+  [
+    "Он вооружился винтовкой.",
+    "Lui si armò di fucile."
+  ],
+  [
+    "Им было негде жить.",
+    "Loro non avevano un posto dove vivere."
+  ],
+  [
+    "Можешь рассказать ему, мне-то что.",
+    "Puoi dirgli che non mi interessa."
+  ],
+  [
+    "Прежде всего, соблюдай диету.",
+    "Soprattutto, fai attenzione alla tua dieta."
+  ],
+  [
+    "Автомобиль выглядел старым?",
+    "L'automobile sembra vecchia?"
+  ],
+  [
+    "Я не знал о его плане.",
+    "Non sapevo del suo piano."
+  ],
+  [
+    "Я не знал о его плане.",
+    "Io non sapevo del suo piano."
+  ],
+  [
+    "Я не пишу письмо.",
+    "Non sto scrivendo una lettera."
+  ],
+  [
+    "Я сыт по горло её ворчанием.",
+    "Non ne posso più del suo brontolio."
+  ],
+  [
+    "Он живёт в Токио.",
+    "Vive a Tokyo."
+  ],
+  [
+    "Она кто угодно?",
+    "Lei è chiunque?"
+  ],
+  [
+    "Этот гербицид безопасен для людей.",
+    "Questo diserbante è sicuro per le persone."
+  ],
+  [
+    "От разговоров без работы пользы не будет.",
+    "Parlare e non lavorare non porta a niente."
+  ],
+  [
+    "Я только что пообедал.",
+    "Ho appena pranzato."
+  ],
+  [
+    "Кто не работает, тот не ест.",
+    "Chi non lavora non ha diritto di mangiare."
+  ],
+  [
+    "Кто не работает, тот не ест.",
+    "Chi non lavora non mangia."
+  ],
+  [
+    "Вода хлестала из сломанного вентиля.",
+    "L'acqua sgorgava da una valvola rotta."
+  ],
+  [
+    "Юмико — член теннисного клуба.",
+    "Yumiko è membro del tennis club."
+  ],
+  [
+    "Я не знаю, что сказать.",
+    "Non so cosa dire."
+  ],
+  [
+    "Вы говорите по-немецки?",
+    "Parlate tedesco?"
+  ],
+  [
+    "Ты хочешь на что-то намекнуть?",
+    "Stai alludendo a qualcosa?"
+  ],
+  [
+    "Я боюсь пауков.",
+    "Io ho paura dei ragni."
+  ],
+  [
+    "У меня болит голова.",
+    "Mi fa male la testa."
+  ],
+  [
+    "Ты можешь помочь мне перевести эти предложения на китайский?",
+    "Mi puoi aiutare a tradurre queste frasi in cinese?"
+  ],
+  [
+    "Ты можешь помочь мне перевести эти предложения на китайский?",
+    "Puoi aiutarmi a tradurre queste frasi in cinese?"
+  ],
+  [
+    "У меня получается прокормить семью.",
+    "Riesco a mantenere la famiglia."
+  ],
+  [
+    "Это для меня китайская грамота.",
+    "Questo per me è arabo."
+  ],
+  [
+    "Будьте внимательны!",
+    "State attenti!"
+  ],
+  [
+    "Что это за цветок?",
+    "Che fiore è quello?"
+  ],
+  [
+    "Капитан был последним, кто покинул тонущее судно.",
+    "Il capitano era l'ultima persona che ha lasciato la nave che affondava."
+  ],
+  [
+    "Я не жажду богатства.",
+    "Non ho sete di ricchezza."
+  ],
+  [
+    "На совещании Майк играл роль председателя.",
+    "Alla riunione Mike aveva il ruolo di moderatore."
+  ],
+  [
+    "У вас есть какие-нибудь основания так полагать?",
+    "Avete qualche motivo per pensarla così?"
+  ],
+  [
+    "Он угодил в плохую компанию.",
+    "Lui è caduto in cattive compagnie."
+  ],
+  [
+    "Хочешь ещё яблоко?",
+    "Vuoi un'altra mela?"
+  ],
+  [
+    "Каково значение этой фразы?",
+    "Qual è il significato di questa frase?"
+  ],
+  [
+    "Я хочу жить вечно.",
+    "Voglio vivere per sempre."
+  ],
+  [
+    "Кто-то по ошибке взял мои туфли.",
+    "Qualcuno ha preso per sbaglio le mie scarpe."
+  ],
+  [
+    "Он всегда смотрит в будущее.",
+    "Guarda sempre verso il futuro."
+  ],
+  [
+    "Я время от времени играю в гольф.",
+    "Di quando in quando gioco a golf."
+  ],
+  [
+    "Мы поднялись и опустились на лифте.",
+    "Noi salimmo e scendemmo con l'ascensore."
+  ],
+  [
+    "Боюсь, что нет.",
+    "Ho paura di no."
+  ],
+  [
+    "Это бесплатно.",
+    "È gratis."
+  ],
+  [
+    "Сколько времени это займёт?",
+    "Quanto tempo dura?"
+  ],
+  [
+    "Наша еда дешёвая.",
+    "Il nostro cibo è a buon mercato."
+  ],
+  [
+    "Так говорил Заратустра.",
+    "Così parlò Zarathustra."
+  ],
+  [
+    "Она богатая женщина.",
+    "Lei è una donna ricca."
+  ],
+  [
+    "Она богатая женщина.",
+    "È una donna ricca."
+  ],
+  [
+    "Возвращайся домой.",
+    "Torna a casa."
+  ],
+  [
+    "Джордж женился на моей сестре.",
+    "George ha sposato mia sorella."
+  ],
+  [
+    "Я приобрёл картину на аукционе.",
+    "Ho ottenuto il dipinto ad un'asta."
+  ],
+  [
+    "Я верю в Бога.",
+    "Credo in Dio."
+  ],
+  [
+    "Латинский — язык будущего!",
+    "Il latino è la lingua del futuro!"
+  ],
+  [
+    "Лучше, чем ничего.",
+    "Meglio di niente."
+  ],
+  [
+    "Пирог вкусный.",
+    "La torta è deliziosa."
+  ],
+  [
+    "Она вышла замуж за музыканта.",
+    "Ha sposato un musicista."
+  ],
+  [
+    "Эта сумка моя.",
+    "Questa borsa è mia."
+  ],
+  [
+    "Не возражаешь, если я открою окно?",
+    "Non ti dispiace se chiudo la finestra?"
+  ],
+  [
+    "Я посетил Нару.",
+    "Ho visitato Nara."
+  ],
+  [
+    "Я хочу спать.",
+    "Voglio dormire."
+  ],
+  [
+    "Я хочу спать.",
+    "Io voglio dormire."
+  ],
+  [
+    "Похоже, господин Танака сдал экзамен.",
+    "Sembra che il signor Tanaka abbia superato l'esame."
+  ],
+  [
+    "Я знаком с автором.",
+    "Conosco l'autore."
+  ],
+  [
+    "«СССР» значит «Союз Советских Социалистических Республик».",
+    "URSS significa \"Unione delle Repubbliche Socialiste Sovietiche\"."
+  ],
+  [
+    "Я пишу приятелю.",
+    "Sto scrivendo ad un amico."
+  ],
+  [
+    "Кастрюля перекипела.",
+    "La pentola traboccava."
+  ],
+  [
+    "Я встречал его раньше.",
+    "L'ho già incontrato."
+  ],
+  [
+    "Хотите автомобиль?",
+    "Volete una macchina?"
+  ],
+  [
+    "В этом вопросе мы с вами не придём к соглашению.",
+    "Su questa questione con voi non verremo ad un accordo."
+  ],
+  [
+    "Если хочешь пойти с ней, я возражать не стану.",
+    "Se tu volessi andare con lei, io non farei obiezioni."
+  ],
+  [
+    "Она выполнит свой план любой ценой.",
+    "Lei realizzerà il suo piano ad ogni costo."
+  ],
+  [
+    "Начало истории было интересным.",
+    "L'inizio della storia era interessante."
+  ],
+  [
+    "Америка — страна иммигрантов.",
+    "L'America è una terra di immigranti."
+  ],
+  [
+    "На работе поставили торговый автомат.",
+    "Hanno installato un distributore automatico al lavoro."
+  ],
+  [
+    "Он в Токио.",
+    "Lui è a Tokyo."
+  ],
+  [
+    "Государство — это я!",
+    "Sono lo Stato!"
+  ],
+  [
+    "Государство — это я!",
+    "Io sono lo Stato!"
+  ],
+  [
+    "Это сделано в Казахстане.",
+    "Questo è fatto in Kazakistan."
+  ],
+  [
+    "Если погода будет хорошей, я пойду поплаваю в реке.",
+    "Se farà bel tempo andrò a nuotare nel fiume."
+  ],
+  [
+    "Ты можешь собрать достаточно денег для платежа?",
+    "Riesci a mettere insieme abbastanza soldi per il pagamento?"
+  ],
+  [
+    "Тебе пора вставать.",
+    "È ora che ti alzi."
+  ],
+  [
+    "Он очень молод духом.",
+    "Lui è molto giovane nello spirito."
+  ],
+  [
+    "Это фотография моей сестры.",
+    "Questa è una fotografia di mia sorella."
+  ],
+  [
+    "Вообще-то, земля становится теплей.",
+    "In realtà la terra sta diventando più calda."
+  ],
+  [
+    "Она случайно разбила вазу.",
+    "Lei ha rotto accidentalmente un vaso."
+  ],
+  [
+    "У него три дочери.",
+    "Ha tre figlie."
+  ],
+  [
+    "Я забыл его адрес.",
+    "Ho dimenticato il suo indirizzo."
+  ],
+  [
+    "В примитивных культурах использовался бартер.",
+    "Nelle società primitive veniva utilizzato il baratto."
+  ],
+  [
+    "Слепой лошади что кивай, что подмигивай.",
+    "Per un cavallo cieco, un cenno del capo o un occhiolino fa lo stesso."
+  ],
+  [
+    "Мне не оставалось ничего другого, кроме как уйти.",
+    "Non avevo altra scelta che andare."
+  ],
+  [
+    "Прошлой ночью у меня был смешной сон.",
+    "La notte scorsa ho fatto un sogno divertente."
+  ],
+  [
+    "Он взял хорошую камеру.",
+    "Lui ha preso una bella macchina fotografica."
+  ],
+  [
+    "Его гордость не позволяла ему сносить подобные оскорбления.",
+    "Il suo orgoglio non gli permetteva di sopportare simili insulti."
+  ],
+  [
+    "Ты должен увидеть это зрелище.",
+    "Devo vedere questo spettacolo."
+  ],
+  [
+    "Что это за суп?",
+    "Che tipo di minestra è questa?"
+  ],
+  [
+    "Я действительно сожалею о том, что сказал ей вчера.",
+    "Mi dispiace davvero per quello che le ho detto ieri."
+  ],
+  [
+    "Он всё так же ленив.",
+    "Lui è sempre il solito pigro."
+  ],
+  [
+    "Я посмотрю в словаре.",
+    "Guardo nel vocabolario."
+  ],
+  [
+    "Мы часто делаем ошибки.",
+    "Spesso commettiamo errori."
+  ],
+  [
+    "Это твоя комната?",
+    "Questa è la tua camera?"
+  ],
+  [
+    "Я не знаю, который час.",
+    "Non so che ora è."
+  ],
+  [
+    "Завтра я не буду занят.",
+    "Io non sarò occupato domani."
+  ],
+  [
+    "Он дышит?",
+    "Sta respirando?"
+  ],
+  [
+    "Он дышит?",
+    "Lui sta respirando?"
+  ],
+  [
+    "Помощник взял два доллара.",
+    "L'assistente ha preso due dollari."
+  ],
+  [
+    "Он лишь недавно занял место.",
+    "Ha occupato il posto solo di recente."
+  ],
+  [
+    "Доктор предписал пациенту отказаться от вина.",
+    "Il dottore ha ordinato al paziente di rinunciare al vino."
+  ],
+  [
+    "Я поймал прекрасную бабочку.",
+    "Ho catturato una farfalla bellissima."
+  ],
+  [
+    "У моего отца, который очень занят, нет времени читать книги.",
+    "Mio padre, che è molto impegnato, non ha tempo per leggere libri."
+  ],
+  [
+    "Откройте дверь.",
+    "Aprite la porta."
+  ],
+  [
+    "Откройте дверь.",
+    "Apra la porta."
+  ],
+  [
+    "У него сильный ум.",
+    "Lui ha una mente forte."
+  ],
+  [
+    "С меня достаточно.",
+    "Per me può bastare."
+  ],
+  [
+    "Джон — член плавательного клуба.",
+    "John è membro del club del nuoto."
+  ],
+  [
+    "Эта работа заняла три часа.",
+    "Per questo lavoro ci sono volute tre ore."
+  ],
+  [
+    "У тебя два цветка.",
+    "Hai due fiori."
+  ],
+  [
+    "Я зайду проверить в восемь.",
+    "Passo a controllare alle otto."
+  ],
+  [
+    "Она не верит в бога.",
+    "Non crede in Dio."
+  ],
+  [
+    "Она не верит в бога.",
+    "Lei non crede in Dio."
+  ],
+  [
+    "Они действительно победили.",
+    "Hanno vinto davvero."
+  ],
+  [
+    "Он вызвал меня.",
+    "Lui mi ha chiamato."
+  ],
+  [
+    "Риск велик.",
+    "Il rischio è grosso."
+  ],
+  [
+    "Мой брат живёт в Токио.",
+    "Mio fratello vive a Tokyo."
+  ]
+]

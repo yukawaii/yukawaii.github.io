@@ -1,0 +1,29 @@
+.container {
+  margin-bottom: 2em;
+}
+
+.title {
+  font-size: 3em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1.25em;
+  font-weight: lighter;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin-bottom: 1em;
+  }
+
+  .title {
+    font-size: 2em;
+  }
+
+  .subtitle {
+    font-size: 1em;
+  }
+}

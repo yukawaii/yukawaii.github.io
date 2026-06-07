@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Весёлая радуга</title>
+
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimal-ui"/>
+<link rel="icon" type="image/png" href="favicon.ico">
+<link rel="stylesheet" type="text/css" href="style/fa/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="style/style.css">
+<script type="text/javascript" src="js/hammer.min.js"></script>
+<script type="text/javascript" src="js/js.cookie.js"></script>
+<script type="text/javascript" src="js/jsonfn.min.js"></script>
+<script type="text/javascript" src="js/keypress.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/sweet-alert.min.js"></script>
+
+<script type="text/javascript" src="js/hextris-lite.js"></script>
+
+<style>
+	  /* Стили кнопки */
+
+      .iksweb{display: inline-block; position:absolute; bottom: 0; left:30%;  bottom:1%;  cursor: pointer;}            
+      .iksweb2{display: inline-block; position:fixed; bottom: 0; right:25%; bottom:1%;   cursor: pointer;}
+	  .iksweb3{display: inline-block; position:absolute; bottom: 0; left:45%; bottom:1%;  cursor: pointer; text-decoration:none;}
+	  .iksweb4{display: inline-block; position:absolute; right:4%; top:2%;  cursor: pointer; text-decoration:none;}
+	</style>
+<script src = "./info.js"></script>
+</head>
+<body>
+	<script type="text/javascript" src="./info.js"></script>
+	<script src = "./App.js"></script>
+	<script>
+		// Sends event to client
+		vkBridge.send('VKWebAppInit');
+			  </script> 
+<script type="text/javascript" src="js/sound.js"></script>
+
+<canvas id="canvas"></canvas>
+<div id="overlay" class="faded overlay"></div>
+<div id="startBtn" ></div>
+<div id="helpScreen" class="unselectable">
+	<div id="inst_main_body"></div>
+</div>
+<img id="openSideBar" class="helpText" src="./images/btn_help.svg"/>
+<div class="faded overlay"></div>
+<img id="pauseBtn" src="./images/btn_pause.svg"/>
+<img id="restartBtn" src="./images/btn_restart.svg"/>
+<div id="HIGHSCORE">Рекорд</div>
+<div id="highScoreInGameText">
+	<div id="highScoreInGameTextHeader">Рекорд</div><div id="currentHighScore">10292</div>
+</div>
+<div id="gameoverscreen">
+	<div id="container">
+		<div id="gameOverBox" class="GOTitle">Игра окончена</div>
+		<div id="cScore">1843</div>
+		<div id="highScoresTitle" class="GOTitle">Рекорды</div>
+		<div class="score"><span class="scoreNum">1.</span> <div id="1place" style="display:inline;">0</div></div>
+		<div class="score"><span class="scoreNum">2.</span> <div id="2place" style="display:inline;">0</div></div>
+		<div class="score"><span class="scoreNum">3.</span> <div id="3place" style="display:inline;">0</div></div>
+	</div>
+	<div id="bottomContainer">
+		<img id="restart" src="./images/btn_restart.svg" height="57px">
+		<div id="buttonCont"></div>
+	</div>
+</div>
+
+<div>
+	<button class = "iksweb4"  onclick="top0()"><img id="jg" src="./images/top.png" /></button>
+	<button class = "iksweb2"  onclick="mutebtn()"><img id="mute" src="./images/mute.png" /></button>
+
+		/* <button class = "iksweb"  onclick="joingroup()"><img id="jg" src="./images/jg.png" /></button><br /> */
+	<button class = "iksweb3"  onclick="infr()"><img id="infr" src="./images/infr.png" /></button></div>
+</body>
+</html>

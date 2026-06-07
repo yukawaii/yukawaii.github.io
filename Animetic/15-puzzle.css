@@ -1,0 +1,38 @@
+::selection {background: transparent;}
+p{margin: 0; font: 12px/150% Arial; text-align: center; color: #888;}
+p a{color: #888;}
+
+#puzzle{
+	position: relative;
+	width: 325px;
+	height: 325px;
+	margin: 0 auto;
+	margin-top: 3px;
+	border: 8px solid #C6D8FF;
+	border-radius: 4px;
+}
+#puzzle span{
+	position: absolute;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border-radius: 4px;
+}
+#puzzle span.number{
+	cursor: pointer;
+	font: bold 36px/80px Arial;
+	text-align: center;
+	text-shadow: -1px -1px 0 rgba(0,0,0, 0.5);
+	color: #87acfd;
+}
+#puzzle span.empty{background: transparent;}
+#puzzle span.number.light{background: #FFFADD;}
+#puzzle span.number.dark{background: #FED6BC;}
+
+#puzzle.animate span{
+	-webkit-transition: 0.15s left, 0.15s top;
+ 	transition: 0.15s left, 0.15s top;
+}
+.btnC {
+	text-align: center;
+}

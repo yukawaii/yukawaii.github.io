@@ -1,0 +1,25 @@
+.container {
+  background-color: whitesmoke;
+  bottom: 0;
+  font-weight: lighter;
+  left: 0;
+  padding: 1em 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+.link {
+  color: black;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 425px) {
+  .container {
+    font-size: 0.75em;
+  }
+}
