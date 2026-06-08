@@ -153,16 +153,23 @@
             box-shadow: none;
         }
 
-        /* CONTROLS (Right side of Title Bar) */
-        .title-controls {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 2;
-            display: flex;
-            align-items: center;
-        }
+        /* CONTROLS styles*/
+.title-controls .style-active {
+    background: black;
+    color: white;
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+.title-controls {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+}
 
         .icon-btn {
             width: 18px;
@@ -507,6 +514,12 @@
             border-top-color: black !important;
             border-bottom-color: black !important;
         }
+        .panel-top-right {
+    top: 50px;
+    right: 10px;
+    left: auto;
+    width: 180px;
+}
     </style>
 
     <script src="js/i18n.js"></script>
@@ -521,15 +534,18 @@
 
             <div class="close-box" onclick="window.location.href='/index'">X</div>
             <span class="title-text" data-i18n="maps.title">Maps</span>
-            <div class="title-controls">
-                <button class="icon-btn" onclick="toggleFullScreen()" title="Full Screen">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                        stroke-linecap="square" stroke-linejoin="miter">
-                        <path class="icon-expand" d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1"></path>
-                        <path class="icon-contract" d="M21 9H15V3M21 3l-6 6M3 15h6v6M3 21l6-6"></path>
-                    </svg>
-                </button>
-            </div>
+<div class="title-controls" style="display: flex; align-items: center; gap: 5px; right: 10px; top: 50%; transform: translateY(-50%);">
+    <button class="icon-btn" id="style-toner" onclick="changeMapStyle('toner')" title="Toner (ч/б)" style="width: 28px; height: 28px; font-size: 1rem;">⚫</button>
+    <button class="icon-btn" id="style-bright" onclick="changeMapStyle('bright')" title="Bright (светлый)" style="width: 28px; height: 28px; font-size: 1rem;">☀️</button>
+    <button class="icon-btn" id="style-osm" onclick="changeMapStyle('osm')" title="OSM (цветной)" style="width: 28px; height: 28px; font-size: 1rem;">🌈</button>
+    <button class="icon-btn" onclick="toggleFullScreen()" title="Full Screen" style="width: 28px; height: 28px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+            stroke-linecap="square" stroke-linejoin="miter">
+            <path class="icon-expand" d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1"></path>
+            <path class="icon-contract" d="M21 9H15V3M21 3l-6 6M3 15h6v6M3 21l6-6"></path>
+        </svg>
+    </button>
+</div>
         </div>
 
         <div class="overlay-panel panel-top-left">
@@ -670,11 +686,8 @@ async function fetchWithProxyFallback(targetUrl, options = {}) {
 async function initGLMap() {
     try {
         // Список запасных источников карты
-        const styleUrls = [
-             'https://tiles.stadiamaps.com/styles/stamen_toner.json',
-                       'https://tile.openstreetmap.jp/styles/maptiler-toner-en/style.json',
-           
-            'https://cdn.jsdelivr.net/npm/maplibre-gl@2.4.0/dist/maplibre-gl.css' // не стиль, просто для совместимости, но оставим как fallback
+        const styleUrls = [       'https://tile.openstreetmap.jp/styles/maptiler-toner-en/style.json',
+                       'https://cdn.jsdelivr.net/npm/maplibre-gl@2.4.0/dist/maplibre-gl.css' // не стиль, просто для совместимости, но оставим как fallback
         ];        
         let defaultCenter = [-74.0060, 40.7128];
         let defaultZoom = 13;
@@ -1130,6 +1143,55 @@ function initLeafletMap() {
                 setTimeout(() => { map.resize(); }, 200);
             }
         }
+        
+        // Словарь доступных стилей
+const mapStyles = {
+    toner: 'https://api.maptiler.com/maps/toner-v2/style.json?key=7s9RFFTCvWYF90Cz1WIx',
+    bright: 'https://api.maptiler.com/maps/backdrop-v4/style.json?key=7s9RFFTCvWYF90Cz1WIx',
+    osm: 'https://tile.openstreetmap.org'
+};
+
+async function changeMapStyle(styleKey) {
+    if (mapType !== 'gl') return;
+    
+    // Обновляем активную кнопку
+    document.querySelectorAll('.title-controls .icon-btn').forEach(btn => {
+        btn.classList.remove('style-active');
+    });
+    const activeBtn = document.getElementById(`style-${styleKey}`);
+    if (activeBtn) activeBtn.classList.add('style-active');
+    
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    
+    if (styleKey === 'osm') {
+        // Для OSM нужен другой подход — создаём новый стиль
+        const style = {
+            version: 8,
+            sources: {
+                osm: {
+                    type: 'raster',
+                    tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                    tileSize: 256,
+                    attribution: '© OpenStreetMap'
+                }
+            },
+            layers: [{
+                id: 'osm-layer',
+                type: 'raster',
+                source: 'osm'
+            }]
+        };
+        map.setStyle(style);
+    } else {
+        map.setStyle(mapStyles[styleKey]);
+    }
+    
+    map.once('styledata', () => {
+        map.setCenter(center);
+        map.setZoom(zoom);
+    });
+}
     </script>
     <script src="https://cdn.counter.dev/script.js" data-id="4e551911-0e5d-4c48-91a6-b828c3301675"
         data-utcoffset="11"></script>
