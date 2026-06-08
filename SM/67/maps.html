@@ -618,20 +618,12 @@
         // --- INTERNAL PROXY (Cloudflare Function) ---
         const PROXY_ENDPOINT = "/api/maps?url=";
 
-        async function fetchWithProxyFallback(targetUrl, options = {}) {
-            try {
-                // Use internal proxy securely
-                const url = PROXY_ENDPOINT + encodeURIComponent(targetUrl);
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
-                return res;
-            } catch (e) {
-                console.error("Internal Proxy fetch failed:", e);
-                // No fallback for internal proxy failure
-                throw e;
-            }
-        }
-
+async function fetchWithProxyFallback(targetUrl, options = {}) {
+    // Прямой запрос (OpenStreetMap API поддерживает CORS)
+    const res = await fetch(targetUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res;
+}
 
 
 
