@@ -219,3 +219,15 @@ function updateHighscoreDisplay() {
     
     console.log('🏆 Зелёный рекорд обновлён из VK Storage:', currentHighscore);
 }
+
+vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom' // Положение баннера: 'top' (наверху) или 'bottom' (внизу)
+})
+.then((data) => {
+  if (data.result) {
+    console.log('Баннер успешно отображается');
+  }
+})
+.catch((error) => {
+  console.error('Ошибка при показе баннера:', error);
+});
