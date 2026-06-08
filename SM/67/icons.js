@@ -396,7 +396,7 @@ const APPS = [
         desc: 'Stay in the know',
         icon: '<circle cx="6" cy="26" r="3" fill="black"/><path d="M6 18 A 8 8 0 0 1 14 26 M6 10 A 16 16 0 0 1 22 26" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>'
     },
-    {
+  /*  {
         id: 'substack',
         name: 'Substack',
         cat: 'lifestyle',
@@ -406,7 +406,7 @@ const APPS = [
         featuredOrder: 2,
         desc: 'Stacks on, Stacks off',
         icon: '<rect x="6" y="5" width="20" height="4" fill="black"/><rect x="6" y="11" width="20" height="4" fill="black"/><path d="M6 17 h20 v11 l-10 -6 l-10 6 z" fill="black"/>'
-    },
+    },*/
     {
         id: 'mindmap',
         name: 'Mindmap',
