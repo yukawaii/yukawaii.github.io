@@ -1280,31 +1280,54 @@
         }
 
         // --- FEED DATA MGMT ---
-        function loadLocalFeeds() {
-            feeds = JSON.parse(localStorage.getItem('rss_feeds')) || [];
-            renderSources();
-            if (feeds.length > 0) resetAndFetch();
-        }
+function loadLocalFeeds() {
+    let savedFeeds = JSON.parse(localStorage.getItem('rss_feeds'));    
+    // Если нет сохранённых лент — добавляем ленту "Космонавтика" по умолчанию
+    if (!savedFeeds || savedFeeds.length === 0) {
+        savedFeeds = [            {                id: Date.now().toString(),
+                name: "Космонавтика",                url: "https://naked-science.ru/article/category/cosmonautics/feed",
+                category: "Наука"
+            }        ];        localStorage.setItem('rss_feeds', JSON.stringify(savedFeeds));
+    }    
+    feeds = savedFeeds;    renderSources();    if (feeds.length > 0) resetAndFetch();
+}
 
-        function loadCloudFeeds() {
-            db.collection('users').doc(currentUser.uid).collection('rss_feeds')
-                .onSnapshot(snap => {
-                    feeds = [];
-                    snap.forEach(doc => {
-                        feeds.push({ id: doc.id, ...doc.data() });
+function loadCloudFeeds() {
+    db.collection('users').doc(currentUser.uid).collection('rss_feeds')
+        .onSnapshot(async snap => {
+            feeds = [];
+            snap.forEach(doc => {
+                feeds.push({ id: doc.id, ...doc.data() });
+            });
+            
+            // Если нет ни одной ленты — создаём дефолтную
+            if (feeds.length === 0) {
+                try {
+                    await db.collection('users').doc(currentUser.uid).collection('rss_feeds').add({
+                        name: "Космонавтика",
+                        url: "https://naked-science.ru/article/category/cosmonautics/feed",
+                        category: "Наука",
+                        added: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    renderSources();
-                    updateAddSourceButton();
-                    if (feeds.length > 0) {
-                        resetAndFetch();
-                        if (proCheckDone && !isPro && feeds.length > FREE_FEED_LIMIT) {
-                            maybeShowFeedSelectionModal();
-                        }
-                    } else {
-                        document.getElementById('articles-container').innerHTML = '<div class="loading-msg">No feeds subscribed. Go to Sources to add some.</div>';
-                    }
-                });
-        }
+                    // onSnapshot сработает снова и подхватит новую ленту
+                    return;
+                } catch (e) {
+                    console.error("Failed to add default feed:", e);
+                }
+            }
+            
+            renderSources();
+            updateAddSourceButton();
+            if (feeds.length > 0) {
+                resetAndFetch();
+                if (proCheckDone && !isPro && feeds.length > FREE_FEED_LIMIT) {
+                    maybeShowFeedSelectionModal();
+                }
+            } else {
+                document.getElementById('articles-container').innerHTML = '<div class="loading-msg">No feeds subscribed. Go to Sources to add some.</div>';
+            }
+        });
+}
 
         async function saveFeed(name, url, category, id = null) {
             if (currentUser) {
@@ -1760,37 +1783,41 @@
             }
         }
 
-        function renderArticles() {
-            const container = document.getElementById('articles-container');
-            container.innerHTML = '';
+function renderArticles() {
+    const container = document.getElementById('articles-container');
+    container.innerHTML = '';
 
-            // Filter articles
-            const filtered = articlesCache.filter(a => {
-                if (filterMode === 'unread') {
-                    return !readItems.has(a.link);
-                }
-                if (filterMode !== 'all') {
-                    // Filter Mode is a Category Name
-                    // Find feeds in this category
-                    const feedUrlsInCategory = feeds.filter(f => (f.category || "Uncategorized") === filterMode).map(f => f.url);
-                    return feedUrlsInCategory.includes(a.feedUrl);
-                }
-                return true;
-            });
+    // Filter articles
+    const filtered = articlesCache.filter(a => {
+        if (filterMode === 'unread') {
+            return !readItems.has(a.link);
+        }
+        if (filterMode !== 'all') {
+            // Filter Mode is a Category Name
+            // Find feeds in this category
+            const feedUrlsInCategory = feeds.filter(f => (f.category || "Uncategorized") === filterMode).map(f => f.url);
+            return feedUrlsInCategory.includes(a.feedUrl);
+        }
+        return true;
+    });
 
-            if (filtered.length === 0) {
-                if (filterMode === 'unread' && articlesCache.length > 0) {
-                    container.innerHTML = '<div class="loading-msg">All caught up!</div>';
-                } else if (articlesCache.length === 0) {
-                    container.innerHTML = '<div class="loading-msg">No articles found. Check your feed URLs.</div>';
-                } else {
-                    container.innerHTML = '<div class="loading-msg">No articles match filter.</div>';
-                }
-                return;
-            }
+    if (filtered.length === 0) {
+        if (filterMode === 'unread' && articlesCache.length > 0) {
+            container.innerHTML = '<div class="loading-msg">All caught up!</div>';
+        } else if (articlesCache.length === 0) {
+            container.innerHTML = '<div class="loading-msg">No articles found. Check your feed URLs.</div>';
+        } else {
+            container.innerHTML = '<div class="loading-msg">No articles match filter.</div>';
+        }
+        return;
+    }
 
-            // Display All
-            filtered.forEach(article => {
+    // Display All
+    filtered.forEach(article => {
+        // Обработка даты с проверкой на null
+        let dateStr = "—";
+        if (article.pubDate) {
+            try {
                 // FORCE UTC PARSING: RSS2JSON returns "YYYY-MM-DD HH:mm:ss"
                 // 1. Replace - with / for Safari compatibility
                 // 2. Append " UTC" to force it to be treated as UTC, not local
@@ -1799,65 +1826,67 @@
                     dateStrRaw += ' UTC';
                 }
                 const date = new Date(dateStrRaw);
-
-                // Use Global Timezone
-                const dateStr = window.rekindleFormatTime(date, { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
-                const isRead = readItems.has(article.link);
-
-                const div = document.createElement('div');
-                div.className = `article ${isRead ? 'read' : ''}`;
-                div.onclick = () => openArticle(article);
-
-                let imgHtml = '';
-                if (article.image) {
-                    imgHtml = `<img src="${article.image}" class="article-img" alt="Thumbnail" onerror="this.style.display='none'">`;
-                }
-
-                div.innerHTML = `
-                    <div class="article-content">
-                        <div class="article-source">${article.source}</div>
-                        <div class="article-title">${article.title}</div>
-                        <div class="article-snippet">${article.snippet}</div>
-                        <div class="article-meta">${dateStr}</div>
-                    </div>
-                    ${imgHtml}
-                `;
-                container.appendChild(div);
-            });
-
-            // FOOTER CONTROLS
-            const footer = document.createElement('div');
-            footer.className = 'list-footer-controls';
-
-            // Container for side-by-side buttons
-            const btnGroup = document.createElement('div');
-            btnGroup.style.display = 'flex';
-            btnGroup.style.gap = '10px';
-            btnGroup.style.width = '100%';
-            btnGroup.style.justifyContent = 'center';
-
-            // Always show Load More button to allow fetching deeper into history
-            const moreBtn = document.createElement('button');
-            moreBtn.className = 'sys-btn wide-btn';
-            moreBtn.id = 'load-more-btn';
-            moreBtn.innerText = `Load More`;
-            moreBtn.style.flex = '1';
-            moreBtn.onclick = loadMore;
-            btnGroup.appendChild(moreBtn);
-
-            if (filtered.length > 0) {
-                const markBtn = document.createElement('button');
-                markBtn.className = 'sys-btn wide-btn';
-                markBtn.innerText = 'Mark All Read';
-                markBtn.style.flex = '1';
-                markBtn.onclick = openMarkReadModal;
-                btnGroup.appendChild(markBtn);
+                dateStr = window.rekindleFormatTime(date, { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+            } catch(e) {
+                dateStr = "—";
             }
+        }
+        
+        const isRead = readItems.has(article.link);
 
-            footer.appendChild(btnGroup);
-            container.appendChild(footer);
+        const div = document.createElement('div');
+        div.className = `article ${isRead ? 'read' : ''}`;
+        div.onclick = () => openArticle(article);
+
+        let imgHtml = '';
+        if (article.image) {
+            imgHtml = `<img src="${article.image}" class="article-img" alt="Thumbnail" onerror="this.style.display='none'">`;
         }
 
+        div.innerHTML = `
+            <div class="article-content">
+                <div class="article-source">${article.source}</div>
+                <div class="article-title">${article.title}</div>
+                <div class="article-snippet">${article.snippet}</div>
+                <div class="article-meta">${dateStr}</div>
+            </div>
+            ${imgHtml}
+        `;
+        container.appendChild(div);
+    });
+
+    // FOOTER CONTROLS
+    const footer = document.createElement('div');
+    footer.className = 'list-footer-controls';
+
+    // Container for side-by-side buttons
+    const btnGroup = document.createElement('div');
+    btnGroup.style.display = 'flex';
+    btnGroup.style.gap = '10px';
+    btnGroup.style.width = '100%';
+    btnGroup.style.justifyContent = 'center';
+
+    // Always show Load More button to allow fetching deeper into history
+    const moreBtn = document.createElement('button');
+    moreBtn.className = 'sys-btn wide-btn';
+    moreBtn.id = 'load-more-btn';
+    moreBtn.innerText = `Load More`;
+    moreBtn.style.flex = '1';
+    moreBtn.onclick = loadMore;
+    btnGroup.appendChild(moreBtn);
+
+    if (filtered.length > 0) {
+        const markBtn = document.createElement('button');
+        markBtn.className = 'sys-btn wide-btn';
+        markBtn.innerText = 'Mark All Read';
+        markBtn.style.flex = '1';
+        markBtn.onclick = openMarkReadModal;
+        btnGroup.appendChild(markBtn);
+    }
+
+    footer.appendChild(btnGroup);
+    container.appendChild(footer);
+}
         function loadMore() {
             fetchCount += 10;
             fetchAllFeeds();
