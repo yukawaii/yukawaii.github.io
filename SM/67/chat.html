@@ -2,115 +2,85 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ВсёТут — AI Чат (Puter.js)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ВсёТут — DeepSeek Чат</title>
     <style>
-        /* Твои стили остаются здесь */
-        * { user-select: none; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
         body {
-            margin: 0; padding: 20px; height: 100vh; overflow: hidden;
-            background-color: #e5e5e5; font-family: "Geneva", "Verdana", sans-serif;
-            display: flex; align-items: center; justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #e5e5e5;
+            font-family: "Geneva", "Verdana", sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         .window {
-            background: white; border: 2px solid black; box-shadow: 8px 8px 0 black;
-            width: 100%; max-width: 800px; height: 90vh; display: flex; flex-direction: column;
+            background: white;
+            border: 2px solid black;
+            box-shadow: 8px 8px 0 black;
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
         .title-bar {
-            background: white; border-bottom: 2px solid black; padding: 8px 12px;
-            display: flex; justify-content: space-between; align-items: center; font-weight: bold;
+            background: white;
+            border-bottom: 2px solid black;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            flex-shrink: 0;
         }
         .close-box {
-            background: white; border: 2px solid black; width: 24px; height: 24px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            background: white;
+            border: 2px solid black;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             box-shadow: 2px 2px 0 black;
         }
-        .close-box:active { transform: translate(1px, 1px); box-shadow: none; }
-        .chat-area {
-            flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px;
+        .close-box:active {
+            transform: translate(1px, 1px);
+            box-shadow: none;
         }
-        .message {
-            max-width: 80%; padding: 10px 15px; border: 2px solid black; word-wrap: break-word;
+        .iframe-container {
+            flex: 1;
+            background: white;
+            overflow: hidden;
         }
-        .user { background: black; color: white; align-self: flex-end; }
-        .ai { background: white; color: black; align-self: flex-start; }
-        .input-area {
-            border-top: 2px solid black; padding: 10px; display: flex; gap: 10px; background: #eee;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
-        textarea {
-            flex: 1; border: 2px solid black; padding: 10px; font-family: inherit;
-            font-size: 1rem; resize: none; height: 60px;
-        }
-        button {
-            background: white; border: 2px solid black; padding: 0 20px;
-            font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0 black;
-        }
-        button:active { transform: translate(1px, 1px); box-shadow: none; }
     </style>
-    <!-- Подключаем Puter.js — он даёт GPT-4o бесплатно -->
-    <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
 <div class="window">
     <div class="title-bar">
-        <span>🤖 AI Чат (GPT-4o)</span>
+        <span>🐋 DeepSeek Чат</span>
         <div class="close-box" onclick="window.location.href='index.html'">✕</div>
     </div>
-    <div class="chat-area" id="chat-area">
-        <div class="message ai">Привет! Я работаю на GPT-4o через Puter.js. Спрашивай что угодно, всё бесплатно!</div>
-    </div>
-    <div class="input-area">
-        <textarea id="user-input" placeholder="Напишите сообщение..."></textarea>
-        <button onclick="sendMessage()">➤</button>
+    <div class="iframe-container">
+        <iframe 
+            src="https://chat.deepseek.com"
+            allow="clipboard-read; clipboard-write"
+            title="DeepSeek AI Chat"
+        ></iframe>
     </div>
 </div>
-
-<script>
-    const chatArea = document.getElementById('chat-area');
-    const userInput = document.getElementById('user-input');
-    
-    // Функция для отображения сообщений
-    function addMessage(text, sender) {
-        const div = document.createElement('div');
-        div.className = `message ${sender}`;
-        div.innerHTML = text.replace(/\n/g, '<br>');
-        chatArea.appendChild(div);
-        chatArea.scrollTop = chatArea.scrollHeight;
-    }
-    
-    // Функция отправки
-    async function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text) return;
-        
-        addMessage(text, 'user');
-        userInput.value = '';
-        
-        // Индикатор загрузки
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = 'message ai';
-        loadingDiv.innerText = '...';
-        chatArea.appendChild(loadingDiv);
-        chatArea.scrollTop = chatArea.scrollHeight;
-        
-        try {
-            // Отправляем запрос через Puter.ai
-            const response = await puter.ai.chat(text);
-            
-            loadingDiv.remove();
-            addMessage(response, 'ai');
-            
-        } catch (error) {
-            console.error("Error:", error);
-            loadingDiv.innerText = `⚠️ Ошибка: ${error.message}. Попробуйте позже.`;
-        }
-    }
-    
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-</script>
 </body>
 </html>
