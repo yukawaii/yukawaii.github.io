@@ -82,13 +82,13 @@ const APPS = [
         plus: false,
         icon: '<g transform="translate(4, 4)"><path d="M6 1.807L0 5.629l6 3.822 6.001-3.822L6 1.807zM18 1.807l-6 3.822 6 3.822 6-3.822-6-3.822zM0 13.274l6 3.822 6.001-3.822L6 9.452l-6 3.822zM18 9.452l-6 3.822 6 3.822 6-3.822-6-3.822zM6 20.371l6.001 3.822 6-3.822-6-3.822L6 20.371z" fill="black"/></g>'
     },
-    {
+  /*  {
         id: 'chat',
         name: 'AI Assistant',
         cat: 'tools',
         plus: false,
         icon: '<path d="M16 3 L19 11 L27 14 L19 17 L16 25 L13 17 L5 14 L13 11 Z M6 3 L8 7 L12 8 L8 9 L6 13 L4 9 L0 8 L4 7 Z" fill="black" stroke="none"/>'
-    },
+    },*/
     {
         id: 'maps',
         name: 'Maps',
