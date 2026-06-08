@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ВсёТут — DeepSeek Чат</title>
+    <title>ВсёТут — AI Чат</title>
+    <!-- Подключаем React, ReactDOM и библиотеку -->
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@benbassatido/ai-chatbot@0.1.4/dist/index.umd.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@benbassatido/ai-chatbot@0.1.4/dist/style.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
         body {
             height: 100vh;
@@ -56,26 +60,45 @@
             transform: translate(1px, 1px);
             box-shadow: none;
         }
-        .iframe-container {
+        #chatbot-container {
             flex: 1;
-            background: white;
             overflow: hidden;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+            position: relative;
         }
     </style>
 </head>
 <body>
 <div class="window">
     <div class="title-bar">
-        <span>🐋 DeepSeek Чат</span>
+        <span>🤖 AI Чат (DeepSeek)</span>
         <div class="close-box" onclick="window.location.href='index.html'">✕</div>
     </div>
-<iframe src="https://chat.deepseek.com/?mobile=true" style="width:100%; height:100%; border:none;"></iframe>
-    </div>
+    <div id="chatbot-container"></div>
 </div>
+
+<script>
+    // Ждём загрузки React и компонента
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.AiChatbot && window.React && window.ReactDOM) {
+            window.ReactDOM.render(
+                window.React.createElement(window.AiChatbot.Chatbot, {
+                    title: "DeepSeek Чат",
+                    brandColor: "#000000",
+                    welcomeMessage: "Привет! Я DeepSeek. Спрашивай что угодно!",
+                    systemPrompt: "Ты DeepSeek — полезный AI-ассистент. Отвечай кратко и по делу, на русском языке.",
+                    direction: "ltr",
+                    storageMode: "localStorage",
+                    businessInfo: {
+                        companyName: "ВсёТут",
+                        description: "Игры, обучение, инструменты"
+                    }
+                }),
+                document.getElementById('chatbot-container')
+            );
+        } else {
+            document.getElementById('chatbot-container').innerHTML = '<div style="padding:20px; text-align:center;">Загрузка чата...</div>';
+        }
+    });
+</script>
 </body>
 </html>
