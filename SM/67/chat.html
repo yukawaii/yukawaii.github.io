@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ВсёТут — AI Чат</title>
+    <title>ВсёТут — AI Чат (Puter.js)</title>
     <style>
+        /* Твои стили остаются здесь */
         * { user-select: none; box-sizing: border-box; }
         body {
             margin: 0; padding: 20px; height: 100vh; overflow: hidden;
@@ -45,48 +45,18 @@
             font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0 black;
         }
         button:active { transform: translate(1px, 1px); box-shadow: none; }
-        
-        /* Выпадающий список моделей */
-        .model-selector {
-            padding: 8px 12px;
-            border-bottom: 2px solid black;
-            background: #f5f5f5;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            font-size: 0.8rem;
-        }
-        .model-selector select {
-            border: 2px solid black;
-            padding: 4px 8px;
-            font-family: inherit;
-            background: white;
-        }
     </style>
-    <!-- Подключаем Puter.js — бесплатный доступ ко всем AI моделям -->
+    <!-- Подключаем Puter.js — он даёт GPT-4o бесплатно -->
     <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
 <div class="window">
     <div class="title-bar">
-        <span>🤖 AI Чат (безлимитный)</span>
+        <span>🤖 AI Чат (GPT-4o)</span>
         <div class="close-box" onclick="window.location.href='index.html'">✕</div>
     </div>
-    <div class="model-selector">
-        <span>Модель:</span>
-        <select id="model-select">
-            <option value="gpt-4o">GPT-4o</option>
-            <option value="gpt-4o-mini">GPT-4o-mini</option>
-            <option value="o3-mini">O3-mini</option>
-            <option value="o1-mini">O1-mini</option>
-            <option value="claude-sonnet-4">Claude Sonnet 4</option>
-            <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
-            <option value="meta-llama/llama-4-maverick">Llama 4 Maverick</option>
-            <option value="mistralai/mistral-large">Mistral Large</option>
-        </select>
-    </div>
     <div class="chat-area" id="chat-area">
-        <div class="message ai">Привет! Я AI-ассистент. Спрашивай что угодно — безлимитно и бесплатно!</div>
+        <div class="message ai">Привет! Я работаю на GPT-4o через Puter.js. Спрашивай что угодно, всё бесплатно!</div>
     </div>
     <div class="input-area">
         <textarea id="user-input" placeholder="Напишите сообщение..."></textarea>
@@ -97,27 +67,8 @@
 <script>
     const chatArea = document.getElementById('chat-area');
     const userInput = document.getElementById('user-input');
-    const modelSelect = document.getElementById('model-select');
     
-    // Сохраняем историю диалога
-    let messages = [];
-    
-    // Загружаем историю из localStorage
-    try {
-        const saved = localStorage.getItem('puter_chat_history');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.length > 0) {
-                messages = parsed;
-                chatArea.innerHTML = '';
-                messages.forEach(msg => {
-                    if (msg.role === 'user') addMessage(msg.content, 'user');
-                    if (msg.role === 'assistant') addMessage(msg.content, 'ai');
-                });
-            }
-        }
-    } catch(e) {}
-    
+    // Функция для отображения сообщений
     function addMessage(text, sender) {
         const div = document.createElement('div');
         div.className = `message ${sender}`;
@@ -126,6 +77,7 @@
         chatArea.scrollTop = chatArea.scrollHeight;
     }
     
+    // Функция отправки
     async function sendMessage() {
         const text = userInput.value.trim();
         if (!text) return;
@@ -133,11 +85,7 @@
         addMessage(text, 'user');
         userInput.value = '';
         
-        messages.push({ role: "user", content: text });
-        
-        // Ограничиваем историю последними 20 сообщениями
-        while (messages.length > 20) messages.shift();
-        
+        // Индикатор загрузки
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'message ai';
         loadingDiv.innerText = '...';
@@ -145,24 +93,15 @@
         chatArea.scrollTop = chatArea.scrollHeight;
         
         try {
-            // Выбранная модель
-            const model = modelSelect.value;
-            
-            // Отправляем запрос через Puter.js (без ключей, без ограничений!)
-            const response = await puter.ai.chat(
-                messages.map(m => m.content).join('\n\n'),
-                { model: model }
-            );
+            // Отправляем запрос через Puter.ai
+            const response = await puter.ai.chat(text);
             
             loadingDiv.remove();
             addMessage(response, 'ai');
             
-            messages.push({ role: "assistant", content: response });
-            localStorage.setItem('puter_chat_history', JSON.stringify(messages));
-            
         } catch (error) {
             console.error("Error:", error);
-            loadingDiv.innerText = `⚠️ Ошибка: ${error.message}. Попробуйте другой модель или позже.`;
+            loadingDiv.innerText = `⚠️ Ошибка: ${error.message}. Попробуйте позже.`;
         }
     }
     
