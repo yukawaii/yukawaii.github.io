@@ -667,72 +667,116 @@ async function fetchWithProxyFallback(targetUrl, options = {}) {
             }
         }
 
-        async function initGLMap() {
+async function initGLMap() {
+    try {
+        // Список запасных источников карты
+        const styleUrls = [
+             'https://tiles.stadiamaps.com/styles/stamen_toner.json',
+                       'https://tile.openstreetmap.jp/styles/maptiler-toner-en/style.json',
+           
+            'https://cdn.jsdelivr.net/npm/maplibre-gl@2.4.0/dist/maplibre-gl.css' // не стиль, просто для совместимости, но оставим как fallback
+        ];        
+        let defaultCenter = [-74.0060, 40.7128];
+        let defaultZoom = 13;
+        try {
+            const manualLoc = JSON.parse(localStorage.getItem('rekindle_location_manual'));
+            if (manualLoc && manualLoc.lat && manualLoc.lon) {
+                defaultCenter = [parseFloat(manualLoc.lon), parseFloat(manualLoc.lat)];
+            }
+        } catch (e) {}
+        // Функция попытки загрузки стиля
+        async function tryLoadStyle(styleUrl, attempt) {
+            return new Promise((resolve, reject) => {
+                const testMap = new maplibregl.Map({
+                    container: document.createElement('div'),
+                    style: styleUrl,
+                    center: [0, 0],
+                    zoom: 1
+                });                
+                const timeout = setTimeout(() => {
+                    testMap.remove();
+                    reject(new Error(`Timeout loading ${styleUrl}`));
+                }, 10000);                
+                testMap.on('load', () => {
+                    clearTimeout(timeout);
+                    testMap.remove();
+                    resolve(true);
+                });                
+                testMap.on('error', (e) => {
+                    clearTimeout(timeout);
+                    testMap.remove();
+                    reject(e);
+                });
+            });
+        }        
+        // Пробуем загрузить первый доступный стиль
+        let loadedStyle = null;
+        for (const styleUrl of styleUrls) {
             try {
-                // Vector Style from data.gouv.fr (Toner)
-                // This replaces our local file and OpenFreeMap, but still looks like Toner.
-                const styleUrl = 'https://openmaptiles.geo.data.gouv.fr/styles/maptiler-toner/style.json';
-
-                let defaultCenter = [-74.0060, 40.7128]; // Default NYC [Lon, Lat]
-                let defaultZoom = 13;
-
-                try {
-                    const manualLoc = JSON.parse(localStorage.getItem('rekindle_location_manual'));
-                    if (manualLoc && manualLoc.lat && manualLoc.lon) {
-                        defaultCenter = [parseFloat(manualLoc.lon), parseFloat(manualLoc.lat)];
-                    }
-                } catch (e) {
-                    console.warn("Failed to load manual location", e);
-                }
-
-                map = new maplibregl.Map({
-                    container: 'map',
-                    style: styleUrl, // Direct URL works now
-                    center: defaultCenter,
-                    zoom: defaultZoom,
-                    attributionControl: false, // We add it manually below
-                    // E-ink optimizations
-                    fadeDuration: 0,
-                    inertia: false
-                });
-
-                // ERROR HANDLING -> Fallback to Leaflet if GL fails mid-stream
-                map.on('error', (e) => {
-                    console.error("Map Error:", e);
-                    // Critical failure? Maybe fallback is needed even here, 
-                    // but usually supported() catches the big ones.
-                    if (e.error && e.error.message && e.error.message.includes("WebGL")) {
-                        document.getElementById('map').innerHTML = ''; // Clear container
-                        mapType = 'leaflet';
-                        initLeafletMap();
-                        return;
-                    }
-
-                    if (e.error && e.error.status === 404) {
-                        console.warn("Missing resource:", e.error.url);
-                    } else if (!e.error || e.error.status !== 404) {
-                        openStatusModal("Map Error", (e.error ? e.error.message : "An unknown error occurred."));
-                    }
-                });
-
-                map.on('load', () => {
-                    console.log("Map Fully Loaded");
-                    map.resize(); // Force resize to ensure canvas is correct
-                });
-
-                map.addControl(new maplibregl.AttributionControl({
-                    compact: true
-                }));
+                console.log(`Trying style: ${styleUrl}`);
+                await tryLoadStyle(styleUrl);
+                loadedStyle = styleUrl;
+                console.log(`Style loaded: ${styleUrl}`);
+                break;
             } catch (e) {
-                console.error("Map Init Failed", e);
-                // Try fallback
+                console.warn(`Failed to load ${styleUrl}:`, e);
+            }
+        }        
+        if (!loadedStyle) {
+            throw new Error("No map style available");
+        }
+        
+        // Создаём карту с рабочим стилем
+        map = new maplibregl.Map({
+            container: 'map',
+            style: loadedStyle,
+            center: defaultCenter,
+            zoom: defaultZoom,
+            attributionControl: false,
+            fadeDuration: 0,
+            inertia: false
+        });
+
+        map.on('error', (e) => {
+            console.error("Map Error:", e);
+            if (e.error && e.error.message && e.error.message.includes("WebGL")) {
                 document.getElementById('map').innerHTML = '';
                 mapType = 'leaflet';
                 initLeafletMap();
+                return;
             }
+        });
+        map.on('load', () => {
+            console.log("Map Fully Loaded");
+            map.resize();
+        });
+        // Устанавливаем русский язык для подписей на карте
+map.on('load', () => {
+    // Получаем все слои с текстом
+    const layers = map.getStyle().layers;
+    layers.forEach(layer => {
+        if (layer.layout && layer.layout['text-field']) {
+            // Меняем поле для текста на name:ru (если есть) или name
+            map.setLayoutProperty(layer.id, 'text-field', [
+                'case',
+                ['has', 'name:ru'], ['get', 'name:ru'],
+                ['has', 'name'], ['get', 'name'],
+                ''
+            ]);
         }
+    });
+});
+        map.addControl(new maplibregl.AttributionControl({ compact: true }));   
+             
+    } catch (e) {        console.error("Map Init Failed", e);
+        document.getElementById('map').innerHTML = '';
+        mapType = 'leaflet';
+        initLeafletMap();
+    }
+}
 
-        function initLeafletMap() {
+
+function initLeafletMap() {
             try {
                 // Get Start Location
                 let startLat = 40.7128;
