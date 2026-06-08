@@ -340,6 +340,18 @@ function startClock() {
 
 // Запускаем часы аккуратно, чтобы не мешать функции init() в body
 window.addEventListener('DOMContentLoaded', startClock);
+	
+	vkBridge.send('VKWebAppShowBannerAd', {
+  banner_location: 'bottom' // Положение баннера: 'top' (наверху) или 'bottom' (внизу)
+})
+.then((data) => {
+  if (data.result) {
+    console.log('Баннер успешно отображается');
+  }
+})
+.catch((error) => {
+  console.error('Ошибка при показе баннера:', error);
+});
 </script>
 
   </body>
