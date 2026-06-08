@@ -3,7 +3,16 @@
     // Check querystring first for testing ?lang=es
     var urlParams = new URLSearchParams(window.location.search);
     var lang = urlParams.get('lang');
-
+// Если переводы уже предзагружены, используем их
+if (window.translations && Object.keys(window.translations).length > 0) {
+    window.i18n = {
+        t: function(key, fallback) {
+            return window.translations[key] || fallback || key;
+        }
+    };
+    window.t = window.i18n.t;
+    document.dispatchEvent(new Event('rekindle:i18n:ready'));
+}
     // Then check LocalStorage
     if (!lang) {
         lang = localStorage.getItem('rekindle_language') || 'auto';
