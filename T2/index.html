@@ -103,6 +103,166 @@
         display: none !important;
     }
 }
+   /* ========== ДЛЯ ТЕЛЕФОНОВ В ЛАНДШАФТЕ (ГОРИЗОНТАЛЬНО) ========== */
+@media (orientation: landscape) and (max-height: 550px) {
+    .pc-only-leader { 
+        display: none !important; 
+    }
+
+    #yandex-highscore-side { display: block !important; }
+    #yandex-highscore-top { display: none !important; }
+
+    .game-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        padding: 5px !important;
+        gap: 15px !important;
+    }
+    
+    .canvas-container {
+        height: 92vh !important;
+        max-height: 92vh !important;
+        width: auto !important;
+        margin: 0 !important;
+        min-width: 300px;
+    }
+    
+    #tetris { 
+        width: 100% !important; 
+        height: 100% !important; 
+    }
+    
+    .controls-container {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        width: 240px !important;
+        max-width: 240px !important;
+        height: 92vh !important;
+        padding: 10px !important;
+        gap: 5px !important;
+    }
+    
+    .instructions { display: none !important; }
+    
+    .top-menu { 
+        display: flex !important; 
+        flex-direction: row !important; 
+        flex-wrap: wrap !important; 
+        gap: 4px !important; 
+        width: 100% !important; 
+    }
+    
+    .iksweb { 
+        font-size: 10px !important; 
+        padding: 6px 2px !important; 
+        border-radius: 8px !important; 
+        flex: 1 !important; 
+        min-width: 60px !important; 
+    }
+    
+    .iksweb.start-btn { flex-basis: 100% !important; }
+    
+    .iksweb1 { 
+        width: 32px !important; 
+        height: 28px !important; 
+        border-radius: 8px !important; 
+        margin: 0 auto !important; 
+    }
+    
+    .iksweb1 img { height: 12px !important; }
+    
+    /* 🔥 ОРИГИНАЛЬНЫЙ МОБИЛЬНЫЙ ДЖОЙСТИК ДЛЯ ГОРИЗОНТАЛЬНЫХ ТЕЛЕФОНОВ */
+    .mobile-joystick {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        width: 100% !important;
+        margin-top: auto !important;
+    }
+    
+    /* Крестовина - уменьшенный размер */
+    .d-pad {
+        display: grid !important;
+        grid-template-columns: repeat(3, 38px) !important;
+        grid-template-rows: repeat(3, 38px) !important;
+        background: #191922 !important;
+        border-radius: 50% !important;
+        padding: 3px !important;
+        gap: 0 !important;
+        border: 1px solid #252530 !important;
+    }
+    
+    .d-btn {
+        background: #282836 !important;
+        border: none !important;
+        color: #fff !important;
+        font-size: 12px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 0 #14141a !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .d-btn:active {
+        background: #14141a !important;
+        transform: translateY(2px) !important;
+        box-shadow: none !important;
+    }
+    
+    .d-btn.b-left {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+    }
+    
+    .d-btn.b-down {
+        grid-column: 2 !important;
+        grid-row: 3 !important;
+    }
+    
+    .d-btn.b-right {
+        grid-column: 3 !important;
+        grid-row: 2 !important;
+    }
+    
+    .d-pad-center {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        background: #1e1e28 !important;
+        border-radius: 4px !important;
+    }
+    
+    /* Кнопка поворота - уменьшенная */
+    .rotate-btn {
+        width: 55px !important;
+        height: 55px !important;
+        background: linear-gradient(135deg, #10b981, #047857) !important;
+        border: 1px solid #34d399 !important;
+        border-radius: 50% !important;
+        color: white !important;
+        font-size: 18px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        box-shadow: 0 3px 0 #064e3b !important;
+    }
+    
+    .rotate-btn:active {
+        background: linear-gradient(135deg, #059669, #065f46) !important;
+        transform: translateY(2px) !important;
+        box-shadow: none !important;
+    }
+    
 </style>
 </head>
 <body>
