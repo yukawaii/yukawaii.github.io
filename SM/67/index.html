@@ -4,6 +4,16 @@
 <head>
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+        <script>
+    // Предзагрузка переводов
+    window.translations = {};
+    fetch('locales/ru.json')
+        .then(response => response.json())
+        .then(data => {
+            window.translations = data;
+            console.log('Translations preloaded');
+        });
+</script>
     <script>
         // Принудительно устанавливаем Modern layout
 localStorage.setItem('rekindle_layout', 'new');
