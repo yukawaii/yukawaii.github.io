@@ -227,8 +227,8 @@ body, html {
        font-size: 10px !important;
     }
 }
-  /* Только Surface Duo (физические пиксели) */
-@media screen and (device-width: 540px) and (device-height: 720px) {
+/* Проверка на Surface Duo через ширину и высоту с запасом */
+@media screen and (min-width: 535px) and (max-width: 545px) and (min-height: 715px) and (max-height: 725px) {
     #game-clock {
         position: fixed !important;
         bottom: 2px !important;
