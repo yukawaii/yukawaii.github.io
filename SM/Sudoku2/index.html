@@ -498,6 +498,9 @@ function startClock() {
 }
 window.addEventListener('DOMContentLoaded',startClock);
 if(typeof vkBridge!=='undefined') vkBridge.send('VKWebAppInit').catch(e=>console.log);
+  // Скрываем часы при открытии окна с играми
+$('#gamesPopup').on('popupbeforeposition', function() { $('#game-clock').hide(); });
+$('#gamesPopup').on('popupafterclose', function() { $('#game-clock').show(); });
 </script>
   </body>
 </html>
