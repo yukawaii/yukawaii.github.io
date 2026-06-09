@@ -109,6 +109,7 @@
     padding: 0 !important;
     overflow: hidden !important;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important;
+   z-index: 100000 !important; 
 }
 
 .games-popup .ui-content {
@@ -498,13 +499,7 @@ function startClock() {
 }
 window.addEventListener('DOMContentLoaded',startClock);
 if(typeof vkBridge!=='undefined') vkBridge.send('VKWebAppInit').catch(e=>console.log);
-// Скрываем часы при открытии окна с играми (работает для всех позиций)
-$('#gamesPopup').on('popupbeforeposition', function() { 
-    $('#game-clock').css('visibility', 'hidden');
-});
-$('#gamesPopup').on('popupafterclose', function() { 
-    $('#game-clock').css('visibility', 'visible');
-});
+
 </script>
   </body>
 </html>
