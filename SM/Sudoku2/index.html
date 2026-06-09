@@ -213,6 +213,19 @@ body, html {
     background: #475569;
     transform: scale(1.02);
 }
+
+    @media screen and (max-width: 375px) {
+    #game-clock {
+        position: fixed !important;
+        bottom: auto !important;
+        top: auto !important;
+        margin: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        bottom: 70px !important;  /* Поднять повыше над баннером (баннер обычно 50px высотой) */
+        z-index: 100000 !important;
+    }
+}
 </style>
   </head>
   <body onload="init();" onclick="elsewhere();">
