@@ -13,6 +13,22 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ionic/ionicons.min.css">
   <style>
+    /* Запрещаем скролл на всей странице */
+body, html {
+    overflow: hidden !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: fixed !important;
+    width: 100% !important;
+}
+
+/* Разрешаем скролл только внутри контента, если нужно */
+.ui-content {
+    overflow-y: auto;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+}
 /* Находим вторую таблицу (панель выбора цифр) */
 .ui-content table:nth-of-type(2),
 #id-home table + table {
