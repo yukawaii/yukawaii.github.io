@@ -538,32 +538,40 @@ function share2(){ if(typeof vkBridge!=='undefined') vkBridge.send("VKWebAppShow
 function toggleMusic() { var audio=document.getElementById('game-audio'), button=document.getElementById('music-toggle'); if(audio.paused) audio.play().then(()=>button.className='ion-ios-musical-notes').catch(e=>console.log); else { audio.pause(); button.className='ion-volume-mute'; } }
 
 function init() {
-    var tbl=document.getElementById("grid");
-    for(var i=0;i<9;i++) {
-        var r=tbl.insertRow(-1);
-        r.className="gridRow";
-        for(var j=0;j<9;j++) {
-            Tref[i][j]=r.insertCell(-1);
-            Tref[i][j].className="gridCell";
-            if(i%3==0) Tref[i][j].className+=" topBorder";
-            if(i%3==2) Tref[i][j].className+=" bottomBorder";
-            if(j%3==0) Tref[i][j].className+=" leftBorder";
-            if(j%3==2) Tref[i][j].className+=" rightBorder";
-            Tref[i][j].setAttribute("y",i);
-            Tref[i][j].setAttribute("x",j);
-            Tref[i][j].setAttribute("clickable",0);
-        }
-    }
-    $("#grid").on("click","td",function(e){ clickCell(this); e.stopPropagation(); });
-    for(i=0;i<10;i++) digits[i]=document.getElementById("digit-"+String(i));
-    document.getElementById("digits").style.display="none";
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
-    setTimeout(function(){ getRandomGrid(96); }, 250);
-  showBottomBanner();
+    var tbl = document.getElementById("grid");
+    for (var i = 0; i < 9; i++) {        var r = tbl.insertRow(-1);        r.className = "gridRow";
+        for (var j = 0; j < 9; j++) {            Tref[i][j] = r.insertCell(-1);            Tref[i][j].className = "gridCell";
+            if (i % 3 == 0) Tref[i][j].className += " topBorder";            if (i % 3 == 2) Tref[i][j].className += " bottomBorder";
+            if (j % 3 == 0) Tref[i][j].className += " leftBorder";            if (j % 3 == 2) Tref[i][j].className += " rightBorder";
+            Tref[i][j].setAttribute("y", i);            Tref[i][j].setAttribute("x", j);            Tref[i][j].setAttribute("clickable", 0);        }    }    
+    $("#grid").on("click", "td", function(e) {         clickCell(this);         e.stopPropagation();     });    
+    for (i = 0; i < 10; i++) digits[i] = document.getElementById("digit-" + String(i));    document.getElementById("digits").style.display = "none";    document.getElementById("but1").style.color = "#000";    document.getElementById("but2").style.color = "#B8B8B8";
+    document.getElementById("but3").style.color = "#B8B8B8";    
+    // Запуск игры и баннера
+    setTimeout(function() {         getRandomGrid(96);        showBottomBannerWithRetry();  // Один вызов баннера
+    }, 250);
 }
 
+  function showBottomBannerWithRetry() {
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppShowBannerAd', {
+            banner_location: 'bottom'
+        })
+        .then((data) => {
+            if (data.result) {
+                console.log('Баннер успешно отображён');
+            }
+        })
+        .catch((error) => {
+            // Только при ошибке "No ads" повторяем попытку
+            if (error.error_reason === 'No ads') {
+                console.log('Рекламы нет, повтор через 30 секунд');
+                setTimeout(showBottomBannerWithRetry, 30000);
+            }
+        });
+    }
+}
+  
 function startClock() {
     var clock=document.getElementById('game-clock');
     function update(){ var d=new Date(); clock.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`; }
