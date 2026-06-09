@@ -91,7 +91,13 @@ body, html {
     top: 40px !important;
     right: 5vw !important;
 }
+/* Адаптация для маленьких экранов (вертикальные телефоны) */
+@media screen and (max-width: 500px) {        /* Уменьшаем заголовок */
+    h1 {        font-size: 18px !important;        margin: 5px 0 5px 0 !important;    }    
+       /* Общий контейнер */
+    .ui-content {        padding: 10px 5px !important;    }    
 
+    
 @media screen and (max-width: 1024px) {
    #game-clock {
         position: relative !important;
