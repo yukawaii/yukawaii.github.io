@@ -503,10 +503,12 @@ function clickCell(cell) {
 function hypothesis1() { if(!hyp) { hyp=true; updateButtonsUI(); } }
 function hypothesis2() { for(var i=0;i<hyps.length;i++) hyps[i].style.color=col1; hyps=[]; hyp=false; updateButtonsUI(); }
 function hypothesis3() { for(var i=0;i<hyps.length;i++) { let y=Number(hyps[i].getAttribute("y")), x=Number(hyps[i].getAttribute("x")); T[y][x]=0; hyps[i].innerHTML=""; } hyps=[]; hyp=false; updateButtonsUI(); }
-function restart() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(Number(Tref[i][j].getAttribute("clickable"))==1) { T[i][j]=0; setCell(i,j,0); } hyp=false; updateButtonsUI(); }
-function solve() { myAdd1(); for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]==0) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; } else if(T[i][j]!=Tsol[i][j]) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; Tref[i][j].style.backgroundColor="#FBB"; } hyp=false; updateButtonsUI(); }
-function check() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]!=Tsol[i][j] && T[i][j]!=0) Tref[i][j].style.backgroundColor="#FBB"; }
-function newRandomGrid(nlevel) { $("#newGrid").popup("close"); setTimeout(function() { getRandomGrid(nlevel); }, 250); }
+function restart() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) { if(Number(Tref[i][j].getAttribute("clickable"))==1) { T[i][j]=0; setCell(i,j,0); } Tref[i][j].style.backgroundColor = ""; } hyp=false; updateButtonsUI(); }
+function solve() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]==0) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; } else if(T[i][j]!=Tsol[i][j]) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; Tref[i][j].style.backgroundColor="#FBB"; } hyp=false; updateButtonsUI(); }
+function check() { myAdd1(); for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]!=Tsol[i][j] && T[i][j]!=0) Tref[i][j].style.backgroundColor="#FBB"; }
+function newRandomGrid(nlevel) {     $("#newGrid").popup("close");     for(var i=0;i<9;i++) for(var j=0;j<9;j++) Tref[i][j].style.backgroundColor = ""; 
+    setTimeout(function() { getRandomGrid(nlevel); }, 250); 
+}
 function updateButtonsUI() { 
     if(hyp) { document.getElementById("but1").style.color="#B8B8B8"; document.getElementById("but2").style.color="#000"; document.getElementById("but3").style.color="#000"; }
     else { document.getElementById("but1").style.color="#000"; document.getElementById("but2").style.color="#B8B8B8"; document.getElementById("but3").style.color="#B8B8B8"; }
