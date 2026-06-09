@@ -498,9 +498,13 @@ function startClock() {
 }
 window.addEventListener('DOMContentLoaded',startClock);
 if(typeof vkBridge!=='undefined') vkBridge.send('VKWebAppInit').catch(e=>console.log);
-  // Скрываем часы при открытии окна с играми
-$('#gamesPopup').on('popupbeforeposition', function() { $('#game-clock').hide(); });
-$('#gamesPopup').on('popupafterclose', function() { $('#game-clock').show(); });
+// Скрываем часы при открытии окна с играми (работает для всех позиций)
+$('#gamesPopup').on('popupbeforeposition', function() { 
+    $('#game-clock').css('visibility', 'hidden');
+});
+$('#gamesPopup').on('popupafterclose', function() { 
+    $('#game-clock').css('visibility', 'visible');
+});
 </script>
   </body>
 </html>
