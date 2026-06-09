@@ -349,7 +349,7 @@ function hypothesis2() {
     document.getElementById("but3").style.color="#B8B8B8";
 }
 function hypothesis3() {
-      myAdd1();
+
     var i;
     console.log(hyps);
     for(i=0;i<hyps.length;i++) {
@@ -364,8 +364,7 @@ function hypothesis3() {
     document.getElementById("but2").style.color="#B8B8B8";
     document.getElementById("but3").style.color="#B8B8B8";
 }
-function restart() {
-    myAdd1();
+function restart() {  
     var i,j;
     for(i=0;i<9;i++) {
         for(j=0;j<9;j++) {
