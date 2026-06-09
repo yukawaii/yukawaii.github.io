@@ -12,11 +12,7 @@ var curY = 0;
 var col1 = "#B00";
 var col2 = "#0A85FF";
 vkBridge.send('VKWebAppInit');
-function myAdd1(){
-        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-    .then(data => console.log(data.result))
-    .catch(error => console.log(error));
-    }
+
 function shuffle(array) {
     let counter = array.length;
     while (counter > 0) {
@@ -386,7 +382,7 @@ function newRandomGrid(nlevel) {
 }
 
 function solve() {
-    myAdd1();
+
     for(i=0;i<9;i++) {
         for(j=0;j<9;j++) {
             if (T[i][j]==0) {
@@ -407,7 +403,7 @@ function solve() {
     document.getElementById("but3").style.color="#B8B8B8";
 }
 function check() {
-    myAdd1();
+    
     for(i=0;i<9;i++) {
         for(j=0;j<9;j++) {
             if ((T[i][j] != Tsol[i][j])&&(T[i][j] != 0)) {
