@@ -228,17 +228,18 @@ body, html {
     }
 }
     /* Для Surface Duo (развернутый, 540x720) */
-@media screen and (min-width: 540px) and (max-width: 540px) and (min-height: 720px) and (max-height: 720px) {
+/* Для устройств с соотношением сторон около 4:3 и шириной ~540px */
+@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (min-width: 500px) and (max-width: 600px) {
     #game-clock {
         position: fixed !important;
-        bottom: auto !important;
-        top: auto !important;
-        margin: 0 !important;
+        bottom: 2px !important;
         left: 10% !important;
         transform: translateX(-50%) !important;
-        bottom: 2px !important;
         z-index: 100000 !important;
-        font-size: 10px !important;
+        font-size: 12px !important;
+        top: auto !important;
+        right: auto !important;
+        margin: 0 !important;
     }
 }
 </style>
