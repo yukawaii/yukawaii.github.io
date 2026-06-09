@@ -30,6 +30,7 @@
 }
 .ui-popup-screen {
     z-index: 100000 !important;
+   background-color: rgba(0, 0, 0, 0.6) !important;
 }
 .ui-popup {
     z-index: 100001 !important;
@@ -80,14 +81,14 @@
 
 @media screen and (max-width: 1024px) {
     #game-clock {
-        position: relative !important;
-        top: 0 !important;
-        right: 0 !important;
-        margin: 10px auto !important;
-        display: block !important;
-        width: max-content !important;
-        font-size: 20px !important;
-        padding: 5px 15px !important;
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        left: auto !important;
+        margin: 0 !important;
+        font-size: 18px !important;
+        padding: 5px 12px !important;
+        z-index: 9999 !important;
     }
 }
 
@@ -267,7 +268,7 @@
       </div>
 
       <!-- ========== ВСПЛЫВАЮЩЕЕ ОКНО С КАТАЛОГОМ ИГР ========== -->
-      <div data-role="popup" id="gamesPopup" class="games-popup" data-overlay-theme="b" data-dismissible="true">
+      <div data-role="popup" id="gamesPopup" class="games-popup" data-overlay-theme="a" data-dismissible="true">
           <div class="ui-content">
               <h2>🎮 Другие игры</h2>
               <div class="games-grid-popup">
