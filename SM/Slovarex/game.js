@@ -556,6 +556,18 @@ function initGame() {
     document.getElementById("soundBtn").onclick = toggleSound;
     document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
+    // Таблица лидеров =================
+const leaderboardBtn = document.getElementById("leaderboardBtn");
+if (leaderboardBtn) {
+    leaderboardBtn.onclick = () => {
+        if (typeof top0 === 'function') {
+            top0();
+        } else {
+            console.log("Функция top0 не найдена в App.js");
+        }
+    };
+}
+//========================================================
     
     const modal = document.getElementById("modal");
     const modalNext = document.getElementById("modalNextBtn");
