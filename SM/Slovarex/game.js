@@ -266,6 +266,11 @@ function handleTimeOut() {
     if (gameState.foundWords.size >= need) {
         nextLevel();
     } else {
+        // ========== ОТПРАВКА УРОВНЯ В ВК  ==========
+        if (typeof sendscore === 'function') {
+            sendscore();
+        }
+        // ===================================================================================
         showToast("⏰ Время вышло! Игра окончена.", true);
         gameState.frozen = true;
         updateUI();
@@ -507,6 +512,11 @@ function nextLevel() {
     
     gameState.totalScore += gameState.levelScore + CONFIG.SCORE_BONUS_PER_LEVEL;
     gameState.level++;
+        // ========== ОТПРАВКА УРОВНЯ В ВК ==========
+    if (typeof sendscore === 'function') {
+        sendscore();  // вызов вашей функции
+    }
+    // ===========================================
     
     initLevel();
     updateUI();
