@@ -494,14 +494,27 @@ function toggleSound() {
 }
 
 function restartGame() {
-    if (confirm("Начать игру заново? Весь прогресс будет потерян.")) {
-        gameState.level = 1;
-        gameState.totalScore = 0;
-        gameState.hintsLeft = CONFIG.HINTS_START;
-        initLevel();
-        updateUI();
-        playSound("click");
-    }
+    Swal.fire({
+        title: 'Начать заново?',
+        text: 'Весь прогресс будет потерян',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#ef4444',
+        confirmButtonText: 'Да, начать заново',
+        cancelButtonText: 'Отмена',
+        background: '#fff',
+        borderRadius: '20px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            gameState.level = 1;
+            gameState.totalScore = 0;
+            gameState.hintsLeft = CONFIG.HINTS_START;
+            initLevel();
+            updateUI();
+            playSound("click");
+        }
+    });
 }
 
 function nextLevel() {
