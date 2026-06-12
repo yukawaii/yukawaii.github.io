@@ -177,7 +177,7 @@ function showToast(message, isError = false) {
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
-    }, 2000);
+    }, 4000);
 }
 
 // ========== ЛОГИКА СЛОВ ==========
