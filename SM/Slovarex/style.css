@@ -113,7 +113,7 @@ body {
 /* Базовое слово */
 .base-word-section {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
 }
 
 .base-word-label {
@@ -125,8 +125,8 @@ body {
 }
 
 .base-word {
-    font-size: 32px;
-    font-weight: 800;
+    font-size: 25px;
+    font-weight: 700;
     letter-spacing: 8px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     background-clip: text;

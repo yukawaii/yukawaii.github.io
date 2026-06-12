@@ -577,7 +577,7 @@ body.has-banner .game-container,
     }
     
     .base-word {
-        font-size: 28px;
+        font-size: 24px;
         letter-spacing: 4px;
     }
     
@@ -623,7 +623,7 @@ body.has-banner .game-container,
     .next-level-btn {
         padding: 12px;
         margin-top: 8px;
-        margin-bottom: 60px; /* место под баннер */
+        margin-bottom: 80px; /* место под баннер */
     }
 }
 
