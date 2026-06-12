@@ -53,7 +53,7 @@ getsc();
 
     function top0(){
       getsc();
-          vkBridge.send("VKWebAppShowLeaderBoardBox", {"user_result": score, "global":1})
+          vkBridge.send("VKWebAppShowLeaderBoardBox", {"app_id": 54634418,"user_result": score, "global":1})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
         } 
