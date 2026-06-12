@@ -1,0 +1,451 @@
+/* responsive.css - адаптивность для всех устройств */
+
+/* Базовые переменные */
+:root {
+    --container-padding: 24px;
+    --tile-size: 65px;
+    --tile-font: 28px;
+    --base-word-font: 32px;
+    --base-word-spacing: 8px;
+}
+
+/* Планшеты и маленькие ноутбуки (до 1024px) */
+@media (max-width: 1024px) {
+    :root {
+        --container-padding: 20px;
+        --tile-size: 60px;
+        --tile-font: 26px;
+        --base-word-font: 28px;
+        --base-word-spacing: 6px;
+    }
+    
+    .game-container {
+        max-width: 90%;
+        padding: var(--container-padding);
+    }
+    
+    .stats {
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 8px 16px;
+    }
+    
+    .stat-value {
+        font-size: 22px;
+    }
+}
+
+/* Телефоны (до 768px) */
+@media (max-width: 768px) {
+    :root {
+        --container-padding: 16px;
+        --tile-size: 55px;
+        --tile-font: 24px;
+        --base-word-font: 24px;
+        --base-word-spacing: 4px;
+    }
+    
+    body {
+        padding: 12px;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+    
+    .game-container {
+        max-width: 100%;
+        border-radius: 28px;
+        padding: var(--container-padding);
+    }
+    
+    /* Хедер */
+    .game-header {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    
+    .stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .stat-card {
+        flex: 1;
+        text-align: center;
+        padding: 6px 12px;
+    }
+    
+    .stat-value {
+        font-size: 20px;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .action-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+    
+    /* Базовое слово */
+    .base-word-section {
+        margin-bottom: 20px;
+    }
+    
+    .base-word {
+        font-size: var(--base-word-font);
+        letter-spacing: var(--base-word-spacing);
+        word-break: break-all;
+        line-height: 1.4;
+    }
+    
+    /* Сетка букв */
+    .letters-grid {
+        grid-template-columns: repeat(auto-fit, minmax(var(--tile-size), 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .letter-tile {
+        font-size: var(--tile-font);
+        padding: 12px 0;
+        min-width: 50px;
+    }
+    
+    /* Текущее слово */
+    .current-word-section {
+        padding: 12px;
+    }
+    
+    .current-word {
+        min-height: 50px;
+    }
+    
+    .letter-chip {
+        padding: 6px 12px;
+        font-size: 18px;
+    }
+    
+    /* Панель управления */
+    .control-panel {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .control-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    /* Прогресс */
+    .progress-section {
+        margin-bottom: 20px;
+    }
+    
+    .progress-label {
+        font-size: 12px;
+    }
+    
+    /* Найденные слова */
+    .found-section {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .found-header {
+        font-size: 14px;
+    }
+    
+    .found-word {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    
+    .found-word span {
+        font-size: 10px;
+    }
+    
+    /* Кнопка след уровня */
+    .next-level-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* Тост */
+    .toast {
+        padding: 10px 20px;
+        font-size: 12px;
+        white-space: normal;
+        text-align: center;
+        max-width: 90%;
+    }
+    
+    /* Модалка */
+    .modal-content {
+        padding: 24px;
+        width: 85%;
+    }
+    
+    .modal-content h2 {
+        font-size: 24px;
+    }
+}
+
+/* Маленькие телефоны (до 480px) */
+@media (max-width: 480px) {
+    :root {
+        --container-padding: 12px;
+        --tile-size: 48px;
+        --tile-font: 20px;
+        --base-word-font: 20px;
+        --base-word-spacing: 3px;
+    }
+    
+    .game-container {
+        padding: var(--container-padding);
+        border-radius: 20px;
+    }
+    
+    .stat-card {
+        padding: 4px 8px;
+    }
+    
+    .stat-label {
+        font-size: 9px;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+    
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    .letters-grid {
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+    
+    .letter-tile {
+        font-size: var(--tile-font);
+        border-radius: 14px;
+    }
+    
+    .control-panel {
+        gap: 6px;
+    }
+    
+    .control-btn {
+        padding: 8px 8px;
+        font-size: 11px;
+    }
+    
+    .found-words {
+        max-height: 120px;
+        gap: 6px;
+    }
+    
+    .found-word {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+    
+    .next-level-btn {
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+/* ========== ГОРИЗОНТАЛЬНАЯ ОРИЕНТАЦИЯ ========== */
+
+/* Горизонталь на телефонах (высота меньше ширины) */
+@media (max-width: 896px) and (orientation: landscape) {
+    body {
+        padding: 8px;
+        align-items: center;
+    }
+    
+    .game-container {
+        padding: 12px;
+        border-radius: 20px;
+    }
+    
+    .game-header {
+        margin-bottom: 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .stats {
+        width: auto;
+        gap: 6px;
+    }
+    
+    .stat-card {
+        padding: 4px 10px;
+    }
+    
+    .stat-value {
+        font-size: 18px;
+    }
+    
+    .action-buttons {
+        width: auto;
+    }
+    
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+    
+    .base-word-section {
+        margin-bottom: 12px;
+    }
+    
+    .base-word {
+        font-size: 22px;
+        letter-spacing: 3px;
+    }
+    
+    /* В горизонтали — компактная сетка букв */
+    .letters-grid {
+        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .letter-tile {
+        font-size: 20px;
+        padding: 8px 0;
+    }
+    
+    .current-word-section {
+        padding: 8px 12px;
+    }
+    
+    .current-word {
+        min-height: 40px;
+    }
+    
+    .letter-chip {
+        padding: 4px 10px;
+        font-size: 16px;
+    }
+    
+    .control-panel {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+    
+    .control-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+    
+    .progress-section {
+        margin-bottom: 12px;
+    }
+    
+    .found-section {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .found-words {
+        max-height: 80px;
+    }
+    
+    .next-level-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+/* Горизонталь на маленьких телефонах (до 700px ширина в ландшафте) */
+@media (max-width: 700px) and (orientation: landscape) {
+    .game-container {
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+    
+    .letters-grid {
+        grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
+        gap: 6px;
+    }
+    
+    .letter-tile {
+        font-size: 18px;
+        padding: 6px 0;
+    }
+    
+    .found-words {
+        max-height: 70px;
+    }
+    
+    .control-btn {
+        padding: 5px 6px;
+        font-size: 10px;
+    }
+}
+
+/* ========== ОЧЕНЬ БОЛЬШИЕ ЭКРАНЫ (ПК, 4K) ========== */
+@media (min-width: 1400px) {
+    .game-container {
+        max-width: 800px;
+    }
+    
+    :root {
+        --tile-size: 75px;
+        --tile-font: 32px;
+        --base-word-font: 36px;
+    }
+    
+    .stat-value {
+        font-size: 28px;
+    }
+    
+    .control-btn {
+        padding: 16px 20px;
+        font-size: 16px;
+    }
+}
+
+/* ========== ДЛЯ УСТРОЙСТВ С ЛЕВОЙ РУКОЙ (опционально) ========== */
+@media (max-width: 768px) and (pointer: coarse) {
+    /* Увеличиваем область нажатия для кнопок на сенсорных экранах */
+    .letter-tile,
+    .control-btn,
+    .action-btn,
+    .next-level-btn,
+    .letter-chip {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .letter-tile:active {
+        transform: scale(0.96);
+    }
+    
+    .control-btn:active {
+        transform: scale(0.97);
+    }
+}
+
+/* ========== ДЛЯ ЭКРАНОВ С ВЫСОКОЙ ПЛОТНОСТЬЮ (Retina) ========== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .letter-tile {
+        border-width: 0.5px;
+    }
+    
+    .game-container {
+        border-width: 0.5px;
+    }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Словарекс — составь слова из букв</title>
+    <meta name="description" content="Составь как можно больше слов из заданных букв. Развивай словарный запас и скорость мышления.">
+   <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Хедер -->
+        <div class="game-header">
+            <div class="stats">
+                <div class="stat-card stat-level">
+                    <span class="stat-label">Уровень</span>
+                    <span class="stat-value" id="level">1</span>
+                </div>
+                <div class="stat-card stat-score">
+                    <span class="stat-label">Очки</span>
+                    <span class="stat-value" id="score">0</span>
+                </div>
+                <div class="stat-card stat-time">
+                    <span class="stat-label">Время</span>
+                    <span class="stat-value" id="timer">02:00</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn" id="hintBtn" title="Подсказка">💡 <span id="hintCount">5</span></button>
+                <button class="action-btn" id="soundBtn" title="Звук">🔊</button>
+                <button class="action-btn" id="restartBtn" title="Начать заново">🔄</button>
+            </div>
+        </div>
+
+        <!-- Основное слово -->
+        <div class="base-word-section">
+            <div class="base-word-label">📖 Базовое слово</div>
+            <div class="base-word" id="baseWord">ЗАГРУЗКА</div>
+        </div>
+
+        <!-- Буквы (плитки) -->
+        <div class="letters-grid" id="lettersGrid"></div>
+
+        <!-- Текущее составляемое слово -->
+        <div class="current-word-section">
+            <div class="current-word-label">✍️ Ваше слово</div>
+            <div class="current-word" id="currentWord">
+                <span class="placeholder">Нажмите на буквы...</span>
+            </div>
+        </div>
+
+        <!-- Панель управления -->
+        <div class="control-panel">
+            <button class="control-btn" id="submitBtn">✅ Отправить</button>
+            <button class="control-btn" id="backspaceBtn">⌫ Удалить</button>
+            <button class="control-btn" id="clearBtn">🗑️ Очистить</button>
+            <button class="control-btn" id="shuffleBtn">🎲 Перемешать</button>
+        </div>
+
+        <!-- Прогресс-бар уровня -->
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>📊 Прогресс уровня</span>
+                <span id="progressText">0 / 0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Найденные слова -->
+        <div class="found-section">
+            <div class="found-header">
+                <span>🏆 Найденные слова</span>
+            </div>
+            <div class="found-words" id="foundWords">
+                <div class="empty-message">Слова появятся здесь...</div>
+            </div>
+        </div>
+
+        <!-- Кнопка след. уровня -->
+        <button class="next-level-btn" id="nextLevelBtn" disabled>🔒 Следующий уровень</button>
+    </div>
+
+    <!-- Модалка завершения -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2>🎉 Уровень пройден!</h2>
+            <div class="modal-stats" id="modalStats"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-next" id="modalNextBtn">➡️ Следующий уровень</button>
+                <button class="modal-btn modal-restart" id="modalRestartBtn">🔄 Начать заново</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Тост-уведомления -->
+    <div class="toast" id="toast"></div>
+
+<script src="words.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
