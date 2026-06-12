@@ -17,7 +17,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
   getid();
   function gettoken(){
     vkBridge.send("VKWebAppGetAuthToken", { 
-            "app_id": 8171561, 
+            "app_id": 54634418, 
             "scope": "friends,status"
           })
           .then(data => {console.log(data);
