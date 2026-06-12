@@ -66,12 +66,9 @@ vkBridge.send('VKWebAppShowBannerAd', {  banner_location: 'bottom'  })
 
   banner1();
 
-//поделиться
+//пригласить друзей
 function share2(){
-  vkBridge.send("VKWebAppShowWallPostBox", {
-    "message": "Интересная игра на составление слов!",
-    "attachments": "https://vk.ru/app54634418"
-  });
+  vkBridge.send("VKWebAppShowInviteBox", {})
 }
 
 

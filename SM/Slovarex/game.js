@@ -580,7 +580,7 @@ if (leaderboardBtn) {
         }
     };
 }
-// Кнопка "Поделиться"
+// Кнопка "Пригласить"
 const shareBtn = document.getElementById("shareBtn");
 if (shareBtn) {
     shareBtn.onclick = () => {
