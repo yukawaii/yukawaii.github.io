@@ -556,7 +556,7 @@ function initGame() {
     document.getElementById("soundBtn").onclick = toggleSound;
     document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
-    // Таблица лидеров =================
+// Таблица лидеров =================
 const leaderboardBtn = document.getElementById("leaderboardBtn");
 if (leaderboardBtn) {
     leaderboardBtn.onclick = () => {
@@ -564,6 +564,17 @@ if (leaderboardBtn) {
             top0();
         } else {
             console.log("Функция top0 не найдена в App.js");
+        }
+    };
+}
+// Кнопка "Поделиться"
+const shareBtn = document.getElementById("shareBtn");
+if (shareBtn) {
+    shareBtn.onclick = () => {
+        if (typeof share2 === 'function') {
+            share2();
+        } else {
+            console.log("Функция share2 не найдена в App.js");
         }
     };
 }

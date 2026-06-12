@@ -18,7 +18,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
   function gettoken(){
     vkBridge.send("VKWebAppGetAuthToken", { 
             "app_id": 54634418, 
-            "scope": "friends,status"
+            "scope": "friends"
           })
           .then(data => {console.log(data);
             token=data.access_token;
@@ -28,7 +28,6 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     .catch(error => console.log(error)); }
     
     gettoken();  
-
  //первичная отправка очков в вк, проверка на 0
     function sendscore0(){        score0=1;        setTimeout(function (){        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
      {"client_secret":"vTHFnjvA35iL1nEpMSTr",      "user_id":id,      "activity_id":1,       "value":score0,        "v": "5.131",        "global": 1,    "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
@@ -66,6 +65,14 @@ vkBridge.send('VKWebAppShowBannerAd', {  banner_location: 'bottom'  })
   });}
 
   banner1();
+
+//поделиться
+function share2(){
+  vkBridge.send("VKWebAppShowWallPostBox", {
+    "message": "Интересная игра на составление слов!",
+    "attachments": "https://vk.ru/app54634418"
+  });
+}
 
 
 
