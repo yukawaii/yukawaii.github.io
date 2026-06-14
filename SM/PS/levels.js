@@ -23,17 +23,17 @@ const LEVELS_DATA = [
 
 // КАТЕГОРИИ (первое окно выбора)
 const CATEGORIES = [
-    { id: 0, icon: "🌲", title: "Лесные жители", themeIndex: 0, levelsCount: 20 },
-    { id: 1, icon: "🍎", title: "Фруктовый рай", themeIndex: 1, levelsCount: 20 },
-    { id: 2, icon: "🌿", title: "Луговые растения", themeIndex: 2, levelsCount: 20 },
-    { id: 3, icon: "🚀", title: "Космические объекты", themeIndex: 3, levelsCount: 20 },
-    { id: 4, icon: "🦁", title: "Животные саванны", themeIndex: 4, levelsCount: 20 },
+    { id: 0, icon: "🌲", title: "Лес", themeIndex: 0, levelsCount: 20 },
+    { id: 1, icon: "🍎", title: "Фрукты", themeIndex: 1, levelsCount: 20 },
+    { id: 2, icon: "🌿", title: "Луга", themeIndex: 2, levelsCount: 20 },
+    { id: 3, icon: "🚀", title: "Космос", themeIndex: 3, levelsCount: 20 },
+    { id: 4, icon: "🦁", title: "Саванна", themeIndex: 4, levelsCount: 20 },
     { id: 5, icon: "📱", title: "Техника", themeIndex: 5, levelsCount: 20 },
     { id: 6, icon: "📚", title: "Школа", themeIndex: 6, levelsCount: 20 },
     { id: 7, icon: "💼", title: "Работа", themeIndex: 7, levelsCount: 20 },
     { id: 8, icon: "🌍", title: "Страны", themeIndex: 8, levelsCount: 20 },
     { id: 9, icon: "🎮", title: "Игры", themeIndex: 9, levelsCount: 20 },
-    { id: 10, icon: "🍕", title: "Вкусная еда", themeIndex: 10, levelsCount: 20 },
+    { id: 10, icon: "🍕", title: "Вкусное", themeIndex: 10, levelsCount: 20 },
     { id: 11, icon: "👕", title: "Одежда", themeIndex: 11, levelsCount: 20 },
     { id: 12, icon: "⚽", title: "Спорт", themeIndex: 12, levelsCount: 20 },
     { id: 13, icon: "🎵", title: "Музыка", themeIndex: 13, levelsCount: 20 }
@@ -331,7 +331,7 @@ if (themeIndex === 12) { // Спорт
     if (levelNum === 6) return ["БИЛЬЯРД", "СНОКЕР", "ПУЛ", "БОУЛИНГ", "ГОЛЬФ"];
     if (levelNum === 7) return ["ШАХМАТЫ", "ШАШКИ", "НАРДЫ", "ГО", "ПОКЕР"];
     if (levelNum === 8) return ["АЛЬПИНИЗМ", "ФИНИШ", "ТУРИЗМ", "ОХОТА", "РЫБАЛКА"];
-    if (levelNum === 9) return ["БАДМИНТОН", "ТЕННИС", "СКВОШ", "ПАДЕЛЬ", "ТРАССА"];
+    if (levelNum === 9) return ["БАДМИНТОН", "ТЕННИС", "СКВОШ", "ПАДЕЛ", "ТРАССА"];
     if (levelNum === 10) return ["ПРИЗ", "СТРЕЛЬБА", "ЛУК", "АРБАЛЕТ", "ГОЛ"];
     if (levelNum === 11) return ["КУБОК", "ЗАЛ", "ПАРКУР", "АКРОБАТИКА", "ЙОГА"];
     if (levelNum === 12) return ["БОКС", "БЕГ", "КЁРЛИНГ", "БАНДИ", "РЕКОРД"];

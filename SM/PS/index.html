@@ -2,10 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+      <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ГдеЛиса | Найди слова по буквам</title>
     <style>
+
+        
         * {
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -29,6 +32,7 @@
     align-items: center;
     font-family: 'Segoe UI', 'Poppins', 'Montserrat', system-ui, sans-serif;
     overflow: hidden;
+      padding-bottom: 90px !important;
 }
 
  .game-container {
@@ -60,7 +64,7 @@
             margin-bottom: 25px;
             color: #fef0cf;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 3px;
         }
 
         .level-badge {
@@ -143,24 +147,17 @@
     box-shadow: 0 2px 0 #235b10;
 }
 
-.cell:active {
-    transform: scale(0.97);
-}
-
-     
-
+.cell:active {    transform: scale(0.97);}   
         .cell.wrong-flash {
             background: #e06c6c;
             box-shadow: 0 2px 0 #973c3c;
             animation: shakeAnim 0.2s ease-in-out 0s 2;
         }
-
         @keyframes shakeAnim {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-4px); }
             75% { transform: translateX(4px); }
         }
-
         .words-container {
             background: #ede1ca;
             border-radius: 38px;
@@ -240,6 +237,9 @@
         }
 
        @media (max-width: 550px) {
+            body {
+        padding-bottom: 90px !important;
+    }
     .game-card {
         padding: 10px 12px 15px;
     }
@@ -289,6 +289,16 @@
     div[style*="max-height:300px"] {
         max-height: 250px !important;
     }
+  #categoriesGrid button {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.5rem !important;
+    }
+    #categoriesGrid {
+        gap: 6px !important;
+    }
+
+
 }
     .words-container {
     display: none;
@@ -304,7 +314,6 @@
     box-shadow: 0 4px 0 #2e4a1a;
 }
 /* Модальное окно правил */
-/* Модальное окно */
 .modal-rules {
     display: none;
     position: fixed;
@@ -316,6 +325,7 @@
     z-index: 9999;
     justify-content: center;
     align-items: center;
+
 }
 
 .modal-rules.show {
@@ -378,6 +388,9 @@
     to { transform: scale(1); opacity: 1; }
 }
 @media (max-width: 480px) {
+                body {
+        padding-bottom: 90px !important;
+    }
     #categoriesGrid button {
         width: 60px !important;
         height: 60px !important;
@@ -389,6 +402,9 @@
 }
 /* Горизонтальная ориентация телефонов - только уменьшение кнопок */
 @media (max-width: 767px) and (orientation: landscape) {
+    body {
+        padding-bottom: 100px !important;
+    }
         
     #categoriesGrid button span {
         font-size: 0.55rem !important;
@@ -402,12 +418,11 @@
 }
 /* Фикс для модальных окон на горизонтальных телефонах */
 @media (max-width: 767px) and (orientation: landscape) {
-    div[style*="border-radius:48px"] {
-        max-height: 85vh !important;
-        overflow-y: auto !important;
-        padding: 12px !important;
+
+                body {
+        padding-bottom: 90px !important;
     }
-    
+
     #levelsGrid {
         gap: 8px !important;
     }
@@ -450,6 +465,38 @@
         font-size: 1.2rem !important;
     }
 }
+
+/* Отступ снизу для модальных окон */
+div[style*="position:fixed"] {
+    padding-bottom: 90px !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+    div[style*="position:fixed"][style*="z-index"] {
+        padding-bottom: 100px !important;
+        align-items: flex-start !important;
+        padding-top: 30px !important;
+    }
+}
+/* Фикс для ПК — поле не должно уезжать за экран */
+@media (min-width: 768px) {
+    .grid {
+        gap: 6px;
+        padding: 15px;
+    }
+    
+    .cell {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+    
+    .game-container {
+        max-width: 700px;
+    }
+}
+
     </style>
     <script src="levels.js"></script>
 </head>
@@ -461,8 +508,10 @@
             <div class="score-panel">
                 <span>🔍 <span id="foundCounter">0</span>/<span id="totalCounter">0</span></span>
             </div>
-         <button id="rulesBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.8rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;">❓</button>
-       <button id="levelSelectBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.8rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer;">📋</button>
+           <button id="rulesBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">❓</button>
+<button id="levelSelectBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">📋</button>
+<button id="galaxyBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">⭐</button>
+       
         </div>
 
 
@@ -481,6 +530,7 @@
 </div>
 
 <script>
+    let totalStars = 0; // Общее количество звёзд
     let currentLevelId = 1; 
   // Прогресс игрока (сохраняем в localStorage)
 function getCompletedLevels() {
@@ -495,15 +545,15 @@ function saveCompletedLevel(levelId) {
         completed.push(levelId);
         localStorage.setItem('gameCompletedLevels', JSON.stringify(completed));
         console.log(`✅ Уровень ${levelId} сохранён!`);
+         // ОБНОВЛЯЕМ ОБЩЕЕ КОЛИЧЕСТВО ЗВЁЗД
+        updateTotalStars();
         
         // Если модальное окно открыто — обновляем его
         const modal = document.getElementById('dynamicLevelModal');
         if (modal && modal.style.display !== 'none') {
             // Перерисовываем текущее окно
             const currentCategory = document.querySelector('#levelsGrid')?.parentElement?.parentElement;
-            if (currentCategory) {
-                // Обновляем
-            }
+
         }
     }
 }
@@ -556,43 +606,40 @@ const CATEGORIES_PER_PAGE = 4;
 // Модальное окно выбора категории (круглые иконки)
 function showLevelSelectModal() {
     // Для горизонтальных телефонов добавляем класс
-    const isLandscape = window.matchMedia("(orientation: landscape) and (max-width: 767px)").matches;
-    
+    const isLandscape = window.matchMedia("(orientation: landscape) and (max-width: 767px)").matches;        
     const oldModal = document.getElementById('dynamicLevelModal');
-    if (oldModal) oldModal.remove();
-    
+    if (oldModal) oldModal.remove();    
     const modalDiv = document.createElement('div');
 modalDiv.id = 'dynamicLevelModal';
 modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
 
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;box-shadow:0 20px 40px rgba(0,0,0,0.3);';
+    contentDiv.style.cssText = 'margin-bottom:40px;background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;box-shadow:0 20px 40px rgba(0,0,0,0.3);';
     
-    contentDiv.innerHTML = `
-        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0 0 15px;">📚 Выбери тему</h3>
-        <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin:20px 0;padding:10px;"></div>
-        <button id="closeCatModal" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:10px;">Закрыть</button>
-    `;
+ contentDiv.innerHTML = `
+    <h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 10px;">📚 Выбери тему</h3>
+    <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:15px 0;padding:5px;"></div>
+    <button id="closeCatModal" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">Закрыть</button>
+`;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
     const grid = document.getElementById('categoriesGrid');
     
-    // Категории с иконками и названиями (для подсказки)
-    const categoriesWithIcons = [
-        { id: 0, icon: "🌲", name: "Лес", title: "Лесные жители" },
-        { id: 1, icon: "🍎", name: "Фрукты", title: "Фруктовый рай" },
-        { id: 2, icon: "🌿", name: "Трава", title: "Луговые растения" },
-        { id: 3, icon: "🚀", name: "Космос", title: "Космические объекты" },
-        { id: 4, icon: "🦁", name: "Сафари", title: "Животные саванны" }
-    ];
-    
+ // Берём категории из глобального массива CATEGORIES
+const categoriesWithIcons = CATEGORIES.map(cat => ({
+    id: cat.id,
+    icon: cat.icon,
+    name: cat.title,
+    title: cat.title,
+    themeIndex: cat.themeIndex
+}));
     categoriesWithIcons.forEach(cat => {
         const btn = document.createElement('button');
       //  btn.innerHTML = `${cat.icon}<br><span style="font-size:0.7rem; margin-top:5px;">${cat.name}</span>`;
       btn.innerHTML = `${cat.icon}`;
-       btn.style.cssText = 'background:#517a2f;color:white;border:none;border-radius:50%;width:70px;height:70px;font-size:2.2rem;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;transition:0.05s linear;display:flex;align-items:center;justify-content:center;';
+     btn.style.cssText = 'background:#B5C9A2;color:#4A5D3E;border:none;border-radius:50%;width:55px;height:55px;font-size:1.8rem;cursor:pointer;box-shadow:0 2px 0 #8FA87D;transition:0.05s linear;display:flex;align-items:center;justify-content:center;';
         btn.onmouseenter = () => btn.style.transform = 'scale(1.05)';
         btn.onmouseleave = () => btn.style.transform = 'scale(1)';
         btn.onclick = () => {
@@ -1137,7 +1184,7 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
     function showMessage(msg, duration = 1700) {
         infoMsgDiv.innerHTML = msg;
         if (duration) setTimeout(() => {
-            if (infoMsgDiv.innerHTML === msg) infoMsgDiv.innerHTML = '🎯 Кликай на буквы по порядку (рядом по горизонтали/вертикали)';
+            if (infoMsgDiv.innerHTML === msg) infoMsgDiv.innerHTML = '🎯 Нажимай на буквы!';
         }, duration);
     }
     
@@ -1374,9 +1421,18 @@ nextLevelBtn.addEventListener('click', () => {
         document.body.addEventListener('click', () => {
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         }, { once: true });
+         // ПОКАЗЫВАЕМ ПРИВЕТСТВЕННУЮ ИСТОРИЮ (только 1 раз)
+    showWelcomeStory();
          // Загружаем первый уровень (ID = 1)
     loadLevelById(1);
     currentLevelIdx = 0;
+    }
+    // Загружаем общее количество звёзд из localStorage
+    const savedStars = localStorage.getItem('totalStars');
+    if (savedStars) {
+        totalStars = parseInt(savedStars);
+    } else {
+        updateTotalStars(); // если нет сохранённых — пересчитываем
     }
    
 // Модальное окно правил
@@ -1450,7 +1506,307 @@ function showConfetti() {
         });
     }, 250);
 } 
-  
+
+
+
+// Проверка первого запуска ===== начало приветственного сюжета
+// Показ сюжетного окна (первый раз - полная история, потом - короткое напоминание)
+function showWelcomeStory() {
+    const hasSeenFullStory = localStorage.getItem('hasSeenFullStory');
+    
+    // Если полную историю ещё не видел - показываем 4 слайда
+    if (!hasSeenFullStory) {
+        let currentSlide = 0;
+        const slides = [
+            {
+                icon: "🌌",
+                title: "Галактика в опасности!",
+                text: "Звёзды меркнут, созвездия исчезают... Тёмная энергия поглощает космос!",
+                button: "🌠 Что случилось?"
+            },
+            {
+                icon: "🔍",
+                title: "Потерянные слова",
+                text: "Древние руны-слова, хранившие баланс, рассыпались по всей вселенной. Без них галактика погибнет!",
+                button: "📖 Как помочь?"
+            },
+            {
+                icon: "✨",
+                title: "Твоя миссия",
+                text: "Каждый день находи спрятанные слова в филвордах. Каждое найденное слово возвращает звезду на небо!",
+                button: "⭐ Что я получу?"
+            },
+            {
+                icon: "🏆",
+                title: "Спаси галактику!",
+                text: "Собирай слова ежедневно, восстанавливай созвездия и становись Хранителем Вселенной! 🌟",
+                button: "🚀 Спасти галактику!"
+            }
+        ];
+        
+        const modalDiv = document.createElement('div');
+        modalDiv.id = 'storyModal';
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
+        
+        function updateSlide() {
+            const slide = slides[currentSlide];
+            contentDiv.innerHTML = `
+                <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
+                <h3 style="color:#2c3e2b;font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
+                <p style="color:#3a3220;font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+                    ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:#8b5a2a;color:white;border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
+                    <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? '#ffa54d' : '#d4c3a4'};display:inline-block;"></span>`).join('')}</div>
+                    <button id="storyNextBtn" style="background:#517a2f;color:white;border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
+                </div>
+            `;
+            
+            const nextBtn = contentDiv.querySelector('#storyNextBtn');
+            if (nextBtn) {
+                nextBtn.onclick = () => {
+                    if (currentSlide === slides.length - 1) {
+                        modalDiv.remove();
+                        localStorage.setItem('hasSeenFullStory', 'true');
+                    } else {
+                        currentSlide++;
+                        updateSlide();
+                    }
+                };
+            }
+            
+            const prevBtn = contentDiv.querySelector('#storyPrevBtn');
+            if (prevBtn) {
+                prevBtn.onclick = () => {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateSlide();
+                    }
+                };
+            }
+        }
+        
+        updateSlide();
+        modalDiv.appendChild(contentDiv);
+        document.body.appendChild(modalDiv);
+        
+        modalDiv.onclick = (e) => {
+            if (e.target === modalDiv && currentSlide === slides.length - 1) {
+                modalDiv.remove();
+                localStorage.setItem('hasSeenFullStory', 'true');
+            }
+        };
+        return;
+    }
+    
+    // ---------- КОРОТКОЕ ОКНО ДЛЯ ПОВТОРНЫХ ЗАПУСКОВ ----------
+    const shortModal = document.createElement('div');
+    shortModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    
+    const shortContent = document.createElement('div');
+    shortContent.style.cssText = 'background:#fff8ec;border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
+    
+    shortContent.innerHTML = `
+        <div style="font-size:4rem;margin-bottom:10px;">🚀</div>
+        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0 0 10px;">Снова в деле!</h3>
+        <p style="color:#3a3220;font-size:1rem;line-height:1.5;">Галактика ждёт твоего спасения!<br>Находи слова и возвращай звёзды ✨</p>
+        <button id="shortStartBtn" style="background:#517a2f;color:white;border:none;border-radius:50px;padding:12px 30px;font-size:1.1rem;font-weight:bold;margin-top:20px;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;">Вперёд! ⭐</button>
+    `;
+    
+    shortModal.appendChild(shortContent);
+    document.body.appendChild(shortModal);
+    
+    const startBtn = shortContent.querySelector('#shortStartBtn');
+    startBtn.onclick = () => shortModal.remove();
+    shortModal.onclick = (e) => { if (e.target === shortModal) shortModal.remove(); };
+}
+//================конец приветственного сюжета
+  // Подсчёт звёзд по галактикам (категориям)
+function getGalaxyStars() {
+    const completedLevels = getCompletedLevels();
+    const stars = {};
+    
+    CATEGORIES.forEach(cat => {
+        const categoryLevels = getLevelsByCategory(cat.id);
+        let completedCount = 0;
+        categoryLevels.forEach(level => {
+            if (completedLevels.includes(level.id)) {
+                completedCount++;
+            }
+        });
+        // За каждый пройденный уровень = 5 звёзд
+        stars[cat.id] = {
+            totalStars: completedCount * 5,
+            maxStars: categoryLevels.length * 5,
+            completedLevels: completedCount,
+            totalLevels: categoryLevels.length
+        };
+    });
+    return stars;
+}
+
+
+// Модальное окно галактик
+function showGalaxyMap() {
+    const stars = getGalaxyStars();
+    
+    const modalDiv = document.createElement('div');
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = 'margin-bottom: 90px;background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+    
+  let galaxiesHtml = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
+        <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:#8b5a2a;padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+`;
+    galaxiesHtml += '<div style="display:flex;flex-direction:column;gap:12px;">';
+    
+    CATEGORIES.forEach(cat => {
+        const starData = stars[cat.id];
+        const percent = (starData.totalStars / starData.maxStars) * 100;
+        galaxiesHtml += `
+            <div class="galaxy-item" data-cat-id="${cat.id}" style="background:#ede1ca;border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : '#d4c3a4'};">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-size:2rem;">${cat.icon}</span>
+                        <div style="text-align:left;">
+                            <div style="font-weight:bold;color:#2c3e2b;">${cat.title}</div>
+                            <div style="font-size:0.8rem;color:#6B5B4E;">⭐ ${starData.totalStars} / ${starData.maxStars} звёзд</div>
+                            <div style="font-size:0.7rem;color:#6B5B4E;">📚 ${starData.completedLevels} / ${starData.totalLevels} уровней</div>
+                        </div>
+                    </div>
+                    <div style="font-size:1.5rem;">➡️</div>
+                </div>
+                <div style="background:#d4c3a4;border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
+                    <div style="width:${percent}%;background:#ffa54d;height:100%;border-radius:20px;"></div>
+                </div>
+            </div>
+        `;
+    });
+    
+    galaxiesHtml += '</div><button id="closeGalaxyBtn" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>';
+    
+    contentDiv.innerHTML = galaxiesHtml;
+    modalDiv.appendChild(contentDiv);
+    document.body.appendChild(modalDiv);
+    
+    // Добавляем обработчики клика по галактикам
+    document.querySelectorAll('.galaxy-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const catId = parseInt(item.getAttribute('data-cat-id'));
+            modalDiv.remove(); // закрываем текущее окно перед открытием нового
+            showGalaxyDetails(catId);
+        });
+    });
+    
+    // Правильный обработчик для кнопки Закрыть
+    const closeBtn = document.getElementById('closeGalaxyBtn');
+    if (closeBtn) {
+        closeBtn.onclick = (e) => {
+            e.stopPropagation();
+            modalDiv.remove();
+        };
+    }
+    // Обработчик для крестика
+const crossBtn = document.getElementById('closeGalaxyCross');
+if (crossBtn) {
+    crossBtn.onclick = (e) => {
+        e.stopPropagation();
+        modalDiv.remove();
+    };
+}
+    
+    // Закрытие по клику на фон
+    modalDiv.onclick = (e) => { 
+        if (e.target === modalDiv) modalDiv.remove(); 
+    };
+}
+
+// Детали галактики
+function showGalaxyDetails(categoryId) {
+    const category = CATEGORIES.find(c => c.id === categoryId);
+    const stars = getGalaxyStars();
+    const starData = stars[categoryId];
+    
+    const modalDiv = document.createElement('div');
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;';
+    
+    // Генерация звёзд (визуально)
+    let starsHtml = '';
+    const totalStars = starData.maxStars;
+    const earnedStars = starData.totalStars;
+    
+    for (let i = 0; i < totalStars; i++) {
+        if (i < earnedStars) {
+            starsHtml += '<span style="font-size:1rem;color:#ffd700;">⭐</span>';
+        } else {
+            starsHtml += '<span style="font-size:1.3rem;color:#d4c3a4;">☆</span>';
+        }
+        if ((i + 1) % 10 === 0) starsHtml += '<br>';
+    }
+    
+    contentDiv.innerHTML = `
+        <div style="font-size:3rem;">${category.icon}</div>
+        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:5px 0;">${category.title}</h3>
+        <div style="background:#ede1ca;border-radius:30px;padding:15px;margin:15px 0;">
+            <div style="font-size:2rem;color:#ffa54d;">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
+            <div style="font-size:0.9rem;color:#6B5B4E;">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
+        </div>
+        <div style="max-height:150px;overflow-y:auto;padding:3px;">
+            ${starsHtml}
+        </div>
+        <button id="closeDetailBtn" style="background:#517a2f;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
+    `;
+    
+    modalDiv.appendChild(contentDiv);
+    document.body.appendChild(modalDiv);
+    
+    document.getElementById('closeDetailBtn').onclick = () => {
+        modalDiv.remove();
+        showGalaxyMap();
+    };
+    
+    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
+}
+const galaxyBtn = document.getElementById('galaxyBtn');
+if (galaxyBtn) {
+    galaxyBtn.onclick = () => showGalaxyMap();
+}
+// Подсчёт и обновление общего количества звёзд
+function updateTotalStars() {
+    const stars = getGalaxyStars();
+    let newTotal = 0;
+    for (let catId in stars) {
+        newTotal += stars[catId].totalStars;
+    }
+    totalStars = newTotal;
+    console.log(`✨ Всего звёзд: ${totalStars}`);
+    
+    // Сохраняем в localStorage для таблицы лидеров
+    localStorage.setItem('totalStars', totalStars);
+    
+    // Можно обновить отображение на иконке звезды (опционально)
+    const galaxyBtn = document.getElementById('galaxyBtn');
+    if (galaxyBtn) {
+        galaxyBtn.setAttribute('data-stars', totalStars);
+        galaxyBtn.title = `✨ ${totalStars} звёзд`;
+    }
+    return totalStars;
+}
+// Функция для получения общего количества звёзд
+function getTotalStars() {
+    return totalStars;
+}
+//===================конец функции галактик
     init();
 </script>
 
