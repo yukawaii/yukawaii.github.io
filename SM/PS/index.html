@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ГдеЛиса | Найди слова по буквам</title>
     <style>
@@ -848,23 +849,12 @@ function tryPlaceWord(word, tempGrid, usedSet, gridSizeVal, preferredDirection) 
 }
     
 function generateLevel(themeIndex, customWords, retryCount = 0) {
-    const MAX_RETRIES = 10;
+    const MAX_RETRIES = 15;
     const theme = LEVELS_DATA[themeIndex % LEVELS_DATA.length];
     const gridSizeVal = theme.size;
     let wordsToPlace = [...customWords];
     
-    // Сортируем длинные слова первыми
     wordsToPlace.sort((a,b) => b.length - a.length);
-    
-    // Проверяем, что все слова не длиннее сетки
-    for (let word of wordsToPlace) {
-        if (word.length > gridSizeVal) {
-            console.error(`Слово "${word}" длиннее сетки (${gridSizeVal})`);
-            if (retryCount < MAX_RETRIES) {
-                return generateLevel(themeIndex, customWords, retryCount + 1);
-            }
-        }
-    }
     
     let tempGrid = Array(gridSizeVal).fill().map(() => Array(gridSizeVal).fill(null));
     let positions = new Map();
@@ -878,8 +868,6 @@ function generateLevel(themeIndex, customWords, retryCount = 0) {
             positions.set(word, result);
         } else {
             allPlaced = false;
-         
-           console.warn(`Не удалось разместить "${word}", попытка ${retryCount + 1}/${MAX_RETRIES}`);
             break;
         }
     }
@@ -889,14 +877,12 @@ function generateLevel(themeIndex, customWords, retryCount = 0) {
         return generateLevel(themeIndex, customWords, retryCount + 1);
     }
     
-    // Финальная попытка — принудительное размещение
+    // Принудительное размещение
     if (!allPlaced) {
-        console.warn(`Принудительное размещение оставшихся слов`);
         for (let i = 0; i < wordsToPlace.length; i++) {
             const word = wordsToPlace[i];
             if (!positions.has(word)) {
                 let forced = false;
-                // Горизонтально
                 for (let r = 0; r < gridSizeVal && !forced; r++) {
                     for (let c = 0; c <= gridSizeVal - word.length; c++) {
                         let can = true;
@@ -916,7 +902,6 @@ function generateLevel(themeIndex, customWords, retryCount = 0) {
                         }
                     }
                 }
-                // Вертикально
                 if (!forced) {
                     for (let c = 0; c < gridSizeVal && !forced; c++) {
                         for (let r = 0; r <= gridSizeVal - word.length; r++) {
@@ -938,31 +923,30 @@ function generateLevel(themeIndex, customWords, retryCount = 0) {
                         }
                     }
                 }
-                if (!forced) {
-                    console.error(`❌ КРИТИЧЕСКАЯ ОШИБКА: слово "${word}" не разместилось!`);
-                }
             }
         }
     }
     
-    // Заполняем пустые клетки случайными буквами
+    // Заполняем пустые клетки
     for (let i = 0; i < gridSizeVal; i++) {
         for (let j = 0; j < gridSizeVal; j++) {
             if (tempGrid[i][j] === null) {
-                const randLetter = RUS_LETTERS[Math.floor(Math.random() * RUS_LETTERS.length)];
-                tempGrid[i][j] = randLetter;
+                tempGrid[i][j] = RUS_LETTERS[Math.floor(Math.random() * RUS_LETTERS.length)];
             }
         }
     }
     
-    // Статистика
-    let horiz = 0, vert = 0;
-    for (let [word, info] of positions) {
-        if (info.direction === 'H') horiz++;
-        else vert++;
+    // ФИНАЛЬНАЯ ПРОВЕРКА: все ли слова на месте
+    for (let word of wordsToPlace) {
+        if (!positions.has(word)) {
+            console.error(`❌ Слово "${word}" не разместилось! Перегенерация...`);
+            if (retryCount < MAX_RETRIES) {
+                return generateLevel(themeIndex, customWords, retryCount + 1);
+            }
+        }
     }
- //   console.log(`📊 Уровень создан: горизонтальных: ${horiz}, вертикальных: ${vert}`);
     
+    console.log(`✅ Уровень создан: ${wordsToPlace.length} слов размещено`);
     return { grid: tempGrid, size: gridSizeVal, words: wordsToPlace, positions };
 }
 
@@ -1168,6 +1152,9 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
                 // проверка победы
                 if (foundWordsSet.size === levelWords.length) {
                     showMessage(`🏆 ПОБЕДА! Уровень пройден! Переходи дальше 🏆`, 2500);
+                       // ЗАПУСКАЕМ КОНФЕТТИ
+    showConfetti();
+
                     playSuccessSound();
 // СОХРАНЯЕМ ПРОГРЕСС
     saveCompletedLevel(levelData.id);
@@ -1202,7 +1189,7 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
         }
     }
     
-    // Обработка клика по клетке
+  
 // Обработка клика по клетке
 function onCellClick(row, col) {
     playTapSound();
@@ -1280,7 +1267,9 @@ function onCellClick(row, col) {
     nextBtn.disabled = false;
     nextBtn.style.opacity = '1';
     nextBtn.style.cursor = 'pointer';
-}
+     // ЗАПУСКАЕМ КОНФЕТТИ
+    showConfetti();
+      }
                 } else {
                     // Слово собрано, но порядок не тот
                     playErrorTone();
@@ -1388,7 +1377,38 @@ if (rulesButton) {
         };
     };
 }
-    
+   // Функция для запуска конфетти
+function showConfetti() {
+    const duration = 3000; // 3 секунды
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000, colors: ['#FFD700', '#FFA54D', '#6B9C3F', '#FF6B6B', '#4ECDC4'] };
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        
+        // Конфетти с двух сторон
+        confetti({
+            ...defaults,
+            particleCount: Math.floor(particleCount),
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        });
+        confetti({
+            ...defaults,
+            particleCount: Math.floor(particleCount),
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        });
+    }, 250);
+} 
   
     init();
 </script>
