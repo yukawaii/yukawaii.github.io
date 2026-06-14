@@ -737,56 +737,97 @@ if (levelSelectBtn) {
     
     // --- Звуки (Web Audio) ---
     let audioCtx = null;
-    function playTapSound() {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+   function playTapSound() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 880;
+        gain.gain.value = 0.08; // тише (было 0.12)
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+        osc.stop(audioCtx.currentTime + 0.1);
+    } catch(e) {}
+}
+    
+function playSuccessSound() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        const now = audioCtx.currentTime;
+        
+        // Мажорный аккорд: До-Ми-Соль (C-E-G)
+        const notes = [523.25, 659.25, 783.99]; // До, Ми, Соль
+        
+        notes.forEach((freq, index) => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.type = 'sine';
-            osc.frequency.value = 860;
-            gain.gain.value = 0.12;
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
-            osc.stop(audioCtx.currentTime + 0.18);
-        } catch(e) {}
-    }
+            osc.frequency.value = freq;
+            gain.gain.value = 0.15;
+            
+            // Каждая нота со сдвигом по времени
+            const startTime = now + index * 0.1;
+            osc.start(startTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.4);
+            osc.stop(startTime + 0.4);
+        });
+        
+        // Добавляем верхнюю ноту для радости (Си)
+        const oscHigh = audioCtx.createOscillator();
+        const gainHigh = audioCtx.createGain();
+        oscHigh.connect(gainHigh);
+        gainHigh.connect(audioCtx.destination);
+        oscHigh.type = 'sine';
+        oscHigh.frequency.value = 987.77; // Си
+        gainHigh.gain.value = 0.12;
+        oscHigh.start(now + 0.2);
+        gainHigh.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        oscHigh.stop(now + 0.6);
+        
+    } catch(e) { console.log("Звук не поддерживается"); }
+}
     
-    function playSuccessSound() {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.type = 'triangle';
-            osc.frequency.value = 1080;
-            gain.gain.value = 0.2;
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.35);
-            osc.stop(audioCtx.currentTime + 0.3);
-        } catch(e) {}
-    }
-    
-    function playErrorTone() {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.type = 'sawtooth';
-            osc.frequency.value = 520;
-            gain.gain.value = 0.1;
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
-            osc.stop(audioCtx.currentTime + 0.2);
-        } catch(e) {}
-    }
+  function playErrorTone() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        const now = audioCtx.currentTime;
+        
+        // Два коротких пика вниз
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 440;
+        gain.gain.value = 0.15;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+        osc.stop(now + 0.15);
+        
+        // Вторая нота ниже
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.value = 349.23;
+        gain2.gain.value = 0.12;
+        osc2.start(now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.27);
+        osc2.stop(now + 0.27);
+        
+    } catch(e) {}
+}
     
     // ----- ГЕНЕРАЦИЯ УРОВНЯ (размещение слов + шум) -----
 // Размещение слова с чередованием направлений и возможностью пересечений
