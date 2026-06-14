@@ -431,6 +431,24 @@
         font-size: 1.8rem !important;
     }
 }
+/* Большие сетки (9x9 и 10x10) */
+@media (max-width: 550px) {
+    .grid[style*="repeat(10,"] .cell,
+    .grid[style*="repeat(9,"] .cell {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 1rem !important;
+    }
+}
+
+@media (min-width: 551px) and (max-width: 768px) {
+    .grid[style*="repeat(10,"] .cell,
+    .grid[style*="repeat(9,"] .cell {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.2rem !important;
+    }
+}
     </style>
     <script src="levels.js"></script>
 </head>
@@ -592,7 +610,7 @@ function showCategoryLevelsModal(categoryId) {
     const category = CATEGORIES.find(c => c.id === categoryId);
     const categoryLevels = getLevelsByCategory(categoryId);
         
-    console.log(`Категория: ${category.title}, уровень 2 имеет ID:`, categoryLevels.find(l => l.levelNum === 2)?.id);
+   // console.log(`Категория: ${category.title}, уровень 2 имеет ID:`, categoryLevels.find(l => l.levelNum === 2)?.id);
     let selectedLevelNum = 1;
     
     const modalDiv = document.createElement('div');
@@ -829,16 +847,28 @@ function tryPlaceWord(word, tempGrid, usedSet, gridSizeVal, preferredDirection) 
     return null;
 }
     
-function generateLevel(themeIndex, customWords) {
+function generateLevel(themeIndex, customWords, retryCount = 0) {
+    const MAX_RETRIES = 10;
     const theme = LEVELS_DATA[themeIndex % LEVELS_DATA.length];
     const gridSizeVal = theme.size;
-    let wordsToPlace = [...customWords]; // используем переданные слова
+    let wordsToPlace = [...customWords];
     
     // Сортируем длинные слова первыми
     wordsToPlace.sort((a,b) => b.length - a.length);
     
+    // Проверяем, что все слова не длиннее сетки
+    for (let word of wordsToPlace) {
+        if (word.length > gridSizeVal) {
+            console.error(`Слово "${word}" длиннее сетки (${gridSizeVal})`);
+            if (retryCount < MAX_RETRIES) {
+                return generateLevel(themeIndex, customWords, retryCount + 1);
+            }
+        }
+    }
+    
     let tempGrid = Array(gridSizeVal).fill().map(() => Array(gridSizeVal).fill(null));
     let positions = new Map();
+    let allPlaced = true;
     
     for (let i = 0; i < wordsToPlace.length; i++) {
         const word = wordsToPlace[i];
@@ -847,25 +877,69 @@ function generateLevel(themeIndex, customWords) {
         if (result) {
             positions.set(word, result);
         } else {
-            // принудительное размещение
-            let placed = false;
-            for (let r = 0; r < gridSizeVal && !placed; r++) {
-                for (let c = 0; c <= gridSizeVal - word.length; c++) {
-                    let canPlace = true;
-                    for (let k = 0; k < word.length; k++) {
-                        if (tempGrid[r][c+k] !== null && tempGrid[r][c+k] !== word[k]) {
-                            canPlace = false;
+            allPlaced = false;
+         
+           console.warn(`Не удалось разместить "${word}", попытка ${retryCount + 1}/${MAX_RETRIES}`);
+            break;
+        }
+    }
+    
+    // Если не все слова разместились, пробуем снова
+    if (!allPlaced && retryCount < MAX_RETRIES) {
+        return generateLevel(themeIndex, customWords, retryCount + 1);
+    }
+    
+    // Финальная попытка — принудительное размещение
+    if (!allPlaced) {
+        console.warn(`Принудительное размещение оставшихся слов`);
+        for (let i = 0; i < wordsToPlace.length; i++) {
+            const word = wordsToPlace[i];
+            if (!positions.has(word)) {
+                let forced = false;
+                // Горизонтально
+                for (let r = 0; r < gridSizeVal && !forced; r++) {
+                    for (let c = 0; c <= gridSizeVal - word.length; c++) {
+                        let can = true;
+                        for (let k = 0; k < word.length; k++) {
+                            if (tempGrid[r][c+k] !== null && tempGrid[r][c+k] !== word[k]) {
+                                can = false;
+                                break;
+                            }
+                        }
+                        if (can) {
+                            for (let k = 0; k < word.length; k++) {
+                                if (tempGrid[r][c+k] === null) tempGrid[r][c+k] = word[k];
+                            }
+                            positions.set(word, { coords: Array.from({length: word.length}, (_,k) => [r, c+k]), direction: 'H' });
+                            forced = true;
                             break;
                         }
                     }
-                    if (canPlace) {
-                        for (let k = 0; k < word.length; k++) {
-                            if (tempGrid[r][c+k] === null) tempGrid[r][c+k] = word[k];
+                }
+                // Вертикально
+                if (!forced) {
+                    for (let c = 0; c < gridSizeVal && !forced; c++) {
+                        for (let r = 0; r <= gridSizeVal - word.length; r++) {
+                            let can = true;
+                            for (let k = 0; k < word.length; k++) {
+                                if (tempGrid[r+k][c] !== null && tempGrid[r+k][c] !== word[k]) {
+                                    can = false;
+                                    break;
+                                }
+                            }
+                            if (can) {
+                                for (let k = 0; k < word.length; k++) {
+                                    if (tempGrid[r+k][c] === null) tempGrid[r+k][c] = word[k];
+                                }
+                                positions.set(word, { coords: Array.from({length: word.length}, (_,k) => [r+k, c]), direction: 'V' });
+                                forced = true;
+                                break;
+                            }
                         }
-                        positions.set(word, { coords: Array.from({length: word.length}, (_,k) => [r, c+k]), direction: 'H' });
-                        placed = true;
-                        break;
                     }
+                }
+                if (!forced) {
+                    console.error(`❌ КРИТИЧЕСКАЯ ОШИБКА: слово "${word}" не разместилось!`);
                 }
             }
         }
@@ -887,38 +961,19 @@ function generateLevel(themeIndex, customWords) {
         if (info.direction === 'H') horiz++;
         else vert++;
     }
-    console.log(`📊 ИТОГО: горизонтальных: ${horiz}, вертикальных: ${vert}`);
+ //   console.log(`📊 Уровень создан: горизонтальных: ${horiz}, вертикальных: ${vert}`);
     
-    // Показываем пересечения
-    console.log("🔗 ПЕРЕСЕЧЕНИЯ:");
-    const wordArray = Array.from(positions.keys());
-    for (let i = 0; i < wordArray.length; i++) {
-        for (let j = i+1; j < wordArray.length; j++) {
-            const coords1 = positions.get(wordArray[i]).coords;
-            const coords2 = positions.get(wordArray[j]).coords;
-            const intersections = coords1.filter(([r,c]) => 
-                coords2.some(([r2,c2]) => r2 === r && c2 === c)
-            );
-            if (intersections.length > 0) {
-                console.log(`   "${wordArray[i]}" ∩ "${wordArray[j]}" = ${intersections.length} букв(ы)`);
-            }
-        }
-    }
-    
-    // ВОЗВРАЩАЕМ ПРАВИЛЬНЫЕ ДАННЫЕ
     return { grid: tempGrid, size: gridSizeVal, words: wordsToPlace, positions };
 }
 
 
 // Размещение слова с поиском пересечений
 function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWordsPositions, wordIndex, totalWords) {
-    const maxAttempts = 800;
+    const maxAttempts = 1500; // было 800, увеличил для надёжности
     
-    // Определяем предпочтительное направление (чередуем)
     const preferHorizontal = (wordIndex % 2 === 0);
     
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        // Пробуем оба направления
         const tryHorizontal = preferHorizontal ? [true, false] : [false, true];
         
         for (let isHorizontal of tryHorizontal) {
@@ -949,15 +1004,13 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
                 coords.push([r, c]);
             }
             
-            // Для первых двух слов не требуем пересечений, для остальных - желательно
             if (!conflict) {
+                // Для первых слов не требуем пересечений, для остальных - желательно
                 if (wordIndex >= 2 && !hasIntersection && existingWordsPositions.size > 0) {
-                    // Для последующих слов стараемся найти пересечение
-                    const willRetry = attempt < maxAttempts - 100;
+                    const willRetry = attempt < maxAttempts - 200;
                     if (willRetry) continue;
                 }
                 
-                // Размещаем слово
                 for (let i = 0; i < word.length; i++) {
                     const r = isHorizontal ? row : row + i;
                     const c = isHorizontal ? col + i : col;
@@ -1217,7 +1270,7 @@ function onCellClick(row, col) {
     // СОХРАНЯЕМ ПРОГРЕСС
     if (typeof currentLevelId !== 'undefined') {
         saveCompletedLevel(currentLevelId);
-        console.log('Попытка сохранить уровень:', currentLevelId);
+      //  console.log('Попытка сохранить уровень:', currentLevelId);
     } else {
         console.log('currentLevelId не определён');
     }
