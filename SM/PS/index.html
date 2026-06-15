@@ -25,7 +25,112 @@
 }
 
 body {
-    background: linear-gradient(145deg, #1a472a 0%, #0a2a1a 100%);
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', 'Poppins', 'Montserrat', system-ui, sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+        background: linear-gradient(135deg, #6ba5c4 0%, #3a7ca5 50%, #1a5a8a 100%);
+    position: relative;
+}
+
+/* Звёзды */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(2px 2px at 5% 10%, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 12% 25%, #fff8e7, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 20% 5%, #ffe4b5, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 28% 45%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 35% 70%, #ffddaa, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 42% 15%, white, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 50% 60%, #fff5e0, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 58% 30%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 65% 85%, #ffe0b3, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 72% 8%, white, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 78% 50%, #fff0cc, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 85% 20%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 92% 75%, #ffddaa, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 98% 40%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 15% 90%, #ffe4b5, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 45% 95%, white, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 75% 15%, #fff8e7, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 33% 55%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 88% 65%, #ffe0b3, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 52% 88%, white, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 63% 42%, #fff5e0, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 18% 33%, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 80% 55%, #fff0cc, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 38% 78%, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 55% 12%, #ffe4b5, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 70% 95%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 25% 40%, #fff8e7, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 48% 72%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90% 30%, #ffddaa, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 60% 18%, white, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 95% 88%, #ffe0b3, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 8% 60%, white, rgba(0,0,0,0));
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Туманность 1 (фиолетовая) */
+body::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    width: 70%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(120, 60, 180, 0.4), rgba(80, 40, 120, 0.2), transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Туманность 2 (синяя) */
+.space-nebula {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    width: 60%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(40, 100, 180, 0.35), rgba(20, 60, 120, 0.15), transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Туманность 3 (розовая) */
+.space-nebula-pink {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 50%;
+    height: 40%;
+    background: radial-gradient(ellipse, rgba(200, 60, 120, 0.25), rgba(150, 40, 80, 0.1), transparent 70%);
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+}
+.game-container, .game-card {
+    background: rgba(255, 248, 236, 0.95);
+  /*  backdrop-filter: blur(2px);*/
+}
+
+
+/*body {
+      background: linear-gradient(145deg, #0a1a0f 0%, #1a3a1f 30%, #0d2a12 60%, #0a2a1a 100%);
     margin: 0;
     padding: 10px;
     display: flex;
@@ -36,8 +141,21 @@ body {
     width: 100vw;
     height: 100vh;
         padding-bottom: 90px !important;
+}*/
+.game-container, .game-card, .grid, .top-panel, .words-container, .buttons, .msg-area {
+    position: relative;
+    z-index: 1;
 }
 
+.game-card {
+    background: #fff8ec;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Убедитесь, что фон карточки непрозрачный */
+.game-card, .top-panel, .grid, .words-container, .msg-area, button {
+    background-color: #fff8ec;
+}
  .game-container {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 56px;
@@ -49,6 +167,7 @@ body {
     max-height: 98vh;
 }
 .game-card {
+     backdrop-filter: none;
     background: #fff8ec;
     border-radius: 44px;
     padding: 15px 18px 20px;
@@ -584,6 +703,8 @@ div[style*="position:fixed"] {
     <script src="levels.js"></script>
 </head>
 <body>
+    <div class="space-nebula"></div>
+    <div class="space-nebula-pink"></div>
 <div class="game-container">
     <div class="game-card">
         <div class="top-panel">
