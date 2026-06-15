@@ -497,7 +497,87 @@ div[style*="position:fixed"] {
         max-width: 700px;
     }
 }
-
+/* Фикс для iframe 1000x750 и ПК — без скролла */
+@media (min-width: 900px) {
+    body {
+        height: 100vh;
+        overflow: hidden;
+        padding: 5px !important;
+    }
+    
+    .game-container {
+        max-height: 98vh;
+    }
+    
+    .game-card {
+        max-height: 94vh;
+        overflow-y: hidden !important;
+        padding: 10px 12px 12px !important;
+    }
+    
+    .grid {
+        gap: 4px;
+        padding: 8px;
+        margin: 5px 0;
+    }
+    
+    .cell {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+    }
+    
+    .top-panel {
+        margin-bottom: 8px;
+        padding: 5px 12px;
+    }
+    
+    .level-badge, .score-panel {
+        font-size: 0.8rem;
+        padding: 3px 12px;
+    }
+    
+    .buttons {
+        margin: 8px 0 4px;
+    }
+    
+    button {
+        padding: 5px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .msg-area {
+        margin-top: 6px;
+        padding: 4px;
+        font-size: 0.7rem;
+    }
+    
+    #rulesBtn, #levelSelectBtn, #galaxyBtn {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 0.6rem !important;
+    }
+    
+    .top-panel {
+        gap: 4px;
+    }
+}
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 650px) and (max-height: 850px) {
+    .cell {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    
+    .grid {
+        gap: 3px;
+        padding: 6px;
+    }
+    
+    .game-card {
+        padding: 8px 10px 10px !important;
+    }
+}
     </style>
     <script src="levels.js"></script>
 </head>
