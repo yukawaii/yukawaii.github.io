@@ -401,19 +401,23 @@ if (this.checkedCells[cellKey] !== undefined) {
                 cell.classList.add('selected');
             }
 
-            if (this.selectedRow !== -1 && this.selectedCol !== -1) {
-                const selVal = this.grid[this.selectedRow][this.selectedCol];
-                if (selVal !== 0 && val === selVal && !(r === this.selectedRow && c === this.selectedCol)) {
-                    cell.classList.add('same-number');
-                }
-                if (r === this.selectedRow || c === this.selectedCol || 
-                    (Math.floor(r/3) === Math.floor(this.selectedRow/3) && 
-                     Math.floor(c/3) === Math.floor(this.selectedCol/3))) {
-                    if (!(r === this.selectedRow && c === this.selectedCol)) {
-                        cell.classList.add('highlighted');
-                    }
-                }
-            }
+// Подсветка одинаковых цифр (кроме уровня Эксперт)
+if (this.selectedRow !== -1 && this.selectedCol !== -1) {
+    const selVal = this.grid[this.selectedRow][this.selectedCol];
+    // Подсвечиваем одинаковые цифры только если уровень НЕ Эксперт
+    if (this.difficulty !== 'expert') {
+        if (selVal !== 0 && val === selVal && !(r === this.selectedRow && c === this.selectedCol)) {
+            cell.classList.add('same-number');
+        }
+    }
+    if (r === this.selectedRow || c === this.selectedCol || 
+        (Math.floor(r/3) === Math.floor(this.selectedRow/3) && 
+         Math.floor(c/3) === Math.floor(this.selectedCol/3))) {
+        if (!(r === this.selectedRow && c === this.selectedCol)) {
+            cell.classList.add('highlighted');
+        }
+    }
+}
 
             cell.addEventListener('click', () => this.selectCell(r, c));
             this.gridElement.appendChild(cell);
