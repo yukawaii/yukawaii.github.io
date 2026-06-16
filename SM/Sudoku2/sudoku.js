@@ -980,3 +980,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const game = new SudokuGame();
     window.__game = game;
 });
+document.addEventListener('touchmove', function(event) {
+    // Разрешаем скролл, только если внутри вашего приложения есть 
+    // отдельный блок, который должен прокручиваться (например, чат)
+    event.preventDefault();
+}, { passive: false });
