@@ -820,6 +820,18 @@ html, body {
     position: fixed;
     overscroll-behavior: none; /* Убирает отскоки при скролле до упора */
 }
+/* Для WebKit (Chrome, Safari, новые версии Opera, iOS/Telegram Webview) */
+::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Для всех элементов приложения (на всякий случай) */
+* {
+    -ms-overflow-style: none;  /* Для Internet Explorer и старого Edge */
+    scrollbar-width: none;     /* Для Firefox */
+}
     </style>
 </head>
 <body>
