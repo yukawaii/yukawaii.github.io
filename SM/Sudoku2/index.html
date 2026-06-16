@@ -24,8 +24,10 @@
             min-height: 100dvh;
             color: #fff;
             touch-action: manipulation;
-            overflow: hidden;
-            position: relative;
+                overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
         }
         /* Фон с точками-звёздами */
         body::before {
@@ -94,7 +96,7 @@
             z-index: 1;
             border: 1px solid rgba(255,255,255,0.05);
             max-height: 95vh;
-            overflow-y: hidden;
+            overflow: hidden;
         }
         /* МЕНЮ */
         #menuScreen {
