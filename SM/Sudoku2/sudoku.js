@@ -61,9 +61,8 @@ showBottomBanner() {
         }
     }*/
 
-// Показать рекламу за вознаграждение (rewarded video)
-// Показать рекламу за вознаграждение (rewarded video)
-showRewardedAd() {
+// Показать рекламу за вознаграждение (rewarded video) с ограничением 2 мин 
+/*showRewardedAd() {
     const now = Date.now();
     if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
         this.lastAdTime = now;
@@ -80,6 +79,25 @@ showRewardedAd() {
             });
     } else {
         console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
+        return Promise.resolve(false);
+    }
+} */
+
+// Показать рекламу за вознаграждение (rewarded video) - без ограничений
+showRewardedAd() {
+    if (typeof vkBridge !== 'undefined') {
+        const sendMethod = vkBridge.sendPromise || vkBridge.send;
+        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+            .then((data) => {
+                console.log('Реклама за вознаграждение показана, награда выдана:', data);
+                return true;
+            })
+            .catch(e => {
+                console.log("Ошибка или реклама не досмотрена:", e);
+                return false;
+            });
+    } else {
+        console.log("VK Bridge не найден");
         return Promise.resolve(false);
     }
 }
