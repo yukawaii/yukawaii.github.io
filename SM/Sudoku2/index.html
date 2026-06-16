@@ -855,17 +855,42 @@
 <script>
 // Инициализация VK Bridge при загрузке
 document.addEventListener('DOMContentLoaded', function() {
-    if (typeof window.VKWebApp !== 'undefined') {
-        window.vkBridge = window.VKWebApp;
-        // Используем send или sendPromise
-        const initMethod = window.vkBridge.sendPromise || window.vkBridge.send;
-        initMethod.call(window.vkBridge, 'VKWebAppInit')
-            .then(() => console.log('VK Bridge инициализирован'))
-            .catch(e => console.warn('Ошибка инициализации VK Bridge:', e));
+    // Проверяем несколько способов получения VK Bridge
+    const getBridge = () => {
+        // Способ 1: через VKWebApp
+        if (typeof window.VKWebApp !== 'undefined') {
+            return window.VKWebApp;
+        }
+        // Способ 2: через vkBridge (из CDN)
+        if (typeof window.vkBridge !== 'undefined' && window.vkBridge !== window) {
+            return window.vkBridge;
+        }
+        // Способ 3: через VK.Bridge
+        if (typeof window.VK !== 'undefined' && window.VK.Bridge) {
+            return window.VK.Bridge;
+        }
+        return null;
+    };
+    
+    const bridge = getBridge();
+    
+    if (bridge) {
+        window.vkBridge = bridge;
+        // Инициализируем
+        if (bridge.send) {
+            bridge.send('VKWebAppInit')
+                .then(() => console.log('VK Bridge инициализирован'))
+                .catch(e => console.warn('Ошибка инициализации VK Bridge:', e));
+        } else {
+            console.warn('VK Bridge не имеет метода send');
+        }
     } else {
-        console.warn('VK Bridge не найден (локальная разработка)');
+        console.warn('VK Bridge не найден, создаём fallback');
         window.vkBridge = {
-            send: (event, data) => console.log('[VK Bridge]', event, data),
+            send: (event, data) => {
+                console.log('[VK Bridge]', event, data);
+                return Promise.resolve({ result: true });
+            },
             sendPromise: (event, data) => {
                 console.log('[VK Bridge]', event, data);
                 return Promise.resolve({ result: true });
