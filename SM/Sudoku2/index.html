@@ -479,7 +479,7 @@ body {
 #howToPlayModal > div {
     animation: slideUp 0.3s ease;
        margin-bottom: 50px !important;
-           overflow-y: hidden !important;
+         
     -webkit-overflow-scrolling: touch !important;
    }
 @keyframes fadeIn {
@@ -833,7 +833,26 @@ body {
         min-height: 0.8em !important;
     }
 }
+/* Скролл только для модального окна */
+#howToPlayModal > div {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
+/* Стилизация скролла для модалки */
+#howToPlayModal > div::-webkit-scrollbar {
+    width: 4px;
+}
+
+#howToPlayModal > div::-webkit-scrollbar-thumb {
+    background: #e94560;
+    border-radius: 4px;
+}
+
+#howToPlayModal > div::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
 
     </style>
 </head>
