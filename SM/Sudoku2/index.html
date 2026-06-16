@@ -13,7 +13,16 @@
             box-sizing: border-box;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+             scrollbar-width: none !important;  /* ← добавить */
+    -ms-overflow-style: none !important;  /* ← добавить */
+        overscroll-behavior: none !important;  /* ← добавить */
         }
+        html {
+    overflow: hidden !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overscroll-behavior: none !important;
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a1a;
@@ -494,7 +503,7 @@
         padding: 4px 8px !important;
                 max-height: 75vh !important;
         max-width: 410px !important;
-         overflow: visible !important;
+         overflow: hidden !important;
 
     }
      body {
@@ -664,7 +673,7 @@
         max-width: 450px !important;
         margin: 0 auto 50px !important;
         max-height: 100% !important;
-        overflow-y: hidden !important;
+        overflow: hidden !important;
         transform: none !important;
     }
     
@@ -827,11 +836,7 @@ html, body {
     height: 0 !important;
 }
 
-/* Для всех элементов приложения (на всякий случай) */
-* {
-    -ms-overflow-style: none;  /* Для Internet Explorer и старого Edge */
-    scrollbar-width: none;     /* Для Firefox */
-}
+
     </style>
 </head>
 <body>
