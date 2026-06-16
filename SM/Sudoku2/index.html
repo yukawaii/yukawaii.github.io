@@ -644,6 +644,11 @@
         font-size: clamp(0.4rem, 1.5vw, 0.6rem) !important;
     }
 }
+/* Специально для iframe с размерами 1000x750 */
+iframe[width="1000"][height="750"] .container,
+iframe[style*="1000px"][style*="750px"] .container {
+    margin-bottom: 110px !important;
+}
 
     </style>
 </head>
