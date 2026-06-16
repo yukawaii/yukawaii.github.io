@@ -645,7 +645,94 @@
     }
 }
 
-
+/* ============================================================
+   Специальные стили для iframe ВК 1000x750
+   ============================================================ */
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 700px) and (max-height: 800px) {
+    /* Уменьшаем контейнер */
+    .container {
+        padding: 10px !important;
+        max-width: 420px !important;
+        margin: 5px auto !important;
+        margin-bottom: 120px !important;
+        max-height: 85vh !important;
+        transform: scale(0.85);
+        transform-origin: top center;
+    }
+    
+    /* Уменьшаем заголовок в меню */
+    #menuScreen h1 {
+        font-size: 2.2rem !important;
+    }
+    #menuScreen .subtitle {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Уменьшаем кнопки в меню */
+    .menu-btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+        width: 90% !important;
+    }
+    .diff-btn {
+        font-size: 0.75rem !important;
+        padding: 6px !important;
+    }
+    
+    /* Уменьшаем игровое поле */
+    #sudoku-grid {
+        max-width: 380px !important;
+        padding: 2px !important;
+    }
+    .cell {
+        font-size: clamp(0.9rem, 3.5vw, 1.4rem) !important;
+    }
+    
+    /* Уменьшаем панель цифр */
+    #num-panel {
+        max-width: 380px !important;
+        gap: 4px !important;
+    }
+    .num-btn {
+        font-size: 0.9rem !important;
+        padding: 5px 0 !important;
+    }
+    
+    /* Уменьшаем кнопки действий */
+    .action-row {
+        max-width: 380px !important;
+        gap: 5px !important;
+    }
+    .action-btn {
+        font-size: 0.9rem !important;
+        padding: 5px !important;
+    }
+    .action-btn.hint-btn,
+    .action-btn.check-btn {
+        font-size: 1.1rem !important;
+    }
+    .action-btn.solve-btn {
+        font-size: 0.7rem !important;
+    }
+    
+    /* Уменьшаем верхнюю панель */
+    #gameScreen .top-bar .back-btn {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
+    }
+    #gameScreen .top-bar .status {
+        font-size: 0.9rem !important;
+    }
+    #gameScreen .top-bar .timer {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Уменьшаем сообщение */
+    #message {
+        font-size: 0.85rem !important;
+        min-height: 1.4em !important;
+    }
+}
     </style>
 </head>
 <body>
