@@ -7,6 +7,12 @@
     <title>Судоку</title>
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <style>
+        html, body {
+    overflow: hidden !important;
+    height: 100% !important;
+    width: 100% !important;
+    position: fixed !important;
+}
         * {
             margin: 0;
             padding: 0;
@@ -17,12 +23,7 @@
     -ms-overflow-style: none !important;  /* ← добавить */
         overscroll-behavior: none !important;  /* ← добавить */
         }
-        html {
-    overflow: hidden !important;
-    height: 100% !important;
-    max-height: 100% !important;
-    overscroll-behavior: none !important;
-}
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a1a;
@@ -487,10 +488,11 @@
     content: "• ";
     color: #e94560;
 }
-#howToPlayModal::-webkit-scrollbar {
+/* Только для модального окна - показываем скролл */
+#howToPlayModal > div::-webkit-scrollbar {
     width: 4px;
 }
-#howToPlayModal::-webkit-scrollbar-thumb {
+#howToPlayModal > div::-webkit-scrollbar-thumb {
     background: #e94560;
     border-radius: 4px;
 }
