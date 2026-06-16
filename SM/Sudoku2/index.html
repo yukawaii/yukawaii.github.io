@@ -851,26 +851,27 @@
 </div>
 <script src="sudoku.js"></script>
 <script>
-    // Инициализация VK Bridge при загрузке
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof window.VKWebApp !== 'undefined') {
-            window.vkBridge = window.VKWebApp;
-            window.vkBridge.send('VKWebAppInit')
-                .then(() => console.log('VK Bridge инициализирован'))
-                .catch(e => console.warn('Ошибка инициализации VK Bridge:', e));
-        } else {
-            console.warn('VK Bridge не найден (локальная разработка)');
-            // Для локальной разработки
-            window.vkBridge = {
-                send: (event, data) => console.log('[VK Bridge]', event, data),
-                sendPromise: (event, data) => {
-                    console.log('[VK Bridge]', event, data);
-                    return Promise.resolve({ result: true });
-                },
-                subscribe: () => {}
-            };
-        }
-    });
+// Инициализация VK Bridge при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.VKWebApp !== 'undefined') {
+        window.vkBridge = window.VKWebApp;
+        // Используем send или sendPromise
+        const initMethod = window.vkBridge.sendPromise || window.vkBridge.send;
+        initMethod.call(window.vkBridge, 'VKWebAppInit')
+            .then(() => console.log('VK Bridge инициализирован'))
+            .catch(e => console.warn('Ошибка инициализации VK Bridge:', e));
+    } else {
+        console.warn('VK Bridge не найден (локальная разработка)');
+        window.vkBridge = {
+            send: (event, data) => console.log('[VK Bridge]', event, data),
+            sendPromise: (event, data) => {
+                console.log('[VK Bridge]', event, data);
+                return Promise.resolve({ result: true });
+            },
+            subscribe: () => {}
+        };
+    }
+});
 </script>
 
 </body>

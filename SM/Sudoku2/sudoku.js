@@ -20,24 +20,26 @@ class AdManager {
         this.bannerShown = false;
     }
 
-    // Показать баннерную рекламу внизу
-    showBottomBanner() {
-        if (this.bannerShown) return;
-        if (typeof vkBridge !== 'undefined') {
-            vkBridge.send('VKWebAppShowBannerAd', {
-                banner_location: 'bottom'
-            })
-            .then((data) => {
-                if (data && data.result) {
-                    console.log('Баннер успешно отображён');
-                    this.bannerShown = true;
-                }
-            })
-            .catch((error) => {
-                console.log('Ошибка при показе баннера:', error);
-            });
-        }
+// Показать баннерную рекламу внизу
+showBottomBanner() {
+    if (this.bannerShown) return;
+    if (typeof vkBridge !== 'undefined') {
+        // Используем sendPromise если есть, иначе send
+        const sendMethod = vkBridge.sendPromise || vkBridge.send;
+        sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
+            banner_location: 'bottom'
+        })
+        .then((data) => {
+            if (data && data.result) {
+                console.log('Баннер успешно отображён');
+                this.bannerShown = true;
+            }
+        })
+        .catch((error) => {
+            console.log('Ошибка при показе баннера:', error);
+        });
     }
+}
 
     // Показать межстраничную рекламу (с защитой от спама)
   /*  showInterstitial() {
@@ -60,11 +62,14 @@ class AdManager {
     }*/
 
 // Показать рекламу за вознаграждение (rewarded video)
+// Показать рекламу за вознаграждение (rewarded video)
 showRewardedAd() {
     const now = Date.now();
     if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
         this.lastAdTime = now;
-        return vkBridge.sendPromise("VKWebAppShowNativeAds", { ad_format: "reward" })
+        // Используем sendPromise если есть, иначе send
+        const sendMethod = vkBridge.sendPromise || vkBridge.send;
+        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
             .then((data) => {
                 console.log('Реклама за вознаграждение показана, награда выдана:', data);
                 return true;
@@ -333,10 +338,11 @@ showConfirmDialog() {
     // ============================================================
     // Социальные функции
     // ============================================================
-    inviteFriends() {
-        this.sound.click();
-        vkBridge.send('VKWebAppShowInviteBox', {});
-    }
+inviteFriends() {
+    this.sound.click();
+    const sendMethod = vkBridge.sendPromise || vkBridge.send;
+    sendMethod.call(vkBridge, 'VKWebAppShowInviteBox', {});
+}
 
     // ============================================================
     // Навигация
