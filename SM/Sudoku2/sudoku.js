@@ -867,14 +867,12 @@ checkNumber() {
 }
   
 // ============================================================
-// Решить всё (с рекламой за вознаграждение)
+// Решить всё (с рекламой за вознаграждение либо просто так, если рекламы нет)
 // ============================================================
 async solveAll() {
     if (this.isFinished) return;
     
-    // Показываем диалог подтверждения
     const confirmed = await this.showConfirmDialog();
-    
     if (!confirmed) {
         this.messageEl.textContent = '❌ Решение отменено';
         this.sound.error();
@@ -885,12 +883,13 @@ async solveAll() {
     const adShown = await this.adManager.showRewardedAd();
     
     if (!adShown) {
-        this.messageEl.textContent = '❌ Реклама не показана. Попробуйте позже.';
+        this.messageEl.textContent = '⚠️ Рекламы сейчас нет, но мы решим поле!';
         this.sound.error();
-        return;
-    }
+        // Пауза, чтобы пользователь увидел сообщение
+        await new Promise(resolve => setTimeout(resolve, 1500));
+    }    
     
-    // Реклама показана успешно — решаем поле
+    // РЕШАЕМ ВСЕГДА — и с рекламой, и без
     this.sound.init();
     this.sound.solve();
 
