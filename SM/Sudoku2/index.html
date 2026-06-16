@@ -813,7 +813,13 @@
         min-height: 0.8em !important;
     }
 }
-
+html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    overscroll-behavior: none; /* Убирает отскоки при скролле до упора */
+}
     </style>
 </head>
 <body>
