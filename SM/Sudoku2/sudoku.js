@@ -499,7 +499,7 @@ showConfirmDialog() {
 if (this.checkedCells[cellKey] !== undefined) {
     if (this.checkedCells[cellKey] === true) {
         // Правильная цифра — зеленая
-     cell.style.color = '#00e676'; // 👈 ЯРКИЙ ЗЕЛЕНЫЙ
+     cell.style.color = '#39ff14'; // 👈 ЯРКИЙ ЗЕЛЕНЫЙ
         cell.style.textShadow = '0 0 10px rgba(0, 230, 118, 0.5)'; // 👈 ДОБАВЛЯЕМ СВЕЧЕНИЕ
     } else if (this.checkedCells[cellKey] === false) {
         // Неправильная цифра — красная
