@@ -40,7 +40,7 @@ class AdManager {
     }
 
     // Показать межстраничную рекламу (с защитой от спама)
-    showInterstitial() {
+  /*  showInterstitial() {
         const now = Date.now();
         if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
             this.lastAdTime = now;
@@ -57,7 +57,27 @@ class AdManager {
             console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
             return Promise.resolve(false);
         }
+    }*/
+
+// Показать рекламу за вознаграждение (rewarded video)
+showRewardedAd() {
+    const now = Date.now();
+    if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
+        this.lastAdTime = now;
+        return vkBridge.sendPromise("VKWebAppShowNativeAds", { ad_format: "reward" })
+            .then((data) => {
+                console.log('Реклама за вознаграждение показана, награда выдана:', data);
+                return true;
+            })
+            .catch(e => {
+                console.log("Ошибка или реклама не досмотрена:", e);
+                return false;
+            });
+    } else {
+        console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
+        return Promise.resolve(false);
     }
+}
 }
 
 // ============================================================
@@ -112,6 +132,96 @@ class SoundManager {
 // 4. Основная игра Судоку
 // ============================================================
 class SudokuGame {
+    // ============================================================
+// Показать диалог подтверждения перед рекламой
+// ============================================================
+showConfirmDialog() {
+    return new Promise((resolve) => {
+        // Создаем overlay
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        // Создаем диалог
+        const dialog = document.createElement('div');
+        dialog.style.cssText = `
+            background: #16213e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        `;
+        
+        dialog.innerHTML = `
+            <h3 style="color: #fff; margin-bottom: 15px; font-size: 1.4rem;">🎬 Реклама за вознаграждение</h3>
+            <p style="color: #ccc; margin-bottom: 25px; line-height: 1.6; font-size: 1rem;">
+                Посмотреть рекламу, чтобы узнать решение головоломки?
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="confirmAdYes" style="
+                    background: #e94560;
+                    color: #fff;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 50px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: 0.2s;
+                    flex: 1;
+                ">✅ Посмотреть</button>
+                <button id="confirmAdNo" style="
+                    background: #0f3460;
+                    color: #fff;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 50px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: 0.2s;
+                    flex: 1;
+                ">❌ Отмена</button>
+            </div>
+        `;
+        
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+        
+        // Обработчики кнопок
+        document.getElementById('confirmAdYes').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            resolve(true);
+        });
+        
+        document.getElementById('confirmAdNo').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+            resolve(false);
+        });
+        
+        // Закрытие по клику вне диалога
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+                resolve(false);
+            }
+        });
+    });
+}
     constructor() {
         this.sound = new SoundManager();
         this.adManager = new AdManager();
@@ -389,10 +499,12 @@ class SudokuGame {
 if (this.checkedCells[cellKey] !== undefined) {
     if (this.checkedCells[cellKey] === true) {
         // Правильная цифра — зеленая
-        cell.style.color = '#4caf50';
+     cell.style.color = '#00e676'; // 👈 ЯРКИЙ ЗЕЛЕНЫЙ
+        cell.style.textShadow = '0 0 10px rgba(0, 230, 118, 0.5)'; // 👈 ДОБАВЛЯЕМ СВЕЧЕНИЕ
     } else if (this.checkedCells[cellKey] === false) {
         // Неправильная цифра — красная
-        cell.style.color = '#ff5252';
+       cell.style.color = '#ff1744'; // 👈 ЯРКИЙ КРАСНЫЙ
+        cell.style.textShadow = '0 0 10px rgba(255, 23, 68, 0.5)'; // 👈 ДОБАВЛЯЕМ СВЕЧЕНИЕ
         cell.classList.add('error');
     }
 }
@@ -452,7 +564,14 @@ updateStatus() {
         this.statusEl.textContent = '🎉 Победа!';
         this.statusEl.style.color = '#4caf50';
     } else {
-        this.statusEl.textContent = `🎯 ${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)}`;
+        // Русские названия уровней
+        const difficultyNames = {
+            'easy': 'Лёгкий',
+            'medium': 'Средний',
+            'hard': 'Сложный',
+            'expert': 'Эксперт'
+        };
+        this.statusEl.textContent = `🎯 ${difficultyNames[this.difficulty] || this.difficulty}`;
         this.statusEl.style.color = '#e94560';
     }
 }
@@ -723,19 +842,31 @@ checkNumber() {
     }
 }
   
-    // ============================================================
-// Решить всё (с рекламой)
+// ============================================================
+// Решить всё (с рекламой за вознаграждение)
 // ============================================================
 async solveAll() {
     if (this.isFinished) return;
     
-    this.messageEl.textContent = '⏳ Загрузка рекламы...';
-    const adShown = await this.adManager.showInterstitial();
+    // Показываем диалог подтверждения
+    const confirmed = await this.showConfirmDialog();
     
-    if (!adShown) {
-        console.log('Реклама не показана, но продолжаем');
+    if (!confirmed) {
+        this.messageEl.textContent = '❌ Решение отменено';
+        this.sound.error();
+        return;
     }
     
+    this.messageEl.textContent = '⏳ Загрузка рекламы...';
+    const adShown = await this.adManager.showRewardedAd();
+    
+    if (!adShown) {
+        this.messageEl.textContent = '❌ Реклама не показана. Попробуйте позже.';
+        this.sound.error();
+        return;
+    }
+    
+    // Реклама показана успешно — решаем поле
     this.sound.init();
     this.sound.solve();
 
@@ -744,7 +875,6 @@ async solveAll() {
         for (let c = 0; c < 9; c++) {
             if (!this.given[r][c] && this.grid[r][c] !== this.solution[r][c]) {
                 this.grid[r][c] = this.solution[r][c];
-                // 👇 ДОБАВЛЕНО: Помечаем каждую решённую клетку как правильную
                 const cellKey = `${r}-${c}`;
                 this.checkedCells[cellKey] = true;
                 solved++;

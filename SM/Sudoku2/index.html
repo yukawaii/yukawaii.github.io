@@ -170,19 +170,65 @@
         .diff-btn:active {
             transform: scale(0.95);
         }
-        .diff-btn.active {
-            border-color: #e94560;
-            color: #fff;
-            background: #2a1a3a;
-        }
-        .diff-btn.easy { border-color: #4caf50; }
-        .diff-btn.medium { border-color: #ff9800; }
-        .diff-btn.hard { border-color: #f44336; }
-        .diff-btn.expert { border-color: #9c27b0; }
-        .diff-btn.easy.active { background: #1a3a1a; color: #4caf50; }
-        .diff-btn.medium.active { background: #3a2a1a; color: #ff9800; }
-        .diff-btn.hard.active { background: #3a1a1a; color: #f44336; }
-        .diff-btn.expert.active { background: #2a1a3a; color: #9c27b0; }
+ .diff-btn.active {
+    border-color: #e94560;
+    color: #fff;
+    background: #2a1a3a;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+}
+
+/* Дополнительные цвета для выбранных режимов */
+.diff-btn.easy.active { 
+    background: #1a3a1a; 
+    color: #4caf50; 
+    border-color: #4caf50;
+    box-shadow: 0 0 25px rgba(76, 175, 80, 0.4);
+}
+.diff-btn.medium.active { 
+    background: #3a2a1a; 
+    color: #ff9800; 
+    border-color: #ff9800;
+    box-shadow: 0 0 25px rgba(255, 152, 0, 0.4);
+}
+.diff-btn.hard.active { 
+    background: #3a1a1a; 
+    color: #f44336; 
+    border-color: #f44336;
+    box-shadow: 0 0 25px rgba(244, 67, 54, 0.4);
+}
+.diff-btn.expert.active { 
+    background: #2a1a3a; 
+    color: #9c27b0; 
+    border-color: #9c27b0;
+    box-shadow: 0 0 25px rgba(156, 39, 176, 0.4);
+}
+
+/* Эффект при наведении */
+.diff-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+}
+
+/* Индикатор выбора - галочка или обводка */
+.diff-btn.active::after {
+    content: ' ✓';
+    font-weight: bold;
+    color: #e94560;
+}
+
+.diff-btn.easy.active::after {
+    color: #4caf50;
+}
+.diff-btn.medium.active::after {
+    color: #ff9800;
+}
+.diff-btn.hard.active::after {
+    color: #f44336;
+}
+.diff-btn.expert.active::after {
+    color: #9c27b0;
+}
 
         /* ИГРОВОЙ ЭКРАН */
         #gameScreen {
@@ -329,8 +375,7 @@
             font-size: 0.8rem;
             grid-column: span 3;
         }
-        /* Кнопки управления */
-       /* Кнопки управления */
+          /* Кнопки управления */
 .action-row {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
@@ -439,6 +484,167 @@
     background: #e94560;
     border-radius: 4px;
 }
+/* ============================================================
+   Ландшафтная ориентация для мобильных (особенно iPhone SE)
+   ============================================================ */
+@media (orientation: landscape) and (max-height: 500px) {
+    .container {
+        margin-bottom: 160px !important;
+        padding: 4px 8px !important;
+        max-height: 80vh !important;
+        max-width: 420px !important;
+    }
+    
+    /* Скрываем лишние элементы в меню */
+    #menuScreen {
+        gap: 4px;
+        padding: 5px 0;
+    }
+    #menuScreen h1 {
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+    }
+    #menuScreen .subtitle {
+        font-size: 0.65rem;
+        margin-bottom: 2px;
+    }
+    .menu-btn {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+        width: 95%;
+        border-radius: 30px;
+    }
+    .diff-btn {
+        font-size: 0.55rem;
+        padding: 3px 5px;
+        border-radius: 8px;
+    }
+    .difficulty-section {
+        gap: 3px;
+        width: 95%;
+    }
+    
+    /* Игровое поле */
+    #sudoku-grid {
+        max-width: 220px !important;
+        padding: 1px;
+        border-width: 2px;
+    }
+    .cell {
+        font-size: clamp(0.5rem, 1.8vw, 0.8rem) !important;
+        border-radius: 1px;
+    }
+    .cell.block-border-right {
+        border-right-width: 2px;
+    }
+    .cell.block-border-bottom {
+        border-bottom-width: 2px;
+    }
+    
+    /* Панель цифр */
+    #num-panel {
+        gap: 2px;
+        max-width: 220px !important;
+    }
+    .num-btn {
+        font-size: 0.6rem !important;
+        padding: 2px 0 !important;
+        border-radius: 6px;
+    }
+    
+    /* Кнопки действий */
+    .action-row {
+        gap: 3px;
+        max-width: 220px !important;
+    }
+    .action-btn {
+        font-size: 0.6rem !important;
+        padding: 2px !important;
+        border-radius: 6px;
+    }
+    .action-btn.hint-btn,
+    .action-btn.check-btn {
+        font-size: 0.8rem !important;
+    }
+    .action-btn.solve-btn {
+        font-size: 0.5rem !important;
+    }
+    
+    /* Верхняя панель */
+    #gameScreen {
+        gap: 3px;
+    }
+    #gameScreen .top-bar {
+        padding: 0 2px;
+    }
+    #gameScreen .top-bar .back-btn {
+        font-size: 0.6rem;
+        padding: 2px 8px;
+    }
+    #gameScreen .top-bar .status {
+        font-size: 0.7rem;
+    }
+    #gameScreen .top-bar .timer {
+        font-size: 0.65rem;
+    }
+    
+    /* Сообщение */
+    #message {
+        font-size: 0.65rem;
+        min-height: 1em;
+    }
+    
+    /* Модальное окно */
+    #howToPlayModal > div {
+        padding: 15px !important;
+        max-height: 70vh !important;
+        margin-bottom: 150px !important;
+    }
+    #howToPlayModal h2 {
+        font-size: 1.2rem !important;
+        margin-bottom: 10px !important;
+    }
+    #howToPlayModal div[style*="color:#ccc"] {
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
+    #howToPlayModal ul {
+        padding-left: 12px !important;
+        margin: 4px 0 !important;
+    }
+    #howToPlayModal .menu-btn {
+        font-size: 0.7rem !important;
+        padding: 6px !important;
+        margin-top: 10px !important;
+    }
+    #closeHowToPlay {
+        font-size: 1.2rem !important;
+        top: 5px !important;
+        right: 10px !important;
+    }
+}
+
+/* Дополнительно для очень маленьких экранов */
+@media (orientation: landscape) and (max-height: 400px) {
+    .container {
+        margin-bottom: 14vh !important;
+        padding: 2px 6px !important;
+        max-height: 75vh !important;
+    }
+    #sudoku-grid {
+        max-width: 180px !important;
+    }
+    #num-panel {
+        max-width: 180px !important;
+    }
+    .action-row {
+        max-width: 180px !important;
+    }
+    .cell {
+        font-size: clamp(0.4rem, 1.5vw, 0.6rem) !important;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -495,14 +701,14 @@
 <p><strong style="color:#fff;">🎮 Управление:</strong></p>
 <ul style="padding-left:20px; margin:10px 0;">
     <li>Нажмите на клетку, чтобы выбрать её</li>
-    <li>Нажмите на цифру внизу, чтобы поставить её</li>
+    <li>Выберите цифру внизу, чтобы поставить её</li>
     <li>Нажмите ✕, чтобы стереть цифру</li>
 </ul>
 
 <p><strong style="color:#fff;">💡 Кнопки помощи:</strong></p>
 <ul style="padding-left:20px; margin:10px 0;">
     <li><strong>💡 Подсказка</strong> — ставит правильную цифру в выбранную пустую клетку</li>
-    <li><strong>✅ Проверить</strong> — проверяет правильность цифры и подсвечивает все такие же цифры на поле</li>
+    <li><strong>✅ Проверить</strong> — проверяет правильность всех цифр на поле</li>
     <li><strong>⚡ Решить всё</strong> — показывает рекламу и решает все клетки</li>
 </ul>
 <p><strong style="color:#fff;">💡 Уровни сложности:</strong></p>
