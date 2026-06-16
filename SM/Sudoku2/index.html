@@ -7,23 +7,25 @@
     <title>Судоку</title>
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <style>
-        html, body {
-    overflow: hidden !important;
-    height: 100% !important;
-    width: 100% !important;
-    position: fixed !important;
-}
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-             scrollbar-width: none !important;  /* ← добавить */
-    -ms-overflow-style: none !important;  /* ← добавить */
-        overscroll-behavior: none !important;  /* ← добавить */
-        }
 
+        }
+body {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.container {
+    overflow: hidden !important;
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a1a;
@@ -33,8 +35,7 @@
             min-height: 100vh;
             min-height: 100dvh;
             color: #fff;
-            touch-action: manipulation;
-                overflow: hidden !important;
+            touch-action: manipulation;            
         }
         /* Фон с точками-звёздами */
         body::before {
@@ -472,6 +473,8 @@
 #howToPlayModal > div {
     animation: slideUp 0.3s ease;
        margin-bottom: 50px !important;
+           overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
    }
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -823,19 +826,6 @@
         font-size: 1.1rem !important;
         min-height: 0.8em !important;
     }
-}
-html, body {
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    overscroll-behavior: none; /* Убирает отскоки при скролле до упора */
-}
-/* Для WebKit (Chrome, Safari, новые версии Opera, iOS/Telegram Webview) */
-::-webkit-scrollbar {
-    display: none;
-    width: 0 !important;
-    height: 0 !important;
 }
 
 
