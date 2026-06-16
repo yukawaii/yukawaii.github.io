@@ -88,6 +88,7 @@
             width: 100%;
             max-width: 500px;
                margin: 0 auto 110px; 
+                   margin-top: 4px!important;
             text-align: center;
             position: relative;
             z-index: 1;
@@ -490,12 +491,19 @@
    ============================================================ */
 @media (orientation: landscape) and (max-height: 500px) {
     .container {
-        margin-bottom: 160px !important;
+        margin-bottom: 120px !important;
         padding: 4px 8px !important;
-        max-height: 80vh !important;
+                max-height: 80vh !important;
         max-width: 420px !important;
+         overflow: visible !important;
+
     }
-    
+     body {
+        overflow: hidden !important;   
+            align-items: center !important;  /* было flex-start */
+    padding-top: 0 !important;  
+          margin-top: 2x!important;
+    }
     /* Скрываем лишние элементы в меню */
     #menuScreen {
         gap: 4px;
@@ -574,6 +582,7 @@
     /* Верхняя панель */
     #gameScreen {
         gap: 3px;
+        
     }
     #gameScreen .top-bar {
         padding: 0 2px;
@@ -599,7 +608,8 @@
     #howToPlayModal > div {
         padding: 15px !important;
         max-height: 70vh !important;
-        margin-bottom: 150px !important;
+        margin-bottom: 110px !important;
+          margin-top: 2px !important;
     }
     #howToPlayModal h2 {
         font-size: 1.2rem !important;
