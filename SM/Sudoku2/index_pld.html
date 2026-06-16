@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Sudoku JS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css" />
+  <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="jquery.mobile-1.4.5.min.js"></script>
+     
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ionic/ionicons.min.css">
+  <style>
+    /* Запрещаем скролл на всей странице */
+body, html {
+    overflow: hidden !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: fixed !important;
+    width: 100% !important;
+}
+
+/* Разрешаем скролл только внутри контента, если нужно */
+.ui-content {
+    overflow-y: auto;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+/* Находим вторую таблицу (панель выбора цифр) */
+.ui-content table:nth-of-type(2),
+#id-home table + table {
+    display: none;
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid #378de5 !important;
+    border-radius: 8px !important;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.3) !important;
+    z-index: 99999 !important;
+    width: 280px !important;
+    height: auto !important;
+}
+
+.ui-popup {
+    z-index: 100001 !important;
+}
+.ui-content table:nth-of-type(2) td,
+#id-home table + table td {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    color: #378de5 !important;
+    border: 1px solid #ddd !important;
+    cursor: pointer;
+}
+
+.ui-page-active, .ui-page {
+    background-image: url('./background.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;    
+    width: 100% !important;
+    min-height: 100vh !important;
+}
+
+@media screen and (max-width: 768px) {
+    .ui-page-active, .ui-page {
+        min-height: 100dvh !important;
+    }
+}
+
+#game-clock {
+    position: absolute !important;
+    font-family: 'Arvo', Arial, sans-serif !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: #378de5 !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    border: 2px solid #84bbf3 !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+    text-shadow: 0px 1px 0px #fff;
+    top: 40px !important;
+    right: 5vw !important;
+}
+/* Адаптация для маленьких экранов (вертикальные телефоны) */
+@media screen and (max-width: 500px) {        /* Уменьшаем заголовок */
+    h1 {        font-size: 18px !important;        margin: 5px 0 5px 0 !important;    }    
+       /* Общий контейнер */
+    .ui-content {        padding: 10px 5px !important;    }    
+   #game-clock {
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        margin: 5px auto 5px auto !important;  /* Уменьшил отступы */
+        display: block !important;
+        width: max-content !important;
+        font-size: 16px !important;  /* Чуть меньше шрифт */
+        padding: 3px 12px !important;  /* Уменьшил паддинг */
+        z-index: 1 !important;
+    }
+}
+
+    
+@media screen and (max-width: 1024px) {
+   #game-clock {
+        position: relative !important;
+        top: 0 !important;
+        right: 0 !important;
+        margin: 20px auto 10px auto !important;
+        display: block !important;
+        width: max-content !important;
+        font-size: 20px !important;
+        padding: 5px 15px !important;
+        z-index: 1 !important;  /* Низкий z-index */
+    }
+}
+
+#music-toggle {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#music-toggle.ion-ios-musical-notes {
+    color: #378de5 !important;
+    text-shadow: 0 0 8px rgba(55, 141, 229, 0.4);
+}
+
+#music-toggle.ion-volume-mute {
+    color: #64748b !important;
+}
+
+/* ========== СТИЛИ ДЛЯ ВСПЛЫВАЮЩЕГО ОКНА С ИГРАМИ ========== */
+.games-popup {
+    max-width: 90vw !important;
+    width: 500px !important;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border-radius: 24px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important;
+  
+}
+
+.games-popup .ui-content {
+    background: transparent !important;
+    padding: 20px !important;
+}
+
+.games-popup h2 {
+    color: #fff !important;
+    text-align: center !important;
+    margin: 0 0 20px 0 !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+.games-grid-popup {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 5px;
+}
+
+.game-card-popup {
+    background: linear-gradient(135deg, #468ee5 0%, #2f76c4 100%);
+    border: 1px solid #2561a4;
+    border-radius: 12px;
+    padding: 12px 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.game-card-popup:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #519bf7 0%, #378de5 100%);
+    box-shadow: 0 8px 20px rgba(55, 141, 229, 0.4);
+}
+
+.close-popup-btn {
+    display: block;
+    width: 100%;
+    background: #64748b;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.close-popup-btn:hover {
+    background: #475569;
+    transform: scale(1.02);
+}
+
+    @media screen and (max-width: 375px) and (max-height: 670px) {
+    #game-clock {
+        position: fixed !important;
+        bottom: auto !important;
+        top: auto !important;
+        margin: 0 !important;
+        left: 10% !important;
+        transform: translateX(-50%) !important;
+        bottom: 2px !important;  /* Поднять повыше над баннером (баннер обычно 50px высотой) */
+        z-index: 100000 !important;
+       font-size: 10px !important;
+    }
+}
+/* Для Surface Duo (развёрнутый) */
+@media screen and (min-width: 530px) and (max-width: 550px) {
+    #game-clock {
+        position: fixed !important;
+        bottom: 2px !important;
+        left: 10% !important;
+        transform: translateX(-50%) !important;
+        z-index: 100000 !important;
+        font-size: 12px !important;
+        top: auto !important;
+        right: auto !important;
+        margin: 0 !important;
+    }
+}
+</style>
+  </head>
+  <body onload="init();" onclick="elsewhere();">
+    <div data-role="page" id="home">
+      <div role="main" class="ui-content">
+        <h1>Судоку для самых умных</h1>
+        <div class="table">
+        <table id="grid"></table>
+        </div>
+        <div class="table panel">
+        <table id="digits">
+            <tr>
+                <td id="digit-0" class="digit"></td>
+                <td id="digit-1" class="digit">1</td>
+                <td id="digit-2" class="digit">2</td>
+                <td id="digit-3" class="digit">3</td>
+                <td id="digit-4" class="digit">4</td>
+            </tr>
+            <tr>
+                <td id="digit-5" class="digit">5</td>
+                <td id="digit-6" class="digit">6</td>
+                <td id="digit-7" class="digit">7</td>
+                <td id="digit-8" class="digit">8</td>
+                <td id="digit-9" class="digit">9</td>
+            </tr>
+        </table>
+        </div>
+        <div class="panel">
+            <ul id="buttons1">
+                <li id="but1" class="ion-fork-repo" data-pack="default" onclick="hypothesis1();"></li>
+                <li id="but2" class="ion-pull-request" data-pack="default" onclick="hypothesis2();"></li>
+                <li id="but3" class="ion-android-close" data-pack="android" onclick="hypothesis3();"></li>   
+                <li class="ion-android-refresh" data-pack="android" onclick='$( "#restart" ).popup( "open" );'></li>
+                <li class="ion-code-working" data-pack="default" onclick='$( "#newGrid" ).popup( "open" );'></li>
+                <li class="ion-help" data-pack="default" onclick='$( "#help" ).popup( "open" );'></li><br>        
+                <li id="but7" class="ion-ios-chatboxes-outline" data-pack="default" onclick="joingroup();"></li>
+                <li id="but8" class="ion-share" data-pack="default" onclick="share2();"></li>
+                <li id="but9" class="ion-android-people" data-pack="default" onclick="infr();"></li>
+                <!-- КНОПКА ДЛЯ ОТКРЫТИЯ ОКНА С ИГРАМИ -->
+                <li id="but10" class="ion-ios-game-controller-a" data-pack="default" onclick='$("#gamesPopup").popup("open");'></li> 
+                <li id="music-toggle" class="ion-volume-mute" onclick="toggleMusic();">
+                    <audio id="game-audio" src="./images/katamari.mp3" loop prefetch="auto"></audio>
+                </li>
+            </ul>
+        </div>  
+      </div>
+
+      <div data-role="popup" id ="waiting" class="ui-content" data-theme="b" data-overlay-theme="b">
+        <p>Создаётся новое поле…</p>
+      </div>
+      <div data-role="popup" id ="newGrid" class="ui-content" data-theme="b" data-overlay-theme="b">
+          <h2>Выбери уровень:</h2>
+          <ul>
+              <li onclick="newRandomGrid(72);">Легко</li>
+              <li onclick="newRandomGrid(96);">Нормально</li>
+              <li onclick="newRandomGrid(128);">Сложно</li>
+              <li onclick="newRandomGrid(192);">Адски</li>
+          </ul>
+      </div>
+      <div data-role="popup" id ="restart" class="ui-content" data-theme="b" data-overlay-theme="b">
+          <h2>Очистить поле?</h2>
+          <ul>
+              <li onclick='restart();$("#restart").popup("close"); style="margin-right: 10px;"'>Да </li>
+              <li id="cancel" onclick='$("#restart").popup("close");'> Нет</li>
+          </ul>
+      </div>
+      <div data-role="popup" id ="help" class="ui-content" data-theme="b" data-overlay-theme="b">
+          <h2>Помощь</h2>
+          <p>Обозначения</p>
+          <ul>
+                <li class="ion-fork-repo" data-pack="default"></li>
+                <li class="help">Поместить догадку (синяя цифра)</li>
+                <li class="ion-pull-request" data-pack="default"></li>
+                <li class="help">Утвердить догадку (красная цифра)</li>
+                <li class="ion-android-close" data-pack="android"></li>
+                <li class="help">Удалить догадку</li>
+                <li class="ion-android-refresh" data-pack="android"></li>
+                <li class="help">Заново это же поле</li>
+                <li class="ion-code-working" data-pack="default"></li>
+                <li class="help">Новая игра</li>
+          </ul>
+          <p>Дополнительно:</p>
+          <h3 id="check" class="helpButton" onclick='check();$("#help").popup("close");'>Показать мои ошибки</h3>
+           <div style="font-size: 12px; color: #666; text-align: center; margin-top: -8px; margin-bottom: 5px;">ⓘ Введите 2+ цифры</div>
+          <h3 id="solve" class="helpButton" onclick='solve();$("#help").popup("close");'>Решить эту задачу</h3>
+      </div>
+
+      <!-- ========== ВСПЛЫВАЮЩЕЕ ОКНО С КАТАЛОГОМ ИГР ========== -->
+      <div data-role="popup" id="gamesPopup" class="games-popup" data-overlay-theme="a" data-dismissible="true">
+          <div class="ui-content">
+              <h2>🎮 Другие игры</h2>
+              <div class="games-grid-popup">
+               <!--   <div class="game-card-popup" onclick="window.open('https://m.vk.ru/app51397074');$('#gamesPopup').popup('close');">🦈 Весёлая акула</div> -->
+                  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/tetrisc');$('#gamesPopup').popup('close');">🧩 Весёлый тетрис</div>
+                 <!--  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/hitrixx');$('#gamesPopup').popup('close');">🌈 Весёлая радуга</div> -->
+                  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/crosstheroad');$('#gamesPopup').popup('close');">🐥 Весёлая цыпа на дороге</div>
+               <!--    <div class="game-card-popup" onclick="window.open('https://m.vk.ru/app51399437');$('#gamesPopup').popup('close');">🍎 Фруктовая корзина</div> -->
+               <!--    <div class="game-card-popup" onclick="window.open('https://m.vk.ru/amebae');$('#gamesPopup').popup('close');">🦠 Амёба: эволюция</div> -->
+                <!--   <div class="game-card-popup" onclick="window.open('https://m.vk.ru/katakana_jp');$('#gamesPopup').popup('close');">🇯🇵 Японский: катакана</div> -->
+                  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/hiragana_jp');$('#gamesPopup').popup('close');">🇯🇵 Японский: хирагана</div>
+                 <!--  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/app8181888');$('#gamesPopup').popup('close');">📚 Японский: Н1-Н5</div> -->
+                  <div class="game-card-popup" onclick="window.open('https://vk.ru/app8177204');$('#gamesPopup').popup('close');">🐘 Угадай животное!</div>
+                  <div class="game-card-popup" onclick="window.open('https://m.vk.ru/animepuzz');$('#gamesPopup').popup('close');">🎌 Аниме-пазлы</div>
+              <!--     <div class="game-card-popup" onclick="window.open('https://m.vk.ru/app8178502');$('#gamesPopup').popup('close');">⚡ Реакция</div> -->
+              <!--     <div class="game-card-popup" onclick="window.open('https://m.vk.ru/app8176436');$('#gamesPopup').popup('close');">🪰 Весёлая мошка</div> -->
+              </div>
+              <button class="close-popup-btn" onclick="$('#gamesPopup').popup('close');">✖️ Закрыть</button>
+          </div>
+      </div>
+      
+      <div id="game-clock">00:00:00</div>
+
+<script>
+// ==================== ПОЛНЫЙ КОД СУДОКУ ====================
+var T = Array.from(new Array(9), () => new Array(9).fill(0));
+var Tref = Array.from(new Array(9), () => new Array(9));
+var Tsol = Array.from(new Array(9), () => new Array(9).fill(0));
+var digits = new Array(10);
+var hyp = false;
+var hyps = [];
+var curX = 0;
+var curY = 0;
+var col1 = "#B00";
+var col2 = "#0A85FF";
+  // Переменная для отслеживания времени последней рекламы
+var lastAdTime = 0;
+var adCooldown = 120000; // 2 минуты в миллисекундах
+
+function shuffle(array) {
+    let counter = array.length;
+    while (counter > 0) {
+        let index = Math.floor(Math.random() * counter);
+        counter--;
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+    return array;
+}
+
+function setCell(y, x, n) {
+    if (n==0) Tref[y][x].innerHTML = "";
+    else Tref[y][x].innerHTML = n.toString();
+}
+
+function updateGrid() {
+    for(var i=0;i<9;i++) for(var j=0;j<9;j++) setCell(i,j,T[i][j]);
+}
+
+function allowed(A, y, x) {
+    var i, res = [], arr = new Array(10).fill(true);
+    if (A[y][x] > 0) return res;
+    for(i=0;i<9;i++) arr[A[y][i]] = false;
+    for(i=0;i<9;i++) arr[A[i][x]] = false;
+    for(i=0;i<9;i++) arr[A[y-(y%3) + Math.floor(i/3)][x-(x%3) + (i%3)]] = false;
+    for(i=1;i<10;i++) if (arr[i]) res.push(i);
+    return res;
+}
+
+function bestHypothesis(A) {
+    var i,j,s,n,bSc=10,bCoords=[9,9],bAll=[];
+    for(i=0;i<9;i++) for(j=0;j<9;j++) if(A[i][j]==0) {
+        s = allowed(A,i,j);
+        n = s.length;
+        if(n<bSc) { bSc=n; bCoords=[i,j]; bAll=s; }
+    }
+    return [bAll, bCoords[0], bCoords[1]];
+}
+
+function _findAcceptableGrid() {
+    var [all,y,x] = bestHypothesis(T);
+    if(y==9) return true;
+    if(all.length==0) return false;
+    all = shuffle(all);
+    for(var i=0;i<all.length;i++) { T[y][x]=all[i]; if(_findAcceptableGrid()) return true; }
+    T[y][x]=0;
+    return false;
+}
+
+function findAcceptableGrid() {
+    for(var i=0;i<9;i++) for(var j=0;j<9;j++) T[i][j]=0;
+    while(!_findAcceptableGrid()) for(i=0;i<9;i++) for(j=0;j<9;j++) T[i][j]=0;
+    for(i=0;i<9;i++) for(j=0;j<9;j++) Tsol[i][j]=T[i][j];
+}
+
+function _findValidityClass(A, n) {
+    var i, sol=-1, [all,y,x]=bestHypothesis(A);
+    if(y==9) return 1;
+    if(all.length==0) return -1;
+    for(i=0;i<all.length;i++) {
+        A[y][x]=all[i];
+        let r = _findValidityClass(A,n);
+        A[y][x]=0;
+        if(r>=0) { if(sol>=0) return -2; sol = all.length * r; }
+        else if(r==-2) return -2;
+    }
+    return sol;
+}
+
+function _getRandomGrid2(nlevel) {
+    var i,j,y1,x1,y2,x2,s,sc=-2,zeros=[],kept=[];
+    for(i=0;i<9;i++) for(j=0;j<9;j++) kept.push([i,j]);
+    findAcceptableGrid();
+    for(i=0;i<nlevel;i++) {
+        j = Math.floor(Math.random()*kept.length);
+        [y1,x1]=kept[j];
+        T[y1][x1]=0;
+        let v = _findValidityClass(T,0);
+        if(v<0) T[y1][x1]=Tsol[y1][x1];
+        else { sc=v; zeros.push([y1,x1]); kept[j]=kept[kept.length-1]; kept.pop(); }
+        j = Math.floor(Math.random()*kept.length);
+        [y1,x1]=kept[j];
+        s = Math.floor(Math.random()*zeros.length);
+        [y2,x2]=zeros[s];
+        T[y1][x1]=0; T[y2][x2]=Tsol[y2][x2];
+        v = _findValidityClass(T,0);
+        if(v<sc) { T[y1][x1]=Tsol[y1][x1]; T[y2][x2]=0; }
+        else { sc=v; zeros[s]=[y1,x1]; kept[j]=[y2,x2]; }
+    }
+    return sc;
+}
+
+function _getRandomGrid(nlevel) {
+    _getRandomGrid2(nlevel);
+    updateGrid();
+    for(var i=0;i<9;i++) for(var j=0;j<9;j++) 
+        Tref[i][j].setAttribute("clickable", T[i][j]==0?1:0);
+    $("#waiting").popup("close");
+    hyp = false;
+    document.getElementById("but1").style.color="#000";
+    document.getElementById("but2").style.color="#B8B8B8";
+    document.getElementById("but3").style.color="#B8B8B8";
+}
+
+function getRandomGrid(nlevel) {
+    $("#waiting").popup("open");
+    setTimeout(function() { _getRandomGrid(nlevel); }, 0);
+}
+
+function elsewhere() {
+    if(Tref[curY] && Tref[curY][curX]) Tref[curY][curX].style.backgroundColor = "";
+    document.getElementById("digits").style.display = "none";
+    document.getElementById("buttons1").style.display = "inline-block";
+}
+
+function clickCell(cell) {
+    if(Number(cell.getAttribute("clickable"))==1) {
+        var y = Number(cell.getAttribute("y"));
+        var x = Number(cell.getAttribute("x"));
+        if(Tref[curY] && Tref[curY][curX]) Tref[curY][curX].style.backgroundColor = "";
+        curY=y; curX=x;
+        cell.style.backgroundColor="#BBB";
+        document.getElementById("digits").style.display="inline-block";
+        document.getElementById("buttons1").style.display="none";
+        var a = allowed(T,y,x);
+        var d = new Array(10).fill(false);
+        for(var i=0;i<a.length;i++) d[a[i]]=true;
+        d[0]=true;
+        for(i=0;i<10;i++) {
+            if(d[i]) {
+                let v=i, col=hyp?col2:col1, h=hyp;
+                digits[i].style.color=col;
+                digits[i].style.borderColor=col;
+                $("#digits").off("click", "#digit-"+String(i)).on("click", "#digit-"+String(i), function(e) {
+                    T[y][x]=v;
+                    setCell(y,x,v);
+                    Tref[y][x].style.color=col;
+                    if(h) hyps.push(Tref[y][x]);
+                });
+            } else {
+                digits[i].style.color="#B8B8B8";
+                digits[i].style.borderColor="#B8B8B8";
+            }
+        }
+    } else elsewhere();
+}
+
+function hypothesis1() { if(!hyp) { hyp=true; updateButtonsUI(); } }
+function hypothesis2() { for(var i=0;i<hyps.length;i++) hyps[i].style.color=col1; hyps=[]; hyp=false; updateButtonsUI(); }
+function hypothesis3() { for(var i=0;i<hyps.length;i++) { let y=Number(hyps[i].getAttribute("y")), x=Number(hyps[i].getAttribute("x")); T[y][x]=0; hyps[i].innerHTML=""; } hyps=[]; hyp=false; updateButtonsUI(); }
+function restart() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) { if(Number(Tref[i][j].getAttribute("clickable"))==1) { T[i][j]=0; setCell(i,j,0); } Tref[i][j].style.backgroundColor = ""; } hyp=false; updateButtonsUI(); }
+function solve() { for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]==0) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; } else if(T[i][j]!=Tsol[i][j]) { T[i][j]=Tsol[i][j]; setCell(i,j,T[i][j]); Tref[i][j].style.color="#B8B8B8"; Tref[i][j].style.backgroundColor="#FBB"; } hyp=false; updateButtonsUI(); }
+function check() { myAdd1(); for(var i=0;i<9;i++) for(var j=0;j<9;j++) if(T[i][j]!=Tsol[i][j] && T[i][j]!=0) Tref[i][j].style.backgroundColor="#FBB"; }
+function newRandomGrid(nlevel) {     $("#newGrid").popup("close");     for(var i=0;i<9;i++) for(var j=0;j<9;j++) Tref[i][j].style.backgroundColor = ""; 
+    setTimeout(function() { getRandomGrid(nlevel); }, 250); 
+}
+function updateButtonsUI() { 
+    if(hyp) { document.getElementById("but1").style.color="#B8B8B8"; document.getElementById("but2").style.color="#000"; document.getElementById("but3").style.color="#000"; }
+    else { document.getElementById("but1").style.color="#000"; document.getElementById("but2").style.color="#B8B8B8"; document.getElementById("but3").style.color="#B8B8B8"; }
+}
+
+function myAdd1(){     var now = Date.now();    if (typeof vkBridge !== 'undefined' && (now - lastAdTime) >= adCooldown) {
+        lastAdTime = now;        vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})            .catch(e => console.log("Ad error:", e));
+    } else {        console.log("Реклама не показана: слишком рано");    }}
+function joingroup(){ if(typeof vkBridge!=='undefined') vkBridge.send("VKWebAppJoinGroup", {"group_id":213417231}); }
+function infr(){ if(typeof vkBridge!=='undefined') vkBridge.send("VKWebAppShowInviteBox", {}).catch(e=>console.log); }
+function share2(){ if(typeof vkBridge!=='undefined') vkBridge.send("VKWebAppShowWallPostBox", {message:"Судоку для самых умных!", attachments:"https://vk.ru/app51399364"}); }
+function toggleMusic() { var audio=document.getElementById('game-audio'), button=document.getElementById('music-toggle'); if(audio.paused) audio.play().then(()=>button.className='ion-ios-musical-notes').catch(e=>console.log); else { audio.pause(); button.className='ion-volume-mute'; } }
+
+function init() {
+    var tbl = document.getElementById("grid");
+    for (var i = 0; i < 9; i++) {        var r = tbl.insertRow(-1);        r.className = "gridRow";
+        for (var j = 0; j < 9; j++) {            Tref[i][j] = r.insertCell(-1);            Tref[i][j].className = "gridCell";
+            if (i % 3 == 0) Tref[i][j].className += " topBorder";            if (i % 3 == 2) Tref[i][j].className += " bottomBorder";
+            if (j % 3 == 0) Tref[i][j].className += " leftBorder";            if (j % 3 == 2) Tref[i][j].className += " rightBorder";
+            Tref[i][j].setAttribute("y", i);            Tref[i][j].setAttribute("x", j);            Tref[i][j].setAttribute("clickable", 0);        }    }    
+    $("#grid").on("click", "td", function(e) {         clickCell(this);         e.stopPropagation();     });    
+    for (i = 0; i < 10; i++) digits[i] = document.getElementById("digit-" + String(i));    document.getElementById("digits").style.display = "none";    document.getElementById("but1").style.color = "#000";    document.getElementById("but2").style.color = "#B8B8B8";
+    document.getElementById("but3").style.color = "#B8B8B8";    
+    // Запуск игры и баннера
+    setTimeout(function() {         getRandomGrid(96);        showBottomBanner();  // Один вызов баннера
+    }, 250);
+}
+
+  
+function startClock() {
+    var clock=document.getElementById('game-clock');
+    function update(){ var d=new Date(); clock.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`; }
+    update(); setInterval(update,1000);
+}
+window.addEventListener('DOMContentLoaded',startClock);
+if(typeof vkBridge!=='undefined') vkBridge.send('VKWebAppInit').catch(e=>console.log);
+  
+function showBottomBanner() {
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppShowBannerAd', {
+            banner_location: 'bottom' // Показывать баннер внизу экрана
+        })
+        .then((data) => {
+            if (data.result) {
+                console.log('Баннер успешно отображён');
+            }
+        })
+        .catch((error) => {
+            console.log('Ошибка при показе баннера:', error);
+        });
+    }
+}
+</script>
+  </body>
+</html>

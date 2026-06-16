@@ -1,414 +1,825 @@
-var T = Array.from(new Array(9), () => new Array(9).fill(0));
-var Tref = Array.from(new Array(9), () => new Array(9));
-var Tsol = Array.from(new Array(9), () => new Array(9).fill(0));
-var digits = new Array(10);
-var hyp = false;
-var hyps = []
-//var coeff = [ 0, 1, 9, 81, 729, 6561, 59049, 531441, 4782969];
+// ============================================================
+// 1. VK Bridge инициализация (используем глобальный объект)
+// ============================================================
+const vkBridge = window.vkBridge || {
+    send: (event, data) => console.log('[VK Bridge]', event, data),
+    sendPromise: (event, data) => {
+        console.log('[VK Bridge]', event, data);
+        return Promise.resolve({ result: true });
+    },
+    subscribe: () => {}
+};
 
-var curX = 0;
-var curY = 0;
-
-var col1 = "#B00";
-var col2 = "#0A85FF";
-vkBridge.send('VKWebAppInit');
-
-function shuffle(array) {
-    let counter = array.length;
-    while (counter > 0) {
-        let index = Math.floor(Math.random() * counter);
-        counter--;
-        let temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
+// ============================================================
+// 2. Управление рекламой (баннер + межстраничная)
+// ============================================================
+class AdManager {
+    constructor() {
+        this.lastAdTime = 0;
+        this.adCooldown = 120000; // 2 минуты
+        this.bannerShown = false;
     }
-    return array;
-}
 
-function randomOrderCells() {
-    var i,j;
-    var arr = []
-    for (i=0;i<9;i++) {
-        for (j=0;j<9;j++) {
-            arr.push([i,j]);
+    // Показать баннерную рекламу внизу
+    showBottomBanner() {
+        if (this.bannerShown) return;
+        if (typeof vkBridge !== 'undefined') {
+            vkBridge.send('VKWebAppShowBannerAd', {
+                banner_location: 'bottom'
+            })
+            .then((data) => {
+                if (data && data.result) {
+                    console.log('Баннер успешно отображён');
+                    this.bannerShown = true;
+                }
+            })
+            .catch((error) => {
+                console.log('Ошибка при показе баннера:', error);
+            });
         }
     }
-    return shuffle(arr);
-}
 
-// Set cell (y,x) with value n   (0 for empty cell)
-function setCell(y, x, n) {
-    if (n==0) Tref[y][x].innerHTML = "";
-    else Tref[y][x].innerHTML = n.toString();
-}
-
-function updateGrid() {
-    var i,j;
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            setCell(i,j,T[i][j]);
-            Tref[i][j].style.color='';
-            Tref[i][j].style.backgroundColor='';
+    // Показать межстраничную рекламу (с защитой от спама)
+    showInterstitial() {
+        const now = Date.now();
+        if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
+            this.lastAdTime = now;
+            return vkBridge.sendPromise("VKWebAppShowNativeAds", { ad_format: "interstitial" })
+                .then(() => {
+                    console.log('Межстраничная реклама показана');
+                    return true;
+                })
+                .catch(e => {
+                    console.log("Ошибка показа рекламы:", e);
+                    return false;
+                });
+        } else {
+            console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
+            return Promise.resolve(false);
         }
     }
 }
 
-function init() {
-    var i, j;
-    var tbl = document.getElementById("grid");
-    for(i=0;i<9;i++) {
-        var r = tbl.insertRow(-1);
-        r.className = "gridRow";
-        for(j=0;j<9;j++) {
-            Tref[i][j] = r.insertCell(-1);
-            Tref[i][j].className = "gridCell";
-            if (i%3 == 0) Tref[i][j].className += " topBorder";
-            if (i%3 == 2) Tref[i][j].className += " bottomBorder";
-            if (j%3 == 0) Tref[i][j].className += " leftBorder";
-            if (j%3 == 2) Tref[i][j].className += " rightBorder";
-            var y = document.createAttribute("y");
-            var x = document.createAttribute("x");
-            var click = document.createAttribute("clickable");
-            click.value = 0;
-            y.value = i;
-            x.value = j;
-            Tref[i][j].setAttributeNode(y);
-            Tref[i][j].setAttributeNode(x);
-            Tref[i][j].setAttributeNode(click);
+// ============================================================
+// 3. Простой звуковой движок
+// ============================================================
+class SoundManager {
+    constructor() {
+        this.enabled = true;
+        this.ctx = null;
+        this.initialized = false;
+    }
+
+    init() {
+        if (this.initialized) return;
+        try {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            this.initialized = true;
+        } catch (e) {
+            console.warn('Web Audio не поддерживается');
         }
     }
-    // click on cells
-    $("#grid").on("click", "td", function(e) {
-        clickCell(this);
-        e.stopPropagation();
-    });
-    // digits
-    for(i=0;i<10;i++)
-        digits[i] = document.getElementById("digit-"+String(i));
-    // Buttons
-    i = $('#digits').height();
-    j = $('#buttons1').height();
-    j = Math.floor( (i-j)/2 ) + 4;
-    $('#buttons1').height( i-j );
-    $('#buttons1').css("margin-top", String(j)+"px");
-    document.getElementById("digits").style.display = "none";
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
 
-    setTimeout(function() { getRandomGrid(96); }, 250);
+    beep(freq = 600, duration = 80, volume = 0.15) {
+        if (!this.enabled || !this.ctx) return;
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration / 1000);
+            osc.start(this.ctx.currentTime);
+            osc.stop(this.ctx.currentTime + duration / 1000);
+        } catch (e) { /* игнорируем */ }
+    }
+
+    click() { this.beep(700, 60, 0.12); }
+    error() { this.beep(300, 150, 0.15); }
+    win() { 
+        this.beep(523, 120, 0.12);
+        setTimeout(() => this.beep(659, 120, 0.12), 150);
+        setTimeout(() => this.beep(784, 180, 0.12), 300);
+    }
+    hint() { this.beep(880, 80, 0.1); }
+    solve() { this.beep(440, 100, 0.1); }
+    toggle() { this.beep(500, 50, 0.1); }
 }
 
-function allowed(A, y,x) {
-    var i;
-    var res = [];
-    var arr = new Array(10).fill(true); 
-    if (A[y][x] > 0) return res;
-    for(i=0;i<9;i++) arr[A[y][i]] = false;
-    for(i=0;i<9;i++) arr[A[i][x]] = false;
-    for(i=0;i<9;i++)
-        arr[ A[ y-(y%3) + Math.floor(i/3)][x-(x%3) + (i%3) ] ] = false;
-    for(i=1;i<10;i++)
-        if (arr[i]) res.push(i);
-    return res;
-}
+// ============================================================
+// 4. Основная игра Судоку
+// ============================================================
+class SudokuGame {
+    constructor() {
+        this.sound = new SoundManager();
+        this.adManager = new AdManager();
+        this.difficulty = 'easy';
+        this.grid = [];
+        this.solution = [];
+        this.userGrid = [];
+        this.given = [];
+        this.selectedRow = -1;
+        this.selectedCol = -1;
+        this.timer = 0;
+        this.timerInterval = null;
+        this.isRunning = false;
+        this.isFinished = false;
+        this.hintsUsed = 0;
+            this.checksUsed = 0; 
+               this.checkedCells = {};
+        this.cellsToRemove = 0;
 
-function bestHypothesis(A) {
-    var i,j,s;
-    var bSc = 10;
-    var bCoords = [9,9];
-    var bAll = [];
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            if (A[i][j] == 0) {
-                s = allowed(A, i,j);
-                n = s.length;
-                if (n<bSc) {
-                    bSc = n;
-                    bCoords = [i,j];
-                    bAll = s;
+        // DOM элементы
+        this.menuScreen = document.getElementById('menuScreen');
+        this.gameScreen = document.getElementById('gameScreen');
+        this.gridElement = document.getElementById('sudoku-grid');
+        this.numPanel = document.getElementById('num-panel');
+        this.messageEl = document.getElementById('message');
+        this.statusEl = document.getElementById('gameStatus');
+        this.timerEl = document.getElementById('timerDisplay');
+       
+
+        // Кнопки
+        document.getElementById('btnStartGame').addEventListener('click', () => this.startNewGame());
+        document.getElementById('btnBackToMenu').addEventListener('click', () => this.goToMenu());
+        document.getElementById('btnToggleSound').addEventListener('click', () => this.toggleSound());
+        document.getElementById('btnInviteFriends').addEventListener('click', () => this.inviteFriends());
+        document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
+        document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
+        document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
+
+        
+        // Кнопка "Как играть?"
+        document.getElementById('btnHowToPlay').addEventListener('click', () => {
+            this.sound.click();
+            document.getElementById('howToPlayModal').style.display = 'flex';
+        });
+        
+        // Закрытие модального окна
+        document.getElementById('closeHowToPlay').addEventListener('click', () => {
+            document.getElementById('howToPlayModal').style.display = 'none';
+        });
+        document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
+            document.getElementById('howToPlayModal').style.display = 'none';
+        });
+        // Закрытие по клику вне окна
+        document.getElementById('howToPlayModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('howToPlayModal').style.display = 'none';
+            }
+        });
+
+        // Выбор сложности
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.difficulty = btn.dataset.diff;
+                this.sound.click();
+            });
+        });
+
+        // Подписка на VK
+        this.setupVKBridge();
+
+        // Показать меню
+        this.showMenu();
+        this.initAdBanner();
+    }
+
+    // ============================================================
+    // VK Bridge
+    // ============================================================
+    setupVKBridge() {
+        vkBridge.subscribe((e) => {
+            if (e.type === 'VKWebAppViewHide') {
+                if (this.sound.ctx && this.sound.ctx.state === 'running') {
+                    this.sound.ctx.suspend();
+                }
+            } else if (e.type === 'VKWebAppViewRestore') {
+                if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
+                    this.sound.ctx.resume();
+                }
+            }
+            // Обработка события показа баннера
+            else if (e.type === 'VKWebAppShowBannerAdResult') {
+                if (e.data && e.data.result) {
+                    console.log('Баннер показан успешно');
+                }
+            }
+        });
+    }
+
+    // ============================================================
+    // Реклама
+    // ============================================================
+    initAdBanner() {
+        // Показываем баннерную рекламу через VK Bridge
+        this.adManager.showBottomBanner();
+    }
+
+    // ============================================================
+    // Социальные функции
+    // ============================================================
+    inviteFriends() {
+        this.sound.click();
+        vkBridge.send('VKWebAppShowInviteBox', {});
+    }
+
+    // ============================================================
+    // Навигация
+    // ============================================================
+    showMenu() {
+        this.menuScreen.style.display = 'flex';
+        this.gameScreen.style.display = 'none';
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        this.isRunning = false;
+    }
+
+    goToMenu() {
+        this.sound.click();
+        this.showMenu();
+    }
+
+    showGame() {
+        this.menuScreen.style.display = 'none';
+        this.gameScreen.style.display = 'flex';
+    }
+
+    // ============================================================
+    // Звук
+    // ============================================================
+    toggleSound() {
+        this.sound.enabled = !this.sound.enabled;
+        const btn = document.getElementById('btnToggleSound');
+        btn.textContent = this.sound.enabled ? '🔊 Звук: Вкл' : '🔇 Звук: Выкл';
+        this.sound.toggle();
+        if (this.sound.enabled) {
+            this.sound.init();
+        }
+    }
+
+    // ============================================================
+    // Генерация Судоку
+    // ============================================================
+    generateSudoku() {
+        const grid = Array.from({ length: 9 }, () => Array(9).fill(0));
+        for (let block = 0; block < 9; block += 3) {
+            this.fillBlock(grid, block, block);
+        }
+        this.solveSudoku(grid);
+        this.solution = grid.map(row => [...row]);
+        this.userGrid = grid.map(row => [...row]);
+        this.given = Array.from({ length: 9 }, () => Array(9).fill(true));
+
+        const removeCounts = {
+            easy: 30 + Math.floor(Math.random() * 5),
+            medium: 38 + Math.floor(Math.random() * 7),
+            hard: 46 + Math.floor(Math.random() * 8),
+            expert: 55 + Math.floor(Math.random() * 10)
+        };
+        this.cellsToRemove = removeCounts[this.difficulty] || 35;
+
+        let removed = 0;
+        while (removed < this.cellsToRemove) {
+            const r = Math.floor(Math.random() * 9);
+            const c = Math.floor(Math.random() * 9);
+            if (this.userGrid[r][c] !== 0) {
+                this.userGrid[r][c] = 0;
+                this.given[r][c] = false;
+                removed++;
+            }
+        }
+        this.grid = this.userGrid.map(row => [...row]);
+    }
+
+    fillBlock(grid, startRow, startCol) {
+        const nums = [1,2,3,4,5,6,7,8,9];
+        for (let i = 0; i < 9; i++) {
+            const r = startRow + Math.floor(i / 3);
+            const c = startCol + (i % 3);
+            const idx = Math.floor(Math.random() * nums.length);
+            grid[r][c] = nums[idx];
+            nums.splice(idx, 1);
+        }
+    }
+
+    isValid(grid, row, col, num) {
+        for (let i = 0; i < 9; i++) {
+            if (grid[row][i] === num) return false;
+            if (grid[i][col] === num) return false;
+        }
+        const br = Math.floor(row / 3) * 3;
+        const bc = Math.floor(col / 3) * 3;
+        for (let r = br; r < br + 3; r++) {
+            for (let c = bc; c < bc + 3; c++) {
+                if (grid[r][c] === num) return false;
+            }
+        }
+        return true;
+    }
+
+    solveSudoku(grid) {
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (grid[r][c] === 0) {
+                    const nums = this.shuffleArray([1,2,3,4,5,6,7,8,9]);
+                    for (const num of nums) {
+                        if (this.isValid(grid, r, c, num)) {
+                            grid[r][c] = num;
+                            if (this.solveSudoku(grid)) return true;
+                            grid[r][c] = 0;
+                        }
+                    }
+                    return false;
                 }
             }
         }
+        return true;
     }
-    return [ bAll, bCoords[0], bCoords[1] ];
-}
 
-function _findAcceptableGrid() {
-    var i;
-    var [all, y, x] = bestHypothesis(T);
-    if (y==9) return true;
-    if (all.length==0) return false; // invalid grid
-    all = shuffle(all);
-    for (i=0;i<all.length;i++) {
-        T[y][x] = all[i];
-        if(_findAcceptableGrid()) return true;
-    }
-}
-function findAcceptableGrid() {
-    var i,j;
-    for(i=0;i<9;i++) { for(j=0;j<9;j++) T[i][j] = 0; }
-    while(_findAcceptableGrid() != true) {
-        for(i=0;i<9;i++) { for(j=0;j<9;j++) T[i][j] = 0; }
-    }
-    for(i=0;i<9;i++) { for(j=0;j<9;j++) Tsol[i][j] = T[i][j]; }
-}
-
-function _findValidityClass(A, n) {
-    var i;
-    var sol = -1;
-    var [all, y, x] = bestHypothesis(A);
-    if (y==9) return 1;
-    if (all.length==0) return -1; // invalid grid
-    // if (all.length > 1) n++; // make a new hypothesis
-    for (i=0;i<all.length;i++) {
-        A[y][x] = all[i];
-        r = _findValidityClass(A, n);
-        A[y][x] = 0;
-        if (r >= 0) {
-            if (sol >= 0) return -2; // at least two solutions exist
-            // sol = r;
-            sol = all.length * r;
-        } else if (r==-2) return -2;
-    }
-    return sol;
-}
-
-function _getRandomGrid2(nlevel) {
-    var i, j, v, y1, x1, y2, x2, s;
-    var sc = -2;
-    var zeros = [];
-    var kept = [];
-    for(i=0;i<9;i++) { for(j=0;j<9;j++) kept.push([i,j]); }
-    findAcceptableGrid();
-    for(i=0;i<nlevel;i++) {
-        j = Math.floor(Math.random() * kept.length);
-        y1 = kept[j][0]; x1 = kept[j][1];
-        T[y1][x1] = 0;
-        v = _findValidityClass(T, 0);
-        if(v < 0) T[y1][x1] = Tsol[y1][x1];
-        else {
-            sc = v; zeros.push([y1,x1]);
-            kept[j] = kept[kept.length-1]; kept.pop();
+    shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-        j = Math.floor(Math.random() * kept.length);
-        y1 = kept[j][0]; x1 = kept[j][1];
-        s = Math.floor(Math.random() * zeros.length);
-        y2 = zeros[s][0]; x2 = zeros[s][1];
-        T[y1][x1] = 0; T[y2][x2] = Tsol[y2][x2];
-        v = _findValidityClass(T, 0);
-        if(v < sc)
-            {
-                T[y1][x1] = Tsol[y1][x1];
-                T[y2][x2] = 0;
+        return arr;
+    }
+
+    // ============================================================
+    // Рендеринг
+    // ============================================================
+    render() {
+    this.gridElement.innerHTML = '';
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+
+            if (c % 3 === 2 && c < 8) cell.classList.add('block-border-right');
+            if (r % 3 === 2 && r < 8) cell.classList.add('block-border-bottom');
+
+            const val = this.grid[r][c];
+            const cellKey = `${r}-${c}`;
+            
+            if (val !== 0) {
+                cell.textContent = val;
+                if (this.given[r][c]) {
+                    cell.classList.add('given');
+                } else {
+                    cell.classList.add('user');
+                }
             }
-        else {
-            sc = v;
-            zeros[s] = [y1, x1];
-            kept[j] = [y2, x2];
-        }
-    }
-    return sc;
-}
 
-/*
-function _getRandomGrid2(nlevel) {
-    var i, j, k, v, y1, x1, y2, x2, x3, y3, s;
-    var sc = -2;
-    var zeros = [];
-    var kept = [];
-    for(i=0;i<9;i++) { for(j=0;j<9;j++) kept.push([i,j]); }
-    findAcceptableGrid();
-    for(i=0;i<nlevel;i++) {
-        // first step
-        j = Math.floor(Math.random() * kept.length);
-        y1 = kept[j][0]; x1 = kept[j][1];
-        T[y1][x1] = 0;
-        v = _findValidityClass(T, 0);
-        if(v < 0) T[y1][x1] = Tsol[y1][x1];
-        else {
-            sc = v; zeros.push([y1,x1]);
-            kept[j] = kept[kept.length-1]; kept.pop();
-        }
-        // second step
-        j = Math.floor(Math.random() * kept.length);
-        k = Math.floor(Math.random() * (kept.length-1));
-        if (j==k) k = kept.length-1;
-        if (j<k) { s=j;j=k;k=s; }
-        y1 = kept[j][0]; x1 = kept[j][1];
-        y2 = kept[k][0]; x2 = kept[k][1];
-        s = Math.floor(Math.random() * zeros.length);
-        y3 = zeros[s][0]; x3 = zeros[s][1];
-        T[y1][x1] = 0; T[y2][x2] = 0; T[y3][x3] = Tsol[y3][x3];
-        v = _findValidityClass(T, 0);
-        if(v < sc)
-            {
-                T[y1][x1] = Tsol[y1][x1];
-                T[y2][x2] = Tsol[y2][x2];
-                T[y3][x3] = 0;
+            // Показываем ошибки ТОЛЬКО на легком уровне (автоматически)
+            if (this.difficulty === 'easy') {
+                if (!this.given[r][c] && val !== 0 && val !== this.solution[r][c]) {
+                    cell.classList.add('error');
+                }
             }
-        else {
-            sc = v;
-            zeros[s] = [y1, x1]; zeros.push([y2,x2]);
-            kept[j] = kept[kept.length-1]; kept.pop();
-            kept[k] = [y3, x3];
-        }
+
+// Отображаем результаты проверки (цвет цифр, а не фона)
+if (this.checkedCells[cellKey] !== undefined) {
+    if (this.checkedCells[cellKey] === true) {
+        // Правильная цифра — зеленая
+        cell.style.color = '#4caf50';
+    } else if (this.checkedCells[cellKey] === false) {
+        // Неправильная цифра — красная
+        cell.style.color = '#ff5252';
+        cell.classList.add('error');
     }
-    return sc;
-}
-*/
-
-function _getRandomGrid(nlevel) {
-    console.log(_getRandomGrid2(nlevel));
-    updateGrid();
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            if (T[i][j] == 0) Tref[i][j].setAttribute("clickable", 1);
-            else Tref[i][j].setAttribute("clickable", 0);
-        }
-    }
-    // make clickable
-    $( "#waiting" ).popup( "close" )
-    //$.mobile.loading().hide();
-    hyp = false;
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
-}
-function getRandomGrid(nlevel) {
-    $( "#waiting" ).popup( "open" )
-    //$.mobile.loading().show();
-    setTimeout(function() { _getRandomGrid(nlevel); }, 0);
 }
 
-function elsewhere() {
-    Tref[curY][curX].style.backgroundColor = "";
-    document.getElementById("digits").style.display = "none";
-    document.getElementById("buttons1").style.display = "inline-block";
-}
-
-function clickCell(cell) {
-    var c = Number(cell.getAttribute("clickable"));
-    if (c==1) {
-        var y = Number(cell.getAttribute("y"));
-        var x = Number(cell.getAttribute("x"));
-        Tref[curY][curX].style.backgroundColor = "";
-        $( "#digits" ).off("click", "**");
-        curY = y;
-        curX = x;
-        cell.style.backgroundColor = "#BBB";
-        document.getElementById("digits").style.display = "inline-block";
-        document.getElementById("buttons1").style.display = "none";
-        var a = allowed(T, y, x);
-        var d = new Array(10).fill(false);
-        for(i=0;i<a.length;i++) d[a[i]] = true;
-        d[0] = true;
-        for(i=0;i<10;i++) {
-            if (d[i]) {
-                let v = i;
-                let col = (hyp)?col2:col1;
-                let h = hyp;
-                digits[i].style.color=col;
-                digits[i].style.borderColor=col;
-                $("#digits").on("click", "#digit-"+String(i), function(e) {
-                    T[y][x] = v;
-                    setCell(y, x, v);
-                    Tref[y][x].style.color = col;
-                    if (h) hyps.push(Tref[y][x]);
-                    //e.stopPropagation();
-                });
-            } else {
-                digits[i].style.color="#B8B8B8";
-                digits[i].style.borderColor="#B8B8B8";
-                digits[i].style.cursor="pointer";
+            if (this.selectedRow === r && this.selectedCol === c) {
+                cell.classList.add('selected');
             }
-        }
-    } else elsewhere();
-}
 
-function hypothesis1() {
-    if(!hyp) {
-        document.getElementById("but1").style.color="#B8B8B8";
-        document.getElementById("but2").style.color="#000";
-        document.getElementById("but3").style.color="#000";
-        hyp = true;
-    }
-}
-function hypothesis2() {  
-    var i;
-    console.log(hyps);
-    for(i=0;i<hyps.length;i++) hyps[i].style.color = col1;
-    hyps = []
-    hyp = false;
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
-}
-function hypothesis3() {
-
-    var i;
-    console.log(hyps);
-    for(i=0;i<hyps.length;i++) {
-        hyps[i].innerHTML = "";
-        var y = Number(hyps[i].getAttribute("y"));
-        var x = Number(hyps[i].getAttribute("x"));
-        T[y][x] = 0;
-    }
-    hyps = []
-    hyp = false;
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
-}
-function restart() {  
-    var i,j;
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            if(Number(Tref[i][j].getAttribute("clickable")) == 1) {
-                T[i][j] = 0;
-                setCell(i,j,0);
+            if (this.selectedRow !== -1 && this.selectedCol !== -1) {
+                const selVal = this.grid[this.selectedRow][this.selectedCol];
+                if (selVal !== 0 && val === selVal && !(r === this.selectedRow && c === this.selectedCol)) {
+                    cell.classList.add('same-number');
+                }
+                if (r === this.selectedRow || c === this.selectedCol || 
+                    (Math.floor(r/3) === Math.floor(this.selectedRow/3) && 
+                     Math.floor(c/3) === Math.floor(this.selectedCol/3))) {
+                    if (!(r === this.selectedRow && c === this.selectedCol)) {
+                        cell.classList.add('highlighted');
+                    }
+                }
             }
+
+            cell.addEventListener('click', () => this.selectCell(r, c));
+            this.gridElement.appendChild(cell);
         }
     }
-    hyp = false;
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
-
+    this.renderNumPanel();
+    this.updateStatus();
 }
-function newRandomGrid(nlevel) {
-    $( "#newGrid" ).popup( "close" );
-    setTimeout(function() { getRandomGrid(nlevel); }, 250);
-}
-
-function solve() {
-
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            if (T[i][j]==0) {
-                T[i][j] = Tsol[i][j];
-                setCell(i,j, T[i][j]);
-                Tref[i][j].style.color = "#B8B8B8";
-            } else if (T[i][j] != Tsol[i][j]) {
-                T[i][j] = Tsol[i][j];
-                setCell(i,j, T[i][j]);
-                Tref[i][j].style.color = "#B8B8B8";
-                Tref[i][j].style.backgroundColor = "#FBB";
-            }
-        }
+// ============================================================
+// Рендеринг панели цифр
+// ============================================================
+renderNumPanel() {
+    this.numPanel.innerHTML = '';
+    for (let i = 1; i <= 9; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.textContent = i;
+        btn.addEventListener('click', () => this.placeNumber(i));
+        this.numPanel.appendChild(btn);
     }
-    hyp = false;
-    document.getElementById("but1").style.color="#000";
-    document.getElementById("but2").style.color="#B8B8B8";
-    document.getElementById("but3").style.color="#B8B8B8";
+    const erase = document.createElement('button');
+    erase.className = 'num-btn erase';
+    erase.textContent = '✕';
+    erase.addEventListener('click', () => this.placeNumber(0));
+    this.numPanel.appendChild(erase);
 }
-function check() {
+// ============================================================
+// Обновление статуса
+// ============================================================
+updateStatus() {
+    if (this.isFinished) {
+        this.statusEl.textContent = '🎉 Победа!';
+        this.statusEl.style.color = '#4caf50';
+    } else {
+        this.statusEl.textContent = `🎯 ${this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1)}`;
+        this.statusEl.style.color = '#e94560';
+    }
+}
+// ============================================================
+// Обновление таймера
+// ============================================================
+updateTimer() {
+    const mins = String(Math.floor(this.timer / 60)).padStart(2, '0');
+    const secs = String(this.timer % 60).padStart(2, '0');
+    this.timerEl.textContent = `${mins}:${secs}`;
+}
+    // ============================================================
+    // Игровая логика
+    // ============================================================
+    selectCell(row, col) {
+        if (this.isFinished) return;
+        if (this.given[row][col]) {
+            this.sound.error();
+            return;
+        }
+        this.selectedRow = row;
+        this.selectedCol = col;
+        this.sound.click();
+        this.render();
+        this.messageEl.textContent = '';
+    }
+
+    placeNumber(num) {
+    if (this.isFinished) return;
+    if (this.selectedRow === -1 || this.selectedCol === -1) {
+        this.messageEl.textContent = '⚠️ Выберите клетку';
+        return;
+    }
+    const r = this.selectedRow;
+    const c = this.selectedCol;
+    if (this.given[r][c]) {
+        this.messageEl.textContent = '❌ Это клетка с подсказкой';
+        this.sound.error();
+        return;
+    }
+
+    this.sound.init();
+
+    const cellKey = `${r}-${c}`;
     
-    for(i=0;i<9;i++) {
-        for(j=0;j<9;j++) {
-            if ((T[i][j] != Tsol[i][j])&&(T[i][j] != 0)) {
-                Tref[i][j].style.backgroundColor = "#FBB";
-            }
+    if (num === 0) {
+        if (this.grid[r][c] !== 0) {
+            this.grid[r][c] = 0;
+            // Удаляем статус проверки для этой клетки
+            delete this.checkedCells[cellKey];
+            this.sound.click();
+            this.messageEl.textContent = '';
+            this.render();
+            this.checkWin();
+        }
+        return;
+    }
+
+    // Ставим цифру
+    this.grid[r][c] = num;
+    this.sound.click();
+    
+    // Удаляем статус проверки для этой клетки (она изменена)
+    delete this.checkedCells[cellKey];
+    
+    // На легком уровне показываем результат сразу
+    if (this.difficulty === 'easy') {
+        if (num === this.solution[r][c]) {
+            this.messageEl.textContent = '✅ Верно!';
+        } else {
+            this.messageEl.textContent = `❌ Неправильно!`;
+            this.sound.error();
+        }
+    } else {
+        this.messageEl.textContent = `Цифра ${num} поставлена`;
+    }
+    
+    this.render();
+    
+    if (this.checkWin()) {
+        this.isFinished = true;
+        this.sound.win();
+        this.statusEl.textContent = '🎉 Победа!';
+        this.messageEl.textContent = '🏆 Вы решили Судоку!';
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        this.render();
+    }
+}
+
+// ============================================================
+// Подсказка (ставит правильную цифру в выделенную клетку)
+// ============================================================
+giveHint() {
+    if (this.isFinished) return;
+    
+    // Проверка доступности подсказок на уровне сложности
+    let maxHints = 0;
+    if (this.difficulty === 'easy') {
+        maxHints = 3;
+    } else if (this.difficulty === 'medium') {
+        maxHints = 3;
+    } else if (this.difficulty === 'hard') {
+        maxHints = 1;
+    } else if (this.difficulty === 'expert') {
+        maxHints = 1;
+    } else {
+        this.messageEl.textContent = '❌ Подсказки недоступны на этом уровне';
+        this.sound.error();
+        return;
+    }
+
+    // Проверка, остались ли подсказки
+    if (this.hintsUsed >= maxHints) {
+        this.messageEl.textContent = `❌ Подсказки закончились! (${maxHints}/${maxHints})`;
+        this.sound.error();
+        return;
+    }
+
+    // Проверка, выделена ли клетка
+    if (this.selectedRow === -1 || this.selectedCol === -1) {
+        this.messageEl.textContent = '⚠️ Выделите клетку';
+        this.sound.error();
+        return;
+    }
+
+    const r = this.selectedRow;
+    const c = this.selectedCol;
+
+    // Проверка, пустая ли клетка
+    if (this.grid[r][c] !== 0) {
+        this.messageEl.textContent = '⚠️ В этой клетке уже есть цифра';
+        this.sound.error();
+        return;
+    }
+
+    // Проверка, является ли клетка "данной"
+    if (this.given[r][c]) {
+        this.messageEl.textContent = '❌ Это клетка с подсказкой';
+        this.sound.error();
+        return;
+    }
+
+    this.sound.init();
+    this.sound.hint();
+    this.hintsUsed++;
+
+    // Ставим правильную цифру
+    const correctNum = this.solution[r][c];
+    this.grid[r][c] = correctNum;
+    
+    // 👇 ДОБАВЛЕНО: Помечаем клетку как правильную (зеленая)
+    const cellKey = `${r}-${c}`;
+    this.checkedCells[cellKey] = true;
+    
+    this.messageEl.textContent = `💡 Подсказка: цифра ${correctNum} (${this.hintsUsed}/${maxHints})`;
+    this.render();
+    
+    // Подсветим подсказку
+    const cells = this.gridElement.children;
+    const idx = r * 9 + c;
+    if (cells[idx]) {
+        cells[idx].classList.add('hint');
+        setTimeout(() => cells[idx].classList.remove('hint'), 1000);
+    }
+    
+    if (this.checkWin()) {
+        this.isFinished = true;
+        this.sound.win();
+        this.statusEl.textContent = '🎉 Победа!';
+        this.messageEl.textContent = '🏆 Вы решили Судоку!';
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
         }
     }
 }
+// ============================================================
+// Проверка (проверяет ВСЕ цифры на поле)
+// ============================================================
+checkNumber() {
+    if (this.isFinished) return;
+    
+    let maxChecks = 0;
+    if (this.difficulty === 'easy') {
+        maxChecks = 3;
+    } else if (this.difficulty === 'medium') {
+        maxChecks = 3;
+    } else if (this.difficulty === 'hard') {
+        maxChecks = 1;
+    } else if (this.difficulty === 'expert') {
+        maxChecks = 1;
+    } else {
+        this.messageEl.textContent = '❌ Проверка недоступна на этом уровне';
+        this.sound.error();
+        return;
+    }
+
+    if (this.checksUsed >= maxChecks) {
+        this.messageEl.textContent = `❌ Проверки закончились! (${maxChecks}/${maxChecks})`;
+        this.sound.error();
+        return;
+    }
+
+    this.sound.init();
+    this.checksUsed++;
+
+    let errors = 0;
+    let correct = 0;
+    
+    // Сохраняем результаты проверки
+    const newCheckedCells = {};
+    
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            const val = this.grid[r][c];
+            const cellKey = `${r}-${c}`;
+            
+            // Пропускаем пустые клетки и "данные"
+            if (val === 0 || this.given[r][c]) {
+                // Если клетка пустая или данная — не сохраняем результат
+                continue;
+            }
+            
+            if (val === this.solution[r][c]) {
+                correct++;
+                newCheckedCells[cellKey] = true; // правильная
+            } else {
+                errors++;
+                newCheckedCells[cellKey] = false; // неправильная
+            }
+        }
+    }
+    
+    // Объединяем с предыдущими результатами (не перезаписываем уже проверенные)
+    for (const key in newCheckedCells) {
+        this.checkedCells[key] = newCheckedCells[key];
+    }
+
+    // Сообщение о результате
+    if (errors === 0 && correct > 0) {
+        this.messageEl.textContent = `✅ Все ${correct} цифр правильные! (${this.checksUsed}/${maxChecks})`;
+        this.sound.click();
+    } else if (errors === 0 && correct === 0) {
+        this.messageEl.textContent = `⚠️ Нет цифр для проверки (${this.checksUsed}/${maxChecks})`;
+        this.sound.error();
+    } else {
+        this.messageEl.textContent = `❌ Найдено ${errors} ошибок, ${correct} правильных (${this.checksUsed}/${maxChecks})`;
+        this.sound.error();
+    }
+    
+    // Перерендерим, чтобы показать результаты
+    this.render();
+    
+    // Проверяем победу
+    if (this.checkWin()) {
+        this.isFinished = true;
+        this.sound.win();
+        this.statusEl.textContent = '🎉 Победа!';
+        this.messageEl.textContent = '🏆 Вы решили Судоку!';
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        this.render();
+    }
+}
+  
+    // ============================================================
+// Решить всё (с рекламой)
+// ============================================================
+async solveAll() {
+    if (this.isFinished) return;
+    
+    this.messageEl.textContent = '⏳ Загрузка рекламы...';
+    const adShown = await this.adManager.showInterstitial();
+    
+    if (!adShown) {
+        console.log('Реклама не показана, но продолжаем');
+    }
+    
+    this.sound.init();
+    this.sound.solve();
+
+    let solved = 0;
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (!this.given[r][c] && this.grid[r][c] !== this.solution[r][c]) {
+                this.grid[r][c] = this.solution[r][c];
+                // 👇 ДОБАВЛЕНО: Помечаем каждую решённую клетку как правильную
+                const cellKey = `${r}-${c}`;
+                this.checkedCells[cellKey] = true;
+                solved++;
+            }
+        }
+    }
+
+    this.messageEl.textContent = `⚡ Решено ${solved} клеток!`;
+    this.render();
+
+    if (this.checkWin()) {
+        this.isFinished = true;
+        this.sound.win();
+        this.statusEl.textContent = '🎉 Победа!';
+        this.messageEl.textContent = '🏆 Судоку решено!';
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+}
+
+    // ============================================================
+    // Проверка победы
+    // ============================================================
+    checkWin() {
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (this.grid[r][c] !== this.solution[r][c]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // ============================================================
+    // Старт игры
+    // ============================================================
+    startNewGame() {
+        this.sound.init();
+        this.sound.click();
+        
+        this.isFinished = false;
+        this.selectedRow = -1;
+        this.selectedCol = -1;
+        this.timer = 0;
+        this.checksUsed = 0;
+          
+             this.checkedCells = {}; 
+        this.hintsUsed = 0;
+        this.messageEl.textContent = '';
+        
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+        
+        this.generateSudoku();
+        this.showGame();
+        this.render();
+        this.updateTimer();
+        
+        this.isRunning = true;
+        this.timerInterval = setInterval(() => {
+            this.timer++;
+            this.updateTimer();
+        }, 1000);
+        
+        if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
+            this.sound.ctx.resume();
+        }
+    }
+}
+
+// ============================================================
+// 5. Запуск
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const game = new SudokuGame();
+    window.__game = game;
+});
