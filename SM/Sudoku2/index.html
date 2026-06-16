@@ -86,7 +86,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             width: 100%;
             max-width: 500px;
-             margin-bottom: 100px;
+             margin-bottom: 110px;
             text-align: center;
             position: relative;
             z-index: 1;
@@ -644,11 +644,7 @@
         font-size: clamp(0.4rem, 1.5vw, 0.6rem) !important;
     }
 }
-/* Специально для iframe с размерами 1000x750 */
-iframe[width="1000"][height="750"] .container,
-iframe[style*="1000px"][style*="750px"] .container {
-    margin-bottom: 110px !important;
-}
+
 
     </style>
 </head>
@@ -727,6 +723,7 @@ iframe[style*="1000px"][style*="750px"] .container {
         </div>
         <button id="closeHowToPlayBtn" class="menu-btn" style="margin-top:20px; width:100%;">Понятно!</button>
     </div>
+   <div style="height: 110px; width: 100%;"></div>
 </div>
 <script src="sudoku.js"></script>
 <script>
@@ -751,5 +748,6 @@ iframe[style*="1000px"][style*="750px"] .container {
         }
     });
 </script>
+
 </body>
 </html>
