@@ -208,7 +208,7 @@
             overflow: hidden;
             border-radius: 8px;
             touch-action: none;
-            transition: background 2s ease;
+            transition: background 5s ease;
         }
 
         /* ===== СТЕНА С ШИПАМИ ===== */
@@ -1372,7 +1372,9 @@
             ['#1a3a6a', '#2a5a8a', '#3a7aaa', '#5a9aca'],
             ['#0a1a3a', '#0a2a5a', '#0a3a6a', '#1a5a8a'],
             ['#2a1a3a', '#3a2a5a', '#4a3a7a', '#5a4a9a'],
-            ['#1a2a4a', '#2a4a6a', '#3a6a8a', '#4a8aaa']
+            ['#1a2a4a', '#2a4a6a', '#3a6a8a', '#4a8aaa'],
+                ['#3a2a4a', '#4a3a6a', '#5a4a8a', '#6a5a9a'],  
+          ['#0a2a4a', '#1a4a6a', '#2a6a8a', '#3a8aaa']   
         ];
         var colorIndex = 0;
         var bgInterval = null;
@@ -1529,7 +1531,7 @@
             jellyfishTimer = setInterval(function() {
                 if (!gameActive || paus) return; // НЕ создаём медуз на паузе
                 spawnJellyfish();
-            }, 12000 + Math.random() * 8000);
+            }, 12000 + Math.random() * 20000);
 
             if (shieldTimer) clearInterval(shieldTimer);
             shieldTimer = setInterval(function() {
