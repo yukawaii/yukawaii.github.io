@@ -20,6 +20,8 @@
             justify-content: center;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
+              justify-content: flex-start;
+    padding: 10px;  /* уменьшите padding, если он мешает */
         }
 
         /* ===== ГЛАВНОЕ МЕНЮ ===== */
@@ -161,40 +163,196 @@
 
         #gameblock {
             width: 300px;
-            height: 270px;
+            height: 350px;
             display: inline-block;
-            background: royalblue;
+            background: linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%);
             position: relative;
             border: 1px solid black;
             overflow: hidden;
             border-radius: 8px;
             touch-action: none;
+            margin-bottom: 50px;
         }
 
+        /* ===== БАТИСКАФ (игрок) ===== */
         #player {
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            -webkit-transition: width, height, -webkit-transform 0.5s;
-            transition: width, height, transform 0.5s;
+            width: 40px;
+            height: 40px;
             position: absolute;
-            border-radius: 2px;
-            background: red;
-            box-shadow: 0 0 5px red;
             z-index: 10;
+            transition: width 0.3s, height 0.3s, transform 0.3s;
+            filter: drop-shadow(0 0 10px rgba(255, 200, 50, 0.4));
         }
 
-        #block {
-            width: 20px;
-            height: 20px;
-            background: navy;
+        .bathyscaphe {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .bathyscaphe .body {
             position: absolute;
-            border-radius: 20px;
-            top: 50px;
-            left: 50px;
-            z-index: 5;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 75%;
+            background: radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300);
+            border-radius: 50% 50% 45% 45%;
+            border: 2px solid #ff8844;
+            box-shadow: inset -10px -10px 30px rgba(150, 30, 0, 0.5), inset 10px 10px 30px rgba(255, 150, 80, 0.3);
         }
 
+        .bathyscaphe .window {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle at 35% 35%, #66ccff, #1a6699);
+            border-radius: 50%;
+            border: 2px solid #ffcc66;
+            box-shadow: inset -3px -3px 10px rgba(0, 50, 100, 0.5), 0 0 20px rgba(100, 200, 255, 0.3);
+        }
+
+        .bathyscaphe .window::after {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 30%;
+            height: 25%;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .bathyscaphe .propeller {
+            position: absolute;
+            bottom: -8%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 15%;
+            background: #888;
+            border-radius: 30% 30% 10% 10%;
+            border: 1px solid #666;
+        }
+
+        .bathyscaphe .propeller::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10%;
+            height: 40%;
+            background: #999;
+            border-radius: 0 0 50% 50%;
+        }
+
+        .bathyscaphe .light {
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 12%;
+            height: 12%;
+            background: radial-gradient(circle, #ffff88, #ffcc00);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 100, 0.6);
+            animation: lightPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .bathyscaphe .light-right {
+            left: auto;
+            right: 10%;
+        }
+
+        @keyframes lightPulse {
+            0% { opacity: 0.6; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* ===== РАКУШКА (блок для сбора) ===== */
+        #block {
+            width: 28px;
+            height: 28px;
+            position: absolute;
+            z-index: 5;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 15px rgba(255, 200, 150, 0.5));
+        }
+
+        .shell {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            animation: shellFloat 2s ease-in-out infinite;
+        }
+
+        .shell .spiral {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 60% 40%, #ffd4a8, #d49a6a, #b8784a);
+            border-radius: 60% 40% 50% 50%;
+            border: 2px solid #c08860;
+            box-shadow: inset -5px -5px 20px rgba(120, 60, 30, 0.4), inset 5px 5px 20px rgba(255, 220, 180, 0.3);
+        }
+
+        .shell .spiral::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(ellipse at 50% 50%, #ffddbb, #d49a6a);
+            border-radius: 50%;
+            border: 1px solid #c08860;
+            box-shadow: inset -3px -3px 10px rgba(100, 50, 20, 0.3);
+        }
+
+        .shell .spiral::after {
+            content: '';
+            position: absolute;
+            top: 35%;
+            left: 38%;
+            width: 25%;
+            height: 25%;
+            background: radial-gradient(ellipse at 50% 50%, #ffeedd, #d49a6a);
+            border-radius: 50%;
+            border: 1px solid #c08860;
+        }
+
+        .shell .shine {
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 30%;
+            height: 20%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .shell .shine2 {
+            top: auto;
+            bottom: 15%;
+            left: 55%;
+            width: 20%;
+            height: 15%;
+            transform: rotate(20deg);
+        }
+
+        @keyframes shellFloat {
+            0% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-6px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(-5deg); }
+        }
+
+        /* ===== ЗВЕЗДА (уменьшает) ===== */
         #block2 {
             display: none;
             position: absolute;
@@ -203,22 +361,20 @@
             height: 30px;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            line-height: 28px;
             pointer-events: none;
         }
 
         .star-icon {
-            font-size: 30px;
-            line-height: 30px;
+            font-size: 32px;
+            line-height: 32px;
             color: gold;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2);
-            animation: twinkle 0.6s ease-in-out infinite alternate;
+            animation: starTwinkle 0.6s ease-in-out infinite alternate;
         }
 
-        @keyframes twinkle {
+        @keyframes starTwinkle {
             0% { transform: scale(0.8) rotate(0deg); opacity: 0.7; }
-            50% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+            50% { transform: scale(1.3) rotate(20deg); opacity: 1; }
             100% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; }
         }
 
@@ -445,7 +601,7 @@
         @media (max-width: 400px) {
             #gameblock {
                 width: 280px;
-                height: 250px;
+                height: 350px;
             }
             .btn {
                 width: 60px;
@@ -477,6 +633,14 @@
                 width: 24px;
                 height: 24px;
             }
+            #player {
+                width: 32px;
+                height: 32px;
+            }
+            #block {
+                width: 22px;
+                height: 22px;
+            }
             .modal-content {
                 padding: 20px 16px;
                 margin: 10px;
@@ -494,7 +658,7 @@
         @media (max-width: 320px) {
             #gameblock {
                 width: 250px;
-                height: 220px;
+                height: 350px;
             }
             .btn {
                 width: 52px;
@@ -513,6 +677,14 @@
                 width: 20px;
                 height: 20px;
             }
+            #player {
+                width: 28px;
+                height: 28px;
+            }
+            #block {
+                width: 18px;
+                height: 18px;
+            }
         }
     </style>
 </head>
@@ -520,8 +692,8 @@
 
     <!-- ===== ГЛАВНОЕ МЕНЮ ===== -->
     <div id="mainMenu">
-        <h1>🔥 Горячая стена</h1>
-        <div class="subtitle">Уклоняйся от стены, набирай очки!</div>
+        <h1>🌊 Глубинная стена</h1>
+        <div class="subtitle">Управляй батискафом, собирай ракушки!</div>
         <button class="menu-btn play" onclick="startGame()">▶ Начать игру</button>
         <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
         <button class="menu-btn invite" onclick="inviteFriends()">👥 Пригласить друзей</button>
@@ -533,12 +705,11 @@
         <div class="modal-content">
             <h2 class="warning">❓ Как играть</h2>
             <ul>
-                <li>🎯 Безопасного места всё меньше</li>
-                <li>🧱 Ты постоянно растёшь</li>
-                <li>⭐ Собирай ракушки, чтобы получить очки</li>
+                <li>🛸 Управляй батискафом</li>
+                <li>🐚 Собирай ракушки для очков</li>
                 <li>⭐ Собирай звёзды, чтобы уменьшиться</li>
                 <li>⏸️ Пауза — кнопка с двумя полосками</li>
-                <li>🔥 Не касайся обжигающих стен!</li>
+                <li>💥 Не касайся проклятых стен!</li>
             </ul>
             <button class="modal-btn close-btn" onclick="closeHowTo()">Понятно!</button>
         </div>
@@ -567,11 +738,11 @@
     <!-- ===== МОДАЛЬНОЕ ОКНО "ПРОИГРЫШ" ===== -->
     <div id="gameOverModal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="danger">💀 Провал!</h2>
-            <p>Раскалённая стена сожгла тебя.</p>
-            <div class="score-text">⭐ <span id="finalScore">0</span> очков</div>
+            <h2 class="danger">💥 Крушение!</h2>
+            <p>Батискаф разбился о стену!</p>
+            <div class="score-text">🐚 <span id="finalScore">0</span> ракушек</div>
             <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="restartGame()">🔄 Играть ещё</button>
+                <button class="modal-btn primary" onclick="restartGame()">🔄 Ещё раз</button>
                 <button class="modal-btn secondary" onclick="goToMenuFromOver()">🏠 В меню</button>
             </div>
         </div>
@@ -587,15 +758,32 @@
 
         <div class="game-wrapper">
             <div id="gameblock">
+                <!-- БАТИСКАФ -->
                 <div id="player">
-                    <svg fill="black" opacity="1.0" baseprofile="full" width="100%" height="100%" viewbox="0 0 24.00 24.00">
-                        <path d="M6.997 17h-3c-1.617 0-3.04-1.257-3.24-2.86l-.498-2.992c-.107-.845.132-1.642.649-2.227A2.78 2.78 0 0 1 2.997 8h6c.835 0 1.585.348 2.059.955.119.152.217.318.296.492.425-.09.866-.09 1.292 0 .078-.175.176-.34.295-.492.474-.607 1.224-.955 2.058-.955h6c.812 0 1.572.336 2.09.921a2.78 2.78 0 0 1 .654 2.188l-.51 3.071c-.195 1.564-1.618 2.82-3.233 2.82h-3c-1.562 0-3.079-1.186-3.456-2.699l-.899-2.714a1.11 1.11 0 0 0-1.294.001l-.917 2.785C10.074 15.815 8.556 17 6.997 17z" />
-                    </svg>
+                    <div class="bathyscaphe">
+                        <div class="light"></div>
+                        <div class="light light-right"></div>
+                        <div class="body"></div>
+                        <div class="window"></div>
+                        <div class="propeller"></div>
+                    </div>
                 </div>
-                <div id="block"></div>
+
+                <!-- РАКУШКА -->
+                <div id="block">
+                    <div class="shell">
+                        <div class="spiral">
+                            <div class="shine"></div>
+                            <div class="shine shine2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЗВЕЗДА -->
                 <div id="block2">
                     <span class="star-icon">⭐</span>
                 </div>
+
                 <div id="scores">0</div>
             </div>
         </div>
@@ -655,7 +843,7 @@
         var t = 75;
         var score = 0;
         var xypm = 5;
-        var rad = 30;
+        var rad = 40; // Начальный размер батискафа
         var paus = false;
         var int1, int2, int3, int4;
         var iint = "";
@@ -757,17 +945,6 @@
             }
         }
 
-        function shareScore() {
-            if (typeof vkBridge !== 'undefined') {
-                vkBridge.send("VKWebAppShowWallPostBox", {
-                    "message": "🔥 Я набрал " + score + " очков в игре «Горячая стена»! Попробуй побить мой рекорд!",
-                    "attachments": "https://vk.ru/app51399471"
-                }).catch(err => console.warn('Ошибка публикации:', err));
-            } else {
-                alert('Поделиться результатом: ' + score + ' очков');
-            }
-        }
-
         // ============================================================
         //  VK РЕКЛАМА (БАННЕР)
         // ============================================================
@@ -782,14 +959,6 @@
                     .catch((error) => {
                         console.warn('Ошибка показа баннера:', error);
                     });
-            }
-        }
-
-        function showInterstitialAd() {
-            if (typeof vkBridge !== 'undefined') {
-                vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
-                    .then(data => console.log('Реклама показана', data))
-                    .catch(err => console.warn('Ошибка рекламы:', err));
             }
         }
 
@@ -812,7 +981,7 @@
             cy = 50;
             t = 75;
             score = 0;
-            rad = 30;
+            rad = 40;
             intcount = 0;
             intval = (Math.floor(Math.random() * 10 + 15));
             
@@ -822,7 +991,6 @@
                 player.style.top = y + 'px';
                 player.style.width = rad + 'px';
                 player.style.height = rad + 'px';
-                player.style.WebkitTransform = 'rotate(360deg)';
             }
             if (block) {
                 block.style.left = cx + 'px';
@@ -842,10 +1010,10 @@
 
         function poyman() {
             cx = (Math.floor(Math.random() * 240 + 20));
-            cy = (Math.floor(Math.random() * 200 + 20));
+            cy = (Math.floor(Math.random() * 280 + 20));
             intcount++;
             
-            if (rad < 130) {
+            if (rad < 60) {
                 rad++;
                 x--;
                 y--;
@@ -854,7 +1022,7 @@
             
             if (intcount >= intval) {
                 bx = (Math.floor(Math.random() * 240 + 20));
-                by = (Math.floor(Math.random() * 200 + 20));
+                by = (Math.floor(Math.random() * 280 + 20));
                 intcount = 0;
                 if (block2) {
                     block2.style.display = 'flex';
@@ -877,15 +1045,17 @@
         }
 
         function checkCollision() {
-            // Столкновение со стеной (блок) - собираем очки
-            if (x > cx - rad && x < cx + 20 && y > cy - rad && y < cy + 20) {
+            // Сбор ракушки - получаем очки
+            var blockSize = 28;
+            var playerSize = rad;
+            if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
                 score++;
                 if (scoresEl) scoresEl.innerHTML = score;
                 poyman();
                 return true;
             }
-            // Звезда - уменьшаем игрока
-            if (block2 && block2.style.display === 'flex' && x > bx - rad && x < bx + 30 && y > by - rad && y < by + 30) {
+            // Звезда - уменьшаем батискаф
+            if (block2 && block2.style.display === 'flex' && x > bx - playerSize && x < bx + 30 && y > by - playerSize && y < by + 30) {
                 block2.style.display = 'none';
                 if (rad > 20) {
                     rad -= 10;
@@ -919,7 +1089,6 @@
             if (d) d.disabled = false;
             if (l) l.disabled = false;
             iint = "right()";
-            if (player) player.style.WebkitTransform = "rotate(270deg)";
             int1 = setTimeout("right()", t);
             if (x > 300 - rad) {
                 clearInterval(int1);
@@ -939,7 +1108,6 @@
             if (r) r.disabled = false;
             if (d) d.disabled = false;
             iint = "left()";
-            if (player) player.style.WebkitTransform = "rotate(90deg)";
             int2 = setTimeout("left()", t);
             if (x < 0) {
                 clearInterval(int2);
@@ -959,9 +1127,8 @@
             if (r) r.disabled = false;
             if (l) l.disabled = false;
             iint = "down()";
-            if (player) player.style.WebkitTransform = "rotate(360deg)";
             int3 = setTimeout("down()", t);
-            if (y > 270 - rad) {
+            if (y > 350 - rad) {
                 clearInterval(int3);
                 gameover();
                 return;
@@ -979,7 +1146,6 @@
             if (r) r.disabled = false;
             if (l) l.disabled = false;
             iint = "up()";
-            if (player) player.style.WebkitTransform = "rotate(180deg)";
             int4 = setTimeout("up()", t);
             if (y < 0) {
                 clearInterval(int4);
@@ -1066,14 +1232,13 @@
         if (mainMenu) mainMenu.style.display = 'flex';
         if (gameContainer) gameContainer.style.display = 'none';
 
-        // Для мобильных: отключаем контекстное меню
         document.addEventListener('contextmenu', function(e) {
             if (e.target.closest('#gameblock') || e.target.closest('.btn')) {
                 e.preventDefault();
             }
         });
 
-        console.log('🔥 Горячая стена загружена!');
+        console.log('🌊 Глубинная стена загружена!');
         console.log('📱 Версия для VK Mini Apps');
     </script>
 
