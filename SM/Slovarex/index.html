@@ -23,7 +23,122 @@
  <script src = "./App.js"></script>
 </head>
 <body>
-    <div class="game-container">
+    <!-- ====== ЧАСТИЦЫ ФОНА ====== -->
+<div class="particles-container" id="particlesContainer"></div>
+    <!-- ====== НАЧАЛЬНЫЙ ЭКРАН ====== -->
+<div id="startScreen" class="start-screen">
+    <div class="start-screen__content">
+        <!-- Логотип -->
+        <div class="start-screen__logo">
+            <div class="start-screen__icon">🧩</div>
+            <h1 class="start-screen__title">Словарекс</h1>
+            <p class="start-screen__subtitle">Составь слова из букв</p>
+        </div>
+
+        <!-- Основные кнопки -->
+        <div class="start-screen__buttons">
+            <button class="start-screen__btn start-screen__btn--play" id="startPlayBtn">
+                🚀 Начать игру
+            </button>
+            <button class="start-screen__btn start-screen__btn--rules" id="startRulesBtn">
+                📖 Как играть
+            </button>
+        </div>
+
+        <!-- Нижняя панель -->
+        <div class="start-screen__bottom">
+            <button class="start-screen__icon-btn" id="startThemeBtn" title="Сменить тему">
+                🎨
+            </button>
+            <button class="start-screen__icon-btn" id="startShareBtn" title="Пригласить друзей">
+                📤
+            </button>
+            <button class="start-screen__icon-btn" id="startSoundBtn" title="Звук">
+                🔊
+            </button>
+        </div>
+
+        <div class="start-screen__footer">
+            <span>Бесплатно · Без регистрации</span>
+        </div>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА "КАК ИГРАТЬ" ====== -->
+<div id="rulesModal" class="modal-overlay">
+    <div class="modal-overlay__content">
+        <button class="modal-overlay__close" id="rulesModalClose">✕</button>
+        <h2>📖 Как играть</h2>
+        <div class="modal-overlay__body">
+            <div class="modal-overlay__rule">
+                <span class="modal-overlay__emoji">📝</span>
+                <div>
+                    <strong>Составляйте слова</strong>
+                    <p>Из букв базового слова собирайте новые слова. Каждую букву можно использовать только один раз.</p>
+                </div>
+            </div>
+            <div class="modal-overlay__rule">
+                <span class="modal-overlay__emoji">⏱️</span>
+                <div>
+                    <strong>Следите за временем</strong>
+                    <p>На уровень даётся 2 минуты. Каждое найденное слово добавляет +15 секунд.</p>
+                </div>
+            </div>
+            <div class="modal-overlay__rule">
+                <span class="modal-overlay__emoji">🎯</span>
+                <div>
+                    <strong>Проходите уровни</strong>
+                    <p>Найдите достаточно слов, чтобы перейти на следующий уровень. Чем выше уровень — тем сложнее!</p>
+                </div>
+            </div>
+            <div class="modal-overlay__rule">
+                <span class="modal-overlay__emoji">💡</span>
+                <div>
+                    <strong>Используйте подсказки</strong>
+                    <p>У вас есть 5 подсказок на всю игру. Используйте их, когда застряли.</p>
+                </div>
+            </div>
+            <div class="modal-overlay__rule">
+                <span class="modal-overlay__emoji">🏆</span>
+                <div>
+                    <strong>Соревнуйтесь</strong>
+                    <p>Набирайте очки, проходите уровни и попадайте в таблицу лидеров!</p>
+                </div>
+            </div>
+        </div>
+        <button class="modal-overlay__start-btn" id="rulesModalStartBtn">🚀 Начать играть</button>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА ВЫБОРА ТЕМЫ ====== -->
+<div id="themeModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--theme">
+        <button class="modal-overlay__close" id="themeModalClose">✕</button>
+        <h2>🎨 Выберите тему</h2>
+        <div class="theme-grid">
+            <button class="theme-btn theme-btn--light" data-theme="light">
+                <span class="theme-btn__preview" style="background:#ffffff; border:2px solid #e5e7eb;"></span>
+                <span class="theme-btn__name">Светлая</span>
+            </button>
+            <button class="theme-btn theme-btn--dark" data-theme="dark">
+                <span class="theme-btn__preview" style="background:#1a1a2e; border:2px solid #2d2d44;"></span>
+                <span class="theme-btn__name">Тёмная</span>
+            </button>
+            <button class="theme-btn theme-btn--blue" data-theme="blue">
+                <span class="theme-btn__preview" style="background:#e8f4fd; border:2px solid #4a9eff;"></span>
+                <span class="theme-btn__name">Голубая</span>
+            </button>
+            <button class="theme-btn theme-btn--green" data-theme="green">
+                <span class="theme-btn__preview" style="background:#e8f5e9; border:2px solid #43a047;"></span>
+                <span class="theme-btn__name">Зелёная</span>
+            </button>
+        </div>
+        <div class="theme-modal__footer">
+            <span class="theme-current" id="themeCurrent">Текущая: Светлая</span>
+        </div>
+    </div>
+</div>
+   <div class="game-container" style="display:none;">
         <!-- Хедер -->
         <div class="game-header">
             <div class="stats">
@@ -43,9 +158,10 @@
             <div class="action-buttons">
                 <button class="action-btn" id="hintBtn" title="Подсказка">💡 <span id="hintCount">5</span></button>
                 <button class="action-btn" id="soundBtn" title="Звук">🔊</button>
-                  <button class="action-btn" id="leaderboardBtn" title="Таблица лидеров">🏆</button>
+             <!--     <button class="action-btn" id="leaderboardBtn" title="Таблица лидеров">🏆</button>-->
                     <button class="action-btn" id="shareBtn" title="Пригласить">📤</button>
                 <button class="action-btn" id="restartBtn" title="Начать заново">🔄</button>
+                    <button class="action-btn" id="menuBtn" title="В меню">🏠</button> 
             </div>
         </div>
 
@@ -100,18 +216,25 @@
     <!-- Кнопка след. уровня -->
     <button class="next-level-btn" id="nextLevelBtn" disabled>🔒 Следующий уровень</button>
 </div>
-        <!-- Прогресс-бар уровня -->
-        <div class="progress-section">
-            <div class="progress-label">
-                <span>📊 Прогресс уровня</span>
-                <span id="progressText">0 / 0</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+        
+    </div>
+<!-- ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ВЫХОДА В МЕНЮ ====== -->
+<div id="exitModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--exit">
+        <h2>🏠 Выйти в меню?</h2>
+        <p style="text-align:center; color: var(--theme-muted, #6b7280); font-size:16px; margin-bottom:24px;">
+            Весь прогресс текущего уровня будет потерян.
+        </p>
+        <div class="exit-modal__buttons">
+            <button class="exit-modal__btn exit-modal__btn--cancel" id="exitModalCancel">
+                ❌ Отмена
+            </button>
+            <button class="exit-modal__btn exit-modal__btn--confirm" id="exitModalConfirm">
+                ✅ Меню
+            </button>
         </div>
     </div>
-
+</div>
     <!-- Модалка завершения -->
     <div class="modal" id="modal">
         <div class="modal-content">

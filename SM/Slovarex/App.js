@@ -12,7 +12,8 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
 .catch(error => console.log(error));
   }
   getid();
-  function gettoken(){
+
+  /* function gettoken(){
     vkBridge.send("VKWebAppGetAuthToken", { 
             "app_id": 54634418, 
             "scope": "friends"
@@ -24,8 +25,10 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     })
     .catch(error => console.log(error)); }
     
-    gettoken();  
- //первичная отправка очков в вк, проверка на 0
+   gettoken();  
+
+
+    //первичная отправка очков в вк, проверка на 0
     function sendscore0(){        score0=1;        setTimeout(function (){        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
      {"client_secret":"vTHFnjvA35iL1nEpMSTr",      "user_id":id,      "activity_id":1,       "value":score0,        "v": "5.131",        "global": 1,    "access_token":"a79a560da79a560da79a560d9da7e6e624aa79aa79a560dc51cd511726b4813a807b9ec",
          }})    .then(data => {console.log("Ответ на первичное добавление очков:" + data);    })    .catch(error => console.log(error)); }, 3000);}
@@ -53,7 +56,7 @@ getsc();
           vkBridge.send("VKWebAppShowLeaderBoardBox", {"app_id": 54634418,"user_result": score, "global":1})
         .then(data => console.log(data.success))  
        .catch(error => console.log(error));
-        } 
+        } */
 
 /*function banner1(){
 vkBridge.send('VKWebAppShowBannerAd', {  banner_location: 'bottom'  })
@@ -68,28 +71,11 @@ function share2(){
   vkBridge.send("VKWebAppShowInviteBox", {})
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function myadd1(){
   vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
 .then(data => console.log(data.result))
 .catch(error => console.log(error));
 }
-
 //пригласить друзей в игру
 function infr(){
   vkBridge.send("VKWebAppShowInviteBox", {})

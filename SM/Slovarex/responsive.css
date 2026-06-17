@@ -21,7 +21,7 @@
     body {
         padding: 0 !important;
         margin: 0 !important;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--theme-bg, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
         height: 100vh;
         overflow: hidden;
         display: flex;
@@ -35,7 +35,7 @@
         height: 780px;
         border-radius: 24px;
         padding: 20px 24px;
-        background: rgba(255, 255, 255, 0.98);
+        background: var(--theme-card, rgba(255, 255, 255, 0.98));
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         display: grid;
         grid-template-columns: 1fr 320px;
@@ -43,6 +43,7 @@
         gap: 12px 20px;
         overflow: hidden;
         position: relative;
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     /* ===== ЛЕВАЯ КОЛОНКА ===== */
@@ -64,14 +65,19 @@
 
     .stat-card {
         padding: 4px 12px;
+        background: var(--theme-bg-light, #f5f7fa);
+        color: var(--theme-text, #1f2937);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     .stat-label {
         font-size: 9px;
+        color: var(--theme-muted, #6b7280);
     }
 
     .stat-value {
         font-size: 18px;
+        color: var(--theme-text, #1f2937);
     }
 
     .action-buttons {
@@ -83,6 +89,14 @@
         width: 36px;
         height: 36px;
         font-size: 16px;
+        background: var(--theme-btn-secondary, #f3f4f6);
+        color: var(--theme-text, #4b5563);
+        border: 1px solid var(--theme-border, transparent);
+        transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--theme-btn-secondary-hover, #e5e7eb);
     }
 
     /* Базовое слово */
@@ -92,9 +106,15 @@
         margin-bottom: 0;
     }
 
+    .base-word-label {
+        color: var(--theme-muted, #9ca3af);
+    }
+
     .base-word {
         font-size: 28px;
         letter-spacing: 4px;
+        color: var(--theme-text, #1f2937);
+        transition: color 0.4s ease;
     }
 
     /* Буквы */
@@ -111,6 +131,9 @@
         font-size: 22px;
         padding: 8px 0;
         border-radius: 14px;
+        background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        color: white;
+        transition: background 0.4s ease;
     }
 
     /* Текущее слово */
@@ -119,11 +142,19 @@
         grid-row: 4 / 5;
         padding: 8px 12px;
         margin-bottom: 0;
+        background: var(--theme-bg-light, #f9fafb);
+        border: 2px dashed var(--theme-border, #e5e7eb);
+        transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .current-word-label {
+        color: var(--theme-muted, #9ca3af);
     }
 
     .current-word {
         min-height: 40px;
         font-size: 20px;
+        color: var(--theme-text, #1f2937);
     }
 
     .letter-chip {
@@ -143,6 +174,16 @@
         padding: 6px 10px;
         font-size: 12px;
         border-radius: 30px;
+        background: var(--theme-btn-secondary, white);
+        color: var(--theme-text, #4b5563);
+        border: 2px solid var(--theme-border, #e5e7eb);
+        transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    #submitBtn {
+        background: var(--theme-primary, linear-gradient(135deg, #10b981 0%, #059669 100%));
+        border-color: transparent;
+        color: white;
     }
 
     /* ===== ПРАВАЯ КОЛОНКА ===== */
@@ -153,8 +194,9 @@
         flex-direction: column;
         gap: 10px;
         overflow: hidden;
-        border-left: 1px solid #f0f0f0;
+        border-left: 1px solid var(--theme-border, #f0f0f0);
         padding-left: 20px;
+        transition: border-color 0.4s ease;
     }
 
     .progress-section {
@@ -164,6 +206,15 @@
 
     .progress-label {
         font-size: 12px;
+        color: var(--theme-text, #374151);
+    }
+
+    .progress-bar {
+        background: var(--theme-bg-light, #e5e7eb);
+    }
+
+    .progress-fill {
+        background: var(--theme-primary, linear-gradient(90deg, #10b981 0%, #34d399 100%));
     }
 
     .found-section {
@@ -174,13 +225,15 @@
         flex-direction: column;
         overflow: hidden;
         padding: 10px 12px;
-        background: #f9fafb;
+        background: var(--theme-bg-light, #f9fafb);
         border-radius: 16px;
+        transition: background 0.4s ease;
     }
 
     .found-header {
         font-size: 13px;
         flex-shrink: 0;
+        color: var(--theme-text, #374151);
     }
 
     .found-words {
@@ -189,15 +242,23 @@
         overflow-y: auto;
         padding: 4px 0;
         gap: 4px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
     }
 
     .found-word {
         padding: 4px 10px;
         font-size: 13px;
+        background: var(--theme-card, white);
+        color: var(--theme-text, #1f2937);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     .found-word span {
         font-size: 10px;
+        color: var(--theme-primary, #10b981);
     }
 
     .next-level-btn {
@@ -206,6 +267,14 @@
         font-size: 13px;
         flex-shrink: 0;
         border-radius: 30px;
+        background: var(--theme-btn-secondary, #e5e7eb);
+        color: var(--theme-muted, #9ca3af);
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .next-level-btn.active {
+        background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        color: white;
     }
 
     /* Скрываем элементы, которые не нужны в двухколоночном режиме */
@@ -228,7 +297,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: var(--theme-bg, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
     }
 
     .game-container {
@@ -237,7 +306,7 @@
         max-height: 100vh;
         border-radius: 28px;
         padding: 16px;
-        background: rgba(255, 255, 255, 0.98);
+        background: var(--theme-card, rgba(255, 255, 255, 0.98));
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         display: flex;
         flex-direction: column;
@@ -245,6 +314,7 @@
         overflow: hidden;
         height: 100vh;
         max-height: 100vh;
+        transition: background 0.4s ease;
     }
 
     .game-header {
@@ -266,14 +336,19 @@
     .stat-card {
         padding: 4px 8px;
         border-radius: 16px;
+        background: var(--theme-bg-light, #f5f7fa);
+        color: var(--theme-text, #1f2937);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     .stat-label {
         font-size: 8px;
+        color: var(--theme-muted, #6b7280);
     }
 
     .stat-value {
         font-size: 14px;
+        color: var(--theme-text, #1f2937);
     }
 
     .action-buttons {
@@ -287,12 +362,16 @@
         height: 32px;
         font-size: 14px;
         border-radius: 16px;
+        background: var(--theme-btn-secondary, #f3f4f6);
+        color: var(--theme-text, #4b5563);
+        border: 1px solid var(--theme-border, transparent);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .action-btn#leaderboardBtn,
+   /* .action-btn#leaderboardBtn,
     .action-btn#shareBtn {
         display: none;
-    }
+    }*/
 
     .base-word-section {
         flex-shrink: 0;
@@ -301,11 +380,14 @@
 
     .base-word-label {
         font-size: 10px;
+        color: var(--theme-muted, #9ca3af);
     }
 
     .base-word {
         font-size: 22px;
         letter-spacing: 3px;
+        color: var(--theme-text, #1f2937);
+        transition: color 0.4s ease;
     }
 
     .letters-grid {
@@ -321,16 +403,23 @@
         padding: 6px 0;
         border-radius: 12px;
         min-height: 44px;
+        background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        color: white;
+        transition: background 0.4s ease;
     }
 
     .current-word-section {
         flex-shrink: 0;
         padding: 6px 10px;
         margin-bottom: 0;
+        background: var(--theme-bg-light, #f9fafb);
+        border: 2px dashed var(--theme-border, #e5e7eb);
+        transition: background 0.4s ease, border-color 0.4s ease;
     }
 
     .current-word-label {
         font-size: 10px;
+        color: var(--theme-muted, #9ca3af);
         margin-bottom: 4px;
     }
 
@@ -338,6 +427,7 @@
         min-height: 32px;
         font-size: 16px;
         gap: 4px;
+        color: var(--theme-text, #1f2937);
     }
 
     .letter-chip {
@@ -360,6 +450,16 @@
         padding: 6px 8px;
         font-size: 11px;
         border-radius: 20px;
+        background: var(--theme-btn-secondary, white);
+        color: var(--theme-text, #4b5563);
+        border: 2px solid var(--theme-border, #e5e7eb);
+        transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    #submitBtn {
+        background: var(--theme-primary, linear-gradient(135deg, #10b981 0%, #059669 100%));
+        border-color: transparent;
+        color: white;
     }
 
     .right-column {
@@ -379,10 +479,16 @@
     .progress-label {
         font-size: 11px;
         margin-bottom: 4px;
+        color: var(--theme-text, #374151);
     }
 
     .progress-bar {
         height: 6px;
+        background: var(--theme-bg-light, #e5e7eb);
+    }
+
+    .progress-fill {
+        background: var(--theme-primary, linear-gradient(90deg, #10b981 0%, #34d399 100%));
     }
 
     .found-section {
@@ -392,33 +498,43 @@
         flex-direction: column;
         padding: 8px 10px;
         margin-bottom: 0;
-        background: #f9fafb;
+        background: var(--theme-bg-light, #f9fafb);
         border-radius: 14px;
         overflow: hidden;
+        transition: background 0.4s ease;
     }
 
     .found-header {
         font-size: 12px;
         flex-shrink: 0;
         margin-bottom: 4px;
+        color: var(--theme-text, #374151);
     }
 
     .found-words {
-        flex: 1;
+        flex: 0 0 auto;
+        max-height: 160px;
         overflow-y: auto;
-        padding: 2px 0;
+        padding: 4px 0;
         gap: 4px;
-        max-height: none;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
     }
 
     .found-word {
         padding: 3px 8px;
         font-size: 12px;
         border-radius: 14px;
+        background: var(--theme-card, white);
+        color: var(--theme-text, #1f2937);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     .found-word span {
         font-size: 9px;
+        color: var(--theme-primary, #10b981);
     }
 
     .next-level-btn {
@@ -427,6 +543,14 @@
         font-size: 12px;
         border-radius: 30px;
         margin-top: auto;
+        background: var(--theme-btn-secondary, #e5e7eb);
+        color: var(--theme-muted, #9ca3af);
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    .next-level-btn.active {
+        background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+        color: white;
     }
 
     /* Модалка */
@@ -516,10 +640,16 @@
 
     .found-section {
         padding: 4px 8px;
+        max-height: 80px;
     }
 
     .found-header {
         font-size: 10px;
+    }
+
+    .found-words {
+        max-height: 60px;
+        gap: 3px;
     }
 
     .found-word {
@@ -638,16 +768,53 @@ body.has-vk-banner .game-container {
     }
 
     .found-words::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: var(--theme-bg-light, #f1f1f1);
         border-radius: 4px;
     }
 
     .found-words::-webkit-scrollbar-thumb {
-        background: #d1d5db;
+        background: var(--theme-border, #d1d5db);
         border-radius: 4px;
     }
 
     .found-words::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af;
+        background: var(--theme-muted, #9ca3af);
     }
+}
+
+/* ========== КНОПКА МЕНЮ НА ТЕЛЕФОНАХ ========== */
+@media (max-width: 480px) {
+    #menuBtn {
+        font-size: 14px;
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ========== ИНДИКАТОР ПАУЗЫ ========== */
+.pause-indicator {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 30px;
+    border-radius: 20px;
+    z-index: 9998;
+    font-weight: 700;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+}
+
+.pause-indicator.show {
+    display: block;
+    animation: pausePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pausePulse {
+    0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
 }

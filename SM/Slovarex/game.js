@@ -3,9 +3,7 @@ if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
     alert("Ошибка загрузки игры. Обновите страницу.");
 }
-// ========== VK BRIDGE ==========
 // ========== VK BRIDGE И БАННЕР ==========
-
 // Показать баннер
 function showBannerAd() {
     if (typeof vkBridge !== 'undefined') {
@@ -125,8 +123,175 @@ const CONFIG = {
     HINTS_START: 5,
     LEVEL_THRESHOLD_START: 0.4,
     LEVEL_THRESHOLD_STEP: 0.05,
-    LEVEL_THRESHOLD_MAX: 0.75
+    LEVEL_THRESHOLD_MAX: 0.75,
+      WORDS_TO_COMPLETE: 20 
 };
+
+// ========== ЧАСТИЦЫ ФОНА ==========
+// ========== ЧАСТИЦЫ ФОНА ==========
+let particlesCreated = false;
+
+function createParticles() {
+    const container = document.getElementById('particlesContainer');
+    if (!container) return;
+    
+    // Очищаем старые частицы
+    container.innerHTML = '';
+    
+    // Определяем цвета частиц в зависимости от темы
+    const theme = document.body.getAttribute('data-theme') || 'light';
+    let particleClass = 'particle-blue';
+    let count = 30;
+    
+    switch(theme) {
+        case 'dark':
+            particleClass = 'particle-pink';
+            count = 25;
+            break;
+        case 'blue':
+            particleClass = 'particle-blue';
+            count = 35;
+            break;
+        case 'green':
+            particleClass = 'particle-gold';
+            count = 30;
+            break;
+        default:
+            particleClass = 'particle-blue';
+            count = 30;
+            break;
+    }
+    
+    // Создаём частицы
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = `particle ${particleClass}`;
+        
+        const sizes = ['particle-sm', 'particle-md', 'particle-lg', 'particle-xl'];
+        const sizeClass = sizes[Math.floor(Math.random() * sizes.length)];
+        particle.classList.add(sizeClass);
+        
+        const delay = Math.floor(Math.random() * 7) + 1;
+        particle.classList.add(`particle-delay-${delay}`);
+        
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        const duration = 3 + Math.random() * 3;
+        particle.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(particle);
+    }
+    
+    particlesCreated = true;
+}
+
+// Обновление частиц при смене темы
+function updateParticles() {
+    createParticles(); // просто пересоздаём
+}
+
+
+// Обновление частиц при смене темы
+function updateParticles() {
+    // Пересоздаём частицы
+    particlesCreated = false;
+    createParticles();
+}
+
+// Инициализация частиц при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(createParticles, 300);
+});
+
+
+
+// ========== ПАУЗА ПРИ СВЁРТЫВАНИИ ==========
+let gamePaused = false;
+let pauseStartTime = 0;
+let pausedTimeAccumulator = 0; // сколько времени было на паузе
+
+// Функция для постановки игры на паузу
+function pauseGame() {
+    if (gamePaused || gameState.frozen) return;
+    if (!gameState.timerId) return;
+    
+    gamePaused = true;
+    pauseStartTime = Date.now();
+    
+    // Останавливаем таймер
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId);
+        gameState.timerId = null;
+    }
+    
+    console.log('⏸️ Игра на паузе');
+    showToast('⏸️ Игра на паузе');
+}
+
+// Функция для возобновления игры
+function resumeGame() {
+    if (!gamePaused) return;
+    if (gameState.frozen) {
+        gamePaused = false;
+        return;
+    }
+    
+    // Вычисляем, сколько времени прошло на паузе
+    const pauseDuration = Math.floor((Date.now() - pauseStartTime) / 1000);
+    pausedTimeAccumulator += pauseDuration;
+    
+    // Отнимаем время паузы от оставшегося времени (чтобы время не тикало на паузе)
+    // Но не даём времени стать отрицательным
+    gameState.timeLeft = Math.max(0, gameState.timeLeft);
+    
+    gamePaused = false;
+    pauseStartTime = 0;
+    
+    // Перезапускаем таймер
+    if (!gameState.frozen && gameState.timeLeft > 0) {
+        startTimer();
+        console.log('▶️ Игра возобновлена');
+        showToast('▶️ Игра продолжается');
+    } else if (gameState.timeLeft <= 0) {
+        // Если время уже вышло — обрабатываем
+        handleTimeOut();
+    }
+}
+
+// Обработчик видимости страницы
+function handleVisibilityChange() {
+    if (document.hidden) {
+        // Страница скрыта (свернута или другая вкладка)
+        pauseGame();
+    } else {
+        // Страница видна (пользователь вернулся)
+        // Даём небольшую задержку, чтобы всё стабилизировалось
+        setTimeout(resumeGame, 100);
+    }
+}
+
+// Обработчик потери/получения фокуса окном
+function handleWindowFocus() {
+    // Окно получило фокус
+    if (gamePaused) {
+        setTimeout(resumeGame, 100);
+    }
+}
+
+function handleWindowBlur() {
+    // Окно потеряло фокус (пользователь переключился на другую программу)
+    if (!gamePaused && !gameState.frozen && gameState.timerId) {
+        pauseGame();
+    }
+}
+
+// Функция для очистки всех обработчиков паузы (при перезапуске)
+function cleanupPauseHandlers() {
+    gamePaused = false;
+    pauseStartTime = 0;
+    pausedTimeAccumulator = 0;
+}
 
 // ========== СОСТОЯНИЕ ИГРЫ ==========
 let gameState = {
@@ -163,12 +328,13 @@ function getCurrentThreshold() {
 }
 
 function updateThresholdFlag() {
-    const need = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+    // Теперь порог — это просто 20 найденных слов
+    const need = CONFIG.WORDS_TO_COMPLETE;
     const before = gameState.thresholdReached;
     gameState.thresholdReached = gameState.foundWords.size >= need;
     
     if (gameState.thresholdReached && !before && !gameState.frozen) {
-        showToast("🎉 Порог достигнут! Можно переходить на следующий уровень!");
+        showToast("🎉 Найдено 20 слов! Открыт следующий уровень!");
         playSound("levelup");
         blinkNextButton();
     }
@@ -188,17 +354,15 @@ function updateNextButton() {
     } else {
         btn.classList.remove("active");
         btn.disabled = true;
-        const need = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+        const need = CONFIG.WORDS_TO_COMPLETE;
         const remain = Math.max(0, need - gameState.foundWords.size);
         btn.textContent = `🔒 Нужно найти ещё ${remain} слов`;
     }
 }
 
 function updateProgressBar() {
-    const need = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
-    const percent = gameState.possibleWords.size > 0 
-        ? (gameState.foundWords.size / need) * 100 
-        : 0;
+    const need = CONFIG.WORDS_TO_COMPLETE;
+    const percent = (gameState.foundWords.size / need) * 100;
     const fill = document.getElementById("progressFill");
     const text = document.getElementById("progressText");
     if (fill) fill.style.width = `${Math.min(100, percent)}%`;
@@ -330,7 +494,9 @@ function getRandomBaseWord() {
 
 // ========== УРОВНИ ==========
 function initLevel() {
-       checkAndShowBanner();
+    // Очищаем состояние паузы
+    cleanupPauseHandlers();
+    
     // Выбираем случайное слово из отфильтрованного пула
     gameState.baseWord = getRandomBaseWord();
     gameState.baseLetters = gameState.baseWord.split("");
@@ -354,12 +520,35 @@ function initLevel() {
     updateUI();
     updateThresholdFlag();
     
+    // Проверяем и показываем баннер на новом уровне
+    if (typeof checkAndShowBanner === 'function') {
+        checkAndShowBanner();
+    }
+    
     console.log(`🎮 Новый уровень! Базовое слово: ${gameState.baseWord} (${gameState.baseWord.length} букв)`);
     console.log(`📝 Возможных слов: ${gameState.possibleWords.size}`);
 }
 
 function startTimer() {
+    // Если игра на паузе — не запускаем таймер
+    if (gamePaused) return;
+    if (gameState.frozen) return;
+    
+    // Очищаем старый таймер, если есть
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId);
+        gameState.timerId = null;
+    }
+    
+    // Не запускаем, если время уже вышло
+    if (gameState.timeLeft <= 0) {
+        handleTimeOut();
+        return;
+    }
+    
     gameState.timerId = setInterval(() => {
+        // Проверка: если игра на паузе — просто выходим
+        if (gamePaused) return;
         if (gameState.frozen) return;
         
         gameState.timeLeft--;
@@ -374,18 +563,67 @@ function startTimer() {
 }
 
 function handleTimeOut() {
-    const need = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
-    if (gameState.foundWords.size >= need) {
+    // Если игра на паузе — не обрабатываем
+    if (gamePaused) return;
+    
+    if (gameState.foundWords.size >= CONFIG.WORDS_TO_COMPLETE) {
         nextLevel();
     } else {
-        // ========== ОТПРАВКА УРОВНЯ В ВК  ==========
+        // ========== ОТПРАВКА УРОВНЯ В ВК ==========
         if (typeof sendscore === 'function') {
             sendscore();
         }
-        // ===================================================================================
-        showToast("⏰ Время вышло! Игра окончена.", true);
+        // ==========================================
+        
+        showPermanentToast("⏰ Время вышло! Игра окончена. Нажмите «Начать заново»", true);
         gameState.frozen = true;
         updateUI();
+    }
+}
+// ========== ПОСТОЯННЫЙ ТОСТ ==========
+let permanentToast = null;
+
+function showPermanentToast(message, isError = false) {
+    // Удаляем старый постоянный тост, если есть
+    if (permanentToast) {
+        permanentToast.remove();
+        permanentToast = null;
+    }
+    
+    // Создаём новый тост
+    permanentToast = document.createElement("div");
+    permanentToast.className = "toast toast-permanent";
+    permanentToast.textContent = message;
+    permanentToast.style.background = isError ? "#ef4444" : "#1f2937";
+    permanentToast.style.position = "fixed";
+    permanentToast.style.bottom = "30px";
+    permanentToast.style.left = "50%";
+    permanentToast.style.transform = "translateX(-50%)";
+    permanentToast.style.padding = "14px 28px";
+    permanentToast.style.borderRadius = "60px";
+    permanentToast.style.fontSize = "16px";
+    permanentToast.style.fontWeight = "600";
+    permanentToast.style.zIndex = "1001";
+    permanentToast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.2)";
+    permanentToast.style.whiteSpace = "nowrap";
+    permanentToast.style.cursor = "pointer";
+    
+    permanentToast.innerHTML = `${message} <span style="margin-left:12px; opacity:0.7;">✖</span>`;
+    
+    permanentToast.onclick = () => {
+        if (permanentToast) {
+            permanentToast.remove();
+            permanentToast = null;
+        }
+    };
+    
+    document.body.appendChild(permanentToast);
+}
+
+function clearPermanentToast() {
+    if (permanentToast) {
+        permanentToast.remove();
+        permanentToast = null;
     }
 }
 
@@ -606,7 +844,6 @@ function toggleSound() {
 }
 
 function restartGame() {
-        setTimeout(checkAndShowBanner, 500);
     Swal.fire({
         title: 'Начать заново?',
         text: 'Весь прогресс будет потерян',
@@ -620,9 +857,23 @@ function restartGame() {
         borderRadius: '20px'
     }).then((result) => {
         if (result.isConfirmed) {
+            // Очищаем паузу
+            cleanupPauseHandlers();
+            
+            // Очищаем постоянный тост
+            clearPermanentToast();
+            
+            // Сбрасываем состояние
             gameState.level = 1;
             gameState.totalScore = 0;
             gameState.hintsLeft = CONFIG.HINTS_START;
+            gameState.frozen = false;
+            gamePaused = false;
+            
+            // Показываем баннер
+            setTimeout(checkAndShowBanner, 500);
+            
+            // Запускаем уровень
             initLevel();
             updateUI();
             playSound("click");
@@ -664,6 +915,8 @@ function blinkNextButton() {
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 function initGame() {
+        // ====== ПРИМЕНЯЕМ ТЕМУ ======
+    applyTheme(currentTheme);
     // Проверяем, есть ли слова для загадывания
     if (BASE_WORDS_POOL.length === 0) {
         console.error("❌ Нет слов длиннее 6 букв! Добавьте слова в DICTIONARY.");
@@ -683,7 +936,7 @@ function initGame() {
     document.getElementById("soundBtn").onclick = toggleSound;
     document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
-// Таблица лидеров =================
+/*// Таблица лидеров =================
 const leaderboardBtn = document.getElementById("leaderboardBtn");
 if (leaderboardBtn) {
     leaderboardBtn.onclick = () => {
@@ -693,7 +946,7 @@ if (leaderboardBtn) {
             console.log("Функция top0 не найдена в App.js");
         }
     };
-}
+}  */
 // Кнопка "Пригласить"
 const shareBtn = document.getElementById("shareBtn");
 if (shareBtn) {
@@ -733,7 +986,411 @@ if (shareBtn) {
     `;
     document.head.appendChild(style);
     
+ // ====== ПОДПИСКА НА СОБЫТИЯ ПАУЗЫ ======
+    // Слушаем изменение видимости страницы
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Слушаем фокус окна
+    window.addEventListener('focus', handleWindowFocus);
+    window.addEventListener('blur', handleWindowBlur);
+    
     console.log(`✅ Игра запущена! Доступно слов для загадывания: ${BASE_WORDS_POOL.length}`);
+}
+
+// ========== НАЧАЛЬНЫЙ ЭКРАН ==========
+
+// Элементы
+const startScreen = document.getElementById('startScreen');
+const startPlayBtn = document.getElementById('startPlayBtn');
+const startRulesBtn = document.getElementById('startRulesBtn');
+const startThemeBtn = document.getElementById('startThemeBtn');
+const startShareBtn = document.getElementById('startShareBtn');
+const startSoundBtn = document.getElementById('startSoundBtn');
+
+// Модалки
+const rulesModal = document.getElementById('rulesModal');
+const rulesModalClose = document.getElementById('rulesModalClose');
+const rulesModalStartBtn = document.getElementById('rulesModalStartBtn');
+
+const themeModal = document.getElementById('themeModal');
+const themeModalClose = document.getElementById('themeModalClose');
+
+
+// ====== УПРАВЛЕНИЕ ТЕМАМИ ======
+const THEME_KEY = 'wordgame_theme';
+let currentTheme = localStorage.getItem(THEME_KEY) || 'light';
+
+function applyTheme(theme) {
+    currentTheme = theme;
+    
+    // 1. Применяем тему к body (глобально)
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+    
+    // 2. Обновляем активную кнопку в модалке темы
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+    });
+    
+    // 3. Обновляем подпись в модалке
+    const themeNames = {
+        light: 'Светлая',
+        dark: 'Тёмная',
+        blue: 'Голубая',
+        green: 'Зелёная'
+    };
+    const currentLabel = document.getElementById('themeCurrent');
+    if (currentLabel) {
+        currentLabel.textContent = `Текущая: ${themeNames[theme] || 'Светлая'}`;
+    }
+    
+    // 4. Применяем тему к игровым элементам (если игра уже запущена)
+    applyThemeToGame(theme);
+    
+    // 5. Обновляем частицы фона
+    updateParticles();
+    
+    console.log(`🎨 Тема изменена на: ${themeNames[theme] || theme}`);
+}
+
+// Применение темы к элементам игры
+function applyThemeToGame(theme) {
+    // Игровой контейнер
+    const gameContainer = document.querySelector('.game-container');
+    if (gameContainer) {
+        gameContainer.style.background = getThemeColor(theme, 'card');
+        gameContainer.style.color = getThemeColor(theme, 'text');
+    }
+    
+    // Статистика
+    document.querySelectorAll('.stat-card').forEach(el => {
+        el.style.background = getThemeColor(theme, 'bgLight');
+        el.style.color = getThemeColor(theme, 'text');
+    });
+    
+    // Базовое слово
+    const baseWord = document.getElementById('baseWord');
+    if (baseWord) {
+        baseWord.style.color = getThemeColor(theme, 'text');
+    }
+    
+    // Буквы
+    document.querySelectorAll('.letter-tile').forEach(el => {
+        // Оставляем градиент, меняем только фон если нужно
+        if (theme === 'dark' || theme === 'green' || theme === 'blue') {
+            el.style.background = getThemeColor(theme, 'primary');
+        }
+    });
+    
+    // Текущее слово
+    const currentWord = document.querySelector('.current-word-section');
+    if (currentWord) {
+        currentWord.style.background = getThemeColor(theme, 'bgLight');
+        currentWord.style.borderColor = getThemeColor(theme, 'border');
+    }
+    
+    // Найденные слова
+    const foundSection = document.querySelector('.found-section');
+    if (foundSection) {
+        foundSection.style.background = getThemeColor(theme, 'bgLight');
+    }
+    
+    // Кнопки
+    document.querySelectorAll('.control-btn').forEach(el => {
+        if (!el.id || el.id !== 'submitBtn') {
+            el.style.background = getThemeColor(theme, 'btnSecondary');
+            el.style.color = getThemeColor(theme, 'text');
+            el.style.borderColor = getThemeColor(theme, 'border');
+        }
+    });
+}
+
+// Вспомогательная функция для получения цветов темы
+function getThemeColor(theme, type) {
+    const colors = {
+        light: {
+            card: 'rgba(255, 255, 255, 0.98)',
+            text: '#1f2937',
+            bgLight: '#f9fafb',
+            border: '#e5e7eb',
+            primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            btnSecondary: '#f3f4f6'
+        },
+        dark: {
+            card: '#1a1a2e',
+            text: '#e5e7eb',
+            bgLight: '#1e1e3a',
+            border: '#2d2d44',
+            primary: 'linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%)',
+            btnSecondary: '#2d2d44'
+        },
+        blue: {
+            card: '#f0f8ff',
+            text: '#1a365d',
+            bgLight: '#e3f0fa',
+            border: '#c5dff8',
+            primary: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
+            btnSecondary: '#d4e8f7'
+        },
+        green: {
+            card: '#f0f7f0',
+            text: '#1a3a1a',
+            bgLight: '#e3f0e3',
+            border: '#c5e0c5',
+            primary: 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)',
+            btnSecondary: '#d4e8d4'
+        }
+    };
+    
+    return colors[theme]?.[type] || colors.light[type];
+}
+
+function initTheme() {
+    applyTheme(currentTheme);
+}
+
+// ====== МЕНЮ ======
+// Кнопка "Начать игру"
+if (startPlayBtn) {
+    startPlayBtn.onclick = () => {
+        applyTheme(currentTheme);
+        
+        // Показываем игровой контейнер
+        const gameContainer = document.querySelector('.game-container');
+        if (gameContainer) {
+            gameContainer.style.display = '';
+        }
+        
+        startScreen.classList.add('hidden');
+        setTimeout(() => {
+            startScreen.style.display = 'none';
+        }, 500);
+        
+        if (typeof initGame === 'function') {
+            initGame();
+        }
+    };
+}
+
+// Кнопка "Как играть"
+if (startRulesBtn) {
+    startRulesBtn.onclick = () => {
+        rulesModal.classList.add('show');
+    };
+}
+
+// Закрытие модалки правил
+if (rulesModalClose) {
+    rulesModalClose.onclick = () => {
+        rulesModal.classList.remove('show');
+    };
+}
+
+if (rulesModal) {
+    rulesModal.onclick = (e) => {
+        if (e.target === rulesModal) {
+            rulesModal.classList.remove('show');
+        }
+    };
+}
+
+if (rulesModalStartBtn) {
+    rulesModalStartBtn.onclick = () => {
+        applyTheme(currentTheme);
+        
+        // Показываем игровой контейнер
+        const gameContainer = document.querySelector('.game-container');
+        if (gameContainer) {
+            gameContainer.style.display = '';
+        }
+        
+        rulesModal.classList.remove('show');
+        startScreen.classList.add('hidden');
+        setTimeout(() => {
+            startScreen.style.display = 'none';
+        }, 500);
+        
+        if (typeof initGame === 'function') {
+            initGame();
+        }
+    };
+}
+
+// ====== ТЕМА ======
+if (startThemeBtn) {
+    startThemeBtn.onclick = () => {
+        themeModal.classList.add('show');
+    };
+}
+
+if (themeModalClose) {
+    themeModalClose.onclick = () => {
+        themeModal.classList.remove('show');
+    };
+}
+
+if (themeModal) {
+    themeModal.onclick = (e) => {
+        if (e.target === themeModal) {
+            themeModal.classList.remove('show');
+        }
+    };
+}
+
+// Выбор темы
+document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.onclick = () => {
+        const theme = btn.dataset.theme;
+        applyTheme(theme);
+        
+        // Если игра уже запущена, обновляем её
+        if (typeof applyThemeToGame === 'function') {
+            applyThemeToGame(theme);
+        }
+        
+        // Не закрываем модалку сразу, чтобы пользователь видел выбор
+        setTimeout(() => {
+            themeModal.classList.remove('show');
+        }, 300);
+    };
+});
+
+// ====== ЗВУК В МЕНЮ ======
+if (startSoundBtn) {
+    // Состояние звука берётся из gameState (если уже инициализирован)
+    const updateSoundIcon = () => {
+        if (typeof gameState !== 'undefined') {
+            startSoundBtn.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+        }
+    };
+    
+    startSoundBtn.onclick = () => {
+        if (typeof toggleSound === 'function') {
+            toggleSound();
+            updateSoundIcon();
+        }
+    };
+    
+    // Обновляем иконку при загрузке
+    setTimeout(updateSoundIcon, 100);
+}
+
+// ====== ПРИГЛАСИТЬ ДРУЗЕЙ ======
+if (startShareBtn) {
+    startShareBtn.onclick = () => {
+        if (typeof share2 === 'function') {
+            share2();
+        } else {
+            console.log('Функция share2 не найдена');
+            // fallback
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Слова из слова',
+                    text: 'Составь слова из букв! Попробуй и ты!',
+                    url: window.location.href
+                }).catch(() => {});
+            }
+        }
+    };
+}
+// ====== КНОПКА ВОЗВРАТА В МЕНЮ ======
+const menuBtn = document.getElementById('menuBtn');
+
+if (menuBtn) {
+    menuBtn.onclick = () => {
+        // Показываем модалку подтверждения
+        const exitModal = document.getElementById('exitModal');
+        if (exitModal) {
+            exitModal.classList.add('show');
+        }
+    };
+}
+
+// ====== МОДАЛКА ВЫХОДА В МЕНЮ ======
+const exitModal = document.getElementById('exitModal');
+const exitModalCancel = document.getElementById('exitModalCancel');
+const exitModalConfirm = document.getElementById('exitModalConfirm');
+
+// Отмена — закрываем модалку
+if (exitModalCancel) {
+    exitModalCancel.onclick = () => {
+        exitModal.classList.remove('show');
+    };
+}
+
+// Клик вне модалки — закрываем
+if (exitModal) {
+    exitModal.onclick = (e) => {
+        if (e.target === exitModal) {
+            exitModal.classList.remove('show');
+        }
+    };
+}
+
+// Подтверждение — выходим в меню
+if (exitModalConfirm) {
+    exitModalConfirm.onclick = () => {
+        exitModal.classList.remove('show');
+        
+        // Останавливаем таймер
+        if (gameState.timerId) {
+            clearInterval(gameState.timerId);
+            gameState.timerId = null;
+        }
+        
+        // Очищаем паузу
+        cleanupPauseHandlers();
+        
+        // Показываем начальный экран
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.style.display = 'flex';
+            setTimeout(() => {
+                startScreen.classList.remove('hidden');
+            }, 10);
+        }
+        
+        // Скрываем игровой контейнер
+        const gameContainer = document.querySelector('.game-container');
+        if (gameContainer) {
+            gameContainer.style.display = 'none';
+        }
+        
+        // Сбрасываем флаг игры
+        gameState.frozen = true;
+        
+        // Показываем VK навигацию (если была скрыта)
+        if (typeof showVKView === 'function') {
+            setTimeout(showVKView, 300);
+        }
+        
+        // Очищаем тост
+        clearPermanentToast();
+        
+        console.log('🏠 Возврат в главное меню');
+    };
+}
+
+
+// Закрытие модалки по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const exitModal = document.getElementById('exitModal');
+        if (exitModal && exitModal.classList.contains('show')) {
+            exitModal.classList.remove('show');
+        }
+    }
+});
+
+// Инициализация темы при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
+});
+
+
+// Также применяем тему при её изменении в игре (если функция уже существует)
+if (typeof window.applyTheme === 'undefined') {
+    window.applyTheme = applyTheme;
 }
 
 document.addEventListener("DOMContentLoaded", initGame);
