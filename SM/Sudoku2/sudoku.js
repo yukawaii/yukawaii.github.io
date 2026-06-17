@@ -521,15 +521,13 @@ inviteFriends() {
 
 // Отображаем результаты проверки (цвет цифр, а не фона)
 if (this.checkedCells[cellKey] !== undefined) {
+    // Убираем классы проверки
+    cell.classList.remove('checked-correct', 'checked-error');
+    
     if (this.checkedCells[cellKey] === true) {
-        // Правильная цифра — зеленая
-     cell.style.color = '#39ff14'; // 👈 ЯРКИЙ ЗЕЛЕНЫЙ
-        cell.style.textShadow = '0 0 10px rgba(0, 230, 118, 0.5)'; // 👈 ДОБАВЛЯЕМ СВЕЧЕНИЕ
+        cell.classList.add('checked-correct'); // ← зеленый через класс
     } else if (this.checkedCells[cellKey] === false) {
-        // Неправильная цифра — красная
-       cell.style.color = '#ff1744'; // 👈 ЯРКИЙ КРАСНЫЙ
-        cell.style.textShadow = '0 0 10px rgba(255, 23, 68, 0.5)'; // 👈 ДОБАВЛЯЕМ СВЕЧЕНИЕ
-        cell.classList.add('error');
+        cell.classList.add('checked-error'); // ← красный через класс
     }
 }
 
@@ -985,3 +983,91 @@ document.addEventListener('touchmove', function(event) {
     // отдельный блок, который должен прокручиваться (например, чат)
     event.preventDefault();
 }, { passive: false });
+
+// Кнопки пригласить друзей и тема
+document.getElementById('btnInviteFriends').addEventListener('click', function() {
+    if (window.vkBridge) {
+        window.vkBridge.send('VKWebAppShowInviteBox')
+            .catch(e => console.warn('Ошибка приглашения:', e));
+    } else {
+        alert('Пригласить друзей');
+    }
+});
+
+// Открыть модалку с темами
+document.getElementById('btnThemeSun').addEventListener('click', function() {
+    document.getElementById('themeModal').style.display = 'flex';
+});
+
+// Закрыть модалку
+function closeThemeModal() {
+    document.getElementById('themeModal').style.display = 'none';
+}
+
+document.getElementById('closeThemeModal').addEventListener('click', closeThemeModal);
+document.getElementById('themeModal').addEventListener('click', function(e) {
+    if (e.target === this) closeThemeModal();
+});
+
+// Переключение тем
+document.querySelectorAll('.theme-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        // Убрать активный класс у всех
+        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active-theme'));
+        this.classList.add('active-theme');
+        
+        const theme = this.dataset.theme;
+        applyTheme(theme);
+        
+        // Сохранить выбранную тему
+        localStorage.setItem('sudoku-theme', theme);
+    });
+});
+
+// Применить тему
+function applyTheme(theme) {
+    const container = document.querySelector('.container');
+    const modal = document.querySelector('#themeModal > div');
+    const body = document.body;
+    const grid = document.getElementById('sudoku-grid');
+    const cells = document.querySelectorAll('.cell');
+    const numBtns = document.querySelectorAll('.num-btn');
+    const actionBtns = document.querySelectorAll('.action-btn');
+    const menuBtns = document.querySelectorAll('.menu-btn');
+    const diffBtns = document.querySelectorAll('.diff-btn');
+    const stars = document.querySelector('body::before');
+    
+    // Убрать все классы тем
+    body.classList.remove('theme-dark', 'theme-light', 'theme-blue', 'theme-pastel');
+    container.classList.remove('theme-dark', 'theme-light', 'theme-blue', 'theme-pastel');
+    if (grid) grid.classList.remove('theme-dark', 'theme-light', 'theme-blue', 'theme-pastel');
+    
+    // Добавить класс теме на body для каскадных стилей
+    body.classList.add('theme-' + theme);
+    
+// Обновить активный класс в модалке
+    document.querySelectorAll('.theme-btn').forEach(function(btn) {
+        btn.classList.remove('active-theme');
+        if (btn.dataset.theme === theme) {
+            btn.classList.add('active-theme');
+        }
+    });
+    
+    // Сохранить тему
+    localStorage.setItem('sudoku-theme', theme);
+}
+
+// Восстановить тему при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('sudoku-theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+        // Обновить активный класс
+        document.querySelectorAll('.theme-btn').forEach(function(btn) {
+            btn.classList.remove('active-theme');
+            if (btn.dataset.theme === savedTheme) {
+                btn.classList.add('active-theme');
+            }
+        });
+    }
+});
