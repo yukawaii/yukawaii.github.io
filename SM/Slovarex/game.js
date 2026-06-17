@@ -87,7 +87,20 @@ function initVKBridge() {
         }
     });
 }
+// ====== УПРАВЛЕНИЕ ЧАСТИЦАМИ ======
+function setParticlesBelowGame() {
+    const container = document.getElementById('particlesContainer');
+    if (container) {
+        container.style.zIndex = '0';  // под игрой
+    }
+}
 
+function setParticlesAboveMenu() {
+    const container = document.getElementById('particlesContainer');
+    if (container) {
+        container.style.zIndex = '10000';  // над фоном меню, но под контентом
+    }
+}
 // Инициализация частиц при загрузке
 document.addEventListener('DOMContentLoaded', () => {
     // Даём небольшую задержку, чтобы DOM полностью загрузился
@@ -1321,7 +1334,8 @@ function updateFoundParticles() {
 if (startPlayBtn) {
     startPlayBtn.onclick = () => {
         applyTheme(currentTheme);
-        
+         // Частицы — под игру
+        setParticlesBelowGame();
         // Показываем игровой контейнер
         const gameContainer = document.querySelector('.game-container');
         if (gameContainer) {
@@ -1364,7 +1378,8 @@ if (rulesModal) {
 if (rulesModalStartBtn) {
     rulesModalStartBtn.onclick = () => {
         applyTheme(currentTheme);
-        
+          // Частицы — под игру
+        setParticlesBelowGame();
         // Показываем игровой контейнер
         const gameContainer = document.querySelector('.game-container');
         if (gameContainer) {
@@ -1507,9 +1522,8 @@ if (exitModalConfirm) {
         
         // Очищаем паузу
         cleanupPauseHandlers();
-       // ====== ПЕРЕСОЗДАЁМ ЧАСТИЦЫ ======
-        setTimeout(createParticles, 50);
-        // =================================
+  // Частицы — над фоном меню
+        setParticlesAboveMenu();
         // Показываем начальный экран
         const startScreen = document.getElementById('startScreen');
         if (startScreen) {
