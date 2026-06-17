@@ -81,6 +81,13 @@
             background: linear-gradient(135deg, #4fcb91, #329e68);
         }
 
+        .menu-btn.continue {
+            background: linear-gradient(135deg, #4fc3f7, #0288d1);
+        }
+        .menu-btn.continue:hover {
+            background: linear-gradient(135deg, #6dd0f8, #039be5);
+        }
+
         .menu-btn.howto {
             background: linear-gradient(135deg, #faa61a, #d4880f);
         }
@@ -943,126 +950,136 @@
                 height: 18px;
             }
         }
-/* ===== КОНТЕЙНЕР ВОЛН ===== */
-.waves-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
 
-/* ===== ОБЩИЕ СТИЛИ ВОЛН ===== */
-.wave {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    pointer-events: none;
-}
+        /* ===== КОНТЕЙНЕР ВОЛН ===== */
+        .waves-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
 
-.wave svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
+        .wave {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+        }
 
-/* ===== ПОЗИЦИИ И АНИМАЦИИ ===== */
-.wave1 {
-    top: 5%;
-    height: 30px;
-    animation: waveMove1 7s ease-in-out infinite;
-}
+        .wave svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
 
-.wave2 {
-    top: 20%;
-    height: 35px;
-    animation: waveMove2 9s ease-in-out infinite;
-}
+        .wave1 {
+            top: 5%;
+            height: 30px;
+            animation: waveMove1 7s ease-in-out infinite;
+        }
 
-.wave3 {
-    top: 40%;
-    height: 40px;
-    animation: waveMove3 8s ease-in-out infinite;
-}
+        .wave2 {
+            top: 20%;
+            height: 35px;
+            animation: waveMove2 9s ease-in-out infinite;
+        }
 
-.wave4 {
-    top: 60%;
-    height: 45px;
-    animation: waveMove4 10s ease-in-out infinite;
-}
+        .wave3 {
+            top: 40%;
+            height: 40px;
+            animation: waveMove3 8s ease-in-out infinite;
+        }
 
-/* ===== АНИМАЦИИ ТОЛЬКО ВЕРТИКАЛЬНЫЕ ===== */
-@keyframes waveMove1 {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(1.3); }
-}
+        .wave4 {
+            top: 60%;
+            height: 45px;
+            animation: waveMove4 10s ease-in-out infinite;
+        }
 
-@keyframes waveMove2 {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.7); }
-}
+        @keyframes waveMove1 {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.3); }
+        }
 
-@keyframes waveMove3 {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(1.4); }
-}
+        @keyframes waveMove2 {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.7); }
+        }
 
-@keyframes waveMove4 {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.6); }
-}
-/* ===== СВЕТЯЩИЕСЯ ЧАСТИЦЫ ===== */
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,200,50,0.2));
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 2;
-    box-shadow: 0 0 10px rgba(255,215,0,0.5);
-    animation: particleFloat 3s ease-in-out infinite;
-}
+        @keyframes waveMove3 {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.4); }
+        }
 
-@keyframes particleFloat {
-    0% { transform: translateY(0) scale(1); opacity: 0.8; }
-    50% { transform: translateY(-60px) scale(1.3); opacity: 1; }
-    100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
-}
-@keyframes magnetPulse {
-    0% { transform: scale(0.9); opacity: 0.7; }
-    100% { transform: scale(1.2); opacity: 1; }
-}
+        @keyframes waveMove4 {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.6); }
+        }
 
-@keyframes achievementAnim {
-    0% { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
-    20% { transform: translate(-50%, -50%) scale(1.2) rotate(3deg); opacity: 1; }
-    40% { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg); opacity: 1; }
-    60% { transform: translate(-50%, -50%) scale(1.05) rotate(1deg); opacity: 1; }
-    80% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
-    100% { transform: translate(-50%, -60%) scale(1) rotate(0deg); opacity: 0; }
-}
-/* ===== ГОЛУБЫЕ ЧАСТИЦЫ ===== */
-.particle-blue {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: radial-gradient(circle, rgba(100, 200, 255, 0.8), rgba(50, 150, 255, 0.2));
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 2;
-    box-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
-    animation: particleFloatBlue 3s ease-in-out infinite;
-}
+        /* ===== СВЕТЯЩИЕСЯ ЧАСТИЦЫ ===== */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,200,50,0.2));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+            animation: particleFloat 3s ease-in-out infinite;
+        }
 
-@keyframes particleFloatBlue {
-    0% { transform: translateY(0) scale(1); opacity: 0.8; }
-    50% { transform: translateY(-50px) scale(1.3); opacity: 1; }
-    100% { transform: translateY(-100px) scale(0.3); opacity: 0; }
-}
+        @keyframes particleFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-60px) scale(1.3); opacity: 1; }
+            100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+        }
+
+        @keyframes magnetPulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        @keyframes achievementAnim {
+            0% { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
+            20% { transform: translate(-50%, -50%) scale(1.2) rotate(3deg); opacity: 1; }
+            40% { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg); opacity: 1; }
+            60% { transform: translate(-50%, -50%) scale(1.05) rotate(1deg); opacity: 1; }
+            80% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -60%) scale(1) rotate(0deg); opacity: 0; }
+        }
+
+        /* ===== ГОЛУБЫЕ ЧАСТИЦЫ ===== */
+        .particle-blue {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(100, 200, 255, 0.8), rgba(50, 150, 255, 0.2));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
+            animation: particleFloatBlue 3s ease-in-out infinite;
+        }
+
+        @keyframes particleFloatBlue {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-50px) scale(1.3); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== УВЕДОМЛЕНИЕ О СОХРАНЕНИИ ===== */
+        @keyframes saveAnim {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            40% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -60%) scale(1); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -1071,7 +1088,8 @@
     <div id="mainMenu">
         <h1>🌊 Батискаф в западне!</h1>
         <div class="subtitle">Управляй батискафом, собирай ракушки!</div>
-        <button class="menu-btn play" onclick="startGame()">▶ Начать игру</button>
+        <button class="menu-btn play" onclick="startGame()">▶ Новая игра</button>
+        <button class="menu-btn continue" onclick="continueGame()">↩️ Продолжить</button>
         <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
         <button class="menu-btn invite" onclick="inviteFriends()">👥 Пригласить друзей</button>
         <button class="menu-btn games" onclick="showGamesModal()">🎮 Другие игры</button>
@@ -1160,34 +1178,34 @@
                 <div class="seaweed" style="left:75%; animation-delay:0.3s; font-size:28px;">🌿</div>
                 <div class="seaweed" style="left:85%; animation-delay:0.8s; font-size:22px;">🌱</div>
                 <div class="seaweed" style="left:92%; animation-delay:1.2s; font-size:26px;">🌿</div>
+
                 <!-- ВОЛНЫ -->
-<!-- ===== ВОЛНЫ ===== -->
-<div class="waves-container">
-    <div class="wave wave1">
-        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
-            <path d="M0,15 C200,0 400,30 600,15 C800,0 1000,30 1200,15 L1200,30 L0,30 Z" 
-                  fill="rgba(255,255,255,0.15)"/>
-        </svg>
-    </div>
-    <div class="wave wave2">
-        <svg viewBox="0 0 1200 35" preserveAspectRatio="none">
-            <path d="M0,17 C150,2 350,32 550,17 C750,2 950,32 1200,17 L1200,35 L0,35 Z" 
-                  fill="rgba(255,255,255,0.12)"/>
-        </svg>
-    </div>
-    <div class="wave wave3">
-        <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
-            <path d="M0,20 C180,5 380,35 580,20 C780,5 980,35 1200,20 L1200,40 L0,40 Z" 
-                  fill="rgba(255,255,255,0.08)"/>
-        </svg>
-    </div>
-    <div class="wave wave4">
-        <svg viewBox="0 0 1200 45" preserveAspectRatio="none">
-            <path d="M0,22 C220,7 420,37 620,22 C820,7 1020,37 1200,22 L1200,45 L0,45 Z" 
-                  fill="rgba(255,255,255,0.05)"/>
-        </svg>
-    </div>
-</div>
+                <div class="waves-container">
+                    <div class="wave wave1">
+                        <svg viewBox="0 0 1200 30" preserveAspectRatio="none">
+                            <path d="M0,15 C200,0 400,30 600,15 C800,0 1000,30 1200,15 L1200,30 L0,30 Z" 
+                                  fill="rgba(255,255,255,0.15)"/>
+                        </svg>
+                    </div>
+                    <div class="wave wave2">
+                        <svg viewBox="0 0 1200 35" preserveAspectRatio="none">
+                            <path d="M0,17 C150,2 350,32 550,17 C750,2 950,32 1200,17 L1200,35 L0,35 Z" 
+                                  fill="rgba(255,255,255,0.12)"/>
+                        </svg>
+                    </div>
+                    <div class="wave wave3">
+                        <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+                            <path d="M0,20 C180,5 380,35 580,20 C780,5 980,35 1200,20 L1200,40 L0,40 Z" 
+                                  fill="rgba(255,255,255,0.08)"/>
+                        </svg>
+                    </div>
+                    <div class="wave wave4">
+                        <svg viewBox="0 0 1200 45" preserveAspectRatio="none">
+                            <path d="M0,22 C220,7 420,37 620,22 C820,7 1020,37 1200,22 L1200,45 L0,45 Z" 
+                                  fill="rgba(255,255,255,0.05)"/>
+                        </svg>
+                    </div>
+                </div>
 
                 <!-- СТЕНА С ШИПАМИ И ЛИАНАМИ -->
                 <div id="wallDecor">
@@ -1265,15 +1283,11 @@
             vkBridge.subscribe((e) => {
                 if (e.detail.type === 'VKWebAppViewHide') {
                     console.log('📱 Приложение скрыто (VKWebAppViewHide)');
-                    // Ставим игру на паузу, НЕ включая звук
                     pauseGameOnHide();
                 }
                 if (e.detail.type === 'VKWebAppViewRestore') {
                     console.log('📱 Приложение восстановлено (VKWebAppViewRestore)');
-                    // Ничего не делаем! Игрок сам снимет паузу кнопкой.
-                    // Только включаем звук обратно, чтобы он работал при разблокировке
                     isSoundEnabled = true;
-                    // Обновляем иконку паузы, если игра на паузе
                     if (paus && pausa) {
                         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
                     }
@@ -1295,40 +1309,159 @@
         // ============================================================
         var audioCtx = null;
         var isSoundEnabled = true;
-                var particleInterval = null;
-                var magnetActive = false;
-var magnetTimer = null;
-var magnetRange = 150; // радиус притяжения
-var speedBoostActive = false;
-var speedBoostTimer = null;
-var originalSpeed = 5;
-var slowMotionActive = false;
-var slowMotionTimer = null;
-var originalT = 75;
-var particleBlueInterval = null;
+        var particleInterval = null;
+        var magnetActive = false;
+        var magnetTimer = null;
+        var magnetRange = 150;
+        var speedBoostActive = false;
+        var speedBoostTimer = null;
+        var originalSpeed = 5;
+        var slowMotionActive = false;
+        var slowMotionTimer = null;
+        var originalT = 75;
+        var particleBlueInterval = null;
 
-function startParticlesBlue() {
-    if (particleBlueInterval) clearInterval(particleBlueInterval);
-    particleBlueInterval = setInterval(function() {
-        if (!gameActive || paus || level < 30 || level >= 100) return;
-        var particle = document.createElement('div');
-        particle.className = 'particle-blue';
-        particle.style.left = (Math.random() * 280 + 10) + 'px';
-        particle.style.top = (Math.random() * 280 + 20) + 'px';
-        var size = 2 + Math.random() * 3;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.animationDuration = (2 + Math.random() * 3) + 's';
-        gameblock.appendChild(particle);
-        setTimeout(function() { particle.remove(); }, 5000);
-    }, 400);
+        // ============================================================
+        //  СОХРАНЕНИЕ ПРОГРЕССА
+        // ============================================================
+        var maxSavedLevel = 0;
+
+        function checkAndSaveLevel() {
+            if (level % 50 === 0 && level > 0) {
+                localStorage.setItem('bathyscaphe_max_level', level);
+                maxSavedLevel = level;
+                console.log('💾 Уровень ' + level + ' сохранён!');
+                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+            }
+        }
+
+        function showSaveNotification(text) {
+            var notification = document.createElement('div');
+            notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
+                'z-index:35;font-size:20px;color:#4fc3f7;text-shadow:0 0 20px rgba(79,195,247,0.8);' +
+                'animation:saveAnim 2s ease-out forwards;pointer-events:none;' +
+                'background:rgba(0,0,0,0.7);padding:12px 24px;border-radius:12px;border:1px solid rgba(79,195,247,0.3);';
+            notification.textContent = text;
+            gameblock.appendChild(notification);
+            setTimeout(function() { notification.remove(); }, 2500);
+        }
+
+        function loadSavedLevel() {
+            var saved = localStorage.getItem('bathyscaphe_max_level');
+            if (saved) {
+                maxSavedLevel = parseInt(saved);
+                return maxSavedLevel;
+            }
+            return 0;
+        }
+
+        function continueGame() {
+            var savedLevel = loadSavedLevel();
+if (savedLevel < 50) {
+    // Создаём модальное окно
+    var modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2 class="warning">⚠️ Нет сохранений</h2>
+            <p>Точки сохранения не достигнуты.</p>
+            <p style="font-size:14px; color:rgba(255,255,255,0.6);">Достигните 50 уровня, чтобы сохранить прогресс!</p>
+            <button class="modal-btn close-btn" onclick="this.closest('.modal-overlay').remove()">Понятно</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    return;
 }
 
-function stopParticlesBlue() {
-    if (particleBlueInterval) clearInterval(particleBlueInterval);
-    
-}
+            // Загружаем сохранённый уровень
+            level = savedLevel;
+            score = (level - 1) * 10;
+            scoresEl.innerHTML = score;
+            levelDisplay.textContent = level;
 
+            // Включаем эффекты для текущего уровня
+            if (level >= 30 && level < 100) {
+                startParticlesBlue();
+            }
+            if (level >= 100) {
+                startParticles();
+            }
+            if (level >= 50) {
+                document.querySelector('.bathyscaphe .body').style.background = 
+                    'radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)';
+                document.querySelector('.bathyscaphe .window').style.background = 
+                    'radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';
+            }
+            if (level >= 100) {
+                document.querySelector('.bathyscaphe .body').style.background = 
+                    'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
+                document.querySelector('.bathyscaphe .window').style.background = 
+                    'radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)';
+                document.querySelector('.shell .spiral').style.background = 
+                    'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
+            }
+
+            // Запускаем игру
+            mainMenu.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            
+            if (!gameActive) {
+                gameActive = true;
+                down();
+            }
+            startBackgroundEffects();
+            playButtonSound();
+        }
+
+        // ============================================================
+        //  ЧАСТИЦЫ
+        // ============================================================
+        function startParticlesBlue() {
+            if (particleBlueInterval) clearInterval(particleBlueInterval);
+            particleBlueInterval = setInterval(function() {
+                if (!gameActive || paus || level < 30 || level >= 100) return;
+                var particle = document.createElement('div');
+                particle.className = 'particle-blue';
+                particle.style.left = (Math.random() * 280 + 10) + 'px';
+                particle.style.top = (Math.random() * 280 + 20) + 'px';
+                var size = 2 + Math.random() * 3;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.animationDuration = (2 + Math.random() * 3) + 's';
+                gameblock.appendChild(particle);
+                setTimeout(function() { particle.remove(); }, 5000);
+            }, 400);
+        }
+
+        function stopParticlesBlue() {
+            if (particleBlueInterval) clearInterval(particleBlueInterval);
+        }
+
+        function startParticles() {
+            if (particleInterval) clearInterval(particleInterval);
+            particleInterval = setInterval(function() {
+                if (!gameActive || paus || level < 100) return;
+                var particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = (Math.random() * 280 + 10) + 'px';
+                particle.style.top = (Math.random() * 280 + 20) + 'px';
+                var size = 2 + Math.random() * 4;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.animationDuration = (2 + Math.random() * 3) + 's';
+                gameblock.appendChild(particle);
+                setTimeout(function() { particle.remove(); }, 5000);
+            }, 300);
+        }
+
+        function stopParticles() {
+            if (particleInterval) clearInterval(particleInterval);
+            if (particleBlueInterval) clearInterval(particleBlueInterval);
+        }
+
+        // ============================================================
+        //  ЗВУКИ
+        // ============================================================
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1363,17 +1496,13 @@ function stopParticlesBlue() {
             setTimeout(function() { playTone(200, 0.4, 'sawtooth', 0.3); }, 300); }
 
         function playButtonSound() {
-            // Если звук выключен или игра не активна - не запускаем
             if (!isSoundEnabled || !gameActive) return;
-            
             var randomDelay = 4000 + Math.random() * 3000;
             if (window.buttonSoundTimer) {
                 clearTimeout(window.buttonSoundTimer);
             }
             window.buttonSoundTimer = setTimeout(function() {
-                // Проверяем, активна ли игра и включён ли звук перед воспроизведением
                 if (!gameActive || !isSoundEnabled || paus) {
-                    // Если игра на паузе или неактивна - перезапускаем таймер
                     playButtonSound();
                     return;
                 }
@@ -1403,61 +1532,43 @@ function stopParticlesBlue() {
         function playShieldUseSound() { playTone(400, 0.2, 'square', 0.25);
             setTimeout(function() { playTone(600, 0.2, 'square', 0.25); }, 150); }
 
-
         // ============================================================
-        //  УПРАВЛЕНИЕ ПАУЗОЙ ПРИ СВОРАЧИВАНИИ
+        //  УПРАВЛЕНИЕ ПАУЗОЙ
         // ============================================================
         var wasPausedByHide = false;
 
         function pauseGameOnHide() {
-            // Если игра активна и не на паузе
             if (gameActive && !paus) {
                 console.log('⏸️ Автоматическая пауза (сворачивание)');
-                // Выключаем звуки
                 isSoundEnabled = false;
-                // Останавливаем все интервалы движения
                 clearAllIntervals();
-                // Останавливаем звук радара
                 if (window.buttonSoundTimer) {
                     clearTimeout(window.buttonSoundTimer);
                     window.buttonSoundTimer = null;
                 }
-                // Меняем состояние паузы
                 paus = true;
                 wasPausedByHide = true;
-                // Блокируем кнопки управления
                 if (u) u.disabled = true;
                 if (d) d.disabled = true;
                 if (r) r.disabled = true;
                 if (l) l.disabled = true;
-                // Меняем иконку паузы
                 if (pausa) {
                     pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
                 }
             }
         }
 
-        // ============================================================
-        //  ПАУЗА (РУЧНАЯ)
-        // ============================================================
         function pause() {
-            // Если игра не активна - игнорируем
             if (!gameActive) return;
-            
-            // Останавливаем все интервалы
             clearAllIntervals();
             
             if (paus === false) {
-                // Включаем паузу
                 console.log('⏸️ Ручная пауза');
-                // Останавливаем звук радара
                 if (window.buttonSoundTimer) {
                     clearTimeout(window.buttonSoundTimer);
                     window.buttonSoundTimer = null;
                 }
-                // Выключаем звуки
                 isSoundEnabled = false;
-                
                 if (u) u.disabled = true;
                 if (d) d.disabled = true;
                 if (r) r.disabled = true;
@@ -1466,41 +1577,29 @@ function stopParticlesBlue() {
                     pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
                 }
                 paus = true;
-                // Сбрасываем флаг, чтобы при восстановлении не снять паузу автоматически
                 wasPausedByHide = false;
             } else {
-                // Снимаем паузу
                 console.log('▶️ Снятие паузы');
-                // Включаем звуки
                 isSoundEnabled = true;
-                
                 if (u) u.disabled = false;
                 if (d) d.disabled = false;
                 if (r) r.disabled = false;
                 if (l) l.disabled = false;
-                
-                // Блокируем активную кнопку движения
                 if (iint === "left()" && l) { l.disabled = true; } 
                 else if (iint === "right()" && r) { r.disabled = true; } 
                 else if (iint === "down()" && d) { d.disabled = true; } 
                 else if (iint === "up()" && u) { u.disabled = true; }
-                
-                // Запускаем движение
                 setTimeout(iint, t);
-                
                 if (pausa) {
                     pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
                 }
                 paus = false;
                 wasPausedByHide = false;
-                
-                // Перезапускаем звук радара
                 if (gameActive) {
                     playButtonSound();
                 }
             }
         }
-
 
         // ============================================================
         //  ПЕРЕМЕННЫЕ ИГРЫ
@@ -1524,10 +1623,8 @@ function stopParticlesBlue() {
         var finalLevelEl = document.getElementById('finalLevel');
         var gameblock = document.getElementById('gameblock');
 
-        var x = 0,
-            y = 0;
-        var cx = 50,
-            cy = 50;
+        var x = 0, y = 0;
+        var cx = 50, cy = 50;
         var bx, by;
         var sx, sy;
         var jx, jy;
@@ -1554,67 +1651,66 @@ function stopParticlesBlue() {
             ['#0a1a3a', '#0a2a5a', '#0a3a6a', '#1a5a8a'],
             ['#2a1a3a', '#3a2a5a', '#4a3a7a', '#5a4a9a'],
             ['#1a2a4a', '#2a4a6a', '#3a6a8a', '#4a8aaa'],
-                ['#3a2a4a', '#4a3a6a', '#5a4a8a', '#6a5a9a'],  
-          ['#0a2a4a', '#1a4a6a', '#2a6a8a', '#3a8aaa']   
+            ['#3a2a4a', '#4a3a6a', '#5a4a8a', '#6a5a9a'],
+            ['#0a2a4a', '#1a4a6a', '#2a6a8a', '#3a8aaa']
         ];
         var colorIndex = 0;
         var bgInterval = null;
 
         // ============================================================
-        //  ФУНКЦИИ МЕНЮ И ИГРЫ
+        //  ФУНКЦИИ МЕНЮ
         // ============================================================
- function startGame() {
-    if (!mainMenu || !gameContainer) {
-        console.error('Элементы меню не найдены');
-        return;
-    }
-    isSoundEnabled = true;
-    wasPausedByHide = false;
-    initAudio();
-    mainMenu.style.display = 'none';
-    gameContainer.style.display = 'flex';
-    resetGame();
-    if (!gameActive) {
-        gameActive = true;
-        down();
-    }
-    startBackgroundEffects();
-
-    // Запускаем бонусы в зависимости от уровня
-    if (level >= 30) {
-        setInterval(function() {
-            if (gameActive && !paus && !speedBoostActive && level >= 30) {
-                spawnSpeedBoost();
+        function startGame() {
+            if (!mainMenu || !gameContainer) {
+                console.error('Элементы меню не найдены');
+                return;
             }
-        }, 12000 + Math.random() * 8000);
-    }
-
-    if (level >= 60) {
-        setInterval(function() {
-            if (gameActive && !paus && !slowMotionActive && level >= 60) {
-                spawnSlowMotion();
+            isSoundEnabled = true;
+            wasPausedByHide = false;
+            initAudio();
+            mainMenu.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            resetGame();
+            if (!gameActive) {
+                gameActive = true;
+                down();
             }
-        }, 18000 + Math.random() * 10000);
-    }
+            startBackgroundEffects();
 
-    if (level >= 70) {
-        setInterval(function() {
-            if (gameActive && !paus && !magnetActive && level >= 70) {
-                spawnMagnet();
+            if (level >= 30) {
+                setInterval(function() {
+                    if (gameActive && !paus && !speedBoostActive && level >= 30) {
+                        spawnSpeedBoost();
+                    }
+                }, 12000 + Math.random() * 8000);
             }
-        }, 20000 + Math.random() * 12000);
-    }
- // Запускаем голубые частицы с 30 уровня
-    if (level >= 30 && level < 100) {
-        startParticlesBlue();
-    }
-    if (level >= 100) {
-        startParticles();
-    }
 
-    
-    playButtonSound();
-}
+            if (level >= 60) {
+                setInterval(function() {
+                    if (gameActive && !paus && !slowMotionActive && level >= 60) {
+                        spawnSlowMotion();
+                    }
+                }, 18000 + Math.random() * 10000);
+            }
+
+            if (level >= 70) {
+                setInterval(function() {
+                    if (gameActive && !paus && !magnetActive && level >= 70) {
+                        spawnMagnet();
+                    }
+                }, 20000 + Math.random() * 12000);
+            }
+
+            if (level >= 30 && level < 100) {
+                startParticlesBlue();
+            }
+            if (level >= 100) {
+                startParticles();
+            }
+
+            playButtonSound();
+        }
+
         function goToMenu() {
             gameActive = false;
             clearAllIntervals();
@@ -1626,7 +1722,6 @@ function stopParticlesBlue() {
                 clearTimeout(window.buttonSoundTimer);
                 window.buttonSoundTimer = null;
             }
-            // Сбрасываем состояние паузы
             paus = false;
             wasPausedByHide = false;
             if (pausa) {
@@ -1743,45 +1838,44 @@ function stopParticlesBlue() {
 
             if (jellyfishTimer) clearInterval(jellyfishTimer);
             jellyfishTimer = setInterval(function() {
-                if (!gameActive || paus) return; // НЕ создаём медуз на паузе
+                if (!gameActive || paus) return;
                 spawnJellyfish();
             }, 12000 + Math.random() * 20000);
 
             if (shieldTimer) clearInterval(shieldTimer);
             shieldTimer = setInterval(function() {
-                if (!gameActive || paus || shields >= 3) return; // НЕ создаём щиты на паузе
+                if (!gameActive || paus || shields >= 3) return;
                 spawnShield();
             }, 18000 + Math.random() * 10000);
-            // Магнит появляется каждые 15-25 секунд после 70 уровня
-if (level >= 70) {
-    setInterval(function() {
-        if (gameActive && !paus && !magnetActive) {
-            spawnMagnet();
-        }
-    }, 20000 + Math.random() * 20000);
-}
-// Медузы появляются чаще после 80 уровня
-if (level >= 80) {
-    var jellyInterval = Math.max(5000, 12000 - (level - 80) * 100);
-    if (jellyfishTimer) clearInterval(jellyfishTimer);
-    jellyfishTimer = setInterval(function() {
-        if (!gameActive || paus) return;
-        spawnJellyfish();
-        // Шанс на вторую медузу
-        if (Math.random() < 0.3) {
-            setTimeout(spawnJellyfish, 500 + Math.random() * 1000);
-        }
-    }, jellyInterval);
-}
-            // В startBackgroundEffects() после 50 уровня
-if (level >= 50) {
-    setInterval(function() {
-        if (gameActive && !paus) {
-            spawnJellyfish();
-            setTimeout(spawnJellyfish, 500 + Math.random() * 1000);
-        }
-    }, 5000 + Math.random() * 5000);
-}
+
+            if (level >= 70) {
+                setInterval(function() {
+                    if (gameActive && !paus && !magnetActive) {
+                        spawnMagnet();
+                    }
+                }, 20000 + Math.random() * 20000);
+            }
+
+            if (level >= 80) {
+                var jellyInterval = Math.max(5000, 12000 - (level - 80) * 100);
+                if (jellyfishTimer) clearInterval(jellyfishTimer);
+                jellyfishTimer = setInterval(function() {
+                    if (!gameActive || paus) return;
+                    spawnJellyfish();
+                    if (Math.random() < 0.3) {
+                        setTimeout(spawnJellyfish, 500 + Math.random() * 1000);
+                    }
+                }, jellyInterval);
+            }
+
+            if (level >= 50) {
+                setInterval(function() {
+                    if (gameActive && !paus) {
+                        spawnJellyfish();
+                        setTimeout(spawnJellyfish, 500 + Math.random() * 1000);
+                    }
+                }, 5000 + Math.random() * 5000);
+            }
         }
 
         function stopBackgroundEffects() {
@@ -1794,7 +1888,7 @@ if (level >= 50) {
         //  МЕДУЗА
         // ============================================================
         function spawnJellyfish() {
-            if (jellyfishActive || paus) return; // НЕ создаём на паузе
+            if (jellyfishActive || paus) return;
             var jellyfish = document.createElement('div');
             jellyfish.className = 'jellyfish';
             var size = 24 + Math.random() * 16;
@@ -1812,9 +1906,7 @@ if (level >= 50) {
             var speed = 1 + Math.random() * 2;
             var dir = startX > 0 ? -1 : 1;
             var moveInterval = setInterval(function() {
-                // Если игра на паузе или неактивна - медуза замирает
                 if (!gameActive || paus) return;
-                
                 if (!jellyfishActive) {
                     clearInterval(moveInterval);
                     return;
@@ -1861,13 +1953,141 @@ if (level >= 50) {
         //  ЩИТ
         // ============================================================
         function spawnShield() {
-            if (shieldItem.style.display === 'flex' || paus) return; // НЕ создаём на паузе
+            if (shieldItem.style.display === 'flex' || paus) return;
             sx = (Math.floor(Math.random() * 240 + 20));
             sy = (Math.floor(Math.random() * 280 + 20));
             shieldItem.style.display = 'flex';
             shieldItem.style.left = sx + 'px';
             shieldItem.style.top = sy + 'px';
             playShieldSound();
+        }
+
+        // ============================================================
+        //  БОНУСЫ
+        // ============================================================
+        function spawnMagnet() {
+            if (level < 70 || magnetActive || paus) return;
+            var magnet = document.createElement('div');
+            magnet.className = 'magnet';
+            magnet.textContent = '🧲';
+            magnet.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
+                'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
+                'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
+                'animation:magnetPulse 1s ease-in-out infinite alternate;';
+            gameblock.appendChild(magnet);
+            
+            var checkMagnet = setInterval(function() {
+                if (!gameActive || paus || !magnet) return;
+                var mx = parseInt(magnet.style.left);
+                var my = parseInt(magnet.style.top);
+                if (x > mx - rad && x < mx + 30 && y > my - rad && y < my + 30) {
+                    clearInterval(checkMagnet);
+                    magnet.remove();
+                    magnetActive = true;
+                    showEffect(mx, my, '🧲', '#ff6600');
+                    
+                    var attractInterval = setInterval(function() {
+                        if (!gameActive || paus || !magnetActive) {
+                            clearInterval(attractInterval);
+                            return;
+                        }
+                        var dx = cx - x;
+                        var dy = cy - y;
+                        var dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < magnetRange) {
+                            cx += (dx / dist) * 3;
+                            cy += (dy / dist) * 3;
+                            block.style.left = cx + 'px';
+                            block.style.top = cy + 'px';
+                            if (dist < 30) {
+                                score++;
+                                scoresEl.innerHTML = score;
+                                playShellSound();
+                                showEffect(cx, cy, '✨', '#ffd700');
+                                poyman();
+                            }
+                        }
+                    }, 50);
+                    
+                    magnetTimer = setTimeout(function() {
+                        magnetActive = false;
+                        clearInterval(attractInterval);
+                    }, 5000);
+                }
+            }, 100);
+            
+            setTimeout(function() {
+                if (magnet) {
+                    clearInterval(checkMagnet);
+                    magnet.remove();
+                }
+            }, 8000);
+        }
+
+        function spawnSpeedBoost() {
+            if (level < 30 || speedBoostActive || paus) return;
+            var boost = document.createElement('div');
+            boost.textContent = '⚡';
+            boost.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
+                'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
+                'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
+                'animation:magnetPulse 0.8s ease-in-out infinite alternate;';
+            gameblock.appendChild(boost);
+            
+            var checkBoost = setInterval(function() {
+                if (!gameActive || paus || !boost) return;
+                var bx = parseInt(boost.style.left);
+                var by = parseInt(boost.style.top);
+                if (x > bx - rad && x < bx + 30 && y > by - rad && y < by + 30) {
+                    clearInterval(checkBoost);
+                    boost.remove();
+                    speedBoostActive = true;
+                    showEffect(bx, by, '⚡', '#ffff00');
+                    speedBoostTimer = setTimeout(function() {
+                        speedBoostActive = false;
+                    }, 3000);
+                }
+            }, 100);
+            
+            setTimeout(function() {
+                if (boost) {
+                    clearInterval(checkBoost);
+                    boost.remove();
+                }
+            }, 7000);
+        }
+
+        function spawnSlowMotion() {
+            if (level < 60 || slowMotionActive || paus) return;
+            var slow = document.createElement('div');
+            slow.textContent = '🐢';
+            slow.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
+                'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
+                'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
+                'animation:magnetPulse 1.2s ease-in-out infinite alternate;';
+            gameblock.appendChild(slow);
+            
+            var checkSlow = setInterval(function() {
+                if (!gameActive || paus || !slow) return;
+                var sx = parseInt(slow.style.left);
+                var sy = parseInt(slow.style.top);
+                if (x > sx - rad && x < sx + 30 && y > sy - rad && y < sy + 30) {
+                    clearInterval(checkSlow);
+                    slow.remove();
+                    slowMotionActive = true;
+                    showEffect(sx, sy, '🐢', '#00ccff');
+                    slowMotionTimer = setTimeout(function() {
+                        slowMotionActive = false;
+                    }, 3000);
+                }
+            }, 100);
+            
+            setTimeout(function() {
+                if (slow) {
+                    clearInterval(checkSlow);
+                    slow.remove();
+                }
+            }, 7000);
         }
 
         // ============================================================
@@ -1885,7 +2105,7 @@ if (level >= 50) {
         }
 
         function spawnBubbles() {
-            if (paus) return; // НЕ создаём пузырьки на паузе
+            if (paus) return;
             for (var i = 0; i < 3; i++) {
                 var bubble = document.createElement('div');
                 bubble.className = 'bubble';
@@ -1916,11 +2136,11 @@ if (level >= 50) {
             if (oldFlash) oldFlash.remove();
             gameblock.appendChild(flash);
             setTimeout(function() { flash.remove(); }, 700);
-            // В функции showLevelUp() добавьте:
-if (level >= 50) {
-    gameblock.style.background = 'linear-gradient(180deg, #0a0a2a 0%, #1a0a3a 30%, #2a0a4a 60%, #3a0a5a 100%)';
-    document.querySelector('.vine').style.opacity = '0.8';
-}
+
+            if (level >= 50) {
+                gameblock.style.background = 'linear-gradient(180deg, #0a0a2a 0%, #1a0a3a 30%, #2a0a4a 60%, #3a0a5a 100%)';
+                document.querySelector('.vine').style.opacity = '0.8';
+            }
         }
 
         var styleSheet = document.createElement("style");
@@ -1955,60 +2175,76 @@ if (level >= 50) {
             clearInterval(int4);
         }
 
-        function resetGame() {
-          stopParticles();
-            stopParticlesBlue();  
-            clearAllIntervals();
-            gameActive = false;
-x = Math.floor(Math.random() * 200 + 20);   // вместо 0
-y = Math.floor(Math.random() * 200 + 20);   // вместо 0
-              cx = Math.floor(Math.random() * 240 + 20); 
-            cy = Math.floor(Math.random() * 280 + 20); 
-               bx = Math.floor(Math.random() * 240 + 20);
+   function resetGame() {
+    stopParticles();
+    stopParticlesBlue();
+    clearAllIntervals();
+    gameActive = false;
+    x = Math.floor(Math.random() * 200 + 20);
+    y = Math.floor(Math.random() * 200 + 20);
+    cx = Math.floor(Math.random() * 240 + 20);
+    cy = Math.floor(Math.random() * 280 + 20);
+    bx = Math.floor(Math.random() * 240 + 20);
     by = Math.floor(Math.random() * 280 + 20);
-            t = 75;
-            score = 0;
-            rad = 40;
-            level = 1;
-            shields = 0;
-            intcount = 0;
-            intval = (Math.floor(Math.random() * 10 + 15));
-            jellyfishActive = false;
-            paus = false;
-            wasPausedByHide = false;
-            
-            if (block2) block2.style.display = 'none';
-            if (shieldItem) shieldItem.style.display = 'none';
-            if (player) {
-                player.style.left = x + 'px';
-                player.style.top = y + 'px';
-                player.style.width = rad + 'px';
-                player.style.height = rad + 'px';
-            }
-            if (block) {
-                block.style.left = cx + 'px';
-                block.style.top = cy + 'px';
-            }
-            if (scoresEl) scoresEl.innerHTML = '0';
-            if (levelDisplay) levelDisplay.textContent = '1';
-            if (shieldCountDisplay) shieldCountDisplay.textContent = '0';
-            
-            document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
-                el.remove();
-            });
-            
-            if (pausa) {
-                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-            }
-            if (u) u.disabled = false;
-            if (d) d.disabled = false;
-            if (r) r.disabled = false;
-            if (l) l.disabled = false;
-            
-            gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
-            isSoundEnabled = true;
-        }
-
+    t = 75;
+    score = 0;
+    rad = 40;
+    level = 1;
+    shields = 0;
+    intcount = 0;
+    intval = (Math.floor(Math.random() * 10 + 15));
+    jellyfishActive = false;
+    paus = false;
+    wasPausedByHide = false;
+    
+    if (block2) block2.style.display = 'none';
+    if (shieldItem) shieldItem.style.display = 'none';
+    if (player) {
+        player.style.left = x + 'px';
+        player.style.top = y + 'px';
+        player.style.width = rad + 'px';
+        player.style.height = rad + 'px';
+    }
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
+    if (scoresEl) scoresEl.innerHTML = '0';
+    if (levelDisplay) levelDisplay.textContent = '1';
+    if (shieldCountDisplay) shieldCountDisplay.textContent = '0';
+    
+    document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
+        el.remove();
+    });
+    
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    
+    // ===== СБРАСЫВАЕМ ВИЗУАЛЬНЫЕ СТИЛИ =====
+    // Сброс цвета фона
+    gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
+    document.querySelector('.vine').style.opacity = '0.5';
+    
+    // Сброс цвета батискафа
+    document.querySelector('.bathyscaphe .body').style.background = 
+        'radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300)';
+    document.querySelector('.bathyscaphe .window').style.background = 
+        'radial-gradient(circle at 35% 35%, #66ccff, #1a6699)';
+    
+    // Сброс цвета ракушки
+    document.querySelector('.shell .spiral').style.background = 
+        'radial-gradient(ellipse at 60% 40%, #ffd4a8, #d49a6a, #b8784a)';
+    document.querySelector('.shell .spiral').style.borderColor = '#c08860';
+    document.querySelector('.shell .spiral').style.boxShadow = 
+        'inset -5px -5px 20px rgba(120, 60, 30, 0.4), inset 5px 5px 20px rgba(255, 220, 180, 0.3)';
+    
+    isSoundEnabled = true;
+}
         function updateShieldDisplay() {
             if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
             if (shields > 0) {
@@ -2059,102 +2295,102 @@ y = Math.floor(Math.random() * 200 + 20);   // вместо 0
                 block.style.top = cy + 'px';
                 block.style.left = cx + 'px';
             }
-               if (level >= 100) {
-        document.querySelector('.shell .spiral').style.background = 
-            'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
-        document.querySelector('.shell .spiral').style.borderColor = '#ffd700';
-        document.querySelector('.shell .spiral').style.boxShadow = 
-            'inset -5px -5px 20px rgba(200,100,0,0.4), inset 5px 5px 20px rgba(255,220,180,0.3), 0 0 30px rgba(255,215,0,0.3)';
-    }
+            if (level >= 100) {
+                document.querySelector('.shell .spiral').style.background = 
+                    'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
+                document.querySelector('.shell .spiral').style.borderColor = '#ffd700';
+                document.querySelector('.shell .spiral').style.boxShadow = 
+                    'inset -5px -5px 20px rgba(200,100,0,0.4), inset 5px 5px 20px rgba(255,220,180,0.3), 0 0 30px rgba(255,215,0,0.3)';
+            }
         }
 
-  function checkCollision() {
-    // Если игра на паузе - никаких столкновений
-    if (paus) return false;
-    
-    var blockSize = 28;
-    var playerSize = rad;
-    if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
-        score++;
-        scoresEl.innerHTML = score;
-        playShellSound();
-        showEffect(cx, cy, '✨', '#ffd700');
-        spawnBubbles();
-        
-        scoresEl.classList.remove('pulse');
-        setTimeout(function() {
-            scoresEl.classList.add('pulse');
-        }, 10);
-        setTimeout(function() {
-            scoresEl.classList.remove('pulse');
-        }, 400);
-        
-        poyman();
-        
-        var newLevel = Math.floor(score / 10) + 1;
-        if (newLevel > level) {
-            level = newLevel;
-            if (levelDisplay) levelDisplay.textContent = level;
-            showLevelUp();
-            checkAchievements();
-            t = Math.max(30, t - 3);
+        function checkCollision() {
+            if (paus) return false;
+            
+            var blockSize = 28;
+            var playerSize = rad;
+            if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
+                score++;
+                scoresEl.innerHTML = score;
+                playShellSound();
+                showEffect(cx, cy, '✨', '#ffd700');
+                spawnBubbles();
+                
+                scoresEl.classList.remove('pulse');
+                setTimeout(function() {
+                    scoresEl.classList.add('pulse');
+                }, 10);
+                setTimeout(function() {
+                    scoresEl.classList.remove('pulse');
+                }, 400);
+                
+                poyman();
+                
+                var newLevel = Math.floor(score / 10) + 1;
+                if (newLevel > level) {
+                    level = newLevel;
+                    if (levelDisplay) levelDisplay.textContent = level;
+                    showLevelUp();
+                    checkAchievements();
+                    t = Math.max(30, t - 3);
+                    // СОХРАНЯЕМ ПРОГРЕСС
+                    checkAndSaveLevel();
+                }
+
+                if (level >= 30 && level < 100) {
+                    startParticlesBlue();
+                    stopParticles();
+                } else if (level >= 100) {
+                    stopParticlesBlue();
+                    startParticles();
+                }
+
+                if (level >= 100) {
+                    document.querySelector('.bathyscaphe .body').style.background = 
+                        'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
+                    document.querySelector('.bathyscaphe .window').style.background = 
+                        'radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)';
+                } else if (level >= 50) {
+                    document.querySelector('.bathyscaphe .body').style.background = 
+                        'radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)';
+                    document.querySelector('.bathyscaphe .window').style.background = 
+                        'radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';
+                }
+                return true;
+            }
+            
+            if (block2 && block2.style.display === 'flex' && x > bx - playerSize && x < bx + 30 && y > by - playerSize && y < by + 30) {
+                block2.style.display = 'none';
+                playStarSound();
+                showEffect(bx, by, '⭐', '#ffdd00');
+                if (rad > 20) {
+                    rad -= 10;
+                    t = Math.max(30, t - 10);
+                }
+                if (player) {
+                    player.style.width = rad + 'px';
+                    player.style.height = rad + 'px';
+                }
+                intval = (Math.floor(Math.random() * 10 + 15));
+                return true;
+            }
+            
+            if (shieldItem && shieldItem.style.display === 'flex' && x > sx - playerSize && x < sx + 30 && y > sy - playerSize && y < sy + 30) {
+                shieldItem.style.display = 'none';
+                shields++;
+                updateShieldDisplay();
+                playShieldSound();
+                showEffect(sx, sy, '🛡️', '#66ccff');
+                return true;
+            }
+            
+            return false;
         }
-   // Управление частицами
-    if (level >= 30 && level < 100) {
-        startParticlesBlue();
-        stopParticles(); // останавливаем золотые, если были
-    } else if (level >= 100) {
-        stopParticlesBlue();
-        startParticles();
-    }
-        // Изменение цвета батискафа
-        if (level >= 100) {
-            document.querySelector('.bathyscaphe .body').style.background = 
-                'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
-            document.querySelector('.bathyscaphe .window').style.background = 
-                'radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)';
-        } else if (level >= 50) {
-            document.querySelector('.bathyscaphe .body').style.background = 
-                'radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)';
-            document.querySelector('.bathyscaphe .window').style.background = 
-                'radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';
-        }
-        return true;
-    }
-    
-    if (block2 && block2.style.display === 'flex' && x > bx - playerSize && x < bx + 30 && y > by - playerSize && y < by + 30) {
-        block2.style.display = 'none';
-        playStarSound();
-        showEffect(bx, by, '⭐', '#ffdd00');
-        if (rad > 20) {
-            rad -= 10;
-            t = Math.max(30, t - 10);
-        }
-        if (player) {
-            player.style.width = rad + 'px';
-            player.style.height = rad + 'px';
-        }
-        intval = (Math.floor(Math.random() * 10 + 15));
-        return true;
-    }
-    
-    if (shieldItem && shieldItem.style.display === 'flex' && x > sx - playerSize && x < sx + 30 && y > sy - playerSize && y < sy + 30) {
-        shieldItem.style.display = 'none';
-        shields++;
-        updateShieldDisplay();
-        playShieldSound();
-        showEffect(sx, sy, '🛡️', '#66ccff');
-        return true;
-    }
-    
-    return false;
-}
 
         function gameover() {
             gameActive = false;
             clearAllIntervals();
             stopBackgroundEffects();
-            // Останавливаем звук радара
             if (window.buttonSoundTimer) {
                 clearTimeout(window.buttonSoundTimer);
                 window.buttonSoundTimer = null;
@@ -2167,16 +2403,15 @@ y = Math.floor(Math.random() * 200 + 20);   // вместо 0
         //  УПРАВЛЕНИЕ
         // ============================================================
         function right() {
-            if (!gameActive || paus) return; // НЕ двигаемся на паузе
+            if (!gameActive || paus) return;
             clearAllIntervals();
             if (r) r.disabled = true;
             if (u) u.disabled = false;
             if (d) d.disabled = false;
             if (l) l.disabled = false;
             iint = "right()";
-          //  int1 = setTimeout("right()", t);
             var delay = slowMotionActive ? t * 2 : t;
-int1 = setTimeout("right()", delay); 
+            int1 = setTimeout("right()", delay);
             if (x > 300 - rad) {
                 clearInterval(int1);
                 gameover();
@@ -2197,9 +2432,8 @@ int1 = setTimeout("right()", delay);
             if (r) r.disabled = false;
             if (d) d.disabled = false;
             iint = "left()";
-        //    int2 = setTimeout("left()", t);
             var delay = slowMotionActive ? t * 2 : t;
-int2 = setTimeout("left()", delay); 
+            int2 = setTimeout("left()", delay);
             if (x < 0) {
                 clearInterval(int2);
                 gameover();
@@ -2220,16 +2454,15 @@ int2 = setTimeout("left()", delay);
             if (r) r.disabled = false;
             if (l) l.disabled = false;
             iint = "down()";
-         //   int3 = setTimeout("down()", t);
             var delay = slowMotionActive ? t * 2 : t;
-int3 = setTimeout("down()", delay); 
+            int3 = setTimeout("down()", delay);
             if (y > 350 - rad) {
                 clearInterval(int3);
                 gameover();
                 return;
             }
             var currentSpeed = speedBoostActive ? xypm * 2 : xypm;
-y += currentSpeed; // или y += currentSpeed;
+            y += currentSpeed;
             checkCollision();
             spawnBubbles();
             if (player) player.style.top = y + "px";
@@ -2243,16 +2476,15 @@ y += currentSpeed; // или y += currentSpeed;
             if (r) r.disabled = false;
             if (l) l.disabled = false;
             iint = "up()";
-          //  int4 = setTimeout("up()", t);
             var delay = slowMotionActive ? t * 2 : t;
-int4 = setTimeout("up()", delay); 
+            int4 = setTimeout("up()", delay);
             if (y < 0) {
                 clearInterval(int4);
                 gameover();
                 return;
             }
             var currentSpeed = speedBoostActive ? xypm * 2 : xypm;
-y -= currentSpeed; // или y += currentSpeed;
+            y -= currentSpeed;
             checkCollision();
             spawnBubbles();
             if (player) player.style.top = y + "px";
@@ -2287,31 +2519,61 @@ y -= currentSpeed; // или y += currentSpeed;
             }
         });
 
+        // ============================================================
+        //  ДОСТИЖЕНИЯ
+        // ============================================================
+        var achievementsUnlocked = [];
 
-function startParticles() {
-    if (particleInterval) clearInterval(particleInterval);
-    particleInterval = setInterval(function() {
-        if (!gameActive || paus || level < 100) return;
-        var particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = (Math.random() * 280 + 10) + 'px';
-        particle.style.top = (Math.random() * 280 + 20) + 'px';
-        var size = 2 + Math.random() * 4;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.animationDuration = (2 + Math.random() * 3) + 's';
-        gameblock.appendChild(particle);
-        setTimeout(function() { particle.remove(); }, 5000);
-    }, 300);
-}
+        function checkAchievements() {
+            var newAchievements = [];
+            
+            if (level >= 10 && !achievementsUnlocked.includes('level10')) {
+                newAchievements.push('🌟 Первые 10 уровней!');
+                achievementsUnlocked.push('level10');
+            }
+            if (level >= 50 && !achievementsUnlocked.includes('level50')) {
+                newAchievements.push('🌊 Полпути к бездне!');
+                achievementsUnlocked.push('level50');
+            }
+            if (level >= 100 && !achievementsUnlocked.includes('level100')) {
+                newAchievements.push('⚡ Повелитель глубин!');
+                achievementsUnlocked.push('level100');
+            }
+            if (score >= 100 && !achievementsUnlocked.includes('score100')) {
+                newAchievements.push('🐚 Коллекционер ракушек (100)!');
+                achievementsUnlocked.push('score100');
+            }
+            if (score >= 500 && !achievementsUnlocked.includes('score500')) {
+                newAchievements.push('🐚 Легендарный коллекционер (500)!');
+                achievementsUnlocked.push('score500');
+            }
+            if (rad <= 20 && !achievementsUnlocked.includes('tiny')) {
+                newAchievements.push('🔬 Микро-батискаф!');
+                achievementsUnlocked.push('tiny');
+            }
+            if (shields >= 5 && !achievementsUnlocked.includes('shields')) {
+                newAchievements.push('🛡️ Мастер защиты!');
+                achievementsUnlocked.push('shields');
+            }
+            
+            newAchievements.forEach(function(text) {
+                showAchievement('🏆 ' + text);
+            });
+        }
 
-function stopParticles() {
-    if (particleInterval) clearInterval(particleInterval);
-     if (particleBlueInterval) clearInterval(particleBlueInterval);
-}
+        function showAchievement(text) {
+            var ach = document.createElement('div');
+            ach.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
+                'z-index:40;font-size:24px;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.8),0 0 40px rgba(255,215,0,0.4);' +
+                'animation:achievementAnim 2.5s ease-out forwards;pointer-events:none;' +
+                'background:rgba(0,0,0,0.6);padding:10px 20px;border-radius:12px;border:1px solid rgba(255,215,0,0.3);';
+            ach.textContent = text;
+            gameblock.appendChild(ach);
+            setTimeout(function() { ach.remove(); }, 3000);
+        }
 
         // ============================================================
-        //  ВИДИМОСТЬ (ДОПОЛНИТЕЛЬНАЯ ЗАЩИТА)
+        //  ВИДИМОСТЬ
         // ============================================================
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
@@ -2320,201 +2582,15 @@ function stopParticles() {
                     pauseGameOnHide();
                 }
             } else {
-                // При возврате на вкладку - просто включаем звук, но не снимаем паузу
                 if (paus) {
                     console.log('▶️ Вкладка активна, но пауза не снимается автоматически');
-                    // Включаем звук, чтобы он работал при снятии паузы
                     isSoundEnabled = true;
-                    // Обновляем иконку паузы
                     if (pausa) {
                         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
                     }
                 }
             }
         });
-        function spawnMagnet() {
-    if (level < 70 || magnetActive || paus) return;
-    var magnet = document.createElement('div');
-    magnet.className = 'magnet';
-    magnet.textContent = '🧲';
-    magnet.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
-        'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
-        'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
-        'animation:magnetPulse 1s ease-in-out infinite alternate;';
-    gameblock.appendChild(magnet);
-    
-    // Проверка столкновения
-    var checkMagnet = setInterval(function() {
-        if (!gameActive || paus || !magnet) return;
-        var mx = parseInt(magnet.style.left);
-        var my = parseInt(magnet.style.top);
-        if (x > mx - rad && x < mx + 30 && y > my - rad && y < my + 30) {
-            // Активация магнита
-            clearInterval(checkMagnet);
-            magnet.remove();
-            magnetActive = true;
-            showEffect(mx, my, '🧲', '#ff6600');
-            
-            // Автоматически собираем ракушки в радиусе
-            var attractInterval = setInterval(function() {
-                if (!gameActive || paus || !magnetActive) {
-                    clearInterval(attractInterval);
-                    return;
-                }
-                // Проверяем ракушку
-                var dx = cx - x;
-                var dy = cy - y;
-                var dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < magnetRange) {
-                    // Притягиваем ракушку к батискафу
-                    cx += (dx / dist) * 3;
-                    cy += (dy / dist) * 3;
-                    block.style.left = cx + 'px';
-                    block.style.top = cy + 'px';
-                    
-                    // Если ракушка близко - собираем
-                    if (dist < 30) {
-                        score++;
-                        scoresEl.innerHTML = score;
-                        playShellSound();
-                        showEffect(cx, cy, '✨', '#ffd700');
-                        poyman();
-                    }
-                }
-            }, 50);
-            
-            magnetTimer = setTimeout(function() {
-                magnetActive = false;
-                clearInterval(attractInterval);
-            }, 5000); // 5 секунд действия
-        }
-    }, 100);
-    
-    // Автоудаление через 8 секунд
-    setTimeout(function() {
-        if (magnet) {
-            clearInterval(checkMagnet);
-            magnet.remove();
-        }
-    }, 8000);
-}
-function spawnSpeedBoost() {
-    if (level < 30 || speedBoostActive || paus) return;
-    var boost = document.createElement('div');
-    boost.textContent = '⚡';
-    boost.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
-        'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
-        'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
-        'animation:magnetPulse 0.8s ease-in-out infinite alternate;';
-    gameblock.appendChild(boost);
-    
-    var checkBoost = setInterval(function() {
-        if (!gameActive || paus || !boost) return;
-        var bx = parseInt(boost.style.left);
-        var by = parseInt(boost.style.top);
-        if (x > bx - rad && x < bx + 30 && y > by - rad && y < by + 30) {
-            clearInterval(checkBoost);
-            boost.remove();
-            speedBoostActive = true;
-            showEffect(bx, by, '⚡', '#ffff00');
-            
-            speedBoostTimer = setTimeout(function() {
-                speedBoostActive = false;
-            }, 3000); // 3 секунды ускорения
-        }
-    }, 100);
-    
-    setTimeout(function() {
-        if (boost) {
-            clearInterval(checkBoost);
-            boost.remove();
-        }
-    }, 7000);
-}
-
-function spawnSlowMotion() {
-    if (level < 60 || slowMotionActive || paus) return;
-    var slow = document.createElement('div');
-    slow.textContent = '🐢';
-    slow.style.cssText = 'position:absolute;z-index:8;font-size:28px;' +
-        'left:' + (Math.floor(Math.random() * 240 + 20)) + 'px;' +
-        'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
-        'animation:magnetPulse 1.2s ease-in-out infinite alternate;';
-    gameblock.appendChild(slow);
-    
-    var checkSlow = setInterval(function() {
-        if (!gameActive || paus || !slow) return;
-        var sx = parseInt(slow.style.left);
-        var sy = parseInt(slow.style.top);
-        if (x > sx - rad && x < sx + 30 && y > sy - rad && y < sy + 30) {
-            clearInterval(checkSlow);
-            slow.remove();
-            slowMotionActive = true;
-            showEffect(sx, sy, '🐢', '#00ccff');
-            
-            slowMotionTimer = setTimeout(function() {
-                slowMotionActive = false;
-            }, 3000); // 3 секунды замедления
-        }
-    }, 100);
-    
-    setTimeout(function() {
-        if (slow) {
-            clearInterval(checkSlow);
-            slow.remove();
-        }
-    }, 7000);
-}
-
-var achievementsUnlocked = [];
-
-function checkAchievements() {
-    var newAchievements = [];
-    
-    if (level >= 10 && !achievementsUnlocked.includes('level10')) {
-        newAchievements.push('🌟 Первые 10 уровней!');
-        achievementsUnlocked.push('level10');
-    }
-    if (level >= 50 && !achievementsUnlocked.includes('level50')) {
-        newAchievements.push('🌊 Полпути к бездне!');
-        achievementsUnlocked.push('level50');
-    }
-    if (level >= 100 && !achievementsUnlocked.includes('level100')) {
-        newAchievements.push('⚡ Повелитель глубин!');
-        achievementsUnlocked.push('level100');
-    }
-    if (score >= 100 && !achievementsUnlocked.includes('score100')) {
-        newAchievements.push('🐚 Коллекционер ракушек (100)!');
-        achievementsUnlocked.push('score100');
-    }
-    if (score >= 500 && !achievementsUnlocked.includes('score500')) {
-        newAchievements.push('🐚 Легендарный коллекционер (500)!');
-        achievementsUnlocked.push('score500');
-    }
-    if (rad <= 20 && !achievementsUnlocked.includes('tiny')) {
-        newAchievements.push('🔬 Микро-батискаф!');
-        achievementsUnlocked.push('tiny');
-    }
-    if (shields >= 5 && !achievementsUnlocked.includes('shields')) {
-        newAchievements.push('🛡️ Мастер защиты!');
-        achievementsUnlocked.push('shields');
-    }
-    
-    newAchievements.forEach(function(text) {
-        showAchievement('🏆 ' + text);
-    });
-}
-
-function showAchievement(text) {
-    var ach = document.createElement('div');
-    ach.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
-        'z-index:40;font-size:24px;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.8),0 0 40px rgba(255,215,0,0.4);' +
-        'animation:achievementAnim 2.5s ease-out forwards;pointer-events:none;' +
-        'background:rgba(0,0,0,0.6);padding:10px 20px;border-radius:12px;border:1px solid rgba(255,215,0,0.3);';
-    ach.textContent = text;
-    gameblock.appendChild(ach);
-    setTimeout(function() { ach.remove(); }, 3000);
-}
 
         // ============================================================
         //  ИНИЦИАЛИЗАЦИЯ
@@ -2528,9 +2604,12 @@ function showAchievement(text) {
             }
         });
 
-        console.log('🌊 Глубинная стена загружена!');
+        // Загружаем сохранённый уровень при старте
+        loadSavedLevel();
+
+        console.log('🌊 Батискаф в западне загружен!');
         console.log('📱 Версия для VK Mini Apps');
-        console.log('✨ Исправлена пауза: звуки отключаются, мир замирает, кнопка паузы синхронизирована');
+        console.log('💾 Сохранение прогресса каждые 50 уровней');
     </script>
 </body>
 </html>
