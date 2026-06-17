@@ -3,6 +3,37 @@ if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
     alert("Ошибка загрузки игры. Обновите страницу.");
 }
+
+// ====== НЕМЕДЛЕННОЕ ПРИМЕНЕНИЕ ТЕМЫ ======
+(function() {
+    const THEME_KEY = 'wordgame_theme';
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    // Применяем тему к body сразу
+    document.body.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+})();
+// В самом начале файла, после проверки словаря:
+const style = document.createElement('style');
+style.textContent = `
+    /* Отключаем выделение и контекстное меню */
+    * {
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+    button:focus, button:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    img, a, button, [role="button"] {
+        -webkit-touch-callout: none !important;
+    }
+`;
+document.head.appendChild(style);
+
+
 // ========== VK BRIDGE И БАННЕР ==========
 // Показать баннер
 function showBannerAd() {
@@ -56,6 +87,15 @@ function initVKBridge() {
         }
     });
 }
+
+// Инициализация частиц при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    // Даём небольшую задержку, чтобы DOM полностью загрузился
+    setTimeout(() => {
+        createParticles();
+        initTheme();
+    }, 100);
+});
 
 // Показать нативный интерфейс VK (шапка, низ)
 function showVKView() {
@@ -199,10 +239,7 @@ function updateParticles() {
     createParticles();
 }
 
-// Инициализация частиц при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(createParticles, 300);
-});
+
 
 
 
@@ -519,6 +556,9 @@ function initLevel() {
     renderFoundWords();
     updateUI();
     updateThresholdFlag();
+    // ====== ЧАСТИЦЫ В БЛОКЕ НАЙДЕННЫХ СЛОВ ======
+    setTimeout(initFoundParticles, 50);
+    // ============================================
     
     // Проверяем и показываем баннер на новом уровне
     if (typeof checkAndShowBanner === 'function') {
@@ -843,43 +883,76 @@ function toggleSound() {
     showToast(gameState.soundEnabled ? "🔊 Звук включён" : "🔇 Звук выключен");
 }
 
-function restartGame() {
-    Swal.fire({
-        title: 'Начать заново?',
-        text: 'Весь прогресс будет потерян',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#10b981',
-        cancelButtonColor: '#ef4444',
-        confirmButtonText: 'Да, начать заново',
-        cancelButtonText: 'Отмена',
-        background: '#fff',
-        borderRadius: '20px'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Очищаем паузу
-            cleanupPauseHandlers();
-            
-            // Очищаем постоянный тост
-            clearPermanentToast();
-            
-            // Сбрасываем состояние
-            gameState.level = 1;
-            gameState.totalScore = 0;
-            gameState.hintsLeft = CONFIG.HINTS_START;
-            gameState.frozen = false;
-            gamePaused = false;
-            
-            // Показываем баннер
-            setTimeout(checkAndShowBanner, 500);
-            
-            // Запускаем уровень
-            initLevel();
-            updateUI();
-            playSound("click");
+// ====== МОДАЛКА ПЕРЕЗАПУСКА ======
+const restartModal = document.getElementById('restartModal');
+const restartModalCancel = document.getElementById('restartModalCancel');
+const restartModalConfirm = document.getElementById('restartModalConfirm');
+
+// Кнопка "Начать заново" в игре
+const restartBtn = document.getElementById('restartBtn');
+if (restartBtn) {
+    restartBtn.onclick = () => {
+        if (restartModal) {
+            restartModal.classList.add('show');
         }
-    });
+    };
 }
+
+// Отмена — закрываем модалку
+if (restartModalCancel) {
+    restartModalCancel.onclick = () => {
+        restartModal.classList.remove('show');
+    };
+}
+
+// Клик вне модалки — закрываем
+if (restartModal) {
+    restartModal.onclick = (e) => {
+        if (e.target === restartModal) {
+            restartModal.classList.remove('show');
+        }
+    };
+}
+
+// Подтверждение — перезапускаем игру
+if (restartModalConfirm) {
+    restartModalConfirm.onclick = () => {
+        restartModal.classList.remove('show');
+        
+        // Очищаем паузу
+        cleanupPauseHandlers();
+        
+        // Очищаем постоянный тост
+        clearPermanentToast();
+        
+        // Сбрасываем состояние
+        gameState.level = 1;
+        gameState.totalScore = 0;
+        gameState.hintsLeft = CONFIG.HINTS_START;
+        gameState.frozen = false;
+        gamePaused = false;
+        
+        // Показываем баннер
+        setTimeout(checkAndShowBanner, 500);
+        
+        // Запускаем уровень
+        initLevel();
+        updateUI();
+        playSound("click");
+        
+        // Показываем уведомление
+        showToast("🔄 Игра перезапущена!");
+    };
+}
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (restartModal && restartModal.classList.contains('show')) {
+            restartModal.classList.remove('show');
+        }
+    }
+});
 
 function nextLevel() {
     if (!gameState.thresholdReached) {
@@ -934,7 +1007,7 @@ function initGame() {
     document.getElementById("shuffleBtn").onclick = shuffleLetters;
     document.getElementById("hintBtn").onclick = useHint;
     document.getElementById("soundBtn").onclick = toggleSound;
-    document.getElementById("restartBtn").onclick = restartGame;
+ //   document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
 /*// Таблица лидеров =================
 const leaderboardBtn = document.getElementById("leaderboardBtn");
@@ -1023,8 +1096,9 @@ let currentTheme = localStorage.getItem(THEME_KEY) || 'light';
 function applyTheme(theme) {
     currentTheme = theme;
     
-    // 1. Применяем тему к body (глобально)
+    // Применяем к body и html
     document.body.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
     
     // 2. Обновляем активную кнопку в модалке темы
@@ -1049,6 +1123,8 @@ function applyTheme(theme) {
     
     // 5. Обновляем частицы фона
     updateParticles();
+   // Обновляем частицы в блоке найденных слов
+    setTimeout(initFoundParticles, 50);
     
     console.log(`🎨 Тема изменена на: ${themeNames[theme] || theme}`);
 }
@@ -1146,7 +1222,98 @@ function getThemeColor(theme, type) {
 }
 
 function initTheme() {
-    applyTheme(currentTheme);
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    currentTheme = savedTheme;
+    
+    // Применяем к body (уже должно быть, но на всякий случай)
+    document.body.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Обновляем активную кнопку в модалке
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === savedTheme);
+    });
+    
+    // Обновляем подпись
+    const themeNames = {
+        light: 'Светлая',
+        dark: 'Тёмная',
+        blue: 'Голубая',
+        green: 'Зелёная'
+    };
+    const currentLabel = document.getElementById('themeCurrent');
+    if (currentLabel) {
+        currentLabel.textContent = `Текущая: ${themeNames[savedTheme] || 'Светлая'}`;
+    }
+    
+    // Применяем тему к элементам игры
+    applyThemeToGame(savedTheme);
+    
+    // Обновляем частицы
+    updateParticles();
+}
+
+// ========== ЧАСТИЦЫ ДЛЯ БЛОКА НАЙДЕННЫХ СЛОВ ==========
+let foundParticlesCreated = false;
+
+function createFoundParticles() {
+    const container = document.getElementById('foundWords');
+    if (!container) return;
+    
+    // Очищаем старые частицы (но не трогаем слова)
+    const existingParticles = container.querySelectorAll('.found-particle');
+    existingParticles.forEach(el => el.remove());
+    
+    // Определяем цвета в зависимости от темы
+    const theme = document.body.getAttribute('data-theme') || 'light';
+    let colors = ['#667eea', '#764ba2', '#4a9eff', '#6c5ce7'];
+    
+    switch(theme) {
+        case 'dark':
+            colors = ['#6c5ce7', '#a29bfe', '#fd79a8', '#74b9ff'];
+            break;
+        case 'blue':
+            colors = ['#4a9eff', '#6c5ce7', '#74b9ff', '#a29bfe'];
+            break;
+        case 'green':
+            colors = ['#43a047', '#2e7d32', '#66bb6a', '#a5d6a7'];
+            break;
+        default:
+            colors = ['#667eea', '#764ba2', '#4a9eff', '#6c5ce7'];
+            break;
+    }
+    
+    // Создаём 8-12 маленьких частиц
+    const count = 8 + Math.floor(Math.random() * 5);
+    
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement('span');
+        particle.className = 'found-particle';
+        particle.style.cssText = `
+            position: absolute;
+            width: ${3 + Math.random() * 4}px;
+            height: ${3 + Math.random() * 4}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+            left: ${Math.random() * 100}%;
+            top: ${Math.random() * 100}%;
+            animation: foundParticleFloat ${4 + Math.random() * 4}s ease-in-out infinite;
+            animation-delay: ${Math.random() * 3}s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        `;
+        container.appendChild(particle);
+    }
+    
+    foundParticlesCreated = true;
+}
+
+// Обновление частиц при смене темы
+function updateFoundParticles() {
+    foundParticlesCreated = false;
+    createFoundParticles();
 }
 
 // ====== МЕНЮ ======
@@ -1340,7 +1507,9 @@ if (exitModalConfirm) {
         
         // Очищаем паузу
         cleanupPauseHandlers();
-        
+       // ====== ПЕРЕСОЗДАЁМ ЧАСТИЦЫ ======
+        setTimeout(createParticles, 50);
+        // =================================
         // Показываем начальный экран
         const startScreen = document.getElementById('startScreen');
         if (startScreen) {
@@ -1371,6 +1540,59 @@ if (exitModalConfirm) {
     };
 }
 
+// ========== ЧАСТИЦЫ В БЛОКЕ НАЙДЕННЫХ СЛОВ ==========
+function initFoundParticles() {
+    const container = document.querySelector('.found-section');
+    if (!container) return;
+    
+    // Удаляем старые частицы (если есть)
+    const oldParticles = container.querySelectorAll('.found-particle');
+    oldParticles.forEach(el => el.remove());
+    
+    // Цвета частиц в зависимости от темы
+    const theme = document.body.getAttribute('data-theme') || 'light';
+    let colors = ['#667eea', '#764ba2', '#4a9eff', '#6c5ce7', '#a29bfe'];
+    
+    switch(theme) {
+        case 'dark':
+            colors = ['#6c5ce7', '#a29bfe', '#fd79a8', '#74b9ff', '#81ecec'];
+            break;
+        case 'blue':
+            colors = ['#4a9eff', '#6c5ce7', '#74b9ff', '#a29bfe', '#81ecec'];
+            break;
+        case 'green':
+            colors = ['#43a047', '#2e7d32', '#66bb6a', '#a5d6a7', '#81c784'];
+            break;
+        default:
+            colors = ['#667eea', '#764ba2', '#4a9eff', '#6c5ce7', '#a29bfe'];
+            break;
+    }
+    
+    // Создаём 10-15 частиц
+    const count = 10 + Math.floor(Math.random() * 6);
+    
+    for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'found-particle';
+        const size = 3 + Math.random() * 5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            background: ${color};
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.2;
+            left: ${Math.random() * 100}%;
+            top: ${Math.random() * 100}%;
+            animation: foundParticleFloat ${5 + Math.random() * 5}s ease-in-out infinite;
+            animation-delay: ${Math.random() * 4}s;
+            z-index: 0;
+        `;
+        container.appendChild(particle);
+    }
+}
 
 // Закрытие модалки по Escape
 document.addEventListener('keydown', (e) => {
@@ -1392,5 +1614,21 @@ document.addEventListener('DOMContentLoaded', () => {
 if (typeof window.applyTheme === 'undefined') {
     window.applyTheme = applyTheme;
 }
+// ====== ОТКЛЮЧАЕМ КОНТЕКСТНОЕ МЕНЮ ======
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    return false;
+});
 
+// Отключаем выделение текста
+document.addEventListener('selectstart', (e) => {
+    e.preventDefault();
+    return false;
+});
+
+// Отключаем перетаскивание
+document.addEventListener('dragstart', (e) => {
+    e.preventDefault();
+    return false;
+});
 document.addEventListener("DOMContentLoaded", initGame);

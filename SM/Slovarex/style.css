@@ -2,8 +2,58 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Убираем выделение при клике */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
+/* Убираем outline у кнопок и интерактивных элементов */
+button,
+input,
+select,
+textarea,
+[role="button"],
+[contenteditable] {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Специально для кнопок */
+button:focus,
+button:focus-visible,
+.action-btn:focus,
+.action-btn:focus-visible,
+.control-btn:focus,
+.control-btn:focus-visible,
+.letter-tile:focus,
+.letter-tile:focus-visible,
+.start-screen__btn:focus,
+.start-screen__btn:focus-visible,
+.theme-btn:focus,
+.theme-btn:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+/* ===== НЕМЕДЛЕННОЕ ПРИМЕНЕНИЕ ТЕМЫ ===== */
+/* Эти стили применяются до загрузки JS */
+html[data-theme="dark"] body {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+html[data-theme="blue"] body {
+    background: linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%);
+}
+
+html[data-theme="green"] body {
+    background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+}
+
+html[data-theme="light"] body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
@@ -1131,3 +1181,107 @@ body[data-theme="green"] {
 .particle-md { width: 4px; height: 4px; }
 .particle-lg { width: 6px; height: 6px; }
 .particle-xl { width: 8px; height: 8px; }
+
+/* ===== ЧАСТИЦЫ В БЛОКЕ НАЙДЕННЫХ СЛОВ ===== */
+.found-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.found-particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes foundParticleFloat {
+    0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.3;
+        transform: translate(-50%, -100%) scale(1);
+    }
+    85% {
+        opacity: 0.3;
+        transform: translate(-50%, -20%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 40%) scale(0.3);
+    }
+}
+
+/* Контент поверх частиц */
+.found-words,
+.found-header,
+.empty-message {
+    position: relative;
+    z-index: 1;
+}
+/* ===== МОДАЛКА ПЕРЕЗАПУСКА ===== */
+.modal-overlay__content--restart {
+    max-width: 400px;
+    padding: 32px 28px 28px;
+}
+
+.restart-modal__buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.restart-modal__btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.restart-modal__btn--cancel {
+    background: var(--theme-btn-secondary, #f3f4f6);
+    color: var(--theme-text, #4b5563);
+}
+
+.restart-modal__btn--cancel:hover {
+    background: var(--theme-btn-secondary-hover, #e5e7eb);
+    transform: translateY(-2px);
+}
+
+.restart-modal__btn--confirm {
+    background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.restart-modal__btn--confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.restart-modal__btn:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+    .modal-overlay__content--restart {
+        padding: 24px 16px 20px;
+    }
+    
+    .restart-modal__buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .restart-modal__btn {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+}

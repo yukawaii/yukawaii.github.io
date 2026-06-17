@@ -7,6 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <!-- Для корректной работы в iframe ВК -->
 <meta name="format-detection" content="telephone=no">
+  <!-- ====== ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ СТРАНИЦЫ ====== -->
+    <script>
+        (function() {
+            const THEME_KEY = 'wordgame_theme';
+            const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+            // Применяем тему к body ДО отрисовки
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+        })();
+    </script>
+    <!-- ==================================================== -->
 <style>
     /* Сброс отступов для iframe ВК */
     body {
@@ -22,7 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
  <script src = "./App.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
     <!-- ====== ЧАСТИЦЫ ФОНА ====== -->
 <div class="particles-container" id="particlesContainer"></div>
     <!-- ====== НАЧАЛЬНЫЙ ЭКРАН ====== -->
@@ -63,7 +74,23 @@
         </div>
     </div>
 </div>
-
+<!-- ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПЕРЕЗАПУСКА ====== -->
+<div id="restartModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--restart">
+        <h2>🔄 Начать заново?</h2>
+        <p style="text-align:center; color: var(--theme-muted, #6b7280); font-size:16px; margin-bottom:24px;">
+            Весь прогресс будет потерян
+        </p>
+        <div class="restart-modal__buttons">
+            <button class="restart-modal__btn restart-modal__btn--cancel" id="restartModalCancel">
+                ❌ Отмена
+            </button>
+            <button class="restart-modal__btn restart-modal__btn--confirm" id="restartModalConfirm">
+                ✅ Начать заново
+            </button>
+        </div>
+    </div>
+</div>
 <!-- ====== МОДАЛКА "КАК ИГРАТЬ" ====== -->
 <div id="rulesModal" class="modal-overlay">
     <div class="modal-overlay__content">
