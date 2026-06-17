@@ -3,7 +3,118 @@ if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
     alert("Ошибка загрузки игры. Обновите страницу.");
 }
+// ========== VK BRIDGE ==========
+// ========== VK BRIDGE И БАННЕР ==========
 
+// Показать баннер
+function showBannerAd() {
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
+            .then((data) => {
+                if (data.result) {
+                    console.log('✅ Баннерная реклама отобразилась');
+                    document.body.classList.add('has-vk-banner');
+                }
+            })
+            .catch((error) => {
+                console.warn('❌ Ошибка показа баннера:', error);
+            });
+    }
+}
+
+// Проверить и показать баннер
+function checkAndShowBanner() {
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppCheckBannerAd', {})
+            .then((data) => {
+                if (!data.result) {
+                    showBannerAd();
+                }
+            })
+            .catch(() => {
+                showBannerAd();
+            });
+    }
+}
+
+// Инициализация VK Bridge
+function initVKBridge() {
+    if (typeof vkBridge === 'undefined') return;
+    
+    // Скрываем навигацию
+    hideVKView();
+    
+    // Показываем баннер
+    setTimeout(checkAndShowBanner, 500);
+    
+    // Слушаем события
+    vkBridge.subscribe((e) => {
+        if (e.detail.type === 'VKWebAppUpdateConfig') {
+            setTimeout(updateVKLayout, 100);
+        }
+        if (e.detail.type === 'VKWebAppBannerAdClosedByUser') {
+            console.log('ℹ️ Баннер закрыт, пробуем показать снова через 30 сек');
+            setTimeout(checkAndShowBanner, 30000);
+        }
+    });
+}
+
+// Показать нативный интерфейс VK (шапка, низ)
+function showVKView() {
+    if (typeof vkBridge === 'undefined') return;
+    vkBridge.send('VKWebAppViewRestore')
+        .then(() => console.log('✅ VK View restored'))
+        .catch(() => console.log('⚠️ VK View restore error'));
+}
+
+// Скрыть нативный интерфейс VK (полноэкранный режим)
+function hideVKView() {
+    if (typeof vkBridge === 'undefined') return;
+    vkBridge.send('VKWebAppViewHide')
+        .then(() => console.log('✅ VK View hidden'))
+        .catch(() => console.log('⚠️ VK View hide error'));
+}
+
+// При старте игры — скрываем навигацию VK
+function initVKBridge() {
+    if (typeof vkBridge === 'undefined') return;
+    
+    // Скрываем шапку и низ VK
+    hideVKView();
+    
+    // Подписываемся на изменение размера окна
+    vkBridge.subscribe((e) => {
+        if (e.detail.type === 'VKWebAppUpdateConfig') {
+            // При изменении размера обновляем адаптацию
+            setTimeout(updateVKLayout, 100);
+        }
+    });
+}
+
+// Обновление лейаута при изменении размера
+function updateVKLayout() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    // Для маленьких экранов показываем навигацию
+    if (width < 500 || height < 700) {
+        showVKView();
+    } else {
+        hideVKView();
+    }
+}
+
+// Вызываем при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initVKBridge, 300);
+});
+
+// Также вызываем при ресайзе
+let resizeTimeout = null;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(updateVKLayout, 300);
+});
 
 // ========== КОНФИГУРАЦИЯ ==========
 const CONFIG = {
@@ -219,6 +330,7 @@ function getRandomBaseWord() {
 
 // ========== УРОВНИ ==========
 function initLevel() {
+       checkAndShowBanner();
     // Выбираем случайное слово из отфильтрованного пула
     gameState.baseWord = getRandomBaseWord();
     gameState.baseLetters = gameState.baseWord.split("");
@@ -494,6 +606,7 @@ function toggleSound() {
 }
 
 function restartGame() {
+        setTimeout(checkAndShowBanner, 500);
     Swal.fire({
         title: 'Начать заново?',
         text: 'Весь прогресс будет потерян',
@@ -560,6 +673,7 @@ function initGame() {
     
     initLevel();
     initAudio();
+       initVKBridge(); 
     
     document.getElementById("submitBtn").onclick = submitWord;
     document.getElementById("backspaceBtn").onclick = backspace;

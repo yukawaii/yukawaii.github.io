@@ -73,7 +73,33 @@
             <button class="control-btn" id="clearBtn">🗑️ Очистить</button>
             <button class="control-btn" id="shuffleBtn">🎲 Перемешать</button>
         </div>
+<!-- ПРАВАЯ КОЛОНКА (ПК) -->
+<div class="right-column">
+    <!-- Прогресс-бар -->
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>📊 Прогресс уровня</span>
+            <span id="progressText">0 / 0</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
 
+    <!-- Найденные слова -->
+    <div class="found-section">
+        <div class="found-header">
+            <span>🏆 Найденные слова</span>
+            <span class="bonus-badge" id="bonusCount">Бонус: 0</span>
+        </div>
+        <div class="found-words" id="foundWords">
+            <div class="empty-message">Слова появятся здесь...</div>
+        </div>
+    </div>
+
+    <!-- Кнопка след. уровня -->
+    <button class="next-level-btn" id="nextLevelBtn" disabled>🔒 Следующий уровень</button>
+</div>
         <!-- Прогресс-бар уровня -->
         <div class="progress-section">
             <div class="progress-label">
@@ -84,19 +110,6 @@
                 <div class="progress-fill" id="progressFill"></div>
             </div>
         </div>
-
-        <!-- Найденные слова -->
-        <div class="found-section">
-            <div class="found-header">
-                <span>🏆 Найденные слова</span>
-            </div>
-            <div class="found-words" id="foundWords">
-                <div class="empty-message">Слова появятся здесь...</div>
-            </div>
-        </div>
-
-        <!-- Кнопка след. уровня -->
-        <button class="next-level-btn" id="nextLevelBtn" disabled>🔒 Следующий уровень</button>
     </div>
 
     <!-- Модалка завершения -->

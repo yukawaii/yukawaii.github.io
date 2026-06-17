@@ -1,6 +1,3 @@
-
-vkBridge.send("VKWebAppInit", {});
-
 var score,id,token, name1;
 
 function getid(){
@@ -58,13 +55,13 @@ getsc();
        .catch(error => console.log(error));
         } 
 
-function banner1(){
+/*function banner1(){
 vkBridge.send('VKWebAppShowBannerAd', {  banner_location: 'bottom'  })
  .then((data) => {     if (data.result) {      // Баннерная реклама отобразилась   
    }  })  .catch((error) => {       console.log(error);
   });}
 
-  banner1();
+  banner1(); */
 
 //пригласить друзей
 function share2(){
