@@ -120,20 +120,35 @@
         }
 
         #topBar .btn-small {
-            padding: 6px 14px;
-            font-size: 13px;
+            padding: 8px 14px;
+            font-size: 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             background: rgba(0, 0, 0, 0.6);
             color: #fff;
             cursor: pointer;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.2s;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #topBar .btn-small:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #topBar .btn-small .label {
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        #topBar .btn-small.icon-only .label {
+            display: none;
         }
 
         .game-wrapper {
@@ -184,6 +199,27 @@
             display: none;
             position: absolute;
             z-index: 8;
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            line-height: 28px;
+            pointer-events: none;
+        }
+
+        .star-icon {
+            font-size: 30px;
+            line-height: 30px;
+            color: gold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2);
+            animation: twinkle 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { transform: scale(0.8) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+            100% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; }
         }
 
         #scores {
@@ -249,15 +285,15 @@
             touch-action: manipulation;
         }
 
-        /* ===== МОДАЛЬНОЕ ОКНО "КАК ИГРАТЬ" ===== */
-        #howToModal {
+        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
@@ -265,7 +301,7 @@
             padding: 20px;
         }
 
-        #howToModal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
@@ -273,44 +309,136 @@
             background: rgba(30, 30, 50, 0.95);
             border-radius: 20px;
             padding: 30px 24px;
-            max-width: 360px;
+            max-width: 380px;
             width: 100%;
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            text-align: center;
         }
 
         .modal-content h2 {
             text-align: center;
             margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .modal-content h2.warning {
             color: #faa61a;
         }
 
+        .modal-content h2.danger {
+            color: #ff6b6b;
+        }
+
+        .modal-content p {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .modal-content .score-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #faa61a;
+            margin: 8px 0 16px 0;
+        }
+
         .modal-content ul {
-            padding-left: 20px;
+            padding-left: 0;
+            list-style: none;
+            text-align: left;
             line-height: 1.8;
         }
 
         .modal-content li {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            padding: 4px 0;
         }
 
-        .modal-content .close-btn {
+        .modal-content .game-link {
             display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 16px;
-            background: linear-gradient(135deg, #7289da, #5a6fc9);
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-content .game-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        .modal-content .game-link:active {
+            transform: scale(0.96);
+        }
+
+        .modal-content .game-link .emoji {
+            margin-right: 10px;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 4px 6px;
             border: none;
             border-radius: 10px;
             color: #fff;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
         }
 
-        .modal-content .close-btn:active {
+        .modal-btn:active {
             transform: scale(0.96);
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #43b581, #2d8f5e);
+        }
+        .modal-btn.primary:hover {
+            background: linear-gradient(135deg, #4fcb91, #329e68);
+        }
+
+        .modal-btn.secondary {
+            background: linear-gradient(135deg, #7289da, #5a6fc9);
+        }
+        .modal-btn.secondary:hover {
+            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
+        }
+
+        .modal-btn.danger {
+            background: linear-gradient(135deg, #ff6b6b, #e04848);
+        }
+        .modal-btn.danger:hover {
+            background: linear-gradient(135deg, #ff8080, #e85a5a);
+        }
+
+        .modal-btn.close-btn {
+            background: linear-gradient(135deg, #7289da, #5a6fc9);
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+        }
+
+        .modal-btn.close-btn:hover {
+            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
         }
 
         /* ===== АДАПТИВ ===== */
@@ -329,8 +457,10 @@
                 height: 44px;
             }
             #topBar .btn-small {
-                font-size: 11px;
-                padding: 4px 10px;
+                font-size: 16px;
+                padding: 6px 10px;
+                min-width: 38px;
+                min-height: 38px;
             }
             #mainMenu h1 {
                 font-size: 22px;
@@ -338,6 +468,26 @@
             .menu-btn {
                 font-size: 15px;
                 padding: 12px 16px;
+            }
+            .star-icon {
+                font-size: 24px;
+                line-height: 24px;
+            }
+            #block2 {
+                width: 24px;
+                height: 24px;
+            }
+            .modal-content {
+                padding: 20px 16px;
+                margin: 10px;
+            }
+            .modal-content .score-text {
+                font-size: 22px;
+            }
+            .modal-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                min-width: 100px;
             }
         }
 
@@ -355,6 +505,14 @@
                 width: 38px;
                 height: 38px;
             }
+            .star-icon {
+                font-size: 20px;
+                line-height: 20px;
+            }
+            #block2 {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
 </head>
@@ -367,31 +525,64 @@
         <button class="menu-btn play" onclick="startGame()">▶ Начать игру</button>
         <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
         <button class="menu-btn invite" onclick="inviteFriends()">👥 Пригласить друзей</button>
-        <button class="menu-btn games" onclick="goToGames()">🎮 Другие игры</button>
+        <button class="menu-btn games" onclick="showGamesModal()">🎮 Другие игры</button>
     </div>
 
     <!-- ===== МОДАЛЬНОЕ ОКНО "КАК ИГРАТЬ" ===== -->
-    <div id="howToModal">
+    <div id="howToModal" class="modal-overlay">
         <div class="modal-content">
-            <h2>❓ Как играть</h2>
+            <h2 class="warning">❓ Как играть</h2>
             <ul>
-                <li>🎯 Управляйте красным квадратом</li>
-                <li>🧱 Уклоняйтесь от синей стены</li>
-                <li>⭐ Собирайте очки, касаясь стены</li>
-                <li>💎 Собирайте звёзды для уменьшения</li>
+                <li>🎯 Безопасного места всё меньше</li>
+                <li>🧱 Ты постоянно растёшь</li>
+                <li>⭐ Собирай ракушки, чтобы получить очки</li>
+                <li>⭐ Собирай звёзды, чтобы уменьшиться</li>
                 <li>⏸️ Пауза — кнопка с двумя полосками</li>
-                <li>🔥 Не дайте стене коснуться вас!</li>
+                <li>🔥 Не касайся обжигающих стен!</li>
             </ul>
-            <button class="close-btn" onclick="closeHowTo()">Понятно!</button>
+            <button class="modal-btn close-btn" onclick="closeHowTo()">Понятно!</button>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО "ДРУГИЕ ИГРЫ" ===== -->
+    <div id="gamesModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="warning">🎮 Другие игры</h2>
+            <ul>
+                <li>
+                    <a href="https://vk.com/app8167395" target="_blank" class="game-link" onclick="closeGamesModal()">
+                        <span class="emoji">🧩</span> Весёлый тетрис
+                    </a>
+                </li>
+                <li>
+                    <a href="https://vk.com/app51399364" target="_blank" class="game-link" onclick="closeGamesModal()">
+                        <span class="emoji">🧠</span> Судоку для самых умных
+                    </a>
+                </li>
+            </ul>
+            <button class="modal-btn close-btn" onclick="closeGamesModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО "ПРОИГРЫШ" ===== -->
+    <div id="gameOverModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="danger">💀 Провал!</h2>
+            <p>Раскалённая стена сожгла тебя.</p>
+            <div class="score-text">⭐ <span id="finalScore">0</span> очков</div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="restartGame()">🔄 Играть ещё</button>
+                <button class="modal-btn secondary" onclick="goToMenuFromOver()">🏠 В меню</button>
+            </div>
         </div>
     </div>
 
     <!-- ===== ИГРОВОЙ КОНТЕЙНЕР ===== -->
     <div id="gameContainer">
         <div id="topBar">
-            <button class="btn-small" onclick="goToMenu()">← Меню</button>
-            <button class="btn-small" onclick="inviteFriends()">👥 Пригласить</button>
-            <button class="btn-small" onclick="goToGames()">🎮 Игры</button>
+            <button class="btn-small" onclick="goToMenu()">🏠 <span class="label">Меню</span></button>
+            <button class="btn-small icon-only" onclick="inviteFriends()">👥</button>
+            <button class="btn-small icon-only" onclick="showGamesModal()">🎮</button>
         </div>
 
         <div class="game-wrapper">
@@ -403,9 +594,7 @@
                 </div>
                 <div id="block"></div>
                 <div id="block2">
-                    <svg fill="gold" opacity="1.0" width="20" height="20" viewbox="0 0 28 28">
-                        <path d="M8.922 9.203a.99.99 0 0 0-1.297-.547 9.02 9.02 0 0 0-4.969 4.969.99.99 0 0 0 .547 1.297c.125.047.25.078.375.078.406 0 .766-.234.938-.625a6.983 6.983 0 0 1 3.859-3.859 1 1 0 0 0 .547-1.313zm14.719-5.562l.719.719-3.813 3.797 1.062 1.062a1.009 1.009 0 0 1 0 1.422l-1 1A11.03 11.03 0 0 1 22 17c0 6.078-4.922 11-11 11S0 23.078 0 17 4.922 6 11 6c1.953 0 3.781.516 5.359 1.391l1-1a1.009 1.009 0 0 1 1.422 0l1.062 1.062zm.125-.875a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156L21.641 1.36a.53.53 0 0 1 0-.719.53.53 0 0 1 .719 0l1.406 1.422a.482.482 0 0 1 0 .703zm3.593 3.593c-.109.094-.234.141-.359.141s-.25-.047-.359-.141l-1.406-1.422a.482.482 0 0 1 0-.703.482.482 0 0 1 .703 0L27.36 5.64a.53.53 0 0 1 0 .719zM28 3.5c0 .281-.219.5-.5.5H26c-.281 0-.5-.219-.5-.5s.219-.5.5-.5h1.5c.281 0 .5.219.5.5zm-3-3V2c0 .281-.219.5-.5.5S24 2.281 24 2V.5c0-.281.219-.5.5-.5s.5.219.5.5zm2.359.859l-1.422 1.406a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156.482.482 0 0 1 0-.703L26.64.64a.53.53 0 0 1 .719 0 .53.53 0 0 1 0 .719z" />
-                    </svg>
+                    <span class="star-icon">⭐</span>
                 </div>
                 <div id="scores">0</div>
             </div>
@@ -430,7 +619,10 @@
         // ============================================================
         if (typeof vkBridge !== 'undefined') {
             vkBridge.send('VKWebAppInit')
-                .then(() => console.log('VK Bridge инициализирован'))
+                .then(() => {
+                    console.log('VK Bridge инициализирован');
+                    showBannerAd();
+                })
                 .catch(err => console.warn('Ошибка инициализации VK Bridge:', err));
         } else {
             console.warn('vkBridge не загружен');
@@ -439,6 +631,20 @@
         // ============================================================
         //  ПЕРЕМЕННЫЕ ИГРЫ
         // ============================================================
+        var player = document.getElementById('player');
+        var block = document.getElementById('block');
+        var block2 = document.getElementById('block2');
+        var scoresEl = document.getElementById('scores');
+        var u = document.getElementById('u');
+        var d = document.getElementById('d');
+        var r = document.getElementById('r');
+        var l = document.getElementById('l');
+        var pausa = document.getElementById('pausa');
+        var mainMenu = document.getElementById('mainMenu');
+        var gameContainer = document.getElementById('gameContainer');
+        var gameOverModal = document.getElementById('gameOverModal');
+        var finalScoreEl = document.getElementById('finalScore');
+
         var x = 0,
             y = 0;
         var cx = 50,
@@ -454,29 +660,18 @@
         var int1, int2, int3, int4;
         var iint = "";
         var gameActive = false;
-        var gameLoopId = null;
-
-        // Элементы DOM
-        var player = document.getElementById('player');
-        var block = document.getElementById('block');
-        var block2 = document.getElementById('block2');
-        var scoresEl = document.getElementById('scores');
-        var u = document.getElementById('u');
-        var d = document.getElementById('d');
-        var r = document.getElementById('r');
-        var l = document.getElementById('l');
-        var pausa = document.getElementById('pausa');
-        var mainMenu = document.getElementById('mainMenu');
-        var gameContainer = document.getElementById('gameContainer');
 
         // ============================================================
         //  ФУНКЦИИ МЕНЮ
         // ============================================================
         function startGame() {
+            if (!mainMenu || !gameContainer) {
+                console.error('Элементы меню не найдены');
+                return;
+            }
             mainMenu.style.display = 'none';
             gameContainer.style.display = 'flex';
             resetGame();
-            // Автозапуск движения вниз
             if (!gameActive) {
                 gameActive = true;
                 down();
@@ -486,17 +681,71 @@
         function goToMenu() {
             gameActive = false;
             clearAllIntervals();
-            gameContainer.style.display = 'none';
-            mainMenu.style.display = 'flex';
+            closeGameOverModal();
+            if (gameContainer) gameContainer.style.display = 'none';
+            if (mainMenu) mainMenu.style.display = 'flex';
+        }
+
+        function goToMenuFromOver() {
+            closeGameOverModal();
+            goToMenu();
         }
 
         function showHowTo() {
-            document.getElementById('howToModal').classList.add('active');
+            var modal = document.getElementById('howToModal');
+            if (modal) modal.classList.add('active');
         }
 
         function closeHowTo() {
-            document.getElementById('howToModal').classList.remove('active');
+            var modal = document.getElementById('howToModal');
+            if (modal) modal.classList.remove('active');
         }
+
+        function showGamesModal() {
+            var modal = document.getElementById('gamesModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeGamesModal() {
+            var modal = document.getElementById('gamesModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function showGameOverModal() {
+            if (finalScoreEl) finalScoreEl.textContent = score;
+            if (gameOverModal) gameOverModal.classList.add('active');
+        }
+
+        function closeGameOverModal() {
+            if (gameOverModal) gameOverModal.classList.remove('active');
+        }
+
+        function restartGame() {
+            closeGameOverModal();
+            resetGame();
+            if (mainMenu && mainMenu.style.display !== 'none') {
+                mainMenu.style.display = 'none';
+                if (gameContainer) gameContainer.style.display = 'flex';
+            }
+            gameActive = true;
+            down();
+        }
+
+        // Закрываем модальные окна при клике вне их
+        document.addEventListener('click', function(e) {
+            var modal = document.getElementById('gamesModal');
+            if (e.target === modal) {
+                closeGamesModal();
+            }
+            var modal2 = document.getElementById('howToModal');
+            if (e.target === modal2) {
+                closeHowTo();
+            }
+            var modal3 = document.getElementById('gameOverModal');
+            if (e.target === modal3) {
+                closeGameOverModal();
+            }
+        });
 
         function inviteFriends() {
             if (typeof vkBridge !== 'undefined') {
@@ -504,13 +753,8 @@
                     .then(data => console.log('Приглашение отправлено', data))
                     .catch(err => console.warn('Ошибка приглашения:', err));
             } else {
-                // Для теста вне VK
                 alert('Пригласить друзей (работает только в VK)');
             }
-        }
-
-        function goToGames() {
-            window.location.href = './i.html';
         }
 
         function shareScore() {
@@ -525,9 +769,23 @@
         }
 
         // ============================================================
-        //  VK РЕКЛАМА
+        //  VK РЕКЛАМА (БАННЕР)
         // ============================================================
-        function showAd() {
+        function showBannerAd() {
+            if (typeof vkBridge !== 'undefined') {
+                vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
+                    .then((data) => {
+                        if (data.result) {
+                            console.log('Баннерная реклама отобразилась');
+                        }
+                    })
+                    .catch((error) => {
+                        console.warn('Ошибка показа баннера:', error);
+                    });
+            }
+        }
+
+        function showInterstitialAd() {
             if (typeof vkBridge !== 'undefined') {
                 vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
                     .then(data => console.log('Реклама показана', data))
@@ -557,68 +815,86 @@
             rad = 30;
             intcount = 0;
             intval = (Math.floor(Math.random() * 10 + 15));
-            block2.style.display = 'none';
-            player.style.left = x + 'px';
-            player.style.top = y + 'px';
-            block.style.left = cx + 'px';
-            block.style.top = cy + 'px';
-            player.style.width = rad + 'px';
-            player.style.height = rad + 'px';
-            player.style.WebkitTransform = 'rotate(360deg)';
-            scoresEl.innerHTML = '0';
+            
+            if (block2) block2.style.display = 'none';
+            if (player) {
+                player.style.left = x + 'px';
+                player.style.top = y + 'px';
+                player.style.width = rad + 'px';
+                player.style.height = rad + 'px';
+                player.style.WebkitTransform = 'rotate(360deg)';
+            }
+            if (block) {
+                block.style.left = cx + 'px';
+                block.style.top = cy + 'px';
+            }
+            if (scoresEl) scoresEl.innerHTML = '0';
+            
             paus = false;
-            pausa.innerHTML =
-                '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-            u.disabled = false;
-            d.disabled = false;
-            r.disabled = false;
-            l.disabled = false;
+            if (pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+            }
+            if (u) u.disabled = false;
+            if (d) d.disabled = false;
+            if (r) r.disabled = false;
+            if (l) l.disabled = false;
         }
 
         function poyman() {
             cx = (Math.floor(Math.random() * 240 + 20));
             cy = (Math.floor(Math.random() * 200 + 20));
             intcount++;
+            
             if (rad < 130) {
                 rad++;
                 x--;
                 y--;
                 t++;
             }
+            
             if (intcount >= intval) {
                 bx = (Math.floor(Math.random() * 240 + 20));
                 by = (Math.floor(Math.random() * 200 + 20));
                 intcount = 0;
-                block2.style.display = 'block';
-                block2.style.top = by + 'px';
-                block2.style.left = bx + 'px';
+                if (block2) {
+                    block2.style.display = 'flex';
+                    block2.style.top = by + 'px';
+                    block2.style.left = bx + 'px';
+                }
                 intval = (Math.floor(Math.random() * 10 + 15));
             }
-            player.style.width = rad + 'px';
-            player.style.height = rad + 'px';
-            player.style.top = y + 'px';
-            player.style.left = x + 'px';
-            block.style.top = cy + 'px';
-            block.style.left = cx + 'px';
+            
+            if (player) {
+                player.style.width = rad + 'px';
+                player.style.height = rad + 'px';
+                player.style.top = y + 'px';
+                player.style.left = x + 'px';
+            }
+            if (block) {
+                block.style.top = cy + 'px';
+                block.style.left = cx + 'px';
+            }
         }
 
         function checkCollision() {
-            // Столкновение со стеной (блок)
+            // Столкновение со стеной (блок) - собираем очки
             if (x > cx - rad && x < cx + 20 && y > cy - rad && y < cy + 20) {
                 score++;
-                scoresEl.innerHTML = score;
+                if (scoresEl) scoresEl.innerHTML = score;
                 poyman();
                 return true;
             }
-            // Звезда
-            if (block2.style.display === 'block' && x > bx - rad && x < bx + 20 && y > by - rad && y < by + 20) {
+            // Звезда - уменьшаем игрока
+            if (block2 && block2.style.display === 'flex' && x > bx - rad && x < bx + 30 && y > by - rad && y < by + 30) {
                 block2.style.display = 'none';
                 if (rad > 20) {
                     rad -= 10;
                     t = Math.max(30, t - 10);
                 }
-                player.style.width = rad + 'px';
-                player.style.height = rad + 'px';
+                if (player) {
+                    player.style.width = rad + 'px';
+                    player.style.height = rad + 'px';
+                }
                 intval = (Math.floor(Math.random() * 10 + 15));
                 return true;
             }
@@ -628,25 +904,8 @@
         function gameover() {
             gameActive = false;
             clearAllIntervals();
-            showAd();
-            // Отправка счёта
-            if (typeof vkBridge !== 'undefined') {
-                // Можно отправить счёт через VK API если нужно
-            }
-            swal({
-                title: "💀 Провал!",
-                text: "Раскалённая стена сожгла тебя. Ты набрал очков: " + score,
-                button: "Играть ещё",
-                icon: "warning",
-            }).then(function() {
-                resetGame();
-                if (mainMenu.style.display !== 'none') {
-                    mainMenu.style.display = 'none';
-                    gameContainer.style.display = 'flex';
-                }
-                gameActive = true;
-                down();
-            });
+            showBannerAd();
+            showGameOverModal();
         }
 
         // ============================================================
@@ -655,12 +914,12 @@
         function right() {
             if (!gameActive) return;
             clearAllIntervals();
-            r.disabled = true;
-            u.disabled = false;
-            d.disabled = false;
-            l.disabled = false;
+            if (r) r.disabled = true;
+            if (u) u.disabled = false;
+            if (d) d.disabled = false;
+            if (l) l.disabled = false;
             iint = "right()";
-            player.style.WebkitTransform = "rotate(270deg)";
+            if (player) player.style.WebkitTransform = "rotate(270deg)";
             int1 = setTimeout("right()", t);
             if (x > 300 - rad) {
                 clearInterval(int1);
@@ -669,18 +928,18 @@
             }
             x += xypm;
             checkCollision();
-            player.style.left = x + "px";
+            if (player) player.style.left = x + "px";
         }
 
         function left() {
             if (!gameActive) return;
             clearAllIntervals();
-            l.disabled = true;
-            u.disabled = false;
-            r.disabled = false;
-            d.disabled = false;
+            if (l) l.disabled = true;
+            if (u) u.disabled = false;
+            if (r) r.disabled = false;
+            if (d) d.disabled = false;
             iint = "left()";
-            player.style.WebkitTransform = "rotate(90deg)";
+            if (player) player.style.WebkitTransform = "rotate(90deg)";
             int2 = setTimeout("left()", t);
             if (x < 0) {
                 clearInterval(int2);
@@ -689,18 +948,18 @@
             }
             x -= xypm;
             checkCollision();
-            player.style.left = x + "px";
+            if (player) player.style.left = x + "px";
         }
 
         function down() {
             if (!gameActive) return;
             clearAllIntervals();
-            d.disabled = true;
-            u.disabled = false;
-            r.disabled = false;
-            l.disabled = false;
+            if (d) d.disabled = true;
+            if (u) u.disabled = false;
+            if (r) r.disabled = false;
+            if (l) l.disabled = false;
             iint = "down()";
-            player.style.WebkitTransform = "rotate(360deg)";
+            if (player) player.style.WebkitTransform = "rotate(360deg)";
             int3 = setTimeout("down()", t);
             if (y > 270 - rad) {
                 clearInterval(int3);
@@ -709,18 +968,18 @@
             }
             y += xypm;
             checkCollision();
-            player.style.top = y + "px";
+            if (player) player.style.top = y + "px";
         }
 
         function up() {
             if (!gameActive) return;
             clearAllIntervals();
-            u.disabled = true;
-            d.disabled = false;
-            r.disabled = false;
-            l.disabled = false;
+            if (u) u.disabled = true;
+            if (d) d.disabled = false;
+            if (r) r.disabled = false;
+            if (l) l.disabled = false;
             iint = "up()";
-            player.style.WebkitTransform = "rotate(180deg)";
+            if (player) player.style.WebkitTransform = "rotate(180deg)";
             int4 = setTimeout("up()", t);
             if (y < 0) {
                 clearInterval(int4);
@@ -729,7 +988,7 @@
             }
             y -= xypm;
             checkCollision();
-            player.style.top = y + "px";
+            if (player) player.style.top = y + "px";
         }
 
         // ============================================================
@@ -738,23 +997,27 @@
         function pause() {
             clearAllIntervals();
             if (paus === false) {
-                u.disabled = true;
-                d.disabled = true;
-                r.disabled = true;
-                l.disabled = true;
-                pausa.innerHTML =
-                    '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                if (u) u.disabled = true;
+                if (d) d.disabled = true;
+                if (r) r.disabled = true;
+                if (l) l.disabled = true;
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                }
                 paus = true;
             } else {
-                u.disabled = false;
-                d.disabled = false;
-                r.disabled = false;
-                l.disabled = false;
-                if (iint === "left()") { l.disabled = true; } else if (iint === "right()") { r.disabled = true; } else if (
-                    iint === "down()") { d.disabled = true; } else if (iint === "up()") { u.disabled = true; }
+                if (u) u.disabled = false;
+                if (d) d.disabled = false;
+                if (r) r.disabled = false;
+                if (l) l.disabled = false;
+                if (iint === "left()" && l) { l.disabled = true; } 
+                else if (iint === "right()" && r) { r.disabled = true; } 
+                else if (iint === "down()" && d) { d.disabled = true; } 
+                else if (iint === "up()" && u) { u.disabled = true; }
                 setTimeout(iint, t);
-                pausa.innerHTML =
-                    '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                }
                 paus = false;
             }
         }
@@ -763,7 +1026,7 @@
         //  КЛАВИАТУРА (для ПК)
         // ============================================================
         document.addEventListener('keydown', function(e) {
-            if (gameContainer.style.display === 'none') return;
+            if (!gameContainer || gameContainer.style.display === 'none') return;
             switch (e.key) {
                 case 'ArrowUp':
                     e.preventDefault();
@@ -800,9 +1063,8 @@
         // ============================================================
         //  ИНИЦИАЛИЗАЦИЯ — ПОКАЗЫВАЕМ МЕНЮ
         // ============================================================
-        // Меню показывается по умолчанию, игра скрыта
-        mainMenu.style.display = 'flex';
-        gameContainer.style.display = 'none';
+        if (mainMenu) mainMenu.style.display = 'flex';
+        if (gameContainer) gameContainer.style.display = 'none';
 
         // Для мобильных: отключаем контекстное меню
         document.addEventListener('contextmenu', function(e) {
