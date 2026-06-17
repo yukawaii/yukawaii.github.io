@@ -1,464 +1,819 @@
 <!-- Created by MD. Jashim Uddin-->
 <!DOCTYPE html>
 <html>
- <head> 
-  <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  	 
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <title>Горячая стена</title>
-  <style>
-     body {
-            background: url(./background3.jpg) no-repeat center fixed;     
-    background-size: cover;
-            position: absolute;
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Горячая стена</title>
+    <style>
+        body {
+            background: url(./background3.jpg) no-repeat center fixed;
+            background-size: cover;
             margin: 0;
-            padding: 0;
+            padding: 10px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* ===== ГЛАВНОЕ МЕНЮ ===== */
+        #mainMenu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 16px;
+            min-width: 280px;
+            max-width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #mainMenu h1 {
+            color: #fff;
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        #mainMenu .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .menu-btn {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.96);
+        }
+
+        .menu-btn.play {
+            background: linear-gradient(135deg, #43b581, #2d8f5e);
+        }
+        .menu-btn.play:hover {
+            background: linear-gradient(135deg, #4fcb91, #329e68);
+        }
+
+        .menu-btn.howto {
+            background: linear-gradient(135deg, #faa61a, #d4880f);
+        }
+        .menu-btn.howto:hover {
+            background: linear-gradient(135deg, #fbb43a, #e09618);
+        }
+
+        .menu-btn.invite {
+            background: linear-gradient(135deg, #7289da, #5a6fc9);
+        }
+        .menu-btn.invite:hover {
+            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
+        }
+
+        .menu-btn.games {
+            background: linear-gradient(135deg, #9b59b6, #7d3c98);
+        }
+        .menu-btn.games:hover {
+            background: linear-gradient(135deg, #af6fc9, #8e4fa8);
+        }
+
+        /* ===== ИГРОВОЙ БЛОК ===== */
+        #gameContainer {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 340px;
+        }
+
+        #topBar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        #topBar .btn-small {
+            padding: 6px 14px;
+            font-size: 13px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.2s;
+        }
+
+        #topBar .btn-small:active {
+            transform: scale(0.95);
+        }
+
+        .game-wrapper {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            padding: 10px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #gameblock {
+            width: 300px;
+            height: 270px;
+            display: inline-block;
+            background: royalblue;
+            position: relative;
+            border: 1px solid black;
+            overflow: hidden;
+            border-radius: 8px;
+            touch-action: none;
+        }
+
+        #player {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            -webkit-transition: width, height, -webkit-transform 0.5s;
+            transition: width, height, transform 0.5s;
+            position: absolute;
+            border-radius: 2px;
+            background: red;
+            box-shadow: 0 0 5px red;
+            z-index: 10;
+        }
+
+        #block {
+            width: 20px;
+            height: 20px;
+            background: navy;
+            position: absolute;
+            border-radius: 20px;
+            top: 50px;
+            left: 50px;
+            z-index: 5;
+        }
+
+        #block2 {
+            display: none;
+            position: absolute;
+            z-index: 8;
+        }
+
+        #scores {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            z-index: 15;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            text-align: left;
+            pointer-events: none;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            width: 72px;
+            height: 50px;
+            background: rgba(0, 0, 50, 0.85);
+            color: white;
+            border: 2px solid royalblue;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            backdrop-filter: blur(4px);
+            transition: all 0.15s;
+        }
+
+        .btn:active {
+            transform: scale(0.92);
+            background: rgba(30, 60, 180, 0.9);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            transform: none;
+        }
+
+        #pausa {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 50, 0.85);
+            border: 2px solid royalblue;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        /* ===== МОДАЛЬНОЕ ОКНО "КАК ИГРАТЬ" ===== */
+        #howToModal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            /* background: rgb(140, 186, 247); */
-        } 
-    .myButton {
-    position: relative;
-    max-width: 40%;
-	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
-	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
-	background-color:#79bbff;
-	border-radius:6px;
-	border:1px solid #84bbf3;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #528ecc;
-    z-index: 10000;
-}
-.myButton:hover {
-	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
-	background-color:#378de5;
-}
-.myButton:active {
-	position:relative;
-	top:1px;
-    z-index: 10000;
-}
-.myButton {
-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
-background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
-background-color:#79bbff;
-border-radius:6px;
-border:1px solid #84bbf3;
-display:inline-block;
-cursor:pointer;
-color:#ffffff;
-font-family:Arial;
-font-size:15px;
-font-weight:bold;
-padding:6px 24px;
-text-decoration:none;
-text-shadow:0px 1px 0px #528ecc;
-}
-.myButton:hover {
-background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
-background-color:#378de5;
-}
-.myButton:active {
-position:relative;
-top:1px;
-}
-
-</style>
- </head> 
- <body> 
-  <script>
-    // Sends event to client
-    vkBridge.send('VKWebAppInit');
-	  
-	  function handleVisibilityChange() {
-    if (document.hidden){
-        stopAllSounds();
-    }
-}
-
-document.addEventListener("visibilitychange", handleVisibilityChange, false);
-	  
-	  
-	function myAdd1(){
-            vkBridge.send("VKWebAppShowNativeAds", {ad_format:"interstitial"})
-        .then(data => console.log(data.result))
-        .catch(error => console.log(error));
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-      
-            //пригласить друзей в игру
-function infr(){
- vkBridge.send("VKWebAppShowInviteBox", {})
-         .then(data => console.log(data.success))  
-        .catch(error => console.log(error));
-}
 
-function share2(){
-            vkBridge.send("VKWebAppShowWallPostBox", {
-            "message": "Весёлая игра! Сможете побить мой рекорд??",
-            "attachments": "https://vk.ru/app51399471"
-          });
+        #howToModal.active {
+            display: flex;
         }
-        function getinfo(){
-  vkBridge.send('VKWebAppGetUserInfo')
-  .then(function (data) {userid = data.id; console.log("data_id: " + data.id + " MY userid: " + userid);
-  sessionStorage.setItem("userid", userid);
-      // *назначение переменных*
-      return userid;
-      
-  })
-  .catch(error => console.log(error));
- // getsc();
-  
-};
-    getinfo();
-    function sendscore(){
-       vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "appevent", "params": 
-  {"client_secret":"GsNVs5K5pSgOwwGBFXNf", 
-  "user_id":userid, "activity_id":2, "value":score, "v":"5.131",
-   "access_token":"7628c3d97628c3d97628c3d9bd753888f6776287628c3d914dc3406648f9c0468104d03",
-   "global":1}})
-   .then(data => {console.log("Ответ на добавление очков:" + data.response);
-  })
-  .catch(error => console.log(error)); }
 
-        </script>
-        <div>
+        .modal-content {
+            background: rgba(30, 30, 50, 0.95);
+            border-radius: 20px;
+            padding: 30px 24px;
+            max-width: 360px;
+            width: 100%;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
 
-         <button class = "myButton" onclick="share2()">Поделиться</button> <br><br>
-         <button class = "myButton" onclick="infr()">Пригласить друзей</button>
-         <button class = "myButton" onclick="window.location.href = './i.html';">Другие игры</button></div>
-  <div style="width:305px;box-shadow:0 0 5px black;display:inline-block;position:relative;"> 
-   <div id="gameblock"> 
-    <div id="player">
-     <svg fill="black" opacity="1.0" baseprofile="full" width="100%" height="100%" viewbox="0 0 24.00 24.00">
-      <path d="M6.997 17h-3c-1.617 0-3.04-1.257-3.24-2.86l-.498-2.992c-.107-.845.132-1.642.649-2.227A2.78 2.78 0 0 1 2.997 8h6c.835 0 1.585.348 2.059.955.119.152.217.318.296.492.425-.09.866-.09 1.292 0 .078-.175.176-.34.295-.492.474-.607 1.224-.955 2.058-.955h6c.812 0 1.572.336 2.09.921a2.78 2.78 0 0 1 .654 2.188l-.51 3.071c-.195 1.564-1.618 2.82-3.233 2.82h-3c-1.562 0-3.079-1.186-3.456-2.699l-.899-2.714a1.11 1.11 0 0 0-1.294.001l-.917 2.785C10.074 15.815 8.556 17 6.997 17z" />
-     </svg> 
+        .modal-content h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #faa61a;
+        }
+
+        .modal-content ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .modal-content li {
+            margin-bottom: 6px;
+        }
+
+        .modal-content .close-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 16px;
+            background: linear-gradient(135deg, #7289da, #5a6fc9);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-content .close-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 400px) {
+            #gameblock {
+                width: 280px;
+                height: 250px;
+            }
+            .btn {
+                width: 60px;
+                height: 44px;
+                font-size: 16px;
+            }
+            #pausa {
+                width: 44px;
+                height: 44px;
+            }
+            #topBar .btn-small {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            #mainMenu h1 {
+                font-size: 22px;
+            }
+            .menu-btn {
+                font-size: 15px;
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            #gameblock {
+                width: 250px;
+                height: 220px;
+            }
+            .btn {
+                width: 52px;
+                height: 38px;
+                font-size: 13px;
+            }
+            #pausa {
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ГЛАВНОЕ МЕНЮ ===== -->
+    <div id="mainMenu">
+        <h1>🔥 Горячая стена</h1>
+        <div class="subtitle">Уклоняйся от стены, набирай очки!</div>
+        <button class="menu-btn play" onclick="startGame()">▶ Начать игру</button>
+        <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
+        <button class="menu-btn invite" onclick="inviteFriends()">👥 Пригласить друзей</button>
+        <button class="menu-btn games" onclick="goToGames()">🎮 Другие игры</button>
     </div>
-    <div id="block"></div> 
-    <div id="block2" style="display:none;position:absolute"> 
-     <svg fill="black" opacity="1.0" width="20" height="20" viewbox="0 0 28 28">
-      <path d="M8.922 9.203a.99.99 0 0 0-1.297-.547 9.02 9.02 0 0 0-4.969 4.969.99.99 0 0 0 .547 1.297c.125.047.25.078.375.078.406 0 .766-.234.938-.625a6.983 6.983 0 0 1 3.859-3.859 1 1 0 0 0 .547-1.313zm14.719-5.562l.719.719-3.813 3.797 1.062 1.062a1.009 1.009 0 0 1 0 1.422l-1 1A11.03 11.03 0 0 1 22 17c0 6.078-4.922 11-11 11S0 23.078 0 17 4.922 6 11 6c1.953 0 3.781.516 5.359 1.391l1-1a1.009 1.009 0 0 1 1.422 0l1.062 1.062zm.125-.875a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156L21.641 1.36a.53.53 0 0 1 0-.719.53.53 0 0 1 .719 0l1.406 1.422a.482.482 0 0 1 0 .703zm3.593 3.593c-.109.094-.234.141-.359.141s-.25-.047-.359-.141l-1.406-1.422a.482.482 0 0 1 0-.703.482.482 0 0 1 .703 0L27.36 5.64a.53.53 0 0 1 0 .719zM28 3.5c0 .281-.219.5-.5.5H26c-.281 0-.5-.219-.5-.5s.219-.5.5-.5h1.5c.281 0 .5.219.5.5zm-3-3V2c0 .281-.219.5-.5.5S24 2.281 24 2V.5c0-.281.219-.5.5-.5s.5.219.5.5zm2.359.859l-1.422 1.406a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156.482.482 0 0 1 0-.703L26.64.64a.53.53 0 0 1 .719 0 .53.53 0 0 1 0 .719z" />
-     </svg>
-    </div> 
-    <div style="width:100%;position:absolute;top:0;left:0;color:white;font-size:25px;" id="scores">
-     0
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО "КАК ИГРАТЬ" ===== -->
+    <div id="howToModal">
+        <div class="modal-content">
+            <h2>❓ Как играть</h2>
+            <ul>
+                <li>🎯 Управляйте красным квадратом</li>
+                <li>🧱 Уклоняйтесь от синей стены</li>
+                <li>⭐ Собирайте очки, касаясь стены</li>
+                <li>💎 Собирайте звёзды для уменьшения</li>
+                <li>⏸️ Пауза — кнопка с двумя полосками</li>
+                <li>🔥 Не дайте стене коснуться вас!</li>
+            </ul>
+            <button class="close-btn" onclick="closeHowTo()">Понятно!</button>
+        </div>
     </div>
-   </div> 
-   <div style="height:20px"></div> 
-   <button class="btn" id="u" ontouchstart="up()">↑↑</button>
-   <br> 
-   <button class="btn" id="l" ontouchstart="left()">&lt;&lt;</button> 
-   <button class="btn" id="r" ontouchstart="right()">&gt;&gt;</button>
-   <br> 
-   <button class="btn" id="d" ontouchstart="down()">↓↓</button> 
-   <button class="btn" id="pausa" onclick="pause()">
-    <svg fill="white" opacity="1.0" width="30" height="30" viewbox="0 0 24 28">
-     <path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z" />
-    </svg></button>
-  </div> 
-  <style type="text/css">
-body{
-text-align:center;
--webkit-touch-callout:none;
--webkit-user-select:none;
--moz-touch-callout:none;
--moz-user-select:none;
--o-touch-callout:none
--o-user-select:none;
-user-select:none;
-touch-callout:none;}
-#pausa{
-position:absolute;
-top:285px;
-width:50px;
-height:50px;
-left:5px;}
-#block{
-width:20px;
-height:20px;
-background:navy;
-position:absolute;
-border-radius:20px;
-top:50px;
-left:50px;}
-.btn{
-width:80px;
-height:50px;
-background:navy;
-color:white;
-border:2px solid royalblue;
-border-radius:50px;}
-#gameblock{
-width:300px;
-height:270px;
-display:inline-block;
-background:royalblue;
-position:relative;
-border:1px solid black;
-overflow:hidden}
-#player{
-width:30px;
-height:30px;
-text-align:center;
--webkit-transition:width,height,-webkit-transform 0.5s;
-position:absolute;
-border-radius:2px;
-background:red;
-box-shadow:0 0 5px red;}
-</style> 
-  <script type="text/javascript">
-var x = 0;
-var y = 0;
-var cx = 50;
-var cy = 50;
-var bx;
-var by;
-var intcount = 0;
-var intval = (Math.floor(Math.random()*10+15));
-var t = 75;
-var score = 0;
-var xypm = 5;
-var rad = 30;
-var paus = false;
-var int1;
-var int2;
-var int3;
-var int4;
-var iint = "";
-function right(){
-clearInterval(int1);
-clearInterval(int2);
-clearInterval(int3);
-clearInterval(int4);
-r.disabled = true;
-u.disabled = false;
-d.disabled = false;
-l.disabled = false;
-iint = "right()";
-player.style.WebkitTransform = "rotate(270deg)";
-int1 = setTimeout("right()",t);
-if(x > 300-rad){
-clearInterval(int1);
-gameover()}else{
-x += xypm;}
-if (x < cx+20 && x > cx-rad && y > cy-rad && y <= cy+20){
-score += 1;poyman();
-scores.innerHTML = score;}
-if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
-block2.style.display = "none";
-rad -= 10;
-t -= 10;
-x -= 5;
-y -= 5;
-player.style.left = x+"px";
-player.style.top = y+"px";
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-intval = (Math.floor(Math.random()*10+15));}
-player.style.left = x+"px";}
-function left(){
-clearInterval(int1);
-clearInterval(int2);
-clearInterval(int3);
-clearInterval(int4);
-l.disabled = true;
-u.disabled = false;
-r.disabled = false;
-d.disabled = false;
-iint = "left()";
-player.style.WebkitTransform = "rotate(90deg)";
-int2 = setTimeout("left()",t)
-if(x < 0){
-clearInterval(int2);
-gameover()}else{
-x -= xypm;}
-if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
-score += 1;poyman()
-scores.innerHTML = score;}
-if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
-block2.style.display = "none";
-rad -= 10;
-t -= 10;
-x -= 5;
-y -= 5;
-player.style.left = x+"px";
-player.style.top = y+"px";
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-intval = (Math.floor(Math.random()*10+15));}
-player.style.left = x+"px";}
-function down(){
-clearInterval(int1);
-clearInterval(int2);
-clearInterval(int3);
-clearInterval(int4);
-d.disabled = true;
-u.disabled = false;
-r.disabled = false;
-l.disabled = false;
-iint = "down()";
-player.style.WebkitTransform = "rotate(360deg)";
-int3 = setTimeout("down()",t);
-if(y > 270-rad){
-clearInterval(int3);
-gameover()}else{
-y += xypm;}
-if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
-score += 1;poyman()
-scores.innerHTML = score;}
-if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
-block2.style.display = "none";
-rad -= 10;
-t -= 10;
-x -= 5;
-y -= 5;
-player.style.left = x+"px";
-player.style.top = y+"px";
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-intval = (Math.floor(Math.random()*10+15));}
-player.style.top = y+"px";}
-function up(){
-clearInterval(int1);
-clearInterval(int2);
-clearInterval(int3);
-clearInterval(int4);
-u.disabled = true;
-d.disabled = false;
-r.disabled = false;
-l.disabled = false;
-iint = "up()";
-player.style.WebkitTransform = "rotate(180deg)";
-int4 = setTimeout("up()",t);
-if(y < 0){
-clearInterval(int4);
-gameover()}else{
-y -= xypm;}
-if(x > cx-rad && x <= cx+20 && y > cy-rad && y <= cy+20){
-score += 1;
-scores.innerHTML = score;
-poyman()}
-if(block2.style.display == "block" && x > bx-rad && x <= bx+20 && y > by-rad && y <= by+20){
-block2.style.display = "none";
-rad -= 10;
-t -= 10;
-x -= 5;
-y -= 5;
-player.style.left = x+"px";
-player.style.top = y+"px";
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-intval = (Math.floor(Math.random()*10+15));}
-player.style.top = y+"px";}
-function poyman(){
-cx = (Math.floor(Math.random()*240+20));
-cy = (Math.floor(Math.random()*200+20));
-intcount++;
-if(rad == 130){
-rad = 130;}
-else{
-rad++;
-x--;
-y--;
-t++;}
-if(intcount == intval){
-bx = (Math.floor(Math.random()*240+20));
-by = (Math.floor(Math.random()*200+20));
-intcount = 0;
-block2.style.display = "block";
-block2.style.top = by + "px";
-block2.style.left = bx + "px";}
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-player.style.top = y+"px";
-player.style.left = x+"px";
-block.style.top = cy+"px";
-block.style.left = cx+"px";}
 
-function gameover(){
-  myAdd1();
-  sendscore();
-u.disabled = false;
-d.disabled = false;
-r.disabled = false;
-l.disabled = false;
+    <!-- ===== ИГРОВОЙ КОНТЕЙНЕР ===== -->
+    <div id="gameContainer">
+        <div id="topBar">
+            <button class="btn-small" onclick="goToMenu()">← Меню</button>
+            <button class="btn-small" onclick="inviteFriends()">👥 Пригласить</button>
+            <button class="btn-small" onclick="goToGames()">🎮 Игры</button>
+        </div>
 
-myalert();
-x = 0;
-y = 0;
-cx = 50;
-cy = 50;
-t = 50;
-iint = 0;
-score = 0;
-rad = 30;
-intcount = 0;
-block2.style.display = "none";
-player.style.left = x+"px";
-player.style.top = y+"px";
-block.style.left = cx+"px";
-block.style.top = cy+"px";
-player.style.width = rad+"px";
-player.style.height = rad+"px";
-player.style.WebkitTransform = "rotate(360deg)";
-scores.innerHTML = score;}
-function pause(){
+        <div class="game-wrapper">
+            <div id="gameblock">
+                <div id="player">
+                    <svg fill="black" opacity="1.0" baseprofile="full" width="100%" height="100%" viewbox="0 0 24.00 24.00">
+                        <path d="M6.997 17h-3c-1.617 0-3.04-1.257-3.24-2.86l-.498-2.992c-.107-.845.132-1.642.649-2.227A2.78 2.78 0 0 1 2.997 8h6c.835 0 1.585.348 2.059.955.119.152.217.318.296.492.425-.09.866-.09 1.292 0 .078-.175.176-.34.295-.492.474-.607 1.224-.955 2.058-.955h6c.812 0 1.572.336 2.09.921a2.78 2.78 0 0 1 .654 2.188l-.51 3.071c-.195 1.564-1.618 2.82-3.233 2.82h-3c-1.562 0-3.079-1.186-3.456-2.699l-.899-2.714a1.11 1.11 0 0 0-1.294.001l-.917 2.785C10.074 15.815 8.556 17 6.997 17z" />
+                    </svg>
+                </div>
+                <div id="block"></div>
+                <div id="block2">
+                    <svg fill="gold" opacity="1.0" width="20" height="20" viewbox="0 0 28 28">
+                        <path d="M8.922 9.203a.99.99 0 0 0-1.297-.547 9.02 9.02 0 0 0-4.969 4.969.99.99 0 0 0 .547 1.297c.125.047.25.078.375.078.406 0 .766-.234.938-.625a6.983 6.983 0 0 1 3.859-3.859 1 1 0 0 0 .547-1.313zm14.719-5.562l.719.719-3.813 3.797 1.062 1.062a1.009 1.009 0 0 1 0 1.422l-1 1A11.03 11.03 0 0 1 22 17c0 6.078-4.922 11-11 11S0 23.078 0 17 4.922 6 11 6c1.953 0 3.781.516 5.359 1.391l1-1a1.009 1.009 0 0 1 1.422 0l1.062 1.062zm.125-.875a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156L21.641 1.36a.53.53 0 0 1 0-.719.53.53 0 0 1 .719 0l1.406 1.422a.482.482 0 0 1 0 .703zm3.593 3.593c-.109.094-.234.141-.359.141s-.25-.047-.359-.141l-1.406-1.422a.482.482 0 0 1 0-.703.482.482 0 0 1 .703 0L27.36 5.64a.53.53 0 0 1 0 .719zM28 3.5c0 .281-.219.5-.5.5H26c-.281 0-.5-.219-.5-.5s.219-.5.5-.5h1.5c.281 0 .5.219.5.5zm-3-3V2c0 .281-.219.5-.5.5S24 2.281 24 2V.5c0-.281.219-.5.5-.5s.5.219.5.5zm2.359.859l-1.422 1.406a.502.502 0 0 1-.344.156.509.509 0 0 1-.359-.156.482.482 0 0 1 0-.703L26.64.64a.53.53 0 0 1 .719 0 .53.53 0 0 1 0 .719z" />
+                    </svg>
+                </div>
+                <div id="scores">0</div>
+            </div>
+        </div>
 
-clearInterval(int1);
-clearInterval(int2);
-clearInterval(int3);
-clearInterval(int4);
-if(paus == false){
-u.disabled = true;
-d.disabled = true;
-r.disabled = true;
-l.disabled = true;
-myAdd1();
-pausa.innerHTML = '<svg fill="white" opacity="1.0" width="30" height="30" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-paus = true;}
-else{
-u.disabled = false;
-d.disabled = false;
-r.disabled = false;
-l.disabled = false;
-if(iint == "left()"){
-l.disabled = true;}
-else if(iint == "right()"){
-r.disabled = true;}
-else if(iint == "down()"){
-d.disabled = true;}
-else if(iint == "up()"){
-t.disabled = true;}
-setTimeout(iint,t);
-pausa.innerHTML = '<svg fill="white" opacity="1.0" width="30" height="30" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-paus = false;}}
-function myalert() {
-swal({  
-	title: "Провал!",  
-	text: "Раскалённая стена сожгла тебя. Ты набрал очков: "+score, 
-	button: "Играть ещё",  
-  });  
- } 
+        <div class="controls">
+            <button class="btn" id="u" ontouchstart="up()" onmousedown="up()">↑↑</button>
+            <button class="btn" id="l" ontouchstart="left()" onmousedown="left()">←</button>
+            <button class="btn" id="r" ontouchstart="right()" onmousedown="right()">→</button>
+            <button class="btn" id="d" ontouchstart="down()" onmousedown="down()">↓↓</button>
+            <button id="pausa" onclick="pause()">
+                <svg fill="white" opacity="1.0" width="26" height="26" viewbox="0 0 24 28">
+                    <path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z" />
+                </svg>
+            </button>
+        </div>
+    </div>
 
+    <script>
+        // ============================================================
+        //  ИНИЦИАЛИЗАЦИЯ VK BRIDGE
+        // ============================================================
+        if (typeof vkBridge !== 'undefined') {
+            vkBridge.send('VKWebAppInit')
+                .then(() => console.log('VK Bridge инициализирован'))
+                .catch(err => console.warn('Ошибка инициализации VK Bridge:', err));
+        } else {
+            console.warn('vkBridge не загружен');
+        }
 
-</script>
-<!-- <div align="center">
-  <audio controls loop id="music">
-      <source src="./bg.ogg" type="audio/ogg">
-      <embed src="./bg.ogg" autostart="false" loop="true" hidden="true"> 
-    </audio> 
-</div> -->
- </body>
+        // ============================================================
+        //  ПЕРЕМЕННЫЕ ИГРЫ
+        // ============================================================
+        var x = 0,
+            y = 0;
+        var cx = 50,
+            cy = 50;
+        var bx, by;
+        var intcount = 0;
+        var intval = (Math.floor(Math.random() * 10 + 15));
+        var t = 75;
+        var score = 0;
+        var xypm = 5;
+        var rad = 30;
+        var paus = false;
+        var int1, int2, int3, int4;
+        var iint = "";
+        var gameActive = false;
+        var gameLoopId = null;
+
+        // Элементы DOM
+        var player = document.getElementById('player');
+        var block = document.getElementById('block');
+        var block2 = document.getElementById('block2');
+        var scoresEl = document.getElementById('scores');
+        var u = document.getElementById('u');
+        var d = document.getElementById('d');
+        var r = document.getElementById('r');
+        var l = document.getElementById('l');
+        var pausa = document.getElementById('pausa');
+        var mainMenu = document.getElementById('mainMenu');
+        var gameContainer = document.getElementById('gameContainer');
+
+        // ============================================================
+        //  ФУНКЦИИ МЕНЮ
+        // ============================================================
+        function startGame() {
+            mainMenu.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            resetGame();
+            // Автозапуск движения вниз
+            if (!gameActive) {
+                gameActive = true;
+                down();
+            }
+        }
+
+        function goToMenu() {
+            gameActive = false;
+            clearAllIntervals();
+            gameContainer.style.display = 'none';
+            mainMenu.style.display = 'flex';
+        }
+
+        function showHowTo() {
+            document.getElementById('howToModal').classList.add('active');
+        }
+
+        function closeHowTo() {
+            document.getElementById('howToModal').classList.remove('active');
+        }
+
+        function inviteFriends() {
+            if (typeof vkBridge !== 'undefined') {
+                vkBridge.send("VKWebAppShowInviteBox", {})
+                    .then(data => console.log('Приглашение отправлено', data))
+                    .catch(err => console.warn('Ошибка приглашения:', err));
+            } else {
+                // Для теста вне VK
+                alert('Пригласить друзей (работает только в VK)');
+            }
+        }
+
+        function goToGames() {
+            window.location.href = './i.html';
+        }
+
+        function shareScore() {
+            if (typeof vkBridge !== 'undefined') {
+                vkBridge.send("VKWebAppShowWallPostBox", {
+                    "message": "🔥 Я набрал " + score + " очков в игре «Горячая стена»! Попробуй побить мой рекорд!",
+                    "attachments": "https://vk.ru/app51399471"
+                }).catch(err => console.warn('Ошибка публикации:', err));
+            } else {
+                alert('Поделиться результатом: ' + score + ' очков');
+            }
+        }
+
+        // ============================================================
+        //  VK РЕКЛАМА
+        // ============================================================
+        function showAd() {
+            if (typeof vkBridge !== 'undefined') {
+                vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
+                    .then(data => console.log('Реклама показана', data))
+                    .catch(err => console.warn('Ошибка рекламы:', err));
+            }
+        }
+
+        // ============================================================
+        //  ИГРОВАЯ ЛОГИКА
+        // ============================================================
+        function clearAllIntervals() {
+            clearInterval(int1);
+            clearInterval(int2);
+            clearInterval(int3);
+            clearInterval(int4);
+        }
+
+        function resetGame() {
+            clearAllIntervals();
+            gameActive = false;
+            x = 0;
+            y = 0;
+            cx = 50;
+            cy = 50;
+            t = 75;
+            score = 0;
+            rad = 30;
+            intcount = 0;
+            intval = (Math.floor(Math.random() * 10 + 15));
+            block2.style.display = 'none';
+            player.style.left = x + 'px';
+            player.style.top = y + 'px';
+            block.style.left = cx + 'px';
+            block.style.top = cy + 'px';
+            player.style.width = rad + 'px';
+            player.style.height = rad + 'px';
+            player.style.WebkitTransform = 'rotate(360deg)';
+            scoresEl.innerHTML = '0';
+            paus = false;
+            pausa.innerHTML =
+                '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+            u.disabled = false;
+            d.disabled = false;
+            r.disabled = false;
+            l.disabled = false;
+        }
+
+        function poyman() {
+            cx = (Math.floor(Math.random() * 240 + 20));
+            cy = (Math.floor(Math.random() * 200 + 20));
+            intcount++;
+            if (rad < 130) {
+                rad++;
+                x--;
+                y--;
+                t++;
+            }
+            if (intcount >= intval) {
+                bx = (Math.floor(Math.random() * 240 + 20));
+                by = (Math.floor(Math.random() * 200 + 20));
+                intcount = 0;
+                block2.style.display = 'block';
+                block2.style.top = by + 'px';
+                block2.style.left = bx + 'px';
+                intval = (Math.floor(Math.random() * 10 + 15));
+            }
+            player.style.width = rad + 'px';
+            player.style.height = rad + 'px';
+            player.style.top = y + 'px';
+            player.style.left = x + 'px';
+            block.style.top = cy + 'px';
+            block.style.left = cx + 'px';
+        }
+
+        function checkCollision() {
+            // Столкновение со стеной (блок)
+            if (x > cx - rad && x < cx + 20 && y > cy - rad && y < cy + 20) {
+                score++;
+                scoresEl.innerHTML = score;
+                poyman();
+                return true;
+            }
+            // Звезда
+            if (block2.style.display === 'block' && x > bx - rad && x < bx + 20 && y > by - rad && y < by + 20) {
+                block2.style.display = 'none';
+                if (rad > 20) {
+                    rad -= 10;
+                    t = Math.max(30, t - 10);
+                }
+                player.style.width = rad + 'px';
+                player.style.height = rad + 'px';
+                intval = (Math.floor(Math.random() * 10 + 15));
+                return true;
+            }
+            return false;
+        }
+
+        function gameover() {
+            gameActive = false;
+            clearAllIntervals();
+            showAd();
+            // Отправка счёта
+            if (typeof vkBridge !== 'undefined') {
+                // Можно отправить счёт через VK API если нужно
+            }
+            swal({
+                title: "💀 Провал!",
+                text: "Раскалённая стена сожгла тебя. Ты набрал очков: " + score,
+                button: "Играть ещё",
+                icon: "warning",
+            }).then(function() {
+                resetGame();
+                if (mainMenu.style.display !== 'none') {
+                    mainMenu.style.display = 'none';
+                    gameContainer.style.display = 'flex';
+                }
+                gameActive = true;
+                down();
+            });
+        }
+
+        // ============================================================
+        //  УПРАВЛЕНИЕ
+        // ============================================================
+        function right() {
+            if (!gameActive) return;
+            clearAllIntervals();
+            r.disabled = true;
+            u.disabled = false;
+            d.disabled = false;
+            l.disabled = false;
+            iint = "right()";
+            player.style.WebkitTransform = "rotate(270deg)";
+            int1 = setTimeout("right()", t);
+            if (x > 300 - rad) {
+                clearInterval(int1);
+                gameover();
+                return;
+            }
+            x += xypm;
+            checkCollision();
+            player.style.left = x + "px";
+        }
+
+        function left() {
+            if (!gameActive) return;
+            clearAllIntervals();
+            l.disabled = true;
+            u.disabled = false;
+            r.disabled = false;
+            d.disabled = false;
+            iint = "left()";
+            player.style.WebkitTransform = "rotate(90deg)";
+            int2 = setTimeout("left()", t);
+            if (x < 0) {
+                clearInterval(int2);
+                gameover();
+                return;
+            }
+            x -= xypm;
+            checkCollision();
+            player.style.left = x + "px";
+        }
+
+        function down() {
+            if (!gameActive) return;
+            clearAllIntervals();
+            d.disabled = true;
+            u.disabled = false;
+            r.disabled = false;
+            l.disabled = false;
+            iint = "down()";
+            player.style.WebkitTransform = "rotate(360deg)";
+            int3 = setTimeout("down()", t);
+            if (y > 270 - rad) {
+                clearInterval(int3);
+                gameover();
+                return;
+            }
+            y += xypm;
+            checkCollision();
+            player.style.top = y + "px";
+        }
+
+        function up() {
+            if (!gameActive) return;
+            clearAllIntervals();
+            u.disabled = true;
+            d.disabled = false;
+            r.disabled = false;
+            l.disabled = false;
+            iint = "up()";
+            player.style.WebkitTransform = "rotate(180deg)";
+            int4 = setTimeout("up()", t);
+            if (y < 0) {
+                clearInterval(int4);
+                gameover();
+                return;
+            }
+            y -= xypm;
+            checkCollision();
+            player.style.top = y + "px";
+        }
+
+        // ============================================================
+        //  ПАУЗА
+        // ============================================================
+        function pause() {
+            clearAllIntervals();
+            if (paus === false) {
+                u.disabled = true;
+                d.disabled = true;
+                r.disabled = true;
+                l.disabled = true;
+                pausa.innerHTML =
+                    '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                paus = true;
+            } else {
+                u.disabled = false;
+                d.disabled = false;
+                r.disabled = false;
+                l.disabled = false;
+                if (iint === "left()") { l.disabled = true; } else if (iint === "right()") { r.disabled = true; } else if (
+                    iint === "down()") { d.disabled = true; } else if (iint === "up()") { u.disabled = true; }
+                setTimeout(iint, t);
+                pausa.innerHTML =
+                    '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                paus = false;
+            }
+        }
+
+        // ============================================================
+        //  КЛАВИАТУРА (для ПК)
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (gameContainer.style.display === 'none') return;
+            switch (e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    up();
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    down();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    left();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    right();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    pause();
+                    break;
+            }
+        });
+
+        // ============================================================
+        //  ВИДИМОСТЬ (остановка при переключении вкладки)
+        // ============================================================
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                clearAllIntervals();
+            }
+        });
+
+        // ============================================================
+        //  ИНИЦИАЛИЗАЦИЯ — ПОКАЗЫВАЕМ МЕНЮ
+        // ============================================================
+        // Меню показывается по умолчанию, игра скрыта
+        mainMenu.style.display = 'flex';
+        gameContainer.style.display = 'none';
+
+        // Для мобильных: отключаем контекстное меню
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.closest('#gameblock') || e.target.closest('.btn')) {
+                e.preventDefault();
+            }
+        });
+
+        console.log('🔥 Горячая стена загружена!');
+        console.log('📱 Версия для VK Mini Apps');
+    </script>
+
+</body>
 </html>
