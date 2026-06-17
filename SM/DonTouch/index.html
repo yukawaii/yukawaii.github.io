@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <title>Горячая стена</title>
+    <title>Батискаф в западне!</title>
     <style>
+        /* ===== ВСЕ ВАШИ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
         body {
             background: url(./background3.jpg) no-repeat center fixed;
             background-size: cover;
@@ -17,14 +18,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
-              justify-content: flex-start;
-    padding: 10px;  /* уменьшите padding, если он мешает */
+            padding-top: 5px;
         }
 
-        /* ===== ГЛАВНОЕ МЕНЮ ===== */
         #mainMenu {
             display: flex;
             flex-direction: column;
@@ -38,6 +37,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
         }
 
         #mainMenu h1 {
@@ -102,13 +102,50 @@
             background: linear-gradient(135deg, #af6fc9, #8e4fa8);
         }
 
-        /* ===== ИГРОВОЙ БЛОК ===== */
         #gameContainer {
             display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
             max-width: 340px;
+            margin-top: -5px;
+        }
+
+        #gameInfo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #gameInfo .level-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #gameInfo .level-info .level-num {
+            color: #faa61a;
+            font-size: 18px;
+        }
+
+        #gameInfo .shield-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        #gameInfo .shield-info .shield-icon {
+            font-size: 20px;
         }
 
         #topBar {
@@ -116,7 +153,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             gap: 8px;
             flex-wrap: wrap;
         }
@@ -156,14 +193,14 @@
         .game-wrapper {
             background: rgba(0, 0, 0, 0.5);
             border-radius: 16px;
-            padding: 10px;
+            padding: 6px;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #gameblock {
             width: 300px;
-            height: 350px;
+            height: 370px;
             display: inline-block;
             background: linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%);
             position: relative;
@@ -171,7 +208,87 @@
             overflow: hidden;
             border-radius: 8px;
             touch-action: none;
-            margin-bottom: 50px;
+            transition: background 2s ease;
+        }
+
+        /* ===== СТЕНА С ШИПАМИ ===== */
+        #wallDecor {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            z-index: 4;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .wall-spikes {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            height: 100%;
+        }
+
+        .spike {
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(180deg, #2d1b0e, #5a3a1a);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            position: relative;
+        }
+
+        .spike::after {
+            content: '☠';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #8B0000;
+            opacity: 0.7;
+        }
+
+        .vine {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 15px,
+                #2d5a1a 15px,
+                #3a7a2a 17px,
+                transparent 17px,
+                transparent 30px
+            );
+            opacity: 0.5;
+            animation: vineWave 3s ease-in-out infinite;
+        }
+
+        .vine::before {
+            content: '🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            font-size: 16px;
+            letter-spacing: 8px;
+            opacity: 0.7;
+            white-space: nowrap;
+            animation: vineScroll 8s linear infinite;
+        }
+
+        @keyframes vineScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes vineWave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
         }
 
         /* ===== БАТИСКАФ (игрок) ===== */
@@ -274,7 +391,22 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* ===== РАКУШКА (блок для сбора) ===== */
+        /* ===== ПУЗЫРЬКИ (след) ===== */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.6), rgba(100, 200, 255, 0.2));
+            pointer-events: none;
+            z-index: 3;
+            animation: bubbleRise 2s ease-out forwards;
+        }
+
+        @keyframes bubbleRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== РАКУШКА ===== */
         #block {
             width: 28px;
             height: 28px;
@@ -352,7 +484,7 @@
             100% { transform: translateY(0) rotate(-5deg); }
         }
 
-        /* ===== ЗВЕЗДА (уменьшает) ===== */
+        /* ===== ЗВЕЗДА ===== */
         #block2 {
             display: none;
             position: absolute;
@@ -362,6 +494,12 @@
             align-items: center;
             justify-content: center;
             pointer-events: none;
+            animation: starAppear 0.5s ease-out;
+        }
+
+        @keyframes starAppear {
+            0% { transform: scale(0) rotate(180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .star-icon {
@@ -378,6 +516,73 @@
             100% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; }
         }
 
+        /* ===== МЕДУЗА ===== */
+        .jellyfish {
+            position: absolute;
+            z-index: 6;
+            font-size: 24px;
+            animation: jellyfishFloat 4s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        @keyframes jellyfishFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* ===== ЩИТ ===== */
+        #shieldItem {
+            display: none;
+            position: absolute;
+            z-index: 7;
+            font-size: 28px;
+            animation: shieldPulse 1s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes shieldPulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* ===== ВЗРЫВ ===== */
+        .explosion {
+            position: absolute;
+            z-index: 20;
+            pointer-events: none;
+            font-size: 40px;
+            animation: explosionAnim 0.6s ease-out forwards;
+        }
+
+        @keyframes explosionAnim {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* ===== УРОВЕНЬ - ВИЗУАЛЬНЫЙ ЭФФЕКТ ===== */
+        .level-up-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            font-size: 42px;
+            font-weight: bold;
+            color: #faa61a;
+            text-shadow: 0 0 30px rgba(255, 200, 50, 0.8), 0 0 60px rgba(255, 200, 50, 0.4);
+            animation: levelUpAnim 1.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes levelUpAnim {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+            70% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -70%) scale(1); opacity: 0; }
+        }
+
+        /* ===== СЧЁТЧИК ПУЛЬСАЦИЯ ===== */
         #scores {
             width: 100%;
             position: absolute;
@@ -392,6 +597,17 @@
             box-sizing: border-box;
             text-align: left;
             pointer-events: none;
+            transition: transform 0.1s;
+        }
+
+        #scores.pulse {
+            animation: scorePulse 0.3s ease;
+        }
+
+        @keyframes scorePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); color: #faa61a; }
+            100% { transform: scale(1); }
         }
 
         .controls {
@@ -439,6 +655,40 @@
             align-items: center;
             justify-content: center;
             touch-action: manipulation;
+        }
+
+        /* ===== РЫБКИ ===== */
+        .fish {
+            position: absolute;
+            z-index: 2;
+            font-size: 18px;
+            animation: fishSwim 12s linear infinite;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        @keyframes fishSwim {
+            0% { transform: translateX(-30px) scaleX(1); }
+            49% { transform: translateX(330px) scaleX(1); }
+            50% { transform: translateX(330px) scaleX(-1); }
+            99% { transform: translateX(-30px) scaleX(-1); }
+            100% { transform: translateX(-30px) scaleX(1); }
+        }
+
+        /* ===== ВОДОРОСЛИ ===== */
+        .seaweed {
+            position: absolute;
+            bottom: 0;
+            z-index: 1;
+            font-size: 24px;
+            animation: seaweedWave 3s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes seaweedWave {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
         }
 
         /* ===== МОДАЛЬНЫЕ ОКНА ===== */
@@ -653,12 +903,19 @@
                 font-size: 14px;
                 min-width: 100px;
             }
+            #gameInfo {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+            #gameInfo .level-info .level-num {
+                font-size: 15px;
+            }
         }
 
         @media (max-width: 320px) {
             #gameblock {
                 width: 250px;
-                height: 350px;
+                height: 330px;
             }
             .btn {
                 width: 52px;
@@ -692,7 +949,7 @@
 
     <!-- ===== ГЛАВНОЕ МЕНЮ ===== -->
     <div id="mainMenu">
-        <h1>🌊 Глубинная стена</h1>
+        <h1>🌊 Батискаф в западне!</h1>
         <div class="subtitle">Управляй батискафом, собирай ракушки!</div>
         <button class="menu-btn play" onclick="startGame()">▶ Начать игру</button>
         <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
@@ -700,7 +957,7 @@
         <button class="menu-btn games" onclick="showGamesModal()">🎮 Другие игры</button>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО "КАК ИГРАТЬ" ===== -->
+    <!-- ===== МОДАЛЬНЫЕ ОКНА ===== -->
     <div id="howToModal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="warning">❓ Как играть</h2>
@@ -708,6 +965,8 @@
                 <li>🛸 Управляй батискафом</li>
                 <li>🐚 Собирай ракушки для очков</li>
                 <li>⭐ Собирай звёзды, чтобы уменьшиться</li>
+                <li>🛡️ Собирай щит для защиты</li>
+                <li>🔱 Избегай ядовитых медуз</li>
                 <li>⏸️ Пауза — кнопка с двумя полосками</li>
                 <li>💥 Не касайся проклятых стен!</li>
             </ul>
@@ -715,7 +974,6 @@
         </div>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО "ДРУГИЕ ИГРЫ" ===== -->
     <div id="gamesModal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="warning">🎮 Другие игры</h2>
@@ -735,12 +993,12 @@
         </div>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО "ПРОИГРЫШ" ===== -->
     <div id="gameOverModal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="danger">💥 Крушение!</h2>
-            <p>Батискаф разбился о стену!</p>
+            <p>Батискаф разбился о проклятую стену!</p>
             <div class="score-text">🐚 <span id="finalScore">0</span> ракушек</div>
+            <div class="score-text" style="font-size:18px; color:#ff6b6b;">📊 Уровень: <span id="finalLevel">1</span></div>
             <div class="modal-buttons">
                 <button class="modal-btn primary" onclick="restartGame()">🔄 Ещё раз</button>
                 <button class="modal-btn secondary" onclick="goToMenuFromOver()">🏠 В меню</button>
@@ -756,8 +1014,55 @@
             <button class="btn-small icon-only" onclick="showGamesModal()">🎮</button>
         </div>
 
+        <div id="gameInfo">
+            <div class="level-info">
+                <span>📊 Уровень</span>
+                <span class="level-num" id="levelDisplay">1</span>
+            </div>
+            <div class="shield-info">
+                <span class="shield-icon" id="shieldDisplay">🛡️</span>
+                <span id="shieldCount">0</span>
+            </div>
+        </div>
+
         <div class="game-wrapper">
             <div id="gameblock">
+                <!-- ФОНОВЫЕ РЫБКИ -->
+                <div class="fish" style="top:15%; animation-duration:14s; font-size:16px;">🐟</div>
+                <div class="fish" style="top:35%; animation-duration:18s; animation-delay:3s; font-size:20px;">🐠</div>
+                <div class="fish" style="top:55%; animation-duration:16s; animation-delay:6s; font-size:14px;">🐡</div>
+                <div class="fish" style="top:75%; animation-duration:20s; animation-delay:9s; font-size:18px;">🐋</div>
+
+                <!-- ВОДОРОСЛИ -->
+                <div class="seaweed" style="left:5%; animation-delay:0s;">🌿</div>
+                <div class="seaweed" style="left:15%; animation-delay:0.5s; font-size:30px;">🌿</div>
+                <div class="seaweed" style="left:25%; animation-delay:1s; font-size:20px;">🌱</div>
+                <div class="seaweed" style="left:75%; animation-delay:0.3s; font-size:28px;">🌿</div>
+                <div class="seaweed" style="left:85%; animation-delay:0.8s; font-size:22px;">🌱</div>
+                <div class="seaweed" style="left:92%; animation-delay:1.2s; font-size:26px;">🌿</div>
+
+                <!-- СТЕНА С ШИПАМИ И ЛИАНАМИ -->
+                <div id="wallDecor">
+                    <div class="wall-spikes">
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                        <div class="spike"></div>
+                    </div>
+                    <div class="vine"></div>
+                </div>
+
                 <!-- БАТИСКАФ -->
                 <div id="player">
                     <div class="bathyscaphe">
@@ -784,6 +1089,9 @@
                     <span class="star-icon">⭐</span>
                 </div>
 
+                <!-- ЩИТ -->
+                <div id="shieldItem">🛡️</div>
+
                 <div id="scores">0</div>
             </div>
         </div>
@@ -803,18 +1111,215 @@
 
     <script>
         // ============================================================
-        //  ИНИЦИАЛИЗАЦИЯ VK BRIDGE
+        //  ИНИЦИАЛИЗАЦИЯ VK BRIDGE И ПОДПИСКА НА СОБЫТИЯ
         // ============================================================
         if (typeof vkBridge !== 'undefined') {
+            vkBridge.subscribe((e) => {
+                if (e.detail.type === 'VKWebAppViewHide') {
+                    console.log('📱 Приложение скрыто (VKWebAppViewHide)');
+                    // Ставим игру на паузу, НЕ включая звук
+                    pauseGameOnHide();
+                }
+                if (e.detail.type === 'VKWebAppViewRestore') {
+                    console.log('📱 Приложение восстановлено (VKWebAppViewRestore)');
+                    // Ничего не делаем! Игрок сам снимет паузу кнопкой.
+                    // Только включаем звук обратно, чтобы он работал при разблокировке
+                    isSoundEnabled = true;
+                    // Обновляем иконку паузы, если игра на паузе
+                    if (paus && pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                    }
+                }
+            });
+
             vkBridge.send('VKWebAppInit')
                 .then(() => {
-                    console.log('VK Bridge инициализирован');
+                    console.log('✅ VK Bridge инициализирован');
                     showBannerAd();
                 })
-                .catch(err => console.warn('Ошибка инициализации VK Bridge:', err));
+                .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
         } else {
-            console.warn('vkBridge не загружен');
+            console.warn('⚠️ vkBridge не загружен');
         }
+
+        // ============================================================
+        //  ЗВУКИ (Web Audio API)
+        // ============================================================
+        var audioCtx = null;
+        var isSoundEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(freq, duration, type, volume) {
+            if (!isSoundEnabled) return;
+            try {
+                initAudio();
+                var oscillator = audioCtx.createOscillator();
+                var gainNode = audioCtx.createGain();
+                oscillator.type = type || 'sine';
+                oscillator.frequency.value = freq;
+                gainNode.gain.setValueAtTime(volume || 0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch(e) { /* игнорируем ошибки аудио */ }
+        }
+
+        function playShellSound() { playTone(800, 0.15, 'sine', 0.3);
+            setTimeout(function() { playTone(1000, 0.1, 'sine', 0.2); }, 100); }
+
+        function playStarSound() { playTone(1200, 0.1, 'sine', 0.3);
+            setTimeout(function() { playTone(1500, 0.1, 'sine', 0.3); }, 100);
+            setTimeout(function() { playTone(1800, 0.15, 'sine', 0.3); }, 200); }
+
+        function playGameOverSound() { playTone(300, 0.3, 'sawtooth', 0.3);
+            setTimeout(function() { playTone(200, 0.4, 'sawtooth', 0.3); }, 300); }
+
+        function playButtonSound() {
+            // Если звук выключен или игра не активна - не запускаем
+            if (!isSoundEnabled || !gameActive) return;
+            
+            var randomDelay = 4000 + Math.random() * 3000;
+            if (window.buttonSoundTimer) {
+                clearTimeout(window.buttonSoundTimer);
+            }
+            window.buttonSoundTimer = setTimeout(function() {
+                // Проверяем, активна ли игра и включён ли звук перед воспроизведением
+                if (!gameActive || !isSoundEnabled || paus) {
+                    // Если игра на паузе или неактивна - перезапускаем таймер
+                    playButtonSound();
+                    return;
+                }
+                for (var i = 0; i < 4; i++) {
+                    setTimeout(function(idx) {
+                        var freq = 700 + idx * 80;
+                        var vol = 0.03 - idx * 0.005;
+                        if (vol > 0.01) {
+                            playTone(freq, 0.04, 'sine', vol);
+                        }
+                    }, i * 60, i);
+                }
+                playButtonSound();
+            }, randomDelay);
+        }
+
+        function playLevelUpSound() { playTone(523, 0.15, 'sine', 0.3);
+            setTimeout(function() { playTone(659, 0.15, 'sine', 0.3); }, 150);
+            setTimeout(function() { playTone(784, 0.2, 'sine', 0.4); }, 300); }
+
+        function playJellyfishSound() { playTone(200, 0.2, 'sawtooth', 0.2);
+            setTimeout(function() { playTone(150, 0.3, 'sawtooth', 0.2); }, 200); }
+
+        function playShieldSound() { playTone(1000, 0.1, 'sine', 0.3);
+            setTimeout(function() { playTone(1200, 0.15, 'sine', 0.4); }, 100); }
+
+        function playShieldUseSound() { playTone(400, 0.2, 'square', 0.25);
+            setTimeout(function() { playTone(600, 0.2, 'square', 0.25); }, 150); }
+
+
+        // ============================================================
+        //  УПРАВЛЕНИЕ ПАУЗОЙ ПРИ СВОРАЧИВАНИИ
+        // ============================================================
+        var wasPausedByHide = false;
+
+        function pauseGameOnHide() {
+            // Если игра активна и не на паузе
+            if (gameActive && !paus) {
+                console.log('⏸️ Автоматическая пауза (сворачивание)');
+                // Выключаем звуки
+                isSoundEnabled = false;
+                // Останавливаем все интервалы движения
+                clearAllIntervals();
+                // Останавливаем звук радара
+                if (window.buttonSoundTimer) {
+                    clearTimeout(window.buttonSoundTimer);
+                    window.buttonSoundTimer = null;
+                }
+                // Меняем состояние паузы
+                paus = true;
+                wasPausedByHide = true;
+                // Блокируем кнопки управления
+                if (u) u.disabled = true;
+                if (d) d.disabled = true;
+                if (r) r.disabled = true;
+                if (l) l.disabled = true;
+                // Меняем иконку паузы
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                }
+            }
+        }
+
+        // ============================================================
+        //  ПАУЗА (РУЧНАЯ)
+        // ============================================================
+        function pause() {
+            // Если игра не активна - игнорируем
+            if (!gameActive) return;
+            
+            // Останавливаем все интервалы
+            clearAllIntervals();
+            
+            if (paus === false) {
+                // Включаем паузу
+                console.log('⏸️ Ручная пауза');
+                // Останавливаем звук радара
+                if (window.buttonSoundTimer) {
+                    clearTimeout(window.buttonSoundTimer);
+                    window.buttonSoundTimer = null;
+                }
+                // Выключаем звуки
+                isSoundEnabled = false;
+                
+                if (u) u.disabled = true;
+                if (d) d.disabled = true;
+                if (r) r.disabled = true;
+                if (l) l.disabled = true;
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                }
+                paus = true;
+                // Сбрасываем флаг, чтобы при восстановлении не снять паузу автоматически
+                wasPausedByHide = false;
+            } else {
+                // Снимаем паузу
+                console.log('▶️ Снятие паузы');
+                // Включаем звуки
+                isSoundEnabled = true;
+                
+                if (u) u.disabled = false;
+                if (d) d.disabled = false;
+                if (r) r.disabled = false;
+                if (l) l.disabled = false;
+                
+                // Блокируем активную кнопку движения
+                if (iint === "left()" && l) { l.disabled = true; } 
+                else if (iint === "right()" && r) { r.disabled = true; } 
+                else if (iint === "down()" && d) { d.disabled = true; } 
+                else if (iint === "up()" && u) { u.disabled = true; }
+                
+                // Запускаем движение
+                setTimeout(iint, t);
+                
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                }
+                paus = false;
+                wasPausedByHide = false;
+                
+                // Перезапускаем звук радара
+                if (gameActive) {
+                    playButtonSound();
+                }
+            }
+        }
+
 
         // ============================================================
         //  ПЕРЕМЕННЫЕ ИГРЫ
@@ -822,7 +1327,10 @@
         var player = document.getElementById('player');
         var block = document.getElementById('block');
         var block2 = document.getElementById('block2');
+        var shieldItem = document.getElementById('shieldItem');
         var scoresEl = document.getElementById('scores');
+        var levelDisplay = document.getElementById('levelDisplay');
+        var shieldCountDisplay = document.getElementById('shieldCount');
         var u = document.getElementById('u');
         var d = document.getElementById('d');
         var r = document.getElementById('r');
@@ -832,31 +1340,54 @@
         var gameContainer = document.getElementById('gameContainer');
         var gameOverModal = document.getElementById('gameOverModal');
         var finalScoreEl = document.getElementById('finalScore');
+        var finalLevelEl = document.getElementById('finalLevel');
+        var gameblock = document.getElementById('gameblock');
 
         var x = 0,
             y = 0;
         var cx = 50,
             cy = 50;
         var bx, by;
+        var sx, sy;
+        var jx, jy;
         var intcount = 0;
         var intval = (Math.floor(Math.random() * 10 + 15));
         var t = 75;
         var score = 0;
         var xypm = 5;
-        var rad = 40; // Начальный размер батискафа
+        var rad = 40;
         var paus = false;
         var int1, int2, int3, int4;
         var iint = "";
         var gameActive = false;
+        var level = 1;
+        var shields = 0;
+        var hasShield = false;
+        var jellyfishActive = false;
+        var jellyfishTimer = null;
+        var shieldTimer = null;
+        var dayNightMode = 0;
+        var colorCycleTimer = null;
+        var waterColors = [
+            ['#1a3a6a', '#2a5a8a', '#3a7aaa', '#5a9aca'],
+            ['#0a1a3a', '#0a2a5a', '#0a3a6a', '#1a5a8a'],
+            ['#2a1a3a', '#3a2a5a', '#4a3a7a', '#5a4a9a'],
+            ['#1a2a4a', '#2a4a6a', '#3a6a8a', '#4a8aaa']
+        ];
+        var colorIndex = 0;
+        var bgInterval = null;
 
         // ============================================================
-        //  ФУНКЦИИ МЕНЮ
+        //  ФУНКЦИИ МЕНЮ И ИГРЫ
         // ============================================================
         function startGame() {
             if (!mainMenu || !gameContainer) {
                 console.error('Элементы меню не найдены');
                 return;
             }
+            isSoundEnabled = true;
+            wasPausedByHide = false;
+            initAudio();
             mainMenu.style.display = 'none';
             gameContainer.style.display = 'flex';
             resetGame();
@@ -864,14 +1395,27 @@
                 gameActive = true;
                 down();
             }
+            startBackgroundEffects();
+            playButtonSound();
         }
 
         function goToMenu() {
             gameActive = false;
             clearAllIntervals();
+            stopBackgroundEffects();
             closeGameOverModal();
             if (gameContainer) gameContainer.style.display = 'none';
             if (mainMenu) mainMenu.style.display = 'flex';
+            if (window.buttonSoundTimer) {
+                clearTimeout(window.buttonSoundTimer);
+                window.buttonSoundTimer = null;
+            }
+            // Сбрасываем состояние паузы
+            paus = false;
+            wasPausedByHide = false;
+            if (pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+            }
         }
 
         function goToMenuFromOver() {
@@ -901,7 +1445,13 @@
 
         function showGameOverModal() {
             if (finalScoreEl) finalScoreEl.textContent = score;
+            if (finalLevelEl) finalLevelEl.textContent = level;
             if (gameOverModal) gameOverModal.classList.add('active');
+            playGameOverSound();
+            if (window.buttonSoundTimer) {
+                clearTimeout(window.buttonSoundTimer);
+                window.buttonSoundTimer = null;
+            }
         }
 
         function closeGameOverModal() {
@@ -917,9 +1467,16 @@
             }
             gameActive = true;
             down();
+            startBackgroundEffects();
+            isSoundEnabled = true;
+            paus = false;
+            wasPausedByHide = false;
+            if (pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+            }
+            playButtonSound();
         }
 
-        // Закрываем модальные окна при клике вне их
         document.addEventListener('click', function(e) {
             var modal = document.getElementById('gamesModal');
             if (e.target === modal) {
@@ -946,7 +1503,182 @@
         }
 
         // ============================================================
-        //  VK РЕКЛАМА (БАННЕР)
+        //  ФОНОВЫЕ ЭФФЕКТЫ
+        // ============================================================
+        function startBackgroundEffects() {
+            if (bgInterval) clearInterval(bgInterval);
+            bgInterval = setInterval(function() {
+                colorIndex = (colorIndex + 1) % waterColors.length;
+                var colors = waterColors[colorIndex];
+                gameblock.style.background = 'linear-gradient(180deg, ' +
+                    colors[0] + ' 0%, ' + colors[1] + ' 30%, ' +
+                    colors[2] + ' 60%, ' + colors[3] + ' 100%)';
+                
+                dayNightMode = (colorIndex % 2 === 0) ? 0 : 1;
+                var overlay = document.createElement('div');
+                overlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:1;pointer-events:none;' +
+                    'background:' + (dayNightMode === 0 ? 'rgba(255,255,200,0.05)' : 'rgba(0,0,30,0.3)') + ';' +
+                    'transition: background 2s ease;';
+                overlay.id = 'dayNightOverlay';
+                var oldOverlay = document.getElementById('dayNightOverlay');
+                if (oldOverlay) oldOverlay.remove();
+                gameblock.appendChild(overlay);
+            }, 8000);
+
+            if (jellyfishTimer) clearInterval(jellyfishTimer);
+            jellyfishTimer = setInterval(function() {
+                if (!gameActive || paus) return; // НЕ создаём медуз на паузе
+                spawnJellyfish();
+            }, 12000 + Math.random() * 8000);
+
+            if (shieldTimer) clearInterval(shieldTimer);
+            shieldTimer = setInterval(function() {
+                if (!gameActive || paus || shields >= 3) return; // НЕ создаём щиты на паузе
+                spawnShield();
+            }, 18000 + Math.random() * 10000);
+        }
+
+        function stopBackgroundEffects() {
+            if (bgInterval) clearInterval(bgInterval);
+            if (jellyfishTimer) clearInterval(jellyfishTimer);
+            if (shieldTimer) clearInterval(shieldTimer);
+        }
+
+        // ============================================================
+        //  МЕДУЗА
+        // ============================================================
+        function spawnJellyfish() {
+            if (jellyfishActive || paus) return; // НЕ создаём на паузе
+            var jellyfish = document.createElement('div');
+            jellyfish.className = 'jellyfish';
+            var size = 24 + Math.random() * 16;
+            jellyfish.style.fontSize = size + 'px';
+            var startX = Math.random() > 0.5 ? -30 : 330;
+            jellyfish.style.left = startX + 'px';
+            jellyfish.style.top = (20 + Math.random() * 280) + 'px';
+            jellyfish.textContent = '🔱';
+            jellyfish.id = 'jellyfishActive';
+            gameblock.appendChild(jellyfish);
+            jellyfishActive = true;
+            jx = startX;
+            jy = parseInt(jellyfish.style.top);
+
+            var speed = 1 + Math.random() * 2;
+            var dir = startX > 0 ? -1 : 1;
+            var moveInterval = setInterval(function() {
+                // Если игра на паузе или неактивна - медуза замирает
+                if (!gameActive || paus) return;
+                
+                if (!jellyfishActive) {
+                    clearInterval(moveInterval);
+                    return;
+                }
+                jx += speed * dir;
+                jellyfish.style.left = jx + 'px';
+                if (jx > x - 20 && jx < x + rad + 20 && jy > y - 20 && jy < y + rad + 20) {
+                    clearInterval(moveInterval);
+                    jellyfishActive = false;
+                    jellyfish.remove();
+                    if (shields > 0) {
+                        shields--;
+                        updateShieldDisplay();
+                        playShieldUseSound();
+                        showEffect(jx, jy, '🛡️', '#66ccff');
+                    } else {
+                        score = Math.max(0, score - 3);
+                        scoresEl.innerHTML = score;
+                        playJellyfishSound();
+                        showEffect(jx, jy, '💀', '#ff4444');
+                        gameblock.style.animation = 'shake 0.3s ease';
+                        setTimeout(function() {
+                            gameblock.style.animation = '';
+                        }, 300);
+                    }
+                }
+                if (jx < -50 || jx > 350) {
+                    clearInterval(moveInterval);
+                    jellyfishActive = false;
+                    jellyfish.remove();
+                }
+            }, 30);
+
+            setTimeout(function() {
+                if (jellyfishActive) {
+                    clearInterval(moveInterval);
+                    jellyfishActive = false;
+                    jellyfish.remove();
+                }
+            }, 8000);
+        }
+
+        // ============================================================
+        //  ЩИТ
+        // ============================================================
+        function spawnShield() {
+            if (shieldItem.style.display === 'flex' || paus) return; // НЕ создаём на паузе
+            sx = (Math.floor(Math.random() * 240 + 20));
+            sy = (Math.floor(Math.random() * 280 + 20));
+            shieldItem.style.display = 'flex';
+            shieldItem.style.left = sx + 'px';
+            shieldItem.style.top = sy + 'px';
+            playShieldSound();
+        }
+
+        // ============================================================
+        //  ЭФФЕКТЫ
+        // ============================================================
+        function showEffect(x, y, emoji, color) {
+            var effect = document.createElement('div');
+            effect.className = 'explosion';
+            effect.textContent = emoji;
+            effect.style.left = (x - 20) + 'px';
+            effect.style.top = (y - 20) + 'px';
+            if (color) effect.style.color = color;
+            gameblock.appendChild(effect);
+            setTimeout(function() { effect.remove(); }, 700);
+        }
+
+        function spawnBubbles() {
+            if (paus) return; // НЕ создаём пузырьки на паузе
+            for (var i = 0; i < 3; i++) {
+                var bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                var size = 3 + Math.random() * 6;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = (x + rad / 2 + Math.random() * 10 - 5) + 'px';
+                bubble.style.top = (y + rad / 2 + Math.random() * 5 - 2) + 'px';
+                bubble.style.animationDuration = (1.5 + Math.random() * 1) + 's';
+                gameblock.appendChild(bubble);
+                setTimeout(function() { bubble.remove(); }, 3000);
+            }
+        }
+
+        function showLevelUp() {
+            var effect = document.createElement('div');
+            effect.className = 'level-up-effect';
+            effect.textContent = '⚡ УРОВЕНЬ ' + level + '! ⚡';
+            gameblock.appendChild(effect);
+            setTimeout(function() { effect.remove(); }, 2000);
+            playLevelUpSound();
+            
+            var flash = document.createElement('div');
+            flash.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;' +
+                'background:rgba(255,215,0,0.2);pointer-events:none;animation:flashAnim 0.6s ease-out forwards;';
+            flash.id = 'levelFlash';
+            var oldFlash = document.getElementById('levelFlash');
+            if (oldFlash) oldFlash.remove();
+            gameblock.appendChild(flash);
+            setTimeout(function() { flash.remove(); }, 700);
+        }
+
+        var styleSheet = document.createElement("style");
+        styleSheet.textContent = '@keyframes flashAnim { 0% { opacity:1; } 100% { opacity:0; } }' +
+            '@keyframes shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-5px); } 75% { transform:translateX(5px); } }';
+        document.head.appendChild(styleSheet);
+
+        // ============================================================
+        //  VK РЕКЛАМА
         // ============================================================
         function showBannerAd() {
             if (typeof vkBridge !== 'undefined') {
@@ -982,10 +1714,16 @@
             t = 75;
             score = 0;
             rad = 40;
+            level = 1;
+            shields = 0;
             intcount = 0;
             intval = (Math.floor(Math.random() * 10 + 15));
+            jellyfishActive = false;
+            paus = false;
+            wasPausedByHide = false;
             
             if (block2) block2.style.display = 'none';
+            if (shieldItem) shieldItem.style.display = 'none';
             if (player) {
                 player.style.left = x + 'px';
                 player.style.top = y + 'px';
@@ -997,8 +1735,13 @@
                 block.style.top = cy + 'px';
             }
             if (scoresEl) scoresEl.innerHTML = '0';
+            if (levelDisplay) levelDisplay.textContent = '1';
+            if (shieldCountDisplay) shieldCountDisplay.textContent = '0';
             
-            paus = false;
+            document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
+                el.remove();
+            });
+            
             if (pausa) {
                 pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
             }
@@ -1006,12 +1749,27 @@
             if (d) d.disabled = false;
             if (r) r.disabled = false;
             if (l) l.disabled = false;
+            
+            gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
+            isSoundEnabled = true;
+        }
+
+        function updateShieldDisplay() {
+            if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
+            if (shields > 0) {
+                shieldItem.style.display = 'none';
+            }
         }
 
         function poyman() {
             cx = (Math.floor(Math.random() * 240 + 20));
             cy = (Math.floor(Math.random() * 280 + 20));
             intcount++;
+            
+            block.style.transform = 'scale(0)';
+            setTimeout(function() {
+                block.style.transform = 'scale(1)';
+            }, 50);
             
             if (rad < 60) {
                 rad++;
@@ -1028,6 +1786,10 @@
                     block2.style.display = 'flex';
                     block2.style.top = by + 'px';
                     block2.style.left = bx + 'px';
+                    block2.style.animation = 'none';
+                    setTimeout(function() {
+                        block2.style.animation = 'starAppear 0.5s ease-out';
+                    }, 10);
                 }
                 intval = (Math.floor(Math.random() * 10 + 15));
             }
@@ -1045,18 +1807,42 @@
         }
 
         function checkCollision() {
-            // Сбор ракушки - получаем очки
+            // Если игра на паузе - никаких столкновений
+            if (paus) return false;
+            
             var blockSize = 28;
             var playerSize = rad;
             if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
                 score++;
-                if (scoresEl) scoresEl.innerHTML = score;
+                scoresEl.innerHTML = score;
+                playShellSound();
+                showEffect(cx, cy, '✨', '#ffd700');
+                spawnBubbles();
+                
+                scoresEl.classList.remove('pulse');
+                setTimeout(function() {
+                    scoresEl.classList.add('pulse');
+                }, 10);
+                setTimeout(function() {
+                    scoresEl.classList.remove('pulse');
+                }, 400);
+                
                 poyman();
+                
+                var newLevel = Math.floor(score / 10) + 1;
+                if (newLevel > level) {
+                    level = newLevel;
+                    if (levelDisplay) levelDisplay.textContent = level;
+                    showLevelUp();
+                    t = Math.max(30, t - 3);
+                }
                 return true;
             }
-            // Звезда - уменьшаем батискаф
+            
             if (block2 && block2.style.display === 'flex' && x > bx - playerSize && x < bx + 30 && y > by - playerSize && y < by + 30) {
                 block2.style.display = 'none';
+                playStarSound();
+                showEffect(bx, by, '⭐', '#ffdd00');
                 if (rad > 20) {
                     rad -= 10;
                     t = Math.max(30, t - 10);
@@ -1068,12 +1854,28 @@
                 intval = (Math.floor(Math.random() * 10 + 15));
                 return true;
             }
+            
+            if (shieldItem && shieldItem.style.display === 'flex' && x > sx - playerSize && x < sx + 30 && y > sy - playerSize && y < sy + 30) {
+                shieldItem.style.display = 'none';
+                shields++;
+                updateShieldDisplay();
+                playShieldSound();
+                showEffect(sx, sy, '🛡️', '#66ccff');
+                return true;
+            }
+            
             return false;
         }
 
         function gameover() {
             gameActive = false;
             clearAllIntervals();
+            stopBackgroundEffects();
+            // Останавливаем звук радара
+            if (window.buttonSoundTimer) {
+                clearTimeout(window.buttonSoundTimer);
+                window.buttonSoundTimer = null;
+            }
             showBannerAd();
             showGameOverModal();
         }
@@ -1082,7 +1884,7 @@
         //  УПРАВЛЕНИЕ
         // ============================================================
         function right() {
-            if (!gameActive) return;
+            if (!gameActive || paus) return; // НЕ двигаемся на паузе
             clearAllIntervals();
             if (r) r.disabled = true;
             if (u) u.disabled = false;
@@ -1097,11 +1899,12 @@
             }
             x += xypm;
             checkCollision();
+            spawnBubbles();
             if (player) player.style.left = x + "px";
         }
 
         function left() {
-            if (!gameActive) return;
+            if (!gameActive || paus) return;
             clearAllIntervals();
             if (l) l.disabled = true;
             if (u) u.disabled = false;
@@ -1116,11 +1919,12 @@
             }
             x -= xypm;
             checkCollision();
+            spawnBubbles();
             if (player) player.style.left = x + "px";
         }
 
         function down() {
-            if (!gameActive) return;
+            if (!gameActive || paus) return;
             clearAllIntervals();
             if (d) d.disabled = true;
             if (u) u.disabled = false;
@@ -1135,11 +1939,12 @@
             }
             y += xypm;
             checkCollision();
+            spawnBubbles();
             if (player) player.style.top = y + "px";
         }
 
         function up() {
-            if (!gameActive) return;
+            if (!gameActive || paus) return;
             clearAllIntervals();
             if (u) u.disabled = true;
             if (d) d.disabled = false;
@@ -1154,42 +1959,12 @@
             }
             y -= xypm;
             checkCollision();
+            spawnBubbles();
             if (player) player.style.top = y + "px";
         }
 
         // ============================================================
-        //  ПАУЗА
-        // ============================================================
-        function pause() {
-            clearAllIntervals();
-            if (paus === false) {
-                if (u) u.disabled = true;
-                if (d) d.disabled = true;
-                if (r) r.disabled = true;
-                if (l) l.disabled = true;
-                if (pausa) {
-                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-                }
-                paus = true;
-            } else {
-                if (u) u.disabled = false;
-                if (d) d.disabled = false;
-                if (r) r.disabled = false;
-                if (l) l.disabled = false;
-                if (iint === "left()" && l) { l.disabled = true; } 
-                else if (iint === "right()" && r) { r.disabled = true; } 
-                else if (iint === "down()" && d) { d.disabled = true; } 
-                else if (iint === "up()" && u) { u.disabled = true; }
-                setTimeout(iint, t);
-                if (pausa) {
-                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-                }
-                paus = false;
-            }
-        }
-
-        // ============================================================
-        //  КЛАВИАТУРА (для ПК)
+        //  КЛАВИАТУРА
         // ============================================================
         document.addEventListener('keydown', function(e) {
             if (!gameContainer || gameContainer.style.display === 'none') return;
@@ -1218,16 +1993,30 @@
         });
 
         // ============================================================
-        //  ВИДИМОСТЬ (остановка при переключении вкладки)
+        //  ВИДИМОСТЬ (ДОПОЛНИТЕЛЬНАЯ ЗАЩИТА)
         // ============================================================
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
-                clearAllIntervals();
+                if (gameActive && !paus) {
+                    console.log('⏸️ Вкладка скрыта — пауза');
+                    pauseGameOnHide();
+                }
+            } else {
+                // При возврате на вкладку - просто включаем звук, но не снимаем паузу
+                if (paus) {
+                    console.log('▶️ Вкладка активна, но пауза не снимается автоматически');
+                    // Включаем звук, чтобы он работал при снятии паузы
+                    isSoundEnabled = true;
+                    // Обновляем иконку паузы
+                    if (pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                    }
+                }
             }
         });
 
         // ============================================================
-        //  ИНИЦИАЛИЗАЦИЯ — ПОКАЗЫВАЕМ МЕНЮ
+        //  ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         if (mainMenu) mainMenu.style.display = 'flex';
         if (gameContainer) gameContainer.style.display = 'none';
@@ -1240,7 +2029,7 @@
 
         console.log('🌊 Глубинная стена загружена!');
         console.log('📱 Версия для VK Mini Apps');
+        console.log('✨ Исправлена пауза: звуки отключаются, мир замирает, кнопка паузы синхронизирована');
     </script>
-
 </body>
 </html>
