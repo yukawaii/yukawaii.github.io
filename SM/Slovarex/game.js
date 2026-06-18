@@ -1367,15 +1367,20 @@ if (startPlayBtn) {
             gameContainer.style.display = '';
         }
         
-        // Скрываем начальный экран
-        startScreen.classList.add('hidden');
-        startScreen.style.display = 'none';
+        // === ПРИНУДИТЕЛЬНО СКРЫВАЕМ СТАРТОВЫЙ ЭКРАН ===
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.style.display = 'none';
+            startScreen.classList.add('hidden');
+        }
+        // =============================================
         
         if (typeof initGame === 'function') {
             initGame();
         }
     };
 }
+
 // Кнопка "Как играть"
 if (startRulesBtn) {
     startRulesBtn.onclick = () => {
@@ -1669,3 +1674,24 @@ document.addEventListener('dragstart', (e) => {
     return false;
 });
 document.addEventListener("DOMContentLoaded", initGame);
+// ====== ФОРСИРОВАННЫЙ СТАРТ ДЛЯ VK ======
+// Если через 1 секунду игра не показалась — показываем принудительно
+setTimeout(() => {
+    const startScreen = document.getElementById('startScreen');
+    const gameContainer = document.querySelector('.game-container');
+    
+    // Если стартовый экран всё ещё виден, а игра должна быть запущена
+    if (startScreen && startScreen.style.display !== 'none') {
+        console.log('⚠️ Принудительно скрываем стартовый экран для VK');
+        startScreen.style.display = 'none';
+        startScreen.classList.add('hidden');
+    }
+    
+    if (gameContainer && gameContainer.style.display === 'none') {
+        console.log('⚠️ Принудительно показываем игру для VK');
+        gameContainer.style.display = '';
+        if (typeof initGame === 'function') {
+            initGame();
+        }
+    }
+}, 1000);
