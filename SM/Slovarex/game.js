@@ -33,8 +33,8 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-
 // ========== VK BRIDGE И БАННЕР ==========
+
 // Показать баннер
 function showBannerAd() {
     if (typeof vkBridge === 'undefined') {
@@ -61,6 +61,7 @@ function showBannerAd() {
             console.warn('❌ Ошибка показа баннера:', error);
         });
 }
+
 // Проверить и показать баннер
 function checkAndShowBanner() {
     if (typeof vkBridge === 'undefined') {
@@ -87,7 +88,6 @@ function checkAndShowBanner() {
         });
 }
 
-
 // Инициализация VK Bridge
 function initVKBridge() {
     if (typeof vkBridge === 'undefined') {
@@ -95,36 +95,45 @@ function initVKBridge() {
         return;
     }
     
-    // Показываем баннер
-    setTimeout(checkAndShowBanner, 500);
-    
-    // Подписываемся на события VK
-    vkBridge.subscribe((e) => {
-        const type = e.detail.type;
-        
-        // Когда пользователь сворачивает приложение
-        if (type === 'VKWebAppViewHide') {
-            console.log('📱 Приложение свернуто');
-            pauseGame();
-        }
-        
-        // Когда пользователь возвращается в приложение
-        if (type === 'VKWebAppViewRestore') {
-            console.log('📱 Приложение восстановлено');
-            resumeGame();
-        }
-        
-        // Когда обновляется конфигурация (например, размер окна)
-        if (type === 'VKWebAppUpdateConfig') {
-            console.log('📱 Обновлена конфигурация VK');
-        }
-        
-        // Когда пользователь закрывает баннер
-        if (type === 'VKWebAppBannerAdClosedByUser') {
-            console.log('ℹ️ Баннер закрыт, пробуем показать снова через 30 сек');
-            setTimeout(checkAndShowBanner, 30000);
-        }
-    });
+    // ====== ИНИЦИАЛИЗАЦИЯ VK BRIDGE ======
+    vkBridge.send('VKWebAppInit', {})
+        .then(() => {
+            console.log('✅ VK Bridge инициализирован');
+            
+            // После инициализации показываем баннер
+            setTimeout(checkAndShowBanner, 500);
+            
+            // Подписываемся на события VK
+            vkBridge.subscribe((e) => {
+                const type = e.detail.type;
+                
+                // Когда пользователь сворачивает приложение
+                if (type === 'VKWebAppViewHide') {
+                    console.log('📱 Приложение свернуто');
+                    pauseGame();
+                }
+                
+                // Когда пользователь возвращается в приложение
+                if (type === 'VKWebAppViewRestore') {
+                    console.log('📱 Приложение восстановлено');
+                    resumeGame();
+                }
+                
+                // Когда обновляется конфигурация (например, размер окна)
+                if (type === 'VKWebAppUpdateConfig') {
+                    console.log('📱 Обновлена конфигурация VK');
+                }
+                
+                // Когда пользователь закрывает баннер
+                if (type === 'VKWebAppBannerAdClosedByUser') {
+                    console.log('ℹ️ Баннер закрыт, пробуем показать снова через 30 сек');
+                    setTimeout(checkAndShowBanner, 30000);
+                }
+            });
+        })
+        .catch((error) => {
+            console.warn('❌ Ошибка инициализации VK Bridge:', error);
+        });
 }
 // ====== УПРАВЛЕНИЕ ЧАСТИЦАМИ ======
 function setParticlesBelowGame() {
