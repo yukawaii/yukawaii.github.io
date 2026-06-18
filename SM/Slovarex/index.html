@@ -219,6 +219,31 @@
         </div>
     </div>
 </div>
+<!-- ====== МОДАЛКА СПИСКА СВИТКОВ ====== -->
+<div id="scrollsModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--scrolls">
+        <button class="modal-overlay__close" id="scrollsModalClose">✕</button>
+        <h2>📜 Свитки мудрости</h2>
+        <div class="scrolls-grid" id="scrollsGrid">
+            <!-- Список свитков будет сгенерирован JS -->
+        </div>
+        <div id="scrollsPagination"></div>
+        <button class="modal-overlay__start-btn" id="scrollsModalBtn">✨ Закрыть</button>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА ТЕКСТА СВИТКА ====== -->
+<div id="scrollTextModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--scroll-text">
+        <button class="modal-overlay__close" id="scrollTextModalClose">✕</button>
+        <div class="scroll-text-content" id="scrollTextContent">
+            <div class="scroll-text-icon">📜</div>
+            <h3 id="scrollTextTitle">Свиток мудрости</h3>
+            <p id="scrollTextBody">Текст свитка</p>
+            <button class="modal-overlay__start-btn" id="scrollTextModalBtn">✨ Прочитано</button>
+        </div>
+    </div>
+</div>
 <!-- ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПЕРЕЗАПУСКА ====== -->
 <div id="restartModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--restart">

@@ -1518,6 +1518,7 @@ if (rulesModalClose) {
     rulesModalClose.onclick = () => {
         rulesModal.classList.remove('show');
     };
+
 }
 
 if (rulesModal) {
@@ -2123,27 +2124,121 @@ ${unlocked ? `
 const GALAXY_KEY = 'wordgame_galaxy';
 
 // Все записки (20 штук)
+// Все записки (100 штук)
 const SCROLLS = [
-    { id: 1, text: 'Слово — это мост между мирами.' },
-    { id: 2, text: 'Язык — это ключ к душе.' },
-    { id: 3, text: 'Каждое слово — это маленькая вселенная.' },
-    { id: 4, text: 'Мудрость начинается с первого слова.' },
-    { id: 5, text: 'Слова могут исцелять.' },
-    { id: 6, text: 'В каждом слове живёт история.' },
-    { id: 7, text: 'Истина всегда ждёт своего слова.' },
-    { id: 8, text: 'Слова — это свет во тьме.' },
-    { id: 9, text: 'Язык — это зеркало культуры.' },
-    { id: 10, text: 'Слово может изменить мир.' },
-    { id: 11, text: 'Знание — это сила слова.' },
-    { id: 12, text: 'Слова строят мосты, а не стены.' },
-    { id: 13, text: 'Язык — это музыка души.' },
-    { id: 14, text: 'Сила слова — в его правде.' },
-    { id: 15, text: 'Слово — это дыхание мысли.' },
-    { id: 16, text: 'Мудрец говорит словами, которые живут вечно.' },
-    { id: 17, text: 'Слова — это звёзды на карте сознания.' },
-    { id: 18, text: 'Язык — это дом бытия.' },
-    { id: 19, text: 'Слово — это начало всех начал.' },
-    { id: 20, text: 'Ты — творец своей реальности через слово.' }
+    // Цитаты учёных и мыслителей
+    { id: 1, text: '«Две вещи наполняют душу всегда новым и всё более сильным удивлением и благоговением, чем чаще и продолжительнее мы размышляем о них, — это звёздное небо надо мной и моральный закон во мне.» — Иммануил Кант' },
+    { id: 2, text: '«Мы — способ, которым Вселенная познает себя.» — Карл Саган' },
+    { id: 3, text: '«Где бы мы ни были, мы всегда находимся в центре Вселенной.» — Джон Арчибальд Уилер' },
+    { id: 4, text: '«Вселенная не обязана быть понятной. Она просто есть.» — Нил Деграсс Тайсон' },
+    { id: 5, text: '«Мы все — звёздная пыль, размышляющая о звёздах.» — Карл Саган' },
+    { id: 6, text: '«Космос — это всё, что есть, всё, что когда-либо было и всё, что когда-либо будет.» — Карл Саган' },
+    { id: 7, text: '«Глаза — это окна в душу. А телескопы — окна во Вселенную.» — неизвестный астроном' },
+    { id: 8, text: '«Земля — это колыбель разума, но нельзя вечно жить в колыбели.» — Константин Циолковский' },
+    { id: 9, text: '«Человечество — это часть Вселенной, которая пытается понять саму себя.» — Стивен Хокинг' },
+    { id: 10, text: '«В бесконечной Вселенной всё возможно.» — Стивен Хокинг' },
+    
+    // Факты о планетах
+    { id: 11, text: '🔭 Юпитер — самая большая планета Солнечной системы. В него можно поместить более 1300 Земель!' },
+    { id: 12, text: '🌕 На Венере день длиннее года. Один оборот вокруг оси занимает 243 земных дня, а вокруг Солнца — 225 дней.' },
+    { id: 13, text: '🪐 Сатурн настолько лёгкий, что мог бы плавать в воде — его плотность меньше плотности воды.' },
+    { id: 14, text: '🔴 Марс называют Красной планетой из-за оксида железа (ржавчины) на его поверхности.' },
+    { id: 15, text: '🌍 Земля — единственная известная планета, где есть жизнь. Но мы всё ещё ищем соседей.' },
+    { id: 16, text: '☀️ Солнце составляет 99,86% всей массы Солнечной системы. Оно огромно!' },
+    { id: 17, text: '❄️ Уран — самая холодная планета с температурой -224°C. И он вращается на боку!' },
+    { id: 18, text: '🌊 На спутнике Юпитера Европе под ледяной коркой скрывается океан — возможно, с жизнью.' },
+    { id: 19, text: '⛰️ Олимп на Марсе — высочайшая гора в Солнечной системе. Её высота — 21,9 км!' },
+    { id: 20, text: '💨 На Нептуне дуют самые сильные ветры — до 2100 км/ч!' },
+    
+    // Интересные факты о космосе
+    { id: 21, text: '🌌 Млечный Путь содержит от 100 до 400 миллиардов звёзд. А мы видим только малую часть.' },
+    { id: 22, text: '⏳ Самый старый свет, который мы видим, — это реликтовое излучение. Ему 13,8 миллиардов лет.' },
+    { id: 23, text: '🕳️ В центре нашей галактики находится сверхмассивная чёрная дыра — Стрелец A*.' },
+    { id: 24, text: '💫 Каждую секунду в наблюдаемой Вселенной рождается около 10 новых звёзд.' },
+    { id: 25, text: '🌠 Метеорит, который упал в Челябинске в 2013 году, весил около 10 000 тонн до входа в атмосферу.' },
+    { id: 26, text: '🔭 Телескоп Хаббл помог определить возраст Вселенной — 13,8 миллиардов лет.' },
+    { id: 27, text: '🌙 Луна постепенно удаляется от Земли со скоростью 3,8 см в год.' },
+    { id: 28, text: '☄️ Кометы — это остатки материала из ранней Солнечной системы. Они содержат лёд и органику.' },
+    { id: 29, text: '✨ Белые карлики — это остатки звёзд, сжатые до размеров Земли. Они невероятно плотные.' },
+    { id: 30, text: '💥 Взрыв сверхновой за несколько секунд выделяет больше энергии, чем Солнце за всю свою жизнь.' },
+    
+    // Больше фактов
+    { id: 31, text: '🪐 Кольца Сатурна состоят из миллиардов частиц льда и камня размером от пылинки до дома.' },
+    { id: 32, text: '🔴 На Марсе есть самый длинный каньон — Долина Маринер. Он протянулся на 4000 км!' },
+    { id: 33, text: '☀️ Температура на поверхности Солнца — около 5500°C, а в ядре — 15 миллионов градусов.' },
+    { id: 34, text: '🌍 Если собрать всю воду на Земле в шар, его диаметр будет всего 1385 км.' },
+    { id: 35, text: '🪐 У Сатурна 146 известных спутников. Самый большой — Титан, крупнее Меркурия.' },
+    { id: 36, text: '🌕 Луна имеет очень тонкую атмосферу — экзосферу. Она почти вакуум.' },
+    { id: 37, text: '💫 Звёзды рождаются в туманностях — огромных облаках газа и пыли.' },
+    { id: 38, text: '⏳ 1 год на Нептуне длится 165 земных лет — там очень долгая зима!' },
+    { id: 39, text: '🌌 Туманность Ориона — одна из самых ярких и изученных туманностей на небе.' },
+    { id: 40, text: '🚀 «Вояджер-1» уже покинул Солнечную систему и продолжает лететь в межзвёздном пространстве.' },
+    
+    { id: 41, text: '🌠 В день на Землю падает около 100 тонн космической пыли и мелких метеоритов.' },
+    { id: 42, text: '🌍 Земля не идеальный шар — она немного приплюснута у полюсов.' },
+    { id: 43, text: '☀️ Свет от Солнца доходит до Земли за 8 минут 20 секунд.' },
+    { id: 44, text: '🌙 Затмения происходят потому, что Луна и Земля идеально выстраиваются на одной линии.' },
+    { id: 45, text: '🪐 Астрономы обнаружили планету, где идут дожди из расплавленного стекла — HD 189733b.' },
+    { id: 46, text: '🔴 Марс имеет полярные шапки из замороженного углекислого газа и воды.' },
+    { id: 47, text: '💫 Самая близкая к нам звезда — Проксима Центавра. До неё 4,2 световых года.' },
+    { id: 48, text: '🌌 Млечный Путь и галактика Андромеды движутся навстречу друг другу. Встретятся через 4,5 млрд лет.' },
+    { id: 49, text: '🚀 Первый человек в космосе — Юрий Гагарин. Его полёт длился 108 минут.' },
+    { id: 50, text: '💥 Чёрные дыры испаряются! Это открытие Стивена Хокинга называется «излучением Хокинга».' },
+    
+    { id: 51, text: '🌠 Метеорные потоки возникают, когда Земля проходит через шлейф пыли комет.' },
+    { id: 52, text: '🔭 В телескоп можно увидеть галактику Андромеды невооружённым глазом в ясную ночь.' },
+    { id: 53, text: '🌕 С Земли всегда видна только одна сторона Луны — она синхронно вращается.' },
+    { id: 54, text: '☀️ Солнце станет красным гигантом через 5 миллиардов лет и поглотит Землю.' },
+    { id: 55, text: '🪐 У Сатурна есть спутник Пан, который напоминает пельмень из-за своей формы.' },
+    { id: 56, text: '🌍 Если бы Земля была размером с яблоко, то атмосфера была бы тоньше кожуры.' },
+    { id: 57, text: '💫 Пульсары — это нейтронные звёзды, которые вращаются сотни раз в секунду.' },
+    { id: 58, text: '🚀 Космический корабль «Новые горизонты» долетел до Плутона за 9,5 лет.' },
+    { id: 59, text: '🌌 Туманность Конская Голова — одна из самых узнаваемых тёмных туманностей.' },
+    { id: 60, text: '⏳ На Меркурии день длится 59 земных дней, а год — 88 дней.' },
+    
+    { id: 61, text: '🌠 Космическая станция МКС вращается вокруг Земли со скоростью 27 600 км/ч.' },
+    { id: 62, text: '🔴 На Марсе есть подземные озёра с жидкой водой — возможно, там есть жизнь.' },
+    { id: 63, text: '🌍 Земля делает полный оборот вокруг своей оси за 23 часа 56 минут.' },
+    { id: 64, text: '💫 Звёзды бывают разных цветов: голубые — самые горячие, красные — прохладные.' },
+    { id: 65, text: '🪐 У Юпитера есть Большое Красное Пятно — гигантский шторм, бушующий столетиями.' },
+    { id: 66, text: '🚀 Космический телескоп «Джеймс Уэбб» позволяет заглянуть в раннюю Вселенную.' },
+    { id: 67, text: '🌙 Луна имеет следы от метеоритов на поверхности — они не исчезают из-за отсутствия атмосферы.' },
+    { id: 68, text: '☀️ Каждую секунду Солнце сжигает 600 миллионов тонн водорода.' },
+    { id: 69, text: '🌌 Вселенная расширяется быстрее, чем считалось ранее — это открытие получило Нобелевскую премию.' },
+    { id: 70, text: '🔭 Галилей первым использовал телескоп для наблюдения звёзд в 1609 году.' },
+    
+    { id: 71, text: '🌠 Метеориты, упавшие на Землю, иногда содержат органические молекулы — кирпичики жизни.' },
+    { id: 72, text: '🌍 Атмосфера Земли защищает нас от солнечного ветра и космической радиации.' },
+    { id: 73, text: '💫 Бетельгейзе — красный сверхгигант, который может взорваться в любой момент.' },
+    { id: 74, text: '🚀 Первая женщина в космосе — Валентина Терешкова, совершила полёт в 1963 году.' },
+    { id: 75, text: '🌌 Галактики часто сталкиваются и сливаются, рождая новые звёзды.' },
+    { id: 76, text: '🔴 На Марсе есть каньон длиной 4000 км — Долина Маринер, в 10 раз длиннее Гранд-Каньона.' },
+    { id: 77, text: '🌕 У Земли есть второй «спутник» — астероид 3753 Круитни, который движется по сложной орбите.' },
+    { id: 78, text: '☀️ Солнце вращается вокруг центра галактики со скоростью 220 км/с.' },
+    { id: 79, text: '🪐 Кольца Сатурна настолько тонкие, что их толщина всего несколько километров.' },
+    { id: 80, text: '🌠 Зодиакальный свет — это слабое свечение, вызванное пылью в Солнечной системе.' },
+    
+    { id: 81, text: '🔭 «Хаббл» сделал снимок поля глубокого космоса, где видно 10 000 галактик.' },
+    { id: 82, text: '🌍 Земля вращается со скоростью 1670 км/ч на экваторе.' },
+    { id: 83, text: '💫 Белые карлики остывают миллиарды лет — это самые старые объекты во Вселенной.' },
+    { id: 84, text: '🚀 Космический шаттл «Дискавери» совершил 39 полётов — больше всех.' },
+    { id: 85, text: '🌌 Туманность Ориона видна невооружённым глазом как размытое пятно.' },
+    { id: 86, text: '🔴 Марсианский день называется «сол» и длится 24 часа 39 минут.' },
+    { id: 87, text: '🌙 На Луне есть «моря» — это тёмные равнины из застывшей лавы.' },
+    { id: 88, text: '☀️ Солнечный ветер состоит из заряженных частиц, летящих со скоростью 400–800 км/с.' },
+    { id: 89, text: '🪐 У Юпитера 95 известных спутников. Четыре самых больших — это Галилеевы спутники.' },
+    { id: 90, text: '🌠 Космическое излучение может повредить ДНК — поэтому астронавты защищены.' },
+    
+    { id: 91, text: '🔭 Телескоп «Кеплер» обнаружил более 2600 экзопланет.' },
+    { id: 92, text: '🌍 Площадь поверхности Земли — 510 миллионов км², из них 70% покрыто водой.' },
+    { id: 93, text: '💫 Нейтронные звёзды имеют массу Солнца, но размер всего 20 км в диаметре.' },
+    { id: 94, text: '🚀 Первый искусственный спутник Земли — «Спутник-1», запущен в 1957 году.' },
+    { id: 95, text: '🌌 Галактика Треугольник — третья по величине галактика в нашей группе.' },
+    { id: 96, text: '🔴 Спутник Марса Фобос постепенно разрушается и через 30–50 млн лет упадёт на планету.' },
+    { id: 97, text: '🌙 Лунные камни, привезённые с «Аполлона», старше большинства земных пород.' },
+    { id: 98, text: '☀️ Солнечное затмение происходит примерно раз в 18 месяцев где-то на Земле.' },
+    { id: 99, text: '🪐 Экзопланета WASP-12b настолько горячая, что её атмосфера испаряется.' },
+    { id: 100, text: '🌠 Ты — часть Вселенной. Ты — её глаза, уши, мысли. Продолжай исследовать!' }
 ];
 
 // Длинный сюжет (показывается 1 раз)
@@ -2213,14 +2308,13 @@ function updateGalaxyProgress(wordsFound) {
         progress.totalStars += newStars;
         progress.stars += newStars;
         
-        // Свитки (каждые 5 звёзд, максимум 20)
-        const totalScrollsUnlocked = Math.min(20, Math.floor(progress.totalStars / 5));
-        for (let i = progress.unlockedScrolls.length; i < totalScrollsUnlocked; i++) {
-            const scrollIndex = i % SCROLLS.length;
-            progress.unlockedScrolls.push(SCROLLS[scrollIndex].id);
-            showScrollUnlocked(SCROLLS[scrollIndex]);
-        }
-        
+// Свитки (каждые 5 звёзд, максимум 100)
+const totalScrollsUnlocked = Math.min(100, Math.floor(progress.totalStars / 5));
+for (let i = progress.unlockedScrolls.length; i < totalScrollsUnlocked; i++) {
+    const scrollIndex = i % SCROLLS.length;
+    progress.unlockedScrolls.push(SCROLLS[scrollIndex].id);
+    showScrollUnlocked(SCROLLS[scrollIndex]);
+}
         // Рубежи (каждые 50 звёзд)
         const newMilestone = Math.floor(progress.totalStars / 50);
         if (newMilestone > progress.currentMilestone) {
@@ -2266,12 +2360,9 @@ function renderGalaxyModal() {
     const maxScrolls = SCROLLS.length;
     
     let starsHtml = '';
-    const displayStars = Math.min(totalStars, 30);
+    const displayStars = Math.min(totalStars, 9);
     for (let i = 0; i < displayStars; i++) {
         starsHtml += '⭐';
-    }
-    if (totalStars > 30) {
-        starsHtml += ` +${totalStars - 30}...`;
     }
     if (totalStars === 0) {
         starsHtml = '💫 (пока нет)';
@@ -2318,7 +2409,7 @@ function renderGalaxyModal() {
                 ⭐ Всего звёзд: <strong>${totalStars}</strong>
             </div>
             
-            <div class="galaxy-progress">
+            <div class="galaxy-progress"style="padding: 8px 10px; margin: 4px 0 8px;">
                 📊 Слов найдено: <strong>${totalWords}</strong>
                 <br>
                 🎯 До следующей звезды: <strong>${nextStar.wordsNeeded}</strong> слов
@@ -2327,13 +2418,14 @@ function renderGalaxyModal() {
                 </div>
             </div>
             
-            <div class="galaxy-scrolls">
-                📜 Свитков собрано: <strong>${scrollsCount} / ${maxScrolls}</strong>
-                ${scrollsCount < maxScrolls ? 
-                    `` : 
-                    `<span class="galaxy-scrolls-complete">✅ Все свитки собраны! Ты — Хранитель Мудрости!</span>`
-                }
-            </div>
+<div class="galaxy-scrolls ${scrollsCount > 0 ? 'galaxy-scrolls--active' : ''}" onclick="${scrollsCount > 0 ? "openScrollsModal()" : ""}">
+    📜 Свитков собрано: <strong>${scrollsCount} / ${maxScrolls}</strong>
+    ${scrollsCount > 0 ? `<span style="font-size:14px; margin-left:6px;">✨ нажмите, чтобы открыть</span>` : ''}
+    ${scrollsCount < maxScrolls ? 
+        `` : 
+        `<span class="galaxy-scrolls-complete">✅ Все 100 свитков собраны! Ты — Хранитель Мудрости!</span>`
+    }
+</div>
             
             <div class="galaxy-milestone">
                 🚀 Рубеж: <strong>${milestone + 1}</strong> — ${milestoneName}
@@ -2503,3 +2595,176 @@ if (galaxyModal) {
         }
     };
 }
+
+// ====== СИСТЕМА СВИТКОВ (100 шт) ======
+
+let scrollsCurrentPage = 1;
+const SCROLLS_PER_PAGE = 10;
+
+// Открыть модалку со всеми свитками
+function openScrollsModal() {
+    scrollsCurrentPage = 1;
+    renderScrollsPage();
+    const modal = document.getElementById('scrollsModal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeScrollsModal() {
+    const modal = document.getElementById('scrollsModal');
+    if (modal) modal.classList.remove('show');
+}
+
+// Рендер текущей страницы свитков
+function renderScrollsPage() {
+    const grid = document.getElementById('scrollsGrid');
+    if (!grid) return;
+    
+    const progress = getGalaxyProgress();
+    const unlockedIds = progress.unlockedScrolls || [];
+    const totalPages = Math.ceil(SCROLLS.length / SCROLLS_PER_PAGE);
+    
+    // Получаем свитки для текущей страницы
+    const startIndex = (scrollsCurrentPage - 1) * SCROLLS_PER_PAGE;
+    const endIndex = Math.min(startIndex + SCROLLS_PER_PAGE, SCROLLS.length);
+    const pageScrolls = SCROLLS.slice(startIndex, endIndex);
+    
+    let html = '';
+    pageScrolls.forEach((scroll) => {
+        const unlocked = unlockedIds.includes(scroll.id);
+        const realIndex = SCROLLS.indexOf(scroll) + 1;
+        html += `
+            <div class="scroll-item ${unlocked ? 'unlocked' : 'locked'}" 
+                 ${unlocked ? `onclick="openScrollTextModal(${scroll.id})"` : ''}>
+                <span class="scroll-item__icon">${unlocked ? '📜' : '🔒'}</span>
+                <div class="scroll-item__info">
+                    <div class="scroll-item__number">Свиток ${realIndex}</div>
+                    <div class="scroll-item__text">${unlocked ? scroll.text.substring(0, 30) + (scroll.text.length > 30 ? '...' : '') : '🔒 Заперто'}</div>
+                </div>
+                <span class="scroll-item__status">${unlocked ? '✨' : '🔒'}</span>
+            </div>
+        `;
+    });
+    
+    grid.innerHTML = html;
+    
+    // Обновляем навигацию
+    updateScrollsPagination(totalPages);
+}
+
+// Обновление пагинации
+function updateScrollsPagination(totalPages) {
+    const pagination = document.getElementById('scrollsPagination');
+    if (!pagination) return;
+    
+    const progress = getGalaxyProgress();
+    const unlockedIds = progress.unlockedScrolls || [];
+    const unlockedCount = unlockedIds.length;
+    
+    let html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 0 4px;">
+            <button class="scrolls-page-btn ${scrollsCurrentPage <= 1 ? 'disabled' : ''}" 
+                    onclick="${scrollsCurrentPage > 1 ? `scrollsGoToPage(${scrollsCurrentPage - 1})` : ''}" 
+                    ${scrollsCurrentPage <= 1 ? 'disabled' : ''}>
+                ◀ Назад
+            </button>
+            <span style="font-size: 14px; color: var(--theme-muted, #9ca3af);">
+                 ${scrollsCurrentPage}/${totalPages}
+            </span>
+            <button class="scrolls-page-btn ${scrollsCurrentPage >= totalPages ? 'disabled' : ''}" 
+                    onclick="${scrollsCurrentPage < totalPages ? `scrollsGoToPage(${scrollsCurrentPage + 1})` : ''}" 
+                    ${scrollsCurrentPage >= totalPages ? 'disabled' : ''}>
+                Вперед ▶
+            </button>
+        </div>
+    `;
+    
+    pagination.innerHTML = html;
+}
+
+// Переход на страницу
+function scrollsGoToPage(page) {
+    const totalPages = Math.ceil(SCROLLS.length / SCROLLS_PER_PAGE);
+    if (page < 1 || page > totalPages) return;
+    scrollsCurrentPage = page;
+    renderScrollsPage();
+}
+
+// Открыть модалку с текстом свитка
+function openScrollTextModal(scrollId) {
+    const scroll = SCROLLS.find(s => s.id === scrollId);
+    if (!scroll) return;
+    
+    document.getElementById('scrollTextTitle').textContent = `Свиток ${scrollId}`;
+    document.getElementById('scrollTextBody').textContent = scroll.text;
+    
+    const modal = document.getElementById('scrollTextModal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeScrollTextModal() {
+    const modal = document.getElementById('scrollTextModal');
+    if (modal) modal.classList.remove('show');
+}
+
+// Показ уведомления о получении свитка
+function showScrollUnlocked(scroll) {
+    showToast(`📜 Свиток ${scroll.id} получен! Нажмите на свиток в галактике, чтобы прочитать.`);
+    playSound('hint');
+}
+// ====== ЗАКРЫТИЕ МОДАЛКИ СПИСКА СВИТКОВ ======
+const scrollsModalClose = document.getElementById('scrollsModalClose');
+if (scrollsModalClose) {
+    scrollsModalClose.onclick = closeScrollsModal;
+}
+
+const scrollsModalBtn = document.getElementById('scrollsModalBtn');
+if (scrollsModalBtn) {
+    scrollsModalBtn.onclick = closeScrollsModal;
+}
+
+const scrollsModal = document.getElementById('scrollsModal');
+if (scrollsModal) {
+    scrollsModal.addEventListener('click', (e) => {
+        if (e.target === scrollsModal) closeScrollsModal();
+    });
+}
+
+// ====== ЗАКРЫТИЕ МОДАЛКИ ТЕКСТА СВИТКА ======
+const scrollTextModalClose = document.getElementById('scrollTextModalClose');
+if (scrollTextModalClose) {
+    scrollTextModalClose.onclick = closeScrollTextModal;
+}
+
+const scrollTextModalBtn = document.getElementById('scrollTextModalBtn');
+if (scrollTextModalBtn) {
+    scrollTextModalBtn.onclick = closeScrollTextModal;
+}
+
+const scrollTextModal = document.getElementById('scrollTextModal');
+if (scrollTextModal) {
+    scrollTextModal.addEventListener('click', (e) => {
+        if (e.target === scrollTextModal) closeScrollTextModal();
+    });
+}
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const scrollTextModal = document.getElementById('scrollTextModal');
+        if (scrollTextModal && scrollTextModal.classList.contains('show')) {
+            closeScrollTextModal();
+        }
+        const scrollsModal = document.getElementById('scrollsModal');
+        if (scrollsModal && scrollsModal.classList.contains('show')) {
+            closeScrollsModal();
+        }
+        const bonusModal = document.getElementById('bonusModal');
+        if (bonusModal && bonusModal.classList.contains('show')) {
+            closeBonusModal();
+        }
+        const galaxyModal = document.getElementById('galaxyModal');
+        if (galaxyModal && galaxyModal.classList.contains('show') && !galaxyModal.querySelector('.story-window')) {
+            // Не закрываем, если это окно сюжета
+        }
+    }
+});
