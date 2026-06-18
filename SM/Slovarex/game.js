@@ -169,6 +169,7 @@ const CONFIG = {
     LEVEL_THRESHOLD_STEP: 0.05,
     LEVEL_THRESHOLD_MAX: 0.75,
       WORDS_TO_COMPLETE: 20 
+
 };
 
 // ========== ЧАСТИЦЫ ФОНА ==========
@@ -333,7 +334,13 @@ function cleanupPauseHandlers() {
     pauseStartTime = 0;
     pausedTimeAccumulator = 0;
 }
-
+function calculateBonus(word) {
+    // Бонус за слово из 5+ букв: +1 очко
+    if (word.length >= 5) {
+        return 1;
+    }
+    return 0;
+}
 // ========== СОСТОЯНИЕ ИГРЫ ==========
 let gameState = {
     level: 1,
@@ -341,6 +348,7 @@ let gameState = {
     levelScore: 0,
     hintsLeft: CONFIG.HINTS_START,
     soundEnabled: true,
+        bonusScore: 0,    
     
     baseWord: "",
     baseLetters: [],
@@ -416,6 +424,12 @@ function updateUI() {
     document.getElementById("timer").textContent = formatTime(gameState.timeLeft);
     document.getElementById("hintCount").textContent = gameState.hintsLeft;
     document.getElementById("baseWord").textContent = gameState.baseWord;
+    
+    // ← НОВОЕ: обновляем бонус
+    const bonusCount = document.getElementById("bonusCount");
+    if (bonusCount) {
+        bonusCount.textContent = `🏆 Бонус: ${gameState.bonusScore}`;
+    }
     
     const timerCard = document.querySelector(".stat-time");
     if (gameState.timeLeft <= 10 && !gameState.frozen) {
@@ -548,6 +562,7 @@ function initLevel() {
     gameState.foundWords.clear();
     gameState.foundList = [];
     gameState.levelScore = 0;
+        gameState.bonusScore = 0;    
     gameState.thresholdReached = false;
     gameState.frozen = false;
     gameState.timeLeft = CONFIG.TIME_PER_LEVEL;
@@ -797,11 +812,19 @@ function submitWord() {
     gameState.foundList.push(word);
     
     const points = word.length;
-    gameState.levelScore += points;
+       const bonus = calculateBonus(word); // ← НОВОЕ
+    
+    gameState.levelScore += points + bonus;  // ← БОНУС ДОБАВЛЯЕТСЯ
+    gameState.bonusScore += bonus;            // ← НОВОЕ: общий бонус
     gameState.timeLeft += CONFIG.TIME_BONUS_PER_WORD;
     
     playSound("success");
-    showToast(`✅ "${word}" +${points} очков! +${CONFIG.TIME_BONUS_PER_WORD} сек!`);
+     // ← ИЗМЕНЕНО: показываем бонус в тосте
+    let toastMessage = `✅ "${word}" +${points} очков! +${CONFIG.TIME_BONUS_PER_WORD} сек!`;
+    if (bonus > 0) {
+        toastMessage += ` 🎁 Бонус +${bonus}!`;
+    }
+    showToast(toastMessage);
     
     gameState.currentWord = [];
     renderCurrentWord();

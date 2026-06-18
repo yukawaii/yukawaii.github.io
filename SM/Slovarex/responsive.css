@@ -277,10 +277,10 @@
         color: white;
     }
 
-    /* Скрываем элементы, которые не нужны в двухколоночном режиме */
+    /* Скрываем элементы, которые не нужны в двухколоночном режиме
     .game-container .found-header .bonus-badge {
         display: none;
-    }
+    } */
 
     /* Баннер VK — отступ */
     body.has-vk-banner .game-container {
