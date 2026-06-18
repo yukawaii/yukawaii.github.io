@@ -1,4 +1,5 @@
 var score,id,token, name1;
+  window.vkBridge = vkBridge; 
 // Инициализация моста
 if (window.vkBridge) {
     window.vkBridge.send('VKWebAppInit')
