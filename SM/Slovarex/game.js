@@ -1635,3 +1635,14 @@ document.addEventListener('dragstart', (e) => {
     return false;
 });
 document.addEventListener("DOMContentLoaded", initGame);
+
+// ====== ПОЯВЛЕНИЕ МЕНЮ ПОСЛЕ ЗАГРУЗКИ ======
+document.addEventListener('DOMContentLoaded', () => {
+    // Через 50мс добавляем класс для плавного появления
+    setTimeout(() => {
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.classList.add('loaded');
+        }
+    }, 50);
+});
