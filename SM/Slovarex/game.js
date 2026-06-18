@@ -379,6 +379,7 @@ let gameState = {
 };
 
 // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 function getCurrentThreshold() {
     const step = Math.max(0, gameState.level - 1);
     return Math.min(
@@ -388,13 +389,16 @@ function getCurrentThreshold() {
 }
 
 function updateThresholdFlag() {
-    // Теперь порог — это просто 20 найденных слов
-    const need = CONFIG.WORDS_TO_COMPLETE;
+    // Считаем порог как процент от возможных слов
+    const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+    // Но не больше WORDS_TO_COMPLETE
+    const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);
+    
     const before = gameState.thresholdReached;
     gameState.thresholdReached = gameState.foundWords.size >= need;
     
     if (gameState.thresholdReached && !before && !gameState.frozen) {
-        showToast("🎉 Найдено 20 слов! Открыт следующий уровень!");
+        showToast(`🎉 Найдено ${gameState.foundWords.size} слов! Открыт следующий уровень!`);
         playSound("levelup");
         blinkNextButton();
     }
@@ -402,6 +406,7 @@ function updateThresholdFlag() {
     updateNextButton();
     updateProgressBar();
 }
+
 
 function updateNextButton() {
     const btn = document.getElementById("nextLevelBtn");
@@ -414,14 +419,16 @@ function updateNextButton() {
     } else {
         btn.classList.remove("active");
         btn.disabled = true;
-        const need = CONFIG.WORDS_TO_COMPLETE;
+        const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+        const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);
         const remain = Math.max(0, need - gameState.foundWords.size);
         btn.textContent = `🔒 Нужно найти ещё ${remain} слов`;
     }
 }
 
 function updateProgressBar() {
-    const need = CONFIG.WORDS_TO_COMPLETE;
+    const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+    const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);
     const percent = (gameState.foundWords.size / need) * 100;
     const fill = document.getElementById("progressFill");
     const text = document.getElementById("progressText");
@@ -634,22 +641,21 @@ function startTimer() {
 
 function handleTimeOut() {
     // Если игра на паузе — не обрабатываем
-    if (gamePaused) return;
-    
-    if (gameState.foundWords.size >= CONFIG.WORDS_TO_COMPLETE) {
-        nextLevel();
-    } else {
+ if (gamePaused) return;    
+    const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+    const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);    
+    if (gameState.foundWords.size >= need) {
+        nextLevel();    } else {        showPermanentToast("⏰ Время вышло! Игра окончена. Нажмите «Начать заново»", true);
+        gameState.frozen = true;        updateUI();    }
         // ========== ОТПРАВКА УРОВНЯ В ВК ==========
       //  if (typeof sendscore === 'function') {
       //      sendscore();
       //  }
         // ==========================================
-        
-        showPermanentToast("⏰ Время вышло! Игра окончена. Нажмите «Начать заново»", true);
-        gameState.frozen = true;
-        updateUI();
-    }
 }
+
+
+
 // ========== ПОСТОЯННЫЙ ТОСТ ==========
 let permanentToast = null;
 
@@ -821,7 +827,9 @@ function submitWord() {
     // Принимаем слово
     gameState.foundWords.add(word);
     gameState.foundList.push(word);
-    
+    // ====== ОБНОВЛЯЕМ ГАЛАКТИКУ ======
+updateGalaxyProgress(1);  // +1 слово к прогрессу галактики
+// ================================
     const points = word.length;
        const bonus = calculateBonus(word); // ← НОВОЕ
     
@@ -836,8 +844,9 @@ function submitWord() {
         toastMessage += ` 🎁 Бонус +${bonus}!`;
     }
     showToast(toastMessage);
-    // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
-checkAchievements();
+        // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
+checkAchievements(word
+);
 // ================================
     gameState.currentWord = [];
     renderCurrentWord();
@@ -845,6 +854,7 @@ checkAchievements();
     updateLettersDisabled();
     updateUI();
     updateThresholdFlag();
+
 }
 
 function backspace() {
@@ -1830,29 +1840,55 @@ const ACHIEVEMENTS = {
 };
 
 // Загрузка сохранённых достижений
+// Загрузка сохранённых достижений
 function loadAchievements() {
     try {
         const saved = localStorage.getItem(ACHIEVEMENTS_KEY);
+        console.log('📂 Загрузка достижений из localStorage:', saved);
         return saved ? JSON.parse(saved) : {};
-    } catch {
+    } catch (e) {
+        console.error('❌ Ошибка загрузки достижений:', e);
         return {};
     }
 }
 
 // Сохранение достижений
 function saveAchievements(achievements) {
-    localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+    try {
+        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+        console.log('💾 Достижения сохранены в localStorage');
+    } catch (e) {
+        console.error('❌ Ошибка сохранения достижений:', e);
+    }
 }
-
+// Проверка и разблокировка достижения
 // Проверка и разблокировка достижения
 function unlockAchievement(achievementId) {
+    console.log('🔓 Попытка разблокировать:', achievementId);
+    
     const achievements = loadAchievements();
+    console.log('📦 Текущие достижения:', achievements);
     
     // Если уже есть — пропускаем
-    if (achievements[achievementId]) return false;
+    if (achievements[achievementId]) {
+        console.log('⏭️ Уже разблокировано:', achievementId);
+        return false;
+    }
     
-    const achievement = ACHIEVEMENTS[achievementId];
-    if (!achievement) return false;
+    // Ищем достижение по id
+    let achievement = null;
+    for (const key in ACHIEVEMENTS) {
+        if (ACHIEVEMENTS[key].id === achievementId) {
+            achievement = ACHIEVEMENTS[key];
+            break;
+        }
+    }
+    
+    if (!achievement) {
+        console.error('❌ Достижение не найдено:', achievementId);
+        console.log('📋 Доступные достижения:', Object.keys(ACHIEVEMENTS).map(k => ACHIEVEMENTS[k].id));
+        return false;
+    }
     
     // Разблокируем
     achievements[achievementId] = {
@@ -1864,6 +1900,7 @@ function unlockAchievement(achievementId) {
     };
     
     saveAchievements(achievements);
+    console.log('💾 Достижение сохранено:', achievements);
     
     // Показываем уведомление
     showAchievementPopup(achievement);
@@ -1872,26 +1909,28 @@ function unlockAchievement(achievementId) {
 }
 
 // Проверка всех достижений
-function checkAchievements() {
+function checkAchievements(submittedWord) {
     const achievements = loadAchievements();
+    console.log('🔍 Проверка достижений, найдено слов:', gameState.foundWords.size);
+     console.log('📋 Достижения в ACHIEVEMENTS:', Object.keys(ACHIEVEMENTS));
     
     // Первое слово
     if (gameState.foundWords.size >= 1 && !achievements[ACHIEVEMENTS.FIRST_WORD.id]) {
+        console.log('🏆 Разблокируем "Первое слово"');
         unlockAchievement(ACHIEVEMENTS.FIRST_WORD.id);
     }
     
-    // Длина слова
-    const currentWord = gameState.currentWord.map(item => item.letter).join("");
-    if (currentWord.length >= 5 && !achievements[ACHIEVEMENTS.FIND_5_LETTERS.id]) {
+    // Длина слова (используем переданное слово)
+    if (submittedWord && submittedWord.length >= 5 && !achievements[ACHIEVEMENTS.FIND_5_LETTERS.id]) {
         unlockAchievement(ACHIEVEMENTS.FIND_5_LETTERS.id);
     }
-    if (currentWord.length >= 6 && !achievements[ACHIEVEMENTS.FIND_6_LETTERS.id]) {
+    if (submittedWord && submittedWord.length >= 6 && !achievements[ACHIEVEMENTS.FIND_6_LETTERS.id]) {
         unlockAchievement(ACHIEVEMENTS.FIND_6_LETTERS.id);
     }
-    if (currentWord.length >= 7 && !achievements[ACHIEVEMENTS.FIND_7_LETTERS.id]) {
+    if (submittedWord && submittedWord.length >= 7 && !achievements[ACHIEVEMENTS.FIND_7_LETTERS.id]) {
         unlockAchievement(ACHIEVEMENTS.FIND_7_LETTERS.id);
     }
-    if (currentWord.length >= 8 && !achievements[ACHIEVEMENTS.FIND_8_LETTERS.id]) {
+    if (submittedWord && submittedWord.length >= 8 && !achievements[ACHIEVEMENTS.FIND_8_LETTERS.id]) {
         unlockAchievement(ACHIEVEMENTS.FIND_8_LETTERS.id);
     }
     
@@ -1931,7 +1970,10 @@ function checkAchievements() {
 }
 
 // Всплывающее окно достижения
+// Всплывающее окно достижения
 function showAchievementPopup(achievement) {
+    console.log('🎉 Показываем достижение:', achievement);
+    
     // Ставим игру на паузу
     if (!gamePaused) {
         pauseGame();
@@ -1939,13 +1981,21 @@ function showAchievementPopup(achievement) {
     }
     
     const modal = document.getElementById('achievementModal');
-    if (!modal) return;
+    if (!modal) {
+        console.error('❌ Модалка achievementModal не найдена!');
+        return;
+    }
     
-    document.getElementById('achievementIcon').textContent = achievement.icon || '🏆';
-    document.getElementById('achievementName').textContent = achievement.name;
-    document.getElementById('achievementDesc').textContent = achievement.description;
+    const iconEl = document.getElementById('achievementIcon');
+    const nameEl = document.getElementById('achievementName');
+    const descEl = document.getElementById('achievementDesc');
+    
+    if (iconEl) iconEl.textContent = achievement.icon || '🏆';
+    if (nameEl) nameEl.textContent = achievement.name;
+    if (descEl) descEl.textContent = achievement.description;
     
     modal.classList.add('show');
+    console.log('✅ Модалка достижения показана');
     
     // Звук достижения
     playSound('levelup');
@@ -1953,6 +2003,7 @@ function showAchievementPopup(achievement) {
 
 // Закрытие модалки достижения
 function closeAchievementPopup() {
+    console.log('❌ Закрываем модалку достижения');
     const modal = document.getElementById('achievementModal');
     if (modal) modal.classList.remove('show');
     
@@ -1961,6 +2012,7 @@ function closeAchievementPopup() {
         achievementPopupPaused = false;
         if (!gameState.frozen && gameState.timeLeft > 0) {
             resumeGame();
+            console.log('▶️ Игра возобновлена после достижения');
         }
     }
 }
@@ -2015,6 +2067,7 @@ if (achievementsModal) {
     };
 }
 
+
 function renderAchievementsList() {
     const grid = document.getElementById('achievementsGrid');
     if (!grid) return;
@@ -2041,11 +2094,336 @@ function renderAchievementsList() {
                         <div class="achievement-item__name">${ach.name}</div>
                         <div class="achievement-item__desc">${ach.description}</div>
                     </div>
-                    <span class="achievement-item__status">${unlocked ? '✅' : '🔒'}</span>
+                    <span class="achievement-item__status">
+${unlocked ? `
+    <span class="achievement-item__checkmark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="checkmark-path" 
+                  d="M3.5 12.5L9 18L20.5 5" 
+                  stroke="#10b981" 
+                  stroke-width="3" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  fill="none"/>
+        </svg>
+    </span>
+` : `
+    <span class="achievement-item__lock">🔒</span>
+`}
+                    </span>
                 </div>
             `;
         }
     }
     
     grid.innerHTML = html;
+}
+
+// ========== БЕСКОНЕЧНАЯ ГАЛАКТИКА ==========
+// ========== ГАЛАКТИКА (БЕСКОНЕЧНАЯ) ==========
+const GALAXY_KEY = 'wordgame_galaxy';
+
+// Все записки (20 штук)
+const SCROLLS = [
+    { id: 1, text: 'Слово — это мост между мирами.' },
+    { id: 2, text: 'Язык — это ключ к душе.' },
+    { id: 3, text: 'Каждое слово — это маленькая вселенная.' },
+    { id: 4, text: 'Мудрость начинается с первого слова.' },
+    { id: 5, text: 'Слова могут исцелять.' },
+    { id: 6, text: 'В каждом слове живёт история.' },
+    { id: 7, text: 'Истина всегда ждёт своего слова.' },
+    { id: 8, text: 'Слова — это свет во тьме.' },
+    { id: 9, text: 'Язык — это зеркало культуры.' },
+    { id: 10, text: 'Слово может изменить мир.' },
+    { id: 11, text: 'Знание — это сила слова.' },
+    { id: 12, text: 'Слова строят мосты, а не стены.' },
+    { id: 13, text: 'Язык — это музыка души.' },
+    { id: 14, text: 'Сила слова — в его правде.' },
+    { id: 15, text: 'Слово — это дыхание мысли.' },
+    { id: 16, text: 'Мудрец говорит словами, которые живут вечно.' },
+    { id: 17, text: 'Слова — это звёзды на карте сознания.' },
+    { id: 18, text: 'Язык — это дом бытия.' },
+    { id: 19, text: 'Слово — это начало всех начал.' },
+    { id: 20, text: 'Ты — творец своей реальности через слово.' }
+];
+
+const STORY_WINDOWS = [
+    { icon: '🌌', title: 'Галактика в опасности!', text: 'Ты — последний Хранитель древнего созвездия Астерия.<br>Злой космический вихрь, Тёмный Хаос, разбил нашу галактику на тысячи осколков.<br>Звёзды погасли. Мир погрузился во тьму.<br><br>Только ты можешь восстановить свет.' },
+    { icon: '🌟', title: 'Собирай звёздную пыль!', text: 'Каждое найденное слово — это частица света.<br>Чем больше слов — тем ярче загораются звёзды.<br><br>Когда ты найдёшь <span class="story-highlight">50 слов</span> — зажжётся первая звезда!<br>Зажги все звёзды, и галактика возродится!' },
+    { icon: '🏅', title: 'Что ты получишь?', text: '⭐ <strong>Звёзды</strong> — за каждые 50 найденных слов<br>📜 <strong>Древние свитки</strong> — за каждые 5 звёзд<br>🗝️ <strong>Ключи к новым созвездиям</strong> — за каждые 10 звёзд.' },
+    { icon: '🚀', title: 'Готов спасти галактику?', text: ' Это твой шанс зажечь звёзды. Возвращайся каждый день — и мир станет светлее!<br><br>Ты — последняя надежда Вселенной! ✨' }
+];
+
+function getGalaxyProgress() {
+    try {
+        const saved = localStorage.getItem(GALAXY_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            if (data.totalStars === undefined) data.totalStars = data.stars || 0;
+            if (data.unlockedScrolls === undefined) data.unlockedScrolls = [];
+            if (data.currentMilestone === undefined) data.currentMilestone = 0;
+            if (data.shownIntro === undefined) data.shownIntro = false;
+            return data;
+        }
+    } catch {}
+    return {
+        totalWords: 0,
+        totalStars: 0,
+        stars: 0,
+        currentMilestone: 0,
+        unlockedScrolls: [],
+        shownIntro: false,
+        lastDailyBonus: null
+    };
+}
+
+function saveGalaxyProgress(data) {
+    localStorage.setItem(GALAXY_KEY, JSON.stringify(data));
+}
+
+function getNextStarTarget(progress) {
+    const totalWords = progress.totalWords || 0;
+    const nextStarWords = Math.ceil((totalWords + 1) / 50) * 50;
+    const wordsNeeded = nextStarWords - totalWords;
+    return {
+        wordsNeeded: wordsNeeded > 0 ? wordsNeeded : 1,
+        totalWordsTarget: nextStarWords,
+        starNumber: progress.totalStars + 1
+    };
+}
+
+function updateGalaxyProgress(wordsFound) {
+    const progress = getGalaxyProgress();
+    progress.totalWords += wordsFound;
+    
+    const targetStars = Math.floor(progress.totalWords / 50);
+    const newStars = targetStars - progress.totalStars;
+    
+    if (newStars > 0) {
+        progress.totalStars += newStars;
+        progress.stars += newStars;
+        
+        // Свитки (каждые 5 звёзд, максимум 20)
+        const totalScrollsUnlocked = Math.min(20, Math.floor(progress.totalStars / 5));
+        for (let i = progress.unlockedScrolls.length; i < totalScrollsUnlocked; i++) {
+            const scrollIndex = i % SCROLLS.length;
+            progress.unlockedScrolls.push(SCROLLS[scrollIndex].id);
+            showScrollUnlocked(SCROLLS[scrollIndex]);
+        }
+        
+        // Рубежи (каждые 50 звёзд)
+        const newMilestone = Math.floor(progress.totalStars / 50);
+        if (newMilestone > progress.currentMilestone) {
+            progress.currentMilestone = newMilestone;
+            showMilestoneReached(newMilestone);
+        }
+        
+        // Уведомление о звезде
+        showStarUnlocked(progress.totalStars);
+    }
+    
+    saveGalaxyProgress(progress);
+    return progress;
+}
+
+function showStarUnlocked(starCount) {
+    const message = starCount <= 5 ? `⭐ ${starCount}-я звезда зажглась!` :
+                    starCount <= 20 ? `⭐ ${starCount} звёзд! Галактика оживает!` :
+                    `⭐ ${starCount} звёзд! Ты — легенда!`;
+    showToast(message);
+    playSound('levelup');
+}
+
+function showScrollUnlocked(scroll) {
+    showToast(`📜 Свиток найден: "${scroll.text}"`);
+    playSound('hint');
+}
+
+function showMilestoneReached(milestone) {
+    const titles = ['', '🌿 Первый рубеж!', '🌳 Искатель!', '🌲 Хранитель!', '🏔️ Покоритель!'];
+    const title = titles[milestone] || `🚀 Рубеж ${milestone + 1}!`;
+    showToast(`🎉 ${title}`);
+}
+
+function renderGalaxyModal() {
+    const progress = getGalaxyProgress();
+    const nextStar = getNextStarTarget(progress);
+    
+    const totalStars = progress.totalStars || 0;
+    const totalWords = progress.totalWords || 0;
+    const scrollsCount = progress.unlockedScrolls?.length || 0;
+    const milestone = progress.currentMilestone || 0;
+    const maxScrolls = SCROLLS.length;
+    
+    let starsHtml = '';
+    const displayStars = Math.min(totalStars, 30);
+    for (let i = 0; i < displayStars; i++) {
+        starsHtml += '⭐';
+    }
+    if (totalStars > 30) {
+        starsHtml += ` +${totalStars - 30}...`;
+    }
+    if (totalStars === 0) {
+        starsHtml = '💫 (пока нет)';
+    }
+    
+    const progressPercent = totalWords > 0 ? (totalWords % 50) / 50 * 100 : 0;
+    const lastBonus = progress.lastDailyBonus;
+    const today = new Date().toDateString();
+    
+    let dailyStatus = '';
+    if (lastBonus === today) {
+        dailyStatus = '✅ Сегодняшний бонус получен! +5 слов к прогрессу!';
+    } else {
+        dailyStatus = '🎁 Ежедневный бонус ждёт тебя! Зайди завтра и получи +5 слов!';
+    }
+    
+    const milestoneNames = [
+        '🌱 Начало пути',
+        '🌿 Первые шаги',
+        '🌳 Искатель',
+        '🌲 Хранитель',
+        '🏔️ Покоритель',
+        '⛰️ Странник',
+        '🗻 Восходитель',
+        '🌄 Проводник',
+        '🌅 Светоч',
+        '🌟 Звездочёт'
+    ];
+    const milestoneName = milestone < milestoneNames.length ? 
+        milestoneNames[milestone] : 
+        `🚀 Бесконечный странник (${milestone + 1})`;
+    
+    const body = document.getElementById('galaxyModalBody');
+    if (!body) return;
+    
+    body.innerHTML = `
+        <div class="galaxy-modal">
+            <h2>🌌 Бесконечная Галактика</h2>
+            
+            <div class="galaxy-stars">${starsHtml}</div>
+            <div class="galaxy-total-stars">
+                ⭐ Всего звёзд: <strong>${totalStars}</strong>
+            </div>
+            
+            <div class="galaxy-progress">
+                📊 Слов найдено: <strong>${totalWords}</strong>
+                <br>
+                🎯 До следующей звезды: <strong>${nextStar.wordsNeeded}</strong> слов
+                <div class="galaxy-progress-bar">
+                    <div class="galaxy-progress-fill" style="width: ${progressPercent}%;"></div>
+                </div>
+            </div>
+            
+            <div class="galaxy-scrolls">
+                📜 Свитков собрано: <strong>${scrollsCount} / ${maxScrolls}</strong>
+                ${scrollsCount < maxScrolls ? 
+                    `<span class="galaxy-scrolls-hint">(каждые 5 звёзд)</span>` : 
+                    `<span class="galaxy-scrolls-complete">✅ Все свитки собраны! Ты — Хранитель Мудрости!</span>`
+                }
+            </div>
+            
+            <div class="galaxy-milestone">
+                🚀 Рубеж: <strong>${milestone + 1}</strong> — ${milestoneName}
+                ${milestone === 0 ? '' : `⚡ ${milestone * 50} звёзд за плечами!`}
+            </div>
+            
+            <div class="galaxy-daily">
+                ${dailyStatus}
+            </div>
+            
+            <button class="galaxy-close-btn" onclick="closeGalaxyModal()">✨ Продолжить путь</button>
+        </div>
+    `;
+}
+
+function openGalaxyModal() {
+    const progress = getGalaxyProgress();
+    
+    // Если сюжет ещё не показан — показываем его
+    if (!progress.shownIntro) {
+        showStoryWindows(0);
+        return;
+    }
+    
+    // Иначе — сразу модалку прогресса
+    renderGalaxyModal();
+    const modal = document.getElementById('galaxyModal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeGalaxyModal() {
+    const modal = document.getElementById('galaxyModal');
+    if (modal) modal.classList.remove('show');
+}
+
+function showStoryWindows(index) {
+    if (index >= STORY_WINDOWS.length) {
+        // Сюжет закончен — отмечаем и показываем прогресс
+        const progress = getGalaxyProgress();
+        progress.shownIntro = true;
+        saveGalaxyProgress(progress);
+        renderGalaxyModal();
+        const modal = document.getElementById('galaxyModal');
+        if (modal) modal.classList.add('show');
+        return;
+    }
+    
+    const story = STORY_WINDOWS[index];
+    const isLast = index === STORY_WINDOWS.length - 1;
+    
+    const body = document.getElementById('galaxyModalBody');
+    if (!body) return;
+    
+    const dotsHtml = STORY_WINDOWS.map((_, i) => 
+        `<span class="${i === index ? 'active' : ''}"></span>`
+    ).join('');
+    
+    body.innerHTML = `
+        <div class="story-window">
+            <div class="story-icon">${story.icon}</div>
+            <h3>${story.title}</h3>
+            <p>${story.text}</p>
+            <div class="story-dots">${dotsHtml}</div>
+            <div class="story-nav">
+                <button class="story-skip" onclick="skipStory()">Пропустить</button>
+                <button class="story-next" onclick="showStoryWindows(${index + 1})">
+                    ${isLast ? '🚀 Начать!' : 'Далее →'}
+                </button>
+            </div>
+        </div>
+    `;
+    
+    const modal = document.getElementById('galaxyModal');
+    if (modal) modal.classList.add('show');
+}
+
+function skipStory() {
+    const progress = getGalaxyProgress();
+    progress.shownIntro = true;
+    saveGalaxyProgress(progress);
+    renderGalaxyModal();
+    const modal = document.getElementById('galaxyModal');
+    if (modal) modal.classList.add('show');
+}
+
+// ====== КНОПКА ГАЛАКТИКИ В МЕНЮ ======
+const startGalaxyBtn = document.getElementById('startGalaxyBtn');
+if (startGalaxyBtn) {
+    startGalaxyBtn.onclick = openGalaxyModal;
+}
+
+// ====== ЗАКРЫТИЕ МОДАЛКИ ======
+const galaxyModalClose = document.getElementById('galaxyModalClose');
+if (galaxyModalClose) {
+    galaxyModalClose.onclick = closeGalaxyModal;
+}
+
+const galaxyModal = document.getElementById('galaxyModal');
+if (galaxyModal) {
+    galaxyModal.onclick = (e) => {
+        if (e.target === galaxyModal) {
+            closeGalaxyModal();
+        }
+    };
 }

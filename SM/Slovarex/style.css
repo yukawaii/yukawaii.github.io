@@ -1412,3 +1412,288 @@ body[data-theme="green"] {
         grid-template-columns: 1fr;
     }
 }
+/* ===== АНИМИРОВАННАЯ ГАЛОЧКА ===== */
+.achievement-item__checkmark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.achievement-item__checkmark svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* Путь галочки — рисуется слева направо */
+.achievement-item__checkmark .checkmark-path {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 0;
+    animation: checkmarkDraw 2s ease-in-out infinite;
+}
+
+@keyframes checkmarkDraw {
+    0% {
+        stroke-dashoffset: 30;
+        opacity: 0.4;
+    }
+    20% {
+        opacity: 1;
+    }
+    50% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+/* Если хотите, чтобы цвет зависел от темы */
+/* Светлая тема — зелёный */
+body[data-theme="light"] .checkmark-path {
+    stroke: #10b981;
+}
+
+/* Тёмная тема — бирюзовый */
+body[data-theme="dark"] .checkmark-path {
+    stroke: #f25eff;
+}
+
+/* Голубая тема — голубой */
+body[data-theme="blue"] .checkmark-path {
+    stroke: #4a9eff;
+}
+
+/* Зелёная тема — тёмно-зелёный */
+body[data-theme="green"] .checkmark-path {
+    stroke: #2e7d32;
+}
+
+/* Замочек для заблокированных */
+.achievement-item__lock {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+/* ===== ГАЛАКТИКА ===== */
+.modal-overlay__content--galaxy {
+    max-width: 480px;
+}
+
+.galaxy-modal h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: var(--theme-text, #1f2937);
+}
+
+.galaxy-stars {
+    font-size: 20px;
+    text-align: center;
+    padding: 8px 0;
+    letter-spacing: 2px;
+    min-height: 40px;
+    line-height: 1.6;
+    word-break: break-all;
+}
+
+.galaxy-total-stars {
+    text-align: center;
+    font-size: 18px;
+    padding: 6px 0 12px;
+    color: var(--theme-text, #1f2937);
+}
+
+.galaxy-total-stars strong {
+    color: #f59e0b;
+    font-size: 22px;
+}
+
+.galaxy-progress {
+    background: var(--theme-bg-light, #f9fafb);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 8px 0 12px;
+    font-size: 14px;
+    color: var(--theme-text, #1f2937);
+    line-height: 1.8;
+}
+
+.galaxy-progress strong {
+    color: var(--theme-primary, #667eea);
+}
+
+.galaxy-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--theme-border, #e5e7eb);
+    border-radius: 8px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.galaxy-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+}
+
+.galaxy-scrolls {
+    font-size: 14px;
+    padding: 6px 0;
+    color: var(--theme-text, #1f2937);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.galaxy-scrolls strong {
+    color: var(--theme-primary, #667eea);
+}
+
+.galaxy-scrolls-hint {
+    font-size: 12px;
+    color: var(--theme-muted, #9ca3af);
+}
+
+.galaxy-scrolls-complete {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.galaxy-milestone {
+    font-size: 14px;
+    padding: 6px 0;
+    color: var(--theme-text, #1f2937);
+}
+
+.galaxy-milestone strong {
+    color: #8b5cf6;
+}
+
+.galaxy-daily {
+    background: var(--theme-bg-light, #f9fafb);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin: 8px 0 16px;
+    font-size: 14px;
+    color: var(--theme-text, #1f2937);
+    text-align: center;
+}
+
+.galaxy-close-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+    border: none;
+    border-radius: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.galaxy-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+/* ===== СЮЖЕТНЫЕ ОКНА ===== */
+.story-window {
+    text-align: center;
+    padding: 8px 0;
+}
+
+.story-window .story-icon {
+    font-size: 56px;
+    margin-bottom: 8px;
+}
+
+.story-window h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--theme-text, #1f2937);
+    margin-bottom: 10px;
+}
+
+.story-window p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--theme-muted, #6b7280);
+    margin-bottom: 6px;
+}
+
+.story-window .story-highlight {
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.story-nav {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.story-nav button {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 60px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.story-nav .story-next {
+    background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+}
+
+.story-nav .story-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+}
+
+.story-nav .story-skip {
+    background: var(--theme-btn-secondary, #f3f4f6);
+    color: var(--theme-text, #4b5563);
+}
+
+.story-nav .story-skip:hover {
+    background: var(--theme-btn-secondary-hover, #e5e7eb);
+}
+
+.story-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0 4px;
+}
+
+.story-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--theme-border, #d1d5db);
+    transition: all 0.3s ease;
+}
+
+.story-dots span.active {
+    background: var(--theme-primary, #667eea);
+    width: 24px;
+    border-radius: 4px;
+}
