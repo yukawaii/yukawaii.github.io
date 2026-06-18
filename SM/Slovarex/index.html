@@ -27,14 +27,13 @@
     })();
 </script>
 <script>
+
     (function() {
         const THEME_KEY = 'wordgame_theme';
         const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
         
-        // Применяем тему к body и html
         document.documentElement.setAttribute('data-theme', savedTheme);
         
-        // Цвета для контейнера меню
         const themeColors = {
             light: {
                 card: 'rgba(255, 255, 255, 0.98)',
@@ -64,7 +63,6 @@
         
         const colors = themeColors[savedTheme] || themeColors.light;
         
-        // Добавляем стили для контейнера меню ДО загрузки CSS
         const style = document.createElement('style');
         style.textContent = `
             body {
@@ -80,8 +78,35 @@
                 align-items: center;
                 transition: background 0.2s ease;
             }
+                      /* ===== СЮДА ДОБАВЬТЕ НОВЫЕ СТИЛИ ===== */
+            #startScreen {
+                opacity: 0 !important;
+                transition: opacity 0.8s ease !important;
+                background: rgba(0, 0, 0, 0.3) !important;
+            }
             
-            /* Стили для контейнера меню, чтобы он не мелькал белым */
+            #startScreen.loaded {
+                opacity: 1 !important;
+                background: transparent !important;
+            }
+            
+            #startScreen.loaded .start-screen__content {
+                transform: scale(1) !important;
+            }
+            
+            #startScreen:not(.loaded) .start-screen__content {
+                transform: scale(0.92) !important;
+            }
+            /* НАЧАЛЬНЫЙ ЭКРАН — СКРЫТ ДО ЗАГРУЗКИ */
+            #startScreen {
+                opacity: 0 !important;
+                transition: opacity 0.5s ease !important;
+            }
+            
+            #startScreen.loaded {
+                opacity: 1 !important;
+            }
+            
             .start-screen__content {
                 background: ${colors.card} !important;
                 color: ${colors.text} !important;
@@ -91,8 +116,12 @@
                 width: 100%;
                 text-align: center;
                 box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-                animation: menuAppear 0.6s ease;
-                transition: background 0.4s ease, color 0.4s ease;
+                transition: background 0.4s ease, color 0.4s ease, transform 0.5s ease, opacity 0.5s ease;
+            }
+            
+            /* Убираем старую анимацию, чтобы не было скачка */
+            .start-screen__content {
+                animation: none !important;
             }
             
             .start-screen__title {

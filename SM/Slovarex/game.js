@@ -3,6 +3,17 @@ if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
     alert("Ошибка загрузки игры. Обновите страницу.");
 }
+// В самом начале game.js, после проверки словаря, добавьте:
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Показываем меню плавно через 100ms после загрузки
+    setTimeout(function() {
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.classList.add('loaded');
+        }
+    }, 100);
+});
 
 // ====== НЕМЕДЛЕННОЕ ПРИМЕНЕНИЕ ТЕМЫ ======
 (function() {
