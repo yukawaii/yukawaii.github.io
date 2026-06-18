@@ -9,37 +9,30 @@
 <meta name="format-detection" content="telephone=no">
 <!-- ====== ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ СТРАНИЦЫ ====== -->
 <script>
-    (function() {
-        const THEME_KEY = 'wordgame_theme';
-        const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+    (function() {        const THEME_KEY = 'wordgame_theme';        const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
         // Применяем тему к body ДО отрисовки
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        
+        document.documentElement.setAttribute('data-theme', savedTheme);        
         // Сразу применяем фон к body
-        const themeColors = {
-            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        const themeColors = {            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
             blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
-            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
-        };
-        
+            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'        };        
         // Добавляем стиль для body до загрузки основных стилей
         const style = document.createElement('style');
         style.textContent = `
-            body {
-                background: ${themeColors[savedTheme] || themeColors.light} !important;
-                min-height: 100vh;
-                margin: 0;
-                padding: 20px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+            body {                background: ${themeColors[savedTheme] || themeColors.light} !important;                min-height: 100vh;
+                margin: 0;                padding: 20px;                display: flex;                justify-content: center;                align-items: center;            }
         `;
         document.head.appendChild(style);
     })();
 </script>
-
+<style>
+    /* Скрываем до загрузки */
+    #startScreen {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+</style>
  <script>
   // Явно задаем глобальную переменную для консоли и фрейма
   window.vkBridge = vkBridge; 
@@ -60,7 +53,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
  <script src = "./App.js"></script>
 </head>
+
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const startScreen = document.getElementById('startScreen');
+        if (startScreen) {
+            startScreen.classList.add('loaded'); // или просто opacity: 1
+            startScreen.style.opacity = '1';
+        }
+    });
+</script>
     <!-- ====== ЧАСТИЦЫ ФОНА ====== -->
 <div class="particles-container" id="particlesContainer"></div>
     <!-- ====== НАЧАЛЬНЫЙ ЭКРАН ====== -->
