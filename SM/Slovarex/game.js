@@ -1,6 +1,3 @@
-    initVKBridge(); 
-    
-
 // Проверка загрузки словаря
 if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
@@ -64,8 +61,33 @@ function showBannerAd() {
             console.warn('❌ Ошибка показа баннера:', error);
         });
 }
+// Проверить и показать баннер
+function checkAndShowBanner() {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        return;
+    }
+    
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) return;
+    } catch (e) {
+        return;
+    }
+    
+    vkBridge.send('VKWebAppCheckBannerAd', {})
+        .then((data) => {
+            if (!data.result) {
+                showBannerAd();
+            }
+        })
+        .catch(() => {
+            showBannerAd();
+        });
+}
 
-// Инициализация VK Bridge
+
 // Инициализация VK Bridge
 function initVKBridge() {
     if (typeof vkBridge === 'undefined') {
