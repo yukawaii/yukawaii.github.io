@@ -645,7 +645,7 @@ function handleTimeOut() {
     const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
     const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);    
     if (gameState.foundWords.size >= need) {
-        nextLevel();    } else {        showPermanentToast("⏰ Время вышло! Игра окончена. Нажмите «Начать заново»", true);
+        nextLevel();    } else {        showPermanentToast("⏰ Время вышло! Игра окончена", true);
         gameState.frozen = true;        updateUI();    }
         // ========== ОТПРАВКА УРОВНЯ В ВК ==========
       //  if (typeof sendscore === 'function') {
