@@ -1,4 +1,17 @@
 var score,id,token, name1;
+// Инициализация моста
+if (window.vkBridge) {
+    window.vkBridge.send('VKWebAppInit')
+        .then((data) => {
+            console.log("Лоадер ВК должен скрыться:", data);
+        })
+        .catch((error) => {
+            console.error("ВК отклонил инициализацию:", error);
+        });
+} else {
+    console.error("Критическая ошибка: VK Bridge не найден в window!");
+}
+
 
 function getid(){
     vkBridge.send('VKWebAppGetUserInfo')
