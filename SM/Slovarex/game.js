@@ -37,38 +37,50 @@ document.head.appendChild(style);
 // ========== VK BRIDGE И БАННЕР ==========
 // Показать баннер
 function showBannerAd() {
-    if (typeof vkBridge !== 'undefined') {
-        vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
-            .then((data) => {
-                if (data.result) {
-                    console.log('✅ Баннерная реклама отобразилась');
-                    document.body.classList.add('has-vk-banner');
-                }
-            })
-            .catch((error) => {
-                console.warn('❌ Ошибка показа баннера:', error);
-            });
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        return;
     }
-}
-
-// Проверить и показать баннер
-function checkAndShowBanner() {
-    if (typeof vkBridge !== 'undefined') {
-        vkBridge.send('VKWebAppCheckBannerAd', {})
-            .then((data) => {
-                if (!data.result) {
-                    showBannerAd();
-                }
-            })
-            .catch(() => {
-                showBannerAd();
-            });
+    
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) return;
+    } catch (e) {
+        return;
     }
+    
+    vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
+        .then((data) => {
+            if (data.result) {
+                console.log('✅ Баннерная реклама отобразилась');
+                document.body.classList.add('has-vk-banner');
+            }
+        })
+        .catch((error) => {
+            console.warn('❌ Ошибка показа баннера:', error);
+        });
 }
 
 // Инициализация VK Bridge
 function initVKBridge() {
-    if (typeof vkBridge === 'undefined') return;
+    // Проверяем, что мы внутри VK
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен (запуск вне ВК)');
+        return;
+    }
+    
+    // Проверяем, что мы в iframe ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) {
+            console.log('ℹ️ Запуск вне iframe ВК');
+            return;
+        }
+    } catch (e) {
+        console.log('ℹ️ Не удалось определить окружение');
+        return;
+    }
     
     // Скрываем навигацию
     hideVKView();
