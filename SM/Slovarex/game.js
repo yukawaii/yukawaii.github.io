@@ -1358,25 +1358,22 @@ function updateFoundParticles() {
 if (startPlayBtn) {
     startPlayBtn.onclick = () => {
         applyTheme(currentTheme);
-         // Частицы — под игру
-        setParticlesBelowGame();
+        
         // Показываем игровой контейнер
         const gameContainer = document.querySelector('.game-container');
         if (gameContainer) {
             gameContainer.style.display = '';
         }
         
+        // Скрываем начальный экран
         startScreen.classList.add('hidden');
-        setTimeout(() => {
-            startScreen.style.display = 'none';
-        }, 500);
+        startScreen.style.display = 'none';
         
         if (typeof initGame === 'function') {
             initGame();
         }
     };
 }
-
 // Кнопка "Как играть"
 if (startRulesBtn) {
     startRulesBtn.onclick = () => {
