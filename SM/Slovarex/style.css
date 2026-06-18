@@ -576,7 +576,6 @@ body {
     z-index: 9998;
     padding: 20px;
     transition: opacity 0.5s ease, transform 0.5s ease, background 0.4s ease;
-    opacity: 0; /* ← начинаем с прозрачного */
 }
 
 .start-screen.loaded {
