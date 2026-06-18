@@ -351,7 +351,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    max-height: 160px;
+    max-height: 460px;
     overflow-y: auto;
     padding: 4px;
 }
@@ -360,7 +360,7 @@ body {
     background: white;
     padding: 6px 14px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 500;
     color: #1f2937;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
