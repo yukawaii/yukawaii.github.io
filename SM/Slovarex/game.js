@@ -2120,7 +2120,6 @@ ${unlocked ? `
 }
 
 // ========== БЕСКОНЕЧНАЯ ГАЛАКТИКА ==========
-// ========== ГАЛАКТИКА (БЕСКОНЕЧНАЯ) ==========
 const GALAXY_KEY = 'wordgame_galaxy';
 
 // Все записки (20 штук)
@@ -2147,11 +2146,22 @@ const SCROLLS = [
     { id: 20, text: 'Ты — творец своей реальности через слово.' }
 ];
 
-const STORY_WINDOWS = [
-    { icon: '🌌', title: 'Галактика в опасности!', text: 'Ты — последний Хранитель древнего созвездия Астерия.<br>Злой космический вихрь, Тёмный Хаос, разбил нашу галактику на тысячи осколков.<br>Звёзды погасли. Мир погрузился во тьму.<br><br>Только ты можешь восстановить свет.' },
-    { icon: '🌟', title: 'Собирай звёздную пыль!', text: 'Каждое найденное слово — это частица света.<br>Чем больше слов — тем ярче загораются звёзды.<br><br>Когда ты найдёшь <span class="story-highlight">50 слов</span> — зажжётся первая звезда!<br>Зажги все звёзды, и галактика возродится!' },
+// Длинный сюжет (показывается 1 раз)
+const STORY_WINDOWS_FULL = [
+    { icon: '🌌', title: 'Галактика в опасности!', text: 'Ты — последний <strong>Хранитель</strong>  древнего созвездия Астерия.<br>Злой космический вихрь, Тёмный Хаос, разбил нашу галактику на тысячи осколков.<br>Звёзды погасли. Мир погрузился во тьму.<br><br>Только ты можешь восстановить свет.' },
+    { icon: '🌟', title: 'Собирай звёздную пыль!', text: 'Каждое найденное слово — это частица света.<br>Чем больше слов — тем ярче загораются звёзды.<br><br>Когда ты найдёшь <span class="story-highlight">50 слов</span> — зажжётся первая звезда!<br>Зажги все звёзды — и галактика возродится!' },
     { icon: '🏅', title: 'Что ты получишь?', text: '⭐ <strong>Звёзды</strong> — за каждые 50 найденных слов<br>📜 <strong>Древние свитки</strong> — за каждые 5 звёзд<br>🗝️ <strong>Ключи к новым созвездиям</strong> — за каждые 10 звёзд.' },
-    { icon: '🚀', title: 'Готов спасти галактику?', text: ' Это твой шанс зажечь звёзды. Возвращайся каждый день — и мир станет светлее!<br><br>Ты — последняя надежда Вселенной! ✨' }
+    { icon: '🚀', title: 'Готов спасти галактику?', text: 'Каждый день — новый шанс зажечь звёзды.<br>Возвращайся каждый день — и мир станет светлее!<br><br>Ты — последняя <strong>надежда Вселенной!</strong> ✨' }
+];
+
+// Краткий сюжет (показывается всегда после первого раза)
+// Краткий сюжет (показывается всегда после первого раза)
+const STORY_WINDOWS_SHORT = [
+    { 
+        icon: '💫', 
+        title: 'Продолжай сиять!', 
+        text: 'Ты уже зажёг много звёзд в этой бесконечной галактике.<br>Каждые <span class="story-highlight">50 слов</span> — новая звезда.<br>Каждые <span class="story-highlight">5 звёзд</span> — свиток мудрости.<br><br>Галактика бесконечна, как и твой путь. Вперёд, Хранитель! 🌌' 
+    }
 ];
 
 function getGalaxyProgress() {
@@ -2270,13 +2280,7 @@ function renderGalaxyModal() {
     const progressPercent = totalWords > 0 ? (totalWords % 50) / 50 * 100 : 0;
     const lastBonus = progress.lastDailyBonus;
     const today = new Date().toDateString();
-    
-    let dailyStatus = '';
-    if (lastBonus === today) {
-        dailyStatus = '✅ Сегодняшний бонус получен! +5 слов к прогрессу!';
-    } else {
-        dailyStatus = '🎁 Ежедневный бонус ждёт тебя! Зайди завтра и получи +5 слов!';
-    }
+    const canClaimBonus = lastBonus !== today;
     
     const milestoneNames = [
         '🌱 Начало пути',
@@ -2292,14 +2296,22 @@ function renderGalaxyModal() {
     ];
     const milestoneName = milestone < milestoneNames.length ? 
         milestoneNames[milestone] : 
-        `🚀 Бесконечный странник (${milestone + 1})`;
+        `🚀 Странник (${milestone + 1})`;
     
     const body = document.getElementById('galaxyModalBody');
     if (!body) return;
     
+    // Собираем HTML для бонуса
+    let bonusHtml = '';
+    if (canClaimBonus) {
+        bonusHtml = `<button class="galaxy-bonus-btn" onclick="openBonusModal()">🎁 Забрать ежедневный бонус</button>`;
+    } else {
+        bonusHtml = `✅ Бонус уже получен сегодня! Возвращайся завтра.`;
+    }
+    
     body.innerHTML = `
         <div class="galaxy-modal">
-            <h2>🌌 Бесконечная Галактика</h2>
+            <h2>🌌 Галактика</h2>
             
             <div class="galaxy-stars">${starsHtml}</div>
             <div class="galaxy-total-stars">
@@ -2318,7 +2330,7 @@ function renderGalaxyModal() {
             <div class="galaxy-scrolls">
                 📜 Свитков собрано: <strong>${scrollsCount} / ${maxScrolls}</strong>
                 ${scrollsCount < maxScrolls ? 
-                    `<span class="galaxy-scrolls-hint">(каждые 5 звёзд)</span>` : 
+                    `` : 
                     `<span class="galaxy-scrolls-complete">✅ Все свитки собраны! Ты — Хранитель Мудрости!</span>`
                 }
             </div>
@@ -2329,27 +2341,74 @@ function renderGalaxyModal() {
             </div>
             
             <div class="galaxy-daily">
-                ${dailyStatus}
+                ${bonusHtml}
             </div>
             
             <button class="galaxy-close-btn" onclick="closeGalaxyModal()">✨ Продолжить путь</button>
         </div>
     `;
 }
+// ====== ЕЖЕДНЕВНЫЙ БОНУС ======
 
-function openGalaxyModal() {
+function openBonusModal() {
+    const modal = document.getElementById('bonusModal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeBonusModal() {
+    const modal = document.getElementById('bonusModal');
+    if (modal) modal.classList.remove('show');
+}
+
+function claimDailyBonus() {
     const progress = getGalaxyProgress();
+    const today = new Date().toDateString();
     
-    // Если сюжет ещё не показан — показываем его
-    if (!progress.shownIntro) {
-        showStoryWindows(0);
+    // Проверяем, не получал ли уже сегодня
+    if (progress.lastDailyBonus === today) {
+        showToast('✅ Бонус уже получен сегодня!');
+        closeBonusModal();
         return;
     }
     
-    // Иначе — сразу модалку прогресса
+    // Начисляем бонус
+    progress.totalWords += 5;
+    progress.lastDailyBonus = today;
+    saveGalaxyProgress(progress);
+    
+    // Показываем уведомление
+    showToast('🎁 +5 слов к прогрессу!');
+    playSound('levelup');
+    
+    // Закрываем модалку бонуса
+    closeBonusModal();
+    
+    // Обновляем модалку галактики
     renderGalaxyModal();
-    const modal = document.getElementById('galaxyModal');
-    if (modal) modal.classList.add('show');
+}
+
+// Закрытие модалки бонуса по клику вне
+const bonusModal = document.getElementById('bonusModal');
+if (bonusModal) {
+    bonusModal.onclick = (e) => {
+        if (e.target === bonusModal) {
+            closeBonusModal();
+        }
+    };
+}
+
+// Закрытие по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const bonusModal = document.getElementById('bonusModal');
+        if (bonusModal && bonusModal.classList.contains('show')) {
+            closeBonusModal();
+        }
+    }
+});
+function openGalaxyModal() {
+    // Всегда показываем сюжет (длинный или краткий)
+    showStoryWindows(0);
 }
 
 function closeGalaxyModal() {
@@ -2358,51 +2417,68 @@ function closeGalaxyModal() {
 }
 
 function showStoryWindows(index) {
-    if (index >= STORY_WINDOWS.length) {
-        // Сюжет закончен — отмечаем и показываем прогресс
-        const progress = getGalaxyProgress();
-        progress.shownIntro = true;
-        saveGalaxyProgress(progress);
+    const progress = getGalaxyProgress();
+    
+    // Определяем, какой сюжет показывать
+    let storyWindows;
+    if (!progress.shownIntro) {
+        storyWindows = STORY_WINDOWS_FULL;
+    } else {
+        storyWindows = STORY_WINDOWS_SHORT;
+    }
+    
+    // Если сюжет закончился — показываем прогресс
+    if (index >= storyWindows.length) {
+        if (!progress.shownIntro) {
+            progress.shownIntro = true;
+            saveGalaxyProgress(progress);
+        }
+        // ====== ПОКАЗЫВАЕМ ПРОГРЕСС ======
         renderGalaxyModal();
         const modal = document.getElementById('galaxyModal');
         if (modal) modal.classList.add('show');
+        // =================================
         return;
     }
-    
-    const story = STORY_WINDOWS[index];
-    const isLast = index === STORY_WINDOWS.length - 1;
+    const story = storyWindows[index];
+    const isLast = index === storyWindows.length - 1;
+    const isShort = storyWindows === STORY_WINDOWS_SHORT;
     
     const body = document.getElementById('galaxyModalBody');
     if (!body) return;
     
-    const dotsHtml = STORY_WINDOWS.map((_, i) => 
-        `<span class="${i === index ? 'active' : ''}"></span>`
-    ).join('');
+    let textHtml = '';
+    if (story.text) {
+        let text = story.text;
+        // Подставляем количество звёзд в текст
+        if (text.includes('${getGalaxyProgress().totalStars')) {
+            text = text.replace(/\$\{getGalaxyProgress\(\)\.totalStars\}/g, progress.totalStars || 0);
+        }
+        textHtml = `<p>${text}</p>`;
+    }
+    
+    let dotsHtml = '';
+    if (!isShort) {
+        dotsHtml = storyWindows.map((_, i) => 
+            `<span class="${i === index ? 'active' : ''}"></span>`
+        ).join('');
+        dotsHtml = `<div class="story-dots">${dotsHtml}</div>`;
+    }
     
     body.innerHTML = `
         <div class="story-window">
             <div class="story-icon">${story.icon}</div>
             <h3>${story.title}</h3>
-            <p>${story.text}</p>
-            <div class="story-dots">${dotsHtml}</div>
+            <div class="story-text">${textHtml}</div>
+            ${dotsHtml}
             <div class="story-nav">
-                <button class="story-skip" onclick="skipStory()">Пропустить</button>
                 <button class="story-next" onclick="showStoryWindows(${index + 1})">
-                    ${isLast ? '🚀 Начать!' : 'Далее →'}
+                    ${isLast ? (isShort ? '🚀 К прогрессу' : '🚀 Начать!') : 'Далее →'}
                 </button>
             </div>
         </div>
     `;
     
-    const modal = document.getElementById('galaxyModal');
-    if (modal) modal.classList.add('show');
-}
-
-function skipStory() {
-    const progress = getGalaxyProgress();
-    progress.shownIntro = true;
-    saveGalaxyProgress(progress);
-    renderGalaxyModal();
     const modal = document.getElementById('galaxyModal');
     if (modal) modal.classList.add('show');
 }

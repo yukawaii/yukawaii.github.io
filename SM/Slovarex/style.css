@@ -1697,3 +1697,70 @@ body[data-theme="green"] .checkmark-path {
     width: 24px;
     border-radius: 4px;
 }
+/* ===== МОДАЛКА ЕЖЕДНЕВНОГО БОНУСА ===== */
+.modal-overlay__content--bonus {
+    max-width: 380px;
+    padding: 32px 28px 28px;
+    text-align: center;
+}
+
+.bonus-modal__btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 60px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    min-width: 120px;
+}
+
+.bonus-modal__btn--cancel {
+    background: var(--theme-btn-secondary, #f3f4f6);
+    color: var(--theme-text, #4b5563);
+}
+
+.bonus-modal__btn--cancel:hover {
+    background: var(--theme-btn-secondary-hover, #e5e7eb);
+    transform: translateY(-2px);
+}
+
+.bonus-modal__btn--confirm {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+}
+
+.bonus-modal__btn--confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+}
+
+.bonus-modal__btn:active {
+    transform: scale(0.97);
+}
+
+.galaxy-bonus-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+    border: none;
+    border-radius: 60px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    width: 100%;
+}
+
+.galaxy-bonus-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+.galaxy-bonus-btn:active {
+    transform: scale(0.97);
+}
