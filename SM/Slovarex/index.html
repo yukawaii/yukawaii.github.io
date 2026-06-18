@@ -276,7 +276,24 @@
 
     <!-- Тост-уведомления -->
     <div class="toast" id="toast"></div>
-
+<script>
+    // Проверяем, что мы в iframe ВК, перед инициализацией
+    (function() {
+        try {
+            const isVK = window.location !== window.parent.location;
+            if (!isVK) {
+                console.log('ℹ️ Запуск вне ВК, VK Bridge не инициализируется');
+                return;
+            }
+        } catch (e) {
+            console.log('ℹ️ Не удалось определить окружение');
+            return;
+        }
+        
+        // Только здесь инициализируем VK Bridge
+        console.log('✅ VK Bridge инициализирован');
+    })();
+</script>
 <script src="words.js"></script>
 <script src="game.js"></script>
 </body>

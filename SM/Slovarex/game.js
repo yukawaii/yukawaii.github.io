@@ -1,3 +1,6 @@
+    initVKBridge(); 
+    
+
 // Проверка загрузки словаря
 if (typeof DICTIONARY === 'undefined') {
     console.error("❌ Словарь не загружен! Проверьте подключение words.js");
@@ -125,14 +128,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // Показать нативный интерфейс VK (шапка, низ)
 function showVKView() {
     if (typeof vkBridge === 'undefined') return;
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) return;
+    } catch (e) { return; }
+    
     vkBridge.send('VKWebAppViewRestore')
         .then(() => console.log('✅ VK View restored'))
         .catch(() => console.log('⚠️ VK View restore error'));
 }
 
-// Скрыть нативный интерфейс VK (полноэкранный режим)
+// Скрыть нативный интерфейс VK
 function hideVKView() {
     if (typeof vkBridge === 'undefined') return;
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) return;
+    } catch (e) { return; }
+    
     vkBridge.send('VKWebAppViewHide')
         .then(() => console.log('✅ VK View hidden'))
         .catch(() => console.log('⚠️ VK View hide error'));
@@ -1024,8 +1037,7 @@ function initGame() {
     
     initLevel();
     initAudio();
-       initVKBridge(); 
-    
+   
     document.getElementById("submitBtn").onclick = submitWord;
     document.getElementById("backspaceBtn").onclick = backspace;
     document.getElementById("clearBtn").onclick = clearWord;
