@@ -66,37 +66,39 @@ function showBannerAd() {
 }
 
 // Инициализация VK Bridge
+// Инициализация VK Bridge
 function initVKBridge() {
-    // Проверяем, что мы внутри VK
     if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен (запуск вне ВК)');
+        console.log('ℹ️ VK Bridge не доступен');
         return;
     }
-    
-    // Проверяем, что мы в iframe ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) {
-            console.log('ℹ️ Запуск вне iframe ВК');
-            return;
-        }
-    } catch (e) {
-        console.log('ℹ️ Не удалось определить окружение');
-        return;
-    }
-    
-    // Скрываем навигацию
-    hideVKView();
     
     // Показываем баннер
     setTimeout(checkAndShowBanner, 500);
     
-    // Слушаем события
+    // Подписываемся на события VK
     vkBridge.subscribe((e) => {
-        if (e.detail.type === 'VKWebAppUpdateConfig') {
-            setTimeout(updateVKLayout, 100);
+        const type = e.detail.type;
+        
+        // Когда пользователь сворачивает приложение
+        if (type === 'VKWebAppViewHide') {
+            console.log('📱 Приложение свернуто');
+            pauseGame();
         }
-        if (e.detail.type === 'VKWebAppBannerAdClosedByUser') {
+        
+        // Когда пользователь возвращается в приложение
+        if (type === 'VKWebAppViewRestore') {
+            console.log('📱 Приложение восстановлено');
+            resumeGame();
+        }
+        
+        // Когда обновляется конфигурация (например, размер окна)
+        if (type === 'VKWebAppUpdateConfig') {
+            console.log('📱 Обновлена конфигурация VK');
+        }
+        
+        // Когда пользователь закрывает баннер
+        if (type === 'VKWebAppBannerAdClosedByUser') {
             console.log('ℹ️ Баннер закрыт, пробуем показать снова через 30 сек');
             setTimeout(checkAndShowBanner, 30000);
         }
@@ -123,73 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         createParticles();
         initTheme();
     }, 100);
-});
-
-// Показать нативный интерфейс VK (шапка, низ)
-function showVKView() {
-    if (typeof vkBridge === 'undefined') return;
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) return;
-    } catch (e) { return; }
-    
-    vkBridge.send('VKWebAppViewRestore')
-        .then(() => console.log('✅ VK View restored'))
-        .catch(() => console.log('⚠️ VK View restore error'));
-}
-
-// Скрыть нативный интерфейс VK
-function hideVKView() {
-    if (typeof vkBridge === 'undefined') return;
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) return;
-    } catch (e) { return; }
-    
-    vkBridge.send('VKWebAppViewHide')
-        .then(() => console.log('✅ VK View hidden'))
-        .catch(() => console.log('⚠️ VK View hide error'));
-}
-
-// При старте игры — скрываем навигацию VK
-function initVKBridge() {
-    if (typeof vkBridge === 'undefined') return;
-    
-    // Скрываем шапку и низ VK
-    hideVKView();
-    
-    // Подписываемся на изменение размера окна
-    vkBridge.subscribe((e) => {
-        if (e.detail.type === 'VKWebAppUpdateConfig') {
-            // При изменении размера обновляем адаптацию
-            setTimeout(updateVKLayout, 100);
-        }
-    });
-}
-
-// Обновление лейаута при изменении размера
-function updateVKLayout() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    
-    // Для маленьких экранов показываем навигацию
-    if (width < 500 || height < 700) {
-        showVKView();
-    } else {
-        hideVKView();
-    }
-}
-
-// Вызываем при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initVKBridge, 300);
-});
-
-// Также вызываем при ресайзе
-let resizeTimeout = null;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(updateVKLayout, 300);
 });
 
 // ========== КОНФИГУРАЦИЯ ==========
@@ -1569,11 +1504,6 @@ if (exitModalConfirm) {
         
         // Сбрасываем флаг игры
         gameState.frozen = true;
-        
-        // Показываем VK навигацию (если была скрыта)
-        if (typeof showVKView === 'function') {
-            setTimeout(showVKView, 300);
-        }
         
         // Очищаем тост
         clearPermanentToast();
