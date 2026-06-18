@@ -9,25 +9,36 @@
 <meta name="format-detection" content="telephone=no">
 <!-- ====== ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ СТРАНИЦЫ ====== -->
 <script>
-    (function() {        const THEME_KEY = 'wordgame_theme';        const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
-        // Применяем тему к body ДО отрисовки
-        document.documentElement.setAttribute('data-theme', savedTheme);        
-        // Сразу применяем фон к body
-        const themeColors = {            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    (function() {
+        const THEME_KEY = 'wordgame_theme';
+        const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        const themeColors = {
+            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
             blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
-            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'        };        
-        // Добавляем стиль для body до загрузки основных стилей
+            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
+        };
+        
         const style = document.createElement('style');
+        style.id = 'themePreloadStyle';
         style.textContent = `
-            body {                background: ${themeColors[savedTheme] || themeColors.light} !important;                min-height: 100vh;
-                margin: 0;                padding: 20px;                display: flex;                justify-content: center;                align-items: center;            }
+            body {
+                background: ${themeColors[savedTheme] || themeColors.light} !important;
+                min-height: 100vh;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         `;
         document.head.appendChild(style);
     })();
 </script>
+<!-- ==================================================== -->
 <script>
-
     (function() {
         const THEME_KEY = 'wordgame_theme';
         const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
@@ -64,49 +75,16 @@
         const colors = themeColors[savedTheme] || themeColors.light;
         
         const style = document.createElement('style');
+        style.id = 'themeMenuStyle'; // ← добавляем id
         style.textContent = `
-            body {
-                background: ${savedTheme === 'dark' ? 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' : 
-                    savedTheme === 'blue' ? 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)' :
-                    savedTheme === 'green' ? 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)' :
-                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'} !important;
-                min-height: 100vh;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: background 0.2s ease;
-            }
-                      /* ===== СЮДА ДОБАВЬТЕ НОВЫЕ СТИЛИ ===== */
-            #startScreen {
-                opacity: 0 !important;
-                transition: opacity 0.8s ease !important;
-                background: rgba(0, 0, 0, 0.3) !important;
-            }
-            
-            #startScreen.loaded {
-                opacity: 1 !important;
-                background: transparent !important;
-            }
-            
-            #startScreen.loaded .start-screen__content {
-                transform: scale(1) !important;
-            }
-            
-            #startScreen:not(.loaded) .start-screen__content {
-                transform: scale(0.92) !important;
-            }
-            /* НАЧАЛЬНЫЙ ЭКРАН — СКРЫТ ДО ЗАГРУЗКИ */
+            /* ===== СТИЛИ ДЛЯ МЕНЮ (ПРЕДОТВРАЩАЮТ МЕЛЬКАНИЕ) ===== */
             #startScreen {
                 opacity: 0 !important;
                 transition: opacity 0.5s ease !important;
             }
-            
             #startScreen.loaded {
                 opacity: 1 !important;
             }
-            
             .start-screen__content {
                 background: ${colors.card} !important;
                 color: ${colors.text} !important;
@@ -116,35 +94,24 @@
                 width: 100%;
                 text-align: center;
                 box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-                transition: background 0.4s ease, color 0.4s ease, transform 0.5s ease, opacity 0.5s ease;
+                transition: background 0.4s ease, color 0.4s ease;
             }
-            
-            /* Убираем старую анимацию, чтобы не было скачка */
-            .start-screen__content {
-                animation: none !important;
-            }
-            
             .start-screen__title {
                 color: ${colors.text} !important;
             }
-            
             .start-screen__subtitle {
                 color: ${colors.muted} !important;
             }
-            
             .start-screen__bottom {
                 border-top-color: ${colors.border} !important;
             }
-            
             .start-screen__btn--rules {
                 background: ${savedTheme === 'dark' ? '#2d2d44' : '#f3f4f6'} !important;
                 color: ${savedTheme === 'dark' ? '#e5e7eb' : '#4b5563'} !important;
             }
-            
             .start-screen__icon-btn {
                 background: ${savedTheme === 'dark' ? '#2d2d44' : '#f3f4f6'} !important;
             }
-            
             .start-screen__footer {
                 color: ${savedTheme === 'dark' ? '#6b7280' : '#d1d5db'} !important;
             }
@@ -207,15 +174,10 @@
 
         <!-- Нижняя панель -->
         <div class="start-screen__bottom">
-            <button class="start-screen__icon-btn" id="startThemeBtn" title="Сменить тему">
-                🎨
-            </button>
-            <button class="start-screen__icon-btn" id="startShareBtn" title="Пригласить друзей">
-                📤
-            </button>
-            <button class="start-screen__icon-btn" id="startSoundBtn" title="Звук">
-                🔊
-            </button>
+            <button class="start-screen__icon-btn" id="startThemeBtn" title="Сменить тему">  🎨            </button>
+            <button class="start-screen__icon-btn" id="startAchievementsBtn" title="Достижения">  🏆</button>
+            <button class="start-screen__icon-btn" id="startShareBtn" title="Пригласить друзей">  📤       </button>
+            <button class="start-screen__icon-btn" id="startSoundBtn" title="Звук">       🔊            </button>
         </div>
 
         <div class="start-screen__footer">
@@ -285,35 +247,39 @@
         <button class="modal-overlay__start-btn" id="rulesModalStartBtn">🚀 Начать играть</button>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА ВЫБОРА ТЕМЫ ====== -->
-<div id="themeModal" class="modal-overlay">
-    <div class="modal-overlay__content modal-overlay__content--theme">
-        <button class="modal-overlay__close" id="themeModalClose">✕</button>
-        <h2>🎨 Выберите тему</h2>
-        <div class="theme-grid">
-            <button class="theme-btn theme-btn--light" data-theme="light">
-                <span class="theme-btn__preview" style="background:#ffffff; border:2px solid #e5e7eb;"></span>
-                <span class="theme-btn__name">Светлая</span>
-            </button>
-            <button class="theme-btn theme-btn--dark" data-theme="dark">
-                <span class="theme-btn__preview" style="background:#1a1a2e; border:2px solid #2d2d44;"></span>
-                <span class="theme-btn__name">Тёмная</span>
-            </button>
-            <button class="theme-btn theme-btn--blue" data-theme="blue">
-                <span class="theme-btn__preview" style="background:#e8f4fd; border:2px solid #4a9eff;"></span>
-                <span class="theme-btn__name">Голубая</span>
-            </button>
-            <button class="theme-btn theme-btn--green" data-theme="green">
-                <span class="theme-btn__preview" style="background:#e8f5e9; border:2px solid #43a047;"></span>
-                <span class="theme-btn__name">Зелёная</span>
-            </button>
-        </div>
-        <div class="theme-modal__footer">
-            <span class="theme-current" id="themeCurrent">Текущая: Светлая</span>
-        </div>
-    </div>
-</div>
+                                            <!-- ====== МОДАЛКА ВЫБОРА ТЕМЫ ====== -->
+                                            <div id="themeModal" class="modal-overlay">
+                                                <div class="modal-overlay__content modal-overlay__content--theme">
+                                                    <button class="modal-overlay__close" id="themeModalClose">✕</button>
+                                                    <h2>🎨 Выберите тему</h2>
+                                                    <div class="theme-list">
+                                                        <button class="theme-item" data-theme="light">
+                                                            <span class="theme-item__circle" style="background:#f5f5f5; border:2px solid #ddd;"></span>
+                                                            <span class="theme-item__name">Светлая</span>
+                                                            <span class="theme-item__check">✓</span>
+                                                        </button>
+                                                        <button class="theme-item" data-theme="dark">
+                                                            <span class="theme-item__circle" style="background:#1a1a2e; border:2px solid #333;"></span>
+                                                            <span class="theme-item__name">Тёмная</span>
+                                                            <span class="theme-item__check">✓</span>
+                                                        </button>
+                                                        <button class="theme-item" data-theme="blue">
+                                                            <span class="theme-item__circle" style="background:#4a9eff ; border:2px solid #4a9eff;"></span>
+                                                            <span class="theme-item__name">Голубая</span>
+                                                            <span class="theme-item__check">✓</span>
+                                                        </button>
+                                                        <button class="theme-item" data-theme="green">
+                                                            <span class="theme-item__circle" style="background:#43a047 ; border:2px solid #43a047;"></span>
+                                                            <span class="theme-item__name">Зелёная</span>
+                                                            <span class="theme-item__check">✓</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="theme-modal__footer">
+                                                        <span class="theme-current" id="themeCurrent">Текущая: Светлая</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+   
    <div class="game-container" style="display:none;">
         <!-- Хедер -->
         <div class="game-header">
@@ -425,6 +391,32 @@
 
     <!-- Тост-уведомления -->
     <div class="toast" id="toast"></div>
+
+    <!-- ====== МОДАЛКА ДОСТИЖЕНИЯ ====== -->
+<div id="achievementModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--achievement">
+        <div class="achievement-popup">
+            <div class="achievement-popup__icon" id="achievementIcon">🏆</div>
+            <h2 class="achievement-popup__title">🎉 Достижение получено!</h2>
+            <div class="achievement-popup__name" id="achievementName">Новое достижение</div>
+            <div class="achievement-popup__desc" id="achievementDesc">Описание</div>
+            <button class="achievement-popup__btn" onclick="closeAchievementPopup()">✅ Отлично!</button>
+        </div>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА СПИСКА ДОСТИЖЕНИЙ ====== -->
+<div id="achievementsModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--achievements">
+        <button class="modal-overlay__close" id="achievementsModalClose">✕</button>
+        <h2>🏆 Достижения</h2>
+        <div class="achievements-grid" id="achievementsGrid">
+            <!-- Список достижений будет сгенерирован JS -->
+        </div>
+        <button class="modal-overlay__start-btn" id="achievementsModalBtn">📊 Закрыть</button>
+    </div>
+</div>
+
 <script>
     // Проверяем, что мы в iframe ВК, перед инициализацией
     (function() {

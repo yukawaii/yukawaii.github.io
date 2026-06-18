@@ -640,9 +640,9 @@ function handleTimeOut() {
         nextLevel();
     } else {
         // ========== ОТПРАВКА УРОВНЯ В ВК ==========
-        if (typeof sendscore === 'function') {
-            sendscore();
-        }
+      //  if (typeof sendscore === 'function') {
+      //      sendscore();
+      //  }
         // ==========================================
         
         showPermanentToast("⏰ Время вышло! Игра окончена. Нажмите «Начать заново»", true);
@@ -836,7 +836,9 @@ function submitWord() {
         toastMessage += ` 🎁 Бонус +${bonus}!`;
     }
     showToast(toastMessage);
-    
+    // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
+checkAchievements();
+// ================================
     gameState.currentWord = [];
     renderCurrentWord();
     renderFoundWords();
@@ -1001,10 +1003,12 @@ function nextLevel() {
     gameState.totalScore += gameState.levelScore + CONFIG.SCORE_BONUS_PER_LEVEL;
     gameState.level++;
         // ========== ОТПРАВКА УРОВНЯ В ВК ==========
-    if (typeof sendscore === 'function') {
-        sendscore();  // вызов вашей функции
-    }
-    // ===========================================
+  //  if (typeof sendscore === 'function') {
+   //     sendscore();  // вызов вашей функции
+  //  }
+      // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
+checkAchievements();
+// ================================
     
     initLevel();
     updateUI();
@@ -1135,14 +1139,96 @@ let currentTheme = localStorage.getItem(THEME_KEY) || 'light';
 function applyTheme(theme) {
     currentTheme = theme;
     
-    // Применяем к body и html
+    // 1. Применяем к body и html (глобально)
     document.body.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
+     // ====== ОБНОВЛЯЕМ СТАТИЧЕСКИЙ СТИЛЬ ИЗ HTML ======
+    const themeColors = {
+        light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+        blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
+        green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
+    };
     
-    // 2. Обновляем активную кнопку в модалке темы
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.theme === theme);
+    const preloadStyle = document.getElementById('themePreloadStyle');
+    if (preloadStyle) {
+        preloadStyle.textContent = `
+            body {
+                background: ${themeColors[theme] || themeColors.light} !important;
+                min-height: 100vh;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        `;
+    }
+    // =====================================================
+     // ====== ОБНОВЛЯЕМ СТИЛИ МЕНЮ ======
+    const themeColorsFull = {
+        light: { card: 'rgba(255, 255, 255, 0.98)', text: '#1f2937', muted: '#9ca3af', border: '#f3f4f6' },
+        dark: { card: '#1a1a2e', text: '#e5e7eb', muted: '#9ca3af', border: '#2d2d44' },
+        blue: { card: '#f0f8ff', text: '#1a365d', muted: '#5a7a9a', border: '#c5dff8' },
+        green: { card: '#f0f7f0', text: '#1a3a1a', muted: '#5a7a5a', border: '#c5e0c5' }
+    };
+    const colors = themeColorsFull[theme] || themeColorsFull.light;
+    const isDark = theme === 'dark';
+    
+    const menuStyle = document.getElementById('themeMenuStyle');
+    if (menuStyle) {
+        menuStyle.textContent = `
+            /* ===== СТИЛИ ДЛЯ МЕНЮ (ОБНОВЛЯЮТСЯ ПРИ СМЕНЕ ТЕМЫ) ===== */
+            #startScreen {
+                opacity: 0 !important;
+                transition: opacity 0.5s ease !important;
+            }
+            #startScreen.loaded {
+                opacity: 1 !important;
+            }
+            .start-screen__content {
+                background: ${colors.card} !important;
+                color: ${colors.text} !important;
+                border-radius: 40px;
+                padding: 48px 40px 36px;
+                max-width: 420px;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+                transition: background 0.4s ease, color 0.4s ease;
+            }
+            .start-screen__title {
+                color: ${colors.text} !important;
+            }
+            .start-screen__subtitle {
+                color: ${colors.muted} !important;
+            }
+            .start-screen__bottom {
+                border-top-color: ${colors.border} !important;
+            }
+            .start-screen__btn--rules {
+                background: ${isDark ? '#2d2d44' : '#f3f4f6'} !important;
+                color: ${isDark ? '#e5e7eb' : '#4b5563'} !important;
+            }
+            .start-screen__icon-btn {
+                background: ${isDark ? '#2d2d44' : '#f3f4f6'} !important;
+            }
+            .start-screen__footer {
+                color: ${isDark ? '#6b7280' : '#d1d5db'} !important;
+            }
+        `;
+    }
+    // =================================================
+    
+    // Обновляем фон start-screen
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+        startScreen.style.background = themeColors[theme] || themeColors.light;
+    }
+    // 2. Обновляем активный класс в списке тем
+    document.querySelectorAll('.theme-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.theme === theme);
     });
     
     // 3. Обновляем подпись в модалке
@@ -1157,12 +1243,25 @@ function applyTheme(theme) {
         currentLabel.textContent = `Текущая: ${themeNames[theme] || 'Светлая'}`;
     }
     
-    // 4. Применяем тему к игровым элементам (если игра уже запущена)
+    // 4. Обновляем фон меню (start-screen)
+      if (startScreen) {
+        const themeBg = {
+            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+            blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
+            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
+        };
+        startScreen.style.background = themeBg[theme] || themeBg.light;
+    }
+    
+    // 5. Обновляем фон body
+    document.body.style.background = getThemeColor(theme, 'bg');
+    
+    // 6. Применяем тему к игровым элементам (если игра запущена)
     applyThemeToGame(theme);
     
-    // 5. Обновляем частицы фона
+    // 7. Обновляем частицы
     updateParticles();
-   // Обновляем частицы в блоке найденных слов
     setTimeout(initFoundParticles, 50);
     
     console.log(`🎨 Тема изменена на: ${themeNames[theme] || theme}`);
@@ -1224,6 +1323,7 @@ function applyThemeToGame(theme) {
 function getThemeColor(theme, type) {
     const colors = {
         light: {
+            bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             card: 'rgba(255, 255, 255, 0.98)',
             text: '#1f2937',
             bgLight: '#f9fafb',
@@ -1232,6 +1332,7 @@ function getThemeColor(theme, type) {
             btnSecondary: '#f3f4f6'
         },
         dark: {
+            bg: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
             card: '#1a1a2e',
             text: '#e5e7eb',
             bgLight: '#1e1e3a',
@@ -1240,6 +1341,7 @@ function getThemeColor(theme, type) {
             btnSecondary: '#2d2d44'
         },
         blue: {
+            bg: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
             card: '#f0f8ff',
             text: '#1a365d',
             bgLight: '#e3f0fa',
@@ -1248,6 +1350,7 @@ function getThemeColor(theme, type) {
             btnSecondary: '#d4e8f7'
         },
         green: {
+            bg: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)',
             card: '#f0f7f0',
             text: '#1a3a1a',
             bgLight: '#e3f0e3',
@@ -1259,7 +1362,6 @@ function getThemeColor(theme, type) {
     
     return colors[theme]?.[type] || colors.light[type];
 }
-
 function initTheme() {
     const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
     currentTheme = savedTheme;
@@ -1267,11 +1369,24 @@ function initTheme() {
     // Применяем к body (уже должно быть, но на всякий случай)
     document.body.setAttribute('data-theme', savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
+     // Применяем к фону меню
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+        const themeBg = {
+            light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+            blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
+            green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
+        };
+        startScreen.style.background = themeBg[savedTheme] || themeBg.light;
+    }
     
     // Обновляем активную кнопку в модалке
-    document.querySelectorAll('.theme-btn').forEach(btn => {
+    document.querySelectorAll('.theme-item').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.theme === savedTheme);
     });
+
+
     
     // Обновляем подпись
     const themeNames = {
@@ -1447,23 +1562,25 @@ if (themeModal) {
     };
 }
 
-// Выбор темы
-document.querySelectorAll('.theme-btn').forEach(btn => {
+// ====== ВЫБОР ТЕМЫ ======
+document.querySelectorAll('.theme-item').forEach(btn => {
     btn.onclick = () => {
         const theme = btn.dataset.theme;
+        
+        // Применяем тему
         applyTheme(theme);
         
-        // Если игра уже запущена, обновляем её
-        if (typeof applyThemeToGame === 'function') {
-            applyThemeToGame(theme);
-        }
+        // Обновляем активный класс
+        document.querySelectorAll('.theme-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        btn.classList.add('active');
         
-        // Не закрываем модалку сразу, чтобы пользователь видел выбор
-        setTimeout(() => {
-            themeModal.classList.remove('show');
-        }, 300);
+        // НЕ ЗАКРЫВАЕМ МОДАЛКУ! Она закроется только по крестику
+        // Удаляем setTimeout с закрытием
     };
 });
+
 
 // ====== ЗВУК В МЕНЮ ======
 if (startSoundBtn) {
@@ -1670,3 +1787,265 @@ document.addEventListener('dragstart', (e) => {
 });
 document.addEventListener("DOMContentLoaded", initGame);
 
+// ========== СИСТЕМА ДОСТИЖЕНИЙ ==========
+const ACHIEVEMENTS_KEY = 'wordgame_achievements';
+
+// Список всех достижений
+const ACHIEVEMENTS = {
+    // Поиск слов
+    FIND_5_LETTERS: { id: 'find_5_letters', name: '🪶 Первое длинное слово', description: 'Найти слово из 5 букв', icon: '📝', category: 'Поиск слов' },
+    FIND_6_LETTERS: { id: 'find_6_letters', name: '🏹 Меткий стрелок', description: 'Найти слово из 6 букв', icon: '🎯', category: 'Поиск слов' },
+    FIND_7_LETTERS: { id: 'find_7_letters', name: '🌟 Слово-алмаз', description: 'Найти слово из 7 букв', icon: '💎', category: 'Поиск слов' },
+    FIND_8_LETTERS: { id: 'find_8_letters', name: '🔥 Мастер слова', description: 'Найти слово из 8 букв', icon: '⚡', category: 'Поиск слов' },
+    
+    // Количество найденных слов
+    WORDS_50: { id: 'words_50', name: '🏃 Начало пути', description: 'Найти 50 слов всего', icon: '🌱', category: 'Количество слов' },
+    WORDS_100: { id: 'words_100', name: '📚 Любитель слов', description: 'Найти 100 слов всего', icon: '📖', category: 'Количество слов' },
+    WORDS_200: { id: 'words_200', name: '🧠 Эрудит', description: 'Найти 200 слов всего', icon: '🧩', category: 'Количество слов' },
+    WORDS_300: { id: 'words_300', name: '🎓 Словесный гений', description: 'Найти 300 слов всего', icon: '🎓', category: 'Количество слов' },
+    WORDS_400: { id: 'words_400', name: '👑 Король слов', description: 'Найти 400 слов всего', icon: '👑', category: 'Количество слов' },
+    WORDS_500: { id: 'words_500', name: '⚡ Легенда словаря', description: 'Найти 500 слов всего', icon: '⚡', category: 'Количество слов' },
+    WORDS_800: { id: 'words_800', name: '🗿 Гуру словесности', description: 'Найти 800 слов всего', icon: '🗿', category: 'Количество слов' },
+    WORDS_1000: { id: 'words_1000', name: '🏆 Великий мастер', description: 'Найти 1000 слов всего', icon: '🏆', category: 'Количество слов' },
+    WORDS_1500: { id: 'words_1500', name: '💪 Неудержимый', description: 'Найти 1500 слов всего', icon: '💪', category: 'Количество слов' },
+    WORDS_2000: { id: 'words_2000', name: '🐉 Повелитель слов', description: 'Найти 2000 слов всего', icon: '🐉', category: 'Количество слов' },
+    
+    // Уровни
+    LEVEL_3: { id: 'level_3', name: '🌿 Первые шаги', description: 'Достигнуть 3 уровня', icon: '🌿', category: 'Уровни' },
+    LEVEL_5: { id: 'level_5', name: '🌳 Опытный игрок', description: 'Достигнуть 5 уровня', icon: '🌳', category: 'Уровни' },
+    LEVEL_10: { id: 'level_10', name: '🏔️ Покоритель высот', description: 'Достигнуть 10 уровня', icon: '🏔️', category: 'Уровни' },
+    LEVEL_15: { id: 'level_15', name: '⛰️ Мастер гор', description: 'Достигнуть 15 уровня', icon: '⛰️', category: 'Уровни' },
+    LEVEL_20: { id: 'level_20', name: '🗻 Властелин высот', description: 'Достигнуть 20 уровня', icon: '🗻', category: 'Уровни' },
+    LEVEL_30: { id: 'level_30', name: '🌟 Созвездие', description: 'Достигнуть 30 уровня', icon: '🌟', category: 'Уровни' },
+    LEVEL_50: { id: 'level_50', name: '🌌 Галактика', description: 'Достигнуть 50 уровня', icon: '🌌', category: 'Уровни' },
+    
+    // Особые
+    FIRST_WORD: { id: 'first_word', name: '🎬 Первое слово', description: 'Найти своё первое слово', icon: '🎬', category: 'Особые' },
+    PERFECT_LEVEL: { id: 'perfect_level', name: '🎯 Идеальный уровень', description: 'Найти все слова на уровне', icon: '🎯', category: 'Особые' },
+    HINT_MASTER: { id: 'hint_master', name: '💡 Мастер подсказок', description: 'Использовать 10 подсказок', icon: '💡', category: 'Особые' },
+    SPEEDSTER: { id: 'speedster', name: '⚡ Спринтер', description: 'Найти 5 слов за 15 секунд', icon: '⏱️', category: 'Особые' },
+    MARATHON: { id: 'marathon', name: '🏃 Марафонец', description: 'Пройти 10 уровней подряд', icon: '🏃', category: 'Особые' },
+    PERFECT_TEN: { id: 'perfect_ten', name: '🎯 Идеальная десятка', description: 'Найти 10 слов за уровень', icon: '🎯', category: 'Особые' },
+    BONUS_HUNTER: { id: 'bonus_hunter', name: '🏅 Охотник за бонусами', description: 'Получить 20 бонусов', icon: '🏅', category: 'Особые' },
+};
+
+// Загрузка сохранённых достижений
+function loadAchievements() {
+    try {
+        const saved = localStorage.getItem(ACHIEVEMENTS_KEY);
+        return saved ? JSON.parse(saved) : {};
+    } catch {
+        return {};
+    }
+}
+
+// Сохранение достижений
+function saveAchievements(achievements) {
+    localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+}
+
+// Проверка и разблокировка достижения
+function unlockAchievement(achievementId) {
+    const achievements = loadAchievements();
+    
+    // Если уже есть — пропускаем
+    if (achievements[achievementId]) return false;
+    
+    const achievement = ACHIEVEMENTS[achievementId];
+    if (!achievement) return false;
+    
+    // Разблокируем
+    achievements[achievementId] = {
+        unlocked: true,
+        unlockedAt: new Date().toISOString(),
+        name: achievement.name,
+        description: achievement.description,
+        icon: achievement.icon
+    };
+    
+    saveAchievements(achievements);
+    
+    // Показываем уведомление
+    showAchievementPopup(achievement);
+    
+    return true;
+}
+
+// Проверка всех достижений
+function checkAchievements() {
+    const achievements = loadAchievements();
+    
+    // Первое слово
+    if (gameState.foundWords.size >= 1 && !achievements[ACHIEVEMENTS.FIRST_WORD.id]) {
+        unlockAchievement(ACHIEVEMENTS.FIRST_WORD.id);
+    }
+    
+    // Длина слова
+    const currentWord = gameState.currentWord.map(item => item.letter).join("");
+    if (currentWord.length >= 5 && !achievements[ACHIEVEMENTS.FIND_5_LETTERS.id]) {
+        unlockAchievement(ACHIEVEMENTS.FIND_5_LETTERS.id);
+    }
+    if (currentWord.length >= 6 && !achievements[ACHIEVEMENTS.FIND_6_LETTERS.id]) {
+        unlockAchievement(ACHIEVEMENTS.FIND_6_LETTERS.id);
+    }
+    if (currentWord.length >= 7 && !achievements[ACHIEVEMENTS.FIND_7_LETTERS.id]) {
+        unlockAchievement(ACHIEVEMENTS.FIND_7_LETTERS.id);
+    }
+    if (currentWord.length >= 8 && !achievements[ACHIEVEMENTS.FIND_8_LETTERS.id]) {
+        unlockAchievement(ACHIEVEMENTS.FIND_8_LETTERS.id);
+    }
+    
+    // Всего слов
+    const totalWords = gameState.foundWords.size;
+    const wordMilestones = [50, 100, 200, 300, 400, 500, 800, 1000, 1500, 2000];
+    const wordAchievementIds = ['WORDS_50', 'WORDS_100', 'WORDS_200', 'WORDS_300', 'WORDS_400', 'WORDS_500', 'WORDS_800', 'WORDS_1000', 'WORDS_1500', 'WORDS_2000'];
+    
+    for (let i = 0; i < wordMilestones.length; i++) {
+        if (totalWords >= wordMilestones[i] && !achievements[ACHIEVEMENTS[wordAchievementIds[i]].id]) {
+            unlockAchievement(ACHIEVEMENTS[wordAchievementIds[i]].id);
+        }
+    }
+    
+    // Уровни
+    const level = gameState.level;
+    const levelMilestones = [3, 5, 10, 15, 20, 30, 50];
+    const levelAchievementIds = ['LEVEL_3', 'LEVEL_5', 'LEVEL_10', 'LEVEL_15', 'LEVEL_20', 'LEVEL_30', 'LEVEL_50'];
+    
+    for (let i = 0; i < levelMilestones.length; i++) {
+        if (level >= levelMilestones[i] && !achievements[ACHIEVEMENTS[levelAchievementIds[i]].id]) {
+            unlockAchievement(ACHIEVEMENTS[levelAchievementIds[i]].id);
+        }
+    }
+    
+    // Идеальный уровень (найдены все возможные слова)
+    if (gameState.foundWords.size === gameState.possibleWords.size && 
+        gameState.possibleWords.size > 0 && 
+        !achievements[ACHIEVEMENTS.PERFECT_LEVEL.id]) {
+        unlockAchievement(ACHIEVEMENTS.PERFECT_LEVEL.id);
+    }
+    
+    // 10 слов за уровень
+    if (gameState.foundWords.size >= 10 && !achievements[ACHIEVEMENTS.PERFECT_TEN.id]) {
+        unlockAchievement(ACHIEVEMENTS.PERFECT_TEN.id);
+    }
+}
+
+// Всплывающее окно достижения
+function showAchievementPopup(achievement) {
+    // Ставим игру на паузу
+    if (!gamePaused) {
+        pauseGame();
+        achievementPopupPaused = true;
+    }
+    
+    const modal = document.getElementById('achievementModal');
+    if (!modal) return;
+    
+    document.getElementById('achievementIcon').textContent = achievement.icon || '🏆';
+    document.getElementById('achievementName').textContent = achievement.name;
+    document.getElementById('achievementDesc').textContent = achievement.description;
+    
+    modal.classList.add('show');
+    
+    // Звук достижения
+    playSound('levelup');
+}
+
+// Закрытие модалки достижения
+function closeAchievementPopup() {
+    const modal = document.getElementById('achievementModal');
+    if (modal) modal.classList.remove('show');
+    
+    // Снимаем паузу, если она была поставлена достижением
+    if (achievementPopupPaused) {
+        achievementPopupPaused = false;
+        if (!gameState.frozen && gameState.timeLeft > 0) {
+            resumeGame();
+        }
+    }
+}
+
+let achievementPopupPaused = false;
+
+// Сброс достижений (для тестирования)
+function resetAchievements() {
+    localStorage.removeItem(ACHIEVEMENTS_KEY);
+    console.log('✅ Достижения сброшены');
+}
+// ====== ДОСТИЖЕНИЯ ======
+// Кнопка достижений в меню
+const startAchievementsBtn = document.getElementById('startAchievementsBtn');
+if (startAchievementsBtn) {
+    startAchievementsBtn.onclick = () => {
+        openAchievementsModal();
+    };
+}
+
+// Модалка достижений
+const achievementsModal = document.getElementById('achievementsModal');
+const achievementsModalClose = document.getElementById('achievementsModalClose');
+const achievementsModalBtn = document.getElementById('achievementsModalBtn');
+
+function openAchievementsModal() {
+    renderAchievementsList();
+    if (achievementsModal) {
+        achievementsModal.classList.add('show');
+    }
+}
+
+function closeAchievementsModal() {
+    if (achievementsModal) {
+        achievementsModal.classList.remove('show');
+    }
+}
+
+if (achievementsModalClose) {
+    achievementsModalClose.onclick = closeAchievementsModal;
+}
+
+if (achievementsModalBtn) {
+    achievementsModalBtn.onclick = closeAchievementsModal;
+}
+
+if (achievementsModal) {
+    achievementsModal.onclick = (e) => {
+        if (e.target === achievementsModal) {
+            closeAchievementsModal();
+        }
+    };
+}
+
+function renderAchievementsList() {
+    const grid = document.getElementById('achievementsGrid');
+    if (!grid) return;
+    
+    const achieved = loadAchievements();
+    
+    const categories = {};
+    for (const key in ACHIEVEMENTS) {
+        const ach = ACHIEVEMENTS[key];
+        if (!categories[ach.category]) categories[ach.category] = [];
+        categories[ach.category].push(ach);
+    }
+    
+    let html = '';
+    for (const category in categories) {
+        html += `<div style="grid-column: 1 / -1; font-weight: 700; color: var(--theme-text, #1f2937); padding: 8px 0 4px; border-bottom: 2px solid var(--theme-border, #e5e7eb);">${category}</div>`;
+        
+        for (const ach of categories[category]) {
+            const unlocked = achieved[ach.id];
+            html += `
+                <div class="achievement-item ${unlocked ? 'unlocked' : 'locked'}">
+                    <span class="achievement-item__icon">${ach.icon}</span>
+                    <div class="achievement-item__info">
+                        <div class="achievement-item__name">${ach.name}</div>
+                        <div class="achievement-item__desc">${ach.description}</div>
+                    </div>
+                    <span class="achievement-item__status">${unlocked ? '✅' : '🔒'}</span>
+                </div>
+            `;
+        }
+    }
+    
+    grid.innerHTML = html;
+}
