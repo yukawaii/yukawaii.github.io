@@ -1028,6 +1028,8 @@ function blinkNextButton() {
 function initGame() {
         // ====== ПРИМЕНЯЕМ ТЕМУ ======
     applyTheme(currentTheme);
+     console.log('🚀 initGame вызвана');
+    console.log('📱 Внутри VK?', window.location !== window.parent.location);
     // Проверяем, есть ли слова для загадывания
     if (BASE_WORDS_POOL.length === 0) {
         console.error("❌ Нет слов длиннее 6 букв! Добавьте слова в DICTIONARY.");
