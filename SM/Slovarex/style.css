@@ -37,32 +37,18 @@ button:focus-visible,
     outline: none !important;
     box-shadow: none !important;
 }
-/* ===== НЕМЕДЛЕННОЕ ПРИМЕНЕНИЕ ТЕМЫ ===== */
-/* Эти стили применяются до загрузки JS */
-html[data-theme="dark"] body {
-    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-}
-
-html[data-theme="blue"] body {
-    background: linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%);
-}
-
-html[data-theme="green"] body {
-    background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
-}
-
-html[data-theme="light"] body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
+/* ===== BODY ===== */
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--theme-bg, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     padding: 20px;
+    transition: background 0.15s ease; /* быстрый переход, чтобы сгладить */
 }
+
 
 /* ===== ИГРОВОЙ КОНТЕЙНЕР ===== */
 .game-container {
