@@ -526,7 +526,7 @@ for (let cat of CATEGORIES) {
     for (let levelNum = 1; levelNum <= cat.levelsCount; levelNum++) {
         const words = getWordsForLevel(cat.themeIndex, levelNum);
         ALL_LEVELS.push({
-            id: ALL_LEVELS.length + 1,
+id: ALL_LEVELS.length + 1,
             categoryId: cat.id,
             categoryIcon: cat.icon,
             categoryTitle: cat.title,
@@ -534,6 +534,7 @@ for (let cat of CATEGORIES) {
             themeIndex: cat.themeIndex,
             size: LEVELS_DATA[cat.themeIndex].size,
             words: words
+
         });
     }
 }

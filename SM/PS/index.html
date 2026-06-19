@@ -858,6 +858,8 @@ body.menu-mode .game-container {
 
     let totalStars = 0; // Общее количество звёзд
     let currentLevelId = 1; 
+    let currentCategoryId = null;
+let currentLevelNum = null;
 
 // Прогресс игрока (сохраняем в localStorage) - теперь с учётом сложности
 function getCompletedLevels(difficulty) {    const key = `gameCompletedLevels_${difficulty || 'easy'}`;    const saved = localStorage.getItem(key);
@@ -897,8 +899,14 @@ function isLevelCompleted(levelId, difficulty = 'easy') {
 function loadLevelById(levelId, difficulty = 'easy') {
     currentLevelId = levelId;
     currentDifficulty = difficulty;
+    localStorage.setItem('lastDifficulty', difficulty);
+    
     const levelData = getLevelById(levelId);
-    if (!levelData) return;
+    if (!levelData) {
+        console.error('Уровень не найден:', levelId);
+        return;
+    }
+    
     saveLastLevel(levelId);
     
     // Получаем слова с учётом сложности
@@ -911,6 +919,10 @@ function loadLevelById(levelId, difficulty = 'easy') {
     wordPositionMap = levelGen.positions;
     foundWordsSet.clear();
     currentChain = [];
+    
+    // Сохраняем текущую категорию и номер уровня для навигации
+    currentCategoryId = levelData.categoryId;
+    currentLevelNum = levelData.levelNum;
     
     levelLabelSpan.innerText = `${levelData.categoryTitle} (ур.${levelData.levelNum}) ${DIFFICULTIES.find(d => d.id === difficulty)?.icon || ''}`;
     totalCounterSpan.innerText = levelWords.length;
@@ -926,7 +938,50 @@ function loadLevelById(levelId, difficulty = 'easy') {
     showMessage(`🎮 Уровень ${levelData.levelNum}: ${levelData.categoryTitle}`, 1800);
 }
 
-
+function findNextLevel(currentLevelId, difficulty) {
+    // 1. Находим текущий уровень
+    const currentLevel = getLevelById(currentLevelId);
+    if (!currentLevel) return ALL_LEVELS[0];
+    
+    const catId = currentLevel.categoryId;
+    const levelNum = currentLevel.levelNum;
+    
+    // 2. Получаем все уровни этой категории
+    const categoryLevels = getLevelsByCategory(catId);
+    
+    // 3. Ищем следующий номер уровня в этой категории
+    let nextLevelNum = levelNum + 1;
+    let nextLevel = categoryLevels.find(l => l.levelNum === nextLevelNum);
+    
+    if (nextLevel) {
+        return nextLevel;
+    }
+    
+    // 4. Уровни в категории закончились - переходим к следующей категории
+    const allCategories = CATEGORIES;
+    const currentCatIndex = allCategories.findIndex(c => c.id === catId);
+    let nextCatIndex = (currentCatIndex + 1) % allCategories.length;
+    
+    // 5. Ищем первый уровень в следующей категории
+    let attempts = 0;
+    while (attempts < allCategories.length) {
+        const nextCat = allCategories[nextCatIndex];
+        const nextCatLevels = getLevelsByCategory(nextCat.id);
+        
+        if (nextCatLevels.length > 0) {
+            // Находим первый уровень (levelNum === 1)
+            const firstLevel = nextCatLevels.find(l => l.levelNum === 1);
+            if (firstLevel) return firstLevel;
+            return nextCatLevels[0];
+        }
+        
+        nextCatIndex = (nextCatIndex + 1) % allCategories.length;
+        attempts++;
+    }
+    
+    // 6. Если ничего не нашли - возвращаем первый уровень
+    return ALL_LEVELS[0];
+}
 
 
 // Модальное окно выбора уровней
@@ -972,7 +1027,7 @@ const categoriesWithIcons = CATEGORIES.map(cat => ({
         btn.onmouseleave = () => btn.style.transform = 'scale(1)';
         btn.onclick = () => {
             modalDiv.remove();
-             showCategoryLevelsModal(cat.id, 'easy');
+              showCategoryLevelsModal(cat.id, currentDifficulty);
         };
         grid.appendChild(btn);
     });
@@ -982,8 +1037,8 @@ const categoriesWithIcons = CATEGORIES.map(cat => ({
 }
 
 // Выбор уровня в категории (сразу с кнопкой Играть!)
-function showCategoryLevelsModal(categoryId) {
-      const difficulty = 'easy'; // по умолчанию
+function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
+    //  const difficulty = 'easy'; // по умолчанию
     const category = CATEGORIES.find(c => c.id === categoryId);
     const categoryLevels = getLevelsByCategory(categoryId);
         
@@ -1040,7 +1095,8 @@ for (let i = 1; i <= 20; i++) {
         const btn = document.createElement('button');
         btn.textContent = i;
         // Передаём difficulty в isLevelCompleted
-        const completed = isLevelCompleted(levelData.id, difficulty);
+        const completed = isLevelCompleted(levelData.id, difficulty); 
+    
         
         // Цвет кнопки: оранжевый для пройденных, стандартный для новых
 const bgColor = completed ? '#FFE5D6 ' : '#d4c3a4';
@@ -1610,6 +1666,7 @@ function startGameWithDifficulty(levelId, difficulty) {
     const levelData = getLevelById(levelId);
     if (!levelData) return;
     currentDifficulty = difficulty;
+     localStorage.setItem('lastDifficulty', difficulty);
     
     // Получаем слова с учётом сложности
     const wordsForLevel = getWordsForLevel(levelData.themeIndex, levelData.levelNum, difficulty);
@@ -2062,13 +2119,18 @@ function updateFoundCellsColor() {
         clearSelection();
     });
     
+// Кнопка "Следующий уровень"
 nextLevelBtn.addEventListener('click', () => {
-    const currentId = ALL_LEVELS.findIndex(l => l.id === currentLevelId);
-    let nextId = currentId + 2; // следующий ID    
-    if (nextId > ALL_LEVELS.length) {
-        nextId = 1; // возвращаемся к первому
-    }    
-    loadLevelById(nextId);
+    // Находим следующий уровень с учётом текущей сложности
+    const nextLevel = findNextLevel(currentLevelId, currentDifficulty);
+    
+    if (nextLevel) {
+        // Загружаем следующий уровень с ТОЙ ЖЕ сложностью
+        loadLevelById(nextLevel.id, currentDifficulty);
+    } else {
+        // На всякий случай - загружаем первый уровень
+        loadLevelById(ALL_LEVELS[0].id, 'easy');
+    }
 });
     
     // инициализация аудио и первого меню
@@ -2094,22 +2156,25 @@ function init() {
 
 // Кнопка "Начать"
 document.getElementById('menuStartBtn').addEventListener('click', function() {
-      // Убираем класс меню
+    // Убираем класс меню
     document.body.classList.remove('menu-mode');
     document.getElementById('startMenu').style.display = 'none';
     document.getElementById('gridContainer').style.display = 'grid';
     document.querySelector('.buttons').style.display = 'flex';
     document.getElementById('infoMessage').style.display = 'block';
     document.querySelector('.words-container').style.display = 'block';
-
     
-    // Проверяем, есть ли сохранённый прогресс
-    const completed = getCompletedLevels();
+    // Получаем последнюю сохранённую сложность
+    const lastDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
+    const completed = getCompletedLevels(lastDifficulty);
     let lastLevelId = 1;
+    
+    // Проверяем, есть ли сохранённый прогресс для этой сложности
     if (completed.length > 0) {
         // Находим последний пройденный уровень, предлагаем следующий
         const maxCompleted = Math.max(...completed);
         const nextLevelId = maxCompleted + 1;
+        // Ищем следующий уровень в ALL_LEVELS
         const allIds = ALL_LEVELS.map(l => l.id);
         if (allIds.includes(nextLevelId)) {
             lastLevelId = nextLevelId;
@@ -2118,9 +2183,12 @@ document.getElementById('menuStartBtn').addEventListener('click', function() {
         }
     }
     
+    // Сохраняем текущую сложность
+    currentDifficulty = lastDifficulty;
+    
     // Показываем приветственную историю (если не показывали)
     showWelcomeStory();
-    loadLevelById(lastLevelId);
+    loadLevelById(lastLevelId, lastDifficulty);
 });
 
 // Кнопка "Как играть?" — открывает модалку правил
