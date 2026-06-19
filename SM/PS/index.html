@@ -800,6 +800,7 @@ body.menu-mode .game-container {
         gap: 4px !important;
     }
 }
+
     </style>
     <script src="levels.js"></script>
 </head>
@@ -1786,7 +1787,49 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
         }
     }
     
-  
+  // Проверка для Г-образных слов (средняя сложность)
+function checkLShapeOrder(chain, correctCoords) {
+    if (chain.length !== correctCoords.length) return false;
+    
+    // Для каждой позиции проверяем, что координаты совпадают
+    // ИЛИ (если позиция крайняя) что это правильная буква на соседней клетке
+    for (let i = 0; i < chain.length; i++) {
+        const expectedRow = correctCoords[i][0];
+        const expectedCol = correctCoords[i][1];
+        const actualRow = chain[i].row;
+        const actualCol = chain[i].col;
+        
+        // Если координаты совпадают — отлично
+        if (actualRow === expectedRow && actualCol === expectedCol) {
+            continue;
+        }
+        
+        // Если это первая или последняя буква, проверяем альтернативную клетку
+        const isFirstOrLast = (i === 0 || i === chain.length - 1);
+        if (isFirstOrLast) {
+            // Проверяем, что это соседняя клетка с той же буквой
+            const expectedLetter = grid[expectedRow][expectedCol];
+            const actualLetter = grid[actualRow][actualCol];
+            
+            if (expectedLetter !== actualLetter) return false;
+            
+            // Проверяем, что это одна из соседних клеток
+            const isAdjacent = (Math.abs(actualRow - expectedRow) + Math.abs(actualCol - expectedCol)) <= 1;
+            if (!isAdjacent) return false;
+            
+            // Проверяем, что эта клетка не занята другим словом
+            if (isCellFound(actualRow, actualCol)) return false;
+            
+            // Проверяем, что эта клетка ещё не использована в цепочке
+            const alreadyUsed = chain.some((c, idx) => idx !== i && c.row === actualRow && c.col === actualCol);
+            if (alreadyUsed) return false;
+        } else {
+            // Для внутренних букв — строгое совпадение
+            return false;
+        }
+    }
+    return true;
+}
 // Обработка клика по клетке
 function onCellClick(row, col) {
     playTapSound();
@@ -1824,15 +1867,24 @@ function onCellClick(row, col) {
         const remainingWords = levelWords.filter(w => !foundWordsSet.has(w));
         const matchedWord = remainingWords.find(w => w === selectedWord);
         
-        if (matchedWord) {
-            // Нашли слово! Проверяем правильность порядка
-            const info = wordPositionMap.get(matchedWord);
-            if (info) {
-                const correctCoords = info.coords;
-                const isCorrectOrder = currentChain.length === correctCoords.length &&
-                    currentChain.every((coord, idx) => 
-                        coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
-                    );
+if (matchedWord) {
+    const info = wordPositionMap.get(matchedWord);
+    if (info) {
+        const correctCoords = info.coords;
+        let isCorrectOrder = false;
+        
+        // Проверяем, является ли слово Г-образным
+        if (info.direction === 'L') {
+            // Для Г-образных слов — проверяем, что все координаты совпадают,
+            // но для первой и последней буквы разрешаем любую клетку с правильной буквой
+            isCorrectOrder = checkLShapeOrder(currentChain, correctCoords);
+        } else {
+            // Для прямых слов — строгая проверка
+            isCorrectOrder = currentChain.length === correctCoords.length &&
+                currentChain.every((coord, idx) => 
+                    coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
+                );
+        }
                 
                 if (isCorrectOrder) {
                     // Слово найдено верно!
