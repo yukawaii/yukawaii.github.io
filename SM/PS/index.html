@@ -360,19 +360,29 @@ body::after {
 
        @media (max-width: 550px) {
             body {
-        padding-bottom: 90px !important;
+        padding-bottom: 20px !important;
+           padding: 5px !important;
     }
     .game-card {
-        padding: 10px 12px 15px;
+        padding: 6px 8px 10px !important;
+        border-radius: 28px !important;
+        max-height: calc(100vh - 30px) !important;
+    }
+
+      .game-container {
+        padding: 6px !important;
+        border-radius: 32px !important;
     }
     .cell {
         width: 40px;
         height: 40px;
         font-size: 1.2rem;
     }
-    .grid {
-        gap: 4px;
-        padding: 10px;
+   .grid {
+        gap: 3px !important;
+        padding: 6px !important;
+        border-radius: 20px !important;
+        margin: 6px 0 !important;
     }
     .current-word-card {
         font-size: 0.8rem;
@@ -391,9 +401,11 @@ body::after {
         padding: 5px 15px;
         font-size: 0.75rem;
     }
-    .top-panel {
-        margin-bottom: 10px;
-        padding: 5px 12px;
+     .top-panel {
+        padding: 4px 8px !important;
+        margin-bottom: 6px !important;
+        border-radius: 30px !important;
+        gap: 2px !important;
     }
      /* Добавьте это в конец медиа-запроса */
     #levelsGrid {
@@ -422,6 +434,8 @@ body::after {
 
 
 }
+
+
     .words-container {
     display: none;
 }
