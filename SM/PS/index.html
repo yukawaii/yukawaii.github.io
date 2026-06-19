@@ -1470,7 +1470,7 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
         }
     }
     
-    console.log(`✅ Уровень создан: ${wordsToPlace.length} слов размещено`);
+   // console.log(`✅ Уровень создан: ${wordsToPlace.length} слов размещено`);
     return { grid: tempGrid, size: gridSizeVal, words: wordsToPlace, positions };
 }
 
@@ -2132,11 +2132,31 @@ document.getElementById('menuInviteBtn').addEventListener('click', function() {
 
 
 
-// Кнопка "Галактика"
-document.getElementById('menuGalaxyBtn').addEventListener('click', function() {
-    const galaxyBtn = document.getElementById('galaxyBtn');
-    if (galaxyBtn) galaxyBtn.click();
-});
+// Кнопка галактики в топ-панели
+const galaxyBtn = document.getElementById('galaxyBtn');
+if (galaxyBtn) {
+    galaxyBtn.onclick = function(e) {
+        e.preventDefault();
+    //    console.log('⭐ Клик по galaxyBtn');
+        showGalaxyMap();
+    };
+}
+
+// Кнопка галактики в меню
+const menuGalaxyBtn = document.getElementById('menuGalaxyBtn');
+if (menuGalaxyBtn) {
+    menuGalaxyBtn.onclick = function(e) {
+        e.preventDefault();
+       // console.log('⭐ Клик по menuGalaxyBtn');
+        // Пробуем найти кнопку в топ-панели и кликнуть по ней
+        const galaxyBtn = document.getElementById('galaxyBtn');
+        if (galaxyBtn) {
+            galaxyBtn.click();
+        } else {
+            showGalaxyMap();
+        }
+    };
+}
 
    
 // Модальное окно правил
@@ -2427,96 +2447,99 @@ function showDifficultyStory(difficulty) {
 
 // Модальное окно галактик
 function showGalaxyMap() {
-    const stars = getGalaxyStars();
-    
-    const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'margin-bottom: 90px;background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-    
-    let galaxiesHtml = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-            <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
-            <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:#8b5a2a;padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-        </div>
-    `;
-    galaxiesHtml += '<div style="display:flex;flex-direction:column;gap:12px;">';
-    
-    CATEGORIES.forEach(cat => {
-        // Суммируем звёзды по всем сложностям
-        let totalStars = 0;
-        let maxStars = 0;
-        let completedLevels = 0;
-        let totalLevels = 0;
+    try {
+       // console.log('🔍 showGalaxyMap вызвана!');
+        const stars = getGalaxyStars();
+      //  console.log('📊 stars:', stars);
         
-        DIFFICULTIES.forEach(diff => {
-            const key = `${cat.id}_${diff.id}`;
-            if (stars[key]) {
-                totalStars += stars[key].totalStars;
-                maxStars += stars[key].maxStars;
-                completedLevels += stars[key].completedLevels;
-                totalLevels += stars[key].totalLevels;
-            }
+        const modalDiv = document.createElement('div');
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.style.cssText = 'margin-bottom: 90px;background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+        
+        let galaxiesHtml = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
+                <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:#8b5a2a;padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+        `;
+        
+        CATEGORIES.forEach(cat => {
+            let totalStars = 0;
+            let maxStars = 0;
+            let completedLevels = 0;
+            let totalLevels = 0;
+            
+            DIFFICULTIES.forEach(diff => {
+                const key = `${cat.id}_${diff.id}`;
+                if (stars[key]) {
+                    totalStars += stars[key].totalStars;
+                    maxStars += stars[key].maxStars;
+                    completedLevels += stars[key].completedLevels;
+                    totalLevels += stars[key].totalLevels;
+                }
+            });
+            
+            const percent = maxStars > 0 ? (totalStars / maxStars) * 100 : 0;
+            
+            galaxiesHtml += `
+                <div class="galaxy-item" data-cat-id="${cat.id}" style="background:#ede1ca;border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : '#d4c3a4'};">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <span style="font-size:2rem;">${cat.icon}</span>
+                            <div style="text-align:left;">
+                                <div style="font-weight:bold;color:#2c3e2b;">${cat.title}</div>
+                                <div style="font-size:0.8rem;color:#6B5B4E;">⭐ ${totalStars} / ${maxStars} звёзд</div>
+                                <div style="font-size:0.7rem;color:#6B5B4E;">📚 ${completedLevels} / ${totalLevels} уровней</div>
+                            </div>
+                        </div>
+                        <div style="font-size:1.5rem;">➡️</div>
+                    </div>
+                    <div style="background:#d4c3a4;border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
+                        <div style="width:${percent}%;background:#ffa54d;height:100%;border-radius:20px;"></div>
+                    </div>
+                </div>
+            `;
         });
-        
-        const percent = maxStars > 0 ? (totalStars / maxStars) * 100 : 0;
         
         galaxiesHtml += `
-            <div class="galaxy-item" data-cat-id="${cat.id}" style="background:#ede1ca;border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : '#d4c3a4'};">
-                <div style="display:flex;align-items:center;justify-content:space-between;">
-                    <div style="display:flex;align-items:center;gap:12px;">
-                        <span style="font-size:2rem;">${cat.icon}</span>
-                        <div style="text-align:left;">
-                            <div style="font-weight:bold;color:#2c3e2b;">${cat.title}</div>
-                            <div style="font-size:0.8rem;color:#6B5B4E;">⭐ ${totalStars} / ${maxStars} звёзд</div>
-                            <div style="font-size:0.7rem;color:#6B5B4E;">📚 ${completedLevels} / ${totalLevels} уровней</div>
-                        </div>
-                    </div>
-                    <div style="font-size:1.5rem;">➡️</div>
-                </div>
-                <div style="background:#d4c3a4;border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
-                    <div style="width:${percent}%;background:#ffa54d;height:100%;border-radius:20px;"></div>
-                </div>
             </div>
+            <button id="closeGalaxyBtn" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>
         `;
-    });
-    
-    galaxiesHtml += '</div><button id="closeGalaxyBtn" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>';
-    
-    contentDiv.innerHTML = galaxiesHtml;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    
-    // Добавляем обработчики клика по галактикам
-    document.querySelectorAll('.galaxy-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const catId = parseInt(item.getAttribute('data-cat-id'));
-            modalDiv.remove();
-            showGalaxyDetails(catId);
+        
+        contentDiv.innerHTML = galaxiesHtml;
+        modalDiv.appendChild(contentDiv);
+        document.body.appendChild(modalDiv);
+        
+        // Обработчики
+        document.querySelectorAll('.galaxy-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const catId = parseInt(item.getAttribute('data-cat-id'));
+                modalDiv.remove();
+                showGalaxyDetails(catId);
+            });
         });
-    });
-    
-    const closeBtn = document.getElementById('closeGalaxyBtn');
-    if (closeBtn) {
-        closeBtn.onclick = (e) => {
+        
+        document.getElementById('closeGalaxyBtn').onclick = (e) => {
             e.stopPropagation();
             modalDiv.remove();
         };
-    }
-    
-    const crossBtn = document.getElementById('closeGalaxyCross');
-    if (crossBtn) {
-        crossBtn.onclick = (e) => {
+        
+        document.getElementById('closeGalaxyCross').onclick = (e) => {
             e.stopPropagation();
             modalDiv.remove();
         };
+        
+        modalDiv.onclick = (e) => { 
+            if (e.target === modalDiv) modalDiv.remove(); 
+        };
+        
+    } catch (e) {
+        console.error('❌ Ошибка в showGalaxyMap:', e);
     }
-    
-    modalDiv.onclick = (e) => { 
-        if (e.target === modalDiv) modalDiv.remove(); 
-    };
 }
 
 // Детали галактики
