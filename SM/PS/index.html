@@ -939,44 +939,35 @@ function loadLevelById(levelId, difficulty = 'easy') {
 }
 
 function findNextLevel(currentLevelId, difficulty) {
-      console.log('🔍 findNextLevel вызван:', { currentLevelId, difficulty });
-    // 1. Находим текущий уровень
     const currentLevel = getLevelById(currentLevelId);
-      console.log('📦 Текущий уровень:', currentLevel);
     if (!currentLevel) return ALL_LEVELS[0];
     
     const catId = currentLevel.categoryId;
     const levelNum = currentLevel.levelNum;
-     console.log('📊 Категория:', catId, 'Текущий номер:', levelNum);
     
-    // 2. Получаем все уровни этой категории
-    const categoryLevels = getLevelsByCategory(catId);
-      console.log('📋 Все уровни категории (номера):', categoryLevels.map(l => l.levelNum));
+    // Получаем все уровни этой категории с ТОЙ ЖЕ сложностью
+    const categoryLevels = getLevelsByCategoryAndDifficulty(catId, difficulty);
     
-    // 3. Ищем следующий номер уровня в этой категории
+    // Ищем следующий номер уровня
     let nextLevelNum = levelNum + 1;
-      console.log('🎯 Ищем уровень с номером:', nextLevelNum);
     let nextLevel = categoryLevels.find(l => l.levelNum === nextLevelNum);
-       console.log('🔎 Результат поиска:', nextLevel);
     
     if (nextLevel) {
-          console.log('✅ Найден следующий уровень:', nextLevel);
-        return nextLevel;
+        return nextLevel; // ✅ нашли следующий подуровень
     }
-      console.log('⚠️ Уровень не найден, переходим к следующей категории');
-    // 4. Уровни в категории закончились - переходим к следующей категории
+    
+    // Уровни в категории закончились — переходим к следующей категории
     const allCategories = CATEGORIES;
     const currentCatIndex = allCategories.findIndex(c => c.id === catId);
     let nextCatIndex = (currentCatIndex + 1) % allCategories.length;
     
-    // 5. Ищем первый уровень в следующей категории
     let attempts = 0;
     while (attempts < allCategories.length) {
         const nextCat = allCategories[nextCatIndex];
-        const nextCatLevels = getLevelsByCategory(nextCat.id);
+        const nextCatLevels = getLevelsByCategoryAndDifficulty(nextCat.id, difficulty);
         
         if (nextCatLevels.length > 0) {
-            // Находим первый уровень (levelNum === 1)
+            // Берём первый уровень (levelNum === 1)
             const firstLevel = nextCatLevels.find(l => l.levelNum === 1);
             if (firstLevel) return firstLevel;
             return nextCatLevels[0];
@@ -986,8 +977,7 @@ function findNextLevel(currentLevelId, difficulty) {
         attempts++;
     }
     
-    // 6. Если ничего не нашли - возвращаем первый уровень
-    return ALL_LEVELS[0];
+    return ALL_LEVELS.find(l => l.difficulty === difficulty) || ALL_LEVELS[0];
 }
 
 
