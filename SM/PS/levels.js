@@ -42,11 +42,12 @@ const CATEGORIES = [
 // ГЕНЕРАЦИЯ ВСЕХ УРОВНЕЙ (5 категорий × 20 уровней = 100 уровней)
 const ALL_LEVELS = [];
 
-// Функция для получения слов для конкретного уровня (можно кастомизировать)
-function getWordsForLevel(themeIndex, levelNum) {
+// Функция для получения слов для конкретного уровня с учётом сложности
+function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
     const baseWords = [...LEVELS_DATA[themeIndex].baseWords];
     
-    // Пример кастомизации для разных уровней одной категории
+    // Для простой сложности — существующая логика (всё, что было)
+    if (difficulty === 'easy') {    
 if (themeIndex === 0) { // Лесные жители
     if (levelNum === 1) return ["БЕЛКА", "ЛИСА", "ВОЛК", "ЛОСЬ", "ЗАЯЦ"];
     if (levelNum === 2) return ["МЕДВЕДЬ", "РЫСЬ", "КУНИЦА", "БАРСУК", "ЕНОТ"];
@@ -367,9 +368,47 @@ if (themeIndex === 13) { // Музыка
     if (levelNum === 19) return ["ТЕМП", "ПЛЕКТР", "КАПО", "ТЮНЕР", "ХИТ"];
     if (levelNum === 20) return ["МУЗЫКАНТ", "ВОКАЛ", "ДУДА", "ТОН", "НОТА"];
 }
+    }
+
+    // ДЛЯ СРЕДНЕЙ СЛОЖНОСТИ (medium) — пока возвращаем те же слова, но позже заменим
+    if (difficulty === 'medium') {
+        // Возвращаем слова для средней сложности
 
 
 
+
+
+
+        // 
+        return baseWords;
+    }
+    
+    // ДЛЯ СЛОЖНОЙ (hard) — пока возвращаем те же слова
+    if (difficulty === 'hard') {
+
+
+
+
+        return baseWords;
+    }
+    
+    // ДЛЯ ЭКСПЕРТА (expert) — пока возвращаем те же слова
+    if (difficulty === 'expert') {
+
+
+
+
+        return baseWords;
+    }
+
+
+
+
+
+
+
+
+    // По умолчанию возвращаем baseWords
     return baseWords;
 }
 

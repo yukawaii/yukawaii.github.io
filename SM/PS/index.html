@@ -893,32 +893,39 @@ function isLevelCompleted(levelId, difficulty = 'easy') {
     return completed.includes(levelId);
 }
 
-// Загрузка уровня по ID
 // Загрузка уровня по ID с учётом сложности
 function loadLevelById(levelId, difficulty = 'easy') {
     currentLevelId = levelId;
     currentDifficulty = difficulty;
     const levelData = getLevelById(levelId);
     if (!levelData) return;
-    saveLastLevel(levelId);    
-    const levelGen = generateLevel(levelData.themeIndex, levelData.words, 0, difficulty);
+    saveLastLevel(levelId);
+    
+    // Получаем слова с учётом сложности
+    const wordsForLevel = getWordsForLevel(levelData.themeIndex, levelData.levelNum, difficulty);
+    
+    const levelGen = generateLevel(levelData.themeIndex, wordsForLevel, 0, difficulty);
     grid = levelGen.grid;
     size = levelGen.size;
     levelWords = levelGen.words;
     wordPositionMap = levelGen.positions;
     foundWordsSet.clear();
-    currentChain = [];    
+    currentChain = [];
+    
     levelLabelSpan.innerText = `${levelData.categoryTitle} (ур.${levelData.levelNum}) ${DIFFICULTIES.find(d => d.id === difficulty)?.icon || ''}`;
     totalCounterSpan.innerText = levelWords.length;
-    foundCounterSpan.innerText = 0;    
+    foundCounterSpan.innerText = 0;
+    
     const nextBtn = document.getElementById('nextLevelBtn');
     nextBtn.disabled = true;
-    nextBtn.style.opacity = '0.5';    
+    nextBtn.style.opacity = '0.5';
+    
     renderGrid();
     updateFoundCellsColor();
     renderWordsList();
     showMessage(`🎮 Уровень ${levelData.levelNum}: ${levelData.categoryTitle}`, 1800);
 }
+
 
 
 
@@ -1602,11 +1609,15 @@ function showSubLevelModal(categoryId, difficulty) {
 function startGameWithDifficulty(levelId, difficulty) {
     const levelData = getLevelById(levelId);
     if (!levelData) return;
-    currentDifficulty = difficulty;    
-    // Сохраняем оригинальный ID для последующего сохранения с учётом сложности
+    currentDifficulty = difficulty;
+    
+    // Получаем слова с учётом сложности
+    const wordsForLevel = getWordsForLevel(levelData.themeIndex, levelData.levelNum, difficulty);
+    
     const levelIdWithDiff = getLevelId(levelData.categoryId, levelData.levelNum, difficulty);
-    currentLevelId = levelIdWithDiff; // <-- используем ID с учётом сложности    
-    const levelGen = generateLevel(levelData.themeIndex, levelData.words, 0, difficulty);
+    currentLevelId = levelIdWithDiff;
+    
+    const levelGen = generateLevel(levelData.themeIndex, wordsForLevel, 0, difficulty);
     grid = levelGen.grid;
     size = levelGen.size;
     levelWords = levelGen.words;
@@ -1630,6 +1641,8 @@ function startGameWithDifficulty(levelId, difficulty) {
     renderWordsList();
     showMessage(`🎮 ${DIFFICULTIES.find(d => d.id === difficulty)?.label || ''} : ${levelData.categoryTitle}`, 1800);
 }
+
+
 // Размещение слова с поиском пересечений
 function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWordsPositions, wordIndex, totalWords) {
     const maxAttempts = 1500; // было 800, увеличил для надёжности
