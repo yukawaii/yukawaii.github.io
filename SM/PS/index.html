@@ -939,24 +939,31 @@ function loadLevelById(levelId, difficulty = 'easy') {
 }
 
 function findNextLevel(currentLevelId, difficulty) {
+      console.log('🔍 findNextLevel вызван:', { currentLevelId, difficulty });
     // 1. Находим текущий уровень
     const currentLevel = getLevelById(currentLevelId);
+      console.log('📦 Текущий уровень:', currentLevel);
     if (!currentLevel) return ALL_LEVELS[0];
     
     const catId = currentLevel.categoryId;
     const levelNum = currentLevel.levelNum;
+     console.log('📊 Категория:', catId, 'Текущий номер:', levelNum);
     
     // 2. Получаем все уровни этой категории
     const categoryLevels = getLevelsByCategory(catId);
+      console.log('📋 Все уровни категории (номера):', categoryLevels.map(l => l.levelNum));
     
     // 3. Ищем следующий номер уровня в этой категории
     let nextLevelNum = levelNum + 1;
+      console.log('🎯 Ищем уровень с номером:', nextLevelNum);
     let nextLevel = categoryLevels.find(l => l.levelNum === nextLevelNum);
+       console.log('🔎 Результат поиска:', nextLevel);
     
     if (nextLevel) {
+          console.log('✅ Найден следующий уровень:', nextLevel);
         return nextLevel;
     }
-    
+      console.log('⚠️ Уровень не найден, переходим к следующей категории');
     // 4. Уровни в категории закончились - переходим к следующей категории
     const allCategories = CATEGORIES;
     const currentCatIndex = allCategories.findIndex(c => c.id === catId);

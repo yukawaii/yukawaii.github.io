@@ -2,7 +2,13 @@
 
 // Буквы для шума (используются в генерации)
 const RUS_LETTERS = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
-
+// СЛОЖНОСТИ
+const DIFFICULTIES = [
+    { id: 'easy', label: '🟢 Простая', icon: '🟢', description: 'Слова по горизонтали и вертикали' },
+    { id: 'medium', label: '🟠 Средняя', icon: '🟠', description: 'Слова могут поворачивать' },
+    { id: 'hard', label: '🔴 Сложная', icon: '🔴', description: 'Слова с диагоналями' },
+    { id: 'expert', label: '🟣 Эксперт', icon: '🟣', description: 'Все виды + время' }
+];
 // БАЗОВЫЕ ТЕМЫ для генерации сеток
 const LEVELS_DATA = [
     { name: "Лесные жители", size: 9, baseWords: ["БЕЛКА", "ЛИСА", "ВОЛК", "МЕДВЕДЬ", "ЗАЯЦ"] },
@@ -39,8 +45,6 @@ const CATEGORIES = [
     { id: 13, icon: "🎵", title: "Музыка", themeIndex: 13, levelsCount: 20 }
 ];
 
-// ГЕНЕРАЦИЯ ВСЕХ УРОВНЕЙ (5 категорий × 20 уровней = 100 уровней)
-const ALL_LEVELS = [];
 
 // Функция для получения слов для конкретного уровня с учётом сложности
 function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
@@ -397,20 +401,20 @@ if (themeIndex === 0) { // Лесные жители
 }
 if (themeIndex === 1) { // Фрукты
     if (levelNum === 1) return ["ГРАНАТ", "ПОМЕЛО", "ЛАЙМ", "СВИТИ", "УГЛИ"];
-    if (levelNum === 2) return ["ЛИЧИ", "РАМБУТАН", "ДУРИАН", "МАНГОСТИН", "ЧЕРИМОЙЯ"];
+    if (levelNum === 2) return ["ЛИЧИ", "РАМБУТАН", "ДУРИАН", "МАНГОСТАН", "ЧЕРИМОЙЯ"];
     if (levelNum === 3) return ["ПИТАХАЙЯ", "КАРАМБОЛА", "МАРАКУЙЯ", "ГУАВА", "ПАПАЙЯ"];
     if (levelNum === 4) return ["АВОКАДО", "ХУРМА", "ФИНИК", "КИЗИЛ", "ИРГА"];
     if (levelNum === 5) return ["ШЕЛКОВИЦА", "ТУТ", "ЖОСТЕР", "ОБЛЕПИХА", "БРУСНИКА"];
     if (levelNum === 6) return ["ГОЛУБИКА", "КЛЮКВА", "ЕЖЕВИКА", "МОРОШКА", "СМОРОДИНА"];
     if (levelNum === 7) return ["КРЫЖОВНИК", "БАРБАРИС", "АКТИНИДИЯ", "ЛИМОННИК", "ЭЛЕУТЕРОКОКК"];
-    if (levelNum === 8) return ["МАНДАРИН", "КУМКВАТ", "ПАМЕЛА", "ОРОВА", "ДЕКОПОН"];
+    if (levelNum === 8) return ["МАНДАРИН", "КУМКВАТ", "ПОМЕЛО", "АГАВА", "ДЕКОПАН"];
     if (levelNum === 9) return ["АПЕЛЬСИН", "БЕРГАМОТ", "ЦИТРОН", "КОРНЕЛЬ", "ГРЕЙПФРУТ"];
     if (levelNum === 10) return ["ПЕРСИМОН", "ФЕИХОА", "АРАЙЯ", "КАНИСТЕЛЬ", "САПОТА"];
     if (levelNum === 11) return ["ДЖЕКФРУТ", "ДУРИАН", "РАМБУТАН", "ЛОНГАН", "МАНГИФЕРА"];
     if (levelNum === 12) return ["ПИНЬЯ", "НОНИ", "МОРИНГА", "ТАМАРИНД", "КАНДЕЛЬ"];
     if (levelNum === 13) return ["АБРИКОС", "НЕКТАРИН", "ПЕРСИК", "МИНДАЛЬ", "ФИСТАШКА"];
     if (levelNum === 14) return ["КАШТАН", "ЖЕЛУДЬ", "ОРЕХ", "ФУНДУК", "ЛЕЩИНА"];
-    if (levelNum === 15) return ["КЕДР", "КЕШЬЮ", "ПЕКАН", "МАКАДАМИЯ", "БРАЗИЛИЯ"];
+    if (levelNum === 15) return ["КЕДР", "КЕШЬЮ", "ПЕКАН", "МАКАДАМИЯ", "КУПУАСУ"];
     if (levelNum === 16) return ["КОКОС", "ФИНИК", "БАНАН", "ПЛАТАН", "АБАКА"];
     if (levelNum === 17) return ["АНАНАС", "ГУАВА", "ПАПАЙЯ", "ДЫНЯ", "АРБУЗ"];
     if (levelNum === 18) return ["ТЫКВА", "БАКЛАЖАН", "ПЕРЕЦ", "ТОМАТ", "ОГУРЕЦ"];
@@ -521,33 +525,6 @@ if (themeIndex === 4) { // Животные саванны
     return baseWords;
 }
 
-// Заполняем ALL_LEVELS
-for (let cat of CATEGORIES) {
-    for (let levelNum = 1; levelNum <= cat.levelsCount; levelNum++) {
-        const words = getWordsForLevel(cat.themeIndex, levelNum);
-        ALL_LEVELS.push({
-id: ALL_LEVELS.length + 1,
-            categoryId: cat.id,
-            categoryIcon: cat.icon,
-            categoryTitle: cat.title,
-            levelNum: levelNum,
-            themeIndex: cat.themeIndex,
-            size: LEVELS_DATA[cat.themeIndex].size,
-            words: words
-
-        });
-    }
-}
-
-// Функция получения уровня по ID
-function getLevelById(levelId) {
-    return ALL_LEVELS.find(l => l.id === levelId);
-}
-
-// Функция получения уровней по категории
-function getLevelsByCategory(categoryId) {
-    return ALL_LEVELS.filter(l => l.categoryId === categoryId);
-}
 
 // Свитки мудрости (50 штук)
 const WISDOM_SCROLLS = [
@@ -604,13 +581,7 @@ const WISDOM_SCROLLS = [
 ];
 
 
-// СЛОЖНОСТИ
-const DIFFICULTIES = [
-    { id: 'easy', label: '🟢 Простая', icon: '🟢', description: 'Слова по горизонтали и вертикали' },
-    { id: 'medium', label: '🟠 Средняя', icon: '🟠', description: 'Слова могут поворачивать' },
-    { id: 'hard', label: '🔴 Сложная', icon: '🔴', description: 'Слова с диагоналями' },
-    { id: 'expert', label: '🟣 Эксперт', icon: '🟣', description: 'Все виды + время' }
-];
+
 
 // Функция генерации уникального ID уровня с учётом сложности
 function getLevelId(categoryId, levelNum, difficulty) {
@@ -680,3 +651,49 @@ const DIFFICULTY_STORIES = {
         }
     }
 };
+
+
+
+
+
+
+
+
+// ГЕНЕРАЦИЯ ВСЕХ УРОВНЕЙ (14 категорий × 20 уровней × 4 сложности = 1120 уровней)
+const ALL_LEVELS = [];
+
+// Заполняем ALL_LEVELS
+for (let cat of CATEGORIES) {
+    for (let levelNum = 1; levelNum <= cat.levelsCount; levelNum++) {
+        // ✅ Перебираем все сложности
+        for (let diff of DIFFICULTIES) {
+            const words = getWordsForLevel(cat.themeIndex, levelNum, diff.id);
+            ALL_LEVELS.push({
+                id: getLevelId(cat.id, levelNum, diff.id),  // ✅ правильный ID
+                categoryId: cat.id,
+                categoryIcon: cat.icon,
+                categoryTitle: cat.title,
+                levelNum: levelNum,
+                themeIndex: cat.themeIndex,
+                difficulty: diff.id,  // ✅ сохраняем сложность
+                size: LEVELS_DATA[cat.themeIndex]?.size || 6,
+                words: words
+            });
+        }
+    }
+}
+
+// Функция получения уровня по ID
+function getLevelById(levelId) {
+    return ALL_LEVELS.find(l => l.id === levelId);
+}
+
+// Функция получения уровней по категории
+function getLevelsByCategory(categoryId) {
+    return ALL_LEVELS.filter(l => l.categoryId === categoryId);
+}
+
+// Функция получения уровней по категории и сложности
+function getLevelsByCategoryAndDifficulty(categoryId, difficulty) {
+    return ALL_LEVELS.filter(l => l.categoryId === categoryId && l.difficulty === difficulty);
+}
