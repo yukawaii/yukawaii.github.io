@@ -678,11 +678,12 @@ div[style*="position:fixed"] {
     .top-panel {
         margin-bottom: 8px;
         padding: 5px 12px;
+         gap: 4px;
     }
     
     .level-badge, .score-panel {
-        font-size: 0.8rem;
-        padding: 3px 12px;
+      font-size: 1.1rem !important;
+        padding: 6px 28px !important;
     }
     
     .buttons {
@@ -700,15 +701,25 @@ div[style*="position:fixed"] {
         font-size: 0.7rem;
     }
     
-    #rulesBtn, #levelSelectBtn, #galaxyBtn {
-        width: 18px !important;
-        height: 18px !important;
-        font-size: 0.6rem !important;
+
+     #rulesBtn,
+    #levelSelectBtn,
+    #galaxyBtn,
+    #menuBackBtn {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1.5rem !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        padding: 0 !important;
+        line-height: 40px !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
-    .top-panel {
-        gap: 4px;
-    }
+   
 }
 @media (min-width: 900px) and (max-width: 1100px) and (min-height: 650px) and (max-height: 850px) {
     .cell {
