@@ -229,6 +229,9 @@ body::after {
             border-radius: 44px;
             box-shadow: inset 0 0 0 2px #fff6e5, inset 0 0 0 6px #bd9865, 0 12px 24px rgba(0,0,0,0.3);
             margin: 16px 0;
+              margin: 16px auto; /* ← добавить auto */
+    width: fit-content; /* ← добавить */
+    max-width: 100%; /* ← добавить */
         }
 
         .cell {
@@ -657,11 +660,12 @@ div[style*="position:fixed"] {
         max-height: 94vh;
         overflow-y: hidden !important;
         padding: 10px 12px 12px !important;
+        
     }
     
     .grid {
         gap: 4px;
-        padding: 8px;
+        padding: 12px;
         margin: 5px 0;
     }
     
@@ -1780,29 +1784,72 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
         showMessage(`🔎 Ищи слова! Нажимай буквы по очереди (строго вдоль линии)`, 1800);
     } */
     
-    function renderGrid() {
-          gridDiv.style.setProperty('--grid-size', size);
-    gridDiv.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
-           gridDiv.innerHTML = '';
-        for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
-                const letter = grid[i][j];
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                // проверяем, принадлежит ли уже найденному слову
-                if (isCellFound(i, j)) cell.classList.add('found');
-                cell.textContent = letter;
-                cell.setAttribute('data-row', i);
-                cell.setAttribute('data-col', j);
-                cell.addEventListener('click', (function(row, col) {
-                    return () => onCellClick(row, col);
-                })(i, j));
-                gridDiv.appendChild(cell);
-            }
-        }
-        highlightCurrentChain();
+function renderGrid() {
+    // Определяем, ПК это или телефон
+    const isDesktop = window.innerWidth >= 900;
+    
+    let gapSize, cellSize, padding, gridWidth;
+    
+    if (isDesktop) {
+        // Для ПК — центрируем и подгоняем размер
+        const containerWidth = gridDiv.parentElement.clientWidth - 60; // учитываем padding родителя
+        gapSize = 4;
+        padding = 12;
+        let idealSize = Math.floor((containerWidth - (size - 1) * gapSize) / size);
+        cellSize = Math.min(42, Math.max(30, idealSize));
+        
+        gridDiv.style.margin = '0 auto';
+        gridDiv.style.width = 'fit-content';
+        gridDiv.style.justifySelf = 'center';
+    } else {
+        // Для телефонов — используем оригинальную логику
+        const isSmallScreen = window.innerWidth < 550;
+        gapSize = isSmallScreen ? 3 : 8;
+        padding = isSmallScreen ? 6 : 22;
+        
+        // Вычисляем размер клетки для телефона
+        const containerWidth = gridDiv.parentElement.clientWidth - padding * 2 - 10;
+        let idealSize = Math.floor((containerWidth - (size - 1) * gapSize) / size);
+        
+        // Ограничиваем размер для телефонов
+        const maxCellSize = isSmallScreen ? 40 : 55;
+        const minCellSize = isSmallScreen ? 28 : 35;
+        cellSize = Math.min(maxCellSize, Math.max(minCellSize, idealSize));
+        
+        // Для телефонов сбрасываем центрирование
+        gridDiv.style.margin = '16px 0';
+        gridDiv.style.width = '100%';
+        gridDiv.style.justifySelf = 'stretch';
     }
     
+    // Применяем стили к сетке
+    gridDiv.style.gap = `${gapSize}px`;
+    gridDiv.style.padding = `${padding}px`;
+    gridDiv.style.gridTemplateColumns = `repeat(${size}, ${cellSize}px)`;
+    gridDiv.style.gridTemplateRows = `repeat(${size}, ${cellSize}px)`;
+    
+    // Очищаем и рендерим клетки
+    gridDiv.innerHTML = '';
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            const letter = grid[i][j];
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (isCellFound(i, j)) cell.classList.add('found');
+            cell.textContent = letter;
+            cell.style.width = `${cellSize}px`;
+            cell.style.height = `${cellSize}px`;
+            cell.style.fontSize = `${Math.max(14, cellSize * 0.55)}px`;
+            cell.setAttribute('data-row', i);
+            cell.setAttribute('data-col', j);
+            cell.addEventListener('click', (function(row, col) {
+                return () => onCellClick(row, col);
+            })(i, j));
+            gridDiv.appendChild(cell);
+        }
+    }
+    highlightCurrentChain();
+}
     function isCellFound(row, col) {
         for (let word of foundWordsSet) {
             const info = wordPositionMap.get(word);
