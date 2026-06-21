@@ -816,6 +816,236 @@ body.menu-mode .game-container {
     }
 }
 
+/* Ландшафтная ориентация на телефонах - сохраняем вертикальную структуру */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 600px) {
+    #startMenu {
+        padding: 6px 10px !important;
+        gap: 2px !important;
+        justify-content: center !important;
+    }
+    
+    /* Первая линия - иконка + название */
+    #startMenu > div:first-child {
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: 1.8rem !important;
+    }
+    
+    #startMenu h1 {
+        font-size: 1rem !important;
+    }
+    
+    /* Подзаголовок - скрываем 
+    #startMenu p {
+        display: none !important;
+    }*/
+    
+    /* Блок с кнопками */
+    #startMenu > div[style*="max-width:min(280px, 70vw)"] {
+        gap: 3px !important;
+        max-width: 200px !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: 3px 10px !important;
+        font-size: 0.55rem !important;
+    }
+    
+    /* Нижние кнопки */
+    #startMenu > div:last-child {
+        gap: 5px !important;
+        margin-top: 3px !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.7rem !important;
+        min-width: 26px !important;
+        min-height: 26px !important;
+    }
+}
+
+/* Убираем скролл и делаем меню на всю высоту */
+#startMenu {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+}
+
+/* Ландшафтная ориентация - делаем элементы крупнее */
+@media (max-width: 900px) and (orientation: landscape) {
+    #startMenu {
+        padding: 15px 30px !important;
+        justify-content: space-evenly !important;
+    }
+    
+    /* Иконка и название */
+    #startMenu > div:first-child {
+        gap: 15px !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(3.5rem, 14vh, 6rem) !important;
+    }
+    
+    #startMenu h1 {
+        font-size: clamp(2.5rem, 10vh, 4rem) !important;
+    }
+    
+    /* Подзаголовок */
+    #startMenu p {
+        font-size: clamp(1rem, 3vh, 1.8rem) !important;
+        margin: 3px 0 !important;
+    }
+    
+    /* Кнопки */
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 350px !important;
+        gap: clamp(10px, 2.5vh, 18px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(14px, 3vh, 22px) 25px !important;
+        font-size: clamp(1.2rem, 3.5vh, 1.8rem) !important;
+    }
+    
+    /* Нижние кнопки */
+    #startMenu > div:last-child {
+        gap: clamp(15px, 3.5vh, 30px) !important;
+        padding-top: clamp(5px, 1.5vh, 15px) !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(50px, 10vh, 70px) !important;
+        height: clamp(50px, 10vh, 70px) !important;
+        font-size: clamp(1.5rem, 4.5vh, 2.5rem) !important;
+    }
+}
+
+/* Очень маленький ландшафт */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 400px) {
+    #startMenu {
+        padding: 8px 20px !important;
+        gap: 2px !important;
+    }
+    
+    #startMenu > div:first-child {
+        gap: 10px !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(2.5rem, 10vh, 4rem) !important;
+    }
+    
+    #startMenu h1 {
+        font-size: clamp(1.8rem, 7vh, 3rem) !important;
+    }
+    
+    #startMenu p {
+        font-size: clamp(0.7rem, 2.5vh, 1.2rem) !important;
+        margin: 1px 0 !important;
+    }
+    
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 250px !important;
+        gap: clamp(6px, 1.5vh, 12px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(8px, 2vh, 14px) 15px !important;
+        font-size: clamp(0.8rem, 2.5vh, 1.3rem) !important;
+    }
+    
+    #startMenu > div:last-child {
+        gap: clamp(10px, 2.5vh, 20px) !important;
+        padding-top: clamp(3px, 0.8vh, 8px) !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(36px, 7vh, 50px) !important;
+        height: clamp(36px, 7vh, 50px) !important;
+        font-size: clamp(1rem, 3vh, 1.8rem) !important;
+    }
+}
+
+/* Вертикальные телефоны */
+@media (max-height: 700px) and (orientation: portrait) {
+    #startMenu {
+        padding: 12px 15px !important;
+        gap: 2px !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(2.5rem, 10vh, 4rem) !important;
+    }
+    
+    #startMenu h1 {
+        font-size: clamp(1.8rem, 7vh, 3rem) !important;
+    }
+    
+    #startMenu p {
+        font-size: clamp(0.8rem, 2.5vh, 1.3rem) !important;
+        margin: 2px 0 !important;
+    }
+    
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 280px !important;
+        gap: clamp(6px, 1.8vh, 14px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(10px, 2.5vh, 18px) 20px !important;
+        font-size: clamp(0.9rem, 2.8vh, 1.4rem) !important;
+    }
+    
+    #startMenu > div:last-child {
+        gap: clamp(10px, 2.5vh, 20px) !important;
+        padding-top: clamp(3px, 0.8vh, 10px) !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(40px, 8vh, 55px) !important;
+        height: clamp(40px, 8vh, 55px) !important;
+        font-size: clamp(1.2rem, 3.5vh, 2rem) !important;
+    }
+}
+
+/* Очень маленькие вертикальные телефоны */
+@media (max-height: 500px) and (orientation: portrait) {
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(2rem, 8vh, 3rem) !important;
+    }
+    
+    #startMenu h1 {
+        font-size: clamp(1.3rem, 5vh, 2.2rem) !important;
+    }
+    
+    #startMenu p {
+        display: none !important;
+    }
+    
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 200px !important;
+        gap: clamp(4px, 1.2vh, 8px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(6px, 1.8vh, 12px) 12px !important;
+        font-size: clamp(0.7rem, 2vh, 1rem) !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(32px, 6vh, 42px) !important;
+        height: clamp(32px, 6vh, 42px) !important;
+        font-size: clamp(0.9rem, 2.5vh, 1.5rem) !important;
+    }
+}
+
+
     </style>
     <script src="levels.js"></script>
 </head>
@@ -825,22 +1055,33 @@ body.menu-mode .game-container {
 <div class="game-container">
     <div class="game-card">
 
-<!-- СТАРТОВОЕ МЕНЮ -->
-<div id="startMenu" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:70vh;text-align:center;padding:20px;">
-    <div style="font-size:4rem;margin-bottom:5px;">🚀</div>
-    <h1 style="color:#2c3e2b;font-size:2.2rem;margin:0;font-weight:900;letter-spacing:2px;">Где Лиса?</h1>
-    <p style="color:#6B5B4E;font-size:1rem;margin:5px 0 20px;">Космическое приключение ✨</p>
-    
-    <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:14px 40px;border-radius:60px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;max-width:280px;margin-bottom:10px;">🚀 Начать</button>
-    <button id="menuHowToPlay" style="background:#8b5a2a;color:white;border:none;padding:12px 40px;border-radius:60px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #5a3a1a;width:100%;max-width:280px;margin-bottom:15px;">📖 Как играть?</button>
-        <button id="menuDifficultyBtn" style="background:#4a6fa5;color:white;border:none;padding:12px 40px;border-radius:60px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2a4a7a;width:100%;max-width:280px;margin-bottom:10px;">🎯 Сложность</button>
-    <div style="display:flex;gap:20px;justify-content:center;">
-        <button id="menuInviteBtn" style="background:#4a6fa5;color:white;border:none;padding:12px;border-radius:50%;font-size:1.5rem;cursor:pointer;box-shadow:0 3px 0 #2a4a7a;width:50px;height:50px;display:flex;align-items:center;justify-content:center;">👥</button>
-        <button id="menuGalaxyBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:12px;border-radius:50%;font-size:1.5rem;cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:50px;height:50px;display:flex;align-items:center;justify-content:center;">⭐</button>
-        <button id="menuScrollsBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 1.5rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer;">📜</button>
 
+<!-- СТАРТОВОЕ МЕНЮ -->
+<div id="startMenu" style="display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;text-align:center;padding:10px;height:100%;width:100%;min-height:0;overflow:hidden;">
+    <!-- Первая линия: иконка + название -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:clamp(8px, 2vw, 20px);flex-shrink:0;">
+        <div style="font-size:clamp(3rem, 12vh, 6rem);line-height:1;flex-shrink:0;">🚀</div>
+        <h1 style="color:#2c3e2b;font-size:clamp(2rem, 8vh, 4rem);margin:0;font-weight:900;letter-spacing:2px;line-height:1.2;">Где Лиса?</h1>
+    </div>
+    
+    <!-- Подзаголовок -->
+    <p style="color:#6B5B4E;font-size:clamp(1rem, 3vh, 1.6rem);margin:clamp(2px, 0.5vh, 10px) 0;flex-shrink:0;line-height:1.2;">Космическое приключение ✨</p>
+    
+    <!-- Кнопки -->
+    <div style="display:flex;flex-direction:column;gap:clamp(10px, 2.5vh, 20px);width:100%;max-width:min(400px, 85vw);flex-shrink:0;">
+        <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(14px, 3vh, 24px) 30px;border-radius:60px;font-size:clamp(1.2rem, 3.5vh, 1.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;">🚀 Начать</button>
+        <button id="menuHowToPlay" style="background:#8b5a2a;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 1.6rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #5a3a1a;width:100%;transition:0.05s linear;">📖 Как играть?</button>
+        <button id="menuDifficultyBtn" style="background:#4a6fa5;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 1.6rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2a4a7a;width:100%;transition:0.05s linear;">🎯 Сложность</button>
+    </div>
+    
+    <!-- Нижние кнопки -->
+    <div style="display:flex;gap:clamp(12px, 3vh, 30px);justify-content:center;flex-shrink:0;padding-top:clamp(5px, 1vh, 15px);">
+        <button id="menuInviteBtn" style="background:#4a6fa5;color:white;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #2a4a7a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">👥</button>
+        <button id="menuGalaxyBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">⭐</button>
+        <button id="menuScrollsBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">📜</button>
     </div>
 </div>
+
 
         <div class="top-panel">
             <div class="level-badge" id="levelLabel">Уровень 1</div>
@@ -3007,15 +3248,69 @@ function showScrollDetail(scrollId) {
     };
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
-
+// Перестраиваем меню при повороте экрана
+window.addEventListener('orientationchange', function() {
+    // Просто перезапускаем анимацию/перерисовку, если нужно
+    const menu = document.getElementById('startMenu');
+    if (menu && menu.style.display !== 'none') {
+        menu.style.display = 'none';
+        setTimeout(() => { menu.style.display = 'flex'; }, 10);
+    }
+});
 
 // Кнопка свитков в меню
 document.getElementById('menuScrollsBtn').addEventListener('click', showScrollsModal); 
 
+
+
 // Запускаем звёзды при загрузке
 createLivingStars();
 
+// Перерисовка сетки при изменении размера окна
+let resizeTimeout = null;
+window.addEventListener('resize', function() {
+    // Очищаем предыдущий таймаут
+    if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+    }
+    
+    // Делаем задержку, чтобы не перерисовывать слишком часто
+    resizeTimeout = setTimeout(function() {
+        // Проверяем, что игра активна (не в меню)
+        const isGameActive = document.getElementById('gridContainer').style.display !== 'none';
+        if (isGameActive && grid && grid.length > 0) {
+            // Сохраняем текущее состояние
+            const currentFound = foundWordsSet;
+            const currentChainState = currentChain;
+            
+            // Перерисовываем сетку
+            renderGrid();
+            
+            // Восстанавливаем состояние найденных клеток
+            updateFoundCellsColor();
+            
+            // Восстанавливаем выделение
+            highlightCurrentChain();
+            
+            // Обновляем список слов
+            renderWordsList();
+        }
+    }, 300); // Задержка 300ms для плавности
+});
 
+// Также перерисовываем при изменении ориентации
+window.addEventListener('orientationchange', function() {
+    // Даем время на смену ориентации
+    setTimeout(function() {
+        const isGameActive = document.getElementById('gridContainer').style.display !== 'none';
+        if (isGameActive && grid && grid.length > 0) {
+            renderGrid();
+            updateFoundCellsColor();
+            highlightCurrentChain();
+            renderWordsList();
+        }
+    }, 400);
+});
 
 //===================конец функции галактик
     init();
