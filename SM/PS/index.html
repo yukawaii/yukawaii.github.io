@@ -263,7 +263,7 @@ body::after {
 }
 
 .cell.found {
-    background: linear-gradient(145deg, #6b9c3f, #3d7620);
+  /*  background: linear-gradient(145deg, #6b9c3f, #3d7620);*/
     color: white;
     text-shadow: 0 1px 2px black;
     border-color: #c2e082;
@@ -1119,6 +1119,7 @@ function getCurrentCategories() {
     const diff = currentDifficulty || 'easy';
     return getCategoriesForDifficulty(diff);
 }
+let wordColorsMap = new Map();
     let totalStars = 0; // Общее количество звёзд
     let currentLevelId = 1; 
     let currentCategoryId = null;
@@ -1176,6 +1177,8 @@ function loadLevelById(levelId, difficulty = 'easy') {
     currentLevelId = levelId;
     currentDifficulty = difficulty;
     localStorage.setItem('lastDifficulty', difficulty);
+    wordColorsMap.clear();
+colorIndex = 0;
     
     const levelData = getLevelById(levelId);
     if (!levelData) {
@@ -1698,12 +1701,97 @@ function tryPlaceLShapeWord(word, tempGrid, gridSizeVal, existingWordsPositions,
     }
     return null;
 }
-
+// Размещение слова со множеством поворотов (змеиное размещение)
+function tryPlaceSnakeWord(word, tempGrid, gridSizeVal) {
+    const maxAttempts = 2000;
+    const directions = [
+        { dr: 0, dc: 1 },  // вправо
+        { dr: 0, dc: -1 }, // влево
+        { dr: 1, dc: 0 },  // вниз
+        { dr: -1, dc: 0 }  // вверх
+    ];
+    
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        // Стартовая позиция
+        const startRow = Math.floor(Math.random() * gridSizeVal);
+        const startCol = Math.floor(Math.random() * gridSizeVal);
+        
+        if (tempGrid[startRow][startCol] !== null) continue;
+        
+        const coords = [];
+        let currentRow = startRow;
+        let currentCol = startCol;
+        let placed = true;
+        const usedCoords = new Set();
+        usedCoords.add(`${startRow},${startCol}`);
+        coords.push([startRow, startCol]);
+        
+        // Текущее направление
+        let currentDir = directions[Math.floor(Math.random() * directions.length)];
+        let stepsInCurrentDir = 0;
+        let maxStepsInDir = Math.floor(Math.random() * 3) + 1; // 1-3 шага в одном направлении
+        
+        for (let i = 1; i < word.length; i++) {
+            // Если прошли maxStepsInDir шагов, меняем направление
+            if (stepsInCurrentDir >= maxStepsInDir) {
+                // Выбираем новое направление (не противоположное текущему)
+                const availableDirs = directions.filter(d => 
+                    !(d.dr === -currentDir.dr && d.dc === -currentDir.dc)
+                );
+                currentDir = availableDirs[Math.floor(Math.random() * availableDirs.length)];
+                stepsInCurrentDir = 0;
+                maxStepsInDir = Math.floor(Math.random() * 3) + 1;
+            }
+            
+            const nextRow = currentRow + currentDir.dr;
+            const nextCol = currentCol + currentDir.dc;
+            const key = `${nextRow},${nextCol}`;
+            
+            // Проверяем границы
+            if (nextRow < 0 || nextRow >= gridSizeVal || nextCol < 0 || nextCol >= gridSizeVal) {
+                placed = false;
+                break;
+            }
+            
+            // Проверяем занятость
+            if (tempGrid[nextRow][nextCol] !== null && tempGrid[nextRow][nextCol] !== word[i]) {
+                placed = false;
+                break;
+            }
+            
+            // Проверяем, что не ходим в уже использованную клетку
+            if (usedCoords.has(key)) {
+                placed = false;
+                break;
+            }
+            
+            usedCoords.add(key);
+            coords.push([nextRow, nextCol]);
+            currentRow = nextRow;
+            currentCol = nextCol;
+            stepsInCurrentDir++;
+        }
+        
+        if (placed && coords.length === word.length) {
+            // Размещаем слово
+            for (let i = 0; i < coords.length; i++) {
+                const [r, c] = coords[i];
+                if (tempGrid[r][c] === null) {
+                    tempGrid[r][c] = word[i];
+                }
+            }
+            return { coords, direction: 'S' }; // S = Snake (змея)
+        }
+    }
+    return null;
+}
 function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'easy') {
     const MAX_RETRIES = 15;
     const theme = LEVELS_DATA[themeIndex % LEVELS_DATA.length];
     const gridSizeVal = theme.size;
-    const isHardMode = difficulty === 'medium';
+    const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
+    // Включаем змеиное размещение для hard и expert
+    const enableSnake = difficulty === 'hard' || difficulty === 'expert';
     let wordsToPlace = [...customWords];
     
     wordsToPlace.sort((a,b) => b.length - a.length);
@@ -1712,25 +1800,32 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
     let positions = new Map();
     let allPlaced = true;
     
-   for (let i = 0; i < wordsToPlace.length; i++) {
-    const word = wordsToPlace[i];
-    let result = null;
-    
-    if (isHardMode && word.length >= 4) {
-        result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
+    for (let i = 0; i < wordsToPlace.length; i++) {
+        const word = wordsToPlace[i];
+        let result = null;
+        
+        // Для длинных слов сначала пробуем змеиное размещение
+        if (enableSnake && word.length >= 6) {
+            result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
+        }
+        
+        // Если не получилось змеиное — пробуем Г-образное
+        if (!result && enableLShape && word.length >= 4) {
+            result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
+        }
+        
+        // Если не получилось Г-образное — пробуем обычное
+        if (!result) {
+            result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
+        }
+        
+        if (result) {
+            positions.set(word, result);
+        } else {
+            allPlaced = false;
+            break;
+        }
     }
-    
-    if (!result) {
-        result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
-    }
-    
-    if (result) {
-        positions.set(word, result);
-    } else {
-        allPlaced = false;
-        break;
-    }
-}
     // Если не все слова разместились, пробуем снова
     if (!allPlaced && retryCount < MAX_RETRIES) {
         return generateLevel(themeIndex, customWords, retryCount + 1);
@@ -1936,6 +2031,8 @@ function showSubLevelModal(categoryId, difficulty) {
 
 
 function startGameWithDifficulty(levelId, difficulty) {
+    wordColorsMap.clear();
+colorIndex = 0;
     const levelData = getLevelById(levelId);
     if (!levelData) return;
     currentDifficulty = difficulty;
@@ -2305,7 +2402,6 @@ function onCellClick(row, col) {
     // Если нет активной цепочки — начинаем новую с этой клетки
     if (currentChain.length === 0) {
         currentChain = [{ row, col }];
-      //  updateCurrentWordUI();
         highlightCurrentChain();
         return;
     }
@@ -2326,7 +2422,6 @@ function onCellClick(row, col) {
     if (isAdjacentHor || isAdjacentVer) {
         // Добавляем новую букву
         currentChain.push({ row, col });
-      //  updateCurrentWordUI();
         highlightCurrentChain();
         
         // АВТОПРОВЕРКА: проверяем, собрано ли слово целиком
@@ -2334,65 +2429,72 @@ function onCellClick(row, col) {
         const remainingWords = levelWords.filter(w => !foundWordsSet.has(w));
         const matchedWord = remainingWords.find(w => w === selectedWord);
         
-if (matchedWord) {
-    const info = wordPositionMap.get(matchedWord);
-    if (info) {
-        const correctCoords = info.coords;
-        let isCorrectOrder = false;
-        
-        // Проверяем, является ли слово Г-образным
-        if (info.direction === 'L') {
-            // Для Г-образных слов — проверяем, что все координаты совпадают,
-            // но для первой и последней буквы разрешаем любую клетку с правильной буквой
-            isCorrectOrder = checkLShapeOrder(currentChain, correctCoords);
-        } else {
-            // Для прямых слов — строгая проверка
-            isCorrectOrder = currentChain.length === correctCoords.length &&
-                currentChain.every((coord, idx) => 
-                    coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
-                );
-        }
+        if (matchedWord) {
+            const info = wordPositionMap.get(matchedWord);
+            if (info) {
+                const correctCoords = info.coords;
+                let isCorrectOrder = false;
+                
+                // Проверка типа слова
+                if (info.direction === 'S') {
+                    // ЗМЕИНЫЕ СЛОВА — строгая проверка координат (как в лабиринте)
+                    isCorrectOrder = currentChain.length === correctCoords.length &&
+                        currentChain.every((coord, idx) => 
+                            coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
+                        );
+                } else if (info.direction === 'L') {
+                    // Г-ОБРАЗНЫЕ СЛОВА — проверка с учётом альтернативных крайних букв
+                    isCorrectOrder = checkLShapeOrder(currentChain, correctCoords);
+                } else {
+                    // ПРЯМЫЕ СЛОВА — строгая проверка
+                    isCorrectOrder = currentChain.length === correctCoords.length &&
+                        currentChain.every((coord, idx) => 
+                            coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
+                        );
+                }
                 
                 if (isCorrectOrder) {
                     // Слово найдено верно!
                     foundWordsSet.add(matchedWord);
-                       updateFoundCellsColor();
-                    // Обновляем отображение (клетки остаются зелёными)
+                    
+                    // Запоминаем цвет для этого слова
+                    if (!wordColorsMap.has(matchedWord)) {
+                        wordColorsMap.set(matchedWord, getNextWordColor());
+                    }
+                    
+                    updateFoundCellsColor();
                     renderWordsList();
                     foundCounterSpan.innerText = foundWordsSet.size;
                     playSuccessSound();
                     showMessage(`🎉 Найдено слово: ${matchedWord}! 🎉`, 1600);
                     currentChain = [];
-                 //   updateCurrentWordUI();
                     highlightCurrentChain();
                     
- if (foundWordsSet.size === levelWords.length) {
-    showMessage(`🏆 ПОБЕДА! Уровень пройден! 🏆`, 2500);
-    playSuccessSound();
-    
-    // СОХРАНЯЕМ ПРОГРЕСС
-    if (typeof currentLevelId !== 'undefined') {
-               saveCompletedLevel(currentLevelId, currentDifficulty);
-      //  console.log('Попытка сохранить уровень:', currentLevelId);
-    } else {
-        console.log('currentLevelId не определён');
-    }
-    
-    // АКТИВИРУЕМ КНОПКУ СЛЕДУЮЩЕГО УРОВНЯ
-    const nextBtn = document.getElementById('nextLevelBtn');
-    nextBtn.disabled = false;
-    nextBtn.style.opacity = '1';
-    nextBtn.style.cursor = 'pointer';
-     // ЗАПУСКАЕМ КОНФЕТТИ
-    showConfetti();
-      }
+                    if (foundWordsSet.size === levelWords.length) {
+                        showMessage(`🏆 ПОБЕДА! Уровень пройден! 🏆`, 2500);
+                        playSuccessSound();
+                        
+                        // СОХРАНЯЕМ ПРОГРЕСС
+                        if (typeof currentLevelId !== 'undefined') {
+                            saveCompletedLevel(currentLevelId, currentDifficulty);
+                        } else {
+                            console.log('currentLevelId не определён');
+                        }
+                        
+                        // АКТИВИРУЕМ КНОПКУ СЛЕДУЮЩЕГО УРОВНЯ
+                        const nextBtn = document.getElementById('nextLevelBtn');
+                        nextBtn.disabled = false;
+                        nextBtn.style.opacity = '1';
+                        nextBtn.style.cursor = 'pointer';
+                        // ЗАПУСКАЕМ КОНФЕТТИ
+                        showConfetti();
+                    }
                 } else {
                     // Слово собрано, но порядок не тот
                     playErrorTone();
                     showMessage(`❌ "${matchedWord}" — буквы верны, но порядок не совпадает с линией слова!`, 1700);
                     animateWrong(currentChain);
                     currentChain = [];
-                 //   updateCurrentWordUI();
                     highlightCurrentChain();
                 }
             }
@@ -2404,30 +2506,41 @@ if (matchedWord) {
         showMessage('🚫 Буквы должны идти подряд! Начинаем заново', 1100);
         animateWrong(currentChain);
         currentChain = [{ row, col }];
-      //  updateCurrentWordUI();
         highlightCurrentChain();
     }
 }
-       // Окрашивает все клетки всех найденных слов (вызывать после каждого найденного слова)
+
+// Окрашивает все клетки всех найденных слов (вызывать после каждого найденного слова)
 function updateFoundCellsColor() {
-    // Сначала убираем класс found со всех клеток
+    // Сначала убираем класс found и сбрасываем цвета со всех клеток
     document.querySelectorAll('.cell').forEach(cell => {
         cell.classList.remove('found');
+        cell.style.background = '';
+        cell.style.color = '';
+        cell.style.textShadow = '';
+        cell.dataset.wordColor = '';
     });
     
-    // Добавляем found для всех клеток, входящих в найденные слова
+    // Заново окрашиваем все найденные слова
     for (let word of foundWordsSet) {
         const info = wordPositionMap.get(word);
+        const color = wordColorsMap.get(word) || '#6B9C3F';
         if (info) {
             for (let [r, c] of info.coords) {
                 const cellDiv = document.querySelector(`.cell[data-row='${r}'][data-col='${c}']`);
                 if (cellDiv) {
                     cellDiv.classList.add('found');
+                    // Теперь каждая клетка окрашивается в цвет текущего слова
+                    // (последнее найденное слово перезаписывает цвет)
+                    cellDiv.dataset.wordColor = color;
+                    cellDiv.style.background = color;
+                    cellDiv.style.color = 'white';
+                    cellDiv.style.textShadow = '0 1px 2px black';
                 }
             }
         }
     }
-}     
+}
        
     
     // Обработчики кнопок
