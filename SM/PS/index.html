@@ -1069,7 +1069,10 @@ body.menu-mode .game-container {
     
     <!-- Кнопки -->
     <div style="display:flex;flex-direction:column;gap:clamp(10px, 2.5vh, 20px);width:100%;max-width:min(400px, 85vw);flex-shrink:0;">
-        <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(14px, 3vh, 24px) 30px;border-radius:60px;font-size:clamp(1.2rem, 3.5vh, 1.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;">🚀 Начать</button>
+    <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(10px, 2.5vh, 18px) 30px;border-radius:60px;font-size:clamp(1.2rem, 3.5vh, 1.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;display:flex;flex-direction:column;align-items:center;gap:0px;line-height:1.2;">
+        <span>🚀 Начать</span>
+        <span id="menuStartSubtitle" style="font-size:clamp(0.5rem, 1.2vh, 0.7rem);font-weight:normal;opacity:0.8;margin-top:2px;">🟢 Простая</span>
+    </button>
         <button id="menuHowToPlay" style="background:#8b5a2a;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 1.6rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #5a3a1a;width:100%;transition:0.05s linear;">📖 Как играть?</button>
         <button id="menuDifficultyBtn" style="background:#4a6fa5;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 1.6rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2a4a7a;width:100%;transition:0.05s linear;">🎯 Сложность</button>
     </div>
@@ -1111,7 +1114,11 @@ body.menu-mode .game-container {
 </div>
 
 <script>
-
+// Функция получения категорий в зависимости от сложности
+function getCurrentCategories() {
+    const diff = currentDifficulty || 'easy';
+    return getCategoriesForDifficulty(diff);
+}
     let totalStars = 0; // Общее количество звёзд
     let currentLevelId = 1; 
     let currentCategoryId = null;
@@ -1127,10 +1134,13 @@ function saveCompletedLevel(levelId, difficulty) {    const key = `gameCompleted
         updateTotalStars();    }
 }
 // Эту функцию можно удалить или оставить только для обратной совместимости
-function isLevelCompleted(levelId) {
-    return isLevelCompleted(levelId, 'easy');
+function isLevelCompleted(levelId, difficulty) {
+    const key = `gameCompletedLevels_${difficulty || 'easy'}`;
+    const saved = localStorage.getItem(key);
+    if (!saved) return false;
+    const completed = JSON.parse(saved);
+    return completed.includes(levelId);
 }
-
 
 // Сохраняем последний открытый уровень
 function saveLastLevel(levelId) {
@@ -1149,6 +1159,16 @@ function isLevelCompleted(levelId, difficulty = 'easy') {
     if (!saved) return false;
     const completed = JSON.parse(saved);
     return completed.includes(levelId);
+}
+
+// Обновить отображение сложности в меню
+function updateMenuDifficultyDisplay() {
+    const diff = localStorage.getItem('lastDifficulty') || 'easy';
+    const diffLabel = DIFFICULTIES.find(d => d.id === diff)?.label || '🟢 Простая';
+    const menuBtn = document.getElementById('menuDifficultyBtn');
+    if (menuBtn) {
+        menuBtn.innerHTML = `🎯 ${diffLabel}`;
+    }
 }
 
 // Загрузка уровня по ID с учётом сложности
@@ -1213,13 +1233,14 @@ function findNextLevel(currentLevelId, difficulty) {
     }
     
     // Уровни в категории закончились — переходим к следующей категории
-    const allCategories = CATEGORIES;
-    const currentCatIndex = allCategories.findIndex(c => c.id === catId);
+const allCategories = getCurrentCategories();
+const currentCatIndex = allCategories.findIndex(c => c.id === catId);
     let nextCatIndex = (currentCatIndex + 1) % allCategories.length;
     
     let attempts = 0;
     while (attempts < allCategories.length) {
         const nextCat = allCategories[nextCatIndex];
+        // ✅ ИСПРАВЛЕНИЕ: передаём difficulty!
         const nextCatLevels = getLevelsByCategoryAndDifficulty(nextCat.id, difficulty);
         
         if (nextCatLevels.length > 0) {
@@ -1233,9 +1254,9 @@ function findNextLevel(currentLevelId, difficulty) {
         attempts++;
     }
     
+    // Если ничего не нашли, возвращаем первый уровень с нужной сложностью
     return ALL_LEVELS.find(l => l.difficulty === difficulty) || ALL_LEVELS[0];
 }
-
 
 // Модальное окно выбора уровней
 let currentPage = 0; // 0, 1, 2
@@ -1245,42 +1266,40 @@ const CATEGORIES_PER_PAGE = 4;
 // Модальное окно выбора категории (круглые иконки)
 function showLevelSelectModal() {
     // Для горизонтальных телефонов добавляем класс
-    const isLandscape = window.matchMedia("(orientation: landscape) and (max-width: 767px)").matches;     const oldModal = document.getElementById('dynamicLevelModal');
-        if (oldModal) oldModal.remove();    
+    const isLandscape = window.matchMedia("(orientation: landscape) and (max-width: 767px)").matches;     
+    const oldModal = document.getElementById('dynamicLevelModal');
+    if (oldModal) oldModal.remove();    
+    
     const modalDiv = document.createElement('div');
-modalDiv.id = 'dynamicLevelModal';
-modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    modalDiv.id = 'dynamicLevelModal';
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
 
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'margin-bottom:40px;background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;box-shadow:0 20px 40px rgba(0,0,0,0.3);';
-     contentDiv.innerHTML = `
-    <h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 10px;">📚 Выбери тему</h3>
-    <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:15px 0;padding:5px;"></div>
-    <button id="closeCatModal" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">Закрыть</button>
-`;    
+    
+    contentDiv.innerHTML = `
+        <h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 10px;">📚 Выбери тему</h3>
+        <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:15px 0;padding:5px;"></div>
+        <button id="closeCatModal" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">Закрыть</button>
+    `;    
+    
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
     const grid = document.getElementById('categoriesGrid');
     
- // Берём категории из глобального массива CATEGORIES
-const categoriesWithIcons = CATEGORIES.map(cat => ({
-    id: cat.id,
-    icon: cat.icon,
-    name: cat.title,
-    title: cat.title,
-    themeIndex: cat.themeIndex
-}));
-    categoriesWithIcons.forEach(cat => {
+    // Получаем категории для текущей сложности
+    const categories = getCurrentCategories();
+    
+    categories.forEach(cat => {
         const btn = document.createElement('button');
-      //  btn.innerHTML = `${cat.icon}<br><span style="font-size:0.7rem; margin-top:5px;">${cat.name}</span>`;
-      btn.innerHTML = `${cat.icon}`;
-     btn.style.cssText = 'background:#B5C9A2;color:#4A5D3E;border:none;border-radius:50%;width:55px;height:55px;font-size:1.8rem;cursor:pointer;box-shadow:0 2px 0 #8FA87D;transition:0.05s linear;display:flex;align-items:center;justify-content:center;';
+        btn.innerHTML = `${cat.icon}`;
+        btn.style.cssText = 'background:#B5C9A2;color:#4A5D3E;border:none;border-radius:50%;width:55px;height:55px;font-size:1.8rem;cursor:pointer;box-shadow:0 2px 0 #8FA87D;transition:0.05s linear;display:flex;align-items:center;justify-content:center;';
         btn.onmouseenter = () => btn.style.transform = 'scale(1.05)';
         btn.onmouseleave = () => btn.style.transform = 'scale(1)';
         btn.onclick = () => {
             modalDiv.remove();
-              showCategoryLevelsModal(cat.id, currentDifficulty);
+            showCategoryLevelsModal(cat.id, currentDifficulty);
         };
         grid.appendChild(btn);
     });
@@ -1292,7 +1311,7 @@ const categoriesWithIcons = CATEGORIES.map(cat => ({
 // Выбор уровня в категории (сразу с кнопкой Играть!)
 function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     //  const difficulty = 'easy'; // по умолчанию
-    const category = CATEGORIES.find(c => c.id === categoryId);
+    const category = getCurrentCategories().find(c => c.id === categoryId);
     const categoryLevels = getLevelsByCategory(categoryId);
         
    // console.log(`Категория: ${category.title}, уровень 2 имеет ID:`, categoryLevels.find(l => l.levelNum === 2)?.id);
@@ -1377,7 +1396,7 @@ const shadowColor = completed ? '#8b5a2a' : '#9b6e42';
     document.getElementById('playSelectedBtn').onclick = () => {
         const levelData = categoryLevels.find(l => l.levelNum === selectedLevelNum);
         if (levelData) {
-            loadLevelById(levelData.id);
+          loadLevelById(levelData.id, difficulty);
             modalDiv.remove();
         }
     };
@@ -1803,7 +1822,7 @@ function showCategoryModalForDifficulty(difficulty) {
     
     let html = `<h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 15px;">📚 Выбери категорию</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;">`;
     
-    CATEGORIES.forEach(cat => {
+    getCurrentCategories().forEach(cat => {
         html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${difficulty}" style="background:#B5C9A2;color:#4A5D3E;border:none;border-radius:50%;width:55px;height:55px;font-size:1.8rem;cursor:pointer;box-shadow:0 2px 0 #8FA87D;transition:0.05s linear;display:flex;align-items:center;justify-content:center;">${cat.icon}</button>`;
     });
     
@@ -1828,7 +1847,8 @@ function showCategoryModalForDifficulty(difficulty) {
 
 // Выбор подуровня внутри категории (как в игре)
 function showSubLevelModal(categoryId, difficulty) {
-    const category = CATEGORIES.find(c => c.id === categoryId);
+      const categories = getCategoriesForDifficulty(difficulty);
+    const category = categories.find(c => c.id === categoryId);
     const categoryLevels = getLevelsByCategory(categoryId);
     let selectedLevelNum = 1;
     
@@ -2202,7 +2222,7 @@ function renderGrid() {
 
                     playSuccessSound();
 // СОХРАНЯЕМ ПРОГРЕСС
-  saveCompletedLevel(levelData.id, currentDifficulty);
+saveCompletedLevel(currentLevelId, currentDifficulty);
 
               // АКТИВИРУЕМ КНОПКУ СЛЕДУЮЩЕГО УРОВНЯ
                                     const nextBtn = document.getElementById('nextLevelBtn');
@@ -2435,6 +2455,9 @@ function init() {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     }, { once: true });
     
+    // ✅ Загружаем сохранённую сложность
+    currentDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
+    
     // Загружаем общее количество звёзд из localStorage
     const savedStars = localStorage.getItem('totalStars');
     if (savedStars) {
@@ -2448,6 +2471,8 @@ function init() {
     
     // Показываем стартовое меню
     document.getElementById('startMenu').style.display = 'flex';
+     // Обновляем подзаголовок кнопки Начать
+    updateStartButtonSubtitle();
 }
 
 // Кнопка "Начать"
@@ -2460,8 +2485,11 @@ document.getElementById('menuStartBtn').addEventListener('click', function() {
     document.getElementById('infoMessage').style.display = 'block';
     document.querySelector('.words-container').style.display = 'block';
     
-    // Получаем последнюю сохранённую сложность
+    // ✅ Получаем последнюю сохранённую сложность
     const lastDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
+    currentDifficulty = lastDifficulty; // ✅ ВАЖНО: устанавливаем текущую сложность
+    
+    // Получаем пройденные уровни для ЭТОЙ сложности
     const completed = getCompletedLevels(lastDifficulty);
     let lastLevelId = 1;
     
@@ -2470,20 +2498,21 @@ document.getElementById('menuStartBtn').addEventListener('click', function() {
         // Находим последний пройденный уровень, предлагаем следующий
         const maxCompleted = Math.max(...completed);
         const nextLevelId = maxCompleted + 1;
-        // Ищем следующий уровень в ALL_LEVELS
-        const allIds = ALL_LEVELS.map(l => l.id);
-        if (allIds.includes(nextLevelId)) {
+        
+        // Ищем следующий уровень в ALL_LEVELS с нужной сложностью
+        const nextLevel = ALL_LEVELS.find(l => l.id === nextLevelId && l.difficulty === lastDifficulty);
+        if (nextLevel) {
             lastLevelId = nextLevelId;
         } else {
+            // Если следующего нет, берём последний пройденный
             lastLevelId = maxCompleted;
         }
     }
     
-    // Сохраняем текущую сложность
-    currentDifficulty = lastDifficulty;
-    
     // Показываем приветственную историю (если не показывали)
     showWelcomeStory();
+    
+    // ✅ Загружаем уровень с правильной сложностью
     loadLevelById(lastLevelId, lastDifficulty);
 });
 
@@ -2730,7 +2759,7 @@ function getGalaxyStars() {
     
     difficulties.forEach(diff => {
         const completedLevels = getCompletedLevels(diff);
-        CATEGORIES.forEach(cat => {
+        getCurrentCategories().forEach(cat => {
             const categoryLevels = getLevelsByCategory(cat.id);
             let completedCount = 0;
             categoryLevels.forEach(level => {
@@ -2777,8 +2806,12 @@ function showDifficultyModal() {
         btn.onclick = () => {
             const diff = btn.getAttribute('data-diff');
             modalDiv.remove();
+                    // ✅ Обновляем подзаголовок у кнопки "Начать"
+        localStorage.setItem('lastDifficulty', diff);
+        updateStartButtonSubtitle();
             // Показываем сюжет для выбранной сложности
             showDifficultyStory(diff);
+            
         };
     });
     
@@ -2843,7 +2876,7 @@ function showGalaxyMap() {
             <div style="display:flex;flex-direction:column;gap:12px;">
         `;
         
-        CATEGORIES.forEach(cat => {
+        getCurrentCategories().forEach(cat => {
             let totalStars = 0;
             let maxStars = 0;
             let completedLevels = 0;
@@ -2922,7 +2955,7 @@ function showGalaxyMap() {
 // Детали галактики
 // Детали галактики
 function showGalaxyDetails(categoryId) {
-    const category = CATEGORIES.find(c => c.id === categoryId);
+    const category = getCurrentCategories().find(c => c.id === categoryId);
     const stars = getGalaxyStars();
     
     // Суммируем звёзды по всем сложностям для этой категории
@@ -3297,23 +3330,27 @@ window.addEventListener('resize', function() {
         }
     }, 300); // Задержка 300ms для плавности
 });
-
-// Также перерисовываем при изменении ориентации
-window.addEventListener('orientationchange', function() {
-    // Даем время на смену ориентации
-    setTimeout(function() {
-        const isGameActive = document.getElementById('gridContainer').style.display !== 'none';
-        if (isGameActive && grid && grid.length > 0) {
-            renderGrid();
-            updateFoundCellsColor();
-            highlightCurrentChain();
-            renderWordsList();
-        }
-    }, 400);
-});
+// Обновить подзаголовок внутри кнопки "Начать"
+function updateStartButtonSubtitle() {
+    const diff = localStorage.getItem('lastDifficulty') || 'easy';
+    const diffData = DIFFICULTIES.find(d => d.id === diff);
+    const subtitle = document.getElementById('menuStartSubtitle');
+    if (subtitle && diffData) {
+        subtitle.textContent = `${diffData.icon} ${diffData.label}`;
+        // Цвет текста подзаголовка
+        const colors = {
+            'easy': '#81C784',
+            'medium': '#FFB74D',
+            'hard': '#E57373',
+            'expert': '#CE93D8'
+        };
+        subtitle.style.color = colors[diff] || '#fff';
+    }
+}
 
 //===================конец функции галактик
     init();
+  
 </script>
 
 </body>
