@@ -43,7 +43,7 @@ function sendscore(){
   vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
  {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
     "user_id":id,
-  "activity_id":2,
+  "activity_id":1,
    "value":score, 
    "v": "5.131", 
    "access_token":"8d7a76f48d7a76f48d7a76f49b8d06a79e88d7a8d7a76f4efe9c7449a4bc80bec78fb31"}})

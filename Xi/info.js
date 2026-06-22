@@ -41,7 +41,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
         vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
      {"client_secret":"DmtAFZKqEwtyLsnEOD2Z",
       "user_id":id,
-      "activity_id":2,
+      "activity_id":1,
        "value":score0, 
        "v": "5.131", 
        "global": 1,
