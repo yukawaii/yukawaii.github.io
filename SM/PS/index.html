@@ -8,13 +8,11 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ГдеЛиса: Космос | Найди слова по буквам</title>
      <script src = "./App.js"></script>
-
     <script src="levels.js"></script>
      <script>
   // Явно задаем глобальную переменную для консоли и фрейма
   window.vkBridge = vkBridge; 
 </script>
-
    <link rel="stylesheet" href="styleOld.css">
 </head>
 <body>
@@ -47,6 +45,7 @@
     
     <!-- Нижние кнопки -->
     <div style="display:flex;gap:clamp(12px, 3vh, 30px);justify-content:center;flex-shrink:0;padding-top:clamp(5px, 1vh, 15px);">
+        <button id="menuThemeBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:12px;border-radius:50%;font-size:1.5rem;cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:50px;height:50px;display:flex;align-items:center;justify-content:center;">🎨</button>
         <button id="menuInviteBtn" style="background:#4a6fa5;color:white;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #2a4a7a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">👥</button>
         <button id="menuGalaxyBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">⭐</button>
         <button id="menuScrollsBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">📜</button>
@@ -244,16 +243,17 @@ function showLevelSelectModal() {
     if (oldModal) oldModal.remove();    
     
     const modalDiv = document.createElement('div');
+       modalDiv.className = 'modal-window'; 
     modalDiv.id = 'dynamicLevelModal';
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
 
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'margin-bottom:40px;background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;box-shadow:0 20px 40px rgba(0,0,0,0.3);';
+    contentDiv.style.cssText = 'margin-bottom:40px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;box-shadow:0 20px 40px rgba(0,0,0,0.3);';
     
     contentDiv.innerHTML = `
-        <h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 10px;">📚 Выбери тему</h3>
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.3rem;margin:0 0 10px;">📚 Выбери тему</h3>
         <div id="categoriesGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:15px 0;padding:5px;"></div>
-        <button id="closeCatModal" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">Закрыть</button>
+        <button id="closeCatModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">Закрыть</button>
     `;    
     
     modalDiv.appendChild(contentDiv);
@@ -289,17 +289,17 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     let selectedLevelNum = 1;
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
-   contentDiv.innerHTML = `
-    <h3 style="color:#2c3e2b;font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
-        <div id="levelsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-height:300px;overflow-y:auto;padding:10px;"></div>
-        <button id="playSelectedBtn" style="background:#517a2f;color:white;border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;margin-top:15px;">🎮 Играть!</button>
-        <button id="backToCatsBtn" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">◀ Назад к темам</button>
-    `;
+contentDiv.innerHTML = `
+    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
+    <button id="playSelectedBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);margin-top:15px;">🎮 Играть!</button>
+    <button id="backToCatsBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">◀ Назад к темам</button>
+`;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -877,11 +877,12 @@ function showCategoryModalForDifficulty(difficulty) {
     if (oldModal) oldModal.remove();
     
     const modalDiv = document.createElement('div');
+     modalDiv.className = 'modal-window'; 
     modalDiv.id = 'diffCategoryModal';
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
     // ✅ ИСПРАВЛЕНИЕ: используем категории для конкретной сложности
     const categories = getCategoriesForDifficulty(difficulty);
@@ -919,10 +920,11 @@ function showSubLevelModal(categoryId, difficulty) {
     let selectedLevelNum = 1;
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
     contentDiv.innerHTML = `
         <h3 style="color:#2c3e2b;font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
@@ -1656,23 +1658,24 @@ if (rulesButton) {
     rulesButton.onclick = function() {
         // Создаём окно
         let modalDiv = document.createElement('div');
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:10000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(3px);';
+           modalDiv.className = 'modal-window';
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(3px);';
         
         let contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'background:#fff8ec;border-radius:44px;padding:25px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s;';
+        contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:44px;padding:25px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s;';
         
-        contentDiv.innerHTML = `
-            <h3 style="color:#2c3e2b;font-size:1.6rem;margin:0 0 15px;">📖 Правила</h3>
-            <ul style="text-align:left;color:#3a3220;padding-left:20px;line-height:1.7;">
-                <li>🔍 Находи слова на поле</li>
-                <li>➡️ По горизонтали и вертикали</li>
-                <li>✨ Слова пересекаются</li>
-                <li>👆 Кликай на буквы по порядку</li>
-                <li>✅ Слово засчитывается автоматически</li>
-                <li>🏆 Найди все слова для победы</li>
-            </ul>
-            <button id="closeModalBtn" style="background:#517a2f;color:white;border:none;padding:10px 25px;border-radius:50px;font-size:1rem;font-weight:bold;margin-top:15px;cursor:pointer;">Добро!</button>
-        `;
+contentDiv.innerHTML = `
+    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 15px;">📖 Правила</h3>
+    <ul style="text-align:left;color:var(--text-secondary, #3a3220);padding-left:20px;line-height:1.7;">
+        <li>🔍 Находи слова на поле</li>
+        <li>➡️ По горизонтали и вертикали</li>
+        <li>✨ Слова пересекаются</li>
+        <li>👆 Кликай на буквы по порядку</li>
+        <li>✅ Слово засчитывается автоматически</li>
+        <li>🏆 Найди все слова для победы</li>
+    </ul>
+    <button id="closeModalBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:50px;font-size:1rem;font-weight:bold;margin-top:15px;cursor:pointer;">Добро!</button>
+`;
         
         modalDiv.appendChild(contentDiv);
         document.body.appendChild(modalDiv);
@@ -1759,24 +1762,25 @@ function showWelcomeStory() {
         ];
         
         const modalDiv = document.createElement('div');
+         modalDiv.className = 'modal-window'; 
         modalDiv.id = 'storyModal';
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
+        contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
         
         function updateSlide() {
             const slide = slides[currentSlide];
-            contentDiv.innerHTML = `
-                <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
-                <h3 style="color:#2c3e2b;font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-                <p style="color:#3a3220;font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
-                    ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:#8b5a2a;color:white;border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
-                    <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? '#ffa54d' : '#d4c3a4'};display:inline-block;"></span>`).join('')}</div>
-                    <button id="storyNextBtn" style="background:#517a2f;color:white;border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
-                </div>
-            `;
+          contentDiv.innerHTML = `
+    <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
+    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
+    <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+        ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
+        <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};display:inline-block;"></span>`).join('')}</div>
+        <button id="storyNextBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
+    </div>
+`;
             
             const nextBtn = contentDiv.querySelector('#storyNextBtn');
             if (nextBtn) {
@@ -1817,10 +1821,10 @@ function showWelcomeStory() {
     
     // ---------- КОРОТКОЕ ОКНО ДЛЯ ПОВТОРНЫХ ЗАПУСКОВ ----------
     const shortModal = document.createElement('div');
-    shortModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    shortModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const shortContent = document.createElement('div');
-    shortContent.style.cssText = 'background:#fff8ec;border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
+    shortContent.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
     
     shortContent.innerHTML = `
         <div style="font-size:4rem;margin-bottom:10px;">🚀</div>
@@ -1871,20 +1875,19 @@ function getGalaxyStars() {
 
 function showDifficultyModal() {
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:20001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
-    let html = `<h3 style="color:#2c3e2b;font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
-    html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
-    
-    DIFFICULTIES.forEach(diff => {
-        html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:#517a2f;color:white;border:none;padding:14px;border-radius:40px;font-size:1rem;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;">${diff.label}</button>`;
-    });
-    
-    html += `</div><button id="closeDiffModal" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
-    
+    let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
+html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
+DIFFICULTIES.forEach(diff => {
+    html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:14px;border-radius:40px;font-size:1rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${diff.label}</button>`;
+});
+html += `</div><button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
+
     contentDiv.innerHTML = html;
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -1915,17 +1918,18 @@ function showDifficultyStory(difficulty) {
     const slide = isFirstTime ? story.long : story.short;
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:20002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
     
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;margin-bottom:10px;">${slide.title.split(' ')[0]}</div>
-        <h3 style="color:#2c3e2b;font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-        <p style="color:#3a3220;font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-        <button id="storyContinueBtn" style="background:#517a2f;color:white;border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 #2e4a1a;">${slide.button}</button>
-    `;
+contentDiv.innerHTML = `
+    <div style="font-size:3rem;margin-bottom:10px;">${slide.title.split(' ')[0]}</div>
+    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
+    <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+    <button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>
+`;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -1948,18 +1952,18 @@ function showGalaxyMap() {
         const stars = getGalaxyStars();
         
         const modalDiv = document.createElement('div');
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+         modalDiv.className = 'modal-window'; 
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'margin-bottom: 90px;background:#fff8ec;border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+        contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
         
-        let galaxiesHtml = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-                <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
-                <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:#8b5a2a;padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:12px;">
-        `;
+let galaxiesHtml = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
+        <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+`;
         
         // ✅ ИСПРАВЛЕНИЕ: собираем ВСЕ категории со ВСЕХ сложностей в массив
         const allCategories = [];
@@ -2016,30 +2020,30 @@ function showGalaxyMap() {
                 expert: '🟣'
             }[cat.difficulty] || '';
             
-            galaxiesHtml += `
-                <div class="galaxy-item" data-cat-id="${cat.id}" data-diff="${cat.difficulty}" style="background:#ede1ca;border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : '#d4c3a4'};">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <span style="font-size:2rem;">${cat.icon}</span>
-                            <div style="text-align:left;">
-                                <div style="font-weight:bold;color:#2c3e2b;">${diffIcon} ${cat.title}</div>
-                                <div style="font-size:0.8rem;color:#6B5B4E;">⭐ ${totalStars} / ${maxStars} звёзд</div>
-                                <div style="font-size:0.7rem;color:#6B5B4E;">📚 ${completedLevels} / ${totalLevels} уровней</div>
-                            </div>
-                        </div>
-                        <div style="font-size:1.5rem;">➡️</div>
-                    </div>
-                    <div style="background:#d4c3a4;border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
-                        <div style="width:${percent}%;background:#ffa54d;height:100%;border-radius:20px;"></div>
-                    </div>
+galaxiesHtml += `
+    <div class="galaxy-item" data-cat-id="${cat.id}" data-diff="${cat.difficulty}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:2rem;">${cat.icon}</span>
+                <div style="text-align:left;">
+                    <div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${diffIcon} ${cat.title}</div>
+                    <div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div>
                 </div>
-            `;
+            </div>
+            <div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div>
+        </div>
+        <div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
+            <div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div>
+        </div>
+    </div>
+`;
         });
         
-        galaxiesHtml += `
-            </div>
-            <button id="closeGalaxyBtn" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>
-        `;
+galaxiesHtml += `
+    </div>
+    <button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>
+`;
         
         contentDiv.innerHTML = galaxiesHtml;
         modalDiv.appendChild(contentDiv);
@@ -2105,10 +2109,11 @@ function showGalaxyDetails(categoryId) {
     const starData = { totalStars, maxStars, completedLevels, totalLevels };
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;';
     
     // Генерация звёзд (визуально)
     let starsHtml = '';
@@ -2124,18 +2129,18 @@ function showGalaxyDetails(categoryId) {
         if ((i + 1) % 10 === 0) starsHtml += '<br>';
     }
     
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;">${category.icon}</div>
-        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:5px 0;">${category.title}</h3>
-        <div style="background:#ede1ca;border-radius:30px;padding:15px;margin:15px 0;">
-            <div style="font-size:2rem;color:#ffa54d;">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
-            <div style="font-size:0.9rem;color:#6B5B4E;">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
-        </div>
-        <div style="max-height:150px;overflow-y:auto;padding:3px;">
-            ${starsHtml}
-        </div>
-        <button id="closeDetailBtn" style="background:#517a2f;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
-    `;
+contentDiv.innerHTML = `
+    <div style="font-size:3rem;">${category.icon}</div>
+    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:5px 0;">${category.title}</h3>
+    <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;margin:15px 0;">
+        <div style="font-size:2rem;color:var(--accent-color, #ffa54d);">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
+        <div style="font-size:0.9rem;color:var(--text-secondary, #6B5B4E);">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
+    </div>
+    <div style="max-height:150px;overflow-y:auto;padding:3px;">
+        ${starsHtml}
+    </div>
+    <button id="closeDetailBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
+`;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -2276,10 +2281,11 @@ function showScrollsModal() {
     syncScrollsWithStars();
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10005;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10005;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:20px;max-width:450px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:450px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
     
     const unlockedCount = getUnlockedScrolls().length;
     const totalStars = parseInt(localStorage.getItem('totalStars') || 0);
@@ -2293,45 +2299,45 @@ function showScrollsModal() {
     const endIdx = Math.min(startIdx + SCROLLS_PER_PAGE, WISDOM_SCROLLS.length);
     const pageScrolls = WISDOM_SCROLLS.slice(startIdx, endIdx);
     
-    let html = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-            <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0;">📜 Свитки мудрости</h3>
-            <button id="closeScrollsModal" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:#8b5a2a;padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-        </div>
-        <div style="background:#ede1ca;border-radius:30px;padding:12px;margin-bottom:15px;">
-            <span style="font-weight:bold;color:#2c3e2b;">⭐ ${totalStars} звёзд</span>
-            <span style="color:#6B5B4E;margin-left:10px;">|</span>
-            <span style="color:#6B5B4E;">📜 ${unlockedCount} / ${WISDOM_SCROLLS.length} открыто</span>
-            ${unlockedCount < WISDOM_SCROLLS.length ? `<div style="font-size:0.8rem;color:#8b5a2a;margin-top:5px;">🔒 Следующий свиток откроется на ${nextStarThreshold} звёздах</div>` : '<div style="font-size:0.8rem;color:#517a2f;margin-top:5px;">🌟 Все свитки открыты! Ты — хранитель мудрости!</div>'}
-        </div>
-        <div style="text-align:left;padding:5px;">
-    `;
+let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">📜 Свитки мудрости</h3>
+        <button id="closeScrollsModal" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+<div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:12px;margin-bottom:15px;">
+    <span style="font-weight:bold;color:var(--text-primary, #2c3e2b);">⭐ ${totalStars} звёзд</span>
+    <span style="color:var(--text-secondary, #6B5B4E);margin-left:10px;">|</span>
+    <span style="color:var(--text-secondary, #6B5B4E);">📜 ${unlockedCount} / ${WISDOM_SCROLLS.length} открыто</span>
+    ${unlockedCount < WISDOM_SCROLLS.length ? `<div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-top:5px;">🔒 Следующий свиток откроется на ${nextStarThreshold} звёздах</div>` : '<div style="font-size:0.8rem;color:var(--btn-primary, #517a2f);margin-top:5px;">🌟 Все свитки открыты! Ты — хранитель мудрости!</div>'}
+</div>'}
+    </div>
+`;
     
-    pageScrolls.forEach(scroll => {
-        const unlocked = isScrollUnlocked(scroll.id);
-        html += `
-            <div class="scroll-item" data-id="${scroll.id}" style="
-                display:flex;
-                align-items:center;
-                justify-content:space-between;
-                padding:10px 15px;
-                margin:4px 0;
-                background:${unlocked ? '#fff8ec' : '#f0ebe0'};
-                border-radius:12px;
-                border-left:4px solid ${unlocked ? '#ffa54d' : '#d4c3a4'};
-                cursor:${unlocked ? 'pointer' : 'default'};
-                transition:0.1s;
-            ">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <span style="font-size:1.2rem;">${unlocked ? '📜' : '🔒'}</span>
-                    <span style="color:#2c3e2b;font-weight:${unlocked ? 'bold' : 'normal'};">Свиток ${scroll.id}</span>
-                </div>
-                <div>
-                    ${unlocked ? '<span style="color:#517a2f;font-size:1rem;">✓</span>' : '<span style="color:#8a7a6a;font-size:0.7rem;">закрыт</span>'}
-                </div>
+pageScrolls.forEach(scroll => {
+    const unlocked = isScrollUnlocked(scroll.id);
+    html += `
+        <div class="scroll-item" data-id="${scroll.id}" style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:10px 15px;
+            margin:4px 0;
+            background:${unlocked ? 'var(--bg-card, #fff8ec)' : 'var(--bg-card-light, #f0ebe0)'};
+            border-radius:12px;
+            border-left:4px solid ${unlocked ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};
+            cursor:${unlocked ? 'pointer' : 'default'};
+            transition:0.1s;
+        ">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:1.2rem;">${unlocked ? '📜' : '🔒'}</span>
+                <span style="color:var(--text-primary, #2c3e2b);font-weight:${unlocked ? 'bold' : 'normal'};">Свиток ${scroll.id}</span>
             </div>
-        `;
-    });
+            <div>
+                ${unlocked ? '<span style="color:var(--btn-primary, #517a2f);font-size:1rem;">✓</span>' : '<span style="color:var(--text-secondary, #8a7a6a);font-size:0.7rem;">закрыт</span>'}
+            </div>
+        </div>
+    `;
+});
     
     html += `
         </div>
@@ -2386,19 +2392,20 @@ function showScrollDetail(scrollId) {
     if (!scroll) return;
     
     const modalDiv = document.createElement('div');
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:10006;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+     modalDiv.className = 'modal-window'; 
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10006;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:#fff8ec;border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;margin-bottom:5px;">📜</div>
-        <div style="font-size:0.8rem;color:#8b5a2a;margin-bottom:10px;">Свиток №${scroll.id}</div>
-        <div style="background:#ede1ca;border-radius:30px;padding:20px;margin:10px 0;">
-            <p style="color:#2c3e2b;font-size:1.1rem;line-height:1.5;margin:0;font-style:italic;">${scroll.text}</p>
-        </div>
-        <button id="closeScrollDetail" style="background:#517a2f;color:white;border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐ Прочитано!</button>
-    `;
+contentDiv.innerHTML = `
+    <div style="font-size:3rem;margin-bottom:5px;">📜</div>
+    <div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-bottom:10px;">Свиток №${scroll.id}</div>
+    <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:20px;margin:10px 0;">
+        <p style="color:var(--text-primary, #2c3e2b);font-size:1.1rem;line-height:1.5;margin:0;font-style:italic;">${scroll.text}</p>
+    </div>
+    <button id="closeScrollDetail" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐ Прочитано!</button>
+`;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -2475,7 +2482,207 @@ function updateStartButtonSubtitle() {
         subtitle.style.color = colors[diff] || '#fff';
     }
 }
+// Текущая тема
+let currentTheme = localStorage.getItem('theme') || 'dark';
+// Функция для создания модального окна с правильной темой
+function createThemedModal(htmlContent, options = {}) {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal-window';
+    modalDiv.style.cssText = `
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        z-index:${options.zIndex || 10000};
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        backdrop-filter:blur(8px);
+        background:var(--modal-bg, rgba(0,0,0,0.85)) !important;
+    `;
+    
+    // Применяем цвет фона в зависимости от темы
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    modalDiv.style.background = isDark ? 'rgba(10,10,26,0.92)' : 'rgba(0,0,0,0.85)';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.style.cssText = `
+        background:${isDark ? '#1a1a2e' : '#fff8ec'};
+        border-radius:48px;
+        padding:25px;
+        max-width:${options.maxWidth || '400px'};
+        width:90%;
+        text-align:center;
+        border:2px solid ${isDark ? 'rgba(120,80,200,0.3)' : '#ffa54d'};
+        box-shadow:0 20px 40px ${isDark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.3)'};
+        position:relative;
+        z-index:${options.zIndex + 1 || 10001};
+        pointer-events:auto;
+        max-height:${options.maxHeight || 'auto'};
+        overflow-y:${options.maxHeight ? 'auto' : 'visible'};
+    `;
+    
+    modalContent.innerHTML = htmlContent;
+    modalDiv.appendChild(modalContent);
+    document.body.appendChild(modalDiv);
+    
+    // Закрытие по клику на фон
+    modalDiv.addEventListener('click', function(e) {
+        if (e.target === modalDiv && options.closeOnBackground !== false) {
+            modalDiv.remove();
+        }
+    });
+    
+    return { modalDiv, modalContent };
+}
+function setTheme(themeName) {
+    currentTheme = themeName;
+    document.documentElement.setAttribute('data-theme', themeName);
+    localStorage.setItem('theme', themeName);
+    
+    // Обновляем иконку кнопки темы
+    const themeBtn = document.querySelector('#menuThemeBtn');
+    if (themeBtn) {
+        const icons = {
+            'dark': '🌌',
+            'blue': '💙',
+            'teal': '💚',
+            'sun': '☀️'
+        };
+        themeBtn.textContent = icons[themeName] || '🌌';
+    }
+}
 
+// При загрузке применяем сохранённую тему
+setTheme(localStorage.getItem('theme') || 'dark');
+
+function showThemeSelector() {
+    // Удаляем старую модалку если есть
+    const oldModal = document.getElementById('themeModal');
+    if (oldModal) oldModal.remove();
+      
+    const modalDiv = document.createElement('div');
+     modalDiv.className = 'modal-window'; 
+    modalDiv.id = 'themeModal';
+    modalDiv.style.cssText = `
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+               z-index:99999;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        backdrop-filter:blur(5px);
+    `;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = `
+        background:var(--bg-card, #fff8ec);
+        border-radius:48px;
+        padding:25px;
+        max-width:380px;
+        width:90%;
+        text-align:center;
+        border:2px solid #ffa54d;
+        position:relative;
+        z-index:100000;
+        pointer-events:auto;
+    `;
+    
+    const themes = [
+        { id: 'dark', icon: '🌌', name: 'Космос' },
+        { id: 'blue', icon: '💙', name: 'Голубая' },
+        { id: 'teal', icon: '💚', name: 'Бирюза' },
+        { id: 'sun', icon: '☀️', name: 'Солнце' }
+    ];
+    
+   let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 15px;">🎨 Выбери тему</h3>`;
+html += `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;">`;
+
+themes.forEach(theme => {
+    const isActive = currentTheme === theme.id;
+    html += `
+        <div class="theme-btn" data-theme="${theme.id}" style="
+            background:${isActive ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};
+            border:2px solid ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'transparent'};
+            border-radius:50%;
+            width:70px;
+            height:70px;
+            font-size:2rem;
+            cursor:pointer;
+            box-shadow:0 3px 0 ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'var(--border-color, #9b6e42)'};
+            transition:0.05s linear;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:2px;
+            pointer-events:auto;
+            position:relative;
+            user-select:none;
+        ">
+            <div>${theme.icon}</div>
+            <span style="font-size:0.5rem;color:var(--text-secondary, #3a3220);">${theme.name}</span>
+        </div>
+    `;
+});
+
+html += `</div>
+    <button id="closeThemeModalBtn" style="
+        background:var(--btn-secondary, #8b5a2a);
+        color:var(--text-light, white);
+        border:none;
+        padding:10px 25px;
+        border-radius:40px;
+        font-size:0.9rem;
+        cursor:pointer;
+        margin-top:15px;
+        pointer-events:auto;
+        position:relative;
+        z-index:100001;
+    ">Закрыть</button>`;
+    
+    contentDiv.innerHTML = html;
+    modalDiv.appendChild(contentDiv);
+    document.body.appendChild(modalDiv);
+    
+    // Обработчик для кнопок тем
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const themeId = this.getAttribute('data-theme');
+            setTheme(themeId);
+            modalDiv.remove();
+            showThemeSelector();
+        });
+    });
+    
+    // Обработчик для кнопки закрытия
+    const closeBtn = document.getElementById('closeThemeModalBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            modalDiv.remove();
+        });
+    }
+    
+    // Закрытие по клику на фон
+    modalDiv.addEventListener('click', function(e) {
+        if (e.target === modalDiv) {
+            modalDiv.remove();
+        }
+    });
+}
+// Обработчик кнопки темы
+document.getElementById('menuThemeBtn').addEventListener('click', showThemeSelector);
+
+// Загружаем сохранённую тему при старте
+setTheme(localStorage.getItem('theme') || 'dark');
 //===================конец функции галактик
     init();
   

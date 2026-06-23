@@ -4,6 +4,123 @@
             -webkit-tap-highlight-color: transparent;
             box-sizing: border-box;
         }
+:root {
+    --btn-primary: #517a2f;
+    --btn-secondary: #8b5a2a;
+}
+
+[data-theme="blue"] {
+    --btn-primary: #1a3a5a;
+    --btn-secondary: #1a4a6a;
+}
+
+[data-theme="teal"] {
+    --btn-primary: #1a4a4a;
+    --btn-secondary: #1a5a5a;
+}
+
+[data-theme="sun"] {
+    --btn-primary: #5a4a1a;
+    --btn-secondary: #6a5a2a;
+}
+:root {
+    --bg-body: linear-gradient(135deg, #6ba5c4 0%, #3a7ca5 50%, #1a5a8a 100%);
+    --bg-card: #fff8ec;
+    --bg-panel: #2c3e2b;
+    --bg-grid: #e0cfaa;
+    --bg-cell: #fffdf5;
+    --text-primary: #2b4a1e;
+    --text-light: #fef0cf;
+    --shadow-color: rgba(0,0,0,0.3);
+    --border-color: #ffefc0;
+    --accent-color: #ffa54d;
+    --button-primary: #517a2f;
+    --button-secondary: #423d30;
+    --msg-bg: #2c261c;
+    --cell-shadow: #9b6e42;
+    --grid-border-light: #fff6e5;
+    --grid-border-dark: #bd9865;
+}
+
+/* Тема: Голубая */
+[data-theme="blue"] {
+    --bg-body: linear-gradient(135deg, #7ec8e3 0%, #4a9fc7 50%, #2a7fa5 100%);
+    --bg-card: #f0f8ff;
+    --bg-panel: #1a4a6a;
+    --bg-grid: #c5dbe8;
+    --bg-cell: #f5faff;
+    --text-primary: #1a3a5a;
+    --text-light: #e8f4ff;
+    --shadow-color: rgba(0,40,80,0.3);
+    --border-color: #b8d8e8;
+    --accent-color: #4a9fc7;
+    --button-primary: #2a7fa5;
+    --button-secondary: #1a4a6a;
+    --msg-bg: #1a3a5a;
+    --cell-shadow: #8ab8d0;
+    --grid-border-light: #b8d8e8;
+    --grid-border-dark: #8ab8d0;
+}
+
+/* Тема: Бирюза */
+[data-theme="teal"] {
+    --bg-body: linear-gradient(135deg, #5cb8b8 0%, #2a9a9a 50%, #1a7a7a 100%);
+    --bg-card: #e8f5f5;
+    --bg-panel: #1a5a5a;
+    --bg-grid: #b8dcdc;
+    --bg-cell: #f0fafa;
+    --text-primary: #1a4a4a;
+    --text-light: #e0f5f5;
+    --shadow-color: rgba(0,60,60,0.3);
+    --border-color: #a8d0d0;
+    --accent-color: #2a9a9a;
+    --button-primary: #1a7a7a;
+    --button-secondary: #1a5a5a;
+    --msg-bg: #1a5a5a;
+    --cell-shadow: #6ab8b8;
+    --grid-border-light: #a8d0d0;
+    --grid-border-dark: #6ab8b8;
+}
+
+/* Тема: Солнце */
+[data-theme="sun"] {
+    --bg-body: linear-gradient(135deg, #f5c842 0%, #e8a820 50%, #d4880a 100%);
+    --bg-card: #fef8e8;
+    --bg-panel: #8a6a1a;
+    --bg-grid: #f0e0a8;
+    --bg-cell: #fffcf0;
+    --text-primary: #5a4a1a;
+    --text-light: #fef8e8;
+    --shadow-color: rgba(80,60,0,0.3);
+    --border-color: #f0d888;
+    --accent-color: #e8a820;
+    --button-primary: #d4880a;
+    --button-secondary: #8a6a1a;
+    --msg-bg: #6a4a0a;
+    --cell-shadow: #d4b86a;
+    --grid-border-light: #f0d888;
+    --grid-border-dark: #d4b86a;
+}
+
+/* Тема: Космос (тёмная) */
+[data-theme="dark"] {
+    --bg-body: linear-gradient(145deg, #0a0a1a 0%, #1a1a3a 50%, #0d0d2b 100%);
+    --bg-card: #1a1a2e;
+    --bg-panel: #2a2a4a;
+    --bg-grid: #2a2a3e;
+    --bg-cell: #2d2d4a;
+    --text-primary: #d0d0e8;
+    --text-light: #e8e8ff;
+    --shadow-color: rgba(0,0,30,0.5);
+    --border-color: #4a4a6a;
+    --accent-color: #6b5a9e;
+    --button-primary: #4a3a7a;
+    --button-secondary: #2a2a4a;
+    --msg-bg: #1a1a3a;
+    --cell-shadow: #3a3a5a;
+    --grid-border-light: #4a4a6a;
+    --grid-border-dark: #2a2a4a;
+}
 
    #levelsGrid button {
     border-radius: 50% !important;
@@ -23,7 +140,7 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-        background: linear-gradient(135deg, #6ba5c4 0%, #3a7ca5 50%, #1a5a8a 100%);
+      background: var(--bg-body, #0a0a1a) !important;
     position: relative;
 }
 
@@ -113,32 +230,27 @@ body::after {
     z-index: 0;
 }
 .game-container, .game-card {
-    background: rgba(255, 248, 236, 0.95);
-  /*  backdrop-filter: blur(2px);*/
+    background: var(--bg-card, rgba(255, 248, 236, 0.95));
+    box-shadow: 0 20px 35px var(--shadow-color, rgba(0, 0, 0, 0.4));
+}
+.buttons button.next-btn {
+    background: var(--btn-primary, #517a2f) !important;
+}
+/* Кнопки в топ-панели */
+#rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn {
+    background: var(--accent, #ffa54d) !important;
+    color: #2d2b1a !important;
 }
 
-
-/*body {
-      background: linear-gradient(145deg, #0a1a0f 0%, #1a3a1f 30%, #0d2a12 60%, #0a2a1a 100%);
-    margin: 0;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', 'Poppins', 'Montserrat', system-ui, sans-serif;
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
-        padding-bottom: 90px !important;
-}*/
 .game-container, .game-card, .grid, .top-panel, .words-container, .buttons, .msg-area {
     position: relative;
     z-index: 1;
 }
 
 .game-card {
-    background: #fff8ec;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+   background: var(--bg-card, #fff8ec) !important;
+    box-shadow: 0 20px 35px var(--shadow-color, rgba(0,0,0,0.4)) !important;
+
 }
 
 /* Убедитесь, что фон карточки непрозрачный */
@@ -146,7 +258,7 @@ body::after {
     background-color: #fff8ec;
 }
  .game-container {
-    background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.3);
     border-radius: 56px;
     padding: 12px;
     backdrop-filter: blur(4px);
@@ -169,27 +281,29 @@ body::after {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #2c3e2b;
+    background: var(--bg-panel, #2c3e2b) !important;
+    color: var(--text-light, #fef0cf) !important;
             padding: 8px 20px;
             border-radius: 60px;
-            margin-bottom: 25px;
-            color: #fef0cf;
+            margin-bottom: 25px;    
             flex-wrap: wrap;
             gap: 3px;
         }
 
         .level-badge {
-            background: #ffa54d;
+        background: var(--accent, #ffa54d) !important;
+    color: #2d2b1a !important;
             padding: 5px 22px;
             border-radius: 40px;
             font-weight: bold;
             font-size: 1.2rem;
-            color: #2d2b1a;
+        
             box-shadow: inset 0 1px 2px #ffd58c, 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .score-panel {
-            background: #1f3a1c;
+              background: var(--btn-primary, #1f3a1c) !important;
+    color: var(--text-light, #fef0cf) !important;
             padding: 5px 18px;
             border-radius: 40px;
             font-weight: bold;
@@ -213,10 +327,13 @@ body::after {
             display: grid;
             justify-content: center;
             gap: 8px;
-            background: #e0cfaa;
+    background: var(--bg-grid, #e0cfaa) !important;
+    box-shadow: inset 0 0 0 2px var(--grid-border-light, #fff6e5), 
+                inset 0 0 0 6px var(--grid-border-dark, #bd9865), 
+                0 12px 24px var(--shadow-color, rgba(0,0,0,0.3)) !important;
             padding: 22px;
             border-radius: 44px;
-            box-shadow: inset 0 0 0 2px #fff6e5, inset 0 0 0 6px #bd9865, 0 12px 24px rgba(0,0,0,0.3);
+
             margin: 16px 0;
               margin: 16px auto; /* ← добавить auto */
     width: fit-content; /* ← добавить */
@@ -226,7 +343,7 @@ body::after {
         .cell {
     width: 62px;
     height: 62px;
-    background: #fffdf5;
+
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -234,21 +351,23 @@ body::after {
     font-size: 2rem;
     font-weight: 800;
     font-family: 'Segoe UI', 'Montserrat', monospace;
-    color: #2b4a1e;
+      background: var(--bg-cell);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 0 #9b6e42;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.05s linear;
-    box-shadow: 0 4px 0 #9b6e42;
+  
     border: 2px solid #ffefc0;
     text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
 }
 
 .cell.selected {
-    background: #f7b32b;
-    /* Убираем transform: translateY(3px); - оно двигает клетку */
-    color: #2f2a1a;
-    border-color: #ffe0a3;
-    box-shadow: 0 2px 0 #8b5a2a;
+    background: var(--bg-cell, #fffdf5) !important;
+    color: var(--text-primary, #2b4a1e) !important;
+    border-color: var(--border-color, #ffefc0) !important;
+    box-shadow: 0 4px 0 var(--cell-shadow, #9b6e42) !important;
 }
 
 .cell.found {
@@ -315,24 +434,29 @@ body::after {
             margin: 22px 0 8px;
         }
 
-        button {
-            background: #423d30;
+      /*  button {
+            background: var(--btn-secondary, #423d30) !important;
+    color: var(--text-light, #ffefcf) !important;
             border: none;
             padding: 10px 28px;
             border-radius: 60px;
             font-weight: bold;
             font-size: 1rem;
-            color: #ffefcf;
+       
             cursor: pointer;
            transition: 0.07s linear;
             box-shadow: 0 4px 0 #201e17;
             font-family: inherit;
-        }
+        } 
+
 
         button:active {
             transform: translateY(2px);
             box-shadow: 0 2px 0 #201e17;
-        }
+        } */
+
+
+
 
         .next-btn {
             background: #517a2f;
@@ -342,10 +466,10 @@ body::after {
         .msg-area {
             text-align: center;
             margin-top: 18px;
-            background: #2c261c;
+         background: var(--msg-bg, #2c261c) !important;
+    color: var(--text-light, #ffe3b3) !important;
             padding: 8px;
-            border-radius: 60px;
-            color: #ffe3b3;
+            border-radius: 60px;         
             font-weight: 500;
             font-size: 0.9rem;
         }
@@ -1034,3 +1158,660 @@ body.menu-mode .game-container {
     }
 }
 
+.theme-btn {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+#closeThemeModal {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+div[style*="z-index:20006"] {
+    pointer-events: auto !important;
+}
+
+div[style*="z-index:20005"] {
+    pointer-events: auto !important;
+}
+
+/* === СКРУГЛЁННЫЕ КНОПКИ С НЕЖНЫМИ ЦВЕТАМИ === */
+button {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 100px !important;
+    color: var(--text-primary, #2b4a1e) !important;
+    padding: 8px 24px !important;
+    font-weight: 500 !important;
+    font-size: 0.85rem !important;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.02),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+    transition: all 0.25s ease !important;
+    letter-spacing: 0.2px !important;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+button:active {
+    transform: translateY(0) !important;
+}
+
+/* Акцентные кнопки */
+.next-btn, #menuStartBtn {
+    background: rgba(255, 165, 77, 0.10) !important;
+    border: 1.5px solid rgba(255, 165, 77, 0.15) !important;
+    color: var(--text-primary, #2b4a1e) !important;
+    font-weight: 600 !important;
+}
+
+.next-btn:hover, #menuStartBtn:hover {
+    background: rgba(255, 165, 77, 0.18) !important;
+    border-color: rgba(255, 165, 77, 0.25) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Кнопка "Очистить" */
+#clearBtn {
+    background: rgba(200, 80, 80, 0.06) !important;
+    border: 1.5px solid rgba(200, 80, 80, 0.08) !important;
+    color: var(--text-primary, #2b4a1e) !important;
+}
+
+#clearBtn:hover {
+    background: rgba(200, 80, 80, 0.12) !important;
+    border-color: rgba(200, 80, 80, 0.15) !important;
+}
+
+/* Маленькие иконки */
+#rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn,
+#menuInviteBtn, #menuGalaxyBtn, #menuScrollsBtn, #menuThemeBtn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
+    font-size: 0.8rem !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+#rulesBtn:hover, #levelSelectBtn:hover, #galaxyBtn:hover, #menuBackBtn:hover,
+#menuInviteBtn:hover, #menuGalaxyBtn:hover, #menuScrollsBtn:hover, #menuThemeBtn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    transform: scale(1.05) !important;
+}
+
+/* Отключённая кнопка */
+.next-btn:disabled {
+    opacity: 0.3 !important;
+    transform: none !important;
+    cursor: not-allowed !important;
+}
+
+/* ========== ТЁМНАЯ ТЕМА (ФИОЛЕТОВЫЕ ОТТЕНКИ) ========== */
+[data-theme="dark"] button {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] button:hover {
+    background: rgba(120, 80, 200, 0.08) !important;
+    border-color: rgba(120, 80, 200, 0.15) !important;
+}
+
+[data-theme="dark"] .next-btn,
+[data-theme="dark"] #menuStartBtn {
+    background: rgba(120, 80, 200, 0.10) !important;
+    border: 1.5px solid rgba(120, 80, 200, 0.15) !important;
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .next-btn:hover,
+[data-theme="dark"] #menuStartBtn:hover {
+    background: rgba(120, 80, 200, 0.18) !important;
+    border-color: rgba(120, 80, 200, 0.25) !important;
+}
+
+[data-theme="dark"] #clearBtn {
+    background: rgba(200, 80, 80, 0.04) !important;
+    border: 1.5px solid rgba(200, 80, 80, 0.06) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] #clearBtn:hover {
+    background: rgba(200, 80, 80, 0.08) !important;
+    border-color: rgba(200, 80, 80, 0.10) !important;
+}
+
+[data-theme="dark"] #rulesBtn,
+[data-theme="dark"] #levelSelectBtn,
+[data-theme="dark"] #galaxyBtn,
+[data-theme="dark"] #menuBackBtn,
+[data-theme="dark"] #menuInviteBtn,
+[data-theme="dark"] #menuGalaxyBtn,
+[data-theme="dark"] #menuScrollsBtn,
+[data-theme="dark"] #menuThemeBtn {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] #rulesBtn:hover,
+[data-theme="dark"] #levelSelectBtn:hover,
+[data-theme="dark"] #galaxyBtn:hover,
+[data-theme="dark"] #menuBackBtn:hover,
+[data-theme="dark"] #menuInviteBtn:hover,
+[data-theme="dark"] #menuGalaxyBtn:hover,
+[data-theme="dark"] #menuScrollsBtn:hover,
+[data-theme="dark"] #menuThemeBtn:hover {
+    background: rgba(120, 80, 200, 0.08) !important;
+    border-color: rgba(120, 80, 200, 0.15) !important;
+}
+
+/* ========== СВЕТЛЫЕ ТЕМЫ ========== */
+/* Для светлых тем текст должен быть виден */
+[data-theme="blue"] button,
+[data-theme="teal"] button,
+[data-theme="sun"] button {
+    color: #1a1a2e !important;
+}
+
+[data-theme="blue"] .next-btn,
+[data-theme="teal"] .next-btn,
+[data-theme="sun"] .next-btn,
+[data-theme="blue"] #menuStartBtn,
+[data-theme="teal"] #menuStartBtn,
+[data-theme="sun"] #menuStartBtn {
+    color: #1a1a2e !important;
+}
+
+[data-theme="blue"] #clearBtn,
+[data-theme="teal"] #clearBtn,
+[data-theme="sun"] #clearBtn {
+    color: #1a1a2e !important;
+}
+
+/* Кнопка "Начать" в меню для всех тем */
+#menuStartBtn {
+    font-weight: 600 !important;
+}
+/* ========== ФИКСЫ ДЛЯ ТЁМНОЙ ТЕМЫ ========== */
+[data-theme="dark"] .cell {
+    border-color: rgba(120, 80, 200, 0.3) !important;
+    box-shadow: 0 0 15px rgba(120, 80, 200, 0.08), 
+                0 4px 0 rgba(80, 50, 150, 0.3) !important;
+    background: rgba(40, 30, 60, 0.8) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .cell.selected {
+    background: rgba(120, 80, 200, 0.25) !important;
+    box-shadow: 0 0 25px rgba(120, 80, 200, 0.15), 
+                0 2px 0 rgba(80, 50, 150, 0.4) !important;
+    border-color: rgba(120, 80, 200, 0.4) !important;
+}
+
+[data-theme="dark"] .cell.found {
+    border-color: rgba(120, 80, 200, 0.2) !important;
+    box-shadow: 0 0 20px rgba(120, 80, 200, 0.1) !important;
+}
+
+/* Контейнер со словами в тёмной теме */
+[data-theme="dark"] .words-container {
+    background: rgba(40, 30, 60, 0.6) !important;
+    border: 1px solid rgba(120, 80, 200, 0.15) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="dark"] .word-chip {
+    background: rgba(60, 40, 100, 0.3) !important;
+    border: 1px solid rgba(120, 80, 200, 0.08) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .word-chip.found-word {
+    background: rgba(120, 80, 200, 0.15) !important;
+    border-color: rgba(120, 80, 200, 0.2) !important;
+    color: #e8e8ff !important;
+}
+
+/* Сетка в тёмной теме */
+[data-theme="dark"] .grid {
+    background: rgba(30, 20, 50, 0.6) !important;
+    box-shadow: inset 0 0 0 2px rgba(120, 80, 200, 0.1),
+                inset 0 0 0 6px rgba(80, 50, 150, 0.1),
+                0 12px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Контейнер для списка слов (если не words-container) */
+[data-theme="dark"] .words-list {
+    gap: 8px !important;
+}
+
+[data-theme="dark"] .word-chip {
+    padding: 6px 14px !important;
+    border-radius: 30px !important;
+    font-size: 0.85rem !important;
+}
+
+/* Топ-панель в тёмной теме (дополнительно) */
+[data-theme="dark"] .top-panel {
+    background: rgba(30, 20, 50, 0.7) !important;
+    border: 1px solid rgba(120, 80, 200, 0.08) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* Сообщение в тёмной теме */
+[data-theme="dark"] .msg-area {
+    background: rgba(30, 20, 50, 0.7) !important;
+    border: 1px solid rgba(120, 80, 200, 0.06) !important;
+    color: #d0d0e8 !important;
+}
+/* Модальные окна с темами */
+
+
+/* Переменные для модальных окон */
+:root {
+    --modal-bg: rgba(0,0,0,0.85);
+}
+
+[data-theme="dark"] {
+    --modal-bg: rgba(10,10,26,0.92);
+}
+
+[data-theme="blue"] {
+    --modal-bg: rgba(10,30,50,0.88);
+}
+
+[data-theme="teal"] {
+    --modal-bg: rgba(10,40,40,0.88);
+}
+
+[data-theme="sun"] {
+    --modal-bg: rgba(40,30,10,0.88);
+}
+
+/* Общий фон для всех модалок */
+.modal-window {
+    background: var(--modal-bg, rgba(0,0,0,0.85)) !important;
+}
+
+/* Тёмная тема для всего контента модалок */
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .modal-content *:not(button):not([style*="background"]) {
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .modal-content h3,
+[data-theme="dark"] .modal-content h2 {
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background: #1a1a2e !important;
+    border-color: rgba(120, 80, 200, 0.3) !important;
+}
+
+[data-theme="dark"] .galaxy-item {
+    background: rgba(40, 30, 60, 0.6) !important;
+    border-color: rgba(120, 80, 200, 0.2) !important;
+}
+
+[data-theme="dark"] #levelsGrid button,
+[data-theme="dark"] #categoriesGrid button {
+    background: rgba(60, 40, 100, 0.3) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .scroll-item {
+    background: rgba(40, 30, 60, 0.5) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] [style*="background:#ede1ca"] {
+    background: rgba(40, 30, 60, 0.4) !important;
+}
+/* ===== ДОБАВИТЬ В НАЧАЛО ФАЙЛА ===== */
+:root {
+    --text-primary: #2b4a1e;
+    --text-secondary: #3a3220;
+    --text-light: #fef0cf;
+    --accent-color: #ffa54d;
+    --btn-primary: #517a2f;
+    --btn-secondary: #8b5a2a;
+    --bg-card: #fff8ec;
+}
+
+[data-theme="dark"] {
+    --text-primary: #d0d0e8 !important;
+    --text-secondary: #b8b8d8 !important;
+    --text-light: #e8e8ff !important;
+    --accent-color: #6b5a9e !important;
+    --btn-primary: #4a3a7a !important;
+    --btn-secondary: #ac82ff !important;
+    --bg-card: #1a1a2e !important;
+}
+
+[data-theme="blue"] {
+    --text-primary: #1a3a5a !important;
+    --text-secondary: #2a4a6a !important;
+    --accent-color: #4a9fc7 !important;
+    --btn-primary: #2a7fa5 !important;
+    --btn-secondary: #1a4a6a !important;
+    --bg-card: #f0f8ff !important;
+}
+
+[data-theme="teal"] {
+    --text-primary: #1a4a4a !important;
+    --text-secondary: #2a5a5a !important;
+    --accent-color: #2a9a9a !important;
+    --btn-primary: #1a7a7a !important;
+    --btn-secondary: #1a5a5a !important;
+    --bg-card: #e8f5f5 !important;
+}
+
+[data-theme="sun"] {
+    --text-primary: #5a4a1a !important;
+    --text-secondary: #6a5a2a !important;
+    --accent-color: #e8a820 !important;
+    --btn-primary: #d4880a !important;
+    --btn-secondary: #8a6a1a !important;
+    --bg-card: #fef8e8 !important;
+}
+/* Добавить в конец styleOld.css */
+
+/* Дополнительные переменные для теней */
+:root {
+    --btn-primary-shadow: #2e4a1a;
+    --btn-secondary-shadow: #5a3a1a;
+    --bg-card-light: #ede1ca;
+    --bg-progress: #d4c3a4;
+    --border-color: #d4c3a4;
+}
+
+[data-theme="dark"] {
+    --btn-primary-shadow: #2a1a4a;
+    --btn-secondary-shadow: #1a0a2a;
+    --bg-card-light: rgba(40, 30, 60, 0.6);
+    --bg-progress: rgba(40, 30, 60, 0.5);
+    --border-color: rgba(120, 80, 200, 0.2);
+}
+
+[data-theme="blue"] {
+    --btn-primary-shadow: #1a4a6a;
+    --btn-secondary-shadow: #0a2a4a;
+    --bg-card-light: #e0edf5;
+    --bg-progress: #c5dbe8;
+}
+
+[data-theme="teal"] {
+    --btn-primary-shadow: #1a4a4a;
+    --btn-secondary-shadow: #0a2a2a;
+    --bg-card-light: #d0e8e8;
+    --bg-progress: #b8dcdc;
+}
+
+[data-theme="sun"] {
+    --btn-primary-shadow: #6a4a0a;
+    --btn-secondary-shadow: #4a2a0a;
+    --bg-card-light: #f0e0a8;
+    --bg-progress: #f0d888;
+}
+
+/* Стили для модалок */
+[data-theme="dark"] .modal-content {
+    background: #1a1a2e !important;
+    border-color: rgba(120, 80, 200, 0.3) !important;
+}
+
+[data-theme="dark"] .modal-content div,
+[data-theme="dark"] .modal-content span,
+[data-theme="dark"] .modal-content p,
+[data-theme="dark"] .modal-content li {
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .modal-content h3,
+[data-theme="dark"] .modal-content h2 {
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .galaxy-item {
+    background: rgba(40, 30, 60, 0.6) !important;
+    border-color: rgba(120, 80, 200, 0.2) !important;
+}
+
+[data-theme="dark"] #levelsGrid button,
+[data-theme="dark"] #categoriesGrid button {
+    background: rgba(60, 40, 100, 0.3) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .scroll-item {
+    background: rgba(40, 30, 60, 0.5) !important;
+    color: #d0d0e8 !important;
+}
+/* В конец styleOld.css */
+[data-theme="dark"] .scroll-item span {
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .scroll-item {
+    background: rgba(40, 30, 60, 0.5) !important;
+    border-color: rgba(120, 80, 200, 0.2) !important;
+}
+
+[data-theme="dark"] .scroll-item:hover {
+    background: rgba(50, 35, 80, 0.6) !important;
+}
+
+[data-theme="dark"] .scroll-item div span {
+    color: #d0d0e8 !important;
+}
+
+/* ===== КНОПКИ ДЛЯ ГОЛУБОЙ ТЕМЫ ===== */
+[data-theme="blue"] button:not([style*="background:transparent"]) {
+    background: rgba(26, 58, 90, 0.12) !important;
+    border: 2px solid rgba(26, 58, 90, 0.25) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(26, 58, 90, 0.2) !important;
+    border-color: rgba(26, 58, 90, 0.4) !important;
+}
+
+[data-theme="blue"] .next-btn,
+[data-theme="blue"] #menuStartBtn {
+    background: rgba(26, 58, 90, 0.15) !important;
+    border: 2px solid rgba(26, 58, 90, 0.35) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] .next-btn:hover,
+[data-theme="blue"] #menuStartBtn:hover {
+    background: rgba(26, 58, 90, 0.25) !important;
+}
+
+[data-theme="blue"] #clearBtn {
+    background: rgba(200, 60, 60, 0.1) !important;
+    border: 2px solid rgba(200, 60, 60, 0.2) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] #clearBtn:hover {
+    background: rgba(200, 60, 60, 0.18) !important;
+}
+
+[data-theme="blue"] #rulesBtn,
+[data-theme="blue"] #levelSelectBtn,
+[data-theme="blue"] #galaxyBtn,
+[data-theme="blue"] #menuBackBtn {
+    background: rgba(26, 58, 90, 0.1) !important;
+    border: 2px solid rgba(26, 58, 90, 0.2) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] #rulesBtn:hover,
+[data-theme="blue"] #levelSelectBtn:hover,
+[data-theme="blue"] #galaxyBtn:hover,
+[data-theme="blue"] #menuBackBtn:hover {
+    background: rgba(26, 58, 90, 0.2) !important;
+}
+
+/* ===== КНОПКИ ДЛЯ БИРЮЗОВОЙ ТЕМЫ ===== */
+[data-theme="teal"] button:not([style*="background:transparent"]) {
+    background: rgba(26, 74, 74, 0.12) !important;
+    border: 2px solid rgba(26, 74, 74, 0.25) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(26, 74, 74, 0.2) !important;
+    border-color: rgba(26, 74, 74, 0.4) !important;
+}
+
+[data-theme="teal"] .next-btn,
+[data-theme="teal"] #menuStartBtn {
+    background: rgba(26, 74, 74, 0.15) !important;
+    border: 2px solid rgba(26, 74, 74, 0.35) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] .next-btn:hover,
+[data-theme="teal"] #menuStartBtn:hover {
+    background: rgba(26, 74, 74, 0.25) !important;
+}
+
+[data-theme="teal"] #clearBtn {
+    background: rgba(200, 60, 60, 0.1) !important;
+    border: 2px solid rgba(200, 60, 60, 0.2) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] #clearBtn:hover {
+    background: rgba(200, 60, 60, 0.18) !important;
+}
+
+[data-theme="teal"] #rulesBtn,
+[data-theme="teal"] #levelSelectBtn,
+[data-theme="teal"] #galaxyBtn,
+[data-theme="teal"] #menuBackBtn {
+    background: rgba(26, 74, 74, 0.1) !important;
+    border: 2px solid rgba(26, 74, 74, 0.2) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] #rulesBtn:hover,
+[data-theme="teal"] #levelSelectBtn:hover,
+[data-theme="teal"] #galaxyBtn:hover,
+[data-theme="teal"] #menuBackBtn:hover {
+    background: rgba(26, 74, 74, 0.2) !important;
+}
+
+/* ===== КНОПКИ ДЛЯ СОЛНЕЧНОЙ ТЕМЫ ===== */
+[data-theme="sun"] button:not([style*="background:transparent"]) {
+    background: rgba(90, 74, 26, 0.12) !important;
+    border: 2px solid rgba(90, 74, 26, 0.25) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(90, 74, 26, 0.2) !important;
+    border-color: rgba(90, 74, 26, 0.4) !important;
+}
+
+[data-theme="sun"] .next-btn,
+[data-theme="sun"] #menuStartBtn {
+    background: rgba(90, 74, 26, 0.15) !important;
+    border: 2px solid rgba(90, 74, 26, 0.35) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] .next-btn:hover,
+[data-theme="sun"] #menuStartBtn:hover {
+    background: rgba(90, 74, 26, 0.25) !important;
+}
+
+[data-theme="sun"] #clearBtn {
+    background: rgba(200, 60, 60, 0.1) !important;
+    border: 2px solid rgba(200, 60, 60, 0.2) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] #clearBtn:hover {
+    background: rgba(200, 60, 60, 0.18) !important;
+}
+
+[data-theme="sun"] #rulesBtn,
+[data-theme="sun"] #levelSelectBtn,
+[data-theme="sun"] #galaxyBtn,
+[data-theme="sun"] #menuBackBtn {
+    background: rgba(90, 74, 26, 0.1) !important;
+    border: 2px solid rgba(90, 74, 26, 0.2) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] #rulesBtn:hover,
+[data-theme="sun"] #levelSelectBtn:hover,
+[data-theme="sun"] #galaxyBtn:hover,
+[data-theme="sun"] #menuBackBtn:hover {
+    background: rgba(90, 74, 26, 0.2) !important;
+}
+
+/* ===== КНОПКИ В МОДАЛЬНЫХ ОКНАХ ДЛЯ СВЕТЛЫХ ТЕМ ===== */
+[data-theme="blue"] .modal-content button,
+[data-theme="teal"] .modal-content button,
+[data-theme="sun"] .modal-content button {
+    background: rgba(0, 0, 0, 0.06) !important;
+    border: 2px solid rgba(0, 0, 0, 0.15) !important;
+    color: inherit !important;
+}
+
+[data-theme="blue"] .modal-content button:hover,
+[data-theme="teal"] .modal-content button:hover,
+[data-theme="sun"] .modal-content button:hover {
+    background: rgba(0, 0, 0, 0.12) !important;
+    border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Кнопки в модалках для каждой темы */
+[data-theme="blue"] #playSelectedBtn,
+[data-theme="blue"] #backToCatsBtn,
+[data-theme="blue"] #closeCatModal,
+[data-theme="blue"] #closeDiffModal,
+[data-theme="blue"] #closeGalaxyBtn {
+    background: rgba(26, 58, 90, 0.12) !important;
+    border: 2px solid rgba(26, 58, 90, 0.25) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="teal"] #playSelectedBtn,
+[data-theme="teal"] #backToCatsBtn,
+[data-theme="teal"] #closeCatModal,
+[data-theme="teal"] #closeDiffModal,
+[data-theme="teal"] #closeGalaxyBtn {
+    background: rgba(26, 74, 74, 0.12) !important;
+    border: 2px solid rgba(26, 74, 74, 0.25) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="sun"] #playSelectedBtn,
+[data-theme="sun"] #backToCatsBtn,
+[data-theme="sun"] #closeCatModal,
+[data-theme="sun"] #closeDiffModal,
+[data-theme="sun"] #closeGalaxyBtn {
+    background: rgba(90, 74, 26, 0.12) !important;
+    border: 2px solid rgba(90, 74, 26, 0.25) !important;
+    color: #5a4a1a !important;
+}

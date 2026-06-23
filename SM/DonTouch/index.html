@@ -1333,10 +1333,10 @@
         var maxSavedLevel = 0;
 
         function checkAndSaveLevel() {
-            if (level % 50 === 0 && level > 0) {
+            if (level % 3 === 0 && level > 0) {
                 localStorage.setItem('bathyscaphe_max_level', level);
                 maxSavedLevel = level;
-                console.log('💾 Уровень ' + level + ' сохранён!');
+              //  console.log('💾 Уровень ' + level + ' сохранён!');
                 showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
             }
         }
@@ -1363,7 +1363,7 @@
 
         function continueGame() {
             var savedLevel = loadSavedLevel();
-if (savedLevel < 50) {
+if (savedLevel < 3) {
     // Создаём модальное окно
     var modal = document.createElement('div');
     modal.className = 'modal-overlay active';
@@ -1371,7 +1371,7 @@ if (savedLevel < 50) {
         <div class="modal-content">
             <h2 class="warning">⚠️ Нет сохранений</h2>
             <p>Точки сохранения не достигнуты.</p>
-            <p style="font-size:14px; color:rgba(255,255,255,0.6);">Достигните 50 уровня, чтобы сохранить прогресс!</p>
+            <p style="font-size:14px; color:rgba(255,255,255,0.6);">Достигните 3 уровня, чтобы сохранить прогресс!</p>
             <button class="modal-btn close-btn" onclick="this.closest('.modal-overlay').remove()">Понятно</button>
         </div>
     `;
@@ -2614,7 +2614,7 @@ if (savedLevel < 50) {
         loadSavedLevel();
 
         console.log('🌊 Батискаф в западне загружен!');      
-        console.log('💾 Сохранение прогресса каждые 50 уровней');
+     //   console.log('💾 Сохранение прогресса каждые 3 уровня');
     </script>
 </body>
 </html>
