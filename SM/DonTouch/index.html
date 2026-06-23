@@ -726,7 +726,7 @@
         }
 
         .modal-content {
-            background: rgba(30, 30, 50, 0.95);
+            background: rgba(20, 60, 100, 0.92);  
             border-radius: 20px;
             padding: 30px 24px;
             max-width: 380px;
@@ -1087,10 +1087,525 @@
             80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
             100% { transform: translate(-50%, -60%) scale(1); opacity: 0; }
         }
+    /* ===== КРУГЛЫЕ КНОПКИ-ИКОНКИ В МЕНЮ ===== */
+.menu-btn-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: linear-gradient(135deg, #7289da, #5a6fc9);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.menu-btn-icon:active {
+    transform: scale(0.92);
+}
+/* Пригласить друзей - светлый голубой */
+.menu-btn-icon.invite {
+    background: linear-gradient(135deg, #81d4fa, #4fc3f7);
+}
+
+.menu-btn-icon.invite:hover {
+    background: linear-gradient(135deg, #a6e0fa, #6dd0f8);
+}
+
+/* Другие игры - средний голубой */
+.menu-btn-icon.games {
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+}
+
+.menu-btn-icon.games:hover {
+    background: linear-gradient(135deg, #6dd0f8, #039be5);
+}
+
+/* Достижения - тёмный голубой (как вы хотели) */
+.menu-btn-icon.achievements {
+    background: linear-gradient(135deg, #0288d1, #01579b);
+}
+
+.menu-btn-icon.achievements:hover {
+    background: linear-gradient(135deg, #039be5, #0277bd);
+}
+
+@media (max-width: 400px) {
+    .menu-btn-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 320px) {
+    .menu-btn-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+}
+/* ===== МОРСКАЯ МОДАЛКА ДОСТИЖЕНИЙ ===== */
+#achievementsModal .modal-content {
+    width: 560px;
+    max-width: 92vw;
+    max-height: 85vh;
+    padding: 20px 20px 16px;
+    background: linear-gradient(145deg, rgba(20, 60, 100, 0.92), rgba(10, 40, 70, 0.95));
+    border-radius: 16px;
+    border: 2px solid rgba(100, 200, 255, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 
+                inset 0 1px 0 rgba(100, 200, 255, 0.1),
+                0 0 40px rgba(50, 150, 255, 0.1);
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+#achievementsModal .modal-content::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.5), transparent);
+    border-radius: 50%;
+}
+
+#achievementsModal .modal-content h2 {
+    color: #7ec8e3;
+    text-shadow: 0 0 30px rgba(100, 200, 255, 0.2);
+}
+
+/* Кнопка закрытия */
+#achievementsModal .close-x {
+    color: rgba(150, 220, 255, 0.4);
+}
+
+#achievementsModal .close-x:hover {
+    color: #7ec8e3;
+}
+
+/* Статистика */
+#achievementsList .stats-header {
+    background: rgba(50, 150, 200, 0.12);
+    border: 1px solid rgba(100, 200, 255, 0.12);
+}
+
+#achievementsList .stats-header span:first-child {
+    color: #7ec8e3;
+}
+
+#achievementsList .stats-header span:last-child {
+    color: rgba(150, 220, 255, 0.5);
+}
+
+/* Заголовки категорий */
+#achievementsList .category-header {
+    color: #7ec8e3;
+    border-bottom: 1px solid rgba(100, 200, 255, 0.12);
+    text-shadow: 0 0 20px rgba(100, 200, 255, 0.1);
+}
+
+/* Элементы достижений */
+#achievementsList .achievement-item {
+    background: rgba(50, 150, 200, 0.06);
+    border: 1px solid rgba(100, 200, 255, 0.06);
+}
+
+#achievementsList .achievement-item.unlocked {
+    background: rgba(50, 200, 255, 0.08);
+    border: 1px solid rgba(100, 200, 255, 0.15);
+    box-shadow: 0 0 20px rgba(50, 200, 255, 0.05);
+}
+
+#achievementsList .achievement-item.unlocked:hover {
+    background: rgba(50, 200, 255, 0.15) !important;
+    border-color: rgba(100, 200, 255, 0.3) !important;
+    box-shadow: 0 0 30px rgba(50, 200, 255, 0.1);
+}
+
+#achievementsList .achievement-item.locked {
+    background: rgba(30, 80, 120, 0.08);
+    border: 1px solid rgba(100, 200, 255, 0.04);
+}
+
+#achievementsList .achievement-item.locked:hover {
+    background: rgba(50, 150, 200, 0.1) !important;
+    border-color: rgba(100, 200, 255, 0.1) !important;
+}
+
+/* Названия */
+#achievementsList .achievement-item .info .name {
+    color: #b0dcee;
+}
+
+#achievementsList .achievement-item.unlocked .info .name {
+    color: #5ddfb0;
+    text-shadow: 0 0 20px rgba(93, 223, 176, 0.15);
+}
+
+
+/* Статус */
+#achievementsList .achievement-item .status {
+    color: rgba(150, 220, 255, 0.3);
+}
+
+/* Скролл */
+#achievementsList::-webkit-scrollbar-thumb {
+    background: rgba(100, 200, 255, 0.2);
+    border-radius: 10px;
+}
+
+#achievementsList::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 200, 255, 0.35);
+}
+
+/* Кнопка "Закрыть" */
+#achievementsModal .modal-btn.close-btn {
+    background: linear-gradient(135deg, rgba(50, 150, 200, 0.3), rgba(30, 100, 150, 0.3));
+    border: 1px solid rgba(100, 200, 255, 0.15);
+    color: #7ec8e3;
+}
+
+#achievementsModal .modal-btn.close-btn:hover {
+    background: linear-gradient(135deg, rgba(50, 200, 255, 0.25), rgba(30, 150, 200, 0.25));
+    border-color: rgba(100, 200, 255, 0.3);
+    box-shadow: 0 0 30px rgba(50, 200, 255, 0.1);
+}
+
+/* Для больших экранов */
+@media (min-width: 768px) {
+    #achievementsModal .modal-content {
+        width: 640px;
+        padding: 24px 24px 20px;
+    }
+}
+
+@media (min-width: 1200px) {
+    #achievementsModal .modal-content {
+        width: 720px;
+        padding: 28px 28px 24px;
+    }
+}
+
+/* Для мобильных */
+@media (max-width: 480px) {
+    #achievementsModal .modal-content {
+        width: auto;
+        max-width: 95vw;
+        padding: 16px 12px;
+        margin: 10px;
+        background: linear-gradient(145deg, rgba(20, 60, 100, 0.95), rgba(10, 40, 70, 0.98));
+    }
+}
+/* ===== КОМПАКТНАЯ МОДАЛКА ДОСТИЖЕНИЙ ===== */
+
+#achievementsModal .modal-content h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#achievementsList {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,215,0,0.2) transparent;
+}
+
+#achievementsList::-webkit-scrollbar {
+    width: 3px;
+}
+
+#achievementsList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#achievementsList::-webkit-scrollbar-thumb {
+    background: rgba(255,215,0,0.25);
+    border-radius: 10px;
+}
+
+#achievementsList::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,215,0,0.4);
+}
+
+/* Стили для элементов достижений в компактном виде */
+#achievementsList .achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    min-height: 40px;
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+#achievementsList .achievement-item.unlocked {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+#achievementsList .achievement-item.locked {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    opacity: 0.5;
+}
+
+#achievementsList .achievement-item .icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+#achievementsList .achievement-item .info {
+    flex: 1;
+    min-width: 0;
+     overflow: hidden; 
+}
+
+#achievementsList .achievement-item .info .name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #6faeff;
+}
+
+#achievementsList .achievement-item.unlocked .info .name {
+    color: #10b981;
+}
+
+#achievementsList .achievement-item .info .desc {
+    font-size: 14px;
+    color: rgba(161, 255, 247, 0.45);
+    line-height: 1.3;
+    margin-top: 2px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+#achievementsList .achievement-item .status {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+#achievementsList .category-header {
+    grid-column: 1 / -1;
+    font-weight: 700;
+    color: #faa61a;
+    font-size: 12px;
+    padding: 8px 0 2px;
+    border-bottom: 1px solid rgba(255,215,0,0.1);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+
+#achievementsList .stats-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 6px 8px;
+    background: rgba(255,215,0,0.06);
+    border-radius: 8px;
+    margin-bottom: 4px;
+    border: 1px solid rgba(255,215,0,0.08);
+}
+
+#achievementsList .stats-header span:first-child {
+    color: #faa61a;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#achievementsList .stats-header span:last-child {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    margin-left: 6px;
+}
+
+/* Адаптив для маленьких экранов */
+@media (max-width: 480px) {
+    #achievementsModal .modal-content {
+        max-width: 95%;
+        padding: 16px 12px;
+        margin: 10px;
+    }
+    
+    #achievementsList {
+        grid-template-columns: 1fr !important;
+        max-height: 340px;
+    }
+    
+    #achievementsList .achievement-item .info .desc {
+        white-space: normal;
+    }
+}
+/* Для мобильных устройств, чтобы текст не обрезался */
+@media (max-width: 480px) {
+    #achievementsList .achievement-item .info .desc {
+        white-space: normal;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 380px) {
+    #achievementsModal .modal-content {
+        padding: 12px 10px;
+    }
+    
+    #achievementsList .achievement-item {
+        padding: 5px 6px;
+        min-height: 34px;
+    }
+    
+    #achievementsList .achievement-item .icon {
+        font-size: 16px;
+    }
+    
+    #achievementsList .achievement-item .info .name {
+        font-size: 12px;
+    }
+    
+    #achievementsList .achievement-item .info .desc {
+        font-size: 12px;
+    }
+}
+/* Кнопка закрытия */
+#achievementsModal .close-x {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: rgba(150, 220, 255, 0.3);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+#achievementsModal .close-x:hover {
+    color: #7ec8e3;
+    transform: rotate(90deg);
+}
+/* ===== АНИМАЦИЯ ПУЗЫРЕЙ ДЛЯ ПЕРЕЗАПУСКА ===== */
+/* ===== АНИМАЦИЯ ПУЗЫРЕЙ ДЛЯ ПЕРЕЗАПУСКА ===== */
+#bubbleOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    pointer-events: none;
+    display: none;
+    overflow: hidden;
+    background: rgba(0, 20, 50, 0.3);
+}
+
+#bubbleOverlay.active {
+    display: block;
+    pointer-events: all;
+}
+
+.bubble-overlay {
+    position: absolute;
+    bottom: -80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(150, 230, 255, 0.5), rgba(50, 180, 255, 0.2));
+    border: 2px solid rgba(150, 230, 255, 0.3);
+    box-shadow: 0 0 20px rgba(100, 200, 255, 0.2), inset 0 0 20px rgba(100, 200, 255, 0.1);
+    animation: bubbleRiseOverlay linear forwards;
+    pointer-events: none;
+}
+
+@keyframes bubbleRiseOverlay {
+    0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0.9;
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-40vh) scale(1);
+    }
+    70% {
+        opacity: 0.9;
+        transform: translateY(-80vh) scale(1.1);
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.3);
+        opacity: 0;
+    }
+}
+
+.bubble-overlay-small {
+    position: absolute;
+    bottom: -40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(200, 240, 255, 0.3), rgba(100, 200, 255, 0.1));
+    border: 1px solid rgba(150, 230, 255, 0.15);
+    animation: bubbleRiseOverlaySmall linear forwards;
+    pointer-events: none;
+}
+
+@keyframes bubbleRiseOverlaySmall {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.9;
+        transform: translateY(-60vh) scale(0.9);
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.2);
+        opacity: 0;
+    }
+}
+
+.bubble-overlay-big {
+    position: absolute;
+    bottom: -120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(100, 200, 255, 0.2), rgba(50, 150, 255, 0.05));
+    border: 3px solid rgba(150, 230, 255, 0.15);
+    box-shadow: 0 0 40px rgba(100, 200, 255, 0.1);
+    animation: bubbleRiseOverlayBig linear forwards;
+    pointer-events: none;
+}
+
+@keyframes bubbleRiseOverlayBig {
+    0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-50vh) scale(1.1);
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.4);
+        opacity: 0;
+    }
+}
     </style>
 </head>
 <body>
-
+<!-- ===== ОВЕРЛЕЙ С ПУЗЫРЯМИ ДЛЯ ПЕРЕЗАПУСКА ===== -->
+<div id="bubbleOverlay">
+    <!-- Пузыри будут создаваться динамически -->
+</div>
     <!-- ===== ГЛАВНОЕ МЕНЮ ===== -->
     <div id="mainMenu">
         <h1>🌊 Батискаф в западне!</h1>
@@ -1098,8 +1613,11 @@
         <button class="menu-btn play" onclick="startGame()">▶ Новая игра</button>
         <button class="menu-btn continue" onclick="continueGame()">↩️ Продолжить</button>
         <button class="menu-btn howto" onclick="showHowTo()">❓ Как играть?</button>
-        <button class="menu-btn invite" onclick="inviteFriends()">👥 Пригласить друзей</button>
-        <button class="menu-btn games" onclick="showGamesModal()">🎮 Другие игры</button>
+<div style="display: flex; gap: 12px; justify-content: center; width: 100%; margin-top: 4px;">
+    <button class="menu-btn-icon invite" onclick="inviteFriends()" title="Пригласить друзей">👥</button>
+    <button class="menu-btn-icon games" onclick="showGamesModal()" title="Другие игры">🎮</button>
+    <button class="menu-btn-icon achievements" onclick="openAchievementsModal()" title="Достижения">🏆</button>
+</div>
     </div>
 
     <!-- ===== МОДАЛЬНЫЕ ОКНА ===== -->
@@ -1111,7 +1629,7 @@
                 <li>🐚 Собирай ракушки для очков</li>
                 <li>⭐ Собирай звёзды, чтобы уменьшиться</li>
                 <li>🛡️ Собирай щиты для защиты</li>
-                <li>🔱 Избегай ядовитых медуз</li>    
+                <li>🧿 Избегай ядовитых медуз</li>    
                 <li>💥 Не касайся проклятых стен!</li>
             </ul>
             <button class="modal-btn close-btn" onclick="closeHowTo()">Понятно!</button>
@@ -1280,6 +1798,29 @@
             </button>
         </div>
     </div>
+<!-- ===== МОДАЛКА ВСПЛЫВАЮЩЕГО ДОСТИЖЕНИЯ ===== -->
+<div id="achievementPopup" class="modal-overlay">
+    <div class="modal-content" style="max-width: 340px; padding: 30px 24px;">
+        <div style="font-size: 64px; text-align: center; margin-bottom: 10px;" id="popupAchievementIcon">🏆</div>
+        <h2 style="text-align: center; color: #faa61a; margin: 0 0 8px 0;">🎉 Достижение получено!</h2>
+        <div style="text-align: center; font-size: 22px; font-weight: bold; color: #fff; margin: 8px 0;" id="popupAchievementName">Новое достижение</div>
+        <div style="text-align: center; font-size: 15px; color: rgba(255,255,255,0.7); margin: 8px 0 20px 0;" id="popupAchievementDesc">Описание</div>
+        <button class="modal-btn primary" onclick="closeAchievementPopup()" style="width: 100%;">✅ Отлично!</button>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА СПИСКА ДОСТИЖЕНИЙ ===== -->
+<div id="achievementsModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px; padding: 20px 16px; border-radius: 16px; position: relative;">
+        <button onclick="closeAchievementsModal()" style="position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 24px; cursor: pointer; padding: 4px 8px; transition: all 0.2s;"
+                onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">✕</button>
+        <h2 style="text-align: center; color: #faa61a; margin: 0 0 12px 0; font-size: 20px;">🏆 Достижения</h2>
+        <div id="achievementsList" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+            <!-- Список будет сгенерирован JS -->
+        </div>
+        <button class="modal-btn close-btn" onclick="closeAchievementsModal()" style="width: 100%; margin-top: 12px; padding: 10px;">📊 Закрыть</button>
+    </div>
+</div>
 
     <script>
         // ============================================================
@@ -1331,6 +1872,125 @@
         //  СОХРАНЕНИЕ ПРОГРЕССА
         // ============================================================
         var maxSavedLevel = 0;
+        var bubbleInterval = null;
+var bubbleOverlayActive = false;
+
+function startBubbleTransition(callback) {
+    if (bubbleOverlayActive) return;
+    bubbleOverlayActive = true;
+    
+    var overlay = document.getElementById('bubbleOverlay');
+    if (!overlay) {
+        createBubbleOverlay();
+        overlay = document.getElementById('bubbleOverlay');
+    }
+    
+    overlay.innerHTML = '';
+    overlay.style.display = 'block';
+    overlay.style.pointerEvents = 'all';
+    overlay.style.background = 'rgba(0, 20, 50, 0.4)';
+    
+    // Создаём много пузырей сразу
+    for (var i = 0; i < 4; i++) {
+        setTimeout(function() {
+            createBubbleWave();
+        }, i * 200);
+    }
+    
+    // Запускаем интервал для новых волн (чаще)
+    if (bubbleInterval) clearInterval(bubbleInterval);
+    bubbleInterval = setInterval(function() {
+        if (bubbleOverlayActive) {
+            createBubbleWave();
+        } else {
+            clearInterval(bubbleInterval);
+            bubbleInterval = null;
+        }
+    }, 400); // Было 800
+    
+    // ⏳ Ждём 3 секунды (пузыри уже уплывут за экран)
+    setTimeout(function() {
+        // Скрываем оверлей
+        hideBubbleOverlay();
+        
+        // Запускаем колбэк (перезапуск игры) ПОСЛЕ исчезновения пузырей
+        if (callback) callback();
+    }, 3000);
+}
+
+function hideBubbleOverlay() {
+    var overlay = document.getElementById('bubbleOverlay');
+    if (overlay) {
+        // Очищаем все пузыри
+        overlay.innerHTML = '';
+        overlay.style.display = 'none';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.background = 'transparent';
+        bubbleOverlayActive = false;
+    }
+    if (bubbleInterval) {
+        clearInterval(bubbleInterval);
+        bubbleInterval = null;
+    }
+}
+
+function createBubbleWave() {
+    if (!bubbleOverlayActive) return;
+    
+    var overlay = document.getElementById('bubbleOverlay');
+    if (!overlay || overlay.style.display === 'none') return;
+    
+    var count = 10 + Math.floor(Math.random() * 15); // Ещё больше пузырей
+    
+    for (var i = 0; i < count; i++) {
+        var bubble = document.createElement('div');
+        
+        var rand = Math.random();
+        var size;
+        var className;
+        
+        if (rand > 0.8) {
+            className = 'bubble-overlay-big';
+            size = 50 + Math.random() * 80;
+        } else if (rand > 0.5) {
+            className = 'bubble-overlay';
+            size = 30 + Math.random() * 50;
+        } else {
+            className = 'bubble-overlay-small';
+            size = 15 + Math.random() * 25;
+        }
+        
+        bubble.className = className;
+        bubble.style.width = size + 'px';
+        bubble.style.height = size + 'px';
+        bubble.style.left = (Math.random() * 90 + 5) + '%';
+        
+        // 🚀 УСКОРЯЕМ! Длительность теперь 1.5-3 секунды (было 3-5)
+        var duration;
+        if (className === 'bubble-overlay-big') {
+            duration = 1.8 + Math.random() * 1.2;
+        } else if (className === 'bubble-overlay') {
+            duration = 1.5 + Math.random() * 1;
+        } else {
+            duration = 1.2 + Math.random() * 0.8;
+        }
+        bubble.style.animationDuration = duration + 's';
+        
+        var startDelay = Math.random() * 0.5; // Меньше задержка
+        bubble.style.animationDelay = startDelay + 's';
+        
+        if (Math.random() > 0.7) {
+            bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(200, 240, 255, 0.4), rgba(100, 200, 255, 0.1))';
+        }
+        
+        overlay.appendChild(bubble);
+        
+        setTimeout(function(el) {
+            if (el && el.parentNode) el.remove();
+        }, (duration + startDelay) * 1000 + 300, bubble);
+    }
+}
+
 
         function checkAndSaveLevel() {
             if (level % 3 === 0 && level > 0) {
@@ -1643,15 +2303,26 @@ if (savedLevel < 3) {
         var paus = false;
         var int1, int2, int3, int4;
         var iint = "";
-        var gameActive = false;
+        var gameActive = false;        
         var level = 1;
         var shields = 0;
+        var lastAdTime = 0;
+var adCooldown = 120000; // 2 минуты (120000 миллисекунд)
         var hasShield = false;
         var jellyfishActive = false;
         var jellyfishTimer = null;
         var shieldTimer = null;
         var dayNightMode = 0;
         var colorCycleTimer = null;
+        var jellyfishDeflected = 0;
+var jellyfishHits = 0;
+var deathCount = 0;
+var speedBoostCount = 0;
+var slowMotionCount = 0;
+var achievementPopupPaused = false;  
+window.keysBlocked = false;  
+var magnetCount = 0;
+var achievementsChecked = false;
         var waterColors = [
             ['#1a3a6a', '#2a5a8a', '#3a7aaa', '#5a9aca'],
             ['#0a1a3a', '#0a2a5a', '#0a3a6a', '#1a5a8a'],
@@ -1663,6 +2334,42 @@ if (savedLevel < 3) {
         var colorIndex = 0;
         var bgInterval = null;
 
+
+// Показать межстраничную рекламу (с защитой от спама)
+// Показать межстраничную рекламу (с защитой от спама)
+function showInterstitialAd() {
+    return new Promise(function(resolve) {
+        var now = Date.now();
+        
+        // Проверяем, прошло ли достаточно времени с последней рекламы
+        if (typeof vkBridge !== 'undefined' && (now - lastAdTime) >= adCooldown) {
+            lastAdTime = now;
+            
+            vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
+                .then(function(data) {
+                    console.log('📱 Межстраничная реклама показана');
+                    // Небольшая задержка после рекламы
+                    setTimeout(function() {
+                        resolve(true);
+                    }, 200);
+                })
+                .catch(function(error) {
+                    console.log("⚠️ Ошибка показа рекламы:", error);
+                    // Всё равно продолжаем игру
+                    resolve(false);
+                });
+        } else {
+            var waitTime = Math.round((adCooldown - (now - lastAdTime)) / 1000);
+            if (waitTime > 0) {
+                console.log("⏳ Реклама не показана: подождите " + waitTime + " секунд");
+            } else {
+                console.log("⏳ Реклама не показана: слишком рано");
+            }
+            // Всё равно продолжаем игру
+            resolve(false);
+        }
+    });
+}
         // ============================================================
         //  ФУНКЦИИ МЕНЮ
         // ============================================================
@@ -1775,24 +2482,148 @@ if (savedLevel < 3) {
             if (gameOverModal) gameOverModal.classList.remove('active');
         }
 
-        function restartGame() {
-            closeGameOverModal();
-            resetGame();
-            if (mainMenu && mainMenu.style.display !== 'none') {
-                mainMenu.style.display = 'none';
-                if (gameContainer) gameContainer.style.display = 'flex';
-            }
-            gameActive = true;
-            down();
-            startBackgroundEffects();
-            isSoundEnabled = true;
-            paus = false;
-            wasPausedByHide = false;
-            if (pausa) {
-                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-            }
-            playButtonSound();
+function restartGame() {
+    // Закрываем модалку
+    closeGameOverModal();
+    
+    // Ставим игру на паузу
+    if (gameActive) {
+        paus = true;
+        clearAllIntervals();
+        if (u) u.disabled = true;
+        if (d) d.disabled = true;
+        if (r) r.disabled = true;
+        if (l) l.disabled = true;
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
         }
+    }
+    
+    // Показываем рекламу (если можно)
+    if (typeof vkBridge !== 'undefined') {
+        var now = Date.now();
+        if ((now - lastAdTime) >= adCooldown) {
+            lastAdTime = now;
+            vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
+                .then(function() {
+                    console.log('📱 Реклама показана');
+                })
+                .catch(function(e) {
+                    console.log('⚠️ Ошибка рекламы:', e);
+                });
+        } else {
+            var waitTime = Math.round((adCooldown - (now - lastAdTime)) / 1000);
+            console.log("⏳ Реклама не показана: подождите " + waitTime + " сек");
+        }
+    }
+    
+    // Запускаем анимацию пузырей
+    startBubbleTransition(function() {
+        console.log('🌊 Пузыри исчезли, запускаем игру!');
+        
+        // Снимаем паузу и запускаем игру
+        resumeGameAfterRestart();
+    });
+}
+
+// Новая функция для возобновления игры после рестарта
+function resumeGameAfterRestart() {
+    // Снимаем паузу
+    paus = false;
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    
+    gameActive = true;
+    down();
+    startBackgroundEffects();
+    isSoundEnabled = true;
+    wasPausedByHide = false;
+    
+    playButtonSound();
+}
+
+function createBubbleOverlay() {
+    var overlay = document.getElementById('bubbleOverlay');
+    if (overlay) return;
+    
+    overlay = document.createElement('div');
+    overlay.id = 'bubbleOverlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:2000;pointer-events:none;display:none;overflow:hidden;background:transparent;';
+    document.body.appendChild(overlay);
+}
+function startBubbleTransition(callback) {
+    if (bubbleOverlayActive) {
+        console.log('⚠️ Анимация уже идёт');
+        return;
+    }
+    bubbleOverlayActive = true;
+    console.log('🫧 Запуск анимации пузырей');
+    
+    var overlay = document.getElementById('bubbleOverlay');
+    if (!overlay) {
+        createBubbleOverlay();
+        overlay = document.getElementById('bubbleOverlay');
+    }
+    
+    overlay.innerHTML = '';
+    overlay.style.display = 'block';
+    overlay.style.pointerEvents = 'all';
+    overlay.style.background = 'rgba(0, 20, 50, 0.4)';
+    
+    // Создаём много пузырей сразу
+    for (var i = 0; i < 4; i++) {
+        setTimeout(function() {
+            createBubbleWave();
+        }, i * 200);
+    }
+    
+    // Запускаем интервал для новых волн
+    if (bubbleInterval) clearInterval(bubbleInterval);
+    bubbleInterval = setInterval(function() {
+        if (bubbleOverlayActive) {
+            createBubbleWave();
+        } else {
+            clearInterval(bubbleInterval);
+            bubbleInterval = null;
+        }
+    }, 400);
+    
+    // ⏳ Через 2 секунды (когда пузыри уже в середине полёта) 
+    // обновляем игровое поле под пузырями
+    setTimeout(function() {
+        console.log('🔄 Обновляем игровое поле под пузырями');
+        
+        // Сброс игры (поле обновляется, но игра остаётся на паузе)
+        resetGame();
+        
+        // Показываем игровой контейнер
+        if (mainMenu && mainMenu.style.display !== 'none') {
+            mainMenu.style.display = 'none';
+            if (gameContainer) gameContainer.style.display = 'flex';
+        }
+        
+        // Игра остаётся на паузе! (paus = true)
+        // Игрок видит новое поле, но пузыри ещё летают
+        console.log('🎮 Новое поле готово, ждём окончания анимации');
+        
+    }, 2000); // 2 секунды - пузыри уже в середине пути
+    
+    // ⏳ Ждём 4 секунды (пузыри исчезли)
+    setTimeout(function() {
+        console.log('🫧 Скрываем оверлей');
+        hideBubbleOverlay();
+        
+        setTimeout(function() {
+            console.log('✅ Анимация завершена, запускаем игру');
+            if (callback) callback();
+        }, 300);
+    }, 4000);
+}
 
         document.addEventListener('click', function(e) {
             var modal = document.getElementById('gamesModal');
@@ -1902,7 +2733,7 @@ if (savedLevel < 3) {
             var startX = Math.random() > 0.5 ? -30 : 330;
             jellyfish.style.left = startX + 'px';
             jellyfish.style.top = (20 + Math.random() * 280) + 'px';
-            jellyfish.textContent = '🔱';
+            jellyfish.textContent = '🧿';
             jellyfish.id = 'jellyfishActive';
             gameblock.appendChild(jellyfish);
             jellyfishActive = true;
@@ -1927,6 +2758,9 @@ if (savedLevel < 3) {
                         shields--;
                         updateShieldDisplay();
                         playShieldUseSound();
+                         jellyfishDeflected++;
+        achievementsChecked = false;
+        setTimeout(checkAndNotifyAchievements, 100);
                         showEffect(jx, jy, '🛡️', '#66ccff');
                     } else {
                         score = Math.max(0, score - 3);
@@ -1990,6 +2824,9 @@ if (savedLevel < 3) {
                     clearInterval(checkMagnet);
                     magnet.remove();
                     magnetActive = true;
+                    magnetCount++;
+            achievementsChecked = false;
+            setTimeout(checkAndNotifyAchievements, 100);
                     showEffect(mx, my, '🧲', '#ff6600');
                     
                     var attractInterval = setInterval(function() {
@@ -2048,6 +2885,9 @@ if (savedLevel < 3) {
                     clearInterval(checkBoost);
                     boost.remove();
                     speedBoostActive = true;
+                     speedBoostCount++;
+            achievementsChecked = false;
+            setTimeout(checkAndNotifyAchievements, 100);
                     showEffect(bx, by, '⚡', '#ffff00');
                     speedBoostTimer = setTimeout(function() {
                         speedBoostActive = false;
@@ -2081,6 +2921,9 @@ if (savedLevel < 3) {
                     clearInterval(checkSlow);
                     slow.remove();
                     slowMotionActive = true;
+                                slowMotionCount++;
+            achievementsChecked = false;
+            setTimeout(checkAndNotifyAchievements, 100);
                     showEffect(sx, sy, '🐢', '#00ccff');
                     slowMotionTimer = setTimeout(function() {
                         slowMotionActive = false;
@@ -2133,6 +2976,8 @@ if (savedLevel < 3) {
             gameblock.appendChild(effect);
             setTimeout(function() { effect.remove(); }, 2000);
             playLevelUpSound();
+             achievementsChecked = false;
+    setTimeout(checkAndNotifyAchievements, 200);
             
             var flash = document.createElement('div');
             flash.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;' +
@@ -2317,11 +3162,21 @@ if (savedLevel < 3) {
             var playerSize = rad;
             if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
                 score++;
+                if (score === 1) {
+                                    // Проверяем достижение "Первая ракушка"
+                                }
+                                // Убираем achievementsChecked для проверки
+                                achievementsChecked = false;
+                                setTimeout(function() {
+                                    checkAndNotifyAchievements();
+                                }, 100);
                 scoresEl.innerHTML = score;
                 playShellSound();
                 showEffect(cx, cy, '✨', '#ffd700');
                 spawnBubbles();
-                
+                achievementsChecked = false;
+        setTimeout(checkAndNotifyAchievements, 100);
+
                 scoresEl.classList.remove('pulse');
                 setTimeout(function() {
                     scoresEl.classList.add('pulse');
@@ -2401,6 +3256,8 @@ if (savedLevel < 3) {
                 clearTimeout(window.buttonSoundTimer);
                 window.buttonSoundTimer = null;
             }
+            deathCount++;
+achievementsChecked = false;
             showBannerAd();
             showGameOverModal();
         }
@@ -2501,6 +3358,12 @@ if (savedLevel < 3) {
         // ============================================================
         document.addEventListener('keydown', function(e) {
             if (!gameContainer || gameContainer.style.display === 'none') return;
+                // 👇 ДОБАВЬТЕ ЭТУ ПРОВЕРКУ
+    if (window.keysBlocked) {
+        e.preventDefault();
+        return;
+    }
+    // 👆 КОНЕЦ ВСТАВКИ
             switch (e.key) {
                 case 'ArrowUp':
                     e.preventDefault();
@@ -2615,6 +3478,866 @@ if (savedLevel < 3) {
 
         console.log('🌊 Батискаф в западне загружен!');      
      //   console.log('💾 Сохранение прогресса каждые 3 уровня');
+
+// ============================================================
+//  СИСТЕМА ДОСТИЖЕНИЙ
+// ============================================================
+
+// Ключ для сохранения в localStorage
+const ACHIEVEMENTS_KEY = 'bathyscaphe_achievements';
+
+// Список всех достижений
+const ACHIEVEMENTS = {
+    // ===== УРОВНИ =====
+    level_5: {
+        id: 'level_5',
+        name: 'Первые шаги',
+        description: 'Достигнуть 5 уровня',
+        icon: '🌊',
+        category: '📊 Уровни',
+        check: function() { return level >= 5; }
+    },
+    level_10: {
+        id: 'level_10',
+        name: 'Исследователь глубин',
+        description: 'Достигнуть 10 уровня',
+        icon: '🌟',
+        category: '📊 Уровни',
+        check: function() { return level >= 10; }
+    },
+    level_15: {
+        id: 'level_15',
+        name: 'Опытный ныряльщик',
+        description: 'Достигнуть 15 уровня',
+        icon: '🏊',
+        category: '📊 Уровни',
+        check: function() { return level >= 15; }
+    },
+    level_25: {
+        id: 'level_25',
+        name: 'Океанский странник',
+        description: 'Достигнуть 25 уровня',
+        icon: '🌊',
+        category: '📊 Уровни',
+        check: function() { return level >= 25; }
+    },
+    level_30: {
+        id: 'level_30',
+        name: 'Друг китов',
+        description: 'Достигнуть 30 уровня',
+        icon: '🐋',
+        category: '📊 Уровни',
+        check: function() { return level >= 30; }
+    },
+    level_50: {
+        id: 'level_50',
+        name: 'Повелитель бездны',
+        description: 'Достигнуть 50 уровня',
+        icon: '⚡',
+        category: '📊 Уровни',
+        check: function() { return level >= 50; }
+    },
+    level_75: {
+        id: 'level_75',
+        name: 'Легенда океана',
+        description: 'Достигнуть 75 уровня',
+        icon: '⚓',
+        category: '📊 Уровни',
+        check: function() { return level >= 75; }
+    },
+    level_100: {
+        id: 'level_100',
+        name: 'Король глубин',
+        description: 'Достигнуть 100 уровня',
+        icon: '👑',
+        category: '📊 Уровни',
+        check: function() { return level >= 100; }
+    },
+    level_150: {
+        id: 'level_150',
+        name: 'Повелитель бездны',
+        description: 'Достигнуть 150 уровня',
+        icon: '👾',
+        category: '📊 Уровни',
+        check: function() { return level >= 150; }
+    },
+    // ===== УРОВНИ (добавьте в конец категории) =====
+level_200: {
+    id: 'level_200',
+    name: 'Хранитель глубин',
+    description: 'Достигнуть 200 уровня',
+    icon: '🐲',  // Дракон
+    category: '📊 Уровни',
+    check: function() { return level >= 200; }
+},
+level_300: {
+    id: 'level_300',
+    name: 'Повелитель океана',
+    description: 'Достигнуть 300 уровня',
+    icon: '🌋',  // Вулкан
+    category: '📊 Уровни',
+    check: function() { return level >= 300; }
+},
+level_500: {
+    id: 'level_500',
+    name: 'Легенда бездны',
+    description: 'Достигнуть 500 уровня',
+    icon: '🌌',  // Космос
+    category: '📊 Уровни',
+    check: function() { return level >= 500; }
+},
+level_750: {
+    id: 'level_750',
+    name: 'Император глубин',
+    description: 'Достигнуть 750 уровня',
+    icon: '👾',  // Инопланетянин
+    category: '📊 Уровни',
+    check: function() { return level >= 750; }
+},
+level_1000: {
+    id: 'level_1000',
+    name: 'Бог океана',
+    description: 'Достигнуть 1000 уровня',
+    icon: '⚡',  // Молния
+    category: '📊 Уровни',
+    check: function() { return level >= 1000; }
+},
+level_1500: {
+    id: 'level_1500',
+    name: 'Титан глубин',
+    description: 'Достигнуть 1500 уровня',
+    icon: '🌀',  // Водоворот
+    category: '📊 Уровни',
+    check: function() { return level >= 1500; }
+},
+level_2000: {
+    id: 'level_2000',
+    name: 'Абсолютный повелитель',
+    description: 'Достигнуть 2000 уровня',
+    icon: '🔥',  // Пламя
+    category: '📊 Уровни',
+    check: function() { return level >= 2000; }
+},
+level_3000: {
+    id: 'level_3000',
+    name: 'Легендарный бог',
+    description: 'Достигнуть 3000 уровня',
+    icon: '🌟',  // Звезда
+    category: '📊 Уровни',
+    check: function() { return level >= 3000; }
+},
+level_5000: {
+    id: 'level_5000',
+    name: 'Бессмертный бог',
+    description: 'Достигнуть 5000 уровня',
+    icon: '💫',  // Падающая звезда
+    category: '📊 Уровни',
+    check: function() { return level >= 5000; }
+},
+level_7500: {
+    id: 'level_7500',
+    name: 'Властелин бездны',
+    description: 'Достигнуть 7500 уровня',
+    icon: '🐉',
+    category: '📊 Уровни',
+    check: function() { return level >= 7500; }
+},
+level_10000: {
+    id: 'level_10000',
+    name: 'Легенда легенд',
+    description: 'Достигнуть 10000 уровня',
+    icon: '🏆',  // Трофей
+    category: '📊 Уровни',
+    check: function() { return level >= 10000; }
+},
+    
+// ===== КОЛЛЕКЦИЯ =====
+first_shell: {
+    id: 'first_shell',
+    name: 'Первая ракушка',
+    description: 'Собрать первую ракушку',
+    icon: '🐚',  // Маленькая ракушка
+    category: '📈 Коллекция',
+    check: function() { return score >= 1; }
+},
+score_10: {
+    id: 'score_10',
+    name: 'Первый улов',
+    description: 'Собрать 10 ракушек',
+    icon: '🐌',  // Улитка - медленный старт
+    category: '📈 Коллекция',
+    check: function() { return score >= 10; }
+},
+score_25: {
+    id: 'score_25',
+    name: 'Любитель ракушек',
+    description: 'Собрать 25 ракушек',
+    icon: '🐚',
+    category: '📈 Коллекция',
+    check: function() { return score >= 25; }
+},
+score_50: {
+    id: 'score_50',
+    name: 'Начинающий коллекционер',
+    description: 'Собрать 50 ракушек',
+    icon: '🐡',  // Рыбка - начало коллекции
+    category: '📈 Коллекция',
+    check: function() { return score >= 50; }
+},
+score_75: {
+    id: 'score_75',
+    name: 'Увлечённый коллекционер',
+    description: 'Собрать 75 ракушек',
+    icon: '🐠',  // Рыбка покрасивее
+    category: '📈 Коллекция',
+    check: function() { return score >= 75; }
+},
+score_100: {
+    id: 'score_100',
+    name: 'Опытный коллекционер',
+    description: 'Собрать 100 ракушек',
+    icon: '🐟',  // Золотая рыбка
+    category: '📈 Коллекция',
+    check: function() { return score >= 100; }
+},
+score_150: {
+    id: 'score_150',
+    name: 'Знаток ракушек',
+    description: 'Собрать 150 ракушек',
+    icon: '🐠',
+    category: '📈 Коллекция',
+    check: function() { return score >= 150; }
+},
+score_200: {
+    id: 'score_200',
+    name: 'Профессиональный коллекционер',
+    description: 'Собрать 200 ракушек',
+    icon: '🐬',  // Дельфин - серьёзный уровень
+    category: '📈 Коллекция',
+    check: function() { return score >= 200; }
+},
+score_300: {
+    id: 'score_300',
+    name: 'Мастер коллекционирования',
+    description: 'Собрать 300 ракушек',
+    icon: '🐳',  // Кит - большой успех
+    category: '📈 Коллекция',
+    check: function() { return score >= 300; }
+},
+score_500: {
+    id: 'score_500',
+    name: 'Мастер-коллекционер',
+    description: 'Собрать 500 ракушек',
+    icon: '🐉',  // Дракон - легендарный уровень
+    category: '📈 Коллекция',
+    check: function() { return score >= 500; }
+},
+score_750: {
+    id: 'score_750',
+    name: 'Легендарный коллекционер',
+    description: 'Собрать 750 ракушек',
+    icon: '🌟',  // Звезда - почти рекорд
+    category: '📈 Коллекция',
+    check: function() { return score >= 750; }
+},
+score_1000: {
+    id: 'score_1000',
+    name: 'Повелитель ракушек',
+    description: 'Собрать 1000 ракушек',
+    icon: '👑',  // Корона - абсолютный рекорд
+    category: '📈 Коллекция',
+    check: function() { return score >= 1000; }
+},
+    
+    // ===== БОНУСЫ =====
+    speed_first: {
+        id: 'speed_first',
+        name: 'Первое ускорение',
+        description: 'Активировать ускорение впервые',
+        icon: '⚡',
+        category: '🎯 Бонусы',
+        check: function() { return speedBoostCount >= 1; }
+    },
+    slow_first: {
+        id: 'slow_first',
+        name: 'Первое замедление',
+        description: 'Активировать замедление впервые',
+        icon: '🐢',
+        category: '🎯 Бонусы',
+        check: function() { return slowMotionCount >= 1; }
+    },
+    magnet_first: {
+        id: 'magnet_first',
+        name: 'Первый магнит',
+        description: 'Активировать магнит впервые',
+        icon: '🧲',
+        category: '🎯 Бонусы',
+        check: function() { return magnetCount >= 1; }
+    },
+    speed_5: {
+        id: 'speed_5',
+        name: 'Демон скорости',
+        description: 'Активировать ускорение 5 раз',
+        icon: '⚡',
+        category: '🎯 Бонусы',
+        check: function() { return speedBoostCount >= 5; }
+    },
+    speed_10: {
+        id: 'speed_10',
+        name: 'Ускоритель',
+        description: 'Активировать ускорение 10 раз',
+        icon: '⚡',
+        category: '🎯 Бонусы',
+        check: function() { return speedBoostCount >= 10; }
+    },
+    slow_5: {
+        id: 'slow_5',
+        name: 'Мастер замедления',
+        description: 'Активировать замедление 5 раз',
+        icon: '🐢',
+        category: '🎯 Бонусы',
+        check: function() { return slowMotionCount >= 5; }
+    },
+    slow_10: {
+        id: 'slow_10',
+        name: 'Замедлитель',
+        description: 'Активировать замедление 10 раз',
+        icon: '🐢',
+        category: '🎯 Бонусы',
+        check: function() { return slowMotionCount >= 10; }
+    },
+    magnet_5: {
+        id: 'magnet_5',
+        name: 'Магнитный повелитель',
+        description: 'Активировать магнит 5 раз',
+        icon: '🧲',
+        category: '🎯 Бонусы',
+        check: function() { return magnetCount >= 5; }
+    },
+    magnet_10: {
+        id: 'magnet_10',
+        name: 'Магнитный магнат',
+        description: 'Активировать магнит 10 раз',
+        icon: '🧲',
+        category: '🎯 Бонусы',
+        check: function() { return magnetCount >= 10; }
+    },
+    all_bonuses_25: {
+    id: 'all_bonuses_25',
+    name: 'Коллекционер бонусов',
+    description: 'Активировать 25 любых бонусов',
+    icon: '🎯',
+    category: '🎯 Бонусы',
+    check: function() { return (speedBoostCount + slowMotionCount + magnetCount) >= 25; }
+},
+    
+    // ===== ЗАЩИТА =====
+    shield_first: {
+        id: 'shield_first',
+        name: 'Первая защита',
+        description: 'Получить первый щит',
+        icon: '🛡️',
+        category: '🛡️ Защита',
+        check: function() { return shields >= 1; }
+    },
+    shield_3: {
+        id: 'shield_3',
+        name: 'Защитник',
+        description: 'Накопить 3 щита',
+        icon: '🛡️',
+        category: '🛡️ Защита',
+        check: function() { return shields >= 3; }
+    },
+    shield_5: {
+        id: 'shield_5',
+        name: 'Мастер защиты',
+        description: 'Накопить 5 щитов',
+        icon: '🛡️',
+        category: '🛡️ Защита',
+        check: function() { return shields >= 5; }
+    },
+    shield_10: {
+        id: 'shield_10',
+        name: 'Непробиваемый',
+        description: 'Накопить 10 щитов',
+        icon: '🛡️',
+        category: '🛡️ Защита',
+        check: function() { return shields >= 10; }
+    },
+    deflect_first: {
+        id: 'deflect_first',
+        name: 'Первое отражение',
+        description: 'Отразить атаку медузы щитом',
+        icon: '🧿',
+        category: '🛡️ Защита',
+        check: function() { return jellyfishDeflected >= 1; }
+    },
+    deflect_3: {
+        id: 'deflect_3',
+        name: 'Укротитель медуз',
+        description: 'Отразить 3 атаки медуз',
+        icon: '🧿',
+        category: '🛡️ Защита',
+        check: function() { return jellyfishDeflected >= 3; }
+    },
+    deflect_10: {
+        id: 'deflect_10',
+        name: 'Мастер отражения',
+        description: 'Отразить 10 атак медуз',
+        icon: '🧿',
+        category: '🛡️ Защита',
+        check: function() { return jellyfishDeflected >= 10; }
+    },
+    shield_15: {
+    id: 'shield_15',
+    name: 'Нерушимый',
+    description: 'Накопить 15 щитов',
+    icon: '🏰',
+    category: '🛡️ Защита',
+    check: function() { return shields >= 15; }
+},
+    // ===== СЛОЖНЫЕ =====
+    perfect_start: {
+        id: 'perfect_start',
+        name: 'Идеальный старт',
+        description: 'Собрать 20 ракушек без потерь от медуз',
+        icon: '🎯',
+        category: '🏆 Сложные',
+        check: function() { return score >= 20 && jellyfishHits === 0; }
+    },
+        bless_start: {
+        id: 'perfect_start',
+        name: 'Легендарный старт',
+        description: 'Собрать 50 ракушек без потерь от медуз',
+        icon: '🎯',
+        category: '🏆 Сложные',
+        check: function() { return score >= 50 && jellyfishHits === 0; }
+    },
+            cos_start: {
+        id: 'perfect_start',
+        name: 'Легендарный старт',
+        description: 'Собрать 300 ракушек без потерь от медуз',
+        icon: '🎯',
+        category: '🏆 Сложные',
+        check: function() { return score >= 300 && jellyfishHits === 0; }
+    },
+    no_hit_50: {
+        id: 'no_hit_50',
+        name: 'Чистый игрок',
+        description: 'Достигнуть 50 уровня без потерь от медуз',
+        icon: '🎯',
+        category: '🏆 Сложные',
+        check: function() { return level >= 50 && jellyfishHits === 0; }
+    },
+    no_deaths: {
+        id: 'no_deaths',
+        name: 'Бессмертный',
+        description: 'Достигнуть 20 уровня без смертей',
+        icon: '💪',
+        category: '🏆 Сложные',
+        check: function() { return level >= 20 && deathCount === 0; }
+    },
+    tiny_ship: {
+        id: 'tiny_ship',
+        name: 'Микро-батискаф',
+        description: 'Уменьшиться до 20px',
+        icon: '🔬',
+        category: '🏆 Сложные',
+        check: function() { return rad <= 20; }
+    },
+    tiny_25: {
+        id: 'tiny_25',
+        name: 'Морская Кроха',
+        description: 'Уменьшиться до 25px',
+        icon: '🔬',
+        category: '🏆 Сложные',
+        check: function() { return rad <= 25; }
+    },
+    big_50: {
+        id: 'big_50',
+        name: 'Гигантский батискаф',
+        description: 'Вырасти до 50px',
+        icon: '🐳',
+        category: '🏆 Сложные',
+        check: function() { return rad >= 50; }
+    },
+    score_100_no_death: {
+        id: 'score_100_no_death',
+        name: 'Безупречный сбор',
+        description: 'Собрать 100 ракушек без смертей',
+        icon: '💎',
+        category: '🏆 Сложные',
+        check: function() { return score >= 100 && deathCount === 0; }
+    },
+    level_50_no_shield: {
+        id: 'level_50_no_shield',
+        name: 'Голый ныряльщик',
+        description: 'Достигнуть 60 уровня без использования щитов',
+        icon: '🔥',
+        category: '🏆 Сложные',
+        check: function() { return level >= 50 && jellyfishDeflected === 0 && shields === 0; }
+    },
+    
+    // ===== СЕКРЕТНЫЕ =====
+    lucky_7: {
+        id: 'lucky_7',
+        name: 'Счастливый билет',
+        description: 'Достигнуть 7 уровня',
+        icon: '🍀',
+        category: '🤫 Секретные',
+        check: function() { return level === 7; }
+    },
+    lucky_13: {
+        id: 'lucky_13',
+        name: 'Число Ктулху',
+        description: 'Достигнуть 13 уровня',
+        icon: '🔮',
+        category: '🤫 Секретные',
+        check: function() { return level === 13; }
+    },
+    fifty_fifty: {
+        id: 'fifty_fifty',
+        name: 'Идеальный баланс',
+        description: 'Собрать ровно 69 ракушек',
+        icon: '⚖️',
+        category: '🤫 Секретные',
+        check: function() { return score === 69; }
+    },
+    zero_shield: {
+        id: 'zero_shield',
+        name: 'Аскет',
+        description: 'Пройти 30 уровней, не взяв ни одного щита',
+        icon: '🛡️',
+        category: '🤫 Секретные',
+        check: function() { return level >= 30 && shields === 0 && jellyfishDeflected === 0; }
+    },
+    all_bonuses: {
+        id: 'all_bonuses',
+        name: 'Коллекционер бонусов',
+        description: 'Активировать все типы бонусов',
+        icon: '🎁',
+        category: '🤫 Секретные',
+        check: function() { return speedBoostCount >= 1 && slowMotionCount >= 1 && magnetCount >= 1; }
+    },
+    perfect_10: {
+        id: 'perfect_10',
+        name: 'Идеальный уровень',
+        description: 'Собрать 33 ракушек подряд без потерь',
+        icon: '🌟',
+        category: '🤫 Секретные',
+        check: function() { return score >= 33 && jellyfishHits === 0 && deathCount === 0; }
+    },
+    
+    // ===== ВРЕМЯ =====
+    speed_runner: {
+        id: 'speed_runner',
+        name: 'Спидраннер',
+        description: 'Достигнуть 44 уровня с минимальными потерями',
+        icon: '🏃',
+        category: '⏱️ Время',
+        check: function() { 
+            return level >= 44 && deathCount <= 2 && jellyfishHits <= 5; 
+        }
+    },
+    marathon: {
+        id: 'marathon',
+        name: 'Марафонец',
+        description: 'Достигнуть 100 уровня',
+        icon: '🏊',
+        category: '⏱️ Время',
+        check: function() { return level >= 100; }
+    }
+};
+
+// Состояние достижений
+let unlockedAchievements = loadAchievements();
+
+// Загрузка достижений из localStorage
+function loadAchievements() {
+    try {
+        const saved = localStorage.getItem(ACHIEVEMENTS_KEY);
+        if (saved) {
+            return JSON.parse(saved);
+        }
+    } catch (e) {
+        console.warn('Ошибка загрузки достижений:', e);
+    }
+    return {};
+}
+
+// Сохранение достижений в localStorage
+function saveAchievements() {
+    try {
+        localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(unlockedAchievements));
+    } catch (e) {
+        console.warn('Ошибка сохранения достижений:', e);
+    }
+}
+
+// Проверка и разблокировка достижений
+function checkAchievements() {
+    if (achievementsChecked) return;
+    
+    let newAchievements = [];
+    
+    for (const key in ACHIEVEMENTS) {
+        const ach = ACHIEVEMENTS[key];
+        if (!unlockedAchievements[ach.id] && ach.check()) {
+            unlockedAchievements[ach.id] = true;
+            newAchievements.push(ach);
+        }
+    }
+    
+    if (newAchievements.length > 0) {
+        saveAchievements();
+        showAchievementPopup(newAchievements[0]);
+        if (newAchievements.length > 1) {
+            setTimeout(function() {
+                for (let i = 1; i < newAchievements.length; i++) {
+                    setTimeout(function() {
+                        showAchievementPopup(newAchievements[i]);
+                    }, i * 3000);
+                }
+            }, 3000);
+        }
+    }
+}
+
+// Показ всплывающего окна достижения
+function showAchievementPopup(achievement) {
+    console.log('🎉 Достижение:', achievement.name);
+    
+    // Ставим игру на паузу
+    if (gameActive && !paus) {
+        pauseGameForAchievement();
+        achievementPopupPaused = true;
+    }
+    
+    const popup = document.getElementById('achievementPopup');
+    const iconEl = document.getElementById('popupAchievementIcon');
+    const nameEl = document.getElementById('popupAchievementName');
+    const descEl = document.getElementById('popupAchievementDesc');
+    
+    if (iconEl) iconEl.textContent = achievement.icon || '🏆';
+    if (nameEl) nameEl.textContent = achievement.name;
+    if (descEl) descEl.textContent = achievement.description;
+    
+    if (popup) popup.classList.add('active');
+    playLevelUpSound();
+}
+// Закрытие всплывающего окна достижения с обратным отсчётом
+function closeAchievementPopup() {
+    const popup = document.getElementById('achievementPopup');
+    if (popup) popup.classList.remove('active');
+    
+    if (achievementPopupPaused) {
+        achievementPopupPaused = false;
+        
+        // Показываем обратный отсчёт
+        let countdown = 3;
+        showResumeNotification('⏳ ' + countdown);
+        
+        var countdownInterval = setInterval(function() {
+            countdown--;
+            if (countdown > 0) {
+                showResumeNotification('⏳ ' + countdown);
+            } else {
+                clearInterval(countdownInterval);
+                showResumeNotification('🎮 Вперёд!');
+                setTimeout(function() {
+                    resumeGameAfterAchievement();
+                }, 500);
+            }
+        }, 1000);
+    }
+}
+// Показ уведомления о скором возобновлении игры
+function showResumeNotification(text) {
+    var notification = document.createElement('div');
+    notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
+        'z-index:35;font-size:20px;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.8);' +
+        'animation:saveAnim 1.5s ease-out forwards;pointer-events:none;' +
+        'background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:12px;' +
+        'border:2px solid rgba(255,215,0,0.3);font-weight:bold;';
+    notification.textContent = text;
+    gameblock.appendChild(notification);
+    setTimeout(function() { 
+        if (notification.parentNode) notification.remove(); 
+    }, 1800);
+}
+// Пауза для достижения
+// Пауза для достижения (полная остановка игры)
+function pauseGameForAchievement() {
+    if (!gameActive) return;
+    
+    // Останавливаем все интервалы движения
+    clearAllIntervals();
+    
+    // Блокируем все кнопки управления
+    if (u) u.disabled = true;
+    if (d) d.disabled = true;
+    if (r) r.disabled = true;
+    if (l) l.disabled = true;
+    
+    // Ставим флаг паузы
+    paus = true;
+    
+    // Меняем иконку паузы
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+    }
+    
+    // Дополнительно блокируем клавиатуру
+    window.keysBlocked = true;
+    
+    console.log('⏸️ Игра на паузе (достижение)');
+}
+
+// Возобновление игры после достижения
+function resumeGameAfterAchievement() {
+    if (!gameActive) return;
+    
+    // Разблокируем кнопки управления
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    
+    // Снимаем флаг паузы
+    paus = false;
+    
+    // Разблокируем клавиатуру
+    window.keysBlocked = false;
+    
+    // Восстанавливаем иконку паузы
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    
+    // Возобновляем движение
+    if (iint) {
+        setTimeout(iint, t);
+    }
+    
+    // Включаем звук кнопок
+    playButtonSound();
+    
+    console.log('▶️ Игра возобновлена');
+}
+
+// Открытие модалки со списком достижений
+function openAchievementsModal() {
+    renderAchievementsList();
+    const modal = document.getElementById('achievementsModal');
+    if (modal) modal.classList.add('active');
+    playButtonSound();
+}
+
+// Закрытие модалки со списком достижений
+function closeAchievementsModal() {
+    const modal = document.getElementById('achievementsModal');
+    if (modal) modal.classList.remove('active');
+}
+
+// Рендер списка достижений
+// Рендер списка достижений (компактный, в две колонки)
+function renderAchievementsList() {
+    const container = document.getElementById('achievementsList');
+    if (!container) return;
+    
+    // Подсчёт статистики
+    let total = 0;
+    let unlocked = 0;
+    for (const key in ACHIEVEMENTS) {
+        total++;
+        if (unlockedAchievements[ACHIEVEMENTS[key].id]) unlocked++;
+    }
+    
+    let html = '';
+    
+    // Шапка со статистикой
+    html += `
+        <div class="stats-header">
+            <span>🏆 ${unlocked} / ${total}</span>
+            <span>достижений</span>
+        </div>
+    `;
+    
+    // Группировка по категориям
+    const categories = {};
+    for (const key in ACHIEVEMENTS) {
+        const ach = ACHIEVEMENTS[key];
+        if (!categories[ach.category]) categories[ach.category] = [];
+        categories[ach.category].push(ach);
+    }
+    
+    // Рендер категорий
+    for (const category in categories) {
+        html += `
+            <div class="category-header">${category}</div>
+        `;
+        
+        for (const ach of categories[category]) {
+            const isUnlocked = unlockedAchievements[ach.id] || false;
+            
+            html += `
+                <div class="achievement-item ${isUnlocked ? 'unlocked' : 'locked'}">
+                    <span class="icon">${ach.icon}</span>
+                    <div class="info">
+                        <div class="name">${ach.name}</div>
+                        <div class="desc">${ach.description}</div>
+                    </div>
+                    <span class="status">${isUnlocked ? '⭐' : '🔒'}</span>
+                </div>
+            `;
+        }
+    }
+    
+    container.innerHTML = html;
+}
+// Обёртка для checkAchievements с защитой от множественных вызовов
+function checkAndNotifyAchievements() {
+    if (!gameActive) return;
+    checkAchievements();
+}
+
+// Сброс достижений (для тестирования)
+function resetAchievements() {
+    localStorage.removeItem(ACHIEVEMENTS_KEY);
+    unlockedAchievements = {};
+    jellyfishDeflected = 0;
+    jellyfishHits = 0;
+    deathCount = 0;
+    speedBoostCount = 0;
+    slowMotionCount = 0;
+    magnetCount = 0;
+    achievementsChecked = false;
+    console.log('🔄 Достижения сброшены');
+    if (confirm('Достижения сброшены! Обновите страницу.')) {
+        location.reload();
+    }
+}
+
+
+
+// ============================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+if (mainMenu) mainMenu.style.display = 'flex';
+if (gameContainer) gameContainer.style.display = 'none';
+
+document.addEventListener('contextmenu', function(e) {
+    if (e.target.closest('#gameblock') || e.target.closest('.btn')) {
+        e.preventDefault();
+    }
+});
+
+// Загружаем сохранённый уровень при старте
+loadSavedLevel();
+
+console.log('🌊 Батискаф в западне загружен!');      
+console.log('💾 Сохранение прогресса каждые 3 уровня');
+console.log('🏆 Система достижений активна!');
     </script>
 </body>
 </html>
