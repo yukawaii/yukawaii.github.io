@@ -1787,20 +1787,21 @@ const DIFFICULTY_STORIES = {
 // ГЕНЕРАЦИЯ ВСЕХ УРОВНЕЙ
 const ALL_LEVELS = [];
 
-const allCategories = CATEGORIES.easy || [];
-if (Array.isArray(allCategories)) {
-    for (let cat of allCategories) {
-        for (let levelNum = 1; levelNum <= cat.levelsCount; levelNum++) {
-            for (let diff of DIFFICULTIES) {
-                const words = getWordsForLevel(cat.themeIndex, levelNum, diff.id);
+// Проходим по ВСЕМ сложностям из CATEGORIES
+for (let diffKey in CATEGORIES) {
+    const diffCategories = CATEGORIES[diffKey];
+    if (Array.isArray(diffCategories)) {
+        for (let cat of diffCategories) {
+            for (let levelNum = 1; levelNum <= cat.levelsCount; levelNum++) {
+                const words = getWordsForLevel(cat.themeIndex, levelNum, diffKey);
                 ALL_LEVELS.push({
-                    id: getLevelId(cat.id, levelNum, diff.id),
+                    id: getLevelId(cat.id, levelNum, diffKey),
                     categoryId: cat.id,
                     categoryIcon: cat.icon,
                     categoryTitle: cat.title,
                     levelNum: levelNum,
                     themeIndex: cat.themeIndex,
-                    difficulty: diff.id,
+                    difficulty: diffKey,
                     size: LEVELS_DATA[cat.themeIndex]?.size || 6,
                     words: words
                 });
@@ -1808,6 +1809,13 @@ if (Array.isArray(allCategories)) {
         }
     }
 }
+
+//console.log('✅ ALL_LEVELS создан, всего уровней:', ALL_LEVELS.length);
+// Для отладки: покажем сколько уровней для каждой сложности
+['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+    const count = ALL_LEVELS.filter(l => l.difficulty === diff).length;
+  //  console.log(`📊 Уровней для ${diff}: ${count}`);
+});
 
 function getLevelById(levelId) {
     return ALL_LEVELS.find(l => l.id === levelId);
@@ -1820,7 +1828,10 @@ function getLevelsByCategory(categoryId) {
 
 // Функция получения уровней по категории и сложности
 function getLevelsByCategoryAndDifficulty(categoryId, difficulty) {
-    return ALL_LEVELS.filter(l => l.categoryId === categoryId && l.difficulty === difficulty);
+    const result = ALL_LEVELS.filter(l => l.categoryId === categoryId && l.difficulty === difficulty);
+    // Сортируем по номеру уровня
+    result.sort((a, b) => a.levelNum - b.levelNum);
+    return result;
 }
 
 

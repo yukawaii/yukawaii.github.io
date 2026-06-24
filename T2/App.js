@@ -63,7 +63,7 @@ function saveVKScore(scoreValue) {
     .then(data => {        let currentScore = parseInt(data.response) || 0;        if (scoreValue > currentScore) {
             // Сохраняем новый рекорд
             return vkBridge.send('VKWebAppCallAPIMethod', {                method: 'secure.addAppEvent',                params: {
-                    user_id: vkUserId,         activity_id: 1,     value: scoreValue,      v: '5.131',       access_token: ServToken
+                    user_id: vkUserId,         activity_id: 2,     value: scoreValue,      v: '5.131',       access_token: ServToken
                 }            });        }    })
     .then(() => {        console.log('Рекорд сохранён:', scoreValue);        updateRecordText(`Рекорд: ${scoreValue}`);    })
     .catch(err => {        console.error('Ошибка сохранения рекорда:', err);

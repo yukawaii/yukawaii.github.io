@@ -8,7 +8,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ГдеЛиса: Космос | Найди слова по буквам</title>
      <script src = "./App.js"></script>
-    <script src="levels.js"></script>
+    <script src="./levels.js"></script>
      <script>
   // Явно задаем глобальную переменную для консоли и фрейма
   window.vkBridge = vkBridge; 
@@ -141,11 +141,13 @@ function updateMenuDifficultyDisplay() {
 
 // Загрузка уровня по ID с учётом сложности
 function loadLevelById(levelId, difficulty = 'easy') {
+    console.log('🔧 loadLevelById вызван с ID:', levelId, 'difficulty:', difficulty);
+    
     currentLevelId = levelId;
     currentDifficulty = difficulty;
     localStorage.setItem('lastDifficulty', difficulty);
     wordColorsMap.clear();
-colorIndex = 0;
+    colorIndex = 0;
     
     const levelData = getLevelById(levelId);
     if (!levelData) {
@@ -155,7 +157,6 @@ colorIndex = 0;
     
     saveLastLevel(levelId);
     
-    // Получаем слова с учётом сложности
     const wordsForLevel = getWordsForLevel(levelData.themeIndex, levelData.levelNum, difficulty);
     
     const levelGen = generateLevel(levelData.themeIndex, wordsForLevel, 0, difficulty);
@@ -166,9 +167,29 @@ colorIndex = 0;
     foundWordsSet.clear();
     currentChain = [];
     
-    // Сохраняем текущую категорию и номер уровня для навигации
     currentCategoryId = levelData.categoryId;
     currentLevelNum = levelData.levelNum;
+    
+    // ===== ВАЖНО: ПЕРЕКЛЮЧАЕМ ВИДИМОСТЬ =====
+    // Скрываем меню
+    const startMenu = document.getElementById('startMenu');
+    if (startMenu) startMenu.style.display = 'none';
+    
+    // Показываем игровое поле
+    const gridContainer = document.getElementById('gridContainer');
+    if (gridContainer) gridContainer.style.display = 'grid';
+    
+    const buttons = document.querySelector('.buttons');
+    if (buttons) buttons.style.display = 'flex';
+    
+    const infoMsg = document.getElementById('infoMessage');
+    if (infoMsg) infoMsg.style.display = 'block';
+    
+    const wordsContainer = document.querySelector('.words-container');
+    if (wordsContainer) wordsContainer.style.display = 'block';
+    
+    // Убираем класс menu-mode с body
+    document.body.classList.remove('menu-mode');
     
     levelLabelSpan.innerText = `${levelData.categoryTitle} (ур.${levelData.levelNum}) ${DIFFICULTIES.find(d => d.id === difficulty)?.icon || ''}`;
     totalCounterSpan.innerText = levelWords.length;
@@ -326,8 +347,9 @@ contentDiv.innerHTML = `
                         selectedLevelNum = levelNum;
                         
                         // Выбранный уровень всегда подсвечивается ярче
-                        btn.style.background = '#f7b32b';
-                        btn.style.boxShadow = '0 2px 0 #8b5a2a';
+                    // Вместо прямых цветов используем CSS-переменные
+btn.style.background = 'var(--level-selected-bg, #f7b32b)';
+btn.style.boxShadow = '0 2px 0 var(--level-selected-shadow, #8b5a2a)';
                         btn.style.transform = 'scale(0.98)';
                     }
                         
@@ -759,7 +781,7 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
     const gridSizeVal = theme.size;
     const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
     // Включаем змеиное размещение для hard и expert
-    const enableSnake = difficulty === 'hard' || difficulty === 'expert';
+      const enableSnake = difficulty === 'hard' || difficulty === 'expert';
     let wordsToPlace = [...customWords];
     
     wordsToPlace.sort((a,b) => b.length - a.length);
@@ -768,17 +790,22 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
     let positions = new Map();
     let allPlaced = true;
     
+       
     for (let i = 0; i < wordsToPlace.length; i++) {
         const word = wordsToPlace[i];
         let result = null;
         
-        // Для длинных слов сначала пробуем змеиное размещение
+        // ✅ ПРАВИЛЬНО: определяем ДЛЯ КАЖДОГО СЛОВА отдельно
+        const useLShape = (difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert') || 
+                          (difficulty === 'easy' && word.length > 8);
+        
+        // Для длинных слов сначала пробуем змеиное размещение (hard/expert)
         if (enableSnake && word.length >= 6) {
             result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
         }
         
         // Если не получилось змеиное — пробуем Г-образное
-        if (!result && enableLShape && word.length >= 4) {
+        if (!result && useLShape && word.length >= 4) {
             result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
         }
         
@@ -794,6 +821,7 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
             break;
         }
     }
+    
     // Если не все слова разместились, пробуем снова
     if (!allPlaced && retryCount < MAX_RETRIES) {
         return generateLevel(themeIndex, customWords, retryCount + 1);
@@ -868,23 +896,20 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
         }
     }
     
-   // console.log(`✅ Уровень создан: ${wordsToPlace.length} слов размещено`);
     return { grid: tempGrid, size: gridSizeVal, words: wordsToPlace, positions };
 }
-
 function showCategoryModalForDifficulty(difficulty) {
     const oldModal = document.getElementById('diffCategoryModal');
     if (oldModal) oldModal.remove();
     
     const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
+    modalDiv.className = 'modal-window';
     modalDiv.id = 'diffCategoryModal';
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
-    // ✅ ИСПРАВЛЕНИЕ: используем категории для конкретной сложности
     const categories = getCategoriesForDifficulty(difficulty);
     
     let html = `<h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 15px;">📚 Выбери категорию</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;">`;
@@ -903,6 +928,7 @@ function showCategoryModalForDifficulty(difficulty) {
         btn.onclick = () => {
             const catId = parseInt(btn.getAttribute('data-cat'));
             const diff = btn.getAttribute('data-diff');
+            console.log('📂 Выбрана категория:', catId, 'сложность:', diff);
             modalDiv.remove();
             showSubLevelModal(catId, diff);
         };
@@ -911,86 +937,102 @@ function showCategoryModalForDifficulty(difficulty) {
     document.getElementById('closeCatDiffModal').onclick = () => modalDiv.remove();
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
-
-// Выбор подуровня внутри категории (как в игре)
+function selectLevel(btn, levelData) {
+    // Убираем выделение с предыдущей кнопки
+    if (selectedButton) {
+        selectedButton.classList.remove('selected-level');
+    }
+    selectedButton = btn;
+    selectedData = levelData;
+    // Добавляем класс выделения на новую кнопку
+    btn.classList.add('selected-level');
+    console.log('✅ Выбран уровень:', levelData.levelNum, 'ID:', levelData.id);
+}
+// Выбор подуровня внутри категории
 function showSubLevelModal(categoryId, difficulty) {
-      const categories = getCategoriesForDifficulty(difficulty);
+    const categories = getCategoriesForDifficulty(difficulty);
     const category = categories.find(c => c.id === categoryId);
+    if (!category) {
+        console.error('❌ Категория не найдена:', categoryId);
+        return;
+    }
+    
     const categoryLevels = getLevelsByCategoryAndDifficulty(categoryId, difficulty);
-    let selectedLevelNum = 1;
+    if (!categoryLevels || categoryLevels.length === 0) {
+        console.error('❌ Нет уровней для категории:', categoryId, difficulty);
+        return;
+    }
+    
+    let selectedLevelData = categoryLevels[0]; // По умолчанию первый
     
     const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
+    modalDiv.className = 'modal-window';
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
     
     contentDiv.innerHTML = `
         <h3 style="color:#2c3e2b;font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
         <p style="color:#6B5B4E;font-size:0.8rem;margin-bottom:10px;">Сложность: ${DIFFICULTIES.find(d => d.id === difficulty)?.label || difficulty}</p>
-        <div id="levelsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-height:300px;overflow-y:auto;padding:10px;"></div>
+        <div id="levelsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-height:300px;overflow-y:auto;padding:10px;"></div>
         <button id="playSelectedBtn" style="background:#517a2f;color:white;border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;margin-top:15px;">🎮 Играть!</button>
         <button id="backToCatsBtn" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">◀ Назад к темам</button>
     `;
     
-    modalDiv.appendChild(contentDiv);    document.body.appendChild(modalDiv);    
+    modalDiv.appendChild(contentDiv);
+    document.body.appendChild(modalDiv);
+    
     const grid = document.getElementById('levelsGrid');
-    let selectedButton = null;    
-    // Функция выделения кнопки
-    function selectLevel(btn, levelNum) {
-        if (selectedButton) {
-            const oldLevelId = categoryLevels.find(l => l.levelNum === selectedLevelNum)?.id;
-            const wasCompleted = oldLevelId ? isLevelCompleted(oldLevelId) : false;
-            
-            if (wasCompleted) {
-                selectedButton.style.background = '#ffa54d';
-                selectedButton.style.boxShadow = '0 3px 0 #8b5a2a';
-            } else {
-                selectedButton.style.background = '#d4c3a4';
-                selectedButton.style.boxShadow = '0 3px 0 #9b6e42';
-            }
-        }
-        selectedButton = btn;
-        selectedLevelNum = levelNum;
-        
-        btn.style.background = '#f7b32b';
-        btn.style.boxShadow = '0 2px 0 #8b5a2a';
-        btn.style.transform = 'scale(0.98)';
-    }    
-    // Создаём кнопки уровней
-    for (let i = 1; i <= 20; i++) {
-                                    // В цикле создания кнопок:
-                                    const levelData = categoryLevels.find(l => l.levelNum === i);
-                                    if (levelData) {
-                                        const btn = document.createElement('button');
-                                        btn.textContent = i;
-                                        // Генерируем ID с учётом сложности
-                                        const levelIdWithDiff = getLevelId(categoryId, i, difficulty);
-                                        const completed = isLevelCompleted(levelIdWithDiff, difficulty);
-       
-            const bgColor = completed ? '#FFE5D6' : '#d4c3a4';
-            const textColor = completed ? '#2d2b1a' : '#3a3220';
-            const shadowColor = completed ? '#8b5a2a' : '#9b6e42';            
-            btn.style.cssText = `background:${bgColor};color:${textColor};border:none;border-radius:50%;width:55px;height:55px;min-width:55px;min-height:55px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 ${shadowColor};transition:0.05s linear;display:flex;align-items:center;justify-content:center;margin:2px;`;
-            
-            btn.onmouseenter = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; };
-            btn.onmouseleave = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1)'; };
-            btn.onclick = () => selectLevel(btn, i);
-            grid.appendChild(btn);
-        }
+    let selectedButton = null;
+    
+    function selectLevel(btn, levelData) {
+    // Снимаем выделение с предыдущей кнопки
+    if (selectedButton) {
+        selectedButton.classList.remove('selected-level');
     }
+    selectedButton = btn;
+    selectedLevelData = levelData;
+    
+    // Добавляем класс выделения
+    btn.classList.add('selected-level');
+    console.log('✅ Выбран уровень:', levelData.levelNum, 'ID:', levelData.id);
+}
+    // Создаём кнопки уровней
+    categoryLevels.forEach((levelData) => {
+        const btn = document.createElement('button');
+        btn.textContent = levelData.levelNum;
+        btn.dataset.levelId = levelData.id;
+        
+        const completed = isLevelCompleted(levelData.id, difficulty);
+        
+        const bgColor = completed ? '#FFE5D6' : '#d4c3a4';
+        const textColor = completed ? '#2d2b1a' : '#3a3220';
+        const shadowColor = completed ? '#8b5a2a' : '#9b6e42';
+        
+        btn.style.cssText = `background:${bgColor};color:${textColor};border:none;border-radius:50%;width:55px;height:55px;min-width:55px;min-height:55px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 ${shadowColor};transition:0.05s linear;display:flex;align-items:center;justify-content:center;margin:2px;`;
+        
+        btn.onmouseenter = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; };
+        btn.onmouseleave = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1)'; };
+        btn.onclick = () => selectLevel(btn, levelData);
+        grid.appendChild(btn);
+    });
     
     // Выбираем первый уровень по умолчанию
     const firstBtn = grid.querySelector('button');
-    if (firstBtn) selectLevel(firstBtn, 1);
+    if (firstBtn && categoryLevels.length > 0) {
+        selectLevel(firstBtn, categoryLevels[0]);
+    }
     
     // Кнопка Играть!
     document.getElementById('playSelectedBtn').onclick = () => {
-        const levelData = categoryLevels.find(l => l.levelNum === selectedLevelNum);
-        if (levelData) {
-            startGameWithDifficulty(levelData.id, difficulty);
+        if (selectedLevelData) {
+            console.log('✅ Загружаем уровень:', selectedLevelData.id, selectedLevelData.levelNum);
+            // Прямой вызов загрузки уровня
+            loadLevelById(selectedLevelData.id, difficulty);
             modalDiv.remove();
+        } else {
+            alert('⚠️ Пожалуйста, выберите уровень!');
         }
     };
     
@@ -1004,18 +1046,31 @@ function showSubLevelModal(categoryId, difficulty) {
 
 
 function startGameWithDifficulty(levelId, difficulty) {
+    console.log('🚀 startGameWithDifficulty вызван с levelId:', levelId, 'difficulty:', difficulty);
+    
     wordColorsMap.clear();
-colorIndex = 0;
+    colorIndex = 0;
+    
     const levelData = getLevelById(levelId);
-    if (!levelData) return;
+    if (!levelData) {
+        console.error('❌ Уровень не найден:', levelId);
+        // Пробуем найти уровень в ALL_LEVELS
+        const found = ALL_LEVELS.find(l => l.id === levelId);
+        if (found) {
+            console.log('✅ Уровень найден в ALL_LEVELS:', found);
+            loadLevelById(found.id, difficulty);
+        }
+        return;
+    }
+    
     currentDifficulty = difficulty;
-     localStorage.setItem('lastDifficulty', difficulty);
+    localStorage.setItem('lastDifficulty', difficulty);
     
     // Получаем слова с учётом сложности
     const wordsForLevel = getWordsForLevel(levelData.themeIndex, levelData.levelNum, difficulty);
+    console.log('📝 Слова для уровня:', wordsForLevel);
     
-    const levelIdWithDiff = getLevelId(levelData.categoryId, levelData.levelNum, difficulty);
-    currentLevelId = levelIdWithDiff;
+    currentLevelId = levelData.id;
     
     const levelGen = generateLevel(levelData.themeIndex, wordsForLevel, 0, difficulty);
     grid = levelGen.grid;
@@ -1041,7 +1096,6 @@ colorIndex = 0;
     renderWordsList();
     showMessage(`🎮 ${DIFFICULTIES.find(d => d.id === difficulty)?.label || ''} : ${levelData.categoryTitle}`, 1800);
 }
-
 
 // Размещение слова с поиском пересечений
 function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWordsPositions, wordIndex, totalWords) {
@@ -1951,28 +2005,12 @@ function showGalaxyMap() {
     try {
         const stars = getGalaxyStars();
         
-        const modalDiv = document.createElement('div');
-         modalDiv.className = 'modal-window'; 
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-        
-let galaxiesHtml = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
-        <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-`;
-        
-        // ✅ ИСПРАВЛЕНИЕ: собираем ВСЕ категории со ВСЕХ сложностей в массив
+        // Собираем все категории со всех сложностей
         const allCategories = [];
         ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
             const categories = getCategoriesForDifficulty(diff);
             categories.forEach(cat => {
-                // Используем уникальный ключ: id + diff
                 const uniqueKey = `${cat.id}_${diff}`;
-                // Проверяем, нет ли уже такой категории с такой же сложностью
                 const exists = allCategories.some(item => item.id === cat.id && item.difficulty === diff);
                 if (!exists) {
                     allCategories.push({
@@ -1993,13 +2031,35 @@ let galaxiesHtml = `
             return a.id - b.id;
         });
         
-        allCategories.forEach(cat => {
+        // ===== ПАГИНАЦИЯ =====
+        const totalPages = Math.ceil(allCategories.length / GALAXIES_PER_PAGE);
+        if (currentGalaxyPage >= totalPages) currentGalaxyPage = totalPages - 1;
+        if (currentGalaxyPage < 0) currentGalaxyPage = 0;
+        
+        const startIdx = currentGalaxyPage * GALAXIES_PER_PAGE;
+        const endIdx = Math.min(startIdx + GALAXIES_PER_PAGE, allCategories.length);
+        const pageCategories = allCategories.slice(startIdx, endIdx);
+        
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-window';
+        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+        
+        let galaxiesHtml = `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
+                <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
+            </div>
+        `;
+        
+        pageCategories.forEach(cat => {
             let totalStars = 0;
             let maxStars = 0;
             let completedLevels = 0;
             let totalLevels = 0;
             
-            // Для каждой категории считаем звёзды по всем сложностям
             ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
                 const key = `${cat.id}_${diff}`;
                 if (stars[key]) {
@@ -2012,7 +2072,6 @@ let galaxiesHtml = `
             
             const percent = maxStars > 0 ? (totalStars / maxStars) * 100 : 0;
             
-            // Показываем значок сложности рядом с названием
             const diffIcon = {
                 easy: '🟢',
                 medium: '🟠',
@@ -2020,35 +2079,41 @@ let galaxiesHtml = `
                 expert: '🟣'
             }[cat.difficulty] || '';
             
-galaxiesHtml += `
-    <div class="galaxy-item" data-cat-id="${cat.id}" data-diff="${cat.difficulty}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:12px;">
-                <span style="font-size:2rem;">${cat.icon}</span>
-                <div style="text-align:left;">
-                    <div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${diffIcon} ${cat.title}</div>
-                    <div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div>
-                    <div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div>
+            galaxiesHtml += `
+                <div class="galaxy-item" data-cat-id="${cat.id}" data-diff="${cat.difficulty}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};margin-bottom:8px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <span style="font-size:2rem;">${cat.icon}</span>
+                            <div style="text-align:left;">
+                                <div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${diffIcon} ${cat.title}</div>
+                                <div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div>
+                                <div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div>
+                            </div>
+                        </div>
+                        <div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div>
+                    </div>
+                    <div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
+                        <div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div>
+                    </div>
                 </div>
-            </div>
-            <div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div>
-        </div>
-        <div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
-            <div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div>
-        </div>
-    </div>
-`;
+            `;
         });
         
-galaxiesHtml += `
-    </div>
-    <button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:20px;">Закрыть</button>
-`;
+        // ===== КНОПКИ ПАГИНАЦИИ =====
+        galaxiesHtml += `
+            <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
+                <button id="galaxyPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === 0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button>
+                <span style="color:#6B5B4E;font-size:0.9rem;">${currentGalaxyPage + 1} / ${totalPages}</span>
+                <button id="galaxyNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button>
+            </div>
+            <button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>
+        `;
         
         contentDiv.innerHTML = galaxiesHtml;
         modalDiv.appendChild(contentDiv);
         document.body.appendChild(modalDiv);
         
+        // Обработчики для галактик
         document.querySelectorAll('.galaxy-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -2059,15 +2124,45 @@ galaxiesHtml += `
             });
         });
         
-        document.getElementById('closeGalaxyBtn').onclick = (e) => {
-            e.stopPropagation();
-            modalDiv.remove();
-        };
+        // ===== ПАГИНАЦИЯ: НАЗАД =====
+        const prevBtn = document.getElementById('galaxyPrevPage');
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                if (currentGalaxyPage > 0) {
+                    currentGalaxyPage--;
+                    modalDiv.remove();
+                    showGalaxyMap();
+                }
+            };
+        }
         
-        document.getElementById('closeGalaxyCross').onclick = (e) => {
-            e.stopPropagation();
-            modalDiv.remove();
-        };
+        // ===== ПАГИНАЦИЯ: ВПЕРЁД =====
+        const nextBtn = document.getElementById('galaxyNextPage');
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (currentGalaxyPage < totalPages - 1) {
+                    currentGalaxyPage++;
+                    modalDiv.remove();
+                    showGalaxyMap();
+                }
+            };
+        }
+        
+        const closeBtn = document.getElementById('closeGalaxyBtn');
+        if (closeBtn) {
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                modalDiv.remove();
+            };
+        }
+        
+        const crossBtn = document.getElementById('closeGalaxyCross');
+        if (crossBtn) {
+            crossBtn.onclick = (e) => {
+                e.stopPropagation();
+                modalDiv.remove();
+            };
+        }
         
         modalDiv.onclick = (e) => { 
             if (e.target === modalDiv) modalDiv.remove(); 
@@ -2275,6 +2370,10 @@ function syncScrollsWithStars() {
 
 let currentScrollPage = 0;
 const SCROLLS_PER_PAGE = 10;
+
+// ПАГИНАЦИЯ ДЛЯ ГАЛАКТИК
+let currentGalaxyPage = 0;
+const GALAXIES_PER_PAGE = 4;
 
 function showScrollsModal() {
     // Синхронизируем свитки со звёздами
@@ -2684,6 +2783,10 @@ document.getElementById('menuThemeBtn').addEventListener('click', showThemeSelec
 // Загружаем сохранённую тему при старте
 setTheme(localStorage.getItem('theme') || 'dark');
 //===================конец функции галактик
+
+
+
+
     init();
   
 </script>

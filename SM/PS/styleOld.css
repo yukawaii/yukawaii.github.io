@@ -1,35 +1,20 @@
-       
-        * {
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            box-sizing: border-box;
-        }
+/* ===== ОСНОВНЫЕ СБРОСЫ И ПЕРЕМЕННЫЕ ===== */
+* {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+}
+
 :root {
     --btn-primary: #517a2f;
     --btn-secondary: #8b5a2a;
-}
-
-[data-theme="blue"] {
-    --btn-primary: #1a3a5a;
-    --btn-secondary: #1a4a6a;
-}
-
-[data-theme="teal"] {
-    --btn-primary: #1a4a4a;
-    --btn-secondary: #1a5a5a;
-}
-
-[data-theme="sun"] {
-    --btn-primary: #5a4a1a;
-    --btn-secondary: #6a5a2a;
-}
-:root {
     --bg-body: linear-gradient(135deg, #6ba5c4 0%, #3a7ca5 50%, #1a5a8a 100%);
     --bg-card: #fff8ec;
     --bg-panel: #2c3e2b;
     --bg-grid: #e0cfaa;
     --bg-cell: #fffdf5;
     --text-primary: #2b4a1e;
+    --text-secondary: #3a3220;
     --text-light: #fef0cf;
     --shadow-color: rgba(0,0,0,0.3);
     --border-color: #ffefc0;
@@ -40,16 +25,26 @@
     --cell-shadow: #9b6e42;
     --grid-border-light: #fff6e5;
     --grid-border-dark: #bd9865;
+    --btn-primary-shadow: #2e4a1a;
+    --bg-card-light: #ede1ca;
+    --bg-progress: #d4c3a4;
+    --modal-bg: rgba(0,0,0,0.85);
+        --level-selected-bg: #f7b32b;
+    --level-selected-shadow: #8b5a2a;
 }
 
-/* Тема: Голубая */
+/* ===== ТЕМЫ ===== */
 [data-theme="blue"] {
+    
+    --btn-primary: #1a3a5a;
+    --btn-secondary: #1a4a6a;
     --bg-body: linear-gradient(135deg, #7ec8e3 0%, #4a9fc7 50%, #2a7fa5 100%);
     --bg-card: #f0f8ff;
     --bg-panel: #1a4a6a;
     --bg-grid: #c5dbe8;
     --bg-cell: #f5faff;
     --text-primary: #1a3a5a;
+    --text-secondary: #2a4a6a;
     --text-light: #e8f4ff;
     --shadow-color: rgba(0,40,80,0.3);
     --border-color: #b8d8e8;
@@ -60,16 +55,25 @@
     --cell-shadow: #8ab8d0;
     --grid-border-light: #b8d8e8;
     --grid-border-dark: #8ab8d0;
+    --btn-primary-shadow: #1a4a6a;
+    --bg-card-light: #e0edf5;
+    --bg-progress: #c5dbe8;
+    --modal-bg: rgba(10,30,50,0.88);
+        --level-selected-bg: #6cb8ff;
+    --level-selected-shadow: #3487e6;
+
 }
 
-/* Тема: Бирюза */
 [data-theme="teal"] {
+    --btn-primary: #1a4a4a;
+    --btn-secondary: #1a5a5a;
     --bg-body: linear-gradient(135deg, #5cb8b8 0%, #2a9a9a 50%, #1a7a7a 100%);
     --bg-card: #e8f5f5;
     --bg-panel: #1a5a5a;
     --bg-grid: #b8dcdc;
     --bg-cell: #f0fafa;
     --text-primary: #1a4a4a;
+    --text-secondary: #2a5a5a;
     --text-light: #e0f5f5;
     --shadow-color: rgba(0,60,60,0.3);
     --border-color: #a8d0d0;
@@ -80,16 +84,24 @@
     --cell-shadow: #6ab8b8;
     --grid-border-light: #a8d0d0;
     --grid-border-dark: #6ab8b8;
+    --btn-primary-shadow: #1a4a4a;
+    --bg-card-light: #d0e8e8;
+    --bg-progress: #b8dcdc;
+    --modal-bg: rgba(10,40,40,0.88);
+       --level-selected-bg: #2DD4BF;
+    --level-selected-shadow: #0D9488;
 }
 
-/* Тема: Солнце */
 [data-theme="sun"] {
+    --btn-primary: #5a4a1a;
+    --btn-secondary: #6a5a2a;
     --bg-body: linear-gradient(135deg, #f5c842 0%, #e8a820 50%, #d4880a 100%);
     --bg-card: #fef8e8;
     --bg-panel: #8a6a1a;
     --bg-grid: #f0e0a8;
     --bg-cell: #fffcf0;
     --text-primary: #5a4a1a;
+    --text-secondary: #6a5a2a;
     --text-light: #fef8e8;
     --shadow-color: rgba(80,60,0,0.3);
     --border-color: #f0d888;
@@ -100,16 +112,24 @@
     --cell-shadow: #d4b86a;
     --grid-border-light: #f0d888;
     --grid-border-dark: #d4b86a;
+    --btn-primary-shadow: #6a4a0a;
+    --bg-card-light: #f0e0a8;
+    --bg-progress: #f0d888;
+    --modal-bg: rgba(40,30,10,0.88);
+        --level-selected-bg: #FBBF24;
+    --level-selected-shadow: #D97706;
 }
 
-/* Тема: Космос (тёмная) */
 [data-theme="dark"] {
+    --btn-primary: #4a3a7a;
+    --btn-secondary: #ac82ff;
     --bg-body: linear-gradient(145deg, #0a0a1a 0%, #1a1a3a 50%, #0d0d2b 100%);
     --bg-card: #1a1a2e;
     --bg-panel: #2a2a4a;
     --bg-grid: #2a2a3e;
     --bg-cell: #2d2d4a;
     --text-primary: #d0d0e8;
+    --text-secondary: #b8b8d8;
     --text-light: #e8e8ff;
     --shadow-color: rgba(0,0,30,0.5);
     --border-color: #4a4a6a;
@@ -120,16 +140,32 @@
     --cell-shadow: #3a3a5a;
     --grid-border-light: #4a4a6a;
     --grid-border-dark: #2a2a4a;
+    --btn-primary-shadow: #2a1a4a;
+    --bg-card-light: rgba(40,30,60,0.6);
+    --bg-progress: rgba(40,30,60,0.5);
+    --modal-bg: rgba(10,10,26,0.92);
 }
 
-   #levelsGrid button {
+/* Обычная кнопка уровня */
+#levelsGrid button {
     border-radius: 50% !important;
     aspect-ratio: 1 / 1 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    background: #d4c3a4;
+    color: #3a3220;
+    box-shadow: 0 3px 0 #9b6e42;
+    transition: 0.05s linear;
 }
 
+/* Выделенная кнопка уровня */
+#levelsGrid button.selected-level {
+    background: var(--level-selected-bg, #f7b32b) !important;
+    box-shadow: 0 2px 0 var(--level-selected-shadow, #8b5a2a) !important;
+    transform: scale(0.98);
+}
+/* ===== БАЗОВЫЕ СТИЛИ ===== */
 body {
     margin: 0;
     padding: 10px;
@@ -140,11 +176,11 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-      background: var(--bg-body, #0a0a1a) !important;
+    background: var(--bg-body) !important;
     position: relative;
 }
 
-/* Звёзды */
+/* Звёзды и туманности */
 body::before {
     content: '';
     position: absolute;
@@ -153,44 +189,43 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: 
-      radial-gradient(2px 2px at 5% 10%, white, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 12% 25%, #fff8e7, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 20% 5%, #ffe4b5, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 28% 45%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 35% 70%, #ffddaa, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 42% 15%, white, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 50% 60%, #fff5e0, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 58% 30%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 65% 85%, #ffe0b3, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 72% 8%, white, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 78% 50%, #fff0cc, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 85% 20%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 92% 75%, #ffddaa, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 98% 40%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 15% 90%, #ffe4b5, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 45% 95%, white, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 75% 15%, #fff8e7, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 33% 55%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 88% 65%, #ffe0b3, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 52% 88%, white, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 63% 42%, #fff5e0, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 18% 33%, white, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 80% 55%, #fff0cc, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 38% 78%, white, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 55% 12%, #ffe4b5, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 70% 95%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 25% 40%, #fff8e7, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 48% 72%, white, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90% 30%, #ffddaa, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 60% 18%, white, rgba(0,0,0,0)),
-        radial-gradient(3px 3px at 95% 88%, #ffe0b3, rgba(0,0,0,0)),
-        radial-gradient(1px 1px at 8% 60%, white, rgba(0,0,0,0));
+        radial-gradient(2px 2px at 5% 10%, white, transparent),
+        radial-gradient(1px 1px at 12% 25%, #fff8e7, transparent),
+        radial-gradient(3px 3px at 20% 5%, #ffe4b5, transparent),
+        radial-gradient(1px 1px at 28% 45%, white, transparent),
+        radial-gradient(2px 2px at 35% 70%, #ffddaa, transparent),
+        radial-gradient(1px 1px at 42% 15%, white, transparent),
+        radial-gradient(3px 3px at 50% 60%, #fff5e0, transparent),
+        radial-gradient(1px 1px at 58% 30%, white, transparent),
+        radial-gradient(2px 2px at 65% 85%, #ffe0b3, transparent),
+        radial-gradient(1px 1px at 72% 8%, white, transparent),
+        radial-gradient(3px 3px at 78% 50%, #fff0cc, transparent),
+        radial-gradient(1px 1px at 85% 20%, white, transparent),
+        radial-gradient(2px 2px at 92% 75%, #ffddaa, transparent),
+        radial-gradient(1px 1px at 98% 40%, white, transparent),
+        radial-gradient(2px 2px at 15% 90%, #ffe4b5, transparent),
+        radial-gradient(1px 1px at 45% 95%, white, transparent),
+        radial-gradient(3px 3px at 75% 15%, #fff8e7, transparent),
+        radial-gradient(1px 1px at 33% 55%, white, transparent),
+        radial-gradient(2px 2px at 88% 65%, #ffe0b3, transparent),
+        radial-gradient(1px 1px at 52% 88%, white, transparent),
+        radial-gradient(3px 3px at 63% 42%, #fff5e0, transparent),
+        radial-gradient(2px 2px at 18% 33%, white, transparent),
+        radial-gradient(1px 1px at 80% 55%, #fff0cc, transparent),
+        radial-gradient(2px 2px at 38% 78%, white, transparent),
+        radial-gradient(1px 1px at 55% 12%, #ffe4b5, transparent),
+        radial-gradient(3px 3px at 70% 95%, white, transparent),
+        radial-gradient(2px 2px at 25% 40%, #fff8e7, transparent),
+        radial-gradient(1px 1px at 48% 72%, white, transparent),
+        radial-gradient(2px 2px at 90% 30%, #ffddaa, transparent),
+        radial-gradient(1px 1px at 60% 18%, white, transparent),
+        radial-gradient(3px 3px at 95% 88%, #ffe0b3, transparent),
+        radial-gradient(1px 1px at 8% 60%, white, transparent);
     background-repeat: no-repeat;
     pointer-events: none;
     z-index: 0;
 }
 
-/* Туманность 1 (фиолетовая) */
 body::after {
     content: '';
     position: absolute;
@@ -198,67 +233,39 @@ body::after {
     left: 5%;
     width: 70%;
     height: 60%;
-    background: radial-gradient(ellipse, rgba(120, 60, 180, 0.4), rgba(80, 40, 120, 0.2), transparent 70%);
+    background: radial-gradient(ellipse, rgba(120,60,180,0.4), rgba(80,40,120,0.2), transparent 70%);
     filter: blur(80px);
     pointer-events: none;
     z-index: 0;
 }
 
-/* Туманность 2 (синяя) */
 .space-nebula {
     position: absolute;
     bottom: 5%;
     right: 5%;
     width: 60%;
     height: 50%;
-    background: radial-gradient(ellipse, rgba(40, 100, 180, 0.35), rgba(20, 60, 120, 0.15), transparent 70%);
+    background: radial-gradient(ellipse, rgba(40,100,180,0.35), rgba(20,60,120,0.15), transparent 70%);
     filter: blur(80px);
     pointer-events: none;
     z-index: 0;
 }
 
-/* Туманность 3 (розовая) */
 .space-nebula-pink {
     position: absolute;
     top: 40%;
     left: 50%;
     width: 50%;
     height: 40%;
-    background: radial-gradient(ellipse, rgba(200, 60, 120, 0.25), rgba(150, 40, 80, 0.1), transparent 70%);
+    background: radial-gradient(ellipse, rgba(200,60,120,0.25), rgba(150,40,80,0.1), transparent 70%);
     filter: blur(90px);
     pointer-events: none;
     z-index: 0;
 }
-.game-container, .game-card {
-    background: var(--bg-card, rgba(255, 248, 236, 0.95));
-    box-shadow: 0 20px 35px var(--shadow-color, rgba(0, 0, 0, 0.4));
-}
-.buttons button.next-btn {
-    background: var(--btn-primary, #517a2f) !important;
-}
-/* Кнопки в топ-панели */
-#rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn {
-    background: var(--accent, #ffa54d) !important;
-    color: #2d2b1a !important;
-}
 
-.game-container, .game-card, .grid, .top-panel, .words-container, .buttons, .msg-area {
-    position: relative;
-    z-index: 1;
-}
-
-.game-card {
-   background: var(--bg-card, #fff8ec) !important;
-    box-shadow: 0 20px 35px var(--shadow-color, rgba(0,0,0,0.4)) !important;
-
-}
-
-/* Убедитесь, что фон карточки непрозрачный */
-.game-card, .top-panel, .grid, .words-container, .msg-area, button {
-    background-color: #fff8ec;
-}
- .game-container {
-        background: rgba(0, 0, 0, 0.3);
+/* ===== КОНТЕЙНЕРЫ ===== */
+.game-container {
+    background: rgba(0,0,0,0.3);
     border-radius: 56px;
     padding: 12px;
     backdrop-filter: blur(4px);
@@ -266,84 +273,71 @@ body::after {
     max-width: 850px;
     height: auto;
     max-height: 98vh;
+     overflow: hidden;  
 }
+
 .game-card {
-     backdrop-filter: none;
-    background: #fff8ec;
+    background: var(--bg-card) !important;
     border-radius: 44px;
     padding: 15px 18px 20px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 35px var(--shadow-color), inset 0 1px 2px rgba(255,255,255,0.6);
     max-height: calc(98vh - 30px);
     overflow-y: auto;
 }
 
-        .top-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-    background: var(--bg-panel, #2c3e2b) !important;
-    color: var(--text-light, #fef0cf) !important;
-            padding: 8px 20px;
-            border-radius: 60px;
-            margin-bottom: 25px;    
-            flex-wrap: wrap;
-            gap: 3px;
-        }
+/* ===== ТОП-ПАНЕЛЬ ===== */
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-panel) !important;
+    color: var(--text-light) !important;
+    padding: 8px 20px;
+    border-radius: 60px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 3px;
+}
 
-        .level-badge {
-        background: var(--accent, #ffa54d) !important;
+.level-badge {
+    background: var(--accent-color) !important;
     color: #2d2b1a !important;
-            padding: 5px 22px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        
-            box-shadow: inset 0 1px 2px #ffd58c, 0 2px 5px rgba(0,0,0,0.2);
-        }
+    padding: 5px 22px;
+    border-radius: 40px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: inset 0 1px 2px #ffd58c, 0 2px 5px rgba(0,0,0,0.2);
+}
 
-        .score-panel {
-              background: var(--btn-primary, #1f3a1c) !important;
-    color: var(--text-light, #fef0cf) !important;
-            padding: 5px 18px;
-            border-radius: 40px;
-            font-weight: bold;
-            display: flex;
-            gap: 15px;
-        }
+.score-panel {
+    background: var(--btn-primary) !important;
+    color: var(--text-light) !important;
+    padding: 5px 18px;
+    border-radius: 40px;
+    font-weight: bold;
+    display: flex;
+    gap: 15px;
+}
 
-      /*  .current-word-card {
-              margin: 5px auto; 
-            background: #3e2a1f;
-            padding: 6px 22px;
-            border-radius: 50px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 5px;
-            color: #ffeaaf;
-        }*/
+/* ===== СЕТКА ===== */
+.grid {
+    display: grid;
+    justify-content: center;
+    gap: 8px;
+    background: var(--bg-grid) !important;
+    box-shadow: inset 0 0 0 2px var(--grid-border-light), 
+                inset 0 0 0 6px var(--grid-border-dark), 
+                0 12px 24px var(--shadow-color) !important;
+    padding: 22px;
+    border-radius: 44px;
+    margin: 16px auto;
+    width: fit-content;
+    max-width: 100%;
+}
 
-        .grid {
-            display: grid;
-            justify-content: center;
-            gap: 8px;
-    background: var(--bg-grid, #e0cfaa) !important;
-    box-shadow: inset 0 0 0 2px var(--grid-border-light, #fff6e5), 
-                inset 0 0 0 6px var(--grid-border-dark, #bd9865), 
-                0 12px 24px var(--shadow-color, rgba(0,0,0,0.3)) !important;
-            padding: 22px;
-            border-radius: 44px;
-
-            margin: 16px 0;
-              margin: 16px auto; /* ← добавить auto */
-    width: fit-content; /* ← добавить */
-    max-width: 100%; /* ← добавить */
-        }
-
-        .cell {
+.cell {
     width: 62px;
     height: 62px;
-
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -351,230 +345,182 @@ body::after {
     font-size: 2rem;
     font-weight: 800;
     font-family: 'Segoe UI', 'Montserrat', monospace;
-      background: var(--bg-cell);
+    background: var(--bg-cell);
     color: var(--text-primary);
-    border-color: var(--border-color);
-    box-shadow: 0 4px 0 #9b6e42;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 0 var(--cell-shadow);
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.05s linear;
-  
-    border: 2px solid #ffefc0;
     text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
 }
 
 .cell.selected {
-    background: var(--bg-cell, #fffdf5) !important;
-    color: var(--text-primary, #2b4a1e) !important;
-    border-color: var(--border-color, #ffefc0) !important;
-    box-shadow: 0 4px 0 var(--cell-shadow, #9b6e42) !important;
+    background: var(--bg-cell) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 4px 0 var(--cell-shadow) !important;
 }
 
 .cell.found {
-  /*  background: linear-gradient(145deg, #6b9c3f, #3d7620);*/
     color: white;
     text-shadow: 0 1px 2px black;
     border-color: #c2e082;
     opacity: 0.85;
-    /* Убираем transform: translateY(2px); */
     box-shadow: 0 2px 0 #235b10;
 }
 
-.cell:active {    transform: scale(0.97);}   
-        .cell.wrong-flash {
-            background: #e06c6c;
-            box-shadow: 0 2px 0 #973c3c;
-            animation: shakeAnim 0.2s ease-in-out 0s 2;
-        }
-        @keyframes shakeAnim {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
-        .words-container {
-            background: #ede1ca;
-            border-radius: 38px;
-            padding: 12px 18px;
-            margin-top: 8px;
-        }
-
-        .words-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .word-chip {
-            background: #d4c3a4;
-            padding: 7px 20px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #3a3220;
-            transition: 0.1s;
-            font-family: monospace;
-            letter-spacing: 1px;
-            box-shadow: inset 0 1px 2px white, 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .word-chip.found-word {
-            background: #578b2f;
-            color: white;
-            text-decoration: line-through;
-            text-decoration-thickness: 2px;
-            text-decoration-color: #ffda88;
-            box-shadow: inset 0 0 6px #b4f56a;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 22px 0 8px;
-        }
-
-      /*  button {
-            background: var(--btn-secondary, #423d30) !important;
-    color: var(--text-light, #ffefcf) !important;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 1rem;
-       
-            cursor: pointer;
-           transition: 0.07s linear;
-            box-shadow: 0 4px 0 #201e17;
-            font-family: inherit;
-        } 
-
-
-        button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #201e17;
-        } */
-
-
-
-
-        .next-btn {
-            background: #517a2f;
-            box-shadow: 0 4px 0 #2e4a1a;
-        }
-
-        .msg-area {
-            text-align: center;
-            margin-top: 18px;
-         background: var(--msg-bg, #2c261c) !important;
-    color: var(--text-light, #ffe3b3) !important;
-            padding: 8px;
-            border-radius: 60px;         
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-       @media (max-width: 550px) {
-            body {
-        padding-bottom: 20px !important;
-           padding: 5px !important;
-    }
-    .game-card {
-        padding: 6px 8px 10px !important;
-        border-radius: 28px !important;
-        max-height: calc(100vh - 30px) !important;
-    }
-
-      .game-container {
-        padding: 6px !important;
-        border-radius: 32px !important;
-    }
-    .cell {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-   .grid {
-        gap: 3px !important;
-        padding: 6px !important;
-        border-radius: 20px !important;
-        margin: 6px 0 !important;
-    }
-    .current-word-card {
-        font-size: 0.8rem;
-        letter-spacing: 2px;
-        padding: 4px 10px;
-    }
-    .level-badge, .score-panel {
-        font-size: 0.7rem;
-        padding: 3px 10px;
-    }
-        .words-container {
-        padding: 4px 6px !important;
-        border-radius: 16px !important;
-        margin-top: 4px !important;
-    }
-    .word-chip {
-        font-size: 0.6rem;
-        padding: 3px 8px;
-    }
-        .buttons {
-        margin: 4px 0 !important;
-        gap: 6px !important;
-    }
-    button {
-        padding: 5px 10px;
-        font-size: 0.75rem;
-    }
-     .top-panel {
-        padding: 4px 8px !important;
-        margin-bottom: 6px !important;
-        border-radius: 30px !important;
-        gap: 2px !important;
-    }
-     /* Добавьте это в конец медиа-запроса */
-    #levelsGrid {
-        gap: 8px !important;
-    }
-    
-    #levelsGrid button {
-        width: 42px !important;
-        height: 42px !important;
-        min-width: 42px !important;
-        min-height: 42px !important;
-        font-size: 0.9rem !important;
-    }
-    
-    div[style*="max-height:300px"] {
-        max-height: 250px !important;
-    }
-  #categoriesGrid button {
-        width: 45px !important;
-        height: 45px !important;
-        font-size: 1.5rem !important;
-    }
-    #categoriesGrid {
-        gap: 6px !important;
-    }
-
-
+.cell:active {
+    transform: scale(0.97);
 }
 
-
-    .words-container {
-    display: none;
+.cell.wrong-flash {
+    background: #e06c6c;
+    box-shadow: 0 2px 0 #973c3c;
+    animation: shakeAnim 0.2s ease-in-out 0s 2;
 }
+
+@keyframes shakeAnim {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* ===== СПИСОК СЛОВ ===== */
+.words-container {
+    background: var(--bg-card-light);
+    border-radius: 38px;
+    padding: 12px 18px;
+    margin-top: 8px;
+}
+
+.words-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.word-chip {
+    background: var(--bg-progress);
+    padding: 7px 20px;
+    border-radius: 60px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    transition: 0.1s;
+    font-family: monospace;
+    letter-spacing: 1px;
+    box-shadow: inset 0 1px 2px white, 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.word-chip.found-word {
+    background: #578b2f;
+    color: white;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    text-decoration-color: #ffda88;
+    box-shadow: inset 0 0 6px #b4f56a;
+}
+
+/* ===== КНОПКИ ===== */
+button {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1.5px solid rgba(255,255,255,0.06) !important;
+    border-radius: 100px !important;
+    color: var(--text-primary) !important;
+    padding: 8px 24px !important;
+    font-weight: 500 !important;
+    font-size: 0.85rem !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.03) !important;
+    transition: all 0.25s ease !important;
+    letter-spacing: 0.2px !important;
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+
+button:active {
+    transform: translateY(0) !important;
+}
+
+.next-btn, #menuStartBtn {
+    background: rgba(255,165,77,0.10) !important;
+    border: 1.5px solid rgba(255,165,77,0.15) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+.next-btn:hover, #menuStartBtn:hover {
+    background: rgba(255,165,77,0.18) !important;
+    border-color: rgba(255,165,77,0.25) !important;
+    transform: translateY(-2px) !important;
+}
+
 .next-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
+    opacity: 0.3 !important;
+    transform: none !important;
+    cursor: not-allowed !important;
 }
 
-.next-btn:disabled:active {
-    transform: none;
-    box-shadow: 0 4px 0 #2e4a1a;
+#clearBtn {
+    background: rgba(200,80,80,0.06) !important;
+    border: 1.5px solid rgba(200,80,80,0.08) !important;
+    color: var(--text-primary) !important;
 }
-/* Модальное окно правил */
+
+#clearBtn:hover {
+    background: rgba(200,80,80,0.12) !important;
+    border-color: rgba(200,80,80,0.15) !important;
+}
+
+#rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn,
+#menuInviteBtn, #menuGalaxyBtn, #menuScrollsBtn, #menuThemeBtn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: 1.5px solid rgba(255,255,255,0.06) !important;
+    font-size: 0.8rem !important;
+    background: rgba(255,255,255,0.03) !important;
+}
+
+#rulesBtn:hover, #levelSelectBtn:hover, #galaxyBtn:hover, #menuBackBtn:hover,
+#menuInviteBtn:hover, #menuGalaxyBtn:hover, #menuScrollsBtn:hover, #menuThemeBtn:hover {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.12) !important;
+    transform: scale(1.05) !important;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 22px 0 8px;
+}
+
+/* ===== СООБЩЕНИЯ ===== */
+.msg-area {
+    text-align: center;
+    margin-top: 18px;
+    background: var(--msg-bg) !important;
+    color: var(--text-light) !important;
+    padding: 8px;
+    border-radius: 60px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* ===== МОДАЛЬНЫЕ ОКНА ===== */
+.modal-window {
+    background: var(--modal-bg) !important;
+}
+
 .modal-rules {
     display: none;
     position: fixed;
@@ -582,11 +528,10 @@ body::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--modal-bg);
     z-index: 9999;
     justify-content: center;
     align-items: center;
-
 }
 
 .modal-rules.show {
@@ -594,31 +539,26 @@ body::after {
 }
 
 .modal-rules-content {
-    background: #fff8ec;
+    background: var(--bg-card);
     border-radius: 44px;
     padding: 25px 30px;
     max-width: 380px;
     width: 85%;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border: 2px solid #ffa54d;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border: 2px solid var(--accent-color);
     animation: zoomIn 0.2s ease;
 }
 
-@keyframes zoomIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
 .modal-rules-content h3 {
-    color: #2c3e2b;
+    color: var(--text-primary);
     font-size: 1.6rem;
     margin: 0 0 10px;
 }
 
 .modal-rules-content ul {
     text-align: left;
-    color: #3a3220;
+    color: var(--text-secondary);
     padding-left: 20px;
     line-height: 1.7;
 }
@@ -628,7 +568,7 @@ body::after {
 }
 
 .modal-rules-content .close-modal-btn {
-    background: #517a2f;
+    background: var(--btn-primary);
     color: white;
     border: none;
     padding: 10px 25px;
@@ -637,223 +577,28 @@ body::after {
     font-weight: bold;
     margin-top: 15px;
     cursor: pointer;
-    box-shadow: 0 3px 0 #2e4a1a;
+    box-shadow: 0 3px 0 var(--btn-primary-shadow);
 }
 
 .modal-rules-content .close-modal-btn:active {
     transform: translateY(2px);
-    box-shadow: 0 1px 0 #2e4a1a;
+    box-shadow: 0 1px 0 var(--btn-primary-shadow);
 }
+
 @keyframes zoomIn {
     from { transform: scale(0.9); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
-@media (max-width: 480px) {
-                body {
-        padding-bottom: 90px !important;
-    }
-    #categoriesGrid button {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 1.5rem !important;
-    }
-    #categoriesGrid button span {
-        font-size: 0.6rem !important;
-    }
-}
-/* Горизонтальная ориентация телефонов - только уменьшение кнопок */
-@media (max-width: 767px) and (orientation: landscape) {
-    body {
-        padding-bottom: 100px !important;
-    }
-        
-    #categoriesGrid button span {
-        font-size: 0.55rem !important;
-    }
-    
-       
-    div[style*="border-radius:48px"] {
-        max-height: 80vh !important;
-        overflow-y: auto !important;
-    }
-}
-/* Фикс для модальных окон на горизонтальных телефонах */
-@media (max-width: 767px) and (orientation: landscape) {
 
-                body {
-        padding-bottom: 90px !important;
-    }
-
-    #levelsGrid {
-        gap: 8px !important;
-    }
-    
-    #levelsGrid button {
-        width: 45px !important;
-        height: 45px !important;
-        min-width: 45px !important;
-        min-height: 45px !important;
-        border-radius: 50% !important;
-        font-size: 1rem !important;
-        padding: 0 !important;
-        line-height: 1 !important;
-    }
-    
-    #categoriesGrid button {
-        width: 55px !important;
-        height: 55px !important;
-        min-width: 55px !important;
-        min-height: 55px !important;
-        border-radius: 50% !important;
-        font-size: 1.8rem !important;
-    }
-}
-/* Большие сетки (9x9 и 10x10) */
-@media (max-width: 550px) {
-    .grid[style*="repeat(10,"] .cell,
-    .grid[style*="repeat(9,"] .cell {
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 1rem !important;
-    }
-}
-
-@media (min-width: 551px) and (max-width: 768px) {
-    .grid[style*="repeat(10,"] .cell,
-    .grid[style*="repeat(9,"] .cell {
-        width: 45px !important;
-        height: 45px !important;
-        font-size: 1.2rem !important;
-    }
-}
-
-/* Отступ снизу для модальных окон */
-div[style*="position:fixed"] {
-    padding-bottom: 90px !important;
-    box-sizing: border-box !important;
-}
-
-@media (max-width: 767px) {
-    div[style*="position:fixed"][style*="z-index"] {
-        padding-bottom: 100px !important;
-        align-items: flex-start !important;
-        padding-top: 30px !important;
-    }
-}
-/* Фикс для ПК — поле не должно уезжать за экран */
-@media (min-width: 768px) {
-    .grid {
-        gap: 6px;
-        padding: 15px;
-    }
-    
-    .cell {
-        width: 55px;
-        height: 55px;
-        font-size: 1.5rem;
-    }
-    
-    .game-container {
-        max-width: 700px;
-    }
-}
-/* Фикс для iframe 1000x750 и ПК — без скролла */
-@media (min-width: 900px) {
-    body {
-        height: 100vh;
-        overflow: hidden;
-        padding: 5px !important;
-    }
-    
-    .game-container {
-        max-height: 98vh;
-    }
-    
-    .game-card {
-        max-height: 94vh;
-        overflow-y: hidden !important;
-        padding: 10px 12px 12px !important;
-        
-    }
-    
-    .grid {
-        gap: 4px;
-        padding: 12px;
-        margin: 5px 0;
-    }
-    
-    .cell {
-        width: 42px;
-        height: 42px;
-        font-size: 1.2rem;
-    }
-    
-    .top-panel {
-        margin-bottom: 8px;
-        padding: 5px 12px;
-         gap: 4px;
-    }
-    
-    .level-badge, .score-panel {
-      font-size: 1.1rem !important;
-        padding: 6px 28px !important;
-    }
-    
-    .buttons {
-        margin: 8px 0 4px;
-    }
-    
-    button {
-        padding: 5px 16px;
-        font-size: 0.8rem;
-    }
-    
-    .msg-area {
-        margin-top: 6px;
-        padding: 4px;
-        font-size: 0.7rem;
-    }
-    
-
-     #rulesBtn,
-    #levelSelectBtn,
-    #galaxyBtn,
-    #menuBackBtn {
-        width: 40px !important;
-        height: 40px !important;
-        font-size: 1.5rem !important;
-        min-width: 40px !important;
-        min-height: 40px !important;
-        padding: 0 !important;
-        line-height: 40px !important;
-        text-align: center !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-   
-}
-@media (min-width: 900px) and (max-width: 1100px) and (min-height: 650px) and (max-height: 850px) {
-    .cell {
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-    }
-    
-    .grid {
-        gap: 3px;
-        padding: 6px;
-    }
-    
-    .game-card {
-        padding: 8px 10px 10px !important;
-    }
-}
-
-/* Стартовое меню */
+/* ===== СТАРТОВОЕ МЕНЮ ===== */
 #startMenu {
     display: none;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+       overflow: hidden !important;  /* Добавить: не даём содержимому вылезать */
+   
+  
 }
 
 #startMenu button:hover {
@@ -869,15 +614,817 @@ div[style*="position:fixed"] {
     transition: 0.05s linear;
 }
 
+body.menu-mode .top-panel,
+body.menu-mode .grid,
+body.menu-mode .words-container,
+body.menu-mode .buttons,
+body.menu-mode .msg-area {
+    display: none !important;
+}
+
+body.menu-mode .game-container {
+    max-height: none;
+}
+
+/* ===== КРУГЛЫЕ КНОПКИ В СЕТКАХ ===== */
+#levelsGrid button {
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* ===== ТЁМНАЯ ТЕМА: ЯЧЕЙКИ И КОНТЕЙНЕРЫ ===== */
+[data-theme="dark"] .cell {
+    border-color: rgba(120,80,200,0.3) !important;
+    box-shadow: 0 0 15px rgba(120,80,200,0.08), 0 4px 0 rgba(80,50,150,0.3) !important;
+    background: rgba(40,30,60,0.8) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .cell.selected {  
+    background: rgba(120,80,200,0.5) !important;
+    color: #ffb3d9 !important;
+    box-shadow: 0 0 25px rgba(120,80,200,0.15), 0 2px 0 rgba(80,50,150,0.4) !important;
+    border-color: rgba(120,80,200,0.4) !important;
+}
+
+[data-theme="dark"] .cell.found {
+    border-color: rgba(120,80,200,0.2) !important;
+    box-shadow: 0 0 20px rgba(120,80,200,0.1) !important;
+}
+
+[data-theme="dark"] .words-container {
+    background: rgba(40,30,60,0.6) !important;
+    border: 1px solid rgba(120,80,200,0.15) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="dark"] .word-chip {
+    background: rgba(60,40,100,0.3) !important;
+    border: 1px solid rgba(120,80,200,0.08) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .word-chip.found-word {
+    background: rgba(120,80,200,0.15) !important;
+    border-color: rgba(120,80,200,0.2) !important;
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .grid {
+    background: rgba(30,20,50,0.6) !important;
+    box-shadow: inset 0 0 0 2px rgba(120,80,200,0.1),
+                inset 0 0 0 6px rgba(80,50,150,0.1),
+                0 12px 24px rgba(0,0,0,0.3) !important;
+}
+
+[data-theme="dark"] .top-panel {
+    background: rgba(30,20,50,0.7) !important;
+    border: 1px solid rgba(120,80,200,0.08) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+[data-theme="dark"] .msg-area {
+    background: rgba(30,20,50,0.7) !important;
+    border: 1px solid rgba(120,80,200,0.06) !important;
+    color: #d0d0e8 !important;
+}
+
+/* ===== ТЁМНАЯ ТЕМА: КНОПКИ ===== */
+[data-theme="dark"] button {
+    background: rgba(255,255,255,0.02) !important;
+    border: 1.5px solid rgba(255,255,255,0.04) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] button:hover {
+    background: rgba(120,80,200,0.08) !important;
+    border-color: rgba(120,80,200,0.15) !important;
+}
+
+[data-theme="dark"] .next-btn,
+[data-theme="dark"] #menuStartBtn {
+    background: rgba(120,80,200,0.10) !important;
+    border: 1.5px solid rgba(120,80,200,0.15) !important;
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .next-btn:hover,
+[data-theme="dark"] #menuStartBtn:hover {
+    background: rgba(120,80,200,0.18) !important;
+    border-color: rgba(120,80,200,0.25) !important;
+}
+
+[data-theme="dark"] #clearBtn {
+    background: rgba(200,80,80,0.04) !important;
+    border: 1.5px solid rgba(200,80,80,0.06) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] #clearBtn:hover {
+    background: rgba(200,80,80,0.08) !important;
+    border-color: rgba(200,80,80,0.10) !important;
+}
+
+[data-theme="dark"] #rulesBtn,
+[data-theme="dark"] #levelSelectBtn,
+[data-theme="dark"] #galaxyBtn,
+[data-theme="dark"] #menuBackBtn,
+[data-theme="dark"] #menuInviteBtn,
+[data-theme="dark"] #menuGalaxyBtn,
+[data-theme="dark"] #menuScrollsBtn,
+[data-theme="dark"] #menuThemeBtn {
+    background: rgba(255,255,255,0.02) !important;
+    border: 1.5px solid rgba(255,255,255,0.04) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] #rulesBtn:hover,
+[data-theme="dark"] #levelSelectBtn:hover,
+[data-theme="dark"] #galaxyBtn:hover,
+[data-theme="dark"] #menuBackBtn:hover,
+[data-theme="dark"] #menuInviteBtn:hover,
+[data-theme="dark"] #menuGalaxyBtn:hover,
+[data-theme="dark"] #menuScrollsBtn:hover,
+[data-theme="dark"] #menuThemeBtn:hover {
+    background: rgba(120,80,200,0.08) !important;
+    border-color: rgba(120,80,200,0.15) !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background: #1a1a2e !important;
+    border-color: rgba(120,80,200,0.3) !important;
+}
+
+[data-theme="dark"] .modal-content div,
+[data-theme="dark"] .modal-content span,
+[data-theme="dark"] .modal-content p,
+[data-theme="dark"] .modal-content li {
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .modal-content h3,
+[data-theme="dark"] .modal-content h2 {
+    color: #e8e8ff !important;
+}
+
+[data-theme="dark"] .galaxy-item {
+    background: rgba(40,30,60,0.6) !important;
+    border-color: rgba(120,80,200,0.2) !important;
+}
+
+[data-theme="dark"] #levelsGrid button,
+[data-theme="dark"] #categoriesGrid button {
+    background: rgba(60,40,100,0.3) !important;
+    color: #d0d0e8 !important;
+}
+
+[data-theme="dark"] .scroll-item {
+    background: rgba(40,30,60,0.5) !important;
+    color: #d0d0e8 !important;
+    border-color: rgba(120,80,200,0.2) !important;
+}
+
+[data-theme="dark"] .scroll-item:hover {
+    background: rgba(50,35,80,0.6) !important;
+}
+
+[data-theme="dark"] .scroll-item span {
+    color: #e8e8ff !important;
+}
+
+/* ===== СВЕТЛЫЕ ТЕМЫ: КНОПКИ ===== */
+[data-theme="blue"] button:not([style*="background:transparent"]) {
+    background: rgba(26,58,90,0.12) !important;
+    border: 2px solid rgba(26,58,90,0.25) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(26,58,90,0.2) !important;
+    border-color: rgba(26,58,90,0.4) !important;
+}
+
+[data-theme="blue"] .next-btn,
+[data-theme="blue"] #menuStartBtn {
+    background: rgba(26,58,90,0.15) !important;
+    border: 2px solid rgba(26,58,90,0.35) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] .next-btn:hover,
+[data-theme="blue"] #menuStartBtn:hover {
+    background: rgba(26,58,90,0.25) !important;
+}
+
+[data-theme="blue"] #clearBtn {
+    background: rgba(200,60,60,0.1) !important;
+    border: 2px solid rgba(200,60,60,0.2) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] #clearBtn:hover {
+    background: rgba(200,60,60,0.18) !important;
+}
+
+[data-theme="blue"] #rulesBtn,
+[data-theme="blue"] #levelSelectBtn,
+[data-theme="blue"] #galaxyBtn,
+[data-theme="blue"] #menuBackBtn {
+    background: rgba(26,58,90,0.1) !important;
+    border: 2px solid rgba(26,58,90,0.2) !important;
+    color: #1a3a5a !important;
+}
+
+[data-theme="blue"] #rulesBtn:hover,
+[data-theme="blue"] #levelSelectBtn:hover,
+[data-theme="blue"] #galaxyBtn:hover,
+[data-theme="blue"] #menuBackBtn:hover {
+    background: rgba(26,58,90,0.2) !important;
+}
+
+/* ===== БИРЮЗОВАЯ ТЕМА ===== */
+[data-theme="teal"] button:not([style*="background:transparent"]) {
+    background: rgba(26,74,74,0.12) !important;
+    border: 2px solid rgba(26,74,74,0.25) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(26,74,74,0.2) !important;
+    border-color: rgba(26,74,74,0.4) !important;
+}
+
+[data-theme="teal"] .next-btn,
+[data-theme="teal"] #menuStartBtn {
+    background: rgba(26,74,74,0.15) !important;
+    border: 2px solid rgba(26,74,74,0.35) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] .next-btn:hover,
+[data-theme="teal"] #menuStartBtn:hover {
+    background: rgba(26,74,74,0.25) !important;
+}
+
+[data-theme="teal"] #clearBtn {
+    background: rgba(200,60,60,0.1) !important;
+    border: 2px solid rgba(200,60,60,0.2) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] #clearBtn:hover {
+    background: rgba(200,60,60,0.18) !important;
+}
+
+[data-theme="teal"] #rulesBtn,
+[data-theme="teal"] #levelSelectBtn,
+[data-theme="teal"] #galaxyBtn,
+[data-theme="teal"] #menuBackBtn {
+    background: rgba(26,74,74,0.1) !important;
+    border: 2px solid rgba(26,74,74,0.2) !important;
+    color: #1a4a4a !important;
+}
+
+[data-theme="teal"] #rulesBtn:hover,
+[data-theme="teal"] #levelSelectBtn:hover,
+[data-theme="teal"] #galaxyBtn:hover,
+[data-theme="teal"] #menuBackBtn:hover {
+    background: rgba(26,74,74,0.2) !important;
+}
+
+/* ===== СОЛНЕЧНАЯ ТЕМА ===== */
+[data-theme="sun"] button:not([style*="background:transparent"]) {
+    background: rgba(90,74,26,0.12) !important;
+    border: 2px solid rgba(90,74,26,0.25) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] button:hover:not([style*="background:transparent"]) {
+    background: rgba(90,74,26,0.2) !important;
+    border-color: rgba(90,74,26,0.4) !important;
+}
+
+[data-theme="sun"] .next-btn,
+[data-theme="sun"] #menuStartBtn {
+    background: rgba(90,74,26,0.15) !important;
+    border: 2px solid rgba(90,74,26,0.35) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] .next-btn:hover,
+[data-theme="sun"] #menuStartBtn:hover {
+    background: rgba(90,74,26,0.25) !important;
+}
+
+[data-theme="sun"] #clearBtn {
+    background: rgba(200,60,60,0.1) !important;
+    border: 2px solid rgba(200,60,60,0.2) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] #clearBtn:hover {
+    background: rgba(200,60,60,0.18) !important;
+}
+
+[data-theme="sun"] #rulesBtn,
+[data-theme="sun"] #levelSelectBtn,
+[data-theme="sun"] #galaxyBtn,
+[data-theme="sun"] #menuBackBtn {
+    background: rgba(90,74,26,0.1) !important;
+    border: 2px solid rgba(90,74,26,0.2) !important;
+    color: #5a4a1a !important;
+}
+
+[data-theme="sun"] #rulesBtn:hover,
+[data-theme="sun"] #levelSelectBtn:hover,
+[data-theme="sun"] #galaxyBtn:hover,
+[data-theme="sun"] #menuBackBtn:hover {
+    background: rgba(90,74,26,0.2) !important;
+}
+
+[data-theme="blue"] .modal-content button,
+[data-theme="teal"] .modal-content button,
+[data-theme="sun"] .modal-content button {
+    background: rgba(0,0,0,0.06) !important;
+    border: 2px solid rgba(0,0,0,0.15) !important;
+    color: inherit !important;
+}
+
+[data-theme="blue"] .modal-content button:hover,
+[data-theme="teal"] .modal-content button:hover,
+[data-theme="sun"] .modal-content button:hover {
+    background: rgba(0,0,0,0.12) !important;
+    border-color: rgba(0,0,0,0.25) !important;
+}
+
+/* ===== МЕДИА-ЗАПРОСЫ ===== */
 @media (max-width: 550px) {
+    body {
+        padding: 5px !important;
+        padding-bottom: 20px !important;
+    }
+    .game-card {
+        padding: 6px 8px 10px !important;
+        border-radius: 28px !important;
+        max-height: calc(100vh - 30px) !important;
+    }
+    .game-container {
+        padding: 6px !important;
+        border-radius: 32px !important;
+    }
+    .cell {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    .grid {
+        gap: 3px !important;
+        padding: 6px !important;
+        border-radius: 20px !important;
+        margin: 6px 0 !important;
+    }
+    .current-word-card {
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        padding: 4px 10px;
+    }
+    .level-badge, .score-panel {
+        font-size: 0.7rem;
+        padding: 3px 10px;
+    }
+    .words-container {
+        padding: 4px 6px !important;
+        border-radius: 16px !important;
+        margin-top: 4px !important;
+    }
+    .word-chip {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+    }
+    .buttons {
+        margin: 4px 0 !important;
+        gap: 6px !important;
+    }
+    button {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+    .top-panel {
+        padding: 4px 8px !important;
+        margin-bottom: 6px !important;
+        border-radius: 30px !important;
+        gap: 2px !important;
+    }
+    #levelsGrid {
+        gap: 8px !important;
+    }
+    #levelsGrid button {
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        min-height: 42px !important;
+        font-size: 0.9rem !important;
+    }
+    div[style*="max-height:300px"] {
+        max-height: 250px !important;
+    }
+    #categoriesGrid button {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.5rem !important;
+    }
+    #categoriesGrid {
+        gap: 6px !important;
+    }
+    .grid[style*="repeat(10,"] .cell,
+    .grid[style*="repeat(9,"] .cell {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 1rem !important;
+    }
     #startMenu {
         height: 60vh !important;
     }
     #startMenu h1 {
         font-size: 1.8rem !important;
     }
+    .scroll-btn {
+        min-width: 40px !important;
+        font-size: 0.8rem !important;
+    }
+    div[style*="grid-template-columns:repeat(4"] {
+        gap: 4px !important;
+    }
 }
-/* Анимация для звёзд */
+
+@media (min-width: 551px) and (max-width: 768px) {
+    .grid[style*="repeat(10,"] .cell,
+    .grid[style*="repeat(9,"] .cell {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 767px) and (orientation: landscape) {
+    body {
+        padding-bottom: 100px !important;
+    }
+    #categoriesGrid button span {
+        font-size: 0.55rem !important;
+    }
+    div[style*="border-radius:48px"] {
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+    }
+    #levelsGrid {
+        gap: 8px !important;
+    }
+    #levelsGrid button {
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+        border-radius: 50% !important;
+        font-size: 1rem !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+    }
+    #categoriesGrid button {
+        width: 55px !important;
+        height: 55px !important;
+        min-width: 55px !important;
+        min-height: 55px !important;
+        border-radius: 50% !important;
+        font-size: 1.8rem !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .grid {
+        gap: 6px;
+        padding: 15px;
+    }
+    .cell {
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+    .game-container {
+        max-width: 700px;
+    }
+}
+
+@media (min-width: 900px) {
+    body {
+        height: 100vh;
+        overflow: hidden;
+        padding: 5px !important;
+    }
+    .game-container {
+        max-height: 98vh;
+    }
+    .game-card {
+        max-height: 94vh;
+        overflow-y: hidden !important;
+        padding: 10px 12px 12px !important;
+    }
+    .grid {
+        gap: 4px;
+        padding: 12px;
+        margin: 5px 0;
+    }
+    .cell {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+    }
+    .top-panel {
+        margin-bottom: 8px;
+        padding: 5px 12px;
+        gap: 4px;
+    }
+    .level-badge, .score-panel {
+        font-size: 1.1rem !important;
+        padding: 6px 28px !important;
+    }
+    .buttons {
+        margin: 8px 0 4px;
+    }
+    button {
+        padding: 5px 16px;
+        font-size: 0.8rem;
+    }
+    .msg-area {
+        margin-top: 6px;
+        padding: 4px;
+        font-size: 0.7rem;
+    }
+    #rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1.5rem !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        padding: 0 !important;
+        line-height: 40px !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 650px) and (max-height: 850px) {
+    .cell {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    .grid {
+        gap: 3px;
+        padding: 6px;
+    }
+    .game-card {
+        padding: 8px 10px 10px !important;
+    }
+}
+
+/* ===== ЛАНДШАФТНЫЙ СТАРТОВОЕ МЕНЮ ===== */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 600px) {
+    #startMenu {
+        padding: 6px 10px !important;
+        gap: 2px !important;
+        justify-content: center !important;
+    }
+    #startMenu > div:first-child {
+        gap: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    #startMenu > div:first-child > div:first-child {
+        font-size: 1.8rem !important;
+    }
+    #startMenu h1 {
+        font-size: 1rem !important;
+    }
+    #startMenu > div[style*="max-width:min(280px, 70vw)"] {
+        gap: 3px !important;
+        max-width: 200px !important;
+    }
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: 3px 10px !important;
+        font-size: 0.55rem !important;
+    }
+    #startMenu > div:last-child {
+        gap: 5px !important;
+        margin-top: 3px !important;
+    }
+    #startMenu > div:last-child button {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.7rem !important;
+        min-width: 26px !important;
+        min-height: 26px !important;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    #startMenu {
+        padding: 15px 30px !important;
+        justify-content: space-evenly !important;
+    }
+    #startMenu > div:first-child {
+        gap: 15px !important;
+    }
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(3.5rem, 14vh, 6rem) !important;
+    }
+    #startMenu h1 {
+        font-size: clamp(2.5rem, 10vh, 4rem) !important;
+    }
+    #startMenu p {
+        font-size: clamp(1rem, 3vh, 1.8rem) !important;
+        margin: 3px 0 !important;
+    }
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 350px !important;
+        gap: clamp(10px, 2.5vh, 18px) !important;
+    }
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(14px, 3vh, 22px) 25px !important;
+        font-size: clamp(1.2rem, 3.5vh, 1.8rem) !important;
+    }
+    #startMenu > div:last-child {
+        gap: clamp(15px, 3.5vh, 30px) !important;
+        padding-top: clamp(5px, 1.5vh, 15px) !important;
+    }
+    #startMenu > div:last-child button {
+        width: clamp(50px, 10vh, 70px) !important;
+        height: clamp(50px, 10vh, 70px) !important;
+        font-size: clamp(1.5rem, 4.5vh, 2.5rem) !important;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 400px) {
+    #startMenu {
+        padding: 8px 20px !important;
+        gap: 2px !important;
+    }
+    #startMenu > div:first-child {
+        gap: 10px !important;
+    }
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(2.5rem, 10vh, 4rem) !important;
+    }
+    #startMenu h1 {
+        font-size: clamp(1.8rem, 7vh, 3rem) !important;
+    }
+    #startMenu p {
+        font-size: clamp(0.7rem, 2.5vh, 1.2rem) !important;
+        margin: 1px 0 !important;
+    }
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 250px !important;
+        gap: clamp(6px, 1.5vh, 12px) !important;
+    }
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(8px, 2vh, 14px) 15px !important;
+        font-size: clamp(0.8rem, 2.5vh, 1.3rem) !important;
+    }
+    #startMenu > div:last-child {
+        gap: clamp(10px, 2.5vh, 20px) !important;
+        padding-top: clamp(3px, 0.8vh, 8px) !important;
+    }
+    #startMenu > div:last-child button {
+        width: clamp(36px, 7vh, 50px) !important;
+        height: clamp(36px, 7vh, 50px) !important;
+        font-size: clamp(1rem, 3vh, 1.8rem) !important;
+    }
+}
+
+@media (max-height: 700px) and (orientation: portrait) {
+    #startMenu {
+        padding: 8px 12px !important;
+        gap: 2px !important;
+        justify-content: center !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(2rem, 8vh, 3.5rem) !important;
+    }
+    #startMenu h1 {
+        font-size: clamp(1.5rem, 5vh, 2.5rem) !important;
+        margin: 2px 0 !important;
+    }
+    #startMenu p {
+        font-size: clamp(0.7rem, 2vh, 1.1rem) !important;
+        margin: 1px 0 !important;
+    }
+    
+    /* Кнопки в меню */
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 260px !important;
+        gap: clamp(4px, 1.2vh, 10px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(6px, 1.5vh, 12px) 14px !important;
+        font-size: clamp(0.7rem, 2vh, 1.1rem) !important;
+    }
+    
+    /* Нижние кнопки (галактика, друзья, свитки, тема) */
+    #startMenu > div:last-child {
+        gap: clamp(6px, 1.5vh, 14px) !important;
+        padding-top: clamp(2px, 0.5vh, 6px) !important;
+        flex-wrap: wrap !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(32px, 6vh, 44px) !important;
+        height: clamp(32px, 6vh, 44px) !important;
+        font-size: clamp(1rem, 2.5vh, 1.5rem) !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+    }
+}
+
+@media (max-height: 500px) and (orientation: portrait) {
+  #startMenu {
+        padding: 4px 8px !important;
+        gap: 1px !important;
+    }
+    
+    #startMenu > div:first-child > div:first-child {
+        font-size: clamp(1.5rem, 6vh, 2.5rem) !important;
+    }
+    #startMenu h1 {
+        font-size: clamp(1.2rem, 4vh, 2rem) !important;
+    }
+    #startMenu p {
+        font-size: clamp(0.5rem, 1.5vh, 0.8rem) !important;
+        margin: 0 !important;
+    }
+    
+    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
+        max-width: 200px !important;
+        gap: clamp(2px, 0.8vh, 6px) !important;
+    }
+    
+    #startMenu button:not([style*="border-radius:50%"]) {
+        padding: clamp(4px, 1vh, 8px) 10px !important;
+        font-size: clamp(0.6rem, 1.5vh, 0.9rem) !important;
+    }
+    
+    #startMenu > div:last-child {
+        gap: clamp(4px, 1vh, 10px) !important;
+        padding-top: 2px !important;
+    }
+    
+    #startMenu > div:last-child button {
+        width: clamp(28px, 5vh, 36px) !important;
+        height: clamp(28px, 5vh, 36px) !important;
+        font-size: clamp(0.8rem, 2vh, 1.2rem) !important;
+        min-width: 28px !important;
+        min-height: 28px !important;
+    }
+}
+
+/* ===== РАЗНОЕ ===== */
+.words-container {
+    display: none;
+}
+
+.theme-btn {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+#closeThemeModal {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+div[style*="z-index:20006"],
+div[style*="z-index:20005"] {
+    pointer-events: auto !important;
+}
+
+div[style*="position:fixed"] {
+    padding-bottom: 90px !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+    div[style*="position:fixed"][style*="z-index"] {
+        padding-bottom: 100px !important;
+        align-items: flex-start !important;
+        padding-top: 30px !important;
+    }
+}
+
 @keyframes twinkle {
     0%, 100% { opacity: 0.3; transform: scale(0.8); }
     50% { opacity: 1; transform: scale(1.2); }
@@ -899,919 +1446,10 @@ div[style*="position:fixed"] {
     100% { transform: translateX(0) translateY(0); }
 }
 
-
-/* Каждая звезда будет анимироваться индивидуально через JavaScript */
 .star {
     position: absolute;
     border-radius: 50%;
     background: white;
     pointer-events: none;
     z-index: 0;
-}
-body.menu-mode .top-panel,
-body.menu-mode .grid,
-body.menu-mode .words-container,
-body.menu-mode .buttons,
-body.menu-mode .msg-area {
-    display: none !important;
-}
-
-body.menu-mode .game-container {
-    max-height: none;
-}
-@media (max-width: 550px) {
-    .scroll-btn {
-        min-width: 40px !important;
-        font-size: 0.8rem !important;
-    }
-    div[style*="grid-template-columns:repeat(4"] {
-        gap: 4px !important;
-    }
-}
-
-/* Ландшафтная ориентация на телефонах - сохраняем вертикальную структуру */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 600px) {
-    #startMenu {
-        padding: 6px 10px !important;
-        gap: 2px !important;
-        justify-content: center !important;
-    }
-    
-    /* Первая линия - иконка + название */
-    #startMenu > div:first-child {
-        gap: 4px !important;
-        margin-bottom: 2px !important;
-    }
-    
-    #startMenu > div:first-child > div:first-child {
-        font-size: 1.8rem !important;
-    }
-    
-    #startMenu h1 {
-        font-size: 1rem !important;
-    }
-    
-    /* Подзаголовок - скрываем 
-    #startMenu p {
-        display: none !important;
-    }*/
-    
-    /* Блок с кнопками */
-    #startMenu > div[style*="max-width:min(280px, 70vw)"] {
-        gap: 3px !important;
-        max-width: 200px !important;
-    }
-    
-    #startMenu button:not([style*="border-radius:50%"]) {
-        padding: 3px 10px !important;
-        font-size: 0.55rem !important;
-    }
-    
-    /* Нижние кнопки */
-    #startMenu > div:last-child {
-        gap: 5px !important;
-        margin-top: 3px !important;
-    }
-    
-    #startMenu > div:last-child button {
-        width: 26px !important;
-        height: 26px !important;
-        font-size: 0.7rem !important;
-        min-width: 26px !important;
-        min-height: 26px !important;
-    }
-}
-
-/* Убираем скролл и делаем меню на всю высоту */
-#startMenu {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-}
-
-/* Ландшафтная ориентация - делаем элементы крупнее */
-@media (max-width: 900px) and (orientation: landscape) {
-    #startMenu {
-        padding: 15px 30px !important;
-        justify-content: space-evenly !important;
-    }
-    
-    /* Иконка и название */
-    #startMenu > div:first-child {
-        gap: 15px !important;
-    }
-    
-    #startMenu > div:first-child > div:first-child {
-        font-size: clamp(3.5rem, 14vh, 6rem) !important;
-    }
-    
-    #startMenu h1 {
-        font-size: clamp(2.5rem, 10vh, 4rem) !important;
-    }
-    
-    /* Подзаголовок */
-    #startMenu p {
-        font-size: clamp(1rem, 3vh, 1.8rem) !important;
-        margin: 3px 0 !important;
-    }
-    
-    /* Кнопки */
-    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
-        max-width: 350px !important;
-        gap: clamp(10px, 2.5vh, 18px) !important;
-    }
-    
-    #startMenu button:not([style*="border-radius:50%"]) {
-        padding: clamp(14px, 3vh, 22px) 25px !important;
-        font-size: clamp(1.2rem, 3.5vh, 1.8rem) !important;
-    }
-    
-    /* Нижние кнопки */
-    #startMenu > div:last-child {
-        gap: clamp(15px, 3.5vh, 30px) !important;
-        padding-top: clamp(5px, 1.5vh, 15px) !important;
-    }
-    
-    #startMenu > div:last-child button {
-        width: clamp(50px, 10vh, 70px) !important;
-        height: clamp(50px, 10vh, 70px) !important;
-        font-size: clamp(1.5rem, 4.5vh, 2.5rem) !important;
-    }
-}
-
-/* Очень маленький ландшафт */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 400px) {
-    #startMenu {
-        padding: 8px 20px !important;
-        gap: 2px !important;
-    }
-    
-    #startMenu > div:first-child {
-        gap: 10px !important;
-    }
-    
-    #startMenu > div:first-child > div:first-child {
-        font-size: clamp(2.5rem, 10vh, 4rem) !important;
-    }
-    
-    #startMenu h1 {
-        font-size: clamp(1.8rem, 7vh, 3rem) !important;
-    }
-    
-    #startMenu p {
-        font-size: clamp(0.7rem, 2.5vh, 1.2rem) !important;
-        margin: 1px 0 !important;
-    }
-    
-    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
-        max-width: 250px !important;
-        gap: clamp(6px, 1.5vh, 12px) !important;
-    }
-    
-    #startMenu button:not([style*="border-radius:50%"]) {
-        padding: clamp(8px, 2vh, 14px) 15px !important;
-        font-size: clamp(0.8rem, 2.5vh, 1.3rem) !important;
-    }
-    
-    #startMenu > div:last-child {
-        gap: clamp(10px, 2.5vh, 20px) !important;
-        padding-top: clamp(3px, 0.8vh, 8px) !important;
-    }
-    
-    #startMenu > div:last-child button {
-        width: clamp(36px, 7vh, 50px) !important;
-        height: clamp(36px, 7vh, 50px) !important;
-        font-size: clamp(1rem, 3vh, 1.8rem) !important;
-    }
-}
-
-/* Вертикальные телефоны */
-@media (max-height: 700px) and (orientation: portrait) {
-    #startMenu {
-        padding: 12px 15px !important;
-        gap: 2px !important;
-    }
-    
-    #startMenu > div:first-child > div:first-child {
-        font-size: clamp(2.5rem, 10vh, 4rem) !important;
-    }
-    
-    #startMenu h1 {
-        font-size: clamp(1.8rem, 7vh, 3rem) !important;
-    }
-    
-    #startMenu p {
-        font-size: clamp(0.8rem, 2.5vh, 1.3rem) !important;
-        margin: 2px 0 !important;
-    }
-    
-    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
-        max-width: 280px !important;
-        gap: clamp(6px, 1.8vh, 14px) !important;
-    }
-    
-    #startMenu button:not([style*="border-radius:50%"]) {
-        padding: clamp(10px, 2.5vh, 18px) 20px !important;
-        font-size: clamp(0.9rem, 2.8vh, 1.4rem) !important;
-    }
-    
-    #startMenu > div:last-child {
-        gap: clamp(10px, 2.5vh, 20px) !important;
-        padding-top: clamp(3px, 0.8vh, 10px) !important;
-    }
-    
-    #startMenu > div:last-child button {
-        width: clamp(40px, 8vh, 55px) !important;
-        height: clamp(40px, 8vh, 55px) !important;
-        font-size: clamp(1.2rem, 3.5vh, 2rem) !important;
-    }
-}
-
-/* Очень маленькие вертикальные телефоны */
-@media (max-height: 500px) and (orientation: portrait) {
-    #startMenu > div:first-child > div:first-child {
-        font-size: clamp(2rem, 8vh, 3rem) !important;
-    }
-    
-    #startMenu h1 {
-        font-size: clamp(1.3rem, 5vh, 2.2rem) !important;
-    }
-    
-    #startMenu p {
-        display: none !important;
-    }
-    
-    #startMenu > div[style*="max-width:min(400px, 85vw)"] {
-        max-width: 200px !important;
-        gap: clamp(4px, 1.2vh, 8px) !important;
-    }
-    
-    #startMenu button:not([style*="border-radius:50%"]) {
-        padding: clamp(6px, 1.8vh, 12px) 12px !important;
-        font-size: clamp(0.7rem, 2vh, 1rem) !important;
-    }
-    
-    #startMenu > div:last-child button {
-        width: clamp(32px, 6vh, 42px) !important;
-        height: clamp(32px, 6vh, 42px) !important;
-        font-size: clamp(0.9rem, 2.5vh, 1.5rem) !important;
-    }
-}
-
-.theme-btn {
-    cursor: pointer !important;
-    pointer-events: auto !important;
-}
-
-#closeThemeModal {
-    cursor: pointer !important;
-    pointer-events: auto !important;
-}
-
-div[style*="z-index:20006"] {
-    pointer-events: auto !important;
-}
-
-div[style*="z-index:20005"] {
-    pointer-events: auto !important;
-}
-
-/* === СКРУГЛЁННЫЕ КНОПКИ С НЕЖНЫМИ ЦВЕТАМИ === */
-button {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 100px !important;
-    color: var(--text-primary, #2b4a1e) !important;
-    padding: 8px 24px !important;
-    font-weight: 500 !important;
-    font-size: 0.85rem !important;
-    box-shadow: 
-        0 1px 3px rgba(0, 0, 0, 0.02),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
-    transition: all 0.25s ease !important;
-    letter-spacing: 0.2px !important;
-}
-
-button:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 
-        0 4px 20px rgba(0, 0, 0, 0.04),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-}
-
-button:active {
-    transform: translateY(0) !important;
-}
-
-/* Акцентные кнопки */
-.next-btn, #menuStartBtn {
-    background: rgba(255, 165, 77, 0.10) !important;
-    border: 1.5px solid rgba(255, 165, 77, 0.15) !important;
-    color: var(--text-primary, #2b4a1e) !important;
-    font-weight: 600 !important;
-}
-
-.next-btn:hover, #menuStartBtn:hover {
-    background: rgba(255, 165, 77, 0.18) !important;
-    border-color: rgba(255, 165, 77, 0.25) !important;
-    transform: translateY(-2px) !important;
-}
-
-/* Кнопка "Очистить" */
-#clearBtn {
-    background: rgba(200, 80, 80, 0.06) !important;
-    border: 1.5px solid rgba(200, 80, 80, 0.08) !important;
-    color: var(--text-primary, #2b4a1e) !important;
-}
-
-#clearBtn:hover {
-    background: rgba(200, 80, 80, 0.12) !important;
-    border-color: rgba(200, 80, 80, 0.15) !important;
-}
-
-/* Маленькие иконки */
-#rulesBtn, #levelSelectBtn, #galaxyBtn, #menuBackBtn,
-#menuInviteBtn, #menuGalaxyBtn, #menuScrollsBtn, #menuThemeBtn {
-    width: 32px !important;
-    height: 32px !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.06) !important;
-    font-size: 0.8rem !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-}
-
-#rulesBtn:hover, #levelSelectBtn:hover, #galaxyBtn:hover, #menuBackBtn:hover,
-#menuInviteBtn:hover, #menuGalaxyBtn:hover, #menuScrollsBtn:hover, #menuThemeBtn:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    transform: scale(1.05) !important;
-}
-
-/* Отключённая кнопка */
-.next-btn:disabled {
-    opacity: 0.3 !important;
-    transform: none !important;
-    cursor: not-allowed !important;
-}
-
-/* ========== ТЁМНАЯ ТЕМА (ФИОЛЕТОВЫЕ ОТТЕНКИ) ========== */
-[data-theme="dark"] button {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] button:hover {
-    background: rgba(120, 80, 200, 0.08) !important;
-    border-color: rgba(120, 80, 200, 0.15) !important;
-}
-
-[data-theme="dark"] .next-btn,
-[data-theme="dark"] #menuStartBtn {
-    background: rgba(120, 80, 200, 0.10) !important;
-    border: 1.5px solid rgba(120, 80, 200, 0.15) !important;
-    color: #e8e8ff !important;
-}
-
-[data-theme="dark"] .next-btn:hover,
-[data-theme="dark"] #menuStartBtn:hover {
-    background: rgba(120, 80, 200, 0.18) !important;
-    border-color: rgba(120, 80, 200, 0.25) !important;
-}
-
-[data-theme="dark"] #clearBtn {
-    background: rgba(200, 80, 80, 0.04) !important;
-    border: 1.5px solid rgba(200, 80, 80, 0.06) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] #clearBtn:hover {
-    background: rgba(200, 80, 80, 0.08) !important;
-    border-color: rgba(200, 80, 80, 0.10) !important;
-}
-
-[data-theme="dark"] #rulesBtn,
-[data-theme="dark"] #levelSelectBtn,
-[data-theme="dark"] #galaxyBtn,
-[data-theme="dark"] #menuBackBtn,
-[data-theme="dark"] #menuInviteBtn,
-[data-theme="dark"] #menuGalaxyBtn,
-[data-theme="dark"] #menuScrollsBtn,
-[data-theme="dark"] #menuThemeBtn {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] #rulesBtn:hover,
-[data-theme="dark"] #levelSelectBtn:hover,
-[data-theme="dark"] #galaxyBtn:hover,
-[data-theme="dark"] #menuBackBtn:hover,
-[data-theme="dark"] #menuInviteBtn:hover,
-[data-theme="dark"] #menuGalaxyBtn:hover,
-[data-theme="dark"] #menuScrollsBtn:hover,
-[data-theme="dark"] #menuThemeBtn:hover {
-    background: rgba(120, 80, 200, 0.08) !important;
-    border-color: rgba(120, 80, 200, 0.15) !important;
-}
-
-/* ========== СВЕТЛЫЕ ТЕМЫ ========== */
-/* Для светлых тем текст должен быть виден */
-[data-theme="blue"] button,
-[data-theme="teal"] button,
-[data-theme="sun"] button {
-    color: #1a1a2e !important;
-}
-
-[data-theme="blue"] .next-btn,
-[data-theme="teal"] .next-btn,
-[data-theme="sun"] .next-btn,
-[data-theme="blue"] #menuStartBtn,
-[data-theme="teal"] #menuStartBtn,
-[data-theme="sun"] #menuStartBtn {
-    color: #1a1a2e !important;
-}
-
-[data-theme="blue"] #clearBtn,
-[data-theme="teal"] #clearBtn,
-[data-theme="sun"] #clearBtn {
-    color: #1a1a2e !important;
-}
-
-/* Кнопка "Начать" в меню для всех тем */
-#menuStartBtn {
-    font-weight: 600 !important;
-}
-/* ========== ФИКСЫ ДЛЯ ТЁМНОЙ ТЕМЫ ========== */
-[data-theme="dark"] .cell {
-    border-color: rgba(120, 80, 200, 0.3) !important;
-    box-shadow: 0 0 15px rgba(120, 80, 200, 0.08), 
-                0 4px 0 rgba(80, 50, 150, 0.3) !important;
-    background: rgba(40, 30, 60, 0.8) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .cell.selected {
-    background: rgba(120, 80, 200, 0.25) !important;
-    box-shadow: 0 0 25px rgba(120, 80, 200, 0.15), 
-                0 2px 0 rgba(80, 50, 150, 0.4) !important;
-    border-color: rgba(120, 80, 200, 0.4) !important;
-}
-
-[data-theme="dark"] .cell.found {
-    border-color: rgba(120, 80, 200, 0.2) !important;
-    box-shadow: 0 0 20px rgba(120, 80, 200, 0.1) !important;
-}
-
-/* Контейнер со словами в тёмной теме */
-[data-theme="dark"] .words-container {
-    background: rgba(40, 30, 60, 0.6) !important;
-    border: 1px solid rgba(120, 80, 200, 0.15) !important;
-    backdrop-filter: blur(8px) !important;
-}
-
-[data-theme="dark"] .word-chip {
-    background: rgba(60, 40, 100, 0.3) !important;
-    border: 1px solid rgba(120, 80, 200, 0.08) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .word-chip.found-word {
-    background: rgba(120, 80, 200, 0.15) !important;
-    border-color: rgba(120, 80, 200, 0.2) !important;
-    color: #e8e8ff !important;
-}
-
-/* Сетка в тёмной теме */
-[data-theme="dark"] .grid {
-    background: rgba(30, 20, 50, 0.6) !important;
-    box-shadow: inset 0 0 0 2px rgba(120, 80, 200, 0.1),
-                inset 0 0 0 6px rgba(80, 50, 150, 0.1),
-                0 12px 24px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Контейнер для списка слов (если не words-container) */
-[data-theme="dark"] .words-list {
-    gap: 8px !important;
-}
-
-[data-theme="dark"] .word-chip {
-    padding: 6px 14px !important;
-    border-radius: 30px !important;
-    font-size: 0.85rem !important;
-}
-
-/* Топ-панель в тёмной теме (дополнительно) */
-[data-theme="dark"] .top-panel {
-    background: rgba(30, 20, 50, 0.7) !important;
-    border: 1px solid rgba(120, 80, 200, 0.08) !important;
-    backdrop-filter: blur(8px) !important;
-}
-
-/* Сообщение в тёмной теме */
-[data-theme="dark"] .msg-area {
-    background: rgba(30, 20, 50, 0.7) !important;
-    border: 1px solid rgba(120, 80, 200, 0.06) !important;
-    color: #d0d0e8 !important;
-}
-/* Модальные окна с темами */
-
-
-/* Переменные для модальных окон */
-:root {
-    --modal-bg: rgba(0,0,0,0.85);
-}
-
-[data-theme="dark"] {
-    --modal-bg: rgba(10,10,26,0.92);
-}
-
-[data-theme="blue"] {
-    --modal-bg: rgba(10,30,50,0.88);
-}
-
-[data-theme="teal"] {
-    --modal-bg: rgba(10,40,40,0.88);
-}
-
-[data-theme="sun"] {
-    --modal-bg: rgba(40,30,10,0.88);
-}
-
-/* Общий фон для всех модалок */
-.modal-window {
-    background: var(--modal-bg, rgba(0,0,0,0.85)) !important;
-}
-
-/* Тёмная тема для всего контента модалок */
-[data-theme="dark"] .modal-content,
-[data-theme="dark"] .modal-content *:not(button):not([style*="background"]) {
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .modal-content h3,
-[data-theme="dark"] .modal-content h2 {
-    color: #e8e8ff !important;
-}
-
-[data-theme="dark"] .modal-content {
-    background: #1a1a2e !important;
-    border-color: rgba(120, 80, 200, 0.3) !important;
-}
-
-[data-theme="dark"] .galaxy-item {
-    background: rgba(40, 30, 60, 0.6) !important;
-    border-color: rgba(120, 80, 200, 0.2) !important;
-}
-
-[data-theme="dark"] #levelsGrid button,
-[data-theme="dark"] #categoriesGrid button {
-    background: rgba(60, 40, 100, 0.3) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .scroll-item {
-    background: rgba(40, 30, 60, 0.5) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] [style*="background:#ede1ca"] {
-    background: rgba(40, 30, 60, 0.4) !important;
-}
-/* ===== ДОБАВИТЬ В НАЧАЛО ФАЙЛА ===== */
-:root {
-    --text-primary: #2b4a1e;
-    --text-secondary: #3a3220;
-    --text-light: #fef0cf;
-    --accent-color: #ffa54d;
-    --btn-primary: #517a2f;
-    --btn-secondary: #8b5a2a;
-    --bg-card: #fff8ec;
-}
-
-[data-theme="dark"] {
-    --text-primary: #d0d0e8 !important;
-    --text-secondary: #b8b8d8 !important;
-    --text-light: #e8e8ff !important;
-    --accent-color: #6b5a9e !important;
-    --btn-primary: #4a3a7a !important;
-    --btn-secondary: #ac82ff !important;
-    --bg-card: #1a1a2e !important;
-}
-
-[data-theme="blue"] {
-    --text-primary: #1a3a5a !important;
-    --text-secondary: #2a4a6a !important;
-    --accent-color: #4a9fc7 !important;
-    --btn-primary: #2a7fa5 !important;
-    --btn-secondary: #1a4a6a !important;
-    --bg-card: #f0f8ff !important;
-}
-
-[data-theme="teal"] {
-    --text-primary: #1a4a4a !important;
-    --text-secondary: #2a5a5a !important;
-    --accent-color: #2a9a9a !important;
-    --btn-primary: #1a7a7a !important;
-    --btn-secondary: #1a5a5a !important;
-    --bg-card: #e8f5f5 !important;
-}
-
-[data-theme="sun"] {
-    --text-primary: #5a4a1a !important;
-    --text-secondary: #6a5a2a !important;
-    --accent-color: #e8a820 !important;
-    --btn-primary: #d4880a !important;
-    --btn-secondary: #8a6a1a !important;
-    --bg-card: #fef8e8 !important;
-}
-/* Добавить в конец styleOld.css */
-
-/* Дополнительные переменные для теней */
-:root {
-    --btn-primary-shadow: #2e4a1a;
-    --btn-secondary-shadow: #5a3a1a;
-    --bg-card-light: #ede1ca;
-    --bg-progress: #d4c3a4;
-    --border-color: #d4c3a4;
-}
-
-[data-theme="dark"] {
-    --btn-primary-shadow: #2a1a4a;
-    --btn-secondary-shadow: #1a0a2a;
-    --bg-card-light: rgba(40, 30, 60, 0.6);
-    --bg-progress: rgba(40, 30, 60, 0.5);
-    --border-color: rgba(120, 80, 200, 0.2);
-}
-
-[data-theme="blue"] {
-    --btn-primary-shadow: #1a4a6a;
-    --btn-secondary-shadow: #0a2a4a;
-    --bg-card-light: #e0edf5;
-    --bg-progress: #c5dbe8;
-}
-
-[data-theme="teal"] {
-    --btn-primary-shadow: #1a4a4a;
-    --btn-secondary-shadow: #0a2a2a;
-    --bg-card-light: #d0e8e8;
-    --bg-progress: #b8dcdc;
-}
-
-[data-theme="sun"] {
-    --btn-primary-shadow: #6a4a0a;
-    --btn-secondary-shadow: #4a2a0a;
-    --bg-card-light: #f0e0a8;
-    --bg-progress: #f0d888;
-}
-
-/* Стили для модалок */
-[data-theme="dark"] .modal-content {
-    background: #1a1a2e !important;
-    border-color: rgba(120, 80, 200, 0.3) !important;
-}
-
-[data-theme="dark"] .modal-content div,
-[data-theme="dark"] .modal-content span,
-[data-theme="dark"] .modal-content p,
-[data-theme="dark"] .modal-content li {
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .modal-content h3,
-[data-theme="dark"] .modal-content h2 {
-    color: #e8e8ff !important;
-}
-
-[data-theme="dark"] .galaxy-item {
-    background: rgba(40, 30, 60, 0.6) !important;
-    border-color: rgba(120, 80, 200, 0.2) !important;
-}
-
-[data-theme="dark"] #levelsGrid button,
-[data-theme="dark"] #categoriesGrid button {
-    background: rgba(60, 40, 100, 0.3) !important;
-    color: #d0d0e8 !important;
-}
-
-[data-theme="dark"] .scroll-item {
-    background: rgba(40, 30, 60, 0.5) !important;
-    color: #d0d0e8 !important;
-}
-/* В конец styleOld.css */
-[data-theme="dark"] .scroll-item span {
-    color: #e8e8ff !important;
-}
-
-[data-theme="dark"] .scroll-item {
-    background: rgba(40, 30, 60, 0.5) !important;
-    border-color: rgba(120, 80, 200, 0.2) !important;
-}
-
-[data-theme="dark"] .scroll-item:hover {
-    background: rgba(50, 35, 80, 0.6) !important;
-}
-
-[data-theme="dark"] .scroll-item div span {
-    color: #d0d0e8 !important;
-}
-
-/* ===== КНОПКИ ДЛЯ ГОЛУБОЙ ТЕМЫ ===== */
-[data-theme="blue"] button:not([style*="background:transparent"]) {
-    background: rgba(26, 58, 90, 0.12) !important;
-    border: 2px solid rgba(26, 58, 90, 0.25) !important;
-    color: #1a3a5a !important;
-}
-
-[data-theme="blue"] button:hover:not([style*="background:transparent"]) {
-    background: rgba(26, 58, 90, 0.2) !important;
-    border-color: rgba(26, 58, 90, 0.4) !important;
-}
-
-[data-theme="blue"] .next-btn,
-[data-theme="blue"] #menuStartBtn {
-    background: rgba(26, 58, 90, 0.15) !important;
-    border: 2px solid rgba(26, 58, 90, 0.35) !important;
-    color: #1a3a5a !important;
-}
-
-[data-theme="blue"] .next-btn:hover,
-[data-theme="blue"] #menuStartBtn:hover {
-    background: rgba(26, 58, 90, 0.25) !important;
-}
-
-[data-theme="blue"] #clearBtn {
-    background: rgba(200, 60, 60, 0.1) !important;
-    border: 2px solid rgba(200, 60, 60, 0.2) !important;
-    color: #1a3a5a !important;
-}
-
-[data-theme="blue"] #clearBtn:hover {
-    background: rgba(200, 60, 60, 0.18) !important;
-}
-
-[data-theme="blue"] #rulesBtn,
-[data-theme="blue"] #levelSelectBtn,
-[data-theme="blue"] #galaxyBtn,
-[data-theme="blue"] #menuBackBtn {
-    background: rgba(26, 58, 90, 0.1) !important;
-    border: 2px solid rgba(26, 58, 90, 0.2) !important;
-    color: #1a3a5a !important;
-}
-
-[data-theme="blue"] #rulesBtn:hover,
-[data-theme="blue"] #levelSelectBtn:hover,
-[data-theme="blue"] #galaxyBtn:hover,
-[data-theme="blue"] #menuBackBtn:hover {
-    background: rgba(26, 58, 90, 0.2) !important;
-}
-
-/* ===== КНОПКИ ДЛЯ БИРЮЗОВОЙ ТЕМЫ ===== */
-[data-theme="teal"] button:not([style*="background:transparent"]) {
-    background: rgba(26, 74, 74, 0.12) !important;
-    border: 2px solid rgba(26, 74, 74, 0.25) !important;
-    color: #1a4a4a !important;
-}
-
-[data-theme="teal"] button:hover:not([style*="background:transparent"]) {
-    background: rgba(26, 74, 74, 0.2) !important;
-    border-color: rgba(26, 74, 74, 0.4) !important;
-}
-
-[data-theme="teal"] .next-btn,
-[data-theme="teal"] #menuStartBtn {
-    background: rgba(26, 74, 74, 0.15) !important;
-    border: 2px solid rgba(26, 74, 74, 0.35) !important;
-    color: #1a4a4a !important;
-}
-
-[data-theme="teal"] .next-btn:hover,
-[data-theme="teal"] #menuStartBtn:hover {
-    background: rgba(26, 74, 74, 0.25) !important;
-}
-
-[data-theme="teal"] #clearBtn {
-    background: rgba(200, 60, 60, 0.1) !important;
-    border: 2px solid rgba(200, 60, 60, 0.2) !important;
-    color: #1a4a4a !important;
-}
-
-[data-theme="teal"] #clearBtn:hover {
-    background: rgba(200, 60, 60, 0.18) !important;
-}
-
-[data-theme="teal"] #rulesBtn,
-[data-theme="teal"] #levelSelectBtn,
-[data-theme="teal"] #galaxyBtn,
-[data-theme="teal"] #menuBackBtn {
-    background: rgba(26, 74, 74, 0.1) !important;
-    border: 2px solid rgba(26, 74, 74, 0.2) !important;
-    color: #1a4a4a !important;
-}
-
-[data-theme="teal"] #rulesBtn:hover,
-[data-theme="teal"] #levelSelectBtn:hover,
-[data-theme="teal"] #galaxyBtn:hover,
-[data-theme="teal"] #menuBackBtn:hover {
-    background: rgba(26, 74, 74, 0.2) !important;
-}
-
-/* ===== КНОПКИ ДЛЯ СОЛНЕЧНОЙ ТЕМЫ ===== */
-[data-theme="sun"] button:not([style*="background:transparent"]) {
-    background: rgba(90, 74, 26, 0.12) !important;
-    border: 2px solid rgba(90, 74, 26, 0.25) !important;
-    color: #5a4a1a !important;
-}
-
-[data-theme="sun"] button:hover:not([style*="background:transparent"]) {
-    background: rgba(90, 74, 26, 0.2) !important;
-    border-color: rgba(90, 74, 26, 0.4) !important;
-}
-
-[data-theme="sun"] .next-btn,
-[data-theme="sun"] #menuStartBtn {
-    background: rgba(90, 74, 26, 0.15) !important;
-    border: 2px solid rgba(90, 74, 26, 0.35) !important;
-    color: #5a4a1a !important;
-}
-
-[data-theme="sun"] .next-btn:hover,
-[data-theme="sun"] #menuStartBtn:hover {
-    background: rgba(90, 74, 26, 0.25) !important;
-}
-
-[data-theme="sun"] #clearBtn {
-    background: rgba(200, 60, 60, 0.1) !important;
-    border: 2px solid rgba(200, 60, 60, 0.2) !important;
-    color: #5a4a1a !important;
-}
-
-[data-theme="sun"] #clearBtn:hover {
-    background: rgba(200, 60, 60, 0.18) !important;
-}
-
-[data-theme="sun"] #rulesBtn,
-[data-theme="sun"] #levelSelectBtn,
-[data-theme="sun"] #galaxyBtn,
-[data-theme="sun"] #menuBackBtn {
-    background: rgba(90, 74, 26, 0.1) !important;
-    border: 2px solid rgba(90, 74, 26, 0.2) !important;
-    color: #5a4a1a !important;
-}
-
-[data-theme="sun"] #rulesBtn:hover,
-[data-theme="sun"] #levelSelectBtn:hover,
-[data-theme="sun"] #galaxyBtn:hover,
-[data-theme="sun"] #menuBackBtn:hover {
-    background: rgba(90, 74, 26, 0.2) !important;
-}
-
-/* ===== КНОПКИ В МОДАЛЬНЫХ ОКНАХ ДЛЯ СВЕТЛЫХ ТЕМ ===== */
-[data-theme="blue"] .modal-content button,
-[data-theme="teal"] .modal-content button,
-[data-theme="sun"] .modal-content button {
-    background: rgba(0, 0, 0, 0.06) !important;
-    border: 2px solid rgba(0, 0, 0, 0.15) !important;
-    color: inherit !important;
-}
-
-[data-theme="blue"] .modal-content button:hover,
-[data-theme="teal"] .modal-content button:hover,
-[data-theme="sun"] .modal-content button:hover {
-    background: rgba(0, 0, 0, 0.12) !important;
-    border-color: rgba(0, 0, 0, 0.25) !important;
-}
-
-/* Кнопки в модалках для каждой темы */
-[data-theme="blue"] #playSelectedBtn,
-[data-theme="blue"] #backToCatsBtn,
-[data-theme="blue"] #closeCatModal,
-[data-theme="blue"] #closeDiffModal,
-[data-theme="blue"] #closeGalaxyBtn {
-    background: rgba(26, 58, 90, 0.12) !important;
-    border: 2px solid rgba(26, 58, 90, 0.25) !important;
-    color: #1a3a5a !important;
-}
-
-[data-theme="teal"] #playSelectedBtn,
-[data-theme="teal"] #backToCatsBtn,
-[data-theme="teal"] #closeCatModal,
-[data-theme="teal"] #closeDiffModal,
-[data-theme="teal"] #closeGalaxyBtn {
-    background: rgba(26, 74, 74, 0.12) !important;
-    border: 2px solid rgba(26, 74, 74, 0.25) !important;
-    color: #1a4a4a !important;
-}
-
-[data-theme="sun"] #playSelectedBtn,
-[data-theme="sun"] #backToCatsBtn,
-[data-theme="sun"] #closeCatModal,
-[data-theme="sun"] #closeDiffModal,
-[data-theme="sun"] #closeGalaxyBtn {
-    background: rgba(90, 74, 26, 0.12) !important;
-    border: 2px solid rgba(90, 74, 26, 0.25) !important;
-    color: #5a4a1a !important;
 }
