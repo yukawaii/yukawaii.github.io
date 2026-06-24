@@ -130,7 +130,7 @@ function showVKLeaderboard(currentScore = 0) {
     }    
     // Пытаемся открыть таблицу лидеров
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        user_result: parseInt(currentScore, 10) || 0
+        user_result: parseInt(currentScore, 10) || 0,   global: 1 
     })
     .then((data) => {
         if (data && data.success) {
