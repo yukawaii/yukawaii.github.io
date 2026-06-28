@@ -2902,28 +2902,31 @@ if (scrollTextModal) {
 // ====== ПРОДЛЕНИЕ ВРЕМЕНИ ЗА РЕКЛАМУ ======
 
 function gameOverContinueWithAd() {
-    // Закрываем модалку
     closeGameOverModal();
     
-    // Показываем рекламу
     showRewardedAd().then((success) => {
         if (success) {
             // Реклама просмотрена → +2 минуты
-            gameState.timeLeft += 120;  // 120 секунд = 2 минуты
+            gameState.timeLeft += 120;
             gameState.frozen = false;
-            
-            // Перезапускаем таймер
             startTimer();
             updateUI();
-            
             showToast('🎉 +2 минуты! Продолжайте игру!');
             playSound('levelup');
-            
-            console.log('✅ Время продлено на 2 минуты');
         } else {
-            // Реклама не просмотрена — возвращаем в модалку
-            showToast('❌ Реклама не досмотрена, попробуйте снова', true);
-            setTimeout(showGameOverModal, 500);
+            // ====== РЕКЛАМА НЕДОСТУПНА ======            
+            // Вариант 1: +1 минута 
+            gameState.timeLeft += 60;
+            gameState.frozen = false;
+            startTimer();
+            updateUI();
+            showToast('⏱️ Реклама недоступна, но вы получаете +1 минуту!');
+            playSound('hint');
+            
+            // Вариант 2: ничего не давать
+            // showToast('❌ Реклама недоступна, попробуйте позже', true);
+            // setTimeout(showGameOverModal, 500);
+            // ===================================
         }
     });
 }
