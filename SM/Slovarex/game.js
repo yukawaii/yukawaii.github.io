@@ -1315,8 +1315,8 @@ function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
      // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
-    if (typeof saveToVKStorage === 'function') {
-        saveToVKStorage('wordgame_theme_v2', theme);
+       if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_theme_v2', theme);    
         console.log('☁️ Тема синхронизирована с VK Storage');
     }
     // =========================================
@@ -2024,7 +2024,10 @@ function loadAchievements() {
 function saveAchievements(achievements) {
     try {
         localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
-        console.log('💾 Достижения сохранены в localStorage');
+        // ↓ ДОБАВЬТЕ ЭТИ 3 СТРОЧКИ ↓
+        if (typeof saveToVKStorage === 'function') {
+            saveToVKStorage('wordgame_achievements_v2', achievements);
+        }
     } catch (e) {
         console.error('❌ Ошибка сохранения достижений:', e);
     }
@@ -2456,7 +2459,12 @@ function getGalaxyProgress() {
 
 function saveGalaxyProgress(data) {
     localStorage.setItem(GALAXY_KEY, JSON.stringify(data));
+    // ↓ ДОБАВЬТЕ ЭТИ 3 СТРОЧКИ ↓
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_galaxy_v2', data);
+    }
 }
+
 
 function getNextStarTarget(progress) {
     const totalWords = progress.totalWords || 0;
