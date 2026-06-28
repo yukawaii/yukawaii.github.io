@@ -526,7 +526,7 @@ button:active {
     padding: 0 !important;
     border-radius: 50% !important;
     border: 1.5px solid rgba(255,255,255,0.06) !important;
-    font-size: 0.8rem !important;
+    font-size: 2rem !important;
     background: rgba(255,255,255,0.03) !important;
 }
 
@@ -642,7 +642,7 @@ button:active {
 }
 
 #startMenu button:hover {
-    transform: scale(1.02);
+        transform: scale(1.02);
     transition: 0.05s linear;
 }
 
@@ -1407,7 +1407,7 @@ text-shadow: 0 0 10px rgba(101, 193, 255, 0.8) ;
     
     /* Кнопки в меню */
     #startMenu > div[style*="max-width:min(400px, 85vw)"] {
-        max-width: 260px !important;
+        max-width: 200px !important;
         gap: clamp(4px, 1.2vh, 10px) !important;
     }
     
