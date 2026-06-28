@@ -1,6 +1,4 @@
 
-vkBridge.send("VKWebAppInit", {});
-
 var score,id,token, name1;
 
 function getid(){

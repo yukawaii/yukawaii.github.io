@@ -81,6 +81,14 @@
 </div>
 
 <script>
+// Инициализация VK Bridge
+if (typeof vkBridge !== 'undefined') {
+    vkBridge.send('VKWebAppInit', {})
+        .then(() => console.log('✅ VK Bridge инициализирован'))
+        .catch(e => console.warn('❌ Ошибка VK Bridge:', e));
+}
+
+
 // Функция получения категорий в зависимости от сложности
 function getCurrentCategories() {
     const diff = currentDifficulty || 'easy';
@@ -2347,6 +2355,11 @@ function unlockScroll(scrollId) {
     if (!unlocked.includes(scrollId)) {
         unlocked.push(scrollId);
         localStorage.setItem('unlockedScrolls', JSON.stringify(unlocked));
+        // ✅ ДОБАВЛЯЕМ СИНХРОНИЗАЦИЮ
+        if (typeof saveToVKStorage === 'function') {
+            saveToVKStorage('wordgame_scrolls_v2', unlocked);
+            console.log('📜 Свиток ' + scrollId + ' синхронизирован с VK');
+        }
     }
 }
 
@@ -2365,11 +2378,19 @@ function calculateUnlockedScrolls() {
 function syncScrollsWithStars() {
     const shouldBeUnlocked = calculateUnlockedScrolls();
     const unlocked = getUnlockedScrolls();
-    
-    // Открываем все свитки до нужного номера
+    let changed = false;
     for (let i = 1; i <= shouldBeUnlocked; i++) {
         if (!unlocked.includes(i)) {
-            unlockScroll(i);
+            unlocked.push(i);
+            changed = true;
+        }
+    }
+    if (changed) {
+        localStorage.setItem('unlockedScrolls', JSON.stringify(unlocked));
+        // ✅ СИНХРОНИЗИРУЕМ ВСЕ СВИТКИ СРАЗУ
+        if (typeof saveToVKStorage === 'function') {
+            saveToVKStorage('wordgame_scrolls_v2', unlocked);
+            console.log('📜 Все свитки синхронизированы с VK');
         }
     }
     return shouldBeUnlocked;
@@ -2791,7 +2812,224 @@ document.getElementById('menuThemeBtn').addEventListener('click', showThemeSelec
 setTheme(localStorage.getItem('theme') || 'dark');
 //===================конец функции галактик
 
+// ====== VK STORAGE СИНХРОНИЗАЦИЯ ======
 
+// Сохранение в VK Storage
+function saveToVKStorage(key, value) {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        return Promise.resolve();
+    }
+    
+    return vkBridge.send('VKWebAppStorageSet', {
+        key: key,
+        value: typeof value === 'string' ? value : JSON.stringify(value)
+    })
+    .then(() => console.log(`✅ Сохранено в VK Storage: ${key}`))
+    .catch((error) => console.warn(`❌ Ошибка сохранения ${key}:`, error));
+}
+
+// Загрузка из VK Storage
+function loadFromVKStorage(key) {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve(null);
+    }
+    
+    return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
+        .then((data) => {
+            if (data && data.keys && Array.isArray(data.keys) && data.keys.length > 0) {
+                const value = data.keys[0].value;
+                try { return JSON.parse(value); } catch { return value; }
+            }
+            return null;
+        })
+        .catch((error) => {
+            console.warn(`❌ Ошибка загрузки ${key}:`, error);
+            return null;
+        });
+}
+
+// Сохранение темы в VK Storage (обёртка над setTheme)
+const originalSetTheme = setTheme;
+setTheme = function(themeName) {
+    originalSetTheme(themeName);
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_theme_v2', themeName);
+    }
+};
+
+// Синхронизация прогресса при завершении уровня
+const originalSaveCompleted = saveCompletedLevel;
+saveCompletedLevel = function(levelId, difficulty) {
+    originalSaveCompleted(levelId, difficulty);
+    setTimeout(syncAllDataToVK, 500); // ← вместо отдельных saveToVKStorage
+};
+
+function loadAllDataFromVK() {
+    if (typeof vkBridge === 'undefined') return;
+    
+    console.log('🔄 Загрузка данных из VK Storage...');
+    
+    Promise.all([
+        loadFromVKStorage('wordgame_theme_v2'),
+        loadFromVKStorage('wordgame_galaxy_v2'),
+        loadFromVKStorage('wordgame_scrolls_v2'),
+        loadFromVKStorage('wordgame_total_stars_v2'),
+        loadFromVKStorage('wordgame_completed_easy'),
+        loadFromVKStorage('wordgame_completed_medium'),
+        loadFromVKStorage('wordgame_completed_hard'),
+        loadFromVKStorage('wordgame_completed_expert')
+    ]).then(([theme, galaxyData, scrollsData, totalStarsData, easyData, mediumData, hardData, expertData]) => {
+        let loaded = false;
+        
+        // ====== ТЕМА ======
+        if (theme) {
+            setTheme(theme);
+            loaded = true;
+            console.log('✅ Тема загружена из VK');
+        }
+        
+        // ====== ГАЛАКТИКА (МЕРЖ) ======
+        if (galaxyData) {
+            try {
+                const currentStars = getGalaxyStars();
+                let merged = false;
+                
+                // Объединяем: берём МАКСИМУМ по каждой категории
+                for (const key in galaxyData) {
+                    if (galaxyData[key]) {
+                        const vkStars = galaxyData[key].totalStars || 0;
+                        const localStars = currentStars[key]?.totalStars || 0;
+                        
+                        if (vkStars > localStars) {
+                            // В VK больше — обновляем локальные
+                            const catId = galaxyData[key].categoryId;
+                            const diff = galaxyData[key].difficulty;
+                            const levels = getLevelsByCategoryAndDifficulty(catId, diff);
+                            const completed = [];
+                            for (let i = 0; i < levels.length && i < galaxyData[key].completedLevels; i++) {
+                                completed.push(levels[i].id);
+                            }
+                            const keyName = `gameCompletedLevels_${diff}`;
+                            localStorage.setItem(keyName, JSON.stringify(completed));
+                            merged = true;
+                        }
+                    }
+                }
+                
+                if (merged) {
+                    updateTotalStars();
+                    loaded = true;
+                    console.log('✅ Галактика объединена (взято максимум)');
+                }
+            } catch(e) {
+                console.warn('⚠️ Ошибка загрузки галактики:', e);
+            }
+        }
+        
+        // ====== СВИТКИ (МЕРЖ - ОБЪЕДИНЯЕМ) ======
+        if (scrollsData && Array.isArray(scrollsData)) {
+            const localScrolls = getUnlockedScrolls();
+            // ✅ БЕРЁМ МАКСИМУМ: объединяем оба массива
+            const mergedScrolls = [...new Set([...localScrolls, ...scrollsData])];
+            
+            if (mergedScrolls.length > localScrolls.length) {
+                localStorage.setItem('unlockedScrolls', JSON.stringify(mergedScrolls));
+                loaded = true;
+                console.log('✅ Свитки объединены: ' + localScrolls.length + ' → ' + mergedScrolls.length);
+            } else {
+                console.log('ℹ️ Новых свитков из VK нет');
+            }
+        }
+        
+        // ====== ОБЩИЕ ЗВЁЗДЫ (МЕРЖ - БЕРЁМ МАКСИМУМ) ======
+        if (totalStarsData !== null && totalStarsData !== undefined) {
+            const localTotal = parseInt(localStorage.getItem('totalStars') || '0');
+            const maxTotal = Math.max(localTotal, totalStarsData);
+            if (maxTotal > localTotal) {
+                localStorage.setItem('totalStars', String(maxTotal));
+                totalStars = maxTotal;
+                loaded = true;
+                console.log('✅ Общие звёзды обновлены: ' + localTotal + ' → ' + maxTotal);
+            }
+        }
+        
+        // ====== ПРОЙДЕННЫЕ УРОВНИ (МЕРЖ) ======
+        const diffKeys = ['easy', 'medium', 'hard', 'expert'];
+        const diffDataMap = { easy: easyData, medium: mediumData, hard: hardData, expert: expertData };
+        
+        diffKeys.forEach(diff => {
+            const vkData = diffDataMap[diff];
+            if (vkData && Array.isArray(vkData)) {
+                const localCompleted = getCompletedLevels(diff);
+                // ✅ ОБЪЕДИНЯЕМ: берём все уникальные ID
+                const merged = [...new Set([...localCompleted, ...vkData])];
+                if (merged.length > localCompleted.length) {
+                    const keyName = `gameCompletedLevels_${diff}`;
+                    localStorage.setItem(keyName, JSON.stringify(merged));
+                    loaded = true;
+                    console.log('✅ Уровни ' + diff + ' объединены: ' + localCompleted.length + ' → ' + merged.length);
+                }
+            }
+        });
+        
+        if (loaded) {
+            console.log('✅ Данные из VK Storage загружены и объединены');
+            // Обновляем UI
+            updateTotalStars();
+            const galaxyBtn = document.getElementById('galaxyBtn');
+            if (galaxyBtn) {
+                galaxyBtn.setAttribute('data-stars', totalStars || 0);
+            }
+            // ПЕРЕСОХРАНЯЕМ В VK (чтобы там были ВСЕ данные)
+            syncAllDataToVK();
+        } else {
+            console.log('ℹ️ В VK Storage нет новых данных');
+        }
+    }).catch(e => console.warn('⚠️ Ошибка загрузки из VK:', e));
+}
+
+// Полная синхронизация всех данных
+function syncAllDataToVK() {
+    if (typeof vkBridge === 'undefined') return;
+    
+    console.log('🔄 Полная синхронизация с VK Storage...');
+    
+    const completedEasy = getCompletedLevels('easy');
+    const completedMedium = getCompletedLevels('medium');
+    const completedHard = getCompletedLevels('hard');
+    const completedExpert = getCompletedLevels('expert');
+    const stars = getGalaxyStars();
+    const scrolls = getUnlockedScrolls();
+    const total = updateTotalStars();
+    const theme = currentTheme || localStorage.getItem('theme') || 'dark';
+    
+    Promise.all([
+        saveToVKStorage('wordgame_theme_v2', theme),
+        saveToVKStorage('wordgame_galaxy_v2', stars),
+        saveToVKStorage('wordgame_scrolls_v2', scrolls),
+        saveToVKStorage('wordgame_total_stars_v2', total),
+        saveToVKStorage('wordgame_completed_easy', completedEasy),
+        saveToVKStorage('wordgame_completed_medium', completedMedium),
+        saveToVKStorage('wordgame_completed_hard', completedHard),
+        saveToVKStorage('wordgame_completed_expert', completedExpert)
+    ]).then(() => {
+        console.log('✅ Полная синхронизация завершена');
+    }).catch(e => console.warn('⚠️ Ошибка синхронизации:', e));
+}
+// Запуск синхронизации при старте
+(function() {
+    if (typeof vkBridge !== 'undefined') {
+        setTimeout(loadAllDataFromVK, 1500);
+        
+        // Авто-синхронизация каждые 60 секунд (на случай, если пользователь играет долго)
+        setInterval(syncAllDataToVK, 60000);
+    }
+})();
+
+// Доступ из консоли для отладки
+window.syncAllDataToVK = syncAllDataToVK;
+window.loadAllDataFromVK = loadAllDataFromVK;
 
 
     init();
