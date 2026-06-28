@@ -464,6 +464,47 @@
     </div>
 </div>
 
+<!-- ====== МОДАЛКА ПОДСКАЗОК С РЕКЛАМОЙ ====== -->
+<div id="hintAdModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--hint-ad">
+        <h2>💡 Подсказки кончились!</h2>
+        <div class="hint-ad-icon">📺</div>
+        <div class="hint-ad-title">Посмотрите рекламу и получите <strong>3 подсказки</strong>!</div>
+        <div class="hint-ad-subtitle">Если реклама недоступна, вы всё равно получите 1 подсказку</div>
+        <div class="hint-ad-modal__buttons">
+            <button class="hint-ad-modal__btn hint-ad-modal__btn--cancel" onclick="closeHintAdModal()">
+                ❌ Отмена
+            </button>
+            <button class="hint-ad-modal__btn hint-ad-modal__btn--confirm" onclick="getHintsViaAd()">
+                🎁 Подсказки
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ====== МОДАЛКА ЗАВЕРШЕНИЯ ИГРЫ (ВРЕМЯ ВЫШЛО) ====== -->
+<div id="gameOverModal" class="modal-overlay">
+    <div class="modal-overlay__content modal-overlay__content--gameover">
+        <div class="gameover-icon">⏰</div>
+        <h2>Время вышло!</h2>
+        <p class="gameover-text">Игра окончена. Но впереди ещё много интересных слов!</p>
+        <div class="gameover-stats" id="gameoverStats">
+            <!-- Статистика будет заполняться JS -->
+        </div>
+        <div class="gameover-buttons">
+            <button class="gameover-btn gameover-btn--menu" onclick="gameOverToMenu()">
+                🏠 Меню
+            </button>
+            <button class="gameover-btn gameover-btn--restart" onclick="gameOverRestart()">
+                🔄 Новая игра
+            </button>
+            <button class="gameover-btn gameover-btn--continue" onclick="gameOverContinueWithAd()">
+                📺 +2 мин
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- ====== МОДАЛКА СПИСКА ДОСТИЖЕНИЙ ====== -->
 <div id="achievementsModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--achievements">

@@ -361,3 +361,93 @@ window.syncAllDataToVK = syncAllDataToVK;
 window.loadAllDataFromVK = loadAllDataFromVK;
 window.debugVKStorage = debugVKStorage;
 window.manualSync = manualSync;
+
+// ========== ПОДСКАЗКИ С РЕКЛАМОЙ ==========
+
+// Показать рекламу за вознаграждение
+function showRewardedAd() {
+    if (typeof vkBridge !== 'undefined') {
+        // Проверяем, что мы внутри ВК
+        try {
+            const isVK = window.location !== window.parent.location;
+            if (!isVK) {
+                console.log('ℹ️ Запуск вне ВК, реклама недоступна');
+                return Promise.resolve(false);
+            }
+        } catch (e) {
+            return Promise.resolve(false);
+        }
+        
+        const sendMethod = vkBridge.sendPromise || vkBridge.send;
+        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+            .then((data) => {
+                console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+                return true;
+            })
+            .catch((e) => {
+                console.log("❌ Ошибка или реклама не досмотрена:", e);
+                return false;
+            });
+    } else {
+        console.log("ℹ️ VK Bridge не найден");
+        return Promise.resolve(false);
+    }
+}
+
+// Проверка, есть ли подсказки
+function checkHintsAndShowAd() {
+    if (gameState.hintsLeft > 0) {
+        showToast(`💡 У вас есть ${gameState.hintsLeft} подсказок`);
+        return;
+    }
+    
+    // Если подсказки кончились — показываем модалку
+    const modal = document.getElementById('hintAdModal');
+    if (modal) {
+        // Ставим игру на паузу
+        pauseGame();
+        modal.classList.add('show');
+    }
+}
+
+// Получение подсказок через рекламу
+function getHintsViaAd() {
+    const modal = document.getElementById('hintAdModal');
+    
+    // Показываем рекламу
+    showRewardedAd().then((success) => {
+        if (success) {
+            // Реклама просмотрена → 3 подсказки
+            gameState.hintsLeft += 3;
+            showToast('🎉 +3 подсказки!');
+            playSound('levelup');
+        } else {
+            // Рекламы нет → 1 подсказка
+            gameState.hintsLeft += 1;
+            showToast('💡 Реклама недоступна, но вы получаете +1 подсказку!');
+            playSound('hint');
+        }
+        
+        // Обновляем интерфейс
+        updateUI();
+        
+        // Закрываем модалку
+        if (modal) modal.classList.remove('show');
+        
+        // Снимаем паузу
+        if (gamePaused) {
+            resumeGame();
+        }
+    });
+}
+
+// Закрытие модалки без получения подсказок (отмена)
+function closeHintAdModal() {
+    const modal = document.getElementById('hintAdModal');
+    if (modal) modal.classList.remove('show');
+    
+    // Снимаем паузу
+    if (gamePaused) {
+        resumeGame();
+    }
+}

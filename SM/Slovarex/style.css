@@ -1960,3 +1960,494 @@ body[data-theme="green"] .checkmark-path {
 .scrolls-page-btn:active:not(.disabled) {
     transform: scale(0.97);
 }
+
+/* ===== МОДАЛКА ПОДСКАЗОК С РЕКЛАМОЙ ===== */
+.modal-overlay__content--hint-ad {
+    max-width: 400px;
+    padding: 32px 28px 28px;
+    text-align: center;
+    background: var(--theme-card, rgba(255, 255, 255, 0.98));
+    border-radius: 32px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+.modal-overlay__content--hint-ad h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--theme-text, #1f2937);
+    margin: 0 0 8px 0;
+    transition: color 0.4s ease;
+}
+
+.modal-overlay__content--hint-ad .hint-ad-icon {
+    font-size: 64px;
+    margin-bottom: 8px;
+}
+
+.modal-overlay__content--hint-ad .hint-ad-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--theme-text, #1f2937);
+    margin-bottom: 6px;
+    transition: color 0.4s ease;
+}
+
+.modal-overlay__content--hint-ad .hint-ad-subtitle {
+    font-size: 14px;
+    color: var(--theme-muted, #6b7280);
+    margin-top: 6px;
+    transition: color 0.4s ease;
+}
+
+.modal-overlay__content--hint-ad .hint-ad-subtitle strong {
+    color: var(--theme-primary, #667eea);
+}
+
+.hint-ad-modal__buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hint-ad-modal__btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    min-width: 140px;
+}
+
+.hint-ad-modal__btn--cancel {
+    background: var(--theme-btn-secondary, #f3f4f6);
+    color: var(--theme-text, #4b5563);
+    border: 2px solid var(--theme-border, #e5e7eb);
+}
+
+.hint-ad-modal__btn--cancel:hover {
+    background: var(--theme-btn-secondary-hover, #e5e7eb);
+    transform: translateY(-2px);
+}
+
+.hint-ad-modal__btn--confirm {
+    background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.hint-ad-modal__btn--confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.hint-ad-modal__btn:active {
+    transform: scale(0.97);
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 768px) {
+    .modal-overlay__content--hint-ad {
+        max-width: 90%;
+        padding: 24px 16px 20px;
+    }
+    
+    .modal-overlay__content--hint-ad h2 {
+        font-size: 22px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-icon {
+        font-size: 48px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-title {
+        font-size: 16px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-subtitle {
+        font-size: 13px;
+    }
+    
+    .hint-ad-modal__btn {
+        min-width: 100px;
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-overlay__content--hint-ad {
+        max-width: 95%;
+        padding: 20px 12px 16px;
+        border-radius: 24px;
+    }
+    
+    .modal-overlay__content--hint-ad h2 {
+        font-size: 18px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-icon {
+        font-size: 40px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-title {
+        font-size: 14px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-subtitle {
+        font-size: 12px;
+    }
+    
+    .hint-ad-modal__btn {
+        min-width: 80px;
+        padding: 8px 14px;
+        font-size: 13px;
+        border-radius: 30px;
+    }
+    
+    .hint-ad-modal__buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Горизонтальная ориентация */
+@media (max-width: 896px) and (orientation: landscape) {
+    .modal-overlay__content--hint-ad {
+        max-width: 80%;
+        padding: 16px 20px 18px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-icon {
+        font-size: 36px;
+    }
+    
+    .modal-overlay__content--hint-ad h2 {
+        font-size: 18px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-title {
+        font-size: 14px;
+    }
+    
+    .modal-overlay__content--hint-ad .hint-ad-subtitle {
+        font-size: 12px;
+    }
+    
+    .hint-ad-modal__btn {
+        min-width: 80px;
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+}
+
+/* Баннер VK внизу */
+body.has-vk-banner .modal-overlay__content--hint-ad {
+    max-height: 70vh;
+    margin-bottom: 10px;
+}
+
+/* Тёмная тема — кнопка подтверждения */
+body[data-theme="dark"] .hint-ad-modal__btn--confirm {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
+}
+
+body[data-theme="dark"] .hint-ad-modal__btn--confirm:hover {
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+}
+
+/* Голубая тема — кнопка подтверждения */
+body[data-theme="blue"] .hint-ad-modal__btn--confirm {
+    background: linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%);
+    box-shadow: 0 4px 16px rgba(74, 158, 255, 0.3);
+}
+
+body[data-theme="blue"] .hint-ad-modal__btn--confirm:hover {
+    box-shadow: 0 8px 24px rgba(74, 158, 255, 0.4);
+}
+
+/* Зелёная тема — кнопка подтверждения */
+body[data-theme="green"] .hint-ad-modal__btn--confirm {
+    background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+    box-shadow: 0 4px 16px rgba(67, 160, 71, 0.3);
+}
+
+body[data-theme="green"] .hint-ad-modal__btn--confirm:hover {
+    box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4);
+}
+
+/* ===== МОДАЛКА ЗАВЕРШЕНИЯ ИГРЫ ===== */
+.modal-overlay__content--gameover {
+    max-width: 420px;
+    padding: 36px 32px 32px;
+    text-align: center;
+    background: var(--theme-card, rgba(255, 255, 255, 0.98));
+    border-radius: 32px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+.gameover-icon {
+    font-size: 64px;
+    margin-bottom: 8px;
+}
+
+.modal-overlay__content--gameover h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--theme-text, #1f2937);
+    margin: 0 0 6px 0;
+    transition: color 0.4s ease;
+}
+
+.gameover-text {
+    font-size: 16px;
+    color: var(--theme-muted, #6b7280);
+    margin-bottom: 16px;
+    transition: color 0.4s ease;
+}
+
+.gameover-stats {
+    background: var(--theme-bg-light, #f9fafb);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+.gameover-stats .stat-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--theme-text, #1f2937);
+}
+
+.gameover-stats .stat-item .stat-label {
+    color: var(--theme-muted, #6b7280);
+}
+
+.gameover-stats .stat-item .stat-value {
+    font-weight: 700;
+    color: var(--theme-text, #1f2937);
+}
+
+.gameover-stats .stat-item .stat-value.highlight {
+    color: var(--theme-primary, #667eea);
+}
+
+.gameover-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.gameover-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 60px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    min-width: 120px;
+}
+
+.gameover-btn--menu {
+    background: var(--theme-btn-secondary, #f3f4f6);
+    color: var(--theme-text, #4b5563);
+    border: 2px solid var(--theme-border, #e5e7eb);
+}
+
+.gameover-btn--menu:hover {
+    background: var(--theme-btn-secondary-hover, #e5e7eb);
+    transform: translateY(-2px);
+}
+
+.gameover-btn--restart {
+    background: var(--theme-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.gameover-btn--restart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.gameover-btn:active {
+    transform: scale(0.97);
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 480px) {
+    .modal-overlay__content--gameover {
+        padding: 24px 16px 20px;
+        border-radius: 24px;
+    }
+    
+    .gameover-icon {
+        font-size: 48px;
+    }
+    
+    .modal-overlay__content--gameover h2 {
+        font-size: 22px;
+    }
+    
+    .gameover-text {
+        font-size: 14px;
+    }
+    
+    .gameover-stats {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+    
+    .gameover-stats .stat-item {
+        font-size: 12px;
+    }
+    
+    .gameover-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .gameover-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 896px) and (orientation: landscape) {
+    .modal-overlay__content--gameover {
+        max-width: 80%;
+        padding: 16px 20px 18px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .gameover-icon {
+        font-size: 36px;
+    }
+    
+    .modal-overlay__content--gameover h2 {
+        font-size: 20px;
+    }
+    
+    .gameover-text {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    
+    .gameover-stats {
+        padding: 8px 12px;
+        margin-bottom: 12px;
+    }
+    
+    .gameover-stats .stat-item {
+        font-size: 12px;
+    }
+    
+    .gameover-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        min-width: 80px;
+    }
+}
+
+/* Баннер VK внизу */
+body.has-vk-banner .modal-overlay__content--gameover {
+    max-height: 70vh;
+    margin-bottom: 10px;
+}
+
+/* Тёмная тема */
+body[data-theme="dark"] .gameover-btn--restart {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    box-shadow: 0 4px 16px rgba(108, 92, 231, 0.3);
+}
+
+body[data-theme="dark"] .gameover-btn--restart:hover {
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+}
+
+/* Голубая тема */
+body[data-theme="blue"] .gameover-btn--restart {
+    background: linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%);
+    box-shadow: 0 4px 16px rgba(74, 158, 255, 0.3);
+}
+
+body[data-theme="blue"] .gameover-btn--restart:hover {
+    box-shadow: 0 8px 24px rgba(74, 158, 255, 0.4);
+}
+
+/* Зелёная тема */
+body[data-theme="green"] .gameover-btn--restart {
+    background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+    box-shadow: 0 4px 16px rgba(67, 160, 71, 0.3);
+}
+
+body[data-theme="green"] .gameover-btn--restart:hover {
+    box-shadow: 0 8px 24px rgba(67, 160, 71, 0.4);
+}
+.gameover-btn--continue {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+.gameover-btn--continue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+}
+
+/* Тёмная тема */
+body[data-theme="dark"] .gameover-btn--continue {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+}
+
+/* Голубая тема */
+body[data-theme="blue"] .gameover-btn--continue {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+}
+
+/* Зелёная тема */
+body[data-theme="green"] .gameover-btn--continue {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #1f2937;
+}
+
+/* На мобильных кнопки в столбик, а не в ряд */
+@media (max-width: 480px) {
+    .gameover-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .gameover-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 899px) and (orientation: landscape) {
+    .gameover-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 60px;
+    }
+}

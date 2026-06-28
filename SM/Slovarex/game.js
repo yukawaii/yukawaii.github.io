@@ -175,7 +175,7 @@ const CONFIG = {
     TIME_PER_LEVEL: 120,
     TIME_BONUS_PER_WORD: 15,
     SCORE_BONUS_PER_LEVEL: 10,
-    HINTS_START: 5,
+    HINTS_START: 3,
     LEVEL_THRESHOLD_START: 0.4,
     LEVEL_THRESHOLD_STEP: 0.05,
     LEVEL_THRESHOLD_MAX: 0.75,
@@ -639,22 +639,132 @@ function startTimer() {
     }, 1000);
 }
 
-function handleTimeOut() {
-    // Если игра на паузе — не обрабатываем
- if (gamePaused) return;    
-    const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
-    const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);    
-    if (gameState.foundWords.size >= need) {
-        nextLevel();    } else {        showPermanentToast("⏰ Время вышло! Игра окончена", true);
-        gameState.frozen = true;        updateUI();    }
+
         // ========== ОТПРАВКА УРОВНЯ В ВК ==========
       //  if (typeof sendscore === 'function') {
       //      sendscore();
       //  }
         // ==========================================
+function handleTimeOut() {
+    if (gamePaused) return;
+    
+    const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
+    const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);
+    
+    if (gameState.foundWords.size >= need) {
+        nextLevel();
+    } else {
+        // ========== ОТПРАВКА УРОВНЯ В ВК ==========
+        if (typeof sendscore === 'function') {
+            sendscore();
+        }
+        // ==========================================
+        
+        gameState.frozen = true;
+        updateUI();
+        
+        // Показываем модалку завершения (ВМЕСТО тоста)
+        showGameOverModal();
+    }
 }
 
+// ====== МОДАЛКА ЗАВЕРШЕНИЯ ИГРЫ ======
+function showGameOverModal() {
+    const modal = document.getElementById('gameOverModal');
+    if (!modal) return;
+    
+    // Заполняем статистику
+    const stats = document.getElementById('gameoverStats');
+    if (stats) {
+        stats.innerHTML = `
+            <div class="stat-item">
+                <span class="stat-label">📊 Уровень</span>
+                <span class="stat-value highlight">${gameState.level}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">🎯 Найдено слов</span>
+                <span class="stat-value">${gameState.foundWords.size}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">⭐ Очки</span>
+                <span class="stat-value highlight">${gameState.totalScore + gameState.levelScore}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">💡 Подсказок</span>
+                <span class="stat-value">${gameState.hintsLeft}</span>
+            </div>
+        `;
+    }
+    
+    modal.classList.add('show');
+}
 
+function closeGameOverModal() {
+    const modal = document.getElementById('gameOverModal');
+    if (modal) modal.classList.remove('show');
+}
+
+function gameOverToMenu() {
+    closeGameOverModal();
+    
+    // Останавливаем таймер
+    if (gameState.timerId) {
+        clearInterval(gameState.timerId);
+        gameState.timerId = null;
+    }
+    
+    // Очищаем паузу
+    cleanupPauseHandlers();
+    
+    // Частицы — над фоном меню
+    setParticlesAboveMenu();
+    
+    // Показываем начальный экран
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+        startScreen.style.display = 'flex';
+        setTimeout(() => {
+            startScreen.classList.remove('hidden');
+        }, 10);
+    }
+    
+    // Скрываем игровой контейнер
+    const gameContainer = document.querySelector('.game-container');
+    if (gameContainer) {
+        gameContainer.style.display = 'none';
+    }
+    
+    // Показываем VK навигацию
+    if (typeof showVKView === 'function') {
+        setTimeout(showVKView, 300);
+    }
+    
+    // Очищаем тост
+    clearPermanentToast();
+    
+    console.log('🏠 Возврат в главное меню');
+}
+
+function gameOverRestart() {
+    closeGameOverModal();   
+    // Очищаем паузу
+    cleanupPauseHandlers();    
+    // Очищаем постоянный тост
+    clearPermanentToast();    
+    // Сбрасываем состояние
+    gameState.level = 1;
+    gameState.totalScore = 0;
+    gameState.hintsLeft = CONFIG.HINTS_START;
+    gameState.frozen = false;
+    gamePaused = false;    
+    // Показываем баннер
+    setTimeout(checkAndShowBanner, 500);    
+    // Запускаем уровень
+    initLevel();
+    updateUI();
+    playSound("click");    
+    showToast("🔄 Игра перезапущена!");
+}
 
 // ========== ПОСТОЯННЫЙ ТОСТ ==========
 let permanentToast = null;
@@ -890,9 +1000,10 @@ function shuffleLetters() {
 
 function useHint() {
     if (gameState.frozen) return;
+    
+    // Если подсказок нет — предлагаем получить через рекламу
     if (gameState.hintsLeft <= 0) {
-        showToast("Подсказки закончились!", true);
-        playSound("error");
+        checkHintsAndShowAd();
         return;
     }
     
@@ -905,7 +1016,6 @@ function useHint() {
     const hintWord = notFound[Math.floor(Math.random() * notFound.length)];
     gameState.hintsLeft--;
     
-    // Добавляем слово через подсказку
     gameState.foundWords.add(hintWord);
     gameState.foundList.push(hintWord);
     
@@ -1086,6 +1196,7 @@ function initGame() {
     document.getElementById("soundBtn").onclick = toggleSound;
  //   document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
+   
 /*// Таблица лидеров =================
 const leaderboardBtn = document.getElementById("leaderboardBtn");
 if (leaderboardBtn) {
@@ -2788,6 +2899,35 @@ if (scrollTextModal) {
     });
 }
 
+// ====== ПРОДЛЕНИЕ ВРЕМЕНИ ЗА РЕКЛАМУ ======
+
+function gameOverContinueWithAd() {
+    // Закрываем модалку
+    closeGameOverModal();
+    
+    // Показываем рекламу
+    showRewardedAd().then((success) => {
+        if (success) {
+            // Реклама просмотрена → +2 минуты
+            gameState.timeLeft += 120;  // 120 секунд = 2 минуты
+            gameState.frozen = false;
+            
+            // Перезапускаем таймер
+            startTimer();
+            updateUI();
+            
+            showToast('🎉 +2 минуты! Продолжайте игру!');
+            playSound('levelup');
+            
+            console.log('✅ Время продлено на 2 минуты');
+        } else {
+            // Реклама не просмотрена — возвращаем в модалку
+            showToast('❌ Реклама не досмотрена, попробуйте снова', true);
+            setTimeout(showGameOverModal, 500);
+        }
+    });
+}
+
 // Закрытие по Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -2807,5 +2947,18 @@ document.addEventListener('keydown', (e) => {
         if (galaxyModal && galaxyModal.classList.contains('show') && !galaxyModal.querySelector('.story-window')) {
             // Не закрываем, если это окно сюжета
         }
+        // ====== ЗАКРЫТИЕ МОДАЛКИ ПОДСКАЗОК ПО ESCAPE ======
+                const hintAdModal = document.getElementById('hintAdModal');
+        if (hintAdModal && hintAdModal.classList.contains('show')) {
+            closeHintAdModal();
+        }
+        //закрытие модалки конца игры по эскеип, возврат в меню
+        const gameOverModal = document.getElementById('gameOverModal');
+        if (gameOverModal && gameOverModal.classList.contains('show')) {
+            closeGameOverModal();
+            // Возвращаем в меню
+            gameOverToMenu();
+        }
     }
 });
+
