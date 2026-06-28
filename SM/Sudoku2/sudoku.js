@@ -1024,8 +1024,6 @@ async giveHint() {
     console.log('giveHint вызван');
     if (this.isFinished) return;
     
-    // Проверка доступности подсказок на уровне сложности
-    // Устанавливаем начальное значение, если оно ещё не установлено
     if (this.maxHints === undefined || this.maxHints === 0) {
         if (this.difficulty === 'easy' || this.difficulty === 'medium') {
             this.maxHints = 3;
@@ -1034,7 +1032,9 @@ async giveHint() {
         }
     }
 
-    // Если подсказки закончились — показываем модалку
+    // Обновляем иконку в зависимости от количества подсказок
+    this.updateHintButton();
+
     if (this.hintsUsed >= this.maxHints) {
         console.log('Подсказки кончились. Использовано:', this.hintsUsed, 'Максимум:', this.maxHints);
         this.messageEl.textContent = '💡 Подсказки закончились!';
@@ -1044,11 +1044,11 @@ async giveHint() {
         console.log('Результат модалки:', result);
         
         if (result === true) {
-            // Подсказки добавлены к счётчику
             const remaining = this.maxHints - this.hintsUsed;
             this.messageEl.textContent = `✅ Получены подсказки! Осталось: ${remaining}`;
             this.sound.click();
             this.render();
+            this.updateHintButton();
             return;
         } else {
             this.messageEl.textContent = '❌ Вы отменили получение подсказок.';
@@ -1057,7 +1057,6 @@ async giveHint() {
         }
     }
 
-    // Проверка, выделена ли клетка
     if (this.selectedRow === -1 || this.selectedCol === -1) {
         this.messageEl.textContent = '⚠️ Выделите клетку';
         this.sound.error();
@@ -1067,14 +1066,12 @@ async giveHint() {
     const r = this.selectedRow;
     const c = this.selectedCol;
 
-    // Проверка, пустая ли клетка
     if (this.grid[r][c] !== 0) {
         this.messageEl.textContent = '⚠️ В этой клетке уже есть цифра';
         this.sound.error();
         return;
     }
 
-    // Проверка, является ли клетка "данной"
     if (this.given[r][c]) {
         this.messageEl.textContent = '❌ Это клетка с подсказкой';
         this.sound.error();
@@ -1085,7 +1082,6 @@ async giveHint() {
     this.sound.hint();
     this.hintsUsed++;
 
-    // Ставим правильную цифру
     const correctNum = this.solution[r][c];
     this.grid[r][c] = correctNum;
     
@@ -1096,13 +1092,14 @@ async giveHint() {
     this.messageEl.textContent = `💡 Подсказка: ${correctNum} (осталось: ${remaining})`;
     this.render();
     
-    // Подсветим подсказку
     const cells = this.gridElement.children;
     const idx = r * 9 + c;
     if (cells[idx]) {
         cells[idx].classList.add('hint');
         setTimeout(() => cells[idx].classList.remove('hint'), 1000);
     }
+    
+    this.updateHintButton();
     
     if (this.checkWin()) {
         this.isFinished = true;
@@ -1115,6 +1112,8 @@ async giveHint() {
         }
     }
 }
+
+
 // ============================================================
 // Управление таймером (пауза/возобновление)
 // ============================================================
@@ -1317,8 +1316,12 @@ async solveAll() {
     } else {
         this.maxHints = 1;
     }
+
+
     this.messageEl.textContent = '';
         this.messageEl.textContent = '';
+        this.updateHintButton();
+
         
         if (this.timerInterval) {
             clearInterval(this.timerInterval);
@@ -1340,6 +1343,20 @@ async solveAll() {
             this.sound.ctx.resume();
         }
     }
+    // Добавьте этот метод в класс SudokuGame
+updateHintButton() {
+    const hintBtn = document.getElementById('btnHint');
+    if (!hintBtn) return;
+    
+    const remaining = this.maxHints - this.hintsUsed;
+    if (remaining <= 0) {
+        hintBtn.innerHTML = '💡✨'; // Яркая лампочка
+        hintBtn.classList.add('no-hints');
+    } else {
+        hintBtn.innerHTML = '💡';
+        hintBtn.classList.remove('no-hints');
+    }
+}
 }
 
 // ============================================================

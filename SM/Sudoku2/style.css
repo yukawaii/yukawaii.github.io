@@ -136,3 +136,15 @@ li {
     cursor: pointer;
 }
 
+/* Яркая лампочка, когда подсказок нет */
+.action-btn.hint-btn.no-hints {
+    background: #ffaa00 !important;
+    color: #1a1a2e !important;
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.6);
+    animation: pulse-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 170, 0, 0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(255, 200, 0, 0.9); }
+}
