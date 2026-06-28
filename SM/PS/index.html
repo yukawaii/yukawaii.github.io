@@ -323,7 +323,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    
+    contentDiv.className = 'galaxy-scroll';
 contentDiv.innerHTML = `
     <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
     <p style="color:#6B5B4E;font-size:0.8rem;margin-bottom:10px;">Сложность: ${DIFFICULTIES.find(d => d.id === difficulty)?.label || difficulty}</p>
@@ -920,7 +920,7 @@ function showCategoryModalForDifficulty(difficulty) {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:350px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    
+    contentDiv.className = 'galaxy-scroll';
     const categories = getCategoriesForDifficulty(difficulty);
     
     let html = `<h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 15px;">📚 Выбери категорию</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;">`;
@@ -998,7 +998,7 @@ function showSubLevelModal(categoryId, difficulty) {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-    
+    contentDiv.className = 'galaxy-scroll';
     contentDiv.innerHTML = `
         <h3 style="color:#2c3e2b;font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
         <p style="color:#6B5B4E;font-size:0.8rem;margin-bottom:10px;">Сложность: ${DIFFICULTIES.find(d => d.id === difficulty)?.label || difficulty}</p>
@@ -1733,7 +1733,7 @@ if (rulesButton) {
         
         let contentDiv = document.createElement('div');
         contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:44px;padding:25px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s;';
-        
+        contentDiv.className = 'galaxy-scroll';
 contentDiv.innerHTML = `
     <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 15px;">📖 Правила</h3>
     <ul style="text-align:left;color:var(--text-secondary, #3a3220);padding-left:20px;line-height:1.7;">
@@ -1838,7 +1838,7 @@ function showWelcomeStory() {
         
         const contentDiv = document.createElement('div');
         contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
-        
+        contentDiv.className = 'galaxy-scroll';
         function updateSlide() {
             const slide = slides[currentSlide];
           contentDiv.innerHTML = `
@@ -1950,7 +1950,7 @@ function showDifficultyModal() {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    
+    contentDiv.className = 'galaxy-scroll';
     let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
 html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
 DIFFICULTIES.forEach(diff => {
@@ -1992,6 +1992,8 @@ function showDifficultyStory(difficulty) {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
+    contentDiv.className = 'galaxy-scroll';
+    
     
 contentDiv.innerHTML = `
     <div style="font-size:3rem;margin-bottom:10px;">${slide.title.split(' ')[0]}</div>
@@ -2060,8 +2062,8 @@ function showGalaxyMap() {
         modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-        
+contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+contentDiv.className = 'galaxy-scroll';  // ← ДОБАВЬТЕ ЭТУ СТРОКУ        
         let galaxiesHtml = `
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
                 <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
@@ -2224,7 +2226,7 @@ function showGalaxyDetails(categoryId) {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;';
-    
+    contentDiv.className = 'galaxy-scroll';
     // Генерация звёзд (визуально)
     let starsHtml = '';
     const totalStarsCount = starData.maxStars;
@@ -2413,7 +2415,7 @@ function showScrollsModal() {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:450px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-    
+    contentDiv.className = 'galaxy-scroll';
     const unlockedCount = getUnlockedScrolls().length;
     const totalStars = parseInt(localStorage.getItem('totalStars') || 0);
     const nextStarThreshold = Math.ceil((unlockedCount + 1) * 100);
@@ -2524,7 +2526,7 @@ function showScrollDetail(scrollId) {
     
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    
+    contentDiv.className = 'galaxy-scroll';
 contentDiv.innerHTML = `
     <div style="font-size:3rem;margin-bottom:5px;">📜</div>
     <div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-bottom:10px;">Свиток №${scroll.id}</div>

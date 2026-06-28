@@ -1881,3 +1881,84 @@ div[style*="position:fixed"] {
         min-height: 30px !important;
     }
 }
+
+/* ===== КАСТОМНЫЙ СКРОЛЛ ДЛЯ МОДАЛКИ ГАЛАКТИК ===== */
+
+/* Для модалки галактик и других модалок */
+.modal-window .galaxy-scroll,
+.modal-window div[style*="max-height:80vh;overflow-y:auto;"],
+.modal-window div[style*="overflow-y:auto;"] {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(255,165,77,0.6) rgba(255,255,255,0.05) !important;
+}
+
+/* Для WebKit браузеров (Chrome, Safari, Edge) */
+.modal-window .galaxy-scroll::-webkit-scrollbar,
+.modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar,
+.modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar {
+    width: 6px !important;
+    border-radius: 10px !important;
+}
+
+.modal-window .galaxy-scroll::-webkit-scrollbar-track,
+.modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-track,
+.modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05) !important;
+    border-radius: 10px !important;
+    margin: 5px 0 !important;
+}
+
+.modal-window .galaxy-scroll::-webkit-scrollbar-thumb,
+.modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb,
+.modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ffa54d, #ff6b6b) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 20px rgba(255,165,77,0.3), inset 0 0 10px rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.modal-window .galaxy-scroll::-webkit-scrollbar-thumb:hover,
+.modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb:hover,
+.modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffb866, #ff7a7a) !important;
+    box-shadow: 0 0 30px rgba(255,165,77,0.5), inset 0 0 15px rgba(255,255,255,0.2) !important;
+}
+
+/* ===== ДЛЯ ТЁМНОЙ ТЕМЫ ===== */
+[data-theme="dark"] .modal-window .galaxy-scroll::-webkit-scrollbar-thumb,
+[data-theme="dark"] .modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb,
+[data-theme="dark"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #b8a0e8, #7c5cbf) !important;
+    box-shadow: 0 0 30px rgba(180,140,255,0.4), inset 0 0 10px rgba(255,255,255,0.1) !important;
+}
+
+[data-theme="dark"] .modal-window .galaxy-scroll::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #c8b0f0, #8c6ccf) !important;
+    box-shadow: 0 0 40px rgba(180,140,255,0.6), inset 0 0 15px rgba(255,255,255,0.2) !important;
+}
+
+/* ===== ДЛЯ ГОЛУБОЙ ТЕМЫ ===== */
+[data-theme="blue"] .modal-window .galaxy-scroll::-webkit-scrollbar-thumb,
+[data-theme="blue"] .modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb,
+[data-theme="blue"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #4a9fc7, #2a7fa5) !important;
+    box-shadow: 0 0 30px rgba(74,159,199,0.4), inset 0 0 10px rgba(255,255,255,0.1) !important;
+}
+
+/* ===== ДЛЯ БИРЮЗОВОЙ ТЕМЫ ===== */
+[data-theme="teal"] .modal-window .galaxy-scroll::-webkit-scrollbar-thumb,
+[data-theme="teal"] .modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb,
+[data-theme="teal"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #2a9a9a, #1a7a7a) !important;
+    box-shadow: 0 0 30px rgba(42,154,154,0.4), inset 0 0 10px rgba(255,255,255,0.1) !important;
+}
+
+/* ===== ДЛЯ СОЛНЕЧНОЙ ТЕМЫ ===== */
+[data-theme="sun"] .modal-window .galaxy-scroll::-webkit-scrollbar-thumb,
+[data-theme="sun"] .modal-window div[style*="max-height:80vh;overflow-y:auto;"]::-webkit-scrollbar-thumb,
+[data-theme="sun"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #e8a820, #d4880a) !important;
+    box-shadow: 0 0 30px rgba(232,168,32,0.4), inset 0 0 10px rgba(255,255,255,0.1) !important;
+}
