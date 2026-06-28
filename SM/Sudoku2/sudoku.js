@@ -83,23 +83,37 @@ showBottomBanner() {
     }
 } */
 
+
 // Показать рекламу за вознаграждение (rewarded video) - без ограничений
 showRewardedAd() {
-    if (typeof vkBridge !== 'undefined') {
-        const sendMethod = vkBridge.sendPromise || vkBridge.send;
-        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
-            .then((data) => {
-                console.log('Реклама за вознаграждение показана, награда выдана:', data);
-                return true;
-            })
-            .catch(e => {
-                console.log("Ошибка или реклама не досмотрена:", e);
-                return false;
-            });
-    } else {
-        console.log("VK Bridge не найден");
-        return Promise.resolve(false);
-    }
+    console.log('showRewardedAd вызван');
+    
+    return new Promise((resolve) => {
+        // Таймаут на случай, если VK Bridge зависнет
+        const timeoutId = setTimeout(() => {
+            console.log('⏰ Таймаут показа рекламы (5 сек)');
+            resolve(false);
+        }, 3000);
+        
+        if (typeof vkBridge !== 'undefined') {
+            const sendMethod = vkBridge.sendPromise || vkBridge.send;
+            sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+                .then((data) => {
+                    clearTimeout(timeoutId);
+                    console.log('Реклама за вознаграждение показана, награда выдана:', data);
+                    resolve(true);
+                })
+                .catch(e => {
+                    clearTimeout(timeoutId);
+                    console.log("Ошибка или реклама не досмотрена:", e);
+                    resolve(false);
+                });
+        } else {
+            clearTimeout(timeoutId);
+            console.log("VK Bridge не найден");
+            resolve(false);
+        }
+    });
 }
 }
 
@@ -111,6 +125,7 @@ class SoundManager {
         this.enabled = true;
         this.ctx = null;
         this.initialized = false;
+          this.maxHints = 0;
     }
 
     init() {
@@ -155,12 +170,197 @@ class SoundManager {
 // 4. Основная игра Судоку
 // ============================================================
 class SudokuGame {
-    // ============================================================
+  // ============================================================
+// Модалка "Реклама недоступна"
+// ============================================================
+showNoAdModal(callback) {
+    console.log('showNoAdModal вызван');
+    
+    // Создаём overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 4000;
+        padding: 20px;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    // Создаём диалог
+    const dialog = document.createElement('div');
+    dialog.style.cssText = `
+        background: rgba(22, 33, 62, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 24px;
+        padding: 30px 25px;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        animation: slideUp 0.3s ease;
+    `;
+    
+    dialog.innerHTML = `
+        <span style="font-size: 3rem; display: block; margin-bottom: 10px;">📺</span>
+        <h2 style="color: #fff; font-size: 1.4rem; margin-bottom: 10px;">Реклама недоступна</h2>
+        <p style="color: #8a8fa8; font-size: 1rem; margin-bottom: 20px; line-height: 1.6;">
+            К сожалению, реклама сейчас не доступна.<br>
+            Но вы всё равно получите <strong style="color: #ffd54f;">+1 подсказку</strong>!
+        </p>
+        <button id="noAdOkBtn" style="
+            background: linear-gradient(135deg, #e94560, #c23152);
+            color: #fff;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 25px rgba(233, 69, 96, 0.4);
+            transition: 0.2s;
+        ">👍 Ок</button>
+    `;
+    
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    
+    // Обработчик кнопки
+    const okBtn = document.getElementById('noAdOkBtn');
+    okBtn.addEventListener('click', () => {
+        if (overlay.parentNode) {
+            document.body.removeChild(overlay);
+        }
+        console.log('Нажата кнопка "Ок" в модалке "Реклама недоступна"');
+        callback(true);
+    });
+    
+    // Закрытие по клику вне диалога
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            if (overlay.parentNode) {
+                document.body.removeChild(overlay);
+            }
+            console.log('Закрытие модалки "Реклама недоступна" по клику вне');
+            callback(false);
+        }
+    });
+}
+                                            // ============================================================
+                                            // Модалка для получения дополнительных подсказок
+                                            // ============================================================
+                                            showHintAdModal() {
+                                                console.log('showHintAdModal вызван');
+                                                return new Promise((resolve) => {
+                                                    const modal = document.getElementById('hintAdModal');
+                                                    
+                                                    if (!modal) {
+                                                        console.error('Модалка #hintAdModal не найдена в DOM');
+                                                        resolve(false);
+                                                        return;
+                                                    }
+                                                    
+                                                    // ⏸️ Ставим таймер на паузу
+                                                    this.pauseTimer();
+                                                    
+                                                    modal.style.display = 'flex';
+                                                    
+                                                    const cancelBtn = document.getElementById('hintAdCancel');
+                                                    const confirmBtn = document.getElementById('hintAdConfirm');
+                                                    
+                                                    let isResolved = false;
+                                                    
+                                                    const closeModal = (result) => {
+                                                        if (isResolved) return;
+                                                        isResolved = true;
+                                                        modal.style.display = 'none';
+                                                        // Таймер возобновляется только если не было показано другое окно
+                                                        // В случае успеха или отмены — возобновляем
+                                                        if (result === true || result === false) {
+                                                            this.resumeTimer();
+                                                        }
+                                                        resolve(result);
+                                                    };
+                                                    
+                                                    // Убираем старые обработчики
+                                                    const newCancelBtn = cancelBtn.cloneNode(true);
+                                                    const newConfirmBtn = confirmBtn.cloneNode(true);
+                                                    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+                                                    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+                                                    
+                                                    newCancelBtn.addEventListener('click', () => {
+                                                        this.sound.click();
+                                                        closeModal(false);
+                                                    });
+                                                    
+                                                    newConfirmBtn.addEventListener('click', async () => {
+                                                        this.sound.click();
+                                                        console.log('Нажата кнопка "Получить"');
+                                                        
+                                                        try {
+                                                            // Показываем рекламу
+                                                            const adShown = await this.adManager.showRewardedAd();
+                                                            console.log('Результат показа рекламы:', adShown);
+                                                            
+                                                            if (adShown) {
+                                                                // ✅ Реклама показана — даём 3 подсказки
+                                                                this.messageEl.textContent = '🎉 Реклама показана! +3 подсказки!';
+                                                                this.sound.click();
+                                                                closeModal(true);
+                                                            } else {
+                                                                // ❌ Реклама НЕ показана — показываем модалку "Реклама недоступна"
+                                                                modal.style.display = 'none';
+                                                                
+                                                                this.showNoAdModal((result) => {
+                                                                    if (result) {
+                                                                        // Даём 1 подсказку
+                                                                        this.messageEl.textContent = '💡 Вы получили 1 подсказку!';
+                                                                        this.sound.click();
+                                                                        closeModal(true);
+                                                                    } else {
+                                                                        closeModal(false);
+                                                                    }
+                                                                });
+                                                            }
+                                                        } catch (error) {
+                                                            console.error('Ошибка при показе рекламы:', error);
+                                                            modal.style.display = 'none';
+                                                            this.showNoAdModal((result) => {
+                                                                if (result) {
+                                                                    this.messageEl.textContent = '💡 Вы получили 1 подсказку!';
+                                                                    this.sound.click();
+                                                                    closeModal(true);
+                                                                } else {
+                                                                    closeModal(false);
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                    
+                                                    // Закрытие по клику вне модалки
+                                                    modal.addEventListener('click', (e) => {
+                                                        if (e.target === modal) {
+                                                            this.sound.click();
+                                                            closeModal(false);
+                                                        }
+                                                    });
+                                                });
+                                            }
+// ============================================================
 // Показать диалог подтверждения перед рекламой
 // ============================================================
 showConfirmDialog() {
     return new Promise((resolve) => {
-        // Создаем overlay
+        // ⏸️ Ставим таймер на паузу
+        this.pauseTimer();
+        
         const overlay = document.createElement('div');
         overlay.style.cssText = `
             position: fixed;
@@ -176,7 +376,6 @@ showConfirmDialog() {
             animation: fadeIn 0.3s ease;
         `;
         
-        // Создаем диалог
         const dialog = document.createElement('div');
         dialog.style.cssText = `
             background: #16213e;
@@ -225,26 +424,33 @@ showConfirmDialog() {
         overlay.appendChild(dialog);
         document.body.appendChild(overlay);
         
-        // Обработчики кнопок
+        const closeDialog = (result) => {
+            if (overlay.parentNode) {
+                document.body.removeChild(overlay);
+            }
+            // ▶️ Возобновляем таймер
+            this.resumeTimer();
+            resolve(result);
+        };
+        
         document.getElementById('confirmAdYes').addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            resolve(true);
+            closeDialog(true);
         });
         
         document.getElementById('confirmAdNo').addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            resolve(false);
+            closeDialog(false);
         });
         
-        // Закрытие по клику вне диалога
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
-                document.body.removeChild(overlay);
-                resolve(false);
+                closeDialog(false);
             }
         });
     });
 }
+
+
+
     constructor() {
         this.sound = new SoundManager();
         this.adManager = new AdManager();
@@ -279,7 +485,7 @@ showConfirmDialog() {
         document.getElementById('btnBackToMenu').addEventListener('click', () => this.goToMenu());
         document.getElementById('btnToggleSound').addEventListener('click', () => this.toggleSound());
         document.getElementById('btnInviteFriends').addEventListener('click', () => this.inviteFriends());
-        document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
+       document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
         document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
         document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
 
@@ -687,32 +893,149 @@ updateTimer() {
 }
 
 // ============================================================
-// Подсказка (ставит правильную цифру в выделенную клетку)
+// Модалка для получения дополнительных подсказок
 // ============================================================
-giveHint() {
+showHintAdModal() {
+    console.log('showHintAdModal вызван');
+    return new Promise((resolve) => {
+        const modal = document.getElementById('hintAdModal');
+        
+        if (!modal) {
+            console.error('Модалка #hintAdModal не найдена в DOM');
+            resolve(false);
+            return;
+        }
+        
+        // ⏸️ Ставим таймер на паузу
+        this.pauseTimer();
+        
+        modal.style.display = 'flex';
+        
+        const cancelBtn = document.getElementById('hintAdCancel');
+        const confirmBtn = document.getElementById('hintAdConfirm');
+        
+        let isResolved = false;
+        
+        const closeModal = (result) => {
+            if (isResolved) return;
+            isResolved = true;
+            modal.style.display = 'none';
+            this.resumeTimer();
+            console.log('Модалка закрыта с результатом:', result);
+            resolve(result);
+        };
+        
+        // Убираем старые обработчики
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        
+        newCancelBtn.addEventListener('click', () => {
+            this.sound.click();
+            closeModal(false);
+        });
+        
+                                            newConfirmBtn.addEventListener('click', async () => {
+                                        this.sound.click();
+                                        console.log('Нажата кнопка "Получить"');
+                                        
+                                        // Показываем сообщение о загрузке рекламы
+                                        this.messageEl.textContent = '⏳ Загрузка рекламы...';
+                                        
+                                        try {
+                                            const adShown = await this.adManager.showRewardedAd();
+                                            console.log('Результат показа рекламы:', adShown);
+                                            
+                                            if (adShown === true) {
+                                                // ✅ Реклама показана — даём 3 подсказки
+                                                this.maxHints += 3;
+                                                const remaining = this.maxHints - this.hintsUsed;
+                                                this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
+                                                this.sound.click();
+                                                this.render();
+                                                closeModal(true);
+                                            } else {
+                                                // ❌ Реклама НЕ показана
+                                                modal.style.display = 'none';
+                                                
+                                                this.showNoAdModal((result) => {
+                                                    if (result) {
+                                                        this.maxHints += 1;
+                                                        const remaining = this.maxHints - this.hintsUsed;
+                                                        this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
+                                                        this.sound.click();
+                                                        this.render();
+                                                        closeModal(true);
+                                                    } else {
+                                                        closeModal(false);
+                                                    }
+                                                });
+                                            }
+                                        } catch (error) {
+                                            console.error('Ошибка при показе рекламы:', error);
+                                            modal.style.display = 'none';
+                                            this.showNoAdModal((result) => {
+                                                if (result) {
+                                                    this.maxHints += 1;
+                                                    const remaining = this.maxHints - this.hintsUsed;
+                                                    this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
+                                                    this.sound.click();
+                                                    this.render();
+                                                    closeModal(true);
+                                                } else {
+                                                    closeModal(false);
+                                                }
+                                            });
+                                        }
+                                    });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.sound.click();
+                closeModal(false);
+            }
+        });
+    });
+}
+// ============================================================
+// Обновленная подсказка с модалкой для доп. подсказок
+// ============================================================
+async giveHint() {
+    console.log('giveHint вызван');
     if (this.isFinished) return;
     
     // Проверка доступности подсказок на уровне сложности
-    let maxHints = 0;
-    if (this.difficulty === 'easy') {
-        maxHints = 3;
-    } else if (this.difficulty === 'medium') {
-        maxHints = 3;
-    } else if (this.difficulty === 'hard') {
-        maxHints = 1;
-    } else if (this.difficulty === 'expert') {
-        maxHints = 1;
-    } else {
-        this.messageEl.textContent = '❌ Подсказки недоступны на этом уровне';
-        this.sound.error();
-        return;
+    // Устанавливаем начальное значение, если оно ещё не установлено
+    if (this.maxHints === undefined || this.maxHints === 0) {
+        if (this.difficulty === 'easy' || this.difficulty === 'medium') {
+            this.maxHints = 3;
+        } else {
+            this.maxHints = 1;
+        }
     }
 
-    // Проверка, остались ли подсказки
-    if (this.hintsUsed >= maxHints) {
-        this.messageEl.textContent = `❌ Подсказки закончились! (${maxHints}/${maxHints})`;
+    // Если подсказки закончились — показываем модалку
+    if (this.hintsUsed >= this.maxHints) {
+        console.log('Подсказки кончились. Использовано:', this.hintsUsed, 'Максимум:', this.maxHints);
+        this.messageEl.textContent = '💡 Подсказки закончились!';
         this.sound.error();
-        return;
+        
+        const result = await this.showHintAdModal();
+        console.log('Результат модалки:', result);
+        
+        if (result === true) {
+            // Подсказки добавлены к счётчику
+            const remaining = this.maxHints - this.hintsUsed;
+            this.messageEl.textContent = `✅ Получены подсказки! Осталось: ${remaining}`;
+            this.sound.click();
+            this.render();
+            return;
+        } else {
+            this.messageEl.textContent = '❌ Вы отменили получение подсказок.';
+            this.sound.error();
+            return;
+        }
     }
 
     // Проверка, выделена ли клетка
@@ -747,11 +1070,11 @@ giveHint() {
     const correctNum = this.solution[r][c];
     this.grid[r][c] = correctNum;
     
-    // 👇 ДОБАВЛЕНО: Помечаем клетку как правильную (зеленая)
     const cellKey = `${r}-${c}`;
     this.checkedCells[cellKey] = true;
     
-    this.messageEl.textContent = `💡 Подсказка: цифра ${correctNum} (${this.hintsUsed}/${maxHints})`;
+    const remaining = this.maxHints - this.hintsUsed;
+    this.messageEl.textContent = `💡 Подсказка: ${correctNum} (осталось: ${remaining})`;
     this.render();
     
     // Подсветим подсказку
@@ -771,6 +1094,28 @@ giveHint() {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
+    }
+}
+// ============================================================
+// Управление таймером (пауза/возобновление)
+// ============================================================
+pauseTimer() {
+    if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+        this.isRunning = false;
+        console.log('⏸️ Таймер на паузе');
+    }
+}
+
+resumeTimer() {
+    if (!this.timerInterval && !this.isFinished) {
+        this.isRunning = true;
+        this.timerInterval = setInterval(() => {
+            this.timer++;
+            this.updateTimer();
+        }, 1000);
+        console.log('▶️ Таймер возобновлён');
     }
 }
 // ============================================================
@@ -947,6 +1292,13 @@ async solveAll() {
           
              this.checkedCells = {}; 
         this.hintsUsed = 0;
+      // Устанавливаем максимальное количество подсказок в зависимости от уровня
+    if (this.difficulty === 'easy' || this.difficulty === 'medium') {
+        this.maxHints = 3;
+    } else {
+        this.maxHints = 1;
+    }
+    this.messageEl.textContent = '';
         this.messageEl.textContent = '';
         
         if (this.timerInterval) {
