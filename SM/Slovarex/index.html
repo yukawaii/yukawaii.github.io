@@ -519,21 +519,14 @@
 </div>
 
 <script>
-    // Проверяем, что мы в iframe ВК, перед инициализацией
+    // Проверяем, доступен ли VK Bridge
     (function() {
-        try {
-            const isVK = window.location !== window.parent.location;
-            if (!isVK) {
-                console.log('ℹ️ Запуск вне ВК, VK Bridge не инициализируется');
-                return;
-            }
-        } catch (e) {
-            console.log('ℹ️ Не удалось определить окружение');
+        if (typeof vkBridge === 'undefined') {
+            console.log('ℹ️ VK Bridge не найден');
             return;
         }
         
-        // Только здесь инициализируем VK Bridge
-        console.log('✅ VK Bridge инициализирован');
+        console.log('✅ VK Bridge найден');
     })();
 </script>
 <script src="words.js"></script>
