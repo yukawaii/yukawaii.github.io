@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
       <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ГдеЛиса: Космос | Найди слова по буквам</title>
@@ -27,19 +28,19 @@
     <!-- Первая линия: иконка + название -->
     <div style="display:flex;align-items:center;justify-content:center;gap:clamp(8px, 2vw, 20px);flex-shrink:0;">
         <div style="font-size:clamp(3rem, 12vh, 2rem);line-height:1;flex-shrink:0;">🚀</div>
-        <h1 style="color:#97b496;font-size:clamp(2rem, 8vh, 2rem);margin:0;font-weight:600;letter-spacing:2px;line-height:1.2;">Где Лиса?</h1>
+        <h1 style="color:#97b496;font-size:clamp(2rem, 8vh, 2.3rem);margin:0;font-weight:600;letter-spacing:2px;line-height:1.2;">Где Лиса?</h1>
     </div>
     
     <!-- Подзаголовок -->
     <p style="color:#6B5B4E;font-size:clamp(1rem, 3vh, 1rem);margin:clamp(2px, 0.5vh, 10px) 0;flex-shrink:0;line-height:1.2;">Космическое приключение ✨</p>
     
     <!-- Кнопки -->
-    <div style="display:flex;flex-direction:column;gap:clamp(10px, 2.5vh, 20px);width:100%;max-width:min(400px, 85vw);flex-shrink:0;">
-    <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(10px, 2.5vh, 18px) 30px;border-radius:60px;font-size:clamp(1.2rem, 3.5vh, 1.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;display:flex;flex-direction:column;align-items:center;gap:0px;line-height:1.2;">
+    <div style="display:flex;flex-direction:column;gap:clamp(10px, 2.5vh, 20px);width:100%;max-width:min(280px, 75vw);flex-shrink:0;">
+    <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(10px, 2.5vh, 18px) 30px;border-radius:60px;font-size:clamp(1.5rem, 4.5vh, 2.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;display:flex;flex-direction:column;align-items:center;gap:0px;line-height:1.2;">
         <span>🚀 Начать</span>
         <span id="menuStartSubtitle" style="font-size:clamp(0.5rem, 1.2vh, 0.7rem);font-weight:normal;opacity:0.8;margin-top:2px;">🟢 Простая</span>
     </button>
-        <button id="menuHowToPlay" style="background:#8b5a2a;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 3rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #5a3a1a;width:100%;transition:0.05s linear;">📖 Как играть?</button>
+        <button id="menuHowToPlay" style="background:#e9ae73;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 3rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #f7d2ae;width:100%;transition:0.05s linear;">📖 Как играть?</button>
         <button id="menuDifficultyBtn" style="background:#4a6fa5;color:white;border:none;padding:clamp(12px, 2.8vh, 22px) 30px;border-radius:60px;font-size:clamp(1.1rem, 3.2vh, 3rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2a4a7a;width:100%;transition:0.05s linear;">🎯 Сложность</button>
     </div>
     
@@ -918,7 +919,7 @@ function showCategoryModalForDifficulty(difficulty) {
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;';
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:350px;width:90%;text-align:center;border:2px solid #ffa54d;';
     
     const categories = getCategoriesForDifficulty(difficulty);
     
@@ -1953,8 +1954,7 @@ function showDifficultyModal() {
     let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
 html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
 DIFFICULTIES.forEach(diff => {
-    html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:14px;border-radius:40px;font-size:1rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${diff.label}</button>`;
-});
+html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 20px;border-radius:40px;font-size:1rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);max-width:280px;width:80%;margin:0 auto;">${diff.label}</button>`;});
 html += `</div><button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
 
     contentDiv.innerHTML = html;
