@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 100);
 });
 
+// Где-то в начале, после загрузки
+if (typeof initVKBridge === 'function') {
+    initVKBridge();
+}
+
 // ====== НЕМЕДЛЕННОЕ ПРИМЕНЕНИЕ ТЕМЫ ======
 (function() {
     const THEME_KEY = 'wordgame_theme';
@@ -53,14 +58,6 @@ function showBannerAd() {
         return;
     }
     
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) return;
-    } catch (e) {
-        return;
-    }
-    
     vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
         .then((data) => {
             if (data.result) {
@@ -77,14 +74,6 @@ function showBannerAd() {
 function checkAndShowBanner() {
     if (typeof vkBridge === 'undefined') {
         console.log('ℹ️ VK Bridge не доступен');
-        return;
-    }
-    
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) return;
-    } catch (e) {
         return;
     }
     
@@ -106,12 +95,10 @@ function initVKBridge() {
         return;
     }
     
-    // ====== ИНИЦИАЛИЗАЦИЯ VK BRIDGE ======
+    // Просто инициализируем — без проверки isVK
     vkBridge.send('VKWebAppInit', {})
         .then(() => {
             console.log('✅ VK Bridge инициализирован');
-            
-            // После инициализации показываем баннер
             setTimeout(checkAndShowBanner, 500);
             
             // Подписываемся на события VK

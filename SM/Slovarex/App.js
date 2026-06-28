@@ -105,21 +105,10 @@ const VK_STORAGE_KEYS = {
 // Сохранение данных в VK Storage
 function saveToVKStorage(key, value) {
     if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен, сохраняем только локально');
+        console.log('ℹ️ VK Bridge не доступен');
         return Promise.resolve();
-    }
-    
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) {
-            console.log('ℹ️ Запуск вне ВК, сохраняем только локально');
-            return Promise.resolve();
-        }
-    } catch (e) {
-        return Promise.resolve();
-    }
-    
+    }    
+    // Просто пытаемся отправить — если мост есть, он сработает
     return vkBridge.send('VKWebAppStorageSet', {
         key: key,
         value: typeof value === 'string' ? value : JSON.stringify(value)
@@ -139,16 +128,6 @@ function loadFromVKStorage(key) {
         return Promise.resolve(null);
     }
     
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) {
-            console.log('ℹ️ Запуск вне ВК');
-            return Promise.resolve(null);
-        }
-    } catch (e) {
-        return Promise.resolve(null);
-    }
-    
     return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
         .then((data) => {
             console.log(`📥 Загрузка из VK Storage: ${key}`, data);
@@ -164,7 +143,7 @@ function loadFromVKStorage(key) {
                 }
             }
             return null;
-        })
+         })
         .catch((error) => {
             console.warn(`❌ Ошибка загрузки ${key}:`, error);
             return null;
@@ -329,14 +308,8 @@ function syncOnChange() {
 
 // Инициализация синхронизации
 function initVKStorageSync() {
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (!isVK) {
-            console.log('ℹ️ Запуск вне ВК, VK Storage синхронизация отключена');
-            return;
-        }
-    } catch (e) {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
         return;
     }
     
@@ -377,17 +350,6 @@ function debugVKStorage() {
     });
 }
 
-// В конце App.js, после всех определений вызов синхронизации
-if (typeof vkBridge !== 'undefined') {
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (isVK) {
-            // Инициализируем синхронизацию после загрузки
-            setTimeout(initVKStorageSync, 2000);
-        }
-    } catch (e) {}
-}
 
 // Сделаем функции доступными из консоли для отладки
 window.syncAllDataToVK = syncAllDataToVK;
@@ -399,32 +361,21 @@ window.manualSync = manualSync;
 
 // Показать рекламу за вознаграждение
 function showRewardedAd() {
-    if (typeof vkBridge !== 'undefined') {
-        // Проверяем, что мы внутри ВК
-        try {
-            const isVK = window.location !== window.parent.location;
-            if (!isVK) {
-                console.log('ℹ️ Запуск вне ВК, реклама недоступна');
-                return Promise.resolve(false);
-            }
-        } catch (e) {
-            return Promise.resolve(false);
-        }
-        
-        const sendMethod = vkBridge.sendPromise || vkBridge.send;
-        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
-            .then((data) => {
-                console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
-                return true;
-            })
-            .catch((e) => {
-                console.log("❌ Ошибка или реклама не досмотрена:", e);
-                return false;
-            });
-    } else {
+    if (typeof vkBridge === 'undefined') {
         console.log("ℹ️ VK Bridge не найден");
         return Promise.resolve(false);
     }
+    
+    const sendMethod = vkBridge.sendPromise || vkBridge.send;
+    return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+        .then((data) => {
+            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+            return true;
+        })
+        .catch((e) => {
+            console.log("❌ Ошибка или реклама не досмотрена:", e);
+            return false;
+        });
 }
 
 // Проверка, есть ли подсказки
@@ -487,30 +438,28 @@ function closeHintAdModal() {
 
 // В конце App.js, после всех определений в начале игры загружаем данные из вк-стораджа
 (function() {
-    // Проверяем, что мы внутри ВК
-    try {
-        const isVK = window.location !== window.parent.location;
-        if (isVK && typeof vkBridge !== 'undefined') {
-            console.log('🌐 Загружаем данные из VK Storage...');
-            // Загружаем данные из VK Storage при старте
-            setTimeout(function() {
-                if (typeof loadAllDataFromVK === 'function') {
-                    loadAllDataFromVK().then(function(loaded) {
-                        console.log('📦 Данные из VK Storage загружены:', loaded);
-                        if (loaded) {
-                            // Обновляем интерфейс после загрузки
-                            if (typeof updateUI === 'function') {
-                                setTimeout(updateUI, 300);
-                            }
-                            if (typeof renderGalaxyModal === 'function') {
-                                // Если галактика открыта — обновляем
-                            }
-                        }
-                    });
-                }
-            }, 1500);
-        }
-    } catch (e) {
-        console.log('ℹ️ Не удалось определить окружение');
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        return;
     }
+    
+    console.log('🌐 Загружаем данные из VK Storage...');
+    setTimeout(function() {
+        if (typeof loadAllDataFromVK === 'function') {
+            loadAllDataFromVK().then(function(loaded) {
+                console.log('📦 Данные из VK Storage загружены:', loaded);
+                if (loaded) {
+                    if (typeof updateUI === 'function') {
+                        setTimeout(updateUI, 300);
+                    }
+                }
+            });
+        }
+    }, 1500);
 })();
+
+// В конце App.js, после всех определений вызов синхронизации
+if (typeof vkBridge !== 'undefined') {
+    // Инициализируем синхронизацию после загрузки
+    setTimeout(initVKStorageSync, 2000);
+}
