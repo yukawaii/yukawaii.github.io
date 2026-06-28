@@ -13,110 +13,128 @@ const vkBridge = window.vkBridge || {
 // ============================================================
 // 2. Управление рекламой (баннер + межстраничная)
 // ============================================================
+// ============================================================
+// 2. Управление рекламой
+// ============================================================
 class AdManager {
     constructor() {
-        this.lastAdTime = 0;
-        this.adCooldown = 120000; // 2 минуты
         this.bannerShown = false;
+        this.isRewardAdAvailable = false;
+        this.rewardAdChecked = false;
     }
 
-// Показать баннерную рекламу внизу
-showBottomBanner() {
-    if (this.bannerShown) return;
-    if (typeof vkBridge !== 'undefined') {
-        // Используем sendPromise если есть, иначе send
-        const sendMethod = vkBridge.sendPromise || vkBridge.send;
-        sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
-            banner_location: 'bottom'
-        })
-        .then((data) => {
-            if (data && data.result) {
-                console.log('Баннер успешно отображён');
-                this.bannerShown = true;
-            }
-        })
-        .catch((error) => {
-            console.log('Ошибка при показе баннера:', error);
-        });
-    }
-}
-
-    // Показать межстраничную рекламу (с защитой от спама)
-  /*  showInterstitial() {
-        const now = Date.now();
-        if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
-            this.lastAdTime = now;
-            return vkBridge.sendPromise("VKWebAppShowNativeAds", { ad_format: "interstitial" })
-                .then(() => {
-                    console.log('Межстраничная реклама показана');
-                    return true;
-                })
-                .catch(e => {
-                    console.log("Ошибка показа рекламы:", e);
-                    return false;
-                });
-        } else {
-            console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
-            return Promise.resolve(false);
-        }
-    }*/
-
-// Показать рекламу за вознаграждение (rewarded video) с ограничением 2 мин 
-/*showRewardedAd() {
-    const now = Date.now();
-    if (typeof vkBridge !== 'undefined' && (now - this.lastAdTime) >= this.adCooldown) {
-        this.lastAdTime = now;
-        // Используем sendPromise если есть, иначе send
-        const sendMethod = vkBridge.sendPromise || vkBridge.send;
-        return sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
-            .then((data) => {
-                console.log('Реклама за вознаграждение показана, награда выдана:', data);
-                return true;
-            })
-            .catch(e => {
-                console.log("Ошибка или реклама не досмотрена:", e);
-                return false;
-            });
-    } else {
-        console.log("Реклама не показана: слишком рано (нужно подождать 2 минуты)");
-        return Promise.resolve(false);
-    }
-} */
-
-
-// Показать рекламу за вознаграждение (rewarded video) - без ограничений
-showRewardedAd() {
-    console.log('showRewardedAd вызван');
-    
-    return new Promise((resolve) => {
-        // Таймаут на случай, если VK Bridge зависнет
-        const timeoutId = setTimeout(() => {
-            console.log('⏰ Таймаут показа рекламы (5 сек)');
-            resolve(false);
-        }, 3000);
-        
+    // Показать баннерную рекламу внизу
+    showBottomBanner() {
+        if (this.bannerShown) return;
         if (typeof vkBridge !== 'undefined') {
             const sendMethod = vkBridge.sendPromise || vkBridge.send;
-            sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
-                .then((data) => {
-                    clearTimeout(timeoutId);
-                    console.log('Реклама за вознаграждение показана, награда выдана:', data);
-                    resolve(true);
+            sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
+                banner_location: 'bottom'
+            })
+            .then((data) => {
+                if (data && data.result) {
+                    console.log('Баннер успешно отображён');
+                    this.bannerShown = true;
+                }
+            })
+            .catch((error) => {
+                console.log('Ошибка при показе баннера:', error);
+            });
+        }
+    }
+
+    // Проверка доступности рекламы за вознаграждение
+    checkRewardedAdAvailable() {
+        if (this.rewardAdChecked) {
+            return Promise.resolve(this.isRewardAdAvailable);
+        }
+        
+        return new Promise((resolve) => {
+            if (typeof vkBridge !== 'undefined') {
+                const sendMethod = vkBridge.sendPromise || vkBridge.send;
+                sendMethod.call(vkBridge, 'VKWebAppCheckNativeAds', {
+                    ad_format: 'reward'
                 })
-                .catch(e => {
-                    clearTimeout(timeoutId);
-                    console.log("Ошибка или реклама не досмотрена:", e);
+                .then((data) => {
+                    this.rewardAdChecked = true;
+                    this.isRewardAdAvailable = data && data.result === true;
+                    console.log('Доступность рекламы reward:', this.isRewardAdAvailable);
+                    resolve(this.isRewardAdAvailable);
+                })
+                .catch((error) => {
+                    this.rewardAdChecked = true;
+                    this.isRewardAdAvailable = false;
+                    console.log('Ошибка проверки рекламы:', error);
                     resolve(false);
                 });
-        } else {
-            clearTimeout(timeoutId);
-            console.log("VK Bridge не найден");
-            resolve(false);
-        }
-    });
-}
-}
+            } else {
+                this.rewardAdChecked = true;
+                this.isRewardAdAvailable = false;
+                resolve(false);
+            }
+        });
+    }
 
+    // Показать рекламу за вознаграждение
+    showRewardedAd() {
+        console.log('showRewardedAd вызван');
+        
+        return new Promise((resolve) => {
+            const timeoutId = setTimeout(() => {
+                console.log('⏰ Таймаут показа рекламы');
+                resolve(false);
+            }, 8000);
+            
+            if (typeof vkBridge === 'undefined') {
+                clearTimeout(timeoutId);
+                console.log("VK Bridge не найден");
+                resolve(false);
+                return;
+            }
+            
+            const sendMethod = vkBridge.sendPromise || vkBridge.send;
+            
+            // Проверяем доступность рекламы
+            sendMethod.call(vkBridge, 'VKWebAppCheckNativeAds', {
+                ad_format: 'reward'
+            })
+            .then((checkResult) => {
+                console.log('VKWebAppCheckNativeAds результат:', checkResult);
+                
+                if (!checkResult || checkResult.result !== true) {
+                    clearTimeout(timeoutId);
+                    console.log('Реклама reward недоступна');
+                    resolve(false);
+                    return Promise.reject('Реклама недоступна');
+                }
+                
+                // Реклама доступна - показываем
+                return sendMethod.call(vkBridge, 'VKWebAppShowNativeAds', {
+                    ad_format: 'reward'
+                });
+            })
+            .then((showResult) => {
+                clearTimeout(timeoutId);
+                console.log('Результат показа рекламы:', showResult);
+                
+                // Проверяем, что реклама была показана и пользователь её посмотрел
+                if (showResult && showResult.result === true) {
+                    resolve(true);
+                } else {
+                    // Если пришёл не true - возможно, реклама не досмотрена
+                    resolve(false);
+                }
+            })
+            .catch((error) => {
+                clearTimeout(timeoutId);
+                console.log('Ошибка при показе рекламы:', error);
+                resolve(false);
+            });
+        });
+    }
+
+   
+}
 // ============================================================
 // 3. Простой звуковой движок
 // ============================================================
@@ -254,105 +272,132 @@ showNoAdModal(callback) {
     });
 }
                                             // ============================================================
-                                            // Модалка для получения дополнительных подсказок
-                                            // ============================================================
-                                            showHintAdModal() {
-                                                console.log('showHintAdModal вызван');
-                                                return new Promise((resolve) => {
-                                                    const modal = document.getElementById('hintAdModal');
-                                                    
-                                                    if (!modal) {
-                                                        console.error('Модалка #hintAdModal не найдена в DOM');
-                                                        resolve(false);
-                                                        return;
-                                                    }
-                                                    
-                                                    // ⏸️ Ставим таймер на паузу
-                                                    this.pauseTimer();
-                                                    
-                                                    modal.style.display = 'flex';
-                                                    
-                                                    const cancelBtn = document.getElementById('hintAdCancel');
-                                                    const confirmBtn = document.getElementById('hintAdConfirm');
-                                                    
-                                                    let isResolved = false;
-                                                    
-                                                    const closeModal = (result) => {
-                                                        if (isResolved) return;
-                                                        isResolved = true;
-                                                        modal.style.display = 'none';
-                                                        // Таймер возобновляется только если не было показано другое окно
-                                                        // В случае успеха или отмены — возобновляем
-                                                        if (result === true || result === false) {
-                                                            this.resumeTimer();
-                                                        }
-                                                        resolve(result);
-                                                    };
-                                                    
-                                                    // Убираем старые обработчики
-                                                    const newCancelBtn = cancelBtn.cloneNode(true);
-                                                    const newConfirmBtn = confirmBtn.cloneNode(true);
-                                                    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-                                                    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-                                                    
-                                                    newCancelBtn.addEventListener('click', () => {
-                                                        this.sound.click();
-                                                        closeModal(false);
-                                                    });
-                                                    
-                                                    newConfirmBtn.addEventListener('click', async () => {
-                                                        this.sound.click();
-                                                        console.log('Нажата кнопка "Получить"');
-                                                        
-                                                        try {
-                                                            // Показываем рекламу
-                                                            const adShown = await this.adManager.showRewardedAd();
-                                                            console.log('Результат показа рекламы:', adShown);
-                                                            
-                                                            if (adShown) {
-                                                                // ✅ Реклама показана — даём 3 подсказки
-                                                                this.messageEl.textContent = '🎉 Реклама показана! +3 подсказки!';
-                                                                this.sound.click();
-                                                                closeModal(true);
-                                                            } else {
-                                                                // ❌ Реклама НЕ показана — показываем модалку "Реклама недоступна"
-                                                                modal.style.display = 'none';
-                                                                
-                                                                this.showNoAdModal((result) => {
-                                                                    if (result) {
-                                                                        // Даём 1 подсказку
-                                                                        this.messageEl.textContent = '💡 Вы получили 1 подсказку!';
-                                                                        this.sound.click();
-                                                                        closeModal(true);
-                                                                    } else {
-                                                                        closeModal(false);
-                                                                    }
-                                                                });
-                                                            }
-                                                        } catch (error) {
-                                                            console.error('Ошибка при показе рекламы:', error);
-                                                            modal.style.display = 'none';
-                                                            this.showNoAdModal((result) => {
-                                                                if (result) {
-                                                                    this.messageEl.textContent = '💡 Вы получили 1 подсказку!';
-                                                                    this.sound.click();
-                                                                    closeModal(true);
-                                                                } else {
-                                                                    closeModal(false);
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                    
-                                                    // Закрытие по клику вне модалки
-                                                    modal.addEventListener('click', (e) => {
-                                                        if (e.target === modal) {
-                                                            this.sound.click();
-                                                            closeModal(false);
-                                                        }
-                                                    });
-                                                });
-                                            }
+// Модалка для получения дополнительных подсказок
+// ============================================================
+async showHintAdModal() {
+    console.log('showHintAdModal вызван');
+    return new Promise((resolve) => {
+        const modal = document.getElementById('hintAdModal');
+        
+        if (!modal) {
+            console.error('Модалка #hintAdModal не найдена в DOM');
+            resolve(false);
+            return;
+        }
+        
+        // ⏸️ Ставим таймер на паузу
+        this.pauseTimer();
+        
+        modal.style.display = 'flex';
+        
+        const cancelBtn = document.getElementById('hintAdCancel');
+        const confirmBtn = document.getElementById('hintAdConfirm');
+        
+        let isResolved = false;
+        
+        const closeModal = (result) => {
+            if (isResolved) return;
+            isResolved = true;
+            modal.style.display = 'none';
+            this.resumeTimer();
+            console.log('Модалка закрыта с результатом:', result);
+            resolve(result);
+        };
+        
+        // Убираем старые обработчики
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        
+        newCancelBtn.addEventListener('click', () => {
+            this.sound.click();
+            closeModal(false);
+        });
+        
+        newConfirmBtn.addEventListener('click', async () => {
+            this.sound.click();
+            console.log('Нажата кнопка "Получить"');
+            
+            // Сначала проверяем доступность рекламы
+            this.messageEl.textContent = '⏳ Проверка рекламы...';
+            
+            try {
+                const isAvailable = await this.adManager.checkRewardedAdAvailable();
+                console.log('Реклама доступна:', isAvailable);
+                
+                if (isAvailable) {
+                    // Показываем рекламу
+                    this.messageEl.textContent = '⏳ Загрузка рекламы...';
+                    const adShown = await this.adManager.showRewardedAd();
+                    console.log('Результат показа рекламы:', adShown);
+                    
+                    if (adShown === true) {
+                        // ✅ Реклама показана — даём 3 подсказки
+                        this.maxHints += 3;
+                        const remaining = this.maxHints - this.hintsUsed;
+                        this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
+                        this.sound.click();
+                        this.render();
+                        closeModal(true);
+                    } else {
+                        // ❌ Реклама не досмотрена или ошибка
+                        modal.style.display = 'none';
+                        this.showNoAdModal((result) => {
+                            if (result) {
+                                this.maxHints += 1;
+                                const remaining = this.maxHints - this.hintsUsed;
+                                this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
+                                this.sound.click();
+                                this.render();
+                                closeModal(true);
+                            } else {
+                                closeModal(false);
+                            }
+                        });
+                    }
+                } else {
+                    // Реклама недоступна
+                    modal.style.display = 'none';
+                    this.showNoAdModal((result) => {
+                        if (result) {
+                            this.maxHints += 1;
+                            const remaining = this.maxHints - this.hintsUsed;
+                            this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
+                            this.sound.click();
+                            this.render();
+                            closeModal(true);
+                        } else {
+                            closeModal(false);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка при показе рекламы:', error);
+                modal.style.display = 'none';
+                this.showNoAdModal((result) => {
+                    if (result) {
+                        this.maxHints += 1;
+                        const remaining = this.maxHints - this.hintsUsed;
+                        this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
+                        this.sound.click();
+                        this.render();
+                        closeModal(true);
+                    } else {
+                        closeModal(false);
+                    }
+                });
+            }
+        });
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.sound.click();
+                closeModal(false);
+            }
+        });
+    });
+}
 // ============================================================
 // Показать диалог подтверждения перед рекламой
 // ============================================================
