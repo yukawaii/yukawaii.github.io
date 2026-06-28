@@ -2,20 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-<!-- ====== СНАЧАЛА VK BRIDGE ====== -->
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-<!-- ====== ПОТОМ vk-init.js ====== -->
-<script src="vk-init.js"></script>
-
-
-<!-- ====== ПОТОМ СЛОВАРЬ ====== -->
-<script src="words.js"></script>
-
-<!-- ====== ПОТОМ ИГРОВАЯ ЛОГИКА (ГДЕ ВСЕ КОНСТАНТЫ) ====== -->
-<script src="game.js"></script>
-
-<!-- ====== ПОТОМ App.js (ЗАВИСИТ ОТ КОНСТАНТ ИЗ GAME.JS) ====== -->
-<script src="App.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <!-- Для корректной работы в iframe ВК -->
 <meta name="format-detection" content="telephone=no">
@@ -547,6 +535,8 @@
         console.log('✅ VK Bridge инициализирован');
     })();
 </script>
-
+<script src="words.js"></script>
+<script src="game.js"></script>
+<script src="App.js"></script> 
 </body>
 </html>
