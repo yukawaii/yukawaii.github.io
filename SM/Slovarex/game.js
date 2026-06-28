@@ -610,7 +610,13 @@ function startTimer() {
     // Если игра на паузе — не запускаем таймер
     if (gamePaused) return;
     if (gameState.frozen) return;
-    
+        // ====== НЕ ЗАПУСКАЕМ ТАЙМЕР, ЕСЛИ МЕНЮ ВИДНО ======
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen && startScreen.style.display !== 'none') {
+        console.log('ℹ️ Таймер не запускается — меню активно');
+        return;
+    }
+    // ===================================================
     // Очищаем старый таймер, если есть
     if (gameState.timerId) {
         clearInterval(gameState.timerId);
@@ -647,7 +653,13 @@ function startTimer() {
         // ==========================================
 function handleTimeOut() {
     if (gamePaused) return;
-    
+      // ====== НЕ ПОКАЗЫВАЕМ МОДАЛКУ, ЕСЛИ МЕНЮ ВИДНО ======
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen && startScreen.style.display !== 'none') {
+        console.log('ℹ️ Пропускаем timeout — меню активно');
+        return;
+    }
+    // ===================================================
     const percentNeed = Math.ceil(gameState.possibleWords.size * getCurrentThreshold());
     const need = Math.min(percentNeed, CONFIG.WORDS_TO_COMPLETE);
     
@@ -1169,15 +1181,9 @@ function blinkNextButton() {
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 function initGame() {
-     // ====== ИНИЦИАЛИЗАЦИЯ VK STORAGE СИНХРОНИЗАЦИИ ======
-    if (typeof initVKStorageSync === 'function') {
-        setTimeout(initVKStorageSync, 1000);
-    }
-    // ===================================================
-        // ====== ПРИМЕНЯЕМ ТЕМУ ======
+    // ====== ПРИМЕНЯЕМ ТЕМУ ======
     applyTheme(currentTheme);
-     console.log('🚀 initGame вызвана');
-    console.log('📱 Внутри VK?', window.location !== window.parent.location);
+    
     // Проверяем, есть ли слова для загадывания
     if (BASE_WORDS_POOL.length === 0) {
         console.error("❌ Нет слов длиннее 6 букв! Добавьте слова в DICTIONARY.");
@@ -1185,8 +1191,28 @@ function initGame() {
         return;
     }
     
+    // ====== ИНИЦИАЛИЗАЦИЯ VK STORAGE ======
+    if (typeof loadAllDataFromVK === 'function') {
+        setTimeout(function() {
+            loadAllDataFromVK().then(function() {
+                // После загрузки данных обновляем UI
+                if (typeof updateUI === 'function') {
+                    updateUI();
+                }
+            });
+        }, 500);
+    }
+    
+    // ====== ЗАПУСКАЕМ ИГРУ ТОЛЬКО ЕСЛИ ОНА ЕЩЁ НЕ ЗАПУЩЕНА ======
+    // Проверяем, не запущена ли уже игра
+    if (gameState.timerId) {
+        console.log('ℹ️ Игра уже запущена');
+        return;
+    }
+    
     initLevel();
     initAudio();
+    // ===========================================================
    
     document.getElementById("submitBtn").onclick = submitWord;
     document.getElementById("backspaceBtn").onclick = backspace;

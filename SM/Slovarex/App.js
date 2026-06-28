@@ -176,13 +176,14 @@ function loadFromVKStorage(key) {
 function syncAllDataToVK() {
     console.log('🔄 Синхронизация данных с VK Storage...');
     
-    // Получаем все данные
+    // Получаем текущие данные
     const galaxy = getGalaxyProgress();
     const achievements = loadAchievements();
     const theme = localStorage.getItem(THEME_KEY) || 'light';
     const sound = localStorage.getItem('wordgame:v1:sound') || '1';
     
-    // Сохраняем всё параллельно
+    // Сохраняем ВСЕГДА (даже если 0) — это нормально,
+    // потому что мы уже убедились, что локальные данные актуальны
     return Promise.all([
         saveToVKStorage(VK_STORAGE_KEYS.GALAXY, galaxy),
         saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, achievements),
@@ -207,37 +208,67 @@ function loadAllDataFromVK() {
     ]).then(([galaxyData, achievementsData, themeData, soundData]) => {
         let loaded = false;
         
-        // Галактика
-        if (galaxyData) {
-            try {
-                const data = typeof galaxyData === 'string' ? JSON.parse(galaxyData) : galaxyData;
-                // Обновляем только если в VK Storage есть данные
-                if (data && data.totalWords !== undefined) {
-                    saveGalaxyProgress(data);
-                    loaded = true;
-                    console.log('✅ Галактика загружена из VK');
-                }
-            } catch (e) {
-                console.warn('⚠️ Ошибка загрузки галактики:', e);
-            }
-        }
+// ====== ГАЛАКТИКА: БЕРЁМ МАКСИМУМ ======
+if (galaxyData && galaxyData.totalWords !== undefined) {
+    const currentLocal = getGalaxyProgress();
+    
+    // Берём максимум по каждому полю
+    const merged = {
+        totalWords: Math.max(currentLocal.totalWords || 0, galaxyData.totalWords || 0),
+        totalStars: Math.max(currentLocal.totalStars || 0, galaxyData.totalStars || 0),
+        stars: Math.max(currentLocal.stars || 0, galaxyData.stars || 0),
+        currentMilestone: Math.max(currentLocal.currentMilestone || 0, galaxyData.currentMilestone || 0),
+        shownIntro: currentLocal.shownIntro || galaxyData.shownIntro || false,
+        lastDailyBonus: currentLocal.lastDailyBonus || galaxyData.lastDailyBonus || null
+    };
+    
+    // Объединяем свитки (берём все уникальные)
+    const scrollsSet = new Set([...(currentLocal.unlockedScrolls || []), ...(galaxyData.unlockedScrolls || [])]);
+    merged.unlockedScrolls = Array.from(scrollsSet);
+    
+    // Проверяем, изменилось ли что-то
+    const hasChanges = 
+        merged.totalWords !== currentLocal.totalWords ||
+        merged.totalStars !== currentLocal.totalStars ||
+        merged.unlockedScrolls.length !== (currentLocal.unlockedScrolls || []).length;
+    
+    if (hasChanges) {
+        saveGalaxyProgress(merged);
+        loaded = true;
+        console.log(`✅ Галактика объединена: ${merged.totalWords} слов, ${merged.totalStars} звёзд, ${merged.unlockedScrolls.length} свитков`);
+    } else {
+        console.log('ℹ️ Новых данных галактики из VK нет');
+    }
+}
         
-        // Достижения
-        if (achievementsData) {
-            try {
-                const data = typeof achievementsData === 'string' ? JSON.parse(achievementsData) : achievementsData;
-                if (data && typeof data === 'object') {
-                    saveAchievements(data);
-                    loaded = true;
-                    console.log('✅ Достижения загружены из VK');
-                }
-            } catch (e) {
-                console.warn('⚠️ Ошибка загрузки достижений:', e);
-            }
+        // ====== ДОСТИЖЕНИЯ: ОБЪЕДИНЯЕМ ======
+if (achievementsData && typeof achievementsData === 'object') {
+    const currentLocal = loadAchievements();
+    const merged = { ...currentLocal };
+    let mergedCount = Object.keys(merged).length;
+    
+    // Добавляем все достижения из VK, которых нет локально
+    for (const key in achievementsData) {
+        if (!merged[key]) {
+            merged[key] = achievementsData[key];
+            mergedCount++;
+            console.log(`🔄 Добавлено достижение из VK: ${key}`);
         }
+    }
+    
+    if (mergedCount > Object.keys(currentLocal).length) {
+        saveAchievements(merged);
+        loaded = true;
+        console.log(`✅ Достижения объединены: ${mergedCount} всего (${Object.keys(currentLocal).length} локально + ${Object.keys(achievementsData).length} из VK)`);
+    } else {
+        console.log('ℹ️ Новых достижений из VK нет');
+    }
+}
         
-        // Тема
+        // ====== ТЕМА ======
         if (themeData && typeof themeData === 'string') {
+            const localTheme = localStorage.getItem(THEME_KEY) || 'light';
+            // Тему всегда загружаем из VK (она не критична)
             localStorage.setItem(THEME_KEY, themeData);
             if (typeof applyTheme === 'function') {
                 applyTheme(themeData);
@@ -246,7 +277,7 @@ function loadAllDataFromVK() {
             console.log('✅ Тема загружена из VK');
         }
         
-        // Звук
+        // ====== ЗВУК ======
         if (soundData && typeof soundData === 'string') {
             localStorage.setItem('wordgame:v1:sound', soundData);
             if (typeof gameState !== 'undefined') {
@@ -257,8 +288,12 @@ function loadAllDataFromVK() {
         }
         
         if (!loaded) {
-            console.log('ℹ️ В VK Storage нет сохранённых данных');
+            console.log('ℹ️ В VK Storage нет данных или локальные данные новее');
         }
+        
+        // ====== ПОСЛЕ ЗАГРУЗКИ — СОХРАНЯЕМ ВСЁ В VK ======
+        // Это важно: если локальные данные новее — обновляем VK
+        syncAllDataToVK();
         
         return loaded;
     }).catch((error) => {
@@ -266,7 +301,6 @@ function loadAllDataFromVK() {
         return false;
     });
 }
-
 // Синхронизация при изменении данных
 function syncOnChange() {
     // Сохраняем галактику при каждом обновлении
@@ -451,3 +485,33 @@ function closeHintAdModal() {
         resumeGame();
     }
 }
+
+// В конце App.js, после всех определений в начале игры загружаем данные из вк-стораджа
+(function() {
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (isVK && typeof vkBridge !== 'undefined') {
+            console.log('🌐 Загружаем данные из VK Storage...');
+            // Загружаем данные из VK Storage при старте
+            setTimeout(function() {
+                if (typeof loadAllDataFromVK === 'function') {
+                    loadAllDataFromVK().then(function(loaded) {
+                        console.log('📦 Данные из VK Storage загружены:', loaded);
+                        if (loaded) {
+                            // Обновляем интерфейс после загрузки
+                            if (typeof updateUI === 'function') {
+                                setTimeout(updateUI, 300);
+                            }
+                            if (typeof renderGalaxyModal === 'function') {
+                                // Если галактика открыта — обновляем
+                            }
+                        }
+                    });
+                }
+            }, 1500);
+        }
+    } catch (e) {
+        console.log('ℹ️ Не удалось определить окружение');
+    }
+})();
