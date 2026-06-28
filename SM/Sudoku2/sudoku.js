@@ -11,19 +11,15 @@ const vkBridge = window.vkBridge || {
 };
 
 // ============================================================
-// 2. Управление рекламой (баннер + межстраничная)
-// ============================================================
-// ============================================================
 // 2. Управление рекламой
 // ============================================================
 class AdManager {
     constructor() {
         this.bannerShown = false;
-        this.isRewardAdAvailable = false;
-        this.rewardAdChecked = false;
+        this.lastAdTime = 0;
+        this.adCooldown = 120000;
     }
 
-    // Показать баннерную рекламу внизу
     showBottomBanner() {
         if (this.bannerShown) return;
         if (typeof vkBridge !== 'undefined') {
@@ -43,47 +39,15 @@ class AdManager {
         }
     }
 
-    // Проверка доступности рекламы за вознаграждение
-    checkRewardedAdAvailable() {
-        if (this.rewardAdChecked) {
-            return Promise.resolve(this.isRewardAdAvailable);
-        }
-        
-        return new Promise((resolve) => {
-            if (typeof vkBridge !== 'undefined') {
-                const sendMethod = vkBridge.sendPromise || vkBridge.send;
-                sendMethod.call(vkBridge, 'VKWebAppCheckNativeAds', {
-                    ad_format: 'reward'
-                })
-                .then((data) => {
-                    this.rewardAdChecked = true;
-                    this.isRewardAdAvailable = data && data.result === true;
-                    console.log('Доступность рекламы reward:', this.isRewardAdAvailable);
-                    resolve(this.isRewardAdAvailable);
-                })
-                .catch((error) => {
-                    this.rewardAdChecked = true;
-                    this.isRewardAdAvailable = false;
-                    console.log('Ошибка проверки рекламы:', error);
-                    resolve(false);
-                });
-            } else {
-                this.rewardAdChecked = true;
-                this.isRewardAdAvailable = false;
-                resolve(false);
-            }
-        });
-    }
-
     // Показать рекламу за вознаграждение
     showRewardedAd() {
         console.log('showRewardedAd вызван');
         
         return new Promise((resolve) => {
             const timeoutId = setTimeout(() => {
-                console.log('⏰ Таймаут показа рекламы');
+                console.log('⏰ Таймаут показа рекламы (10 сек)');
                 resolve(false);
-            }, 8000);
+            }, 10000);
             
             if (typeof vkBridge === 'undefined') {
                 clearTimeout(timeoutId);
@@ -94,46 +58,59 @@ class AdManager {
             
             const sendMethod = vkBridge.sendPromise || vkBridge.send;
             
-            // Проверяем доступность рекламы
-            sendMethod.call(vkBridge, 'VKWebAppCheckNativeAds', {
+            // Показываем рекламу
+            sendMethod.call(vkBridge, 'VKWebAppShowNativeAds', {
                 ad_format: 'reward'
             })
-            .then((checkResult) => {
-                console.log('VKWebAppCheckNativeAds результат:', checkResult);
-                
-                if (!checkResult || checkResult.result !== true) {
-                    clearTimeout(timeoutId);
-                    console.log('Реклама reward недоступна');
-                    resolve(false);
-                    return Promise.reject('Реклама недоступна');
-                }
-                
-                // Реклама доступна - показываем
-                return sendMethod.call(vkBridge, 'VKWebAppShowNativeAds', {
-                    ad_format: 'reward'
-                });
-            })
-            .then((showResult) => {
+            .then((result) => {
                 clearTimeout(timeoutId);
-                console.log('Результат показа рекламы:', showResult);
+                console.log('VKWebAppShowNativeAds результат:', result);
                 
-                // Проверяем, что реклама была показана и пользователь её посмотрел
-                if (showResult && showResult.result === true) {
-                    resolve(true);
-                } else {
-                    // Если пришёл не true - возможно, реклама не досмотрена
-                    resolve(false);
+                // ВАЖНО: Проверяем разные варианты успешного показа
+                // В VK Bridge успешный показ рекламы может возвращаться по-разному
+                if (result) {
+                    // Если есть поле result и оно true
+                    if (result.result === true) {
+                        console.log('✅ Реклама успешно показана (result: true)');
+                        resolve(true);
+                        return;
+                    }
+                    
+                    // Если есть поле success
+                    if (result.success === true) {
+                        console.log('✅ Реклама успешно показана (success: true)');
+                        resolve(true);
+                        return;
+                    }
+                    
+                    // Если есть поле status и оно 'success'
+                    if (result.status === 'success') {
+                        console.log('✅ Реклама успешно показана (status: success)');
+                        resolve(true);
+                        return;
+                    }
+                    
+                    // Если пришёл объект с данными (не ошибка)
+                    if (result.result !== false && result.error === undefined) {
+                        console.log('✅ Реклама успешно показана (нет ошибок)');
+                        resolve(true);
+                        return;
+                    }
                 }
+                
+                // Если дошли сюда - реклама не показана
+                console.log('❌ Реклама не показана');
+                resolve(false);
             })
             .catch((error) => {
                 clearTimeout(timeoutId);
                 console.log('Ошибка при показе рекламы:', error);
+                // Если ошибка, но реклама всё равно могла показаться
+                // Некоторые версии VK Bridge возвращают ошибку, но реклама показывается
                 resolve(false);
             });
         });
     }
-
-   
 }
 // ============================================================
 // 3. Простой звуковой движок
@@ -271,10 +248,10 @@ showNoAdModal(callback) {
         }
     });
 }
-                                            // ============================================================
+// ============================================================
 // Модалка для получения дополнительных подсказок
 // ============================================================
-async showHintAdModal() {
+showHintAdModal() {
     console.log('showHintAdModal вызван');
     return new Promise((resolve) => {
         const modal = document.getElementById('hintAdModal');
@@ -285,9 +262,7 @@ async showHintAdModal() {
             return;
         }
         
-        // ⏸️ Ставим таймер на паузу
         this.pauseTimer();
-        
         modal.style.display = 'flex';
         
         const cancelBtn = document.getElementById('hintAdCancel');
@@ -319,45 +294,35 @@ async showHintAdModal() {
             this.sound.click();
             console.log('Нажата кнопка "Получить"');
             
-            // Сначала проверяем доступность рекламы
-            this.messageEl.textContent = '⏳ Проверка рекламы...';
+            // Меняем текст на кнопке, чтобы показать загрузку
+            const btn = document.getElementById('hintAdConfirm');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Загрузка...';
+            btn.disabled = true;
             
             try {
-                const isAvailable = await this.adManager.checkRewardedAdAvailable();
-                console.log('Реклама доступна:', isAvailable);
+                // Показываем рекламу
+                const adShown = await this.adManager.showRewardedAd();
+                console.log('Результат показа рекламы в модалке:', adShown);
                 
-                if (isAvailable) {
-                    // Показываем рекламу
-                    this.messageEl.textContent = '⏳ Загрузка рекламы...';
-                    const adShown = await this.adManager.showRewardedAd();
-                    console.log('Результат показа рекламы:', adShown);
-                    
-                    if (adShown === true) {
-                        // ✅ Реклама показана — даём 3 подсказки
-                        this.maxHints += 3;
-                        const remaining = this.maxHints - this.hintsUsed;
-                        this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
-                        this.sound.click();
-                        this.render();
-                        closeModal(true);
-                    } else {
-                        // ❌ Реклама не досмотрена или ошибка
-                        modal.style.display = 'none';
-                        this.showNoAdModal((result) => {
-                            if (result) {
-                                this.maxHints += 1;
-                                const remaining = this.maxHints - this.hintsUsed;
-                                this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
-                                this.sound.click();
-                                this.render();
-                                closeModal(true);
-                            } else {
-                                closeModal(false);
-                            }
-                        });
-                    }
+                // Восстанавливаем кнопку
+                btn.textContent = originalText;
+                btn.disabled = false;
+                
+                // ✅ Если реклама показана — даём 3 подсказки
+                if (adShown === true) {
+                    console.log('✅ Реклама успешно показана, даём 3 подсказки!');
+                    this.maxHints += 3;
+                    const remaining = this.maxHints - this.hintsUsed;
+                    this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
+                    this.sound.click();
+                    this.render();
+                    closeModal(true);
                 } else {
-                    // Реклама недоступна
+                    // ❌ Если реклама НЕ показана — даём 1 подсказку
+                    console.log('❌ Реклама не показана, даём 1 подсказку');
+                    
+                    // Скрываем модалку и показываем "Реклама недоступна"
                     modal.style.display = 'none';
                     this.showNoAdModal((result) => {
                         if (result) {
@@ -373,7 +338,10 @@ async showHintAdModal() {
                     });
                 }
             } catch (error) {
-                console.error('Ошибка при показе рекламы:', error);
+                console.error('Ошибка:', error);
+                btn.textContent = originalText;
+                btn.disabled = false;
+                
                 modal.style.display = 'none';
                 this.showNoAdModal((result) => {
                     if (result) {
