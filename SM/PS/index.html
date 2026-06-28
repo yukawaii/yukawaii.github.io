@@ -15,6 +15,7 @@
   window.vkBridge = vkBridge; 
 </script>
    <link rel="stylesheet" href="styleOld.css">
+
 </head>
 <body>
  <div class="space-nebula"></div>
@@ -2190,9 +2191,8 @@ contentDiv.className = 'galaxy-scroll';  // ← ДОБАВЬТЕ ЭТУ СТРО
     }
 }
 
-// Детали галактики
 function showGalaxyDetails(categoryId) {
-    // ✅ ИСПРАВЛЕНИЕ: находим категорию среди ВСЕХ сложностей
+    // Находим категорию
     let category = null;
     ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
         const found = getCategoriesForDifficulty(diff).find(c => c.id === categoryId);
@@ -2221,13 +2221,13 @@ function showGalaxyDetails(categoryId) {
     const starData = { totalStars, maxStars, completedLevels, totalLevels };
     
     const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
+    modalDiv.className = 'modal-window'; 
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;';
-    contentDiv.className = 'galaxy-scroll';
-    // Генерация звёзд (визуально)
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;max-height:80vh;overflow-y:auto;';
+    
+    // Генерация звёзд
     let starsHtml = '';
     const totalStarsCount = starData.maxStars;
     const earnedStars = starData.totalStars;
@@ -2241,30 +2241,94 @@ function showGalaxyDetails(categoryId) {
         if ((i + 1) % 10 === 0) starsHtml += '<br>';
     }
     
-contentDiv.innerHTML = `
-    <div style="font-size:3rem;">${category.icon}</div>
-    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:5px 0;">${category.title}</h3>
-    <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;margin:15px 0;">
-        <div style="font-size:2rem;color:var(--accent-color, #ffa54d);">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
-        <div style="font-size:0.9rem;color:var(--text-secondary, #6B5B4E);">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
-    </div>
-    <div style="max-height:150px;overflow-y:auto;padding:3px;">
-        ${starsHtml}
-    </div>
-    <button id="closeDetailBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
-`;
+    // Определяем цвет для текущей темы
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const colors = {
+        'dark': '#b8a0e8',
+        'blue': '#4a9fc7',
+        'teal': '#2a9a9a',
+        'sun': '#e8a820'
+    };
+    const scrollColor = colors[theme] || colors['dark'];
+    
+    contentDiv.innerHTML = `
+        <div style="font-size:3rem;">${category.icon}</div>
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:5px 0;">${category.title}</h3>
+        <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;margin:15px 0;">
+            <div style="font-size:2rem;color:var(--accent-color, #ffa54d);">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
+            <div style="font-size:0.9rem;color:var(--text-secondary, #6B5B4E);">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
+        </div>
+        <div id="starsContainer" style="max-height:150px;overflow-y:auto;padding:8px;border-radius:16px;background:rgba(255,255,255,0.03);">
+            ${starsHtml}
+        </div>
+        <button id="closeDetailBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
+    `;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
+    // ===== ПРИМЕНЯЕМ СТИЛИ ДЛЯ СКРОЛЛА ЧЕРЕЗ JS =====
+    const starsContainer = document.getElementById('starsContainer');
+    if (starsContainer) {
+        // Добавляем стили напрямую в элемент
+        const styleTag = document.createElement('style');
+        styleTag.textContent = `
+            #starsContainer {
+                scrollbar-width: thin !important;
+                scrollbar-color: ${scrollColor} rgba(255,255,255,0.05) !important;
+            }
+            #starsContainer::-webkit-scrollbar {
+                width: 6px !important;
+                height: 6px !important;
+                border-radius: 10px !important;
+                background: transparent !important;
+            }
+            #starsContainer::-webkit-scrollbar-track {
+                background: rgba(255,255,255,0.05) !important;
+                border-radius: 10px !important;
+                margin: 5px 0 !important;
+            }
+            #starsContainer::-webkit-scrollbar-thumb {
+                background: ${scrollColor} !important;
+                border-radius: 10px !important;
+                box-shadow: 0 0 20px ${scrollColor}40, inset 0 0 10px rgba(255,255,255,0.1) !important;
+                border: 1px solid rgba(255,255,255,0.1) !important;
+            }
+            #starsContainer::-webkit-scrollbar-thumb:hover {
+                background: ${scrollColor} !important;
+                box-shadow: 0 0 30px ${scrollColor}80, inset 0 0 15px rgba(255,255,255,0.2) !important;
+            }
+        `;
+        // Добавляем стили в head с уникальным ID
+        const styleId = 'stars-scroll-' + Date.now();
+        styleTag.id = styleId;
+        document.head.appendChild(styleTag);
+        
+        // Сохраняем ID для удаления
+        starsContainer.dataset.styleId = styleId;
+    }
+    
     document.getElementById('closeDetailBtn').onclick = () => {
         modalDiv.remove();
+        const starsContainer2 = document.getElementById('starsContainer');
+        if (starsContainer2 && starsContainer2.dataset.styleId) {
+            const styleToRemove = document.getElementById(starsContainer2.dataset.styleId);
+            if (styleToRemove) styleToRemove.remove();
+        }
         showGalaxyMap();
     };
     
-    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
+    modalDiv.onclick = (e) => { 
+        if (e.target === modalDiv) {
+            modalDiv.remove();
+            const starsContainer2 = document.getElementById('starsContainer');
+            if (starsContainer2 && starsContainer2.dataset.styleId) {
+                const styleToRemove = document.getElementById(starsContainer2.dataset.styleId);
+                if (styleToRemove) styleToRemove.remove();
+            }
+        }
+    };
 }
-
 
 // Подсчёт и обновление общего количества звёзд
 function updateTotalStars() {
