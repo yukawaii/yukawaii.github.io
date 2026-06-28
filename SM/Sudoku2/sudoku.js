@@ -544,26 +544,32 @@ showConfirmDialog() {
     // ============================================================
     // VK Bridge
     // ============================================================
-    setupVKBridge() {
-        vkBridge.subscribe((e) => {
-            if (e.type === 'VKWebAppViewHide') {
-                if (this.sound.ctx && this.sound.ctx.state === 'running') {
-                    this.sound.ctx.suspend();
-                }
-            } else if (e.type === 'VKWebAppViewRestore') {
-                if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
-                    this.sound.ctx.resume();
-                }
+// В методе setupVKBridge добавляем:
+setupVKBridge() {
+    vkBridge.subscribe((e) => {
+        if (e.type === 'VKWebAppViewHide') {
+            if (this.sound.ctx && this.sound.ctx.state === 'running') {
+                this.sound.ctx.suspend();
             }
-            // Обработка события показа баннера
-            else if (e.type === 'VKWebAppShowBannerAdResult') {
-                if (e.data && e.data.result) {
-                    console.log('Баннер показан успешно');
-                }
+        } else if (e.type === 'VKWebAppViewRestore') {
+            if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
+                this.sound.ctx.resume();
             }
-        });
-    }
-
+        } else if (e.type === 'VKWebAppShowBannerAdResult') {
+            if (e.data && e.data.result) {
+                console.log('Баннер показан успешно');
+            }
+        }
+        // 👇 ДОБАВЛЯЕМ ОБРАБОТКУ РЕКЛАМЫ ЗА ВОЗНАГРАЖДЕНИЕ
+        else if (e.type === 'VKWebAppShowNativeAdsResult') {
+            console.log('VKWebAppShowNativeAdsResult:', e.data);
+            // Здесь можно обработать результат показа рекламы
+            if (e.data && e.data.result === true) {
+                console.log('✅ Реклама за вознаграждение успешно показана');
+            }
+        }
+    });
+}
     // ============================================================
     // Реклама
     // ============================================================
