@@ -96,18 +96,15 @@ let currentLevelNum = null;
 function getCompletedLevels(difficulty) {    const key = `gameCompletedLevels_${difficulty || 'easy'}`;    const saved = localStorage.getItem(key);
     return saved ? JSON.parse(saved) : [];
 }
-function saveCompletedLevel(levelId, difficulty) {    const key = `gameCompletedLevels_${difficulty || 'easy'}`;
-    const completed = getCompletedLevels(difficulty);    if (!completed.includes(levelId)) {
-        completed.push(levelId);        localStorage.setItem(key, JSON.stringify(completed));        console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
-        updateTotalStars();    }
-}
-// Эту функцию можно удалить или оставить только для обратной совместимости
-function isLevelCompleted(levelId, difficulty) {
+function saveCompletedLevel(levelId, difficulty) {
     const key = `gameCompletedLevels_${difficulty || 'easy'}`;
-    const saved = localStorage.getItem(key);
-    if (!saved) return false;
-    const completed = JSON.parse(saved);
-    return completed.includes(levelId);
+    const completed = getCompletedLevels(difficulty);
+    if (!completed.includes(levelId)) {
+        completed.push(levelId);
+        localStorage.setItem(key, JSON.stringify(completed));
+        console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
+        updateTotalStars();
+    }
 }
 
 // Сохраняем последний открытый уровень
@@ -146,8 +143,8 @@ function loadLevelById(levelId, difficulty = 'easy') {
     currentLevelId = levelId;
     currentDifficulty = difficulty;
     localStorage.setItem('lastDifficulty', difficulty);
-    wordColorsMap.clear();
-    colorIndex = 0;
+   // wordColorsMap.clear(); очистка цветовой карты - слова найденные будут одного цвета
+    //colorIndex = 0;
     
     const levelData = getLevelById(levelId);
     if (!levelData) {
@@ -166,7 +163,9 @@ function loadLevelById(levelId, difficulty = 'easy') {
     wordPositionMap = levelGen.positions;
     foundWordsSet.clear();
     currentChain = [];
-    
+       // ✅ Сбрасываем доступные цвета для нового уровня
+    availableColors = [];
+
     currentCategoryId = levelData.categoryId;
     currentLevelNum = levelData.levelNum;
     
@@ -318,7 +317,9 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     
 contentDiv.innerHTML = `
     <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
-    <button id="playSelectedBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);margin-top:15px;">🎮 Играть!</button>
+    <p style="color:#6B5B4E;font-size:0.8rem;margin-bottom:10px;">Сложность: ${DIFFICULTIES.find(d => d.id === difficulty)?.label || difficulty}</p>
+    <div id="levelsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-height:300px;overflow-y:auto;padding:10px;"></div> <!-- ✅ ДОБАВЬ ЭТО -->
+    <button id="playSelectedBtn" class="play-btn" style="margin-top:15px;">🎮 Играть!</button>
     <button id="backToCatsBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">◀ Назад к темам</button>
 `;
     
@@ -405,6 +406,7 @@ const shadowColor = completed ? '#8b5a2a' : '#9b6e42';
 const levelSelectBtn = document.getElementById('levelSelectBtn');
 if (levelSelectBtn) {
     levelSelectBtn.onclick = function() {
+        console.log('🖱️ Клик по levelSelectBtn');
         currentPage = 0;
         showLevelSelectModal();
     };
@@ -915,7 +917,23 @@ function showCategoryModalForDifficulty(difficulty) {
     let html = `<h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 15px;">📚 Выбери категорию</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;">`;
     
     categories.forEach(cat => {
-        html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${difficulty}" style="background:#B5C9A2;color:#4A5D3E;border:none;border-radius:50%;width:55px;height:55px;font-size:1.8rem;cursor:pointer;box-shadow:0 2px 0 #8FA87D;transition:0.05s linear;display:flex;align-items:center;justify-content:center;">${cat.icon}</button>`;
+html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${difficulty}" style="
+    background:#B5C9A2;
+    color:#4A5D3E;
+    border:none;
+    border-radius:50%;
+    width:55px;
+    height:55px;
+    font-size:1.8rem;
+    cursor:pointer;
+    box-shadow:0 2px 0 #8FA87D;
+    transition:0.05s linear;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+">
+    <span style="transform:scale(0.85);display:inline-block;font-size:1.8rem;">${cat.icon}</span>
+</button>`;
     });
     
     html += `</div><button id="closeCatDiffModal" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
@@ -946,7 +964,7 @@ function selectLevel(btn, levelData) {
     selectedData = levelData;
     // Добавляем класс выделения на новую кнопку
     btn.classList.add('selected-level');
-    console.log('✅ Выбран уровень:', levelData.levelNum, 'ID:', levelData.id);
+  //  console.log('✅ Выбран уровень:', levelData.levelNum, 'ID:', levelData.id);
 }
 // Выбор подуровня внутри категории
 function showSubLevelModal(categoryId, difficulty) {
@@ -976,7 +994,7 @@ function showSubLevelModal(categoryId, difficulty) {
         <h3 style="color:#2c3e2b;font-size:1.4rem;margin:0 0 5px;">${category.icon} ${category.title}</h3>
         <p style="color:#6B5B4E;font-size:0.8rem;margin-bottom:10px;">Сложность: ${DIFFICULTIES.find(d => d.id === difficulty)?.label || difficulty}</p>
         <div id="levelsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-height:300px;overflow-y:auto;padding:10px;"></div>
-        <button id="playSelectedBtn" style="background:#517a2f;color:white;border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;margin-top:15px;">🎮 Играть!</button>
+<button id="playSelectedBtn" class="play-btn" style="margin-top:15px;">🎮 Играть!</button>
         <button id="backToCatsBtn" style="background:#8b5a2a;color:white;border:none;padding:8px 20px;border-radius:40px;font-size:0.85rem;cursor:pointer;margin-top:8px;">◀ Назад к темам</button>
     `;
     
@@ -1010,7 +1028,7 @@ function showSubLevelModal(categoryId, difficulty) {
         const textColor = completed ? '#2d2b1a' : '#3a3220';
         const shadowColor = completed ? '#8b5a2a' : '#9b6e42';
         
-        btn.style.cssText = `background:${bgColor};color:${textColor};border:none;border-radius:50%;width:55px;height:55px;min-width:55px;min-height:55px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 ${shadowColor};transition:0.05s linear;display:flex;align-items:center;justify-content:center;margin:2px;`;
+        btn.style.cssText = `background:${bgColor} !important;;color:${textColor} !important;;border:none;border-radius:50%;width:55px;height:55px;min-width:55px;min-height:55px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 ${shadowColor} !important;;transition:0.05s linear;display:flex;align-items:center;justify-content:center;margin:2px;`;
         
         btn.onmouseenter = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; };
         btn.onmouseleave = () => { if (btn !== selectedButton) btn.style.transform = 'scale(1)'; };
@@ -1049,7 +1067,7 @@ function startGameWithDifficulty(levelId, difficulty) {
     console.log('🚀 startGameWithDifficulty вызван с levelId:', levelId, 'difficulty:', difficulty);
     
     wordColorsMap.clear();
-    colorIndex = 0;
+   // colorIndex = 0;
     
     const levelData = getLevelById(levelId);
     if (!levelData) {
@@ -1078,7 +1096,8 @@ function startGameWithDifficulty(levelId, difficulty) {
     levelWords = levelGen.words;
     wordPositionMap = levelGen.positions;
     foundWordsSet.clear();
-    currentChain = [];
+    currentChain = [];    // ✅ Сбрасываем доступные цвета
+    availableColors = [];
     
     document.body.classList.remove('menu-mode');
     document.getElementById('startMenu').style.display = 'none';
@@ -1155,30 +1174,7 @@ function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWord
     return null;
 }
     
-    // Загрузить уровень
-  /*  function loadLevel(levelIndex) {
-        const levelGen = generateLevel(levelIndex);
-        grid = levelGen.grid;
-        size = levelGen.size;
-        levelWords = [...LEVELS_DATA[levelIndex % LEVELS_DATA.length].baseWords];
-        wordPositionMap = levelGen.positions;
-        foundWordsSet.clear();
-        currentChain = [];
-        
-        levelLabelSpan.innerText = `${LEVELS_DATA[levelIndex % LEVELS_DATA.length].name} (ур.${levelIndex+1})`;
-        totalCounterSpan.innerText = levelWords.length;
-        foundCounterSpan.innerText = 0;
-       // updateCurrentWordUI();
-        // Блокируем кнопку следующего уровня при загрузке нового уровня
-    const nextBtn = document.getElementById('nextLevelBtn');
-    nextBtn.disabled = true;
-    nextBtn.style.opacity = '0.5';
-    //----------------------------блок кнопки сл  ур, конец
-        renderGrid();
-         updateFoundCellsColor(); 
-        renderWordsList();
-        showMessage(`🔎 Ищи слова! Нажимай буквы по очереди (строго вдоль линии)`, 1800);
-    } */
+ 
     
 function renderGrid() {
     // Определяем, ПК это или телефон
@@ -1245,6 +1241,7 @@ function renderGrid() {
         }
     }
     highlightCurrentChain();
+     updateFoundCellsColor();
 }
     function isCellFound(row, col) {
         for (let word of foundWordsSet) {
@@ -1480,14 +1477,13 @@ function onCellClick(row, col) {
                         );
                 }
                 
-                if (isCorrectOrder) {
-                    // Слово найдено верно!
-                    foundWordsSet.add(matchedWord);
-                    
-                    // Запоминаем цвет для этого слова
-                    if (!wordColorsMap.has(matchedWord)) {
-                        wordColorsMap.set(matchedWord, getNextWordColor());
-                    }
+                                if (isCorrectOrder) {
+                        foundWordsSet.add(matchedWord);
+                        
+                        // ✅ Запоминаем цвет для этого слова
+                        if (!wordColorsMap.has(matchedWord)) {
+                            wordColorsMap.set(matchedWord, getNextWordColor());
+                              }
                     
                     updateFoundCellsColor();
                     renderWordsList();
@@ -1537,33 +1533,44 @@ function onCellClick(row, col) {
     }
 }
 
-// Окрашивает все клетки всех найденных слов (вызывать после каждого найденного слова)
 function updateFoundCellsColor() {
-    // Сначала убираем класс found и сбрасываем цвета со всех клеток
+  //  console.log('🎨 updateFoundCellsColor вызван, слов в foundWordsSet:', foundWordsSet.size);
+  //  console.log('📦 wordColorsMap:', wordColorsMap);
+    
+    // Сначала убираем класс found и сбрасываем стили
     document.querySelectorAll('.cell').forEach(cell => {
         cell.classList.remove('found');
         cell.style.background = '';
         cell.style.color = '';
         cell.style.textShadow = '';
-        cell.dataset.wordColor = '';
+        cell.style.borderColor = '';
+        cell.style.boxShadow = '';
     });
     
-    // Заново окрашиваем все найденные слова
+    if (foundWordsSet.size === 0) return;
+    
+    // Окрашиваем слова
     for (let word of foundWordsSet) {
         const info = wordPositionMap.get(word);
-        const color = wordColorsMap.get(word) || '#6B9C3F';
-        if (info) {
-            for (let [r, c] of info.coords) {
-                const cellDiv = document.querySelector(`.cell[data-row='${r}'][data-col='${c}']`);
-                if (cellDiv) {
-                    cellDiv.classList.add('found');
-                    // Теперь каждая клетка окрашивается в цвет текущего слова
-                    // (последнее найденное слово перезаписывает цвет)
-                    cellDiv.dataset.wordColor = color;
-                    cellDiv.style.background = color;
-                    cellDiv.style.color = 'white';
-                    cellDiv.style.textShadow = '0 1px 2px black';
-                }
+        if (!info) continue;
+        
+        let color = wordColorsMap.get(word);
+        if (!color) {
+            color = getNextWordColor();
+            wordColorsMap.set(word, color);
+        }
+        
+        console.log(`🎯 Слово "${word}" цвет: ${color}`);
+        
+        for (let [r, c] of info.coords) {
+            const cellDiv = document.querySelector(`.cell[data-row='${r}'][data-col='${c}']`);
+            if (cellDiv) {
+                cellDiv.classList.add('found');
+                // ✅ Устанавливаем стили напрямую с !important через setProperty
+                cellDiv.style.setProperty('background', color, 'important');
+                cellDiv.style.setProperty('color', '#ffffff', 'important');
+                cellDiv.style.setProperty('text-shadow', '0 1px 2px rgba(0,0,0,0.5)', 'important');
+                cellDiv.style.setProperty('border-color', 'rgba(255,255,255,0.3)', 'important');
             }
         }
     }

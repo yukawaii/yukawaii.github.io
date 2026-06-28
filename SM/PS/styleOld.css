@@ -31,13 +31,39 @@
     --modal-bg: rgba(0,0,0,0.85);
         --level-selected-bg: #f7b32b;
     --level-selected-shadow: #8b5a2a;
+        --play-btn-bg: #517a2f;
+    --play-btn-text: white;
+    --play-btn-shadow: #2e4a1a;
+}
+
+/* Кнопка "Играть!" в модалке выбора уровня */
+#playSelectedBtn {
+    background: var(--play-btn-bg, #517a2f) !important;
+    color: var(--play-btn-text, white) !important;
+    box-shadow: 0 3px 0 var(--play-btn-shadow, #2e4a1a) !important;
+    border: none !important;
+    padding: 10px 14px !important;
+    border-radius: 50px !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: 0.05s linear !important;
+}
+
+#playSelectedBtn:hover {
+    transform: scale(1.02) !important;
+}
+
+#playSelectedBtn:active {
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0 var(--play-btn-shadow, #2e4a1a) !important;
 }
 
 /* ===== ТЕМЫ ===== */
 [data-theme="blue"] {
     
-    --btn-primary: #1a3a5a;
-    --btn-secondary: #1a4a6a;
+    --btn-primary: #7bcaff;
+    --btn-secondary: #43b2fc;
     --bg-body: linear-gradient(135deg, #7ec8e3 0%, #4a9fc7 50%, #2a7fa5 100%);
     --bg-card: #f0f8ff;
     --bg-panel: #1a4a6a;
@@ -49,19 +75,21 @@
     --shadow-color: rgba(0,40,80,0.3);
     --border-color: #b8d8e8;
     --accent-color: #4a9fc7;
-    --button-primary: #2a7fa5;
-    --button-secondary: #1a4a6a;
+    --button-primary: #3bc1ff;
+    --button-secondary: #2a8bcc;
     --msg-bg: #1a3a5a;
     --cell-shadow: #8ab8d0;
     --grid-border-light: #b8d8e8;
     --grid-border-dark: #8ab8d0;
-    --btn-primary-shadow: #1a4a6a;
+    --btn-primary-shadow: #2781bd;
     --bg-card-light: #e0edf5;
     --bg-progress: #c5dbe8;
     --modal-bg: rgba(10,30,50,0.88);
         --level-selected-bg: #6cb8ff;
     --level-selected-shadow: #3487e6;
-
+ --play-btn-bg: #5fafff;
+    --play-btn-text: #e8f4ff;
+    --play-btn-shadow: #2967be;
 }
 
 [data-theme="teal"] {
@@ -90,6 +118,9 @@
     --modal-bg: rgba(10,40,40,0.88);
        --level-selected-bg: #2DD4BF;
     --level-selected-shadow: #0D9488;
+       --play-btn-bg: #1a5a5a;
+    --play-btn-text: #e0f5f5;
+    --play-btn-shadow: #0d3d3d;
 }
 
 [data-theme="sun"] {
@@ -118,6 +149,9 @@
     --modal-bg: rgba(40,30,10,0.88);
         --level-selected-bg: #FBBF24;
     --level-selected-shadow: #D97706;
+      --play-btn-bg: #8a6a1a;
+    --play-btn-text: #fef8e8;
+    --play-btn-shadow: #5a4a0a;
 }
 
 [data-theme="dark"] {
@@ -144,15 +178,20 @@
     --bg-card-light: rgba(40,30,60,0.6);
     --bg-progress: rgba(40,30,60,0.5);
     --modal-bg: rgba(10,10,26,0.92);
+           --level-selected-bg: #b25fff;
+    --level-selected-shadow: #9401b9;
+     --play-btn-bg: #4a3a7a;
+    --play-btn-text: #e8e8ff;
+    --play-btn-shadow: #2a1a4a;
 }
 
 /* Обычная кнопка уровня */
 #levelsGrid button {
-    border-radius: 50% !important;
-    aspect-ratio: 1 / 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #d4c3a4;
     color: #3a3220;
     box-shadow: 0 3px 0 #9b6e42;
@@ -363,13 +402,14 @@ body::after {
 }
 
 .cell.found {
-    color: white;
-    text-shadow: 0 1px 2px black;
-    border-color: #c2e082;
-    opacity: 0.85;
-    box-shadow: 0 2px 0 #235b10;
+    /* Используем CSS-переменные, которые устанавливаются из JavaScript */
+    background: var(--cell-found-color, #6B9C3F) !important;
+    color: var(--cell-found-text, white) !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+    border-color: #c2e082 !important;
+    opacity: 0.85 !important;
+    box-shadow: 0 2px 0 #235b10 !important;
 }
-
 .cell:active {
     transform: scale(0.97);
 }
@@ -637,10 +677,10 @@ body.menu-mode .game-container {
 
 /* ===== ТЁМНАЯ ТЕМА: ЯЧЕЙКИ И КОНТЕЙНЕРЫ ===== */
 [data-theme="dark"] .cell {
-    border-color: rgba(120,80,200,0.3) !important;
-    box-shadow: 0 0 15px rgba(120,80,200,0.08), 0 4px 0 rgba(80,50,150,0.3) !important;
-    background: rgba(40,30,60,0.8) !important;
-    color: #d0d0e8 !important;
+    border-color: rgba(120,80,200,0.3) ;
+    box-shadow: 0 0 15px rgba(120,80,200,0.08), 0 4px 0 rgba(80,50,150,0.3) ;
+    background: rgba(40,30,60,0.8) ;
+    color: #d0d0e8 ;
 }
 
 [data-theme="dark"] .cell.selected {  
@@ -650,10 +690,10 @@ body.menu-mode .game-container {
     border-color: rgba(120,80,200,0.4) !important;
 }
 
-[data-theme="dark"] .cell.found {
+/*[data-theme="dark"] .cell.found {
     border-color: rgba(120,80,200,0.2) !important;
     box-shadow: 0 0 20px rgba(120,80,200,0.1) !important;
-}
+}*/
 
 [data-theme="dark"] .words-container {
     background: rgba(40,30,60,0.6) !important;
@@ -777,8 +817,8 @@ body.menu-mode .game-container {
 
 [data-theme="dark"] #levelsGrid button,
 [data-theme="dark"] #categoriesGrid button {
-    background: rgba(60,40,100,0.3) !important;
-    color: #d0d0e8 !important;
+    background: rgba(60,40,100,0.3);
+    color: #d0d0e8;
 }
 
 [data-theme="dark"] .scroll-item {
@@ -802,10 +842,20 @@ body.menu-mode .game-container {
     color: #1a3a5a !important;
 }
 
+
 [data-theme="blue"] button:hover:not([style*="background:transparent"]) {
     background: rgba(26,58,90,0.2) !important;
     border-color: rgba(26,58,90,0.4) !important;
 }
+
+/*[data-theme="blue"] .cell.found {
+    border-color: rgba(227, 255, 69, 0.2) ;
+    box-shadow: 0 0 20px rgba(184, 181, 17, 0.1) ;
+    color: rgb(125, 177, 255) ; 
+
+text-shadow: 0 0 10px rgba(101, 193, 255, 0.8) ;
+       color: rgb(0, 38, 255) ; 
+}*/
 
 [data-theme="blue"] .next-btn,
 [data-theme="blue"] #menuStartBtn {
@@ -817,6 +867,13 @@ body.menu-mode .game-container {
 [data-theme="blue"] .next-btn:hover,
 [data-theme="blue"] #menuStartBtn:hover {
     background: rgba(26,58,90,0.25) !important;
+}
+
+[data-theme="blue"] .cell.selected {  
+    background: rgba(113, 227, 255, 0.5) !important;
+    color: #1f6dff !important;
+    box-shadow: 0 0 25px rgba(44, 223, 255, 0.15), 0 2px 0 rgba(40, 176, 255, 0.4) !important;
+    border-color: rgba(69, 150, 255, 0.4) !important;
 }
 
 [data-theme="blue"] #clearBtn {
@@ -845,6 +902,7 @@ body.menu-mode .game-container {
     background: rgba(26,58,90,0.2) !important;
 }
 
+
 /* ===== БИРЮЗОВАЯ ТЕМА ===== */
 [data-theme="teal"] button:not([style*="background:transparent"]) {
     background: rgba(26,74,74,0.12) !important;
@@ -863,7 +921,12 @@ body.menu-mode .game-container {
     border: 2px solid rgba(26,74,74,0.35) !important;
     color: #1a4a4a !important;
 }
-
+[data-theme="teal"] .cell.selected {  
+    background: rgba(109, 255, 141, 0.5) !important;
+    color: #034736 !important;
+    box-shadow: 0 0 25px rgba(51, 255, 44, 0.15), 0 2px 0 rgba(40, 255, 58, 0.4) !important;
+    border-color: rgba(99, 255, 133, 0.4) !important;
+}
 [data-theme="teal"] .next-btn:hover,
 [data-theme="teal"] #menuStartBtn:hover {
     background: rgba(26,74,74,0.25) !important;
@@ -901,7 +964,12 @@ body.menu-mode .game-container {
     border: 2px solid rgba(90,74,26,0.25) !important;
     color: #5a4a1a !important;
 }
-
+[data-theme="sun"] .cell.selected {  
+    background: rgba(255, 226, 62, 0.5) !important;
+    color: #005177 !important;
+    box-shadow: 0 0 25px rgba(251, 255, 44, 0.15), 0 2px 0 rgba(255, 241, 40, 0.4) !important;
+    border-color: rgb(255, 208, 0) !important;
+}
 [data-theme="sun"] button:hover:not([style*="background:transparent"]) {
     background: rgba(90,74,26,0.2) !important;
     border-color: rgba(90,74,26,0.4) !important;
@@ -1058,6 +1126,13 @@ body.menu-mode .game-container {
     div[style*="grid-template-columns:repeat(4"] {
         gap: 4px !important;
     }
+      /* Кнопка "Играть!" в модалке выбора уровня */
+    #playSelectedBtn {
+        padding: 8px 12px !important;
+        font-size: 1rem !important;
+        min-width: 100px !important;
+    }
+
 }
 
 @media (min-width: 551px) and (max-width: 768px) {
@@ -1229,6 +1304,12 @@ body.menu-mode .game-container {
         min-width: 26px !important;
         min-height: 26px !important;
     }
+      #playSelectedBtn {
+        padding: 8px 12px !important;
+        font-size: 1rem !important;
+    }
+    
+
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
@@ -1349,7 +1430,14 @@ body.menu-mode .game-container {
         min-width: 32px !important;
         min-height: 32px !important;
     }
+     #playSelectedBtn {
+        padding: 6px 12px !important;
+        font-size: 1rem !important;
+        min-width: 100px !important;
+        margin-top: 10px !important;
+    }
 }
+
 
 @media (max-height: 500px) and (orientation: portrait) {
   #startMenu {
@@ -1390,6 +1478,14 @@ body.menu-mode .game-container {
         min-width: 28px !important;
         min-height: 28px !important;
     }
+     #playSelectedBtn {
+        padding: 4px 12px !important;
+        font-size: 1rem !important;
+        min-width: 100px !important;
+        margin-top: 6px !important;
+    }
+    
+
 }
 
 /* ===== РАЗНОЕ ===== */
@@ -1453,3 +1549,4 @@ div[style*="position:fixed"] {
     pointer-events: none;
     z-index: 0;
 }
+

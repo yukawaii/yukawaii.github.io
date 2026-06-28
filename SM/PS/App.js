@@ -32,7 +32,7 @@ setTimeout(function (){console.log("id^ "+ id);}, 3000);
     function sendscore0(){        score0=1;        setTimeout(function (){        vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
      {"client_secret":"vTHFnjvA35iL1nEpMSTr",      "user_id":id,      "activity_id":1,       "value":score0,        "v": "5.131",        "global": 1,    "access_token":"60c64bd460c64bd460c64bd4e16387fb4f660c660c64bd40ae8b17ee1804f4670cb38e4",
          }})    .then(data => {console.log("Ответ на первичное добавление очков:" + data);    })    .catch(error => console.log(error)); }, 3000);}
-             sendscore0();
+          //   sendscore0();
 
 //Обычная отправка очков в вк, таблицу лидеров, из игры.
 function sendscore(){  sessionStorage.setItem('score',score);  vkBridge.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "32test", "params":
@@ -49,7 +49,7 @@ function sendscore(){  sessionStorage.setItem('score',score);  vkBridge.send("VK
       .then(data => {console.log(data); score=data.response; console.log("getsc=  "+score); 
       })
       .catch(error => console.log(error)); }, 2000);}
-getsc();
+// getsc();
 
     function top0(){
       getsc();

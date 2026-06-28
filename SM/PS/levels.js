@@ -1,7 +1,78 @@
 // levels.js - данные для игры ГдеЛиса
 let colorIndex = 0;
+let availableColors = [];
+// При загрузке восстановить colorIndex
+const savedColorIndex = localStorage.getItem('lastColorIndex');
+if (savedColorIndex) {
+    colorIndex = parseInt(savedColorIndex);
+}
 
+/*const WORD_COLORS = [
+    '#2D6A4F', // темный изумруд
+    '#6B4E8E', // аметист
+    '#c46345', // благородный красный
+    '#2B6A8A', // сапфир
+    '#D4872B', // янтарь
+    '#3A8A7A', // малахит
+    '#896b9b', // александрит
+    '#4A7A5A', // оливковый
+    '#803f4b', // рубин
+    '#3A6A9E', // лазурит
+    '#7A8A4A', // сердолик
+    '#8A5A7A', // розовый кварц
+    '#3A7A7A', // бирюза
+    '#B57A4A', // тигровый глаз
+    '#5A6A8A', // лунный камень
+]; */
 const WORD_COLORS = [
+    '#2E7D32', // темный зеленый
+    '#6A1B9A', // фиолетовый
+    '#1565C0', // синий
+    '#e69600', // оранжевый
+    '#00838F', // бирюзовый
+    '#AD1457', // малиновый
+    '#33691E', // оливковый
+    '#64aa07', // терракотовый
+    '#283593', // темно-синий
+    '#4E342E', // коричневый
+    '#7B1FA2', // пурпурный
+    '#BF360C', // красно-оранжевый
+    '#1A237E', // индиго
+];
+/*const WORD_COLORS = [
+    '#2D5A4F', // темный лес
+    '#5A3A7A', // фиолетовый
+    '#B83A4A', // бордовый
+    '#2A5A8A', // ночной синий
+    '#C47A2A', // золотой
+    '#3A7A6A', // изумруд
+    '#8A4A6A', // розовый
+    '#4A7A3A', // зеленый
+    '#A84A4A', // кирпичный
+    '#3A5A8A', // кобальт
+    '#6A7A3A', // оливковый
+    '#7A4A6A', // пурпурный
+    '#3A6A6A', // бирюзовый
+    '#A86A3A', // терракотовый
+    '#4A5A7A', // стальной
+];*/
+/*const WORD_COLORS = [
+    '#ac0039', // неоновый красный
+    '#00FFAA', // неоновый зеленый
+    '#7000FF', // неоновый фиолетовый
+    '#00D4FF', // неоновый голубой
+    '#769700', // неоновый розовый
+    '#8fd600', // неоновый лайм
+    '#FF6600', // неоновый оранжевый
+    '#00FFFF', // неоновый циан
+    '#FF00FF', // неоновый маджента    
+    '#00FF66', // неоновый изумруд
+    '#AA00FF', // неоновый пурпурный
+    '#FFAA00', // неоновый янтарный
+    '#00AAFF', // неоновый лазурный
+];*/
+
+/*const WORD_COLORS = [
     '#5D8A5E', // приглушённый зелёный
     '#7B5F9E', // лавандово-фиолетовый
     '#B35A6B', // приглушённый розовый
@@ -17,7 +88,7 @@ const WORD_COLORS = [
     '#5A7A7A', // приглушённый серо-бирюзовый
     '#B57A4A', // приглушённый терракотовый
     '#6A7A8A'  // приглушённый серо-синий
-];
+];*/
 // Буквы для шума (используются в генерации)
 const RUS_LETTERS = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
 // СЛОЖНОСТИ
@@ -1834,10 +1905,30 @@ function getLevelsByCategoryAndDifficulty(categoryId, difficulty) {
     return result;
 }
 
-
+// Функция перемешивания массива (алгоритм Фишера-Йетса)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 function getNextWordColor() {
-    const color = WORD_COLORS[colorIndex % WORD_COLORS.length];
-    colorIndex++;
+    // Если список доступных цветов пуст - перезаполняем
+    if (availableColors.length === 0) {
+        // Создаем копию всех цветов и перемешиваем
+        availableColors = [...WORD_COLORS];
+        shuffleArray(availableColors);
+        console.log('🔄 Цвета обновлены, доступно:', availableColors.length);
+    }    
+    // Берем случайный цвет из доступных
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    const color = availableColors[randomIndex];
+    
+    // Удаляем выбранный цвет из доступных
+    availableColors.splice(randomIndex, 1);
+    
     return color;
 }
+

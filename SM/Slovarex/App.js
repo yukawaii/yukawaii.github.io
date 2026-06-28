@@ -95,3 +95,269 @@ function infr(){
   vkBridge.send("VKWebAppShowInviteBox", {})
 }
 
+// ====== VK STORAGE СИНХРОНИЗАЦИЯ ======
+const VK_STORAGE_KEYS = {
+    GALAXY: 'wordgame_galaxy_v2',
+    ACHIEVEMENTS: 'wordgame_achievements_v2',
+    THEME: 'wordgame_theme_v2',
+    SOUND: 'wordgame_sound_v2'
+};
+
+// Сохранение данных в VK Storage
+function saveToVKStorage(key, value) {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен, сохраняем только локально');
+        return Promise.resolve();
+    }
+    
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) {
+            console.log('ℹ️ Запуск вне ВК, сохраняем только локально');
+            return Promise.resolve();
+        }
+    } catch (e) {
+        return Promise.resolve();
+    }
+    
+    return vkBridge.send('VKWebAppStorageSet', {
+        key: key,
+        value: typeof value === 'string' ? value : JSON.stringify(value)
+    })
+    .then(() => {
+        console.log(`✅ Сохранено в VK Storage: ${key}`);
+    })
+    .catch((error) => {
+        console.warn(`❌ Ошибка сохранения ${key}:`, error);
+    });
+}
+
+// Загрузка данных из VK Storage
+function loadFromVKStorage(key) {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        return Promise.resolve(null);
+    }
+    
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) {
+            console.log('ℹ️ Запуск вне ВК');
+            return Promise.resolve(null);
+        }
+    } catch (e) {
+        return Promise.resolve(null);
+    }
+    
+    return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
+        .then((data) => {
+            console.log(`📥 Загрузка из VK Storage: ${key}`, data);
+            
+            if (data && data.keys) {
+                if (Array.isArray(data.keys) && data.keys.length > 0) {
+                    const value = data.keys[0].value;
+                    try {
+                        return JSON.parse(value);
+                    } catch {
+                        return value;
+                    }
+                }
+            }
+            return null;
+        })
+        .catch((error) => {
+            console.warn(`❌ Ошибка загрузки ${key}:`, error);
+            return null;
+        });
+}
+
+// Полная синхронизация всех данных
+function syncAllDataToVK() {
+    console.log('🔄 Синхронизация данных с VK Storage...');
+    
+    // Получаем все данные
+    const galaxy = getGalaxyProgress();
+    const achievements = loadAchievements();
+    const theme = localStorage.getItem(THEME_KEY) || 'light';
+    const sound = localStorage.getItem('wordgame:v1:sound') || '1';
+    
+    // Сохраняем всё параллельно
+    return Promise.all([
+        saveToVKStorage(VK_STORAGE_KEYS.GALAXY, galaxy),
+        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, achievements),
+        saveToVKStorage(VK_STORAGE_KEYS.THEME, theme),
+        saveToVKStorage(VK_STORAGE_KEYS.SOUND, sound)
+    ]).then(() => {
+        console.log('✅ Полная синхронизация завершена');
+    }).catch((error) => {
+        console.warn('⚠️ Ошибка синхронизации:', error);
+    });
+}
+
+// Загрузка всех данных из VK Storage
+function loadAllDataFromVK() {
+    console.log('🔄 Загрузка данных из VK Storage...');
+    
+    return Promise.all([
+        loadFromVKStorage(VK_STORAGE_KEYS.GALAXY),
+        loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
+        loadFromVKStorage(VK_STORAGE_KEYS.THEME),
+        loadFromVKStorage(VK_STORAGE_KEYS.SOUND)
+    ]).then(([galaxyData, achievementsData, themeData, soundData]) => {
+        let loaded = false;
+        
+        // Галактика
+        if (galaxyData) {
+            try {
+                const data = typeof galaxyData === 'string' ? JSON.parse(galaxyData) : galaxyData;
+                // Обновляем только если в VK Storage есть данные
+                if (data && data.totalWords !== undefined) {
+                    saveGalaxyProgress(data);
+                    loaded = true;
+                    console.log('✅ Галактика загружена из VK');
+                }
+            } catch (e) {
+                console.warn('⚠️ Ошибка загрузки галактики:', e);
+            }
+        }
+        
+        // Достижения
+        if (achievementsData) {
+            try {
+                const data = typeof achievementsData === 'string' ? JSON.parse(achievementsData) : achievementsData;
+                if (data && typeof data === 'object') {
+                    saveAchievements(data);
+                    loaded = true;
+                    console.log('✅ Достижения загружены из VK');
+                }
+            } catch (e) {
+                console.warn('⚠️ Ошибка загрузки достижений:', e);
+            }
+        }
+        
+        // Тема
+        if (themeData && typeof themeData === 'string') {
+            localStorage.setItem(THEME_KEY, themeData);
+            if (typeof applyTheme === 'function') {
+                applyTheme(themeData);
+            }
+            loaded = true;
+            console.log('✅ Тема загружена из VK');
+        }
+        
+        // Звук
+        if (soundData && typeof soundData === 'string') {
+            localStorage.setItem('wordgame:v1:sound', soundData);
+            if (typeof gameState !== 'undefined') {
+                gameState.soundEnabled = soundData === '1';
+            }
+            loaded = true;
+            console.log('✅ Звук загружен из VK');
+        }
+        
+        if (!loaded) {
+            console.log('ℹ️ В VK Storage нет сохранённых данных');
+        }
+        
+        return loaded;
+    }).catch((error) => {
+        console.warn('⚠️ Ошибка загрузки из VK:', error);
+        return false;
+    });
+}
+
+// Синхронизация при изменении данных
+function syncOnChange() {
+    // Сохраняем галактику при каждом обновлении
+    const originalSave = saveGalaxyProgress;
+    saveGalaxyProgress = function(data) {
+        originalSave(data);
+        // После сохранения локально — синхронизируем с VK
+        saveToVKStorage(VK_STORAGE_KEYS.GALAXY, data);
+    };
+    
+    // Сохраняем достижения при каждом обновлении
+    const originalSaveAchievements = saveAchievements;
+    saveAchievements = function(data) {
+        originalSaveAchievements(data);
+        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, data);
+    };
+    
+    // Сохраняем тему при изменении
+    const originalApplyTheme = applyTheme;
+    applyTheme = function(theme) {
+        originalApplyTheme(theme);
+        saveToVKStorage(VK_STORAGE_KEYS.THEME, theme);
+    };
+    
+    console.log('✅ Авто-синхронизация настроена');
+}
+
+// Инициализация синхронизации
+function initVKStorageSync() {
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (!isVK) {
+            console.log('ℹ️ Запуск вне ВК, VK Storage синхронизация отключена');
+            return;
+        }
+    } catch (e) {
+        return;
+    }
+    
+    console.log('🌐 Инициализация VK Storage синхронизации...');
+    
+    // Сначала загружаем данные из VK
+    loadAllDataFromVK().then((loaded) => {
+        // После загрузки настраиваем авто-синхронизацию
+        syncOnChange();
+        
+        // Если данные не были загружены — сохраняем текущие
+        if (!loaded) {
+            console.log('📤 Отправка текущих данных в VK Storage...');
+            setTimeout(syncAllDataToVK, 1000);
+        }
+    });
+}
+
+// Ручная синхронизация (можно вызвать из консоли)
+function manualSync() {
+    console.log('🔄 Ручная синхронизация...');
+    syncAllDataToVK();
+}
+
+// Отладка: показать, что сохранено в VK Storage
+function debugVKStorage() {
+    console.log('🔍 Проверка VK Storage...');
+    Promise.all([
+        loadFromVKStorage(VK_STORAGE_KEYS.GALAXY),
+        loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
+        loadFromVKStorage(VK_STORAGE_KEYS.THEME),
+        loadFromVKStorage(VK_STORAGE_KEYS.SOUND)
+    ]).then(([galaxy, achievements, theme, sound]) => {
+        console.log('📦 Галактика:', galaxy);
+        console.log('📦 Достижения:', achievements);
+        console.log('📦 Тема:', theme);
+        console.log('📦 Звук:', sound);
+    });
+}
+
+// В конце App.js, после всех определений вызов синхронизации
+if (typeof vkBridge !== 'undefined') {
+    // Проверяем, что мы внутри ВК
+    try {
+        const isVK = window.location !== window.parent.location;
+        if (isVK) {
+            // Инициализируем синхронизацию после загрузки
+            setTimeout(initVKStorageSync, 2000);
+        }
+    } catch (e) {}
+}
+
+// Сделаем функции доступными из консоли для отладки
+window.syncAllDataToVK = syncAllDataToVK;
+window.loadAllDataFromVK = loadAllDataFromVK;
+window.debugVKStorage = debugVKStorage;
+window.manualSync = manualSync;

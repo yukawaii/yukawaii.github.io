@@ -927,6 +927,12 @@ function toggleSound() {
     if (soundBtn) {
         soundBtn.textContent = gameState.soundEnabled ? "🔊" : "🔇";
     }
+     // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.SOUND, gameState.soundEnabled ? '1' : '0');
+        console.log('☁️ Звук синхронизирован с VK Storage');
+    }
+    // =========================================
     if (gameState.soundEnabled && !audioContext) {
         initAudio();
     }
@@ -1024,6 +1030,19 @@ checkAchievements();
     updateUI();
     showToast(`🎉 Уровень ${gameState.level}! +${CONFIG.SCORE_BONUS_PER_LEVEL} бонусных очков!`);
     playSound("levelup");
+     // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof syncAllDataToVK === 'function') {
+        syncAllDataToVK();
+        console.log('☁️ Данные синхронизированы после перехода на уровень', gameState.level);
+    } else if (typeof saveToVKStorage === 'function') {
+        // Если syncAllDataToVK недоступна, сохраняем основные данные
+        const galaxy = getGalaxyProgress();
+        saveToVKStorage('wordgame_galaxy_v2', galaxy);
+        const achievements = loadAchievements();
+        saveToVKStorage('wordgame_achievements_v2', achievements);
+        console.log('☁️ Данные синхронизированы с VK Storage');
+    }
+    // =========================================
 }
 
 function blinkNextButton() {
@@ -1040,6 +1059,11 @@ function blinkNextButton() {
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 function initGame() {
+     // ====== ИНИЦИАЛИЗАЦИЯ VK STORAGE СИНХРОНИЗАЦИИ ======
+    if (typeof initVKStorageSync === 'function') {
+        setTimeout(initVKStorageSync, 1000);
+    }
+    // ===================================================
         // ====== ПРИМЕНЯЕМ ТЕМУ ======
     applyTheme(currentTheme);
      console.log('🚀 initGame вызвана');
@@ -1153,6 +1177,12 @@ function applyTheme(theme) {
     document.body.setAttribute('data-theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
+     // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_theme_v2', theme);
+        console.log('☁️ Тема синхронизирована с VK Storage');
+    }
+    // =========================================
      // ====== ОБНОВЛЯЕМ СТАТИЧЕСКИЙ СТИЛЬ ИЗ HTML ======
     const themeColors = {
         light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -1862,7 +1892,7 @@ function saveAchievements(achievements) {
         console.error('❌ Ошибка сохранения достижений:', e);
     }
 }
-// Проверка и разблокировка достижения
+
 // Проверка и разблокировка достижения
 function unlockAchievement(achievementId) {
     console.log('🔓 Попытка разблокировать:', achievementId);
@@ -1902,7 +1932,12 @@ function unlockAchievement(achievementId) {
     
     saveAchievements(achievements);
     console.log('💾 Достижение сохранено:', achievements);
-    
+     // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_achievements_v2', achievements);
+        console.log('☁️ Достижения синхронизированы с VK Storage');
+    }
+    // =========================================
     // Показываем уведомление
     showAchievementPopup(achievement);
     
@@ -2327,6 +2362,12 @@ for (let i = progress.unlockedScrolls.length; i < totalScrollsUnlocked; i++) {
     }
     
     saveGalaxyProgress(progress);
+     // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (newStars > 0 && typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_galaxy_v2', progress);
+        console.log('☁️ Галактика синхронизирована с VK Storage');
+    }
+    // =========================================
     return progress;
 }
 
