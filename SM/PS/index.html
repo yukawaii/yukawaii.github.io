@@ -338,10 +338,9 @@ function findNextLevel(currentLevelId, difficulty) {
         if (!isUnlocked) {
             // Уровень заблокирован - показываем модалку разблокировки
             showUnlockLevelModal(catId, difficulty, nextLevelNum, function() {
-                // После разблокировки загружаем уровень
                 loadLevelById(nextLevel.id, difficulty);
             });
-            return null; // Возвращаем null, чтобы не загружать уровень
+            return null;
         }
         return nextLevel;
     }
@@ -1975,33 +1974,50 @@ document.getElementById('menuStartBtn').addEventListener('click', function() {
     
     // ✅ Получаем последнюю сохранённую сложность
     const lastDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
-    currentDifficulty = lastDifficulty; // ✅ ВАЖНО: устанавливаем текущую сложность
+    currentDifficulty = lastDifficulty;
     
-    // Получаем пройденные уровни для ЭТОЙ сложности
+    // Получаем все уровни для этой сложности
+    const allLevels = ALL_LEVELS.filter(l => l.difficulty === lastDifficulty);
     const completed = getCompletedLevels(lastDifficulty);
-    let lastLevelId = 1;
     
-    // Проверяем, есть ли сохранённый прогресс для этой сложности
-    if (completed.length > 0) {
-        // Находим последний пройденный уровень, предлагаем следующий
-        const maxCompleted = Math.max(...completed);
-        const nextLevelId = maxCompleted + 1;
+    let targetLevelId = null;
+    let foundNext = false;
+    
+    // ✅ НАХОДИМ ПЕРВЫЙ НЕПРОЙДЕННЫЙ, НО ОТКРЫТЫЙ УРОВЕНЬ
+    for (let level of allLevels) {
+        const isCompleted = completed.includes(level.id);
+        const isUnlocked = isLevelUnlocked(level.categoryId, lastDifficulty, level.levelNum);
         
-        // Ищем следующий уровень в ALL_LEVELS с нужной сложностью
-        const nextLevel = ALL_LEVELS.find(l => l.id === nextLevelId && l.difficulty === lastDifficulty);
-        if (nextLevel) {
-            lastLevelId = nextLevelId;
-        } else {
-            // Если следующего нет, берём последний пройденный
-            lastLevelId = maxCompleted;
+        if (!isCompleted && isUnlocked) {
+            // ✅ Нашли первый непройденный, но открытый уровень
+            targetLevelId = level.id;
+            foundNext = true;
+            break;
         }
     }
     
-    // Показываем приветственную историю (если не показывали)
+    // Если все открытые уровни пройдены — ищем первый открытый уровень (для повторного прохождения)
+    if (!foundNext) {
+        for (let level of allLevels) {
+            const isUnlocked = isLevelUnlocked(level.categoryId, lastDifficulty, level.levelNum);
+            if (isUnlocked) {
+                targetLevelId = level.id;
+                foundNext = true;
+                break;
+            }
+        }
+    }
+    
+    // Если вообще нет открытых уровней — берём первый уровень
+    if (!foundNext) {
+        targetLevelId = allLevels[0]?.id || 1;
+    }
+    
+    // Показываем приветственную историю
     showWelcomeStory();
     
-    // ✅ Загружаем уровень с правильной сложностью
-    loadLevelById(lastLevelId, lastDifficulty);
+    // ✅ Загружаем найденный уровень
+    loadLevelById(targetLevelId, lastDifficulty);
 });
 
 // Кнопка "Как играть?" — открывает модалку правил
