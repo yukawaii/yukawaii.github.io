@@ -234,25 +234,37 @@ function findNextLevel(currentLevelId, difficulty) {
     let nextLevelNum = levelNum + 1;
     let nextLevel = categoryLevels.find(l => l.levelNum === nextLevelNum);
     
+    // ✅ ПРОВЕРКА: если следующий уровень существует, но ЗАБЛОКИРОВАН
     if (nextLevel) {
-        return nextLevel; // ✅ нашли следующий подуровень
+        const isUnlocked = isLevelUnlocked(catId, difficulty, nextLevelNum);
+        if (!isUnlocked) {
+            // Уровень заблокирован - показываем модалку разблокировки
+            showUnlockLevelModal(catId, difficulty, nextLevelNum, function() {
+                // После разблокировки загружаем уровень
+                loadLevelById(nextLevel.id, difficulty);
+            });
+            return null; // Возвращаем null, чтобы не загружать уровень
+        }
+        return nextLevel;
     }
     
-    // Уровни в категории закончились — переходим к следующей категории
-const allCategories = getCurrentCategories();
-const currentCatIndex = allCategories.findIndex(c => c.id === catId);
+    // Если следующий уровень не найден - переходим к следующей категории
+    const allCategories = getCurrentCategories();
+    const currentCatIndex = allCategories.findIndex(c => c.id === catId);
     let nextCatIndex = (currentCatIndex + 1) % allCategories.length;
     
     let attempts = 0;
     while (attempts < allCategories.length) {
         const nextCat = allCategories[nextCatIndex];
-        // ✅ ИСПРАВЛЕНИЕ: передаём difficulty!
         const nextCatLevels = getLevelsByCategoryAndDifficulty(nextCat.id, difficulty);
         
         if (nextCatLevels.length > 0) {
-            // Берём первый уровень (levelNum === 1)
+            // Проверяем, что первый уровень разблокирован
             const firstLevel = nextCatLevels.find(l => l.levelNum === 1);
-            if (firstLevel) return firstLevel;
+            if (firstLevel) {
+                // Уровень 1 всегда разблокирован (потому что levelNum <= 14)
+                return firstLevel;
+            }
             return nextCatLevels[0];
         }
         
@@ -260,7 +272,6 @@ const currentCatIndex = allCategories.findIndex(c => c.id === catId);
         attempts++;
     }
     
-    // Если ничего не нашли, возвращаем первый уровень с нужной сложностью
     return ALL_LEVELS.find(l => l.difficulty === difficulty) || ALL_LEVELS[0];
 }
 
@@ -393,82 +404,80 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
         btn.style.setProperty('color', '#2d2b1a', 'important');
     }
     
-    for (let i = 1; i <= 20; i++) {
-        const levelData = categoryLevels.find(l => l.levelNum === i);
-        if (levelData) {
-            const btn = document.createElement('button');
-            
-            const unlocked = isLevelUnlocked(categoryId, difficulty, i);
-            const isLocked = (i >= 15 && !unlocked);
-            
-            // Показываем замок для запертых уровней
-            if (isLocked) {
-                btn.textContent = '🔒';
-                btn.style.fontSize = '1rem !important';
-            } else {
-                btn.textContent = i;
-                btn.style.fontSize = '1.2rem !important';
-            }
-            
-            btn.dataset.levelId = levelData.id;
-            btn.dataset.levelNum = levelData.levelNum;
-            btn.dataset.isLocked = isLocked ? 'true' : 'false';
-            
-            const colors = getButtonColors(levelData);
-            
-            btn.style.cssText = `
-                background: ${colors.bg} !important;
-                color: ${colors.text} !important;
-                border: none !important;
-                border-radius: 50% !important;
-                width: 55px !important;
-                height: 55px !important;
-                min-width: 55px !important;
-                min-height: 55px !important;
-                font-size: 1.2rem !important;
-                font-weight: bold !important;
-                cursor: ${isLocked ? 'pointer' : 'pointer'} !important;
-                box-shadow: 0 3px 0 ${colors.shadow} !important;
-                transition: 0.05s linear !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                margin: 2px !important;
-            `;
-            
-            btn.onmouseenter = () => { 
-                if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; 
-            };
-            btn.onmouseleave = () => { 
-                if (btn !== selectedButton) btn.style.transform = 'scale(1)'; 
-            };
-            
-            btn.onclick = (function(b, level) {
-                return function(e) {
-                    e.stopPropagation();
-                    const isLocked = b.dataset.isLocked === 'true';
-                    
-                    if (isLocked) {
-                        // Показываем модалку разблокировки
-                        showUnlockLevelModal(categoryId, difficulty, level.levelNum, function() {
-                            // После разблокировки - перерисовываем
-                            modalDiv.remove();
-                            showCategoryLevelsModal(categoryId, difficulty);
-                        });
-                        return;
-                    }
-                    
-                    selectLevel(b, level);
-                };
-            })(btn, levelData);
-            
-            grid.appendChild(btn);
-            
-            if (i === 1 && !isLocked) {
-                setTimeout(() => { selectLevel(btn, levelData); }, 50);
-            }
-        }
-    }
+                                    // Создаём кнопки уровней - теперь ВСЕ уровни из категории
+                                    categoryLevels.forEach((levelData) => {
+                                        const i = levelData.levelNum;
+                                        const btn = document.createElement('button');
+                                        
+                                        const unlocked = isLevelUnlocked(categoryId, difficulty, i);
+                                        const isLocked = (i >= 15 && !unlocked);
+                                        
+                                        // Показываем замок для запертых уровней
+                                        if (isLocked) {
+                                            btn.textContent = '🔒';
+                                            btn.style.fontSize = '1rem !important';
+                                        } else {
+                                            btn.textContent = i;
+                                            btn.style.fontSize = '1.2rem !important';
+                                        }
+                                        
+                                        btn.dataset.levelId = levelData.id;
+                                        btn.dataset.levelNum = levelData.levelNum;
+                                        btn.dataset.isLocked = isLocked ? 'true' : 'false';
+                                        
+                                        const colors = getButtonColors(levelData);
+                                        
+                                        btn.style.cssText = `
+                                            background: ${colors.bg} !important;
+                                            color: ${colors.text} !important;
+                                            border: none !important;
+                                            border-radius: 50% !important;
+                                            width: 55px !important;
+                                            height: 55px !important;
+                                            min-width: 55px !important;
+                                            min-height: 55px !important;
+                                            font-size: 1.2rem !important;
+                                            font-weight: bold !important;
+                                            cursor: ${isLocked ? 'pointer' : 'pointer'} !important;
+                                            box-shadow: 0 3px 0 ${colors.shadow} !important;
+                                            transition: 0.05s linear !important;
+                                            display: flex !important;
+                                            align-items: center !important;
+                                            justify-content: center !important;
+                                            margin: 2px !important;
+                                        `;
+                                        
+                                        btn.onmouseenter = () => { 
+                                            if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; 
+                                        };
+                                        btn.onmouseleave = () => { 
+                                            if (btn !== selectedButton) btn.style.transform = 'scale(1)'; 
+                                        };
+                                        
+                                        btn.onclick = (function(b, level) {
+                                            return function(e) {
+                                                e.stopPropagation();
+                                                const isLocked = b.dataset.isLocked === 'true';
+                                                
+                                                if (isLocked) {
+                                                    showUnlockLevelModal(categoryId, difficulty, level.levelNum, function() {
+                                                        modalDiv.remove();
+                                                        showCategoryLevelsModal(categoryId, difficulty);
+                                                    });
+                                                    return;
+                                                }
+                                                
+                                                selectLevel(b, level);
+                                            };
+                                        })(btn, levelData);
+                                        
+                                        grid.appendChild(btn);
+                                        
+                                        // Выбираем первый доступный уровень
+                                        if (i === 1 && !isLocked) {
+                                            setTimeout(() => { selectLevel(btn, levelData); }, 50);
+                                        }
+                                    });
     
     document.getElementById('playSelectedBtn').onclick = () => {
         if (selectedLevelData) {
@@ -1569,19 +1578,17 @@ function updateFoundCellsColor() {
     });
     
 // Кнопка "Следующий уровень"
-nextLevelBtn.addEventListener('click', () => {
+nextLevelBtn.addEventListener('click', function() {
     // Находим следующий уровень с учётом текущей сложности
     const nextLevel = findNextLevel(currentLevelId, currentDifficulty);
     
     if (nextLevel) {
         // Загружаем следующий уровень с ТОЙ ЖЕ сложностью
         loadLevelById(nextLevel.id, currentDifficulty);
-    } else {
-        // На всякий случай - загружаем первый уровень
-        loadLevelById(ALL_LEVELS[0].id, 'easy');
     }
+    // Если nextLevel === null, значит findNextLevel уже показал модалку разблокировки
 });
-    
+
     // инициализация аудио и первого меню
 function init() {
     document.body.addEventListener('click', () => {
