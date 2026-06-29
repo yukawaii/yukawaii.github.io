@@ -34,6 +34,9 @@
         --play-btn-bg: #517a2f;
     --play-btn-text: white;
     --play-btn-shadow: #2e4a1a;
+      --completed-level-bg: #FFE5D6;
+    --completed-level-text: #2d2b1a;
+    --completed-level-shadow: #8b5a2a;
 }
 
 /* Кнопка "Играть!" в модалке выбора уровня */
@@ -49,6 +52,7 @@
     cursor: pointer !important;
     transition: 0.05s linear !important;
 }
+
 
 #playSelectedBtn:hover {
     transform: scale(1.02) !important;
@@ -1973,4 +1977,107 @@ div[style*="position:fixed"] {
 [data-theme="sun"] .modal-window div[style*="overflow-y:auto;"]::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #f0b830, #e0981a) !important;
     box-shadow: 0 0 30px rgba(232,168,32,0.5), inset 0 0 15px rgba(255,255,255,0.2) !important;
+}
+
+[data-theme="dark"] {
+    --completed-level-bg: #f776fc;
+    --completed-level-text: #3b0758;
+    --completed-level-shadow: #961f72;
+}
+
+[data-theme="blue"] {
+    --completed-level-bg: #6ec2fd;
+    --completed-level-text: #2532df;
+    --completed-level-shadow: #356588;
+}
+
+[data-theme="teal"] {
+    --completed-level-bg: #5fffff;
+    --completed-level-text: #023d3d;
+    --completed-level-shadow: #2b8585;
+}
+
+[data-theme="sun"] {
+    --completed-level-bg: #ffc94b;
+    --completed-level-text: #5a4a1a;
+    --completed-level-shadow: #917835;
+}
+/* Тёмная тема */
+[data-theme="dark"] .modal-window h3 {
+    color: #b8a0e8 !important;
+    text-shadow: 
+        0 0 10px rgba(180,140,255,0.3),
+        0 0 20px rgba(180,140,255,0.2),
+        0 0 40px rgba(180,140,255,0.1),
+        0 0 80px rgba(180,140,255,0.05) !important;
+}
+
+/* Голубая тема */
+[data-theme="blue"] .modal-window h3 {
+    color: #4a9fc7 !important;
+    text-shadow: 
+        0 0 10px rgba(74,159,199,0.3),
+        0 0 20px rgba(74,159,199,0.2),
+        0 0 40px rgba(74,159,199,0.1) !important;
+}
+
+/* Бирюзовая тема */
+[data-theme="teal"] .modal-window h3 {
+    color: #2a9a9a !important;
+    text-shadow: 
+        0 0 10px rgba(42,154,154,0.3),
+        0 0 20px rgba(42,154,154,0.2),
+        0 0 40px rgba(42,154,154,0.1) !important;
+}
+
+/* Солнечная тема */
+[data-theme="sun"] .modal-window h3 {
+    color: #e8a820 !important;
+    text-shadow: 
+        0 0 10px rgba(232,168,32,0.3),
+        0 0 20px rgba(232,168,32,0.2),
+        0 0 40px rgba(232,168,32,0.1) !important;
+}
+/* ===== КНОПКА ПОКАЗА СЛОВ ===== */
+
+/* ===== КНОПКА ПОКАЗА СЛОВ ===== */
+
+#revealWordsBtn {
+    transition: 0.05s linear !important;
+}
+
+#revealWordsBtn:hover {
+    transform: scale(1.02) !important;
+}
+
+#revealWordsBtn:active {
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0 #8b5a2a !important;
+}
+
+/* Тёмная тема */
+[data-theme="dark"] #revealWordsBtn {
+    background: rgba(120,80,200,0.3) !important;
+    color: #d0d0e8 !important;
+    box-shadow: 0 2px 0 rgba(80,50,150,0.3) !important;
+}
+
+[data-theme="dark"] #revealWordsBtn:hover {
+    background: rgba(120,80,200,0.4) !important;
+}
+
+[data-theme="dark"] #revealWordsBtn:active {
+    box-shadow: 0 1px 0 rgba(80,50,150,0.3) !important;
+}
+
+/* Анимация для модалок */
+@keyframes zoomIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
