@@ -3453,26 +3453,20 @@ function showConfirmModal() {
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
+   // ✅ ПРЕДЗАГРУЗКА РЕКЛАМЫ СРАЗУ ПРИ ОТКРЫТИИ МОДАЛКИ
+    preloadAd();
+    
     document.getElementById('confirmWatchBtn').onclick = function() {
         modalDiv.remove();
         console.log('🔄 Клик по "Показать", пытаемся показать рекламу...');
         
-        // ✅ ПРЯМОЙ ВЫЗОВ showAdUnavailableModal ДЛЯ ТЕСТА
-        // Раскомментируйте следующую строку для проверки, что модалка работает
-        // showAdUnavailableModal();
-        // return;
-        
         showRewardedAd(
-            // Успех - показываем слова
             function() {
                 console.log('✅ Реклама показана, открываем слова');
                 revealWordsSuccess();
             },
-            // Ошибка - реклама недоступна
             function(errorMessage) {
                 console.log('❌ Ошибка:', errorMessage);
-                console.log('📢 Показываем модалку "Реклама недоступна" из onFail');
-                // ✅ ВЫЗЫВАЕМ НАПРЯМУЮ
                 showAdUnavailableModal();
             }
         );
@@ -3487,7 +3481,32 @@ function showConfirmModal() {
         if (e.target === modalDiv) modalDiv.remove(); 
     };
 }
+// ===== ПРЕДЗАГРУЗКА РЕКЛАМЫ =====
+let adPreloaded = false;
 
+function preloadAd() {
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен, предзагрузка невозможна');
+        return;
+    }
+    
+    if (adPreloaded) {
+        console.log('ℹ️ Реклама уже предзагружена');
+        return;
+    }
+    
+    console.log('📺 Предзагрузка рекламы...');
+    vkBridge.send('VKWebAppCheckNativeAds', {
+        ad_format: 'reward'
+    })
+    .then(function(data) {
+        adPreloaded = true;
+        console.log('✅ Реклама предзагружена:', data);
+    })
+    .catch(function(error) {
+        console.warn('⚠️ Ошибка предзагрузки рекламы:', error);
+    });
+}
 // ===== МОДАЛКА "РЕКЛАМА НЕДОСТУПНА" =====
 function showAdUnavailableModal() {
     console.log('📢📢📢 ПОКАЗЫВАЕМ МОДАЛКУ "Реклама недоступна"');
@@ -3547,6 +3566,7 @@ function revealWordsSuccess() {
 
 
 // ===== ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ =====
+// ===== ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ =====
 function showRewardedAd(onSuccess, onFail) {
     console.log('📺 showRewardedAd вызван');
     console.log('🔍 typeof vkBridge:', typeof vkBridge);
@@ -3565,8 +3585,6 @@ function showRewardedAd(onSuccess, onFail) {
     }
     
     let isFinished = false;
-    
-    // ✅ УВЕЛИЧИВАЕМ ТАЙМАУТ ДО 10 СЕКУНД
     const timeoutId = setTimeout(function() {
         if (!isFinished) {
             isFinished = true;
@@ -3575,7 +3593,7 @@ function showRewardedAd(onSuccess, onFail) {
         }
     }, 10000);
     
-    // ✅ СНАЧАЛА ПРОВЕРЯЕМ ГОТОВНОСТЬ РЕКЛАМЫ
+    // ✅ СНАЧАЛА ПРОВЕРЯЕМ (если уже предзагружено — ответ будет мгновенным)
     console.log('📺 Проверяем готовность рекламы...');
     vkBridge.send('VKWebAppCheckNativeAds', {
         ad_format: 'reward'
@@ -3598,6 +3616,7 @@ function showRewardedAd(onSuccess, onFail) {
         console.log('📺 Результат показа:', showData?.result);
         
         if (showData && showData.result === true) {
+            adPreloaded = false;  // Сбрасываем флаг после показа
             onSuccess();
         } else {
             console.log('ℹ️ Реклама не показана (result: false)');
@@ -3769,6 +3788,9 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
+     // ✅ ПРЕДЗАГРУЗКА РЕКЛАМЫ СРАЗУ ПРИ ОТКРЫТИИ МОДАЛКИ
+    preloadAd();
+    
     document.getElementById('unlockWatchBtn').onclick = function() {
         modalDiv.remove();
         console.log(`🔄 Клик по "Посмотреть", разблокируем уровень ${levelNum}...`);
@@ -3776,9 +3798,7 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
         showRewardedAd(
             function() {
                 console.log(`✅ Реклама показана, разблокируем уровень ${levelNum}`);
-                // Разблокируем уровень
                 unlockLevel(categoryId, difficulty, levelNum);
-                // Обновляем UI
                 if (onSuccess) onSuccess();
                 showMessage(`🔓 Уровень ${levelNum} разблокирован!`, 2000);
             },
