@@ -6,7 +6,16 @@ const savedColorIndex = localStorage.getItem('lastColorIndex');
 if (savedColorIndex) {
     colorIndex = parseInt(savedColorIndex);
 }
-
+// ===== НАСТРОЙКИ РАЗБЛОКИРОВКИ =====
+const FREE_LEVELS_COUNT = 14;  // Сколько уровней бесплатно (1-14)
+// ⭐ ИСКЛЮЧЕНИЯ: уровни, которые открыты, даже если выше FREE_LEVELS_COUNT
+// Просто добавляйте сюда номера уровней, которые должны быть открыты
+const OPEN_LEVELS_EXCEPTIONS = [
+    18,   // ← пример: уровень 18 открыт
+    19,  // ← добавляйте новые уровни сюда
+    // 25,
+    // 30
+];
 /*const WORD_COLORS = [
                                 '#2D6A4F', // темный изумруд
                                 '#6B4E8E', // аметист

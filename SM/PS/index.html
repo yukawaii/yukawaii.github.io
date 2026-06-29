@@ -70,15 +70,15 @@
 
         <div id="gridContainer" class="grid"></div>
 
-                    <div class="words-container" style="display:block;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
-                            <span style="font-weight:bold;color:var(--text-secondary);font-size:0.9rem;">📚 Слова для поиска:</span>
-                            <button id="revealWordsBtn" style="background:var(--accent-color, #ffa54d);color:#2d2b1a;border:none;padding:5px 14px;border-radius:40px;font-size:0.75rem;font-weight:bold;cursor:pointer;box-shadow:0 2px 0 #8b5a2a;transition:0.05s linear;">
-                                📖 Показать слова
-                            </button>
+                  <div class="words-container" style="display:block;">
+                            <div id="wordsHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+                                <span style="font-weight:bold;color:var(--text-secondary);font-size:0.9rem;">📚 Слова для поиска:</span>
+                                <button id="revealWordsBtn" style="background:var(--accent-color, #ffa54d);color:#2d2b1a;border:none;padding:5px 14px;border-radius:40px;font-size:0.75rem;font-weight:bold;cursor:pointer;box-shadow:0 2px 0 #8b5a2a;transition:0.05s linear;">
+                                    📖 Показать слова
+                                </button>
+                            </div>
+                            <div id="wordsListContainer" class="words-list" style="display:none;"></div>
                         </div>
-                        <div id="wordsListContainer" class="words-list" style="display:none;"></div>
-                    </div>
 
         <div class="buttons">
             <button id="clearBtn">🗑️ Очистить</button>
@@ -1578,15 +1578,65 @@ function updateFoundCellsColor() {
     });
     
 // Кнопка "Следующий уровень"
+// Кнопка "Следующий уровень"
 nextLevelBtn.addEventListener('click', function() {
-    // Находим следующий уровень с учётом текущей сложности
-    const nextLevel = findNextLevel(currentLevelId, currentDifficulty);
+    // Находим следующий уровень
+    const currentLevel = getLevelById(currentLevelId);
+    if (!currentLevel) return;
     
-    if (nextLevel) {
-        // Загружаем следующий уровень с ТОЙ ЖЕ сложностью
-        loadLevelById(nextLevel.id, currentDifficulty);
+    const catId = currentLevel.categoryId;
+    const levelNum = currentLevel.levelNum;
+    const difficulty = currentDifficulty;
+    
+    // Получаем все уровни этой категории
+    const categoryLevels = getLevelsByCategoryAndDifficulty(catId, difficulty);
+    
+    // Ищем следующий номер уровня
+    let nextLevelNum = levelNum + 1;
+    let nextLevel = categoryLevels.find(l => l.levelNum === nextLevelNum);
+    
+    if (!nextLevel) {
+        // Если следующий уровень не найден - переходим к следующей категории
+        const allCategories = getCurrentCategories();
+        const currentCatIndex = allCategories.findIndex(c => c.id === catId);
+        let nextCatIndex = (currentCatIndex + 1) % allCategories.length;
+        
+        let attempts = 0;
+        while (attempts < allCategories.length) {
+            const nextCat = allCategories[nextCatIndex];
+            const nextCatLevels = getLevelsByCategoryAndDifficulty(nextCat.id, difficulty);
+            
+            if (nextCatLevels.length > 0) {
+                const firstLevel = nextCatLevels.find(l => l.levelNum === 1);
+                if (firstLevel) {
+                    nextLevel = firstLevel;
+                    break;
+                }
+            }
+            nextCatIndex = (nextCatIndex + 1) % allCategories.length;
+            attempts++;
+        }
+        
+        if (!nextLevel) {
+            nextLevel = ALL_LEVELS.find(l => l.difficulty === difficulty) || ALL_LEVELS[0];
+        }
     }
-    // Если nextLevel === null, значит findNextLevel уже показал модалку разблокировки
+    
+    // ✅ ПРОВЕРКА: если следующий уровень существует и ЗАБЛОКИРОВАН
+    if (nextLevel) {
+        const isUnlocked = isLevelUnlocked(catId, difficulty, nextLevel.levelNum);
+        if (!isUnlocked) {
+            // Уровень заблокирован - показываем модалку разблокировки
+            showUnlockLevelModal(catId, difficulty, nextLevel.levelNum, function() {
+                // После разблокировки загружаем уровень
+                loadLevelById(nextLevel.id, difficulty);
+            });
+            return; // Не загружаем уровень
+        }
+        
+        // Уровень разблокирован - загружаем
+        loadLevelById(nextLevel.id, difficulty);
+    }
 });
 
     // инициализация аудио и первого меню
@@ -3214,12 +3264,17 @@ function showAdUnavailableModal() {
         if (e.target === modalDiv) modalDiv.remove(); 
     };
 }
+
 // ===== ФУНКЦИЯ УСПЕШНОГО ОТКРЫТИЯ СЛОВ =====
 function revealWordsSuccess() {
-    isWordsRevealed = true;
-    wordsListContainer.style.display = 'flex';
-    revealWordsBtn.textContent = '🙈 Скрыть слова';
-    revealWordsBtn.style.background = '#e06c6c';
+    isWordsRevealed = true;    
+    // Показываем список слов
+    wordsListContainer.style.display = 'flex';    
+    // СКРЫВАЕМ заголовок и кнопку
+    const wordsHeader = document.getElementById('wordsHeader');
+    if (wordsHeader) {
+        wordsHeader.style.display = 'none';
+    }    
     showMessage('📖 Список слов открыт!', 1500);
 }
 
@@ -3282,17 +3337,12 @@ function showRewardedAd(onSuccess, onFail) {
 }
 
 // ===== ОБРАБОТЧИК КНОПКИ "ПОКАЗАТЬ СЛОВА" =====
+// ===== ОБРАБОТЧИК КНОПКИ "ПОКАЗАТЬ СЛОВА" =====
 function handleRevealWords() {
+    // Если слова уже открыты - ничего не делаем
     if (isWordsRevealed) {
-        // Уже открыто - скрываем
-        isWordsRevealed = false;
-        wordsListContainer.style.display = 'none';
-        revealWordsBtn.textContent = '📖 Показать слова';
-        revealWordsBtn.style.background = 'var(--accent-color, #ffa54d)';
-        showMessage('Список слов скрыт', 1000);
-        return;
-    }
-    
+        showMessage('📖 Слова уже открыты', 1000);
+        return;    }    
     // Показываем модалку подтверждения
     showConfirmModal();
 }
@@ -3302,12 +3352,16 @@ if (revealWordsBtn) {
     revealWordsBtn.addEventListener('click', handleRevealWords);
 }
 
+
 // При загрузке нового уровня - скрываем список слов
 function resetWordsVisibility() {
     isWordsRevealed = false;
     if (wordsListContainer) {
-        wordsListContainer.style.display = 'none';
-    }
+        wordsListContainer.style.display = 'none';    }
+    // ПОКАЗЫВАЕМ заголовок и кнопку обратно
+    const wordsHeader = document.getElementById('wordsHeader');
+    if (wordsHeader) {
+        wordsHeader.style.display = 'flex';    }
     if (revealWordsBtn) {
         revealWordsBtn.textContent = '📖 Показать слова';
         revealWordsBtn.style.background = 'var(--accent-color, #ffa54d)';
@@ -3350,9 +3404,13 @@ function unlockLevel(categoryId, difficulty, levelNum) {
 
 // Проверить, разблокирован ли уровень
 function isLevelUnlocked(categoryId, difficulty, levelNum) {
+    // ✅ Проверяем, есть ли уровень в исключениях
+    if (OPEN_LEVELS_EXCEPTIONS.includes(levelNum)) {
+        return true;  // Всегда открыт
+    }    
     // Уровни 1-14 всегда открыты
-    if (levelNum <= 14) return true;
-    // Уровни 15-20 проверяем
+    if (levelNum <= FREE_LEVELS_COUNT) return true;    
+    // Остальные проверяем по разблокировке
     const unlocked = getUnlockedLevels(categoryId, difficulty);
     return unlocked.includes(levelNum);
 }
