@@ -335,8 +335,6 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     let selectedLevelNum = 1;
     let selectedLevelData = categoryLevels[0];
     let selectedButton = null;
-    // Сохраняем исходные цвета для каждой кнопки
-    const buttonColors = new Map();
     
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-window';
@@ -359,20 +357,18 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     
     const grid = document.getElementById('levelsGrid');
     
-    // ===== ФУНКЦИЯ ДЛЯ ПОЛУЧЕНИЯ ЦВЕТОВ КНОПКИ =====
- function getButtonColors(levelData) {
-    const completed = isLevelCompleted(levelData.id, difficulty);
-    return {
-        bg: completed ? 'var(--completed-level-bg, #FFE5D6)' : '#d4c3a4',
-        text: completed ? 'var(--completed-level-text, #2d2b1a)' : '#3a3220',
-        shadow: completed ? 'var(--completed-level-shadow, #8b5a2a)' : '#9b6e42'
-    };
-}
+    function getButtonColors(levelData) {
+        const completed = isLevelCompleted(levelData.id, difficulty);
+        const unlocked = isLevelUnlocked(categoryId, difficulty, levelData.levelNum);
+        return {
+            bg: completed ? 'var(--completed-level-bg, #FFE5D6)' : (unlocked ? '#d4c3a4' : '#888888'),
+            text: completed ? 'var(--completed-level-text, #2d2b1a)' : (unlocked ? '#3a3220' : '#666666'),
+            shadow: completed ? 'var(--completed-level-shadow, #8b5a2a)' : (unlocked ? '#9b6e42' : '#555555')
+        };
+    }
     
-    // ===== ФУНКЦИЯ ВОССТАНОВЛЕНИЯ СТИЛЕЙ КНОПКИ =====
     function restoreButtonStyle(btn, levelData) {
         const colors = getButtonColors(levelData);
-        // Применяем стили с !important, чтобы перебить inline-стили
         btn.style.setProperty('background', colors.bg, 'important');
         btn.style.setProperty('color', colors.text, 'important');
         btn.style.setProperty('box-shadow', `0 3px 0 ${colors.shadow}`, 'important');
@@ -381,9 +377,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
         btn.classList.remove('selected-level');
     }
     
-    // ===== ФУНКЦИЯ ВЫДЕЛЕНИЯ =====
     function selectLevel(btn, levelData) {
-        // Снимаем выделение с предыдущей кнопки и восстанавливаем её стиль
         if (selectedButton && selectedLevelData) {
             restoreButtonStyle(selectedButton, selectedLevelData);
         }
@@ -392,7 +386,6 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
         selectedLevelNum = levelData.levelNum;
         selectedLevelData = levelData;
         
-        // Выделяем новую кнопку
         btn.classList.add('selected-level');
         btn.style.setProperty('background', 'var(--level-selected-bg, #f7b32b)', 'important');
         btn.style.setProperty('box-shadow', '0 2px 0 var(--level-selected-shadow, #8b5a2a)', 'important');
@@ -400,14 +393,26 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
         btn.style.setProperty('color', '#2d2b1a', 'important');
     }
     
-    // Создаём кнопки уровней (от 1 до 20)
     for (let i = 1; i <= 20; i++) {
         const levelData = categoryLevels.find(l => l.levelNum === i);
         if (levelData) {
             const btn = document.createElement('button');
-            btn.textContent = i;
+            
+            const unlocked = isLevelUnlocked(categoryId, difficulty, i);
+            const isLocked = (i >= 15 && !unlocked);
+            
+            // Показываем замок для запертых уровней
+            if (isLocked) {
+                btn.textContent = '🔒';
+                btn.style.fontSize = '1rem !important';
+            } else {
+                btn.textContent = i;
+                btn.style.fontSize = '1.2rem !important';
+            }
+            
             btn.dataset.levelId = levelData.id;
             btn.dataset.levelNum = levelData.levelNum;
+            btn.dataset.isLocked = isLocked ? 'true' : 'false';
             
             const colors = getButtonColors(levelData);
             
@@ -422,7 +427,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
                 min-height: 55px !important;
                 font-size: 1.2rem !important;
                 font-weight: bold !important;
-                cursor: pointer !important;
+                cursor: ${isLocked ? 'pointer' : 'pointer'} !important;
                 box-shadow: 0 3px 0 ${colors.shadow} !important;
                 transition: 0.05s linear !important;
                 display: flex !important;
@@ -441,17 +446,26 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
             btn.onclick = (function(b, level) {
                 return function(e) {
                     e.stopPropagation();
+                    const isLocked = b.dataset.isLocked === 'true';
+                    
+                    if (isLocked) {
+                        // Показываем модалку разблокировки
+                        showUnlockLevelModal(categoryId, difficulty, level.levelNum, function() {
+                            // После разблокировки - перерисовываем
+                            modalDiv.remove();
+                            showCategoryLevelsModal(categoryId, difficulty);
+                        });
+                        return;
+                    }
+                    
                     selectLevel(b, level);
                 };
             })(btn, levelData);
             
             grid.appendChild(btn);
             
-            // Выбираем первый уровень по умолчанию
-            if (i === 1) {
-                setTimeout(() => { 
-                    selectLevel(btn, levelData); 
-                }, 50);
+            if (i === 1 && !isLocked) {
+                setTimeout(() => { selectLevel(btn, levelData); }, 50);
             }
         }
     }
@@ -470,7 +484,6 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy') {
     
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
-
 // Кнопка выбора уровней
 const levelSelectBtn = document.getElementById('levelSelectBtn');
 if (levelSelectBtn) {
@@ -2907,8 +2920,9 @@ function loadAllDataFromVK() {
         loadFromVKStorage('wordgame_completed_easy'),
         loadFromVKStorage('wordgame_completed_medium'),
         loadFromVKStorage('wordgame_completed_hard'),
-        loadFromVKStorage('wordgame_completed_expert')
-    ]).then(([theme, galaxyData, scrollsData, totalStarsData, easyData, mediumData, hardData, expertData]) => {
+        loadFromVKStorage('wordgame_completed_expert'),
+        loadFromVKStorage('wordgame_unlocked_levels_v2')  // ← ДОБАВИТЬ
+    ]).then(([theme, galaxyData, scrollsData, totalStarsData, easyData, mediumData, hardData, expertData, unlockedLevelsData]) => {
         let loaded = false;
         
         // ====== ТЕМА ======
@@ -2982,7 +2996,12 @@ function loadAllDataFromVK() {
                 console.log('✅ Общие звёзды обновлены: ' + localTotal + ' → ' + maxTotal);
             }
         }
-        
+        // ====== РАЗБЛОКИРОВАННЫЕ УРОВНИ ======
+        if (unlockedLevelsData) {
+            loadUnlockedLevelsFromVK(unlockedLevelsData);
+            loaded = true;
+        }
+
         // ====== ПРОЙДЕННЫЕ УРОВНИ (МЕРЖ) ======
         const diffKeys = ['easy', 'medium', 'hard', 'expert'];
         const diffDataMap = { easy: easyData, medium: mediumData, hard: hardData, expert: expertData };
@@ -3033,6 +3052,19 @@ function syncAllDataToVK() {
     const total = updateTotalStars();
     const theme = currentTheme || localStorage.getItem('theme') || 'dark';
     
+    // Собираем разблокировки
+    const allUnlocked = {};
+    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+        const categories = getCategoriesForDifficulty(diff);
+        categories.forEach(cat => {
+            const key = `unlocked_levels_${cat.id}_${diff}`;
+            const unlocked = getUnlockedLevels(cat.id, diff);
+            if (unlocked.length > 0) {
+                allUnlocked[`${cat.id}_${diff}`] = unlocked;
+            }
+        });
+    });
+    
     Promise.all([
         saveToVKStorage('wordgame_theme_v2', theme),
         saveToVKStorage('wordgame_galaxy_v2', stars),
@@ -3041,11 +3073,14 @@ function syncAllDataToVK() {
         saveToVKStorage('wordgame_completed_easy', completedEasy),
         saveToVKStorage('wordgame_completed_medium', completedMedium),
         saveToVKStorage('wordgame_completed_hard', completedHard),
-        saveToVKStorage('wordgame_completed_expert', completedExpert)
+        saveToVKStorage('wordgame_completed_expert', completedExpert),
+        saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked)  // ← ДОБАВИТЬ
     ]).then(() => {
         console.log('✅ Полная синхронизация завершена');
     }).catch(e => console.warn('⚠️ Ошибка синхронизации:', e));
 }
+
+
 // Запуск синхронизации при старте
 (function() {
     if (typeof vkBridge !== 'undefined') {
@@ -3281,6 +3316,146 @@ loadLevelById = function(levelId, difficulty = 'easy') {
     setTimeout(resetWordsVisibility, 100);
 };
 //конец сокрытия списка слов 
+
+// ===== РАЗБЛОКИРОВКА УРОВНЕЙ =====
+
+// Получить список разблокированных уровней для категории и сложности
+function getUnlockedLevels(categoryId, difficulty) {
+    const key = `unlocked_levels_${categoryId}_${difficulty}`;
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : [];
+}
+
+// Сохранить разблокированный уровень
+function unlockLevel(categoryId, difficulty, levelNum) {
+    const key = `unlocked_levels_${categoryId}_${difficulty}`;
+    const unlocked = getUnlockedLevels(categoryId, difficulty);
+    if (!unlocked.includes(levelNum)) {
+        unlocked.push(levelNum);
+        localStorage.setItem(key, JSON.stringify(unlocked));
+        console.log(`✅ Уровень ${levelNum} разблокирован для категории ${categoryId}`);
+        // Синхронизируем с VK
+        syncUnlockedLevelsToVK();
+        return true;
+    }
+    return false;
+}
+
+// Проверить, разблокирован ли уровень
+function isLevelUnlocked(categoryId, difficulty, levelNum) {
+    // Уровни 1-14 всегда открыты
+    if (levelNum <= 14) return true;
+    // Уровни 15-20 проверяем
+    const unlocked = getUnlockedLevels(categoryId, difficulty);
+    return unlocked.includes(levelNum);
+}
+
+// Синхронизация разблокированных уровней с VK
+function syncUnlockedLevelsToVK() {
+    if (typeof vkBridge === 'undefined') return;
+    
+    // Собираем все разблокировки
+    const allUnlocked = {};
+    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+        const categories = getCategoriesForDifficulty(diff);
+        categories.forEach(cat => {
+            const key = `unlocked_levels_${cat.id}_${diff}`;
+            const unlocked = getUnlockedLevels(cat.id, diff);
+            if (unlocked.length > 0) {
+                allUnlocked[`${cat.id}_${diff}`] = unlocked;
+            }
+        });
+    });
+    
+    saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked);
+}
+
+// Загрузка разблокировок из VK и объединение
+function loadUnlockedLevelsFromVK(data) {
+    if (!data) return;
+    
+    let changed = false;
+    for (const key in data) {
+        const [categoryId, difficulty] = key.split('_');
+        if (!categoryId || !difficulty) continue;
+        
+        const vkUnlocked = data[key] || [];
+        const localUnlocked = getUnlockedLevels(parseInt(categoryId), difficulty);
+        
+        // Объединяем: берём все уникальные уровни из обоих списков
+        const merged = [...new Set([...localUnlocked, ...vkUnlocked])];
+        
+        if (merged.length > localUnlocked.length) {
+            const storageKey = `unlocked_levels_${categoryId}_${difficulty}`;
+            localStorage.setItem(storageKey, JSON.stringify(merged));
+            changed = true;
+            console.log(`✅ Уровни для категории ${categoryId} (${difficulty}) объединены: ${localUnlocked.length} → ${merged.length}`);
+        }
+    }
+    
+    if (changed) {
+        // Пересохраняем в VK, чтобы там были все данные
+        syncUnlockedLevelsToVK();
+    }
+}
+// ===== МОДАЛКА РАЗБЛОКИРОВКИ УРОВНЯ =====
+function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal-window';
+    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:30003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
+    
+    contentDiv.innerHTML = `
+        <div style="font-size:3rem;margin-bottom:10px;">🔓</div>
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Открыть уровень ${levelNum}?</h3>
+        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">
+            Посмотрите короткую рекламу, чтобы разблокировать этот уровень! ⏱️
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button id="unlockWatchBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);flex:1;">
+                🎬 Посмотреть
+            </button>
+            <button id="unlockCancelBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;flex:1;">
+                ❌ Отмена
+            </button>
+        </div>
+    `;
+    
+    modalDiv.appendChild(contentDiv);
+    document.body.appendChild(modalDiv);
+    
+    document.getElementById('unlockWatchBtn').onclick = function() {
+        modalDiv.remove();
+        console.log(`🔄 Клик по "Посмотреть", разблокируем уровень ${levelNum}...`);
+        
+        showRewardedAd(
+            function() {
+                console.log(`✅ Реклама показана, разблокируем уровень ${levelNum}`);
+                // Разблокируем уровень
+                unlockLevel(categoryId, difficulty, levelNum);
+                // Обновляем UI
+                if (onSuccess) onSuccess();
+                showMessage(`🔓 Уровень ${levelNum} разблокирован!`, 2000);
+            },
+            function(errorMessage) {
+                console.log('❌ Ошибка:', errorMessage);
+                showAdUnavailableModal();
+            }
+        );
+    };
+    
+    document.getElementById('unlockCancelBtn').onclick = function() {
+        modalDiv.remove();
+        showMessage('❌ Отменено', 1000);
+    };
+    
+    modalDiv.onclick = function(e) { 
+        if (e.target === modalDiv) modalDiv.remove(); 
+    };
+}
+//конец разблокировки уровней
 
     init();
   
