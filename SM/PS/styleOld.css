@@ -2111,5 +2111,29 @@ div[style*="position:fixed"] {
             100% { width: 0%; margin-left: 100%; }
         }
 
+/* ===== ПЛАВНОЕ ОБНОВЛЕНИЕ МОДАЛКИ ===== */
+.modal-content-inner {
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
+}
 
-        
+.modal-content-inner.updating {
+    opacity: 0 !important;
+    transform: scale(0.95) !important;
+}
+
+.modal-content-inner.updated {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+#levelsGrid {
+    transition: opacity 0.2s ease !important;
+}
+
+#levelsGrid button {
+    transition: all 0.15s ease !important;
+}
+
+#levelsGrid button.selected-level {
+    transition: all 0.1s ease !important;
+}
