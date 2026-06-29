@@ -137,7 +137,6 @@ const LEVELS_DATA = [
     { name: "Роботы11", size: 11, baseWords: ["РОБОТ", "МЕХАНИЗМ", "ДАТЧИК", "МОТОР", "ЧИП"] },    // 28
     { name: "Благотворительность11", size: 11, baseWords: ["ПОМОЩЬ", "ДОБРО", "ПОДДЕРЖКА", "МИЛОСЕРДИЕ", "ЗАБОТА"] }, //29
 ];
-
 // КАТЕГОРИИ для каждой сложности
 const CATEGORIES = {
     easy: [
@@ -234,7 +233,6 @@ const CATEGORIES = {
           { id: 19, icon: "✈", title: "Авиация", themeIndex: 19, levelsCount: 28 },
     ]
 };
-
 function getCategoriesForDifficulty(difficulty) {
     // Если CATEGORIES — объект с ключами сложностей
     if (CATEGORIES[difficulty]) {
@@ -243,11 +241,9 @@ function getCategoriesForDifficulty(difficulty) {
     // fallback
     return CATEGORIES.easy || CATEGORIES;
 }
-
 // Функция для получения слов для конкретного уровня с учётом сложности
 function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
-    const baseWords = [...LEVELS_DATA[themeIndex].baseWords];
-    
+    const baseWords = [...LEVELS_DATA[themeIndex].baseWords];    
     // Для простой сложности — существующая логика (всё, что было)
     if (difficulty === 'easy') {    
                                     if (themeIndex === 0) { // Лесные жители (Без повторов, уровни 1-20)
@@ -719,7 +715,6 @@ function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
                                         }
 
     }
-
     // ДЛЯ СРЕДНЕЙ СЛОЖНОСТИ (medium) — 
     if (difficulty === 'medium') {
                                                 // Возвращаем слова для средней сложности
@@ -1174,8 +1169,7 @@ function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
 
         // 
         return baseWords;
-    }
-    
+    }    
     // ДЛЯ СЛОЖНОЙ (hard) — пока возвращаем те же слова
     if (difficulty === 'hard') {
                                                         if (themeIndex === 0) { // Древний мир (Синонимы и дубли разрешены)
@@ -1639,8 +1633,7 @@ function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
 
 
         return baseWords;
-    }
-    
+    }    
     // ДЛЯ ЭКСПЕРТА (expert) — пока возвращаем те же слова
     if (difficulty === 'expert') {
                                                                         if (themeIndex === 0) { // Мозг
@@ -2111,11 +2104,9 @@ function getWordsForLevel(themeIndex, levelNum, difficulty = 'easy') {
 
         return baseWords;
     }
-
     // По умолчанию возвращаем baseWords
     return baseWords;
 }
-
 
 // Свитки мудрости (50 штук)
 const WISDOM_SCROLLS = [
@@ -2420,10 +2411,6 @@ const WISDOM_SCROLLS = [
     { id: 299, text: "Малахит — это зелёный узорчатый минерал, который образуется в зонах окисления медных руд. Минералогия — это цветовой алфавит: синий — азурит, красный — киноварь, зелёный — малахит. Каждый цвет — это ключ к химическому составу. (Джон Эмсли, Строение минералов)" },
     { id: 300, text: "Шум — это неприятный звук, но с точки зрения акустики — это просто неупорядоченные волны. Тишина — это отсутствие сигнала, но идеальной тишины не бывает. Акустическая экология — это наука о том, чтобы слушать не только музыку, но и среду. (Рэймонд Шефер, Настройка мира)" },
 ];
-
-
-
-
 // Функция генерации уникального ID уровня с учётом сложности
 function getLevelId(categoryId, levelNum, difficulty) {
     const diffIndex = DIFFICULTIES.findIndex(d => d.id === difficulty);
@@ -2432,7 +2419,6 @@ function getLevelId(categoryId, levelNum, difficulty) {
     //            для medium (1), категория 0, уровень 1 → 1001
     return diffIndex * 10000 + categoryId * 100 + levelNum;
 }
-
 // Функция получения данных уровня по ID
 function getLevelDataById(levelId) {
     const diffIndex = Math.floor(levelId / 10000);
@@ -2440,31 +2426,30 @@ function getLevelDataById(levelId) {
     const levelNum = levelId % 100;
     return { difficulty: DIFFICULTIES[diffIndex]?.id, categoryId, levelNum };
 }
-
 // СЮЖЕТЫ ДЛЯ СЛОЖНОСТЕЙ (длинные — первый раз, короткие — повторно)
 const DIFFICULTY_STORIES = {
     easy: {
         long: {
-            title: "🌳 Лесная прогулка",
+            title: "🌳Лесная прогулка",
             text: "Добро пожаловать в лес! Здесь слова спрятаны среди деревьев. Найди их по горизонтали и вертикали, и лес откроет тебе свои тайны. Каждое слово — это шаг к гармонии с природой.",
             button: "🚶 В путь!"
         },
         short: {
-            title: "🌳 Снова в лесу",
+            title: "🌳Снова в лесу",
             text: "Лес ждёт тебя! Найди спрятанные слова и продолжай своё путешествие.",
             button: "Вперёд! 🌲"
         }
     },
     medium: {
         long: {
-            title: "🌀 Лабиринт слов",
+            title: "🧩Лабиринт слов",
             text: "Галактика усложняет задачу! Слова теперь могут поворачивать, как извилистые тропы в космосе. Будь внимателен — каждое слово спрятано хитро. Найди их все и стань мастером!",
-            button: "🌀 В лабиринт!"
+            button: "🐰 В лабиринт!"
         },
         short: {
-            title: "🌀 Снова в лабиринте",
+            title: "🧩Снова в лабиринте",
             text: "Космический лабиринт ждёт тебя! Находи все слова и продолжай свой путь.",
-            button: "Вперёд! 🌟"
+            button: "Вперёд!🐰"
         }
     },
     hard: {
@@ -2569,4 +2554,4 @@ function getNextWordColor() {
     
     return color;
 }
-
+window.DIFFICULTY_STORIES = DIFFICULTY_STORIES;

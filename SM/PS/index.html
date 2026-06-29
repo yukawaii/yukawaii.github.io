@@ -536,7 +536,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy', isUpdate = fal
                                 const btn = document.createElement('button');
                                 
                                 const unlocked = isLevelUnlocked(categoryId, difficulty, i);
-                                const isLocked = (i >= 15 && !unlocked);
+                                const isLocked = (i > FREE_LEVELS_COUNT && !unlocked);
                                 
                                 if (isLocked) {
                                     btn.textContent = '🔒';
@@ -1150,60 +1150,67 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
     
     const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
     const enableSnake = difficulty === 'hard' || difficulty === 'expert';
+    const enableDiagonal = difficulty === 'hard' || difficulty === 'expert';
     
     let wordsToPlace = [...customWords];
-    // Сортируем по убыванию длины
+    // Сортируем по убыванию длины (самые длинные первыми)
     wordsToPlace.sort((a, b) => b.length - a.length);
     
     let tempGrid = Array(gridSizeVal).fill().map(() => Array(gridSizeVal).fill(null));
     let positions = new Map();
     let allPlaced = true;
     
-                    for (let i = 0; i < wordsToPlace.length; i++) {
-                        const word = wordsToPlace[i];
-                        let result = null;
-                        
-                        const useLShape = enableLShape || (difficulty === 'easy' && word.length > 8);
-                        
-                        // ✅ ДЛЯ ДЛИННЫХ СЛОВ (> 12 букв) - СНАЧАЛА ПРИНУДИТЕЛЬНОЕ РАЗМЕЩЕНИЕ
-                        if (word.length > 12) {
-                            result = tryPlaceLongWord(word, tempGrid, gridSizeVal);
-                        }
-                        
-                        // Если не получилось - пробуем змейку
-                        if (!result && enableSnake && word.length > 8) {
-                            result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
-                        }
-                        
-                        // Если не получилось змеиное — пробуем Г-образное
-                        if (!result && useLShape && word.length >= 4) {
-                            result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
-                        }
-                        
-                        // Если не получилось Г-образное — пробуем обычное
-                        if (!result) {
-                            result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
-                        }
-                        
-                        if (result) {
-                            positions.set(word, result);
-                        } else {
-                            allPlaced = false;
-                            break;
-                        }
-                    }
+    for (let i = 0; i < wordsToPlace.length; i++) {
+        const word = wordsToPlace[i];
+        let result = null;
+        
+        const useLShape = enableLShape || (difficulty === 'easy' && word.length > 8);
+        
+        // ✅ 1. СНАЧАЛА ЗМЕЙКА ДЛЯ ДЛИННЫХ СЛОВ (> 8 букв)
+        if (enableSnake && word.length > 8) {
+            result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
+        }
+        
+        // ✅ 2. ДЛЯ СЛОЖНОГО И ЭКСПЕРТА: ДИАГОНАЛЬ ДЛЯ КОРОТКИХ СЛОВ (< 8 букв)
+        if (!result && enableDiagonal && word.length < 8) {
+            result = tryPlaceDiagonalWord(word, tempGrid, gridSizeVal);
+        }
+        
+        // ✅ 3. ДЛИННЫЕ СЛОВА (> 12 букв) - ПРИНУДИТЕЛЬНОЕ РАЗМЕЩЕНИЕ
+        if (!result && word.length > 12) {
+            result = tryPlaceLongWord(word, tempGrid, gridSizeVal);
+        }
+        
+        // ✅ 4. Если не получилось — пробуем Г-образное
+        if (!result && useLShape && word.length >= 4) {
+            result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
+        }
+        
+        // ✅ 5. Если не получилось — пробуем обычное (горизонталь/вертикаль)
+        if (!result) {
+            result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
+        }
+        
+        if (result) {
+            positions.set(word, result);
+        } else {
+            allPlaced = false;
+            break;
+        }
+    }
 
     // Если не все слова разместились, пробуем снова
     if (!allPlaced && retryCount < MAX_RETRIES) {
-        return generateLevel(themeIndex, customWords, retryCount + 1);
+        return generateLevel(themeIndex, customWords, retryCount + 1, difficulty);
     }
     
-    // Принудительное размещение
+    // Принудительное размещение (если что-то не разместилось)
     if (!allPlaced) {
         for (let i = 0; i < wordsToPlace.length; i++) {
             const word = wordsToPlace[i];
             if (!positions.has(word)) {
                 let forced = false;
+                // Пробуем по горизонтали
                 for (let r = 0; r < gridSizeVal && !forced; r++) {
                     for (let c = 0; c <= gridSizeVal - word.length; c++) {
                         let can = true;
@@ -1223,6 +1230,7 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
                         }
                     }
                 }
+                // Если не разместилось по горизонтали — пробуем по вертикали
                 if (!forced) {
                     for (let c = 0; c < gridSizeVal && !forced; c++) {
                         for (let r = 0; r <= gridSizeVal - word.length; r++) {
@@ -1262,13 +1270,15 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
         if (!positions.has(word)) {
             console.error(`❌ Слово "${word}" не разместилось! Перегенерация...`);
             if (retryCount < MAX_RETRIES) {
-                return generateLevel(themeIndex, customWords, retryCount + 1);
+                return generateLevel(themeIndex, customWords, retryCount + 1, difficulty);
             }
         }
     }
     
     return { grid: tempGrid, size: gridSizeVal, words: wordsToPlace, positions };
 }
+
+
 function showCategoryModalForDifficulty(difficulty) {
     const oldModal = document.getElementById('diffCategoryModal');
     if (oldModal) oldModal.remove();
@@ -1703,7 +1713,6 @@ function checkLShapeOrder(chain, correctCoords) {
 function onCellClick(row, col) {
     playTapSound();
 
-    // Теперь можно кликать на ЛЮБЫЕ буквы, даже зелёные    
     // Если нет активной цепочки — начинаем новую с этой клетки
     if (currentChain.length === 0) {
         currentChain = [{ row, col }];
@@ -1715,6 +1724,15 @@ function onCellClick(row, col) {
     const last = currentChain[currentChain.length - 1];
     const isAdjacentHor = (Math.abs(last.row - row) === 0 && Math.abs(last.col - col) === 1);
     const isAdjacentVer = (Math.abs(last.row - row) === 1 && Math.abs(last.col - col) === 0);
+    const isAdjacentDiag = (Math.abs(last.row - row) === 1 && Math.abs(last.col - col) === 1);
+    
+    // ✅ Проверяем, разрешены ли диагонали (hard и expert)
+    let isAdjacent = false;
+    if (currentDifficulty === 'hard' || currentDifficulty === 'expert') {
+        isAdjacent = isAdjacentHor || isAdjacentVer || isAdjacentDiag;
+    } else {
+        isAdjacent = isAdjacentHor || isAdjacentVer;
+    }
     
     // проверка, не выбрана ли уже эта клетка в текущей цепочке (нельзя повторять)
     const alreadyInChain = currentChain.some(c => c.row === row && c.col === col);
@@ -1724,7 +1742,7 @@ function onCellClick(row, col) {
         return;
     }
     
-    if (isAdjacentHor || isAdjacentVer) {
+    if (isAdjacent) {
         // Добавляем новую букву
         currentChain.push({ row, col });
         highlightCurrentChain();
@@ -1742,7 +1760,7 @@ function onCellClick(row, col) {
                 
                 // Проверка типа слова
                 if (info.direction === 'S') {
-                    // ЗМЕИНЫЕ СЛОВА — строгая проверка координат (как в лабиринте)
+                    // ЗМЕИНЫЕ СЛОВА — строгая проверка координат
                     isCorrectOrder = currentChain.length === correctCoords.length &&
                         currentChain.every((coord, idx) => 
                             coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
@@ -1750,6 +1768,12 @@ function onCellClick(row, col) {
                 } else if (info.direction === 'L') {
                     // Г-ОБРАЗНЫЕ СЛОВА — проверка с учётом альтернативных крайних букв
                     isCorrectOrder = checkLShapeOrder(currentChain, correctCoords);
+                } else if (info.direction === 'D') {
+                    // ✅ ДИАГОНАЛЬНЫЕ СЛОВА — строгая проверка координат
+                    isCorrectOrder = currentChain.length === correctCoords.length &&
+                        currentChain.every((coord, idx) => 
+                            coord.row === correctCoords[idx][0] && coord.col === correctCoords[idx][1]
+                        );
                 } else {
                     // ПРЯМЫЕ СЛОВА — строгая проверка
                     isCorrectOrder = currentChain.length === correctCoords.length &&
@@ -1758,13 +1782,13 @@ function onCellClick(row, col) {
                         );
                 }
                 
-                                if (isCorrectOrder) {
-                        foundWordsSet.add(matchedWord);
-                        
-                        // ✅ Запоминаем цвет для этого слова
-                        if (!wordColorsMap.has(matchedWord)) {
-                            wordColorsMap.set(matchedWord, getNextWordColor());
-                              }
+                if (isCorrectOrder) {
+                    foundWordsSet.add(matchedWord);
+                    
+                    // ✅ Запоминаем цвет для этого слова
+                    if (!wordColorsMap.has(matchedWord)) {
+                        wordColorsMap.set(matchedWord, getNextWordColor());
+                    }
                     
                     updateFoundCellsColor();
                     renderWordsList();
@@ -1831,39 +1855,27 @@ function updateFoundCellsColor() {
     if (foundWordsSet.size === 0) return;
     
     // Окрашиваем слова
-    for (let word of foundWordsSet) {
-        const info = wordPositionMap.get(word);
-        if (!info) continue;
-        
-        let color = wordColorsMap.get(word);
-        if (!color) {
-            color = getNextWordColor();
-            wordColorsMap.set(word, color);
-        }
-        
-        console.log(`🎯 Слово "${word}" цвет: ${color}`);
-        
+    for (let word of foundWordsSet) {        const info = wordPositionMap.get(word);
+        if (!info) continue;                let color = wordColorsMap.get(word);
+        if (!color) {            color = getNextWordColor();            wordColorsMap.set(word, color);
+        }        
+        //console.log(`🎯 Слово "${word}" цвет: ${color}`);        
         for (let [r, c] of info.coords) {
             const cellDiv = document.querySelector(`.cell[data-row='${r}'][data-col='${c}']`);
-            if (cellDiv) {
-                cellDiv.classList.add('found');
+            if (cellDiv) {                cellDiv.classList.add('found');
                 // ✅ Устанавливаем стили напрямую с !important через setProperty
-                cellDiv.style.setProperty('background', color, 'important');
-                cellDiv.style.setProperty('color', '#ffffff', 'important');
-                cellDiv.style.setProperty('text-shadow', '0 1px 2px rgba(0,0,0,0.5)', 'important');
-                cellDiv.style.setProperty('border-color', 'rgba(255,255,255,0.3)', 'important');
+                cellDiv.style.setProperty('background', color, 'important');                cellDiv.style.setProperty('color', '#ffffff', 'important');
+                cellDiv.style.setProperty('text-shadow', '0 1px 2px rgba(0,0,0,0.5)', 'important');                cellDiv.style.setProperty('border-color', 'rgba(255,255,255,0.3)', 'important');
             }
         }
     }
 }
-       
-    
+           
     // Обработчики кнопок
     clearBtn.addEventListener('click', () => {
         clearSelection();
     });
-    
-// Кнопка "Следующий уровень"
+
 // Кнопка "Следующий уровень"
 nextLevelBtn.addEventListener('click', function() {
     // Находим следующий уровень
@@ -2114,8 +2126,6 @@ function showConfetti() {
     }, 250);
 } 
 
-
-
 // Проверка первого запуска ===== начало приветственного сюжета
 // Показ сюжетного окна (первый раз - полная история, потом - короткое напоминание)
 function showWelcomeStory() {
@@ -2152,25 +2162,27 @@ function showWelcomeStory() {
         ];
         
         const modalDiv = document.createElement('div');
-         modalDiv.className = 'modal-window'; 
+        modalDiv.className = 'modal-window';
         modalDiv.id = 'storyModal';
         modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
-        contentDiv.className = 'galaxy-scroll';
+        contentDiv.className = 'story-modal-content galaxy-scroll';
+        // ✅ ИСПОЛЬЗУЕМ CSS-ПЕРЕМЕННЫЕ
+        contentDiv.style.cssText = 'background:var(--bg-card);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.3s ease;';
+
         function updateSlide() {
             const slide = slides[currentSlide];
-          contentDiv.innerHTML = `
-    <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
-   <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-<p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
-        ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
-        <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};display:inline-block;"></span>`).join('')}</div>
-        <button id="storyNextBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
-    </div>
-`;
+            contentDiv.innerHTML = `
+                <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
+                <h3 style="color:var(--text-primary);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3>
+                <p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
+                    ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 #5a3a1a;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
+                    <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? 'var(--accent-color)' : 'var(--border-color)'};display:inline-block;"></span>`).join('')}</div>
+                    <button id="storyNextBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 var(--btn-primary-shadow);">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
+                </div>
+            `;
             
             const nextBtn = contentDiv.querySelector('#storyNextBtn');
             if (nextBtn) {
@@ -2214,13 +2226,15 @@ function showWelcomeStory() {
     shortModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const shortContent = document.createElement('div');
-    shortContent.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
+    shortContent.className = 'story-modal-content';
+    // ✅ ИСПОЛЬЗУЕМ CSS-ПЕРЕМЕННЫЕ
+    shortContent.style.cssText = 'background:var(--bg-card);border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.2s ease;';
     
     shortContent.innerHTML = `
         <div style="font-size:4rem;margin-bottom:10px;">🚀</div>
-        <h3 style="color:#2c3e2b;font-size:1.5rem;margin:0 0 10px;">Снова в деле!</h3>
-        <p style="color:#3a3220;font-size:1rem;line-height:1.5;">Галактика ждёт твоего спасения!<br>Находи слова и возвращай звёзды ✨</p>
-        <button id="shortStartBtn" style="background:#517a2f;color:white;border:none;border-radius:50px;padding:12px 30px;font-size:1.1rem;font-weight:bold;margin-top:20px;cursor:pointer;box-shadow:0 3px 0 #2e4a1a;">Вперёд! ⭐</button>
+        <h3 style="color:var(--text-primary);font-size:1.5rem;margin:0 0 10px;">Снова в деле!</h3>
+        <p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;">Галактика ждёт твоего спасения!<br>Находи слова и возвращай звёзды ✨</p>
+        <button id="shortStartBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:50px;padding:12px 30px;font-size:1.1rem;font-weight:bold;margin-top:20px;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow);">Вперёд! ⭐</button>
     `;
     
     shortModal.appendChild(shortContent);
@@ -2298,29 +2312,43 @@ html += `</div><button id="closeDiffModal" style="background:var(--btn-secondary
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
 
-// Показ сюжета для сложности
 function showDifficultyStory(difficulty) {
     const hasSeenKey = `hasSeenStory_${difficulty}`;
     const hasSeen = localStorage.getItem(hasSeenKey);
-    const story = DIFFICULTY_STORIES[difficulty];
+    const story = window.DIFFICULTY_STORIES ? window.DIFFICULTY_STORIES[difficulty] : null;
+    
+    // Если сюжета нет - показываем категории без сюжета
+    if (!story) {
+        showCategoryModalForDifficulty(difficulty);
+        return;
+    }
+    
     const isFirstTime = !hasSeen;
     const slide = isFirstTime ? story.long : story.short;
     
+    // ✅ Добавляем иконку в зависимости от сложности
+    const icons = {
+        easy: '🌳',
+        medium: '🌀',
+        hard: '✨',
+        expert: '🚀'
+    };
+    const icon = icons[difficulty] || '🌟';
+    
     const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
+    modalDiv.className = 'modal-window'; 
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
+    contentDiv.className = 'story-modal-content galaxy-scroll';
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
-    contentDiv.className = 'galaxy-scroll';
     
-    
-contentDiv.innerHTML = `
-    <div style="font-size:3rem;margin-bottom:10px;">${slide.title.split(' ')[0]}</div>
-   <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-<p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-    <button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>
-`;
+    contentDiv.innerHTML = `
+        <div style="font-size:4rem;margin-bottom:10px;">${icon}</div>
+        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3>
+        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+        <button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>
+    `;
     
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
@@ -2330,12 +2358,12 @@ contentDiv.innerHTML = `
         if (isFirstTime) {
             localStorage.setItem(hasSeenKey, 'true');
         }
-        // После сюжета — выбор категории
         showCategoryModalForDifficulty(difficulty);
     };
     
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
+
 
 // Модальное окно галактик
 function showGalaxyMap() {
@@ -3558,10 +3586,53 @@ function syncAllDataToVK() {
     }
 })();
 
-// Доступ из консоли для отладки
-window.syncAllDataToVK = syncAllDataToVK;
-
-window.loadAllDataFromVK = loadAllDataFromVK;
+// ===== РАЗМЕЩЕНИЕ СЛОВА ПО ДИАГОНАЛИ =====
+function tryPlaceDiagonalWord(word, tempGrid, gridSizeVal) {
+    const maxAttempts = 1000;
+    const directions = [
+        { dr: 1, dc: 1 },   // вправо-вниз
+        { dr: 1, dc: -1 },  // влево-вниз
+        { dr: -1, dc: 1 },  // вправо-вверх
+        { dr: -1, dc: -1 }  // влево-вверх
+    ];
+    
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        const startRow = Math.floor(Math.random() * gridSizeVal);
+        const startCol = Math.floor(Math.random() * gridSizeVal);
+        
+        if (tempGrid[startRow][startCol] !== null) continue;
+        
+        let canPlace = true;
+        const coords = [];
+        
+        for (let i = 0; i < word.length; i++) {
+            const r = startRow + i * dir.dr;
+            const c = startCol + i * dir.dc;
+            
+            if (r < 0 || r >= gridSizeVal || c < 0 || c >= gridSizeVal) {
+                canPlace = false;
+                break;
+            }
+            if (tempGrid[r][c] !== null && tempGrid[r][c] !== word[i]) {
+                canPlace = false;
+                break;
+            }
+            coords.push([r, c]);
+        }
+        
+        if (canPlace) {
+            for (let i = 0; i < coords.length; i++) {
+                const [r, c] = coords[i];
+                if (tempGrid[r][c] === null) {
+                    tempGrid[r][c] = word[i];
+                }
+            }
+            return { coords, direction: 'D' }; // D = Diagonal
+        }
+    }
+    return null;
+}
 // ===== МОНЕТИЗАЦИЯ: СКРЫТИЕ СПИСКА СЛОВ =====
 // Состояние: открыт ли список слов для текущего уровня
 let isWordsRevealed = false;
@@ -3854,7 +3925,7 @@ function isLevelUnlocked(categoryId, difficulty, levelNum) {
     if (OPEN_LEVELS_EXCEPTIONS.includes(levelNum)) {
         return true;  // Всегда открыт
     }    
-    // Уровни 1-14 всегда открыты
+    // Уровни 1-10 всегда открыты
     if (levelNum <= FREE_LEVELS_COUNT) return true;    
     // Остальные проверяем по разблокировке
     const unlocked = getUnlockedLevels(categoryId, difficulty);
@@ -3972,6 +4043,5 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
     init();
   
 </script>
-
 </body>
 </html>

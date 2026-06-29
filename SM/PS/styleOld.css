@@ -190,17 +190,18 @@
 }
 
 /* Обычная кнопка уровня */
-#levelsGrid button {
-    border-radius: 50%;
-    aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#levelsGrid button {   
+    aspect-ratio: 1 / 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     background: #d4c3a4;
     color: #3a3220;
     box-shadow: 0 3px 0 #9b6e42;
     transition: 0.05s linear;
+     border-radius: 50% !important;
 }
+
 
 /* Выделенная кнопка уровня */
 #levelsGrid button.selected-level {
@@ -642,10 +643,6 @@ button:active {
     box-shadow: 0 1px 0 var(--btn-primary-shadow);
 }
 
-@keyframes zoomIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
 
 /* ===== СТАРТОВОЕ МЕНЮ ===== */
 #startMenu {
@@ -689,13 +686,7 @@ body.menu-mode .game-container {
 }
 
 /* ===== КРУГЛЫЕ КНОПКИ В СЕТКАХ ===== */
-#levelsGrid button {
-    border-radius: 50% !important;
-    aspect-ratio: 1 / 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
+
 
 /* ===== ТЁМНАЯ ТЕМА: ЯЧЕЙКИ И КОНТЕЙНЕРЫ ===== */
 [data-theme="dark"] .cell {
@@ -2136,4 +2127,80 @@ div[style*="position:fixed"] {
 
 #levelsGrid button.selected-level {
     transition: all 0.1s ease !important;
+}
+
+/* ===== СЮЖЕТНЫЕ МОДАЛКИ ===== */
+
+/* Применяем через класс, а не через id */
+.story-modal-content {
+    background: var(--bg-card) !important;
+    border-color: var(--accent-color) !important;
+}
+
+.story-modal-content h3 {
+    color: var(--text-primary) !important;
+    font-size: 1.6rem !important;
+    margin: 0 0 10px !important;
+}
+
+.story-modal-content p {
+    color: var(--text-secondary) !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    margin: 15px 0 !important;
+}
+
+.story-modal-content button {
+    background: var(--btn-primary) !important;
+    color: var(--text-light) !important;
+    border: none !important;
+    box-shadow: 0 3px 0 var(--btn-primary-shadow) !important;
+}
+
+.story-modal-content button:hover {
+    transform: scale(1.02) !important;
+}
+
+.story-modal-content button:active {
+    transform: translateY(2px) !important;
+    box-shadow: 0 1px 0 var(--btn-primary-shadow) !important;
+}
+
+/* ===== СВЕЧЕНИЕ ДЛЯ ЗАГОЛОВКОВ В СЮЖЕТНЫХ МОДАЛКАХ ===== */
+
+/* Тёмная тема */
+[data-theme="dark"] .story-modal-content h3 {
+    color: #b8a0e8 !important;
+    text-shadow: 
+        0 0 10px rgba(180,140,255,0.3),
+        0 0 20px rgba(180,140,255,0.2),
+        0 0 40px rgba(180,140,255,0.1),
+        0 0 80px rgba(180,140,255,0.05) !important;
+}
+
+/* Голубая тема */
+[data-theme="blue"] .story-modal-content h3 {
+    color: #4a9fc7 !important;
+    text-shadow: 
+        0 0 10px rgba(74,159,199,0.3),
+        0 0 20px rgba(74,159,199,0.2),
+        0 0 40px rgba(74,159,199,0.1) !important;
+}
+
+/* Бирюзовая тема */
+[data-theme="teal"] .story-modal-content h3 {
+    color: #2a9a9a !important;
+    text-shadow: 
+        0 0 10px rgba(42,154,154,0.3),
+        0 0 20px rgba(42,154,154,0.2),
+        0 0 40px rgba(42,154,154,0.1) !important;
+}
+
+/* Солнечная тема */
+[data-theme="sun"] .story-modal-content h3 {
+    color: #e8a820 !important;
+    text-shadow: 
+        0 0 10px rgba(232,168,32,0.3),
+        0 0 20px rgba(232,168,32,0.2),
+        0 0 40px rgba(232,168,32,0.1) !important;
 }
