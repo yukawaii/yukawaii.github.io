@@ -785,8 +785,9 @@ function tryPlaceLShapeWord(word, tempGrid, gridSizeVal, existingWordsPositions,
     return null;
 }
 // Размещение слова со множеством поворотов (змеиное размещение)
+// Размещение слова со множеством поворотов (змеиное размещение) - УЛУЧШЕННАЯ ВЕРСИЯ
 function tryPlaceSnakeWord(word, tempGrid, gridSizeVal) {
-    const maxAttempts = 2000;
+    const maxAttempts = 10000;  // Больше попыток
     const directions = [
         { dr: 0, dc: 1 },  // вправо
         { dr: 0, dc: -1 }, // влево
@@ -794,11 +795,23 @@ function tryPlaceSnakeWord(word, tempGrid, gridSizeVal) {
         { dr: -1, dc: 0 }  // вверх
     ];
     
+    // Для длинных слов пробуем больше вариантов
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        // Стартовая позиция
-        const startRow = Math.floor(Math.random() * gridSizeVal);
-        const startCol = Math.floor(Math.random() * gridSizeVal);
+        // Стартовая позиция - лучше в центре для длинных слов
+        let startRow, startCol;
+        if (word.length > 15) {
+            // Для очень длинных слов стартуем ближе к центру
+            startRow = Math.floor(gridSizeVal / 2) + Math.floor(Math.random() * 4 - 2);
+            startCol = Math.floor(gridSizeVal / 2) + Math.floor(Math.random() * 4 - 2);
+            // Если вышли за границы - корректируем
+            startRow = Math.max(1, Math.min(gridSizeVal - 2, startRow));
+            startCol = Math.max(1, Math.min(gridSizeVal - 2, startCol));
+        } else {
+            startRow = Math.floor(Math.random() * gridSizeVal);
+            startCol = Math.floor(Math.random() * gridSizeVal);
+        }
         
+        if (startRow < 0 || startRow >= gridSizeVal || startCol < 0 || startCol >= gridSizeVal) continue;
         if (tempGrid[startRow][startCol] !== null) continue;
         
         const coords = [];
@@ -809,40 +822,92 @@ function tryPlaceSnakeWord(word, tempGrid, gridSizeVal) {
         usedCoords.add(`${startRow},${startCol}`);
         coords.push([startRow, startCol]);
         
-        // Текущее направление
+        // Для длинных слов используем более плавное движение
         let currentDir = directions[Math.floor(Math.random() * directions.length)];
         let stepsInCurrentDir = 0;
-        let maxStepsInDir = Math.floor(Math.random() * 3) + 1; // 1-3 шага в одном направлении
+        // Для длинных слов делаем больше шагов в одном направлении
+        let maxStepsInDir = word.length > 15 ? Math.floor(Math.random() * 5) + 3 : Math.floor(Math.random() * 3) + 1;
+        let dirChangeCounter = 0;
         
         for (let i = 1; i < word.length; i++) {
-            // Если прошли maxStepsInDir шагов, меняем направление
-            if (stepsInCurrentDir >= maxStepsInDir) {
-                // Выбираем новое направление (не противоположное текущему)
+            // Меняем направление чаще для длинных слов
+            if (stepsInCurrentDir >= maxStepsInDir || (word.length > 15 && Math.random() < 0.15)) {
                 const availableDirs = directions.filter(d => 
                     !(d.dr === -currentDir.dr && d.dc === -currentDir.dc)
                 );
-                currentDir = availableDirs[Math.floor(Math.random() * availableDirs.length)];
+                // Для длинных слов выбираем направление, которое ведёт к свободному пространству
+                let bestDir = null;
+                let bestScore = -1;
+                for (let d of availableDirs) {
+                    const testRow = currentRow + d.dr;
+                    const testCol = currentCol + d.dc;
+                    const testKey = `${testRow},${testCol}`;
+                    if (testRow >= 0 && testRow < gridSizeVal && testCol >= 0 && testCol < gridSizeVal) {
+                        if (!usedCoords.has(testKey) && tempGrid[testRow][testCol] === null) {
+                            // Проверяем, не загоняем ли мы себя в угол
+                            let score = 0;
+                            // Предпочитаем направление к центру
+                            const distToCenter = Math.abs(testRow - gridSizeVal/2) + Math.abs(testCol - gridSizeVal/2);
+                            score += (gridSizeVal - distToCenter) * 0.5;
+                            // Предпочитаем направление, где больше свободных клеток
+                            for (let d2 of directions) {
+                                const checkRow = testRow + d2.dr;
+                                const checkCol = testCol + d2.dc;
+                                if (checkRow >= 0 && checkRow < gridSizeVal && checkCol >= 0 && checkCol < gridSizeVal) {
+                                    const checkKey = `${checkRow},${checkCol}`;
+                                    if (!usedCoords.has(checkKey) && tempGrid[checkRow][checkCol] === null) {
+                                        score++;
+                                    }
+                                }
+                            }
+                            if (score > bestScore) {
+                                bestScore = score;
+                                bestDir = d;
+                            }
+                        }
+                    }
+                }
+                currentDir = bestDir || availableDirs[Math.floor(Math.random() * availableDirs.length)];
                 stepsInCurrentDir = 0;
-                maxStepsInDir = Math.floor(Math.random() * 3) + 1;
+                maxStepsInDir = word.length > 15 ? Math.floor(Math.random() * 4) + 2 : Math.floor(Math.random() * 3) + 1;
+                dirChangeCounter++;
             }
             
             const nextRow = currentRow + currentDir.dr;
             const nextCol = currentCol + currentDir.dc;
             const key = `${nextRow},${nextCol}`;
             
-            // Проверяем границы
             if (nextRow < 0 || nextRow >= gridSizeVal || nextCol < 0 || nextCol >= gridSizeVal) {
                 placed = false;
                 break;
             }
             
-            // Проверяем занятость
+            // Проверяем, не загоняем ли мы себя в тупик (для длинных слов)
+            if (word.length > 15 && i > 3 && i < word.length - 3) {
+                // Проверяем, есть ли ещё свободные клетки вокруг
+                let hasEscape = false;
+                for (let d of directions) {
+                    const checkRow = nextRow + d.dr;
+                    const checkCol = nextCol + d.dc;
+                    if (checkRow >= 0 && checkRow < gridSizeVal && checkCol >= 0 && checkCol < gridSizeVal) {
+                        const checkKey = `${checkRow},${checkCol}`;
+                        if (!usedCoords.has(checkKey) && tempGrid[checkRow][checkCol] === null) {
+                            hasEscape = true;
+                            break;
+                        }
+                    }
+                }
+                if (!hasEscape && i < word.length - 2) {
+                    placed = false;
+                    break;
+                }
+            }
+            
             if (tempGrid[nextRow][nextCol] !== null && tempGrid[nextRow][nextCol] !== word[i]) {
                 placed = false;
                 break;
             }
             
-            // Проверяем, что не ходим в уже использованную клетку
             if (usedCoords.has(key)) {
                 placed = false;
                 break;
@@ -863,58 +928,131 @@ function tryPlaceSnakeWord(word, tempGrid, gridSizeVal) {
                     tempGrid[r][c] = word[i];
                 }
             }
-            return { coords, direction: 'S' }; // S = Snake (змея)
+            return { coords, direction: 'S' };
         }
     }
     return null;
 }
+
+// ===== ПРИНУДИТЕЛЬНОЕ РАЗМЕЩЕНИЕ ДЛИННОГО СЛОВА ПО КРУГУ =====
+// ===== РАЗМЕЩЕНИЕ СЛОВА ЗМЕЙКОЙ ПО СТРОКАМ =====
+function tryPlaceLongWord(word, tempGrid, gridSizeVal) {
+    // Пробуем разместить слово змейкой - строка за строкой
+    for (let startRow = 0; startRow < gridSizeVal; startRow++) {
+        for (let startCol = 0; startCol < gridSizeVal; startCol++) {
+            // Проверяем, что стартовая клетка свободна
+            if (tempGrid[startRow][startCol] !== null) continue;
+            
+            // Пробуем разные направления
+            const directions = [
+                {dr: 0, dc: 1},  // вправо
+                {dr: 1, dc: 0},  // вниз
+                {dr: 0, dc: -1}, // влево
+                {dr: -1, dc: 0}  // вверх
+            ];
+            
+            for (let dirIdx = 0; dirIdx < directions.length; dirIdx++) {
+                const dir = directions[dirIdx];
+                let coords = [];
+                let currentRow = startRow;
+                let currentCol = startCol;
+                let placed = true;
+                const usedCoords = new Set();
+                usedCoords.add(`${startRow},${startCol}`);
+                coords.push([startRow, startCol]);
+                
+                // Двигаемся в этом направлении
+                for (let i = 1; i < word.length; i++) {
+                    const nextRow = currentRow + dir.dr;
+                    const nextCol = currentCol + dir.dc;
+                    const key = `${nextRow},${nextCol}`;
+                    
+                    if (nextRow < 0 || nextRow >= gridSizeVal || nextCol < 0 || nextCol >= gridSizeVal) {
+                        placed = false;
+                        break;
+                    }
+                    
+                    if (tempGrid[nextRow][nextCol] !== null && tempGrid[nextRow][nextCol] !== word[i]) {
+                        placed = false;
+                        break;
+                    }
+                    
+                    if (usedCoords.has(key)) {
+                        placed = false;
+                        break;
+                    }
+                    
+                    usedCoords.add(key);
+                    coords.push([nextRow, nextCol]);
+                    currentRow = nextRow;
+                    currentCol = nextCol;
+                }
+                
+                if (placed && coords.length === word.length) {
+                    for (let i = 0; i < coords.length; i++) {
+                        const [r, c] = coords[i];
+                        if (tempGrid[r][c] === null) {
+                            tempGrid[r][c] = word[i];
+                        }
+                    }
+                    return { coords, direction: 'S' };
+                }
+            }
+        }
+    }
+    return null;
+}
+
 function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'easy') {
-    const MAX_RETRIES = 15;
+    const MAX_RETRIES = 50;
     const theme = LEVELS_DATA[themeIndex % LEVELS_DATA.length];
     const gridSizeVal = theme.size;
-    const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
-    // Включаем змеиное размещение для hard и expert
-      const enableSnake = difficulty === 'hard' || difficulty === 'expert';
-    let wordsToPlace = [...customWords];
     
-    wordsToPlace.sort((a,b) => b.length - a.length);
+    const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
+    const enableSnake = difficulty === 'hard' || difficulty === 'expert';
+    
+    let wordsToPlace = [...customWords];
+    // Сортируем по убыванию длины
+    wordsToPlace.sort((a, b) => b.length - a.length);
     
     let tempGrid = Array(gridSizeVal).fill().map(() => Array(gridSizeVal).fill(null));
     let positions = new Map();
     let allPlaced = true;
     
-       
-    for (let i = 0; i < wordsToPlace.length; i++) {
-        const word = wordsToPlace[i];
-        let result = null;
-        
-        // ✅ ПРАВИЛЬНО: определяем ДЛЯ КАЖДОГО СЛОВА отдельно
-        const useLShape = (difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert') || 
-                          (difficulty === 'easy' && word.length > 8);
-        
-        // Для длинных слов сначала пробуем змеиное размещение (hard/expert)
-        if (enableSnake && word.length >= 6) {
-            result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
-        }
-        
-        // Если не получилось змеиное — пробуем Г-образное
-        if (!result && useLShape && word.length >= 4) {
-            result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
-        }
-        
-        // Если не получилось Г-образное — пробуем обычное
-        if (!result) {
-            result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
-        }
-        
-        if (result) {
-            positions.set(word, result);
-        } else {
-            allPlaced = false;
-            break;
-        }
-    }
-    
+                    for (let i = 0; i < wordsToPlace.length; i++) {
+                        const word = wordsToPlace[i];
+                        let result = null;
+                        
+                        const useLShape = enableLShape || (difficulty === 'easy' && word.length > 8);
+                        
+                        // ✅ ДЛЯ ДЛИННЫХ СЛОВ (> 12 букв) - СНАЧАЛА ПРИНУДИТЕЛЬНОЕ РАЗМЕЩЕНИЕ
+                        if (word.length > 12) {
+                            result = tryPlaceLongWord(word, tempGrid, gridSizeVal);
+                        }
+                        
+                        // Если не получилось - пробуем змейку
+                        if (!result && enableSnake && word.length > 8) {
+                            result = tryPlaceSnakeWord(word, tempGrid, gridSizeVal);
+                        }
+                        
+                        // Если не получилось змеиное — пробуем Г-образное
+                        if (!result && useLShape && word.length >= 4) {
+                            result = tryPlaceLShapeWord(word, tempGrid, gridSizeVal, positions, i);
+                        }
+                        
+                        // Если не получилось Г-образное — пробуем обычное
+                        if (!result) {
+                            result = tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, positions, i, wordsToPlace.length);
+                        }
+                        
+                        if (result) {
+                            positions.set(word, result);
+                        } else {
+                            allPlaced = false;
+                            break;
+                        }
+                    }
+
     // Если не все слова разместились, пробуем снова
     if (!allPlaced && retryCount < MAX_RETRIES) {
         return generateLevel(themeIndex, customWords, retryCount + 1);
@@ -3336,7 +3474,6 @@ function showRewardedAd(onSuccess, onFail) {
     });
 }
 
-// ===== ОБРАБОТЧИК КНОПКИ "ПОКАЗАТЬ СЛОВА" =====
 // ===== ОБРАБОТЧИК КНОПКИ "ПОКАЗАТЬ СЛОВА" =====
 function handleRevealWords() {
     // Если слова уже открыты - ничего не делаем
