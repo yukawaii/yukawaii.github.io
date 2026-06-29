@@ -445,24 +445,20 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy', isUpdate = fal
     let selectedLevelData = categoryLevels[0];
     let selectedButton = null;
     
-    // ✅ ЕСЛИ ЭТО ОБНОВЛЕНИЕ — ИСПОЛЬЗУЕМ СУЩЕСТВУЮЩИЙ КОНТЕЙНЕР
     let modalDiv, contentDiv, grid;
     let isExistingModal = false;
     
+    // Проверяем, существует ли уже модалка для этого categoryId
     if (isUpdate) {
         modalDiv = document.querySelector('.modal-window[data-category="' + categoryId + '"]');
         if (modalDiv) {
             isExistingModal = true;
             contentDiv = modalDiv.querySelector('.modal-content-inner');
             grid = document.getElementById('levelsGrid');
-            // Сохраняем текущий выбранный уровень
-            if (selectedButton) {
-                selectedLevelNum = parseInt(selectedButton.dataset.levelNum) || 1;
-            }
         }
     }
     
-    // ✅ ЕСЛИ МОДАЛКИ НЕТ — СОЗДАЁМ НОВУЮ
+    // Если модалка не существует или это не обновление — создаём новую
     if (!isExistingModal) {
         modalDiv = document.createElement('div');
         modalDiv.className = 'modal-window';
@@ -486,142 +482,154 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy', isUpdate = fal
         grid = document.getElementById('levelsGrid');
     }
     
-    // ✅ ОЧИЩАЕМ СЕТКУ (С ПЛАВНЫМ ИСЧЕЗАНИЕМ)
-    if (grid) {
-        // Добавляем класс для плавного исчезновения
-        grid.style.transition = 'opacity 0.2s ease';
-        grid.style.opacity = '0';
-        
-        setTimeout(() => {
-            grid.innerHTML = '';
-            
-            // ===== ВСЯ ЛОГИКА СОЗДАНИЯ КНОПОК =====
-            function getButtonColors(levelData) {
-                const completed = isLevelCompleted(levelData.id, difficulty);
-                const unlocked = isLevelUnlocked(categoryId, difficulty, levelData.levelNum);
-                return {
-                    bg: completed ? 'var(--completed-level-bg, #FFE5D6)' : (unlocked ? '#d4c3a4' : '#888888'),
-                    text: completed ? 'var(--completed-level-text, #2d2b1a)' : (unlocked ? '#3a3220' : '#666666'),
-                    shadow: completed ? 'var(--completed-level-shadow, #8b5a2a)' : (unlocked ? '#9b6e42' : '#555555')
-                };
-            }
-            
-            function restoreButtonStyle(btn, levelData) {
-                const colors = getButtonColors(levelData);
-                btn.style.setProperty('background', colors.bg, 'important');
-                btn.style.setProperty('color', colors.text, 'important');
-                btn.style.setProperty('box-shadow', `0 3px 0 ${colors.shadow}`, 'important');
-                btn.style.setProperty('transform', 'scale(1)', 'important');
-                btn.style.setProperty('border', 'none', 'important');
-                btn.classList.remove('selected-level');
-            }
-            
-            function selectLevel(btn, levelData) {
-                if (selectedButton && selectedLevelData) {
-                    restoreButtonStyle(selectedButton, selectedLevelData);
-                }
-                selectedButton = btn;
-                selectedLevelNum = levelData.levelNum;
-                selectedLevelData = levelData;
-                btn.classList.add('selected-level');
-                btn.style.setProperty('background', 'var(--level-selected-bg, #f7b32b)', 'important');
-                btn.style.setProperty('box-shadow', '0 2px 0 var(--level-selected-shadow, #8b5a2a)', 'important');
-                btn.style.setProperty('transform', 'scale(0.98)', 'important');
-                btn.style.setProperty('color', '#2d2b1a', 'important');
-            }
-            
-            // Создаём кнопки уровней
-            categoryLevels.forEach((levelData) => {
-                const i = levelData.levelNum;
-                const btn = document.createElement('button');
-                
-                const unlocked = isLevelUnlocked(categoryId, difficulty, i);
-                const isLocked = (i >= 15 && !unlocked);
-                
-                if (isLocked) {
-                    btn.textContent = '🔒';
-                    btn.style.fontSize = '1rem !important';
-                } else {
-                    btn.textContent = i;
-                    btn.style.fontSize = '1.2rem !important';
-                }
-                
-                btn.dataset.levelId = levelData.id;
-                btn.dataset.levelNum = levelData.levelNum;
-                btn.dataset.isLocked = isLocked ? 'true' : 'false';
-                
-                const colors = getButtonColors(levelData);
-                
-                btn.style.cssText = `
-                    background: ${colors.bg} !important;
-                    color: ${colors.text} !important;
-                    border: none !important;
-                    border-radius: 50% !important;
-                    width: 55px !important;
-                    height: 55px !important;
-                    min-width: 55px !important;
-                    min-height: 55px !important;
-                    font-size: 1.2rem !important;
-                    font-weight: bold !important;
-                    cursor: ${isLocked ? 'pointer' : 'pointer'} !important;
-                    box-shadow: 0 3px 0 ${colors.shadow} !important;
-                    transition: 0.05s linear !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    margin: 2px !important;
-                `;
-                
-                btn.onmouseenter = () => { 
-                    if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; 
-                };
-                btn.onmouseleave = () => { 
-                    if (btn !== selectedButton) btn.style.transform = 'scale(1)'; 
-                };
-                
-                btn.onclick = (function(b, level) {
-                    return function(e) {
-                        e.stopPropagation();
-                        const isLocked = b.dataset.isLocked === 'true';
-                        
-                        if (isLocked) {
-                            showUnlockLevelModal(categoryId, difficulty, level.levelNum, function() {
-                                // ✅ ПРИ РАЗБЛОКИРОВКЕ ОБНОВЛЯЕМ МОДАЛКУ С АНИМАЦИЕЙ
-                                showCategoryLevelsModal(categoryId, difficulty, true);
-                            });
-                            return;
-                        }
-                        selectLevel(b, level);
-                    };
-                })(btn, levelData);
-                
-                grid.appendChild(btn);
-                
-                if (i === 1 && !isLocked) {
-                    setTimeout(() => { selectLevel(btn, levelData); }, 50);
-                }
-            });
-            
-            // ✅ ПЛАВНОЕ ПОЯВЛЕНИЕ
-            grid.style.opacity = '1';
-        }, 200);
+    // Функции для работы с кнопками
+    function getButtonColors(levelData) {
+        const completed = isLevelCompleted(levelData.id, difficulty);
+        const unlocked = isLevelUnlocked(categoryId, difficulty, levelData.levelNum);
+        return {
+            bg: completed ? 'var(--completed-level-bg, #FFE5D6)' : (unlocked ? '#d4c3a4' : '#888888'),
+            text: completed ? 'var(--completed-level-text, #2d2b1a)' : (unlocked ? '#3a3220' : '#666666'),
+            shadow: completed ? 'var(--completed-level-shadow, #8b5a2a)' : (unlocked ? '#9b6e42' : '#555555')
+        };
     }
     
-    // ✅ ОБРАБОТЧИКИ КНОПОК (только если модалка новая)
+    function restoreButtonStyle(btn, levelData) {
+        const colors = getButtonColors(levelData);
+        btn.style.setProperty('background', colors.bg, 'important');
+        btn.style.setProperty('color', colors.text, 'important');
+        btn.style.setProperty('box-shadow', `0 3px 0 ${colors.shadow}`, 'important');
+        btn.style.setProperty('transform', 'scale(1)', 'important');
+        btn.style.setProperty('border', 'none', 'important');
+        btn.classList.remove('selected-level');
+    }
+    
+    function selectLevel(btn, levelData) {
+        if (selectedButton && selectedLevelData) {
+            restoreButtonStyle(selectedButton, selectedLevelData);
+        }
+        selectedButton = btn;
+        selectedLevelNum = levelData.levelNum;
+        selectedLevelData = levelData;
+        btn.classList.add('selected-level');
+        btn.style.setProperty('background', 'var(--level-selected-bg, #f7b32b)', 'important');
+        btn.style.setProperty('box-shadow', '0 2px 0 var(--level-selected-shadow, #8b5a2a)', 'important');
+        btn.style.setProperty('transform', 'scale(0.98)', 'important');
+        btn.style.setProperty('color', '#2d2b1a', 'important');
+    }
+    
+    // Обновляем сетку
+    if (grid) {
+        if (isUpdate) {
+            grid.style.transition = 'opacity 0.2s ease';
+            grid.style.opacity = '0';
+        }
+        
+        setTimeout(() => {
+            if (isUpdate) {
+                grid.innerHTML = '';
+            } else {
+                grid.innerHTML = '';
+            }            
+                            // Создаём кнопки уровней
+                            categoryLevels.forEach((levelData) => {
+                                const i = levelData.levelNum;
+                                const btn = document.createElement('button');
+                                
+                                const unlocked = isLevelUnlocked(categoryId, difficulty, i);
+                                const isLocked = (i >= 15 && !unlocked);
+                                
+                                if (isLocked) {
+                                    btn.textContent = '🔒';
+                                    btn.style.fontSize = '1rem !important';
+                                } else {
+                                    btn.textContent = i;
+                                    btn.style.fontSize = '1.2rem !important';
+                                }
+                                
+                                btn.dataset.levelId = levelData.id;
+                                btn.dataset.levelNum = levelData.levelNum;
+                                btn.dataset.isLocked = isLocked ? 'true' : 'false';
+                                
+                                const colors = getButtonColors(levelData);
+                                
+                                btn.style.cssText = `
+                                    background: ${colors.bg} !important;
+                                    color: ${colors.text} !important;
+                                    border: none !important;
+                                    border-radius: 50% !important;
+                                    width: 55px !important;
+                                    height: 55px !important;
+                                    min-width: 55px !important;
+                                    min-height: 55px !important;
+                                    font-size: 1.2rem !important;
+                                    font-weight: bold !important;
+                                    cursor: ${isLocked ? 'pointer' : 'pointer'} !important;
+                                    box-shadow: 0 3px 0 ${colors.shadow} !important;
+                                    transition: 0.05s linear !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    justify-content: center !important;
+                                    margin: 2px !important;
+                                `;
+                                
+                                btn.onmouseenter = () => { 
+                                    if (btn !== selectedButton) btn.style.transform = 'scale(1.05)'; 
+                                };
+                                btn.onmouseleave = () => { 
+                                    if (btn !== selectedButton) btn.style.transform = 'scale(1)'; 
+                                };
+                                
+                                // ✅ ПРАВИЛЬНО: ПЕРЕДАЁМ categoryId В ЗАМЫКАНИЕ
+                                btn.onclick = (function(b, level, catId, diff) {
+                                    return function(e) {
+                                        e.stopPropagation();
+                                        const isLocked = b.dataset.isLocked === 'true';
+                                        
+                                        if (isLocked) {
+                                            showUnlockLevelModal(catId, diff, level.levelNum, function() {
+                                                showCategoryLevelsModal(catId, diff, true);
+                                            });
+                                            return;
+                                        }
+                                        selectLevel(b, level);
+                                    };
+                                })(btn, levelData, categoryId, difficulty);  // ← ПЕРЕДАЁМ categoryId И difficulty
+                                
+                                grid.appendChild(btn);
+                                
+                                if (i === 1 && !isLocked) {
+                                    setTimeout(() => { selectLevel(btn, levelData); }, 50);
+                                }
+                            });
+            if (isUpdate) {
+                grid.style.opacity = '1';
+            }
+        }, isUpdate ? 200 : 0);
+    }
+    
+    // Обработчики кнопок (только для новой модалки)
     if (!isExistingModal) {
-        document.getElementById('playSelectedBtn').onclick = () => {
+        document.getElementById('playSelectedBtn').onclick = function() {
             if (selectedLevelData) {
                 loadLevelById(selectedLevelData.id, difficulty);
                 modalDiv.remove();
             }
         };
         
-        document.getElementById('backToCatsBtn').onclick = () => {
-            modalDiv.remove();
+        // ✅ КНОПКА "НАЗАД К ТЕМАМ" — ПРОСТО ЗАКРЫВАЕТ МОДАЛКУ
+        document.getElementById('backToCatsBtn').onclick = function() {
+            const modal = this.closest('.modal-window');
+            if (modal) {
+                modal.remove();
+            }
             showLevelSelectModal();
         };
         
-        modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
+        modalDiv.onclick = function(e) { 
+            if (e.target === modalDiv) {
+                modalDiv.remove();
+            }
+        };
     }
 }
 
@@ -1278,23 +1286,23 @@ function showCategoryModalForDifficulty(difficulty) {
     let html = `<h3 style="color:#2c3e2b;font-size:1.3rem;margin:0 0 15px;">📚 Выбери категорию</h3><div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;">`;
     
     categories.forEach(cat => {
-html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${difficulty}" style="
-    background:#B5C9A2;
-    color:#4A5D3E;
-    border:none;
-    border-radius:50%;
-    width:55px;
-    height:55px;
-    font-size:1.8rem;
-    cursor:pointer;
-    box-shadow:0 2px 0 #8FA87D;
-    transition:0.05s linear;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-">
-    <span style="transform:scale(0.85);display:inline-block;font-size:1.8rem;">${cat.icon}</span>
-</button>`;
+        html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${difficulty}" style="
+            background:#B5C9A2;
+            color:#4A5D3E;
+            border:none;
+            border-radius:50%;
+            width:55px;
+            height:55px;
+            font-size:1.8rem;
+            cursor:pointer;
+            box-shadow:0 2px 0 #8FA87D;
+            transition:0.05s linear;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        ">
+            <span style="transform:scale(0.85);display:inline-block;font-size:1.8rem;">${cat.icon}</span>
+        </button>`;
     });
     
     html += `</div><button id="closeCatDiffModal" style="background:#8b5a2a;color:white;border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
@@ -1309,13 +1317,19 @@ html += `<button class="cat-select-btn" data-cat="${cat.id}" data-diff="${diffic
             const diff = btn.getAttribute('data-diff');
             console.log('📂 Выбрана категория:', catId, 'сложность:', diff);
             modalDiv.remove();
-            showCategoryLevelsModal(categoryId, difficulty, true); 
+            // ✅ ИСПРАВЛЕНО: передаём catId и diff, а не categoryId и difficulty
+            showCategoryLevelsModal(catId, diff);
         };
     });
     
     document.getElementById('closeCatDiffModal').onclick = () => modalDiv.remove();
     modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
 }
+
+
+
+
+
 function selectLevel(btn, levelData) {
     // Убираем выделение с предыдущей кнопки
     if (selectedButton) {
