@@ -2142,7 +2142,6 @@ function showConfetti() {
     }, 250);
 } 
 
-// Проверка первого запуска ===== начало приветственного сюжета
 // Показ сюжетного окна (первый раз - полная история, потом - короткое напоминание)
 function showWelcomeStory() {
     const hasSeenFullStory = localStorage.getItem('hasSeenFullStory');
@@ -2345,8 +2344,8 @@ function showDifficultyStory(difficulty) {
     // ✅ Добавляем иконку в зависимости от сложности
     const icons = {
         easy: '🌳',
-        medium: '🌀',
-        hard: '✨',
+        medium: '✨',
+        hard: '🌀',
         expert: '🚀'
     };
     const icon = icons[difficulty] || '🌟';
@@ -3146,7 +3145,7 @@ function updateStartButtonSubtitle() {
     const diffData = DIFFICULTIES.find(d => d.id === diff);
     const subtitle = document.getElementById('menuStartSubtitle');
     if (subtitle && diffData) {
-        subtitle.textContent = `${diffData.icon} ${diffData.label}`;
+        subtitle.textContent = ` ${diffData.label}`;
         // Цвет текста подзаголовка
         const colors = {
             'easy': '#81C784',
