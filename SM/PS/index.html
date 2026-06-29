@@ -3580,7 +3580,7 @@ function showRewardedAd(onSuccess, onFail) {
     // Пробуем показать рекламу через VK Bridge
     console.log('📺 Отправляем запрос VKWebAppShowNativeAds...');
     vkBridge.send('VKWebAppShowNativeAds', {
-        ad_format: 'rewarded'
+        ad_format: 'reward'
     })
     .then(function(data) {
         if (isFinished) return;
