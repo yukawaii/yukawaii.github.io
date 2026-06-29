@@ -3547,47 +3547,57 @@ function revealWordsSuccess() {
 
 
 // ===== ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ =====
-// ===== ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ С ТАЙМАУТОМ =====
 function showRewardedAd(onSuccess, onFail) {
     console.log('📺 showRewardedAd вызван');
     console.log('🔍 typeof vkBridge:', typeof vkBridge);
     console.log('🔍 navigator.onLine:', navigator.onLine);
     
-    // Проверяем, есть ли VK Bridge
     if (typeof vkBridge === 'undefined') {
         console.log('ℹ️ VK Bridge не доступен');
         onFail('Реклама временно недоступна');
         return;
     }
     
-    // Проверяем, есть ли интернет
     if (!navigator.onLine) {
         console.log('ℹ️ Нет интернета');
         onFail('Реклама временно недоступна');
         return;
     }
     
-    // ✅ ТАЙМАУТ - если реклама не отвечает 5 секунд, считаем что её нет
     let isFinished = false;
+    
+    // ✅ УВЕЛИЧИВАЕМ ТАЙМАУТ ДО 10 СЕКУНД
     const timeoutId = setTimeout(function() {
         if (!isFinished) {
             isFinished = true;
             console.log('⏰ Таймаут! Реклама не отвечает');
             onFail('Реклама временно недоступна');
         }
-    }, 5000);
+    }, 10000);
     
-    // Пробуем показать рекламу через VK Bridge
-    console.log('📺 Отправляем запрос VKWebAppShowNativeAds...');
-    vkBridge.send('VKWebAppShowNativeAds', {
+    // ✅ СНАЧАЛА ПРОВЕРЯЕМ ГОТОВНОСТЬ РЕКЛАМЫ
+    console.log('📺 Проверяем готовность рекламы...');
+    vkBridge.send('VKWebAppCheckNativeAds', {
         ad_format: 'reward'
     })
-    .then(function(data) {
+    .then(function(checkData) {
+        console.log('📺 Проверка рекламы:', checkData);
+        if (isFinished) return;
+        
+        // ✅ ПОКАЗЫВАЕМ РЕКЛАМУ
+        console.log('📺 Отправляем запрос VKWebAppShowNativeAds...');
+        return vkBridge.send('VKWebAppShowNativeAds', {
+            ad_format: 'reward'
+        });
+    })
+    .then(function(showData) {
         if (isFinished) return;
         isFinished = true;
         clearTimeout(timeoutId);
-        console.log('📺 Ответ от VK Bridge:', data);
-        if (data && data.result) {
+        console.log('📺 Ответ от VK Bridge:', showData);
+        console.log('📺 Результат показа:', showData?.result);
+        
+        if (showData && showData.result === true) {
             onSuccess();
         } else {
             console.log('ℹ️ Реклама не показана (result: false)');
@@ -3599,6 +3609,8 @@ function showRewardedAd(onSuccess, onFail) {
         isFinished = true;
         clearTimeout(timeoutId);
         console.warn('❌ Ошибка показа рекламы:', error);
+        console.warn('❌ error_type:', error?.error_type);
+        console.warn('❌ error_data:', error?.error_data);
         onFail('Реклама временно недоступна');
     });
 }
