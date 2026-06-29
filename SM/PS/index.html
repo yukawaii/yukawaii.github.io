@@ -2163,8 +2163,8 @@ function showWelcomeStory() {
             const slide = slides[currentSlide];
           contentDiv.innerHTML = `
     <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
-    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-    <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+   <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
+<p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
         ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
         <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};display:inline-block;"></span>`).join('')}</div>
@@ -2317,8 +2317,8 @@ function showDifficultyStory(difficulty) {
     
 contentDiv.innerHTML = `
     <div style="font-size:3rem;margin-bottom:10px;">${slide.title.split(' ')[0]}</div>
-    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
-    <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
+   <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;">${slide.title}</h3>
+<p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
     <button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>
 `;
     
