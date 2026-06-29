@@ -15,7 +15,20 @@
   window.vkBridge = vkBridge; 
 </script>
    <link rel="stylesheet" href="styleOld.css">
-
+<script>
+    // Запрет контекстного меню через JavaScript
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    
+    // Для мобильных устройств (долгое нажатие)
+    document.addEventListener('touchstart', function(e) {
+        if (e.target.closest('button') || e.target.closest('.cell') || e.target.closest('.modal-window')) {
+            // Разрешаем касания, но запрещаем контекстное меню
+        }
+    }, { passive: true });
+</script>
 </head>
 <body>
  <div class="space-nebula"></div>
@@ -3144,18 +3157,51 @@ function updateStartButtonSubtitle() {
     const diff = localStorage.getItem('lastDifficulty') || 'easy';
     const diffData = DIFFICULTIES.find(d => d.id === diff);
     const subtitle = document.getElementById('menuStartSubtitle');
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    
     if (subtitle && diffData) {
         subtitle.textContent = ` ${diffData.label}`;
-        // Цвет текста подзаголовка
-        const colors = {
-            'easy': '#81C784',
-            'medium': '#FFB74D',
-            'hard': '#E57373',
-            'expert': '#CE93D8'
-        };
-        subtitle.style.color = colors[diff] || '#fff';
+        
+        // ✅ Цвета для разных тем и сложностей
+        let color = '#fff';
+         if (theme === 'dark') {
+            const colors = {
+                'easy': '#81C784',
+                'medium': '#00AAFF',
+                'hard': '#E57373',
+                'expert': '#CE93D8'
+            };
+            color = colors[diff] || '#fff';
+        } else if (theme === 'blue') {
+            const colors = {
+                'easy': '#00FF66',
+                'medium': '#00FFFF',
+                'hard': '#ac0039',
+                'expert': '#7000FF'
+            };
+            color = colors[diff] || '#fff';
+        } else if (theme === 'teal') {
+            const colors = {
+                'easy': '#00FF66',
+                'medium': '#00FFFF',
+                'hard': '#ac0039',
+                'expert': '#9C27B0'
+            };
+            color = colors[diff] || '#fff';
+        } else if (theme === 'sun') {
+            const sunColors = {
+                'easy': '#00FF66',
+                'medium': '#1565C0',
+                'hard': '#ac0039',
+                'expert': '#9C27B0'
+            };
+            color = sunColors[diff] || '#fff';
+          }        
+        subtitle.style.color = color;
     }
 }
+
+
 // Текущая тема
 let currentTheme = localStorage.getItem('theme') || 'dark';
 // Функция для создания модального окна с правильной темой
