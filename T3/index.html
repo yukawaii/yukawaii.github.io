@@ -35,6 +35,134 @@ body {    overscroll-behavior: none !important;    touch-action: none !important
     #yandex-highscore-side { display: block; }
     #yandex-highscore-top { display: none; }
 
+.neon-title {
+    color: #4ade80;
+    text-shadow:
+        0 0 2px rgba(52, 211, 153, 0.3),
+        0 0 6px rgba(52, 211, 153, 0.2),
+        0 0 14px rgba(52, 211, 153, 0.1);
+    position: relative;
+    animation: glitch 2s ease-in-out infinite;
+}
+
+@keyframes glitch {
+    0%, 100% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    2% {
+        text-shadow: 
+            2px 0 rgba(255, 0, 150, 0.3),
+            -2px 0 rgba(0, 255, 255, 0.3),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(1px, -1px);
+    }
+    4% {
+        text-shadow: 
+            -1px 0 rgba(255, 0, 150, 0.2),
+            1px 0 rgba(0, 255, 255, 0.2),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(-1px, 0);
+    }
+    6% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    92% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    94% {
+        text-shadow: 
+            1px 0 rgba(255, 0, 150, 0.3),
+            -1px 0 rgba(0, 255, 255, 0.3),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(-1px, 1px);
+    }
+    96% {
+        text-shadow: 
+            -2px 0 rgba(255, 0, 150, 0.2),
+            2px 0 rgba(0, 255, 255, 0.2),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(1px, 0);
+    }
+    98% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+}
+
+@keyframes glitch {
+    0%, 100% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    2% {
+        text-shadow: 
+            2px 0 rgba(255, 0, 150, 0.3),
+            -2px 0 rgba(0, 255, 255, 0.3),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(1px, -1px);
+    }
+    4% {
+        text-shadow: 
+            -1px 0 rgba(255, 0, 150, 0.2),
+            1px 0 rgba(0, 255, 255, 0.2),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(-1px, 0);
+    }
+    6% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    92% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+    94% {
+        text-shadow: 
+            1px 0 rgba(255, 0, 150, 0.3),
+            -1px 0 rgba(0, 255, 255, 0.3),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(-1px, 1px);
+    }
+    96% {
+        text-shadow: 
+            -2px 0 rgba(255, 0, 150, 0.2),
+            2px 0 rgba(0, 255, 255, 0.2),
+            0 0 8px rgba(52, 211, 153, 0.2);
+        transform: translate(1px, 0);
+    }
+    98% {
+        text-shadow: 
+            0 0 2px rgba(52, 211, 153, 0.3),
+            0 0 6px rgba(52, 211, 153, 0.2),
+            0 0 14px rgba(52, 211, 153, 0.1);
+        transform: translate(0);
+    }
+}
+
     /* ВЕРТИКАЛЬНЫЕ ТЕЛЕФОНЫ */
     @media (max-width: 768px) and (orientation: portrait) {
         .pc-only-leader { display: none !important; }
@@ -1005,7 +1133,7 @@ div[id$="-modal"]::before {
     <div id="rewards-center-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; justify-content: center; align-items: center;">
         <div style="background: rgba(10, 10, 14, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 480px; border-radius: 30px; padding: 30px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
             <button onclick="closeRewardsCenter()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10;">✕</button>
-            <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🏆 Центр наград</h2>
+            <h2 class="neon-title" style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🏆 Центр наград</h2>
             <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
                 Ваш счёт: <span id="rewards-player-score" style="color: #34d399; font-weight: bold;">0</span>
             </p>
@@ -1021,7 +1149,7 @@ div[id$="-modal"]::before {
                     <span style="font-size: 12px; color: #fcd34d; font-weight: normal;" id="daily-bonus-status">+10</span>
                 </button>
                 <button onclick="openCollections()" style="width: 100%; padding: 16px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #ec4899, #db2777); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3); display: flex; align-items: center; gap: 12px; justify-content: center;">
-                    <span style="font-size: 24px;">🖼️</span>
+                    <span  style="font-size: 24px;">🖼️</span>
                     <span>Коллекции</span>
                     <span style="font-size: 12px; color: #f9a8d4; font-weight: normal;" id="collections-progress">0/200</span>
                 </button>
@@ -1032,7 +1160,7 @@ div[id$="-modal"]::before {
     <!-- ГЛАВНОЕ МЕНЮ -->
     <div id="main-menu-modal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9998; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 480px; border-radius: 30px; padding: 40px 35px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
-            <h1 style="color: #34d399; font-size: 36px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 0 30px rgba(52, 211, 153, 0.3); font-family: 'Russo One', sans-serif;">Тетра Дарк</h1>
+            <h1 class="neon-title" style="color: #34d399; font-size: 36px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 0 30px rgba(52, 211, 153, 0.3); font-family: 'Russo One', sans-serif;">Тетра Дарк</h1>
             <p style="color: #64748b; font-size: 14px; letter-spacing: 2px; margin-bottom: 35px; font-family: 'Russo One', sans-serif;">ВЫБЕРИ РЕЖИМ</p>
             
             <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px;">
@@ -1087,7 +1215,7 @@ div[id$="-modal"]::before {
     <div id="scrolls-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.92); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 500px; border-radius: 30px; padding: 30px 25px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 85vh; display: flex; flex-direction: column;">
             <button onclick="closeScrollsModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10;">✕</button>
-            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">📜 Свитки</h2>
+            <h2 class="neon-title" style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">📜 Свитки</h2>
             <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">
                 Ваш счёт: <span id="scrolls-player-score" style="color: #34d399; font-weight: bold;">0</span>
             </p>
@@ -1104,7 +1232,7 @@ div[id$="-modal"]::before {
     <div id="scroll-text-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.9); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 450px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
             <button onclick="closeScrollTextModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif;">✕</button>
-            <h2 id="scroll-text-title" style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">Свиток 1</h2>
+            <h2 class="neon-title" style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">Свиток 1</h2>
             <div id="scroll-text-content" style="color: #e2e8f0; font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-family: 'Russo One', sans-serif; max-height: 40vh; overflow-y: auto; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 14px;">
                 Текст свитка...
             </div>
@@ -1118,7 +1246,7 @@ div[id$="-modal"]::before {
     <div id="difficulty-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
             <button onclick="closeDifficultyModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif;">✕</button>
-            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">Выбери сложность</h2>
+            <h2 class="neon-title" style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">Выбери сложность</h2>
             <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 30px; font-family: 'Russo One', sans-serif;">
                 Режим: <span id="difficulty-mode-name" style="color: #fff;">Классика</span>
             </p>

@@ -1452,14 +1452,19 @@ initMobileControls();
 document.addEventListener('click', initAudio);
 document.addEventListener('touchstart', initAudio);
 
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        if (isGameStarted && !isGameOver && !gameState.paused) pauseGame();
-        if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-            gameAudio.audioContext.suspend();
-        }
-    }
-});
+// Следим за видимостью страницы — ставим на паузу, но НЕ снимаем автоматически!
+        document.addEventListener('visibilitychange', function() {
+                        if (document.hidden) {
+                            // Вкладка скрыта (свернута или другая вкладка)
+                            if (isGameStarted && !isGameOver && !gameState.paused) {
+                                pauseGame();
+                                console.log('📱 Вкладка скрыта — игра на паузе. Нажмите "Дальше" чтобы продолжить.');
+                            }       // Останавливаем аудио
+                            if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
+                                gameAudio.audioContext.suspend();
+                            }
+                        }            // ❌ НЕТ автоматического resume! Игрок сам нажмёт "Дальше"
+                    });
 
 document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
 canvas.addEventListener('selectstart', (e) => { e.preventDefault(); return false; });
@@ -1474,6 +1479,21 @@ window.addEventListener('resize', () => {
     }, 100);
 });
 
+// Обработчик потери фокуса окна
+window.addEventListener('blur', function() {
+    // Окно потеряло фокус (пользователь переключился на другую программу)
+    if (isGameStarted && !isGameOver && !gameState.paused) {
+        pauseGame();
+        console.log('📱 Окно потеряло фокус — игра на паузе');
+    }
+});
+
+// Обработчик получения фокуса — НЕ снимаем паузу автоматически!
+window.addEventListener('focus', function() {
+    // Окно получило фокус, но игра остаётся на паузе
+    console.log('📱 Окно получило фокус — игра на паузе, нажмите "Дальше"');
+    // ❌ НЕ вызываем resumeGame()!
+});
 document.addEventListener('fullscreenchange', () => {
     setTimeout(() => {
         window.scrollTo(0, 0);
@@ -1579,7 +1599,7 @@ function updateCollectionsProgress() {
             <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
                 <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 560px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
                     <button onclick="closeCollections()" style="position: sticky; top: 0; float: right; background: none; border: none; color: #64748b; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; z-index: 10; padding: 0 8px;">✕</button>
-                    <h2 style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
+                    <h2 class="neon-title" style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
                     <p style="color: #64748b; font-size: 15px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
                         ${t('yourScore') || 'Ваш счёт'}: <span style="color: #34d399; font-weight: bold;">${savedScore}</span>
                     </p>
@@ -3211,7 +3231,6 @@ window.closeRewardsCenter = closeRewardsCenter;
 window.openScrollsFromRewards = openScrollsFromRewards;
 window.openDailyBonus = openDailyBonus;
 window.claimDailyBonus = claimDailyBonus;
-window.showDailyBonusModal = showDailyBonusModal;
 window.showSuccessModal = showSuccessModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
 // ======================== рекл за вознагр
@@ -3222,7 +3241,6 @@ window.showContinueConfirmationModal = showContinueConfirmationModal;
 window.claimDailyBonus = claimDailyBonus;
 window.claimEnhancedDailyBonus = claimEnhancedDailyBonus;
 window.openDailyBonus = openDailyBonus;
-window.showDailyBonusModal = showDailyBonusModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
 
 // Замедление

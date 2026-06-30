@@ -242,6 +242,33 @@ function initVKSDK() {
                 console.log('VK SDK инициализирован');
                 vkInitialized = true;
                 
+                // ====== ПОДПИСКА НА СОБЫТИЯ VK ======
+                vkBridge.subscribe((e) => {
+                    const type = e.detail.type;
+                    
+                    // Когда пользователь сворачивает приложение
+                    if (type === 'VKWebAppViewHide') {
+                        console.log('📱 Приложение свернуто');
+                        if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
+                            pauseGame();
+                        }
+                        if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
+                            gameAudio.audioContext.suspend();
+                        }
+                    }
+                    
+                    // Когда пользователь возвращается в приложение
+                    if (type === 'VKWebAppViewRestore') {
+                        console.log('📱 Приложение восстановлено');
+                        // ❌ НЕ ВЫЗЫВАЕМ resumeGame()!
+                        // Игрок сам нажмёт "Дальше"
+                        if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
+                            gameAudio.audioContext.resume();
+                        }
+                    }
+                });
+                // ==============================================
+                
                 // ====== ОПРЕДЕЛЯЕМ ЯЗЫК ПОЛЬЗОВАТЕЛЯ ======
                 return vkBridge.send("VKWebAppGetUserInfo");
             })
@@ -250,10 +277,8 @@ function initVKSDK() {
                 console.log('Пользователь:', userInfo.first_name);
                 
                 // ====== УСТАНАВЛИВАЕМ ЯЗЫК ======
-                // Приоритет: язык из VK > язык браузера > русский
                 let userLang = 'ru';
                 
-                // 1. Пробуем получить из VK
                 if (userInfo.lang) {
                     userLang = userInfo.lang;
                 } else if (userInfo.language) {
@@ -262,25 +287,21 @@ function initVKSDK() {
                     userLang = userInfo.locale;
                 }
                 
-                // 2. Если VK не дал язык — пробуем язык браузера
                 if (userLang === 'ru' && navigator.language) {
                     const browserLang = navigator.language.split('-')[0];
-                    // Проверяем, есть ли перевод для этого языка
                     const supportedLangs = Object.keys(translations);
                     if (supportedLangs.includes(browserLang)) {
                         userLang = browserLang;
                     }
                 }
                 
-                // 3. Проверяем, есть ли перевод для этого языка
                 const supportedLangs = Object.keys(translations);
                 if (!supportedLangs.includes(userLang)) {
-                    // Если нет — пробуем найти похожий (ru-RU → ru)
                     const shortLang = userLang.split('-')[0];
                     if (supportedLangs.includes(shortLang)) {
                         userLang = shortLang;
                     } else {
-                        userLang = 'ru'; // fallback
+                        userLang = 'ru';
                     }
                 }
                 
@@ -288,10 +309,8 @@ function initVKSDK() {
                 window.gameLanguage = gameLanguage;
                 console.log('🌐 Установлен язык игры:', gameLanguage);
                 
-                // ====== ОБНОВЛЯЕМ ВЕСЬ ИНТЕРФЕЙС ======
                 updateInterfaceLanguage();
                 
-                // ====== ЗАГРУЖАЕМ ДАННЫЕ ИЗ VK STORAGE ======
                 loadAllDataFromVK().then(() => {
                     console.log('✅ Все данные загружены из VK Storage');
                     if (typeof updateHighscoreDisplay === 'function') {
@@ -314,14 +333,13 @@ function initVKSDK() {
                     .catch(err => {
                         console.warn('⚠️ Токен не получен (игрок не авторизован или отказал)', err);
                         updateRecordText('Рекорд: 0 (Гость)');
-                    });             
-                })
+                    });
+            })
             .catch((err) => {
                 console.warn('Пользователь не авторизован:', err);
                 updateRecordText('Рекорд: 0 (Гость)');
                 vkInitialized = false;
                 
-                // ====== ДАЖЕ БЕЗ АВТОРИЗАЦИИ ПЫТАЕМСЯ ОПРЕДЕЛИТЬ ЯЗЫК ======
                 const browserLang = navigator.language ? navigator.language.split('-')[0] : 'ru';
                 const supportedLangs = Object.keys(translations);
                 if (supportedLangs.includes(browserLang)) {
@@ -337,7 +355,6 @@ function initVKSDK() {
         console.warn('VK Bridge не найден');
         updateRecordText('Рекорд: 0');
         
-        // Fallback — язык браузера
         const browserLang = navigator.language ? navigator.language.split('-')[0] : 'ru';
         const supportedLangs = Object.keys(translations);
         if (supportedLangs.includes(browserLang)) {
