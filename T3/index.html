@@ -91,8 +91,6 @@
 
     /* Горизонтальные телефоны и планшеты — мобильный интерфейс */
 @media (pointer: coarse) and (min-width: 769px) and (orientation: landscape) {
-    /* Мобильный интерфейс уже есть через @media (max-width: 768px) и (orientation: portrait) */
-    /* Но для горизонтальных — нужно принудительно показать джойстик */
     .mobile-joystick {
         display: flex !important;
     }
@@ -176,7 +174,6 @@
     
     .iksweb1 img { height: 12px !important; }
     
-    /* 🔥 ОРИГИНАЛЬНЫЙ МОБИЛЬНЫЙ ДЖОЙСТИК ДЛЯ ГОРИЗОНТАЛЬНЫХ ТЕЛЕФОНОВ */
     .mobile-joystick {
         display: flex !important;
         flex-direction: row !important;
@@ -186,7 +183,6 @@
         margin-top: auto !important;
     }
     
-    /* Крестовина - уменьшенный размер */
     .d-pad {
         display: grid !important;
         grid-template-columns: repeat(3, 38px) !important;
@@ -241,7 +237,6 @@
         border-radius: 4px !important;
     }
     
-    /* Кнопка поворота - уменьшенная */
     .rotate-btn {
         width: 55px !important;
         height: 55px !important;
@@ -262,10 +257,605 @@
         transform: translateY(2px) !important;
         box-shadow: none !important;
     }
+}
+
+/* ===== АНИМИРОВАННАЯ ГАЛОЧКА ===== */
+.achievement-item__checkmark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.achievement-item__checkmark svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.achievement-item__checkmark .checkmark-path {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: checkmarkDraw 2s ease-in-out infinite;
+}
+
+@keyframes checkmarkDraw {
+    0% { stroke-dashoffset: 30; opacity: 0.4; }
+    20% { opacity: 1; }
+    50% { stroke-dashoffset: 0; opacity: 1; }
+    80% { opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes modalPopIn {
+    0% { transform: scale(0.85) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes pulse-gold {
+    0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+    100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
+}
+
+@keyframes confetti-fall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(110vh) rotate(1080deg) scale(0.5); }
+}
+
+button:focus,
+button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+*:focus-visible {
+    outline: none !important;
+}
+
+/* ФОН ДЛЯ МОДАЛОК */
+div[id$="-modal"] {
+    background: url('1.jpg') no-repeat center center fixed !important;
+    background-size: cover !important;
+}
+
+div[id$="-modal"]::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+}
+
+/* Стили для коллекций */
+.collection-category-btn {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    font-family: 'Russo One', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    justify-content: center;
+}
+
+.collection-category-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.collection-category-btn .icon { font-size: 28px; }
+.collection-category-btn .progress { font-size: 12px; color: #64748b; font-weight: normal; }
+
+.collection-item {
+    aspect-ratio: 3/4;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    padding: 8px;
+}
+
+.collection-item.unlocked {
+    border-color: rgba(52, 211, 153, 0.3);
+    cursor: pointer;
+}
+
+.collection-item.unlocked:hover {
+    border-color: rgba(52, 211, 153, 0.6);
+    transform: scale(1.02);
+}
+
+.collection-item.locked {
+    border-color: rgba(255, 255, 255, 0.05);
+    filter: grayscale(1);
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.collection-item .item-image {
+    width: 100%;
+    height: 70%;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.collection-item .item-lock {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    opacity: 0.8;
+}
+
+.collection-item .item-number {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 4px;
+    font-family: 'Russo One', sans-serif;
+}
+
+#image-viewer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 14, 0.95);
+    z-index: 100005;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+#image-viewer-modal .viewer-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: rgba(20, 20, 30, 0.95);
+    border: 2px solid rgba(52, 211, 153, 0.3);
+    border-radius: 20px;
+    padding: 20px;
+    animation: modalPopIn 0.3s ease;
+}
+
+#image-viewer-modal .viewer-content img {
+    max-width: 80vh;
+    max-height: 70vh;
+    border-radius: 12px;
+}
+
+#image-viewer-modal .viewer-content .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Russo One', sans-serif;
+}
+
+#image-viewer-modal .viewer-content .close-btn:hover {
+    color: #fff;
+}
+
+/* АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ */
+@media (max-width: 768px) {
+    #scrolls-modal > div {
+        max-width: 95% !important;
+        padding: 20px 15px 20px !important;
+        border-radius: 20px !important;
+        max-height: 90vh !important;
+    }
     
+    #scrolls-modal h2 { font-size: 20px !important; }
+    
+    #scrolls-container {
+        max-height: 40vh !important;
+        padding: 5px 5px !important;
+    }
+    
+    #scrolls-container .scroll-item {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+    }
+    
+    #scrolls-container .scroll-item .scroll-icon { font-size: 18px !important; }
+    
+    #scrolls-modal .pagination-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
+    }
+    
+    #scroll-text-modal > div {
+        max-width: 95% !important;
+        padding: 25px 20px !important;
+        border-radius: 20px !important;
+    }
+    
+    #scroll-text-modal h2 { font-size: 18px !important; }
+    
+    #scroll-text-modal .scroll-text-content {
+        font-size: 14px !important;
+        max-height: 35vh !important;
+        padding: 8px !important;
+    }
+    
+    #main-menu-modal > div,
+    #difficulty-modal > div {
+        max-width: 360px !important;
+        padding: 20px 25px !important;
+        border-radius: 18px !important;
+    }
+    
+    #main-menu-modal h1 { font-size: 22px !important; }
+    
+    #main-menu-modal p[data-i18n="selectMode"] {
+        font-size: 10px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    #main-menu-modal .mode-buttons button {
+        padding: 10px !important;
+        font-size: 14px !important;
+    }
+    
+    #collections-modal > div {
+        max-height: 90vh !important;
+        overflow: hidden !important;
+        padding: 10px 15px !important;
+        transform: scale(0.85) !important;
+        transform-origin: center center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: auto !important;
+        min-width: 300px;
+        max-width: 450px !important;
+    }
+    
+    #collections-modal h2 {
+        font-size: 18px !important;
+        margin-bottom: 4px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    #collections-modal > div > p {
+        font-size: 12px !important;
+        margin-bottom: 5px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    #collections-modal > div > div[style*="display: flex; flex-direction: column; gap:"] {
+        gap: 6px !important;
+        flex: 1 !important;
+        overflow-y: auto !important;
+        padding-right: 5px !important;
+    }
+    
+    #collections-modal button[style*="padding: 16px"] {
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+        min-height: 36px !important;
+        flex-shrink: 0 !important;
+        width: 90% !important;
+        min-width: 250px;
+        max-width: 280px !important;
+        align-self: center !important;
+    }
+    
+    #collections-modal button[style*="padding: 16px"] span[style*="font-size: 24px"] {
+        font-size: 16px !important;
+    }
+    
+    #collections-modal button[style*="padding: 16px"] span[style*="font-size: 12px"] {
+        font-size: 10px !important;
+    }
+    
+    #collection-category-modal > div {
+        max-height: 90vh !important;
+        overflow: hidden !important;
+        padding: 10px 15px !important;
+        transform: scale(0.85) !important;
+        transform-origin: center center !important;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 550px) {
+    #main-menu-modal {
+        overflow: hidden !important;
+        align-items: center !important;
+    }
+    
+    #main-menu-modal > div {
+        max-height: 90vh !important;
+        overflow: hidden !important;
+        padding: 20px 25px !important;
+        transform: scale(0.85) !important;
+        transform-origin: center center !important;
+    }
+    
+    #main-menu-modal h1 {
+        font-size: 24px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    #main-menu-modal p[data-i18n="selectMode"] {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    #main-menu-modal div[style*="flex-direction: column"] {
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    #main-menu-modal button[style*="padding: 16px"] {
+        padding: 10px !important;
+        font-size: 14px !important;
+    }
+    
+    #collections-modal {
+        align-items: center !important;
+        overflow: hidden !important;
+    }
+    
+    #collections-modal > div {
+        max-height: 90vh !important;
+        overflow: hidden !important;
+        padding: 10px 15px !important;
+        transform: scale(0.85) !important;
+        transform-origin: center center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: auto !important;
+        min-width: 300px;
+        max-width: 450px !important;
+    }
+    
+    #collection-category-modal > div {
+        max-height: 90vh !important;
+        overflow: hidden !important;
+        padding: 10px 15px !important;
+        transform: scale(0.85) !important;
+        transform-origin: center center !important;
+    }
+}
+
+/* Планшеты с тач-экраном */
+@media (orientation: landscape) and (min-width: 768px) and (max-width: 1400px) and (hover: none) {
+    .pc-only-leader { display: none !important; }
+    
+    .game-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 15px !important;
+        gap: 25px !important;
+    }
+    
+    .canvas-container {
+        height: 85vh !important;
+        max-height: 85vh !important;
+        width: auto !important;
+        min-width: 400px;
+    }
+    
+    .controls-container {
+        width: 260px !important;
+        max-width: 260px !important;
+        height: 85vh !important;
+        padding: 15px !important;
+        gap: 10px !important;
+    }
+    
+    .instructions { display: none !important; }
+    
+    .top-menu {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+    
+    .iksweb {
+        font-size: 11px !important;
+        padding: 8px 4px !important;
+        border-radius: 10px !important;
+        flex: 1 !important;
+        min-width: 70px !important;
+    }
+    
+    .mobile-joystick {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        width: 100% !important;
+        margin-top: auto !important;
+    }
+    
+    .d-pad {
+        display: grid !important;
+        grid-template-columns: repeat(3, 44px) !important;
+        grid-template-rows: repeat(3, 44px) !important;
+        background: #191922 !important;
+        border-radius: 50% !important;
+        padding: 4px !important;
+        gap: 0 !important;
+        border: 1px solid #252530 !important;
+    }
+    
+    .d-btn {
+        background: #282836 !important;
+        border: none !important;
+        color: #fff !important;
+        font-size: 14px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 0 #14141a !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+    }
+    
+    .d-btn:active {
+        background: #14141a !important;
+        transform: translateY(2px) !important;
+        box-shadow: none !important;
+    }
+    
+    .d-btn.b-left { grid-column: 1 !important; grid-row: 2 !important; }
+    .d-btn.b-down { grid-column: 2 !important; grid-row: 3 !important; }
+    .d-btn.b-right { grid-column: 3 !important; grid-row: 2 !important; }
+    
+    .d-pad-center {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+        background: #1e1e28 !important;
+        border-radius: 4px !important;
+    }
+    
+    .leaderboard-pad,
+    #btn-leader,
+    .leader-label {
+        display: none !important;
+    }
+    
+    .pc-only-leader {
+        display: inline-flex !important;
+    }
+    
+    .rotate-btn {
+        width: 65px !important;
+        height: 65px !important;
+        background: linear-gradient(145deg, #0a0a12, #1a1a2e) !important;
+        border: 2px solid rgba(52, 211, 153, 0.6) !important;
+        border-radius: 50% !important;
+        color: #34d399 !important;
+        font-size: 24px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        position: relative !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 
+            0 0 20px rgba(52, 211, 153, 0.15),
+            inset 0 0 20px rgba(52, 211, 153, 0.05),
+            0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        text-shadow: 0 0 20px rgba(52, 211, 153, 0.5) !important;
+    }
+    
+    .rotate-btn:hover {
+        box-shadow: 
+            0 0 35px rgba(52, 211, 153, 0.3),
+            inset 0 0 30px rgba(52, 211, 153, 0.1),
+            0 4px 20px rgba(0, 0, 0, 0.6) !important;
+        transform: scale(1.05) !important;
+    }
+    
+    .rotate-btn:active {
+        transform: scale(0.92) !important;
+        box-shadow: 
+            0 0 50px rgba(52, 211, 153, 0.4),
+            inset 0 0 40px rgba(52, 211, 153, 0.15) !important;
+        background: linear-gradient(145deg, #0d0d1a, #15152a) !important;
+    }
+    
+    .rotate-btn::before {
+        content: '' !important;
+        position: absolute !important;
+        inset: -3px !important;
+        border-radius: 50% !important;
+        padding: 2px !important;
+        background: conic-gradient(
+            from 0deg,
+            transparent,
+            #34d399,
+            transparent,
+            #34d399,
+            transparent
+        ) !important;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+        -webkit-mask-composite: xor !important;
+        mask-composite: exclude !important;
+        animation: rotateBorder 4s linear infinite !important;
+        opacity: 0.6 !important;
+    }
+    
+    .rotate-btn::after {
+        content: '' !important;
+        position: absolute !important;
+        inset: 5px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle at center, rgba(52, 211, 153, 0.1), transparent 70%) !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease !important;
+    }
+    
+    .rotate-btn:hover::after {
+        opacity: 1 !important;
+    }
+    
+    .action-label {
+        font-size: 10px !important;
+        color: #64748b !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .action-pad {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+}
+
+@keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false">
     <div class="game-wrapper">
         <div class="canvas-container" style="position: relative; display: flex; flex-direction: column;">
             <div id="yandex-highscore-top" style="display: none; width: 100%; text-align: center; font-size: 14px; color: #34d399; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Рекорд: Загрузка...</div>
@@ -274,19 +864,73 @@
 
         <div class="controls-container">
             <div class="top-menu">
-                <button class="iksweb start-btn" onclick="startGame()">СТАРТ</button>
-                <button class="iksweb" onclick="if(typeof isGameStarted==='undefined'||!isGameStarted){swal({title:'Внимание!',text:'Игра еще не начата. Нажмите «Старт»!',icon:'warning',button:'Понятно'});}else if(typeof isGameOver!=='undefined'&&isGameOver){swal({title:'Игра завершена!',text:'Нажмите «Старт»!',icon:'info',button:'Хорошо'});}else{window.pauseGame();if(typeof showVKFullscreenAd==='function')showVKFullscreenAd();}">ПАУЗА</button>
-                <button class="iksweb" onclick="if(typeof isGameStarted==='undefined'||!isGameStarted){swal({title:'Внимание!',text:'Игра еще не начата. Нажмите «Старт»!',icon:'warning',button:'Понятно'});}else if(typeof isGameOver!=='undefined'&&isGameOver){swal({title:'Игра завершена!',text:'Нажмите «Старт»!',icon:'info',button:'Хорошо'});}else{window.resumeGame();}">ДАЛЬШЕ</button>
+                <button class="iksweb start-btn" onclick="startGameWithAudio()">СТАРТ</button>
+                <button class="iksweb" id="pause-resume-btn" onclick="togglePauseResume()">ПАУЗА</button>
                 
                 <div style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
-                    <button class="iksweb1 pc-only-leader" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);" title="Таблица лидеров"><img src="icons8.png" style="height: 18px;" /></button>
-                    <button class="iksweb1" onclick="mutebtn()"><img id="mute" src="./mute.png" /></button>
-                    <button class="iksweb1" onclick="inviteFriends()" title="Пригласить друзей"><img src="friends-icon.png" style="height: 18px;" /></button>
+                    <button class="iksweb1 pc-only-leader" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);" title="Таблица лидеров">
+                        <svg width="28" height="28" viewBox="0 0 48 48">
+                            <g fill="none" stroke-width="3">
+                                <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>
+                                <path fill="#8fbffa" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074c4.793.53 8.735 3.886 10.125 8.364M3.836 18.244c-.536-.782-.655-1.774-.255-2.634C6.85 8.588 14 4 14 4s3.337 7.957 8.663 17.074c-4.794.531-8.735 3.886-10.126 8.364c-4.05-4.593-7.255-9.086-8.7-11.194Z"/>
+                                <path fill="#fff" d="M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                                <path fill="#8fbffa" d="M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.42 3.395a1.25 1.25 0 0 1-1.8 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.799-1.272l.42-3.395l-2.289-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                                <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M14 4s3-1 10-1s10 1 10 1M18.845 14.143A81 81 0 0 1 24 14c2.139 0 3.826.056 5.155.143M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                                <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074m-2.674 0C17.337 11.957 14 4 14 4S6.85 8.588 3.58 15.61c-.4.86-.281 1.852.255 2.634c1.446 2.108 4.651 6.6 8.701 11.194M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.419 3.395a1.25 1.25 0 0 1-1.799 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.8-1.272l.42-3.395l-2.288-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                            </g>
+                        </svg>
+                    </button>
+                    
+                    <button class="iksweb1" onclick="toggleSound()" id="sound-btn" title="Звуки">
+                        <svg id="sound-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
+                            <path fill="#8899a6" d="M2 10s-2 0-2 2v12c0 2 2 2 2 2h6l8 8s1 1 2 1h1s1 0 1-1V2s0-1-1-1h-1c-1 0-2 1-2 1l-8 8z"/>
+                            <path fill="#ccd6dd" d="m8 26l8 8s1 1 2 1h1s1 0 1-1V2s0-1-1-1h-1c-1 0-2 1-2 1l-8 8z"/>
+                            <path fill="#8899a6" d="M29 32.019a.945.945 0 0 1-.615-1.666c3.603-3.071 5.668-7.551 5.668-12.29s-2.066-9.219-5.669-12.29a.947.947 0 0 1 1.229-1.44a18.02 18.02 0 0 1 6.333 13.73a18.02 18.02 0 0 1-6.332 13.729a.94.94 0 0 1-.614.227"/>
+                            <path fill="#8899a6" d="M26.27 28.959a.927.927 0 0 1-.592-1.645a12.04 12.04 0 0 0 4.394-9.315a12.05 12.05 0 0 0-4.311-9.245a.929.929 0 0 1 1.196-1.422a13.9 13.9 0 0 1 4.973 10.667c0 4.172-1.848 8.089-5.069 10.746a.92.92 0 0 1-.591.214"/>
+                            <path fill="#8899a6" d="M23.709 25.959a.998.998 0 0 1-.636-1.772A7.98 7.98 0 0 0 26 18a7.97 7.97 0 0 0-2.988-6.236a1 1 0 1 1 1.254-1.558A9.96 9.96 0 0 1 28 18a9.97 9.97 0 0 1-3.657 7.731a1 1 0 0 1-.634.228"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="iksweb1" onclick="toggleMusic()" id="music-btn" title="Музыка">
+                        <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14">
+                            <path fill="#8fbffa" fill-rule="evenodd" d="M12.781.23a1.2 1.2 0 0 0-.555.02h-.006L4.587 2.369a1.23 1.23 0 0 0-.905 1.177V9.04a2.477 2.477 0 1 0 1.5 2.277V6.076l7.09-1.97V6.57a2.477 2.477 0 1 0 1.5 2.345V1.403a1.226 1.226 0 0 0-.99-1.172Z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="iksweb1" onclick="inviteFriends()" title="Пригласить друзей">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8899a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="iksweb1" onclick="openRewardsCenter()" title="Центр наград">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="iksweb1" onclick="returnToMenu()" title="В меню">
+                        <svg width="24" height="24" viewBox="0 0 14 14">
+                            <g fill="none" fill-rule="evenodd" clip-rule="evenodd">
+                                <path fill="#8fbffa" d="M7.907 1.265a1.5 1.5 0 0 0-1.814 0l-.66.501A20.5 20.5 0 0 0 .527 7.101l-.211.333A1 1 0 0 0 1.16 8.97h.691c-.04.92.01 1.841.15 2.752c.14.906.92 1.574 1.836 1.574h6.326c.917 0 1.696-.668 1.835-1.573c.14-.912.19-1.834.15-2.753h.692a1 1 0 0 0 .844-1.536l-.211-.333a20.5 20.5 0 0 0-4.906-5.335z"/>
+                                <path fill="#2859c5" d="M8.25 13.296V10a1.25 1.25 0 1 0-2.5 0v3.296z"/>
+                            </g>
+                        </svg>
+                    </button>
                 </div>
             </div>
             
             <div id="yandex-highscore-side" style="width: 100%; text-align: center; font-size: 16px; color: #34d399; margin: 5px 0; text-transform: uppercase; letter-spacing: 1.5px;">Рекорд: Загрузка...</div>
-            <div class="instructions">Управление на ПК:<br>Клавиши <b>A / D</b> — Влево/Вправо<br>Клавиша <b>W</b> — Поворот<br>Клавиша <b>S</b> — Быстрый вниз</div>
+            
+            <div class="instructions">
+                Управление на ПК:<br>
+                Клавиши <b>A / D</b> — Влево/Вправо<br>
+                Клавиша <b>W</b> — Поворот<br>
+                Клавиша <b>S</b> — Быстрый вниз
+            </div>
             
             <div class="mobile-joystick">
                 <div class="d-pad">
@@ -295,12 +939,23 @@
                     <button class="d-btn b-right" id="btn-right">▶</button>
                     <button class="d-btn b-down" id="btn-down">▼</button>
                 </div>
+                
                 <div class="leaderboard-pad">
-                    <button id="btn-leader" type="button" style="width:55px;height:55px;background:#282836;border:none;border-radius:50%;box-shadow:0 4px 0 #14141a;display:flex;justify-content:center;align-items:center;cursor:pointer;padding:0;">
-                        <img src="icons8.png" style="height:22px;width:22px;object-fit:contain;" />
+                    <button id="btn-leader" type="button" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);" style="width:55px;height:55px;background:#282836;border:none;border-radius:50%;box-shadow:0 4px 0 #14141a;display:flex;justify-content:center;align-items:center;cursor:pointer;padding:0;">
+                        <svg width="26" height="26" viewBox="0 0 48 48">
+                            <g fill="none" stroke-width="3">
+                                <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>
+                                <path fill="#8fbffa" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074c4.793.53 8.735 3.886 10.125 8.364M3.836 18.244c-.536-.782-.655-1.774-.255-2.634C6.85 8.588 14 4 14 4s3.337 7.957 8.663 17.074c-4.794.531-8.735 3.886-10.126 8.364c-4.05-4.593-7.255-9.086-8.7-11.194Z"/>
+                                <path fill="#fff" d="M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                                <path fill="#8fbffa" d="M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.42 3.395a1.25 1.25 0 0 1-1.8 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.799-1.272l.42-3.395l-2.289-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                                <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M14 4s3-1 10-1s10 1 10 1M18.845 14.143A81 81 0 0 1 24 14c2.139 0 3.826.056 5.155.143M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                                <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074m-2.674 0C17.337 11.957 14 4 14 4S6.85 8.588 3.58 15.61c-.4.86-.281 1.852.255 2.634c1.446 2.108 4.651 6.6 8.701 11.194M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.419 3.395a1.25 1.25 0 0 1-1.799 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.8-1.272l.42-3.395l-2.288-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                            </g>
+                        </svg>
                     </button>
-                    <span>Лидеры</span>
+                    <span style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Лидеры</span>
                 </div>
+                
                 <div class="action-pad">
                     <button class="rotate-btn" id="btn-rot">↻</button>
                     <span class="action-label">Поворот</span>
@@ -308,31 +963,180 @@
             </div>
         </div>
     </div>
-    <script src="tetris.js"></script>
+
+    <!-- МОДАЛКА ТАБЛИЦЫ ЛИДЕРОВ (VK) -->
+    <div id="leaderboard-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.7); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
+        <div style="background: rgba(30, 30, 40, 0.75) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; width: 90%; max-width: 380px; border-radius: 24px; padding: 25px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; font-family: 'Russo One', sans-serif; text-align: center;">
+            <h3 style="text-align: center; color: #34d399; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 0 0 15px rgba(52, 211, 153, 0.4);">Таблица лидеров</h3>
+            <div id="leaderboard-entries" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; padding-right: 5px;">
+                <div style="text-align: center; color: #94a3b8; font-size: 14px; padding: 20px;">Загрузка...</div>
+            </div>
+            <button onclick="closeLeaderboardModal()" style="width: 100% !important; cursor: pointer !important; font-size: 14px !important; font-family: 'Russo One', sans-serif !important; text-transform: uppercase !important; letter-spacing: 2px !important; padding: 14px !important; color: #fff !important; background: rgba(255, 255, 255, 0.05) !important; border-radius: 14px !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; box-shadow: none !important; display: block !important;">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ОКОНЧАНИЯ ИГРЫ -->
+    <div id="gameover-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.8); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);">
+        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(239, 68, 68, 0.4); width: 90%; max-width: 400px; border-radius: 30px; padding: 40px 30px 35px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 60px rgba(239, 68, 68, 0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <div style="width: 70px; height: 70px; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 16px; box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </div>
+            <h2 style="color: #ef4444; font-size: 28px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 6px; font-family: 'Russo One', sans-serif; text-shadow: 0 0 30px rgba(239, 68, 68, 0.3);">ИГРА ОКОНЧЕНА</h2>
+            <p style="color: #94a3b8; font-size: 14px; letter-spacing: 1px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">Ваш счёт:</p>
+            <p id="gameover-score" style="color: #fff; font-size: 42px; font-weight: bold; font-family: 'Russo One', sans-serif; margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,255,0.1);">0</p>
+            <button onclick="closeGameOverModal()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                Новая игра
+            </button>
+            <button onclick="closeGameOverModalAndMenu()" style="width: 100%; padding: 14px; margin-top: 10px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                В меню
+            </button>
+        </div>
+    </div>
+
+    <!-- ЦЕНТР НАГРАД -->
+    <div id="rewards-center-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; justify-content: center; align-items: center;">
+        <div style="background: rgba(10, 10, 14, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 480px; border-radius: 30px; padding: 30px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
+            <button onclick="closeRewardsCenter()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10;">✕</button>
+            <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🏆 Центр наград</h2>
+            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
+                Ваш счёт: <span id="rewards-player-score" style="color: #34d399; font-weight: bold;">0</span>
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                <button onclick="openScrollsFromRewards()" style="width: 100%; padding: 16px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3); display: flex; align-items: center; gap: 12px; justify-content: center;">
+                    <span style="font-size: 24px;">📜</span>
+                    <span>Свитки</span>
+                    <span style="font-size: 12px; color: #a78bfa; font-weight: normal;" id="scrolls-progress">0/100</span>
+                </button>
+                <button onclick="openDailyBonus()" style="width: 100%; padding: 16px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3); display: flex; align-items: center; gap: 12px; justify-content: center;">
+                    <span style="font-size: 24px;">🎁</span>
+                    <span>Ежедневный бонус</span>
+                    <span style="font-size: 12px; color: #fcd34d; font-weight: normal;" id="daily-bonus-status">+10</span>
+                </button>
+                <button onclick="openCollections()" style="width: 100%; padding: 16px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #ec4899, #db2777); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3); display: flex; align-items: center; gap: 12px; justify-content: center;">
+                    <span style="font-size: 24px;">🖼️</span>
+                    <span>Коллекции</span>
+                    <span style="font-size: 12px; color: #f9a8d4; font-weight: normal;" id="collections-progress">0/200</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="main-menu-modal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9998; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+        <div style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 480px; border-radius: 30px; padding: 40px 35px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
+            <h1 style="color: #34d399; font-size: 36px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; text-shadow: 0 0 30px rgba(52, 211, 153, 0.3); font-family: 'Russo One', sans-serif;">Тетра Дарк</h1>
+            <p style="color: #64748b; font-size: 14px; letter-spacing: 2px; margin-bottom: 35px; font-family: 'Russo One', sans-serif;">ВЫБЕРИ РЕЖИМ</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px;">
+                <button onclick="selectMode('tetra')" style="width: 100%; padding: 16px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);">
+                    🧩 Тетра
+                </button>
+                <button onclick="selectMode('penta')" style="width: 100%; padding: 16px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);">
+                    🔶 Пента
+                </button>
+                <button onclick="selectMode('classic')" style="width: 100%; padding: 16px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 16px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);">
+                    🎮 Классика
+                </button>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <button onclick="toggleSound()" id="menu-sound-btn" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
+                    <svg id="sound-icon" width="22" height="22" viewBox="0 0 36 36">
+                        <path fill="#8899a6" d="M2 10s-2 0-2 2v12c0 2 2 2 2 2h6l8 8s1 1 2 1h1s1 0 1-1V2s0-1-1-1h-1c-1 0-2 1-2 1l-8 8z"/>
+                        <path fill="#ccd6dd" d="m8 26l8 8s1 1 2 1h1s1 0 1-1V2s0-1-1-1h-1c-1 0-2 1-2 1l-8 8z"/>
+                        <path fill="#8899a6" d="M29 32.019a.945.945 0 0 1-.615-1.666c3.603-3.071 5.668-7.551 5.668-12.29s-2.066-9.219-5.669-12.29a.947.947 0 0 1 1.229-1.44a18.02 18.02 0 0 1 6.333 13.73a18.02 18.02 0 0 1-6.332 13.729a.94.94 0 0 1-.614.227"/>
+                        <path fill="#8899a6" d="M26.27 28.959a.927.927 0 0 1-.592-1.645a12.04 12.04 0 0 0 4.394-9.315a12.05 12.05 0 0 0-4.311-9.245a.929.929 0 0 1 1.196-1.422a13.9 13.9 0 0 1 4.973 10.667c0 4.172-1.848 8.089-5.069 10.746a.92.92 0 0 1-.591.214"/>
+                        <path fill="#8899a6" d="M23.709 25.959a.998.998 0 0 1-.636-1.772A7.98 7.98 0 0 0 26 18a7.97 7.97 0 0 0-2.988-6.236a1 1 0 1 1 1.254-1.558A9.96 9.96 0 0 1 28 18a9.97 9.97 0 0 1-3.657 7.731a1 1 0 0 1-.634.228"/>
+                    </svg>
+                </button>
+                <button onclick="toggleMusic()" id="menu-music-btn" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
+                    <svg id="music-icon" width="22" height="22" viewBox="0 0 14 14">
+                        <path fill="#8fbffa" fill-rule="evenodd" d="M12.781.23a1.2 1.2 0 0 0-.555.02h-.006L4.587 2.369a1.23 1.23 0 0 0-.905 1.177V9.04a2.477 2.477 0 1 0 1.5 2.277V6.076l7.09-1.97V6.57a2.477 2.477 0 1 0 1.5 2.345V1.403a1.226 1.226 0 0 0-.99-1.172Z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <button onclick="openRewardsCenter()" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                </button>
+                <button onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0)" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
+                    <svg width="28" height="28" viewBox="0 0 48 48">
+                        <g fill="none" stroke-width="3">
+                            <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>
+                            <path fill="#8fbffa" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074c4.793.53 8.735 3.886 10.125 8.364M3.836 18.244c-.536-.782-.655-1.774-.255-2.634C6.85 8.588 14 4 14 4s3.337 7.957 8.663 17.074c-4.794.531-8.735 3.886-10.126 8.364c-4.05-4.593-7.255-9.086-8.7-11.194Z"/>
+                            <path fill="#fff" d="M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                            <path fill="#8fbffa" d="M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.42 3.395a1.25 1.25 0 0 1-1.8 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.799-1.272l.42-3.395l-2.289-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                            <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M14 4s3-1 10-1s10 1 10 1M18.845 14.143A81 81 0 0 1 24 14c2.139 0 3.826.056 5.155.143M12 33a12 12 0 1 0 24 0a12 12 0 1 0-24 0"/>
+                            <path stroke="#2859c5" stroke-linecap="round" stroke-linejoin="round" d="M35.462 29.438c4.05-4.593 7.256-9.086 8.702-11.194c.536-.782.655-1.774.255-2.634C41.15 8.588 34 4 34 4s-3.337 7.957-8.663 17.074m-2.674 0C17.337 11.957 14 4 14 4S6.85 8.588 3.58 15.61c-.4.86-.281 1.852.255 2.634c1.446 2.108 4.651 6.6 8.701 11.194M22.89 26.64a1.25 1.25 0 0 1 2.22 0l1.51 2.912l3.22.634a1.25 1.25 0 0 1 .688 2.062l-2.288 2.545l.419 3.395a1.25 1.25 0 0 1-1.799 1.272L24 38.032l-2.86 1.428a1.25 1.25 0 0 1-1.8-1.272l.42-3.395l-2.288-2.545a1.25 1.25 0 0 1 .688-2.062l3.22-.634l1.51-2.913Z"/>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА СВИТКОВ -->
+    <div id="scrolls-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+        <div style="background: rgba(20, 20, 30, 0.92); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 500px; border-radius: 30px; padding: 30px 25px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 85vh; display: flex; flex-direction: column;">
+            <button onclick="closeScrollsModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10;">✕</button>
+            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">📜 Свитки</h2>
+            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">
+                Ваш счёт: <span id="scrolls-player-score" style="color: #34d399; font-weight: bold;">0</span>
+            </p>
+            <div id="scrolls-container" style="flex: 1; overflow-y: auto; max-height: 50vh; padding: 5px 10px;"></div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <button onclick="prevScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">◀</button>
+                <span id="scrolls-page-info" style="color: #64748b; font-size: 14px; font-family: 'Russo One', sans-serif;">1 / 20</span>
+                <button onclick="nextScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">▶</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ТЕКСТА СВИТКА -->
+    <div id="scroll-text-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.9); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+        <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 450px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
+            <button onclick="closeScrollTextModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif;">✕</button>
+            <h2 id="scroll-text-title" style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">Свиток 1</h2>
+            <div id="scroll-text-content" style="color: #e2e8f0; font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-family: 'Russo One', sans-serif; max-height: 40vh; overflow-y: auto; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 14px;">
+                Текст свитка...
+            </div>
+            <button onclick="closeScrollTextModal()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                Прочитано
+            </button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ВЫБОРА СЛОЖНОСТИ -->
+    <div id="difficulty-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+        <div style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
+            <button onclick="closeDifficultyModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif;">✕</button>
+            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">Выбери сложность</h2>
+            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 30px; font-family: 'Russo One', sans-serif;">
+                Режим: <span id="difficulty-mode-name" style="color: #fff;">Классика</span>
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button onclick="selectDifficulty('easy')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                    🟢 Легко
+                    <span style="display: block; font-size: 11px; color: #86efac; margin-top: 4px;">Медленнее</span>
+                </button>
+                <button onclick="selectDifficulty('medium')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);">
+                    🟡 Средне
+                    <span style="display: block; font-size: 11px; color: #93c5fd; margin-top: 4px;">Стандарт</span>
+                </button>
+                <button onclick="selectDifficulty('hard')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);">
+                    🔴 Сложно
+                    <span style="display: block; font-size: 11px; color: #fca5a5; margin-top: 4px;">Быстрее</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="App.js"></script>
-    <script>
-// Принудительная привязка кнопки лидеров на мобилках
-document.addEventListener('DOMContentLoaded', function() {
-    // Находим кнопку лидеров в мобильном джойстике
-    const mobileLeaderBtn = document.getElementById('btn-leader');
-    if (mobileLeaderBtn) {
-        // Убираем старый onclick, если был
-        mobileLeaderBtn.removeAttribute('onclick');
-        // Вешаем новый обработчик
-        mobileLeaderBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('📱 Нажата мобильная кнопка лидеров');
-            if (typeof showVKLeaderboard === 'function') {
-                const currentScore = (typeof player !== 'undefined' && player.score) ? player.score : 0;
-                showVKLeaderboard(currentScore);
-            } else {
-                console.error('❌ showVKLeaderboard не определена');
-            }
-        });
-        console.log('🔘 Кнопка лидеров на мобилке привязана');
-    }
-});
-</script>
+    <script src="audio.js"></script>
+    <script src="scrolls.js"></script>
+    <script src="tetris.js"></script>
 </body>
 </html>
