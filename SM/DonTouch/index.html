@@ -3295,19 +3295,7 @@ function showCountdownNotification(text) {
     }
 });
 
-        // Предотвращаем случайные нажатия на кнопку "В меню" во время анимаций
-        document.addEventListener('click', function(e) {
-            var menuBtn = e.target.closest('[data-menu-btn="true"]');
-            if (menuBtn) {
-                // Если игра не активна или уже в меню - игнорируем
-                if (!gameActive || mainMenu.style.display !== 'none') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return;
-                }
-            }
-        });
-
+  
         function inviteFriends() {
             if (typeof vkBridge !== 'undefined') {
                 vkBridge.send("VKWebAppShowInviteBox", {})
