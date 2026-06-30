@@ -37,34 +37,35 @@
         #yandex-highscore-side { display: none !important; }
         #yandex-highscore-top { display: block !important; }
         
-        .game-wrapper { flex-direction: column; justify-content: space-between; padding: 10px; gap: 10px; }
-        .canvas-container { width: 100%; height: calc(100vh - 240px); max-height: calc(100vh - 240px); aspect-ratio: auto; border-radius: 16px; }
-        .controls-container { width: 100%; max-width: 450px; height: 220px; padding: 12px; gap: 12px; }
-        .top-menu { flex-direction: row; gap: 8px; align-items: center; }
-        .iksweb { font-size: 11px; padding: 10px 2px; border-radius: 10px; }
-        .iksweb1 { width: 42px; height: 36px; border-radius: 10px; }
-        .iksweb1 img { height: 16px; }
+        .game-wrapper { flex-direction: column; justify-content: space-between;  padding: 4px 4px 2px 4px;  /* ← УМЕНЬШЕНО */    gap: 2px;      /* ← УМЕНЬШЕНО */}
+        .canvas-container { width: 100%; height: calc(100vh - 150px); max-height: calc(100vh - 150px);/* ← УМЕНЬШЕНО было 240 вместо 150 */ aspect-ratio: auto; border-radius: 16px; }
+        .controls-container { width: 100%; max-width: 450px;   height: 140px; /* ← УМЕНЬШЕНО было 220 */   padding: 2px 6px 4px 6px;   /* ← УМЕНЬШЕНО */   gap: 1px;  /* ← УМЕНЬШЕНО */}
+        .top-menu { flex-direction: row; gap: 3px;    /* ← УМЕНЬШЕНО было 8*/ align-items: center; }
+ .iksweb {        font-size: 9px;            /* ← УМЕНЬШЕНО */        padding: 5px 2px;          /* ← УМЕНЬШЕНО */        border-radius: 6px;        /* ← УМЕНЬШЕНО */        min-height: 26px;          /* ← ДОБАВЛЕНО */    }    
+    .iksweb1 {        width: 30px;               /* ← УМЕНЬШЕНО */        height: 26px;              /* ← УМЕНЬШЕНО */        border-radius: 6px;        /* ← УМЕНЬШЕНО */        margin-top: 2px;    }
+        .iksweb1 img {        height: 12px;              /* ← УМЕНЬШЕНО */    }
+        /* Рекорд на телефонах — меньше */
+    #yandex-highscore-top {        font-size: 11px !important;  /* ← УМЕНЬШЕНО */        margin-bottom: 2px !important;        padding: 0;        line-height: 1.2;    }
         .instructions { display: none; }
         
-        .mobile-joystick { display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 5px; gap: 10px; }
-        
-        .d-pad { display: grid; grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); background: #191922; border-radius: 50%; padding: 4px; border: 1px solid #252530; }
-        .d-btn { background: #282836; border: none; color: #fff; font-size: 16px; display: flex; justify-content: center; align-items: center; cursor: pointer; border-radius: 10px; box-shadow: 0 3px 0 #14141a; width: 100%; height: 100%; }
-        .d-btn:active { background: #14141a; transform: translateY(2px); box-shadow: none; }
+        .mobile-joystick { display: flex; width: 100%; justify-content: space-between; align-items: center; margin-top: 5px; gap: 10px; }        
+        .d-pad { display: grid; grid-template-columns: repeat(3, 32px) !important;   /* ← УМЕНЬШЕНО */        grid-template-rows: repeat(3, 32px) !important;      /* ← УМЕНЬШЕНО */ background: #191922; border-radius: 50%; padding: 4px; border: 1px solid #252530; }
+        .d-btn { background: #282836; border: none; color: #fff; font-size: 11px;            /* ← УМЕНЬШЕНО */ display: flex; justify-content: center; align-items: center; cursor: pointer;  border-radius: 6px;         /* ← УМЕНЬШЕНО */   box-shadow: 0 2px 0 #14141a; /* ← УМЕНЬШЕНО */ width: 100%; height: 100%; }
+        .d-btn:active { background: #14141a;  transform: translateY(1px);  /* ← УМЕНЬШЕНО */ box-shadow: none; }
         .d-btn.b-left { grid-column: 1; grid-row: 2; }
         .d-btn.b-down { grid-column: 2; grid-row: 3; }
         .d-btn.b-right { grid-column: 3; grid-row: 2; }
         .d-pad-center { grid-column: 2; grid-row: 2; background: #1e1e28; border-radius: 4px; }
         
-        .leaderboard-pad { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        #btn-leader { width: 55px; height: 55px; background: #282836; border: none; border-radius: 50%; box-shadow: 0 4px 0 #14141a; display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 0; }
-        #btn-leader img { height: 22px; width: 22px; filter: none !important; }
-        .leaderboard-pad span { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        .leaderboard-pad { display: flex; flex-direction: column; align-items: center;  gap: 3px;               /* ← УМЕНЬШЕНО */}
+        #btn-leader { width: 42px !important;  /* ← УМЕНЬШЕНО */    height: 42px !important; /* ← УМЕНЬШЕНО */ background: #282836; border: none; border-radius: 50%;  box-shadow: 0 3px 0 #14141a; /* ← УМЕНЬШЕНО */display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 0; }
+        #btn-leader img { width: 20px !important;  /* ← УМЕНЬШЕНО */    height: 20px !important; /* ← УМЕНЬШЕНО */ filter: none !important; }
+        .leaderboard-pad span { font-size: 8px;  color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         
         .action-pad { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .rotate-btn { width: 75px; height: 75px; background: linear-gradient(135deg, #10b981, #047857); border: 1px solid #34d399; border-radius: 50%; color: white; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 0 #064e3b; }
+        .rotate-btn {  width: 50px;               /* ← УМЕНЬШЕНО */        height: 50px;              /* ← УМЕНЬШЕНО */ background: linear-gradient(135deg, #10b981, #047857); border: 1px solid #34d399; border-radius: 50%; color: white;  font-size: 18px;           /* ← УМЕНЬШЕНО */ display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 0 #064e3b; }
         .rotate-btn:active { background: linear-gradient(135deg, #059669, #065f46); transform: translateY(3px); box-shadow: none; }
-        .action-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-align: center; display: block; width: 100%; }
+        .action-label {  font-size: 7px;          /* ← УМЕНЬШЕНО */ color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-align: center; display: block; width: 100%; }
     }
 
 /* ПК — только если есть мышь И ширина большая */
@@ -864,7 +865,7 @@ div[id$="-modal"]::before {
 
         <div class="controls-container">
             <div class="top-menu">
-                <button class="iksweb start-btn" onclick="startGameWithAudio()">СТАРТ</button>
+              <!--  <button class="iksweb start-btn" onclick="startGameWithAudio()">СТАРТ</button>-->
                 <button class="iksweb" id="pause-resume-btn" onclick="togglePauseResume()">ПАУЗА</button>
                 
                 <div style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">

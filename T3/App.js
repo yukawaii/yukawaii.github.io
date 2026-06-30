@@ -314,10 +314,8 @@ function initVKSDK() {
                     .catch(err => {
                         console.warn('⚠️ Токен не получен (игрок не авторизован или отказал)', err);
                         updateRecordText('Рекорд: 0 (Гость)');
-                    });
-                
-                showVKFullscreenAd();
-            })
+                    });             
+                })
             .catch((err) => {
                 console.warn('Пользователь не авторизован:', err);
                 updateRecordText('Рекорд: 0 (Гость)');
