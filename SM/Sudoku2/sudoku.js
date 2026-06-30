@@ -1146,7 +1146,7 @@ checkNumber() {
     if (this.difficulty === 'easy') {
         maxChecks = 3;
     } else if (this.difficulty === 'medium') {
-        maxChecks = 3;
+        maxChecks = 2;
     } else if (this.difficulty === 'hard') {
         maxChecks = 1;
     } else if (this.difficulty === 'expert') {
@@ -1312,7 +1312,7 @@ async solveAll() {
         this.hintsUsed = 0;
       // Устанавливаем максимальное количество подсказок в зависимости от уровня
     if (this.difficulty === 'easy' || this.difficulty === 'medium') {
-        this.maxHints = 3;
+        this.maxHints = 1;
     } else {
         this.maxHints = 1;
     }
