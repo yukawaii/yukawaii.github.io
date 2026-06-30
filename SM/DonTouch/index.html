@@ -2993,40 +2993,90 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         setTimeout(syncAllDataToVK, 1000);
     }, '🎮');
 }
-       function goToMenu() {
+function goToMenu() {
+    // 1. Останавливаем игру
     gameActive = false;
-    clearAllIntervals();
-    stopBackgroundEffects();
-    closeGameOverModal();
     
-    // Останавливаем звуки кнопок
+    // 2. Очищаем все интервалы
+    clearAllIntervals();
+    
+    // 3. Останавливаем фоновые эффекты
+    stopBackgroundEffects();
+    
+    // 4. Останавливаем частицы
+    stopParticles();
+    stopParticlesBlue();
+    
+    // 5. Останавливаем звуки кнопок
     if (window.buttonSoundTimer) {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
     }
     
-    // Останавливаем любые воспроизводящиеся звуки
+    // 6. Останавливаем аудио контекст
     if (audioCtx) {
         try {
             audioCtx.suspend();
         } catch(e) {}
     }
     
-    if (gameContainer) gameContainer.style.display = 'none';
-    if (mainMenu) mainMenu.style.display = 'flex';
+    // 7. Закрываем модалки, если они открыты
+    closeGameOverModal();
+    closeShieldAdModal();
+    closeRepairModal();
+    if (repairErrorModal) {
+        repairErrorModal.classList.remove('active');
+    }
     
+    // 8. Сбрасываем состояние паузы
     paus = false;
     wasPausedByHide = false;
+    shieldPopupPaused = false;
+    repairPopupPaused = false;
+    window.keysBlocked = false;
+    
+    // 9. Разблокируем кнопки управления
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    
+    // 10. Восстанавливаем иконку паузы
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
-    // Синхронизация при выходе в меню
+    
+    // 11. Скрываем игровой контейнер
+    if (gameContainer) {
+        gameContainer.style.display = 'none';
+    }
+    
+    // 12. Показываем меню
+    if (mainMenu) {
+        mainMenu.style.display = 'flex';
+    }
+    
+    // 13. Очищаем тосты
+    if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+    }
+    var toast = document.getElementById('toast');
+    if (toast) {
+        toast.classList.remove('show');
+    }
+    
+    // 14. Синхронизация при выходе в меню
     setTimeout(syncAllDataToVK, 500);
+    
+    console.log('🏠 Выход в меню. Игра полностью остановлена.');
+}     
+
+ function goToMenuFromOver() {    
+    closeGameOverModal();
+    // Полностью останавливаем игру и выходим в меню
+    goToMenu();
 }
-        function goToMenuFromOver() {
-            closeGameOverModal();
-            goToMenu();
-        }
 
   function showHowTo() {
     var modal = document.getElementById('howToModal');
@@ -3117,9 +3167,10 @@ function showCountdownNotification(text) {
             }
         }
 
-        function closeGameOverModal() {
-            if (gameOverModal) gameOverModal.classList.remove('active');
+      function closeGameOverModal() {
+        if (gameOverModal) {        gameOverModal.classList.remove('active');
         }
+    }
 
         function restartGame() {
             closeGameOverModal();
@@ -3603,12 +3654,18 @@ function showCountdownNotification(text) {
         // ============================================================
         //  16. ИГРОВАЯ ЛОГИКА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
-        function clearAllIntervals() {
-            clearInterval(int1);
-            clearInterval(int2);
-            clearInterval(int3);
-            clearInterval(int4);
-        }
+    function clearAllIntervals() {
+    clearInterval(int1);
+    clearInterval(int2);
+    clearInterval(int3);
+    clearInterval(int4);
+    clearInterval(bgInterval);
+    clearInterval(jellyfishTimer);
+    clearInterval(shieldTimer);
+    clearInterval(particleInterval);
+    clearInterval(particleBlueInterval);
+    clearInterval(bubbleInterval);
+}
 
         function resetGame() {
             stopParticles();
@@ -5261,22 +5318,25 @@ function showRepairResumeNotification(text) {
       
       
       
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                if (gameActive && !paus) {
-                    console.log('⏸️ Вкладка скрыта — пауза');
-                    pauseGameOnHide();
-                }
-            } else {
-                if (paus) {
-                    console.log('▶️ Вкладка активна, но пауза не снимается автоматически');
-                    isSoundEnabled = true;
-                    if (pausa) {
-                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-                    }
-                }
+       // Обработчик видимости страницы
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        // Страница скрыта
+        if (gameActive && !paus && mainMenu.style.display === 'none') {
+            console.log('⏸️ Вкладка скрыта — пауза');
+            pauseGameOnHide();
+        }
+    } else {
+        // Страница видна
+        if (paus && mainMenu.style.display === 'none') {
+            console.log('▶️ Вкладка активна');
+            isSoundEnabled = true;
+            if (pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
             }
-        });
+        }
+    }
+});
 // ============================================================
 //  БЛОКИРОВКА КОНТЕКСТНОГО МЕНЮ И СКРОЛЛА
 // ============================================================
