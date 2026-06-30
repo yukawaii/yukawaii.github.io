@@ -1003,7 +1003,7 @@ div[id$="-modal"]::before {
                 <button class="iksweb" id="pause-resume-btn" onclick="togglePauseResume()">ПАУЗА</button>
                 
                 <div style="display: flex; flex-direction: row; justify-content: center; gap: 15px;">
-                    <button class="iksweb1 pc-only-leader" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);" title="Таблица лидеров">
+                    <button class="iksweb1 pc-only-leader" onclick="showVKLeaderboard()" title="Таблица лидеров">
                         <svg width="28" height="28" viewBox="0 0 48 48">
                             <g fill="none" stroke-width="3">
                                 <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>
@@ -1074,7 +1074,7 @@ div[id$="-modal"]::before {
                 </div>
                 
                 <div class="leaderboard-pad">
-                    <button id="btn-leader" type="button" onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0);" style="width:55px;height:55px;background:#282836;border:none;border-radius:50%;box-shadow:0 4px 0 #14141a;display:flex;justify-content:center;align-items:center;cursor:pointer;padding:0;">
+                    <button id="btn-leader" type="button" onclick="showVKLeaderboard()" style="width:55px;height:55px;background:#282836;border:none;border-radius:50%;box-shadow:0 4px 0 #14141a;display:flex;justify-content:center;align-items:center;cursor:pointer;padding:0;">
                         <svg width="26" height="26" viewBox="0 0 48 48">
                             <g fill="none" stroke-width="3">
                                 <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>
@@ -1195,7 +1195,7 @@ div[id$="-modal"]::before {
                         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
                     </svg>
                 </button>
-                <button onclick="showVKLeaderboard(typeof player !== 'undefined' ? player.score : 0)" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
+                                <button onclick="showVKLeaderboard()" style="width: 48px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: all 0.2s;">
                     <svg width="28" height="28" viewBox="0 0 48 48">
                         <g fill="none" stroke-width="3">
                             <path fill="#fff" d="M24 3c-7 0-10 1-10 1v.491c.014.033 1.707 4.066 4.599 9.668C19.964 14.064 21.727 14 24 14s4.036.064 5.401.16C32.304 8.533 34 4.49 34 4.49V4s-3-1-10-1"/>

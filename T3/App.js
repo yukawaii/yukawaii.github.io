@@ -573,8 +573,21 @@ function updateHighscoreDisplay() {
 
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
-function showVKLeaderboard(currentScore = 0) {
-    console.log('📊 Открываем таблицу лидеров, текущий счёт:', currentScore);
+function showVKLeaderboard() {
+    // Загружаем сохранённый рекорд
+    let highScore = 0;
+    
+    // Сначала проверяем vkHighscore (из VK)
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highScore = window.vkHighscore;
+    } else {
+        // Или из localStorage
+        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
+        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
+        highScore = Math.max(vkScore, localScore);
+    }
+    
+    console.log('📊 Открываем таблицу лидеров, рекорд игрока:', highScore);
     
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
@@ -592,7 +605,7 @@ function showVKLeaderboard(currentScore = 0) {
     }
     
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        user_result: parseInt(currentScore, 10) || 0,
+        user_result: highScore,
         global: 1
     })
     .then((data) => {
