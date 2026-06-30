@@ -13,6 +13,7 @@ let selectedDifficulty = 'medium';
 let difficultyMultiplier = 1;
 let slowDownInterval = null;
 let isSlowDownActive = false;
+let comboDisplayTimer = null;
 // ======================== ПЕРЕМЕННЫЕ ДЛЯ ПАГИНАЦИИ ========================
 let currentScrollPage = 1;
 const SCROLLS_PER_PAGE = 5;
@@ -434,17 +435,25 @@ function arenaSweep() {
             if (selectedDifficulty === 'easy') pointsPerLine = 1;
             else if (selectedDifficulty === 'hard') pointsPerLine = 3;
             else pointsPerLine = 2;
+            
             player.score += rowMultiplier * pointsPerLine;
             rowMultiplier *= 2;
             y++;
         }
     }
     
+            // ====== ПОКАЗЫВАЕМ КОМБО ЕСЛИ ОЧИЩЕНО > 1 ЛИНИИ ======
+        if (rowsCleared > 1) {
+            showComboDisplay(rowsCleared);  // ← передаём количество линий
+        }
+    
+    // Бонусы
     if (rowsCleared > 0) {
         if (Math.random() < BONUS_SPAWN_CHANCE && !activeBonus) spawnBonus();
         if (bonusSpawnCooldown > 0) bonusSpawnCooldown--;
     }
     
+    // Повышение уровня
     let oldLevel = player.level;
     if (player.lines >= 5 && player.level === 1) player.level = 2;
     else if (player.lines >= 10 && player.level === 2) player.level = 3;
@@ -461,6 +470,7 @@ function arenaSweep() {
     if (rowsCleared > 0 && typeof gameAudio !== 'undefined') {
         gameAudio.playOneShot('sweep', 0.25);
     }
+    
     return rowsCleared;
 }
 
@@ -2984,7 +2994,103 @@ function hideSlowDownIndicator() {
     }
 }
 
+// ======================== КОМБО-СИСТЕМА ========================
 
+
+function showComboDisplay(rowsCleared) {
+    // Удаляем старую надпись, если есть
+    const oldDisplay = document.getElementById('combo-display');
+    if (oldDisplay) oldDisplay.remove();
+    
+    // Очищаем старый таймер
+    if (comboDisplayTimer) {
+        clearTimeout(comboDisplayTimer);
+        comboDisplayTimer = null;
+    }
+    
+    // Создаём элемент
+    const display = document.createElement('div');
+    display.id = 'combo-display';
+    display.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        font-family: 'Russo One', sans-serif;
+        font-size: ${rowsCleared >= 5 ? 80 : rowsCleared >= 4 ? 72 : rowsCleared >= 3 ? 60 : 48}px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 
+            0 0 30px rgba(255, 215, 0, 0.8),
+            0 0 60px rgba(255, 215, 0, 0.4),
+            0 4px 20px rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-align: center;
+        line-height: 1.2;
+    `;
+    
+    // Выбираем цвет в зависимости от количества линий
+    let color = '#fcd34d'; // золотой
+    let glowColor = 'rgba(255, 215, 0, 0.8)';
+    if (rowsCleared >= 5) {
+        color = '#ff6b6b';
+        glowColor = 'rgba(255, 107, 107, 0.8)';
+    } else if (rowsCleared >= 4) {
+        color = '#ff922b';
+        glowColor = 'rgba(255, 146, 43, 0.8)';
+    } else if (rowsCleared >= 3) {
+        color = '#fcc419';
+        glowColor = 'rgba(252, 196, 25, 0.8)';
+    }
+    
+    // Текст комбо
+    let comboText = `x${rowsCleared}`;
+    let subText = `${rowsCleared} линии`;
+    if (rowsCleared === 2) subText = `${rowsCleared} линии`;
+    else if (rowsCleared === 3) subText = `${rowsCleared} линии`;
+    else if (rowsCleared === 4) subText = `${rowsCleared} линии`;
+    else if (rowsCleared >= 5) subText = `${rowsCleared} линий`;
+    
+    display.innerHTML = `
+        <div style="color: ${color}; text-shadow: 0 0 40px ${glowColor}, 0 0 80px ${glowColor}40;">
+            ${comboText}
+        </div>
+        <div style="font-size: ${rowsCleared >= 5 ? 20 : 16}px; color: #94a3b8; text-shadow: none; margin-top: -8px;">
+            ${subText}
+        </div>
+    `;
+    
+    document.body.appendChild(display);
+    
+    // Анимация появления
+    requestAnimationFrame(() => {
+        display.style.opacity = '1';
+        display.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+    
+    // ====== ЗАПУСКАЕМ КОНФЕТТИ ПРИ x3 И ВЫШЕ ======
+    if (rowsCleared >= 3) {
+        let confettiCount = 20;
+        if (rowsCleared >= 5) confettiCount = 80;
+        else if (rowsCleared >= 4) confettiCount = 50;
+        createConfetti(confettiCount);
+    }
+    
+    // Автоматическое исчезновение через 1.5 секунды
+    comboDisplayTimer = setTimeout(() => {
+        if (display) {
+            display.style.opacity = '0';
+            display.style.transform = 'translate(-50%, -50%) scale(1.2)';
+            setTimeout(() => {
+                if (display.parentNode) display.remove();
+            }, 400);
+        }
+        comboDisplayTimer = null;
+    }, 1500);
+}
 
 // ======================== ЭКСПОРТ ========================
 window.selectMode = selectMode;
