@@ -219,7 +219,11 @@
             touch-action: none;
             transition: background 5s ease;
         }
-
+                        /* ===== АНИМАЦИЯ ЗАГРУЗКИ РЕКЛАМЫ ===== */
+                        @keyframes loadingBar {
+                            0% { transform: translateX(-100%); }
+                            100% { transform: translateX(100%); }
+                        }
         /* ===== СТЕНА С ШИПАМИ ===== */
         #wallDecor {
             position: absolute;
@@ -1672,6 +1676,7 @@
     <div id="gameContainer">
         <div id="topBar">
             <button class="btn-small" onclick="goToMenu()">🏠 <span class="label">Меню</span></button>
+            <button class="btn-small icon-only" onclick="openShieldAdModal()" title="Получить щиты">🛡️</button>
             <button class="btn-small icon-only" onclick="inviteFriends()">👥</button>
             <button class="btn-small icon-only" onclick="showGamesModal()">🎮</button>
         </div>
@@ -1808,7 +1813,35 @@
         <button class="modal-btn primary" onclick="closeAchievementPopup()" style="width: 100%;">✅ Отлично!</button>
     </div>
 </div>
+<!-- ===== МОДАЛКА ПОЛУЧЕНИЯ ЩИТОВ ===== -->
+<div id="shieldAdModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 340px; padding: 30px 24px;">
+        <div style="font-size: 56px; text-align: center; margin-bottom: 8px;">🛡️</div>
+        <h2 style="text-align: center; color: #4fc3f7; margin: 0 0 12px 0;">Получить щиты</h2>
+        <p style="text-align: center; font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">
+            Посмотрите рекламу и получите <strong style="color: #faa61a;">+3 щита</strong>!
+        </p>
+        <p style="text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px;">
+            Если реклама недоступна, вы всё равно получите +1 щит
+        </p>
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: center;">
+            <button class="modal-btn secondary" onclick="closeShieldAdModal()" style="min-width: 100px;">❌ Отмена</button>
+            <button class="modal-btn primary" id="shieldAdConfirmBtn" onclick="getShieldsViaAd()" style="min-width: 100px;">🎁 Получить</button>
+        </div>
+    </div>
+</div>
 
+<!-- ===== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ===== -->
+<div id="shieldAdLoadingModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 300px; padding: 30px 24px;">
+        <div style="font-size: 48px; text-align: center; margin-bottom: 12px;">⏳</div>
+        <h2 style="text-align: center; color: #fff; margin: 0 0 8px 0;">Загрузка рекламы...</h2>
+        <p style="text-align: center; font-size: 14px; color: rgba(255,255,255,0.6);">Пожалуйста, подождите</p>
+        <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 16px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; background: linear-gradient(90deg, #4fc3f7, #faa61a); animation: loadingBar 1.5s ease-in-out infinite;"></div>
+        </div>
+    </div>
+</div>
 <!-- ===== МОДАЛКА СПИСКА ДОСТИЖЕНИЙ ===== -->
 <div id="achievementsModal" class="modal-overlay">
     <div class="modal-content" style="max-width: 600px; padding: 20px 16px; border-radius: 16px; position: relative;">
@@ -1833,7 +1866,9 @@
             ACHIEVEMENTS: 'bathyscaphe_achievements_v1',
             COUNTERS: 'bathyscaphe_counters_v1'
         };
-
+                        var shieldPopupPaused = false;
+                var shieldAdLoadingModal = document.getElementById('shieldAdLoadingModal');
+                var shieldAdModal = document.getElementById('shieldAdModal');
         // Сохранение в VK Storage
         function saveToVKStorage(key, value) {
             if (typeof vkBridge === 'undefined') {
@@ -2829,6 +2864,12 @@
             if (e.target === modal3) {
                 closeGameOverModal();
             }
+             // Закрытие модалки получения щитов по клику вне
+                var shieldModal = document.getElementById('shieldAdModal');
+                if (e.target === shieldModal) {
+                    closeShieldAdModal();
+                }
+        
         });
 
         function inviteFriends() {
@@ -2983,15 +3024,17 @@
         // ============================================================
         //  12. ЩИТ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
-        function spawnShield() {
-            if (shieldItem.style.display === 'flex' || paus) return;
-            sx = (Math.floor(Math.random() * 240 + 20));
-            sy = (Math.floor(Math.random() * 280 + 20));
-            shieldItem.style.display = 'flex';
-            shieldItem.style.left = sx + 'px';
-            shieldItem.style.top = sy + 'px';
-            playShieldSound();
-        }
+                function spawnShield() {
+                    if (shieldItem.style.display === 'flex' || paus) return;
+                    // Не спавним щиты, если их уже много
+                    if (shields >= 99) return;
+                    sx = (Math.floor(Math.random() * 240 + 20));
+                    sy = (Math.floor(Math.random() * 280 + 20));
+                    shieldItem.style.display = 'flex';
+                    shieldItem.style.left = sx + 'px';
+                    shieldItem.style.top = sy + 'px';
+                    playShieldSound();
+                }
 
         // ============================================================
         //  13. БОНУСЫ - БЕЗ ИЗМЕНЕНИЙ
@@ -3284,13 +3327,24 @@
             isSoundEnabled = true;
         }
 
-        function updateShieldDisplay() {
-            if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
-            if (shields > 0) {
-                shieldItem.style.display = 'none';
+            function updateShieldDisplay() {
+                if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
+                // Скрываем щит на поле, если он есть
+                if (shieldItem) {
+                    shieldItem.style.display = 'none';
+                }
+                // Обновляем иконку щита в gameInfo (делаем её яркой, если есть щиты)
+                var shieldIcon = document.querySelector('.shield-icon');
+                if (shieldIcon) {
+                    if (shields > 0) {
+                        shieldIcon.style.textShadow = '0 0 20px rgba(79,195,247,0.8)';
+                        shieldIcon.style.opacity = '1';
+                    } else {
+                        shieldIcon.style.textShadow = 'none';
+                        shieldIcon.style.opacity = '0.5';
+                    }
+                }
             }
-        }
-
         function poyman() {
             cx = (Math.floor(Math.random() * 240 + 20));
             cy = (Math.floor(Math.random() * 280 + 20));
@@ -4290,6 +4344,175 @@
             }
         }
 
+        // ============================================================
+//  ПОЛУЧЕНИЕ ЩИТОВ ЧЕРЕЗ РЕКЛАМУ
+// ============================================================
+                // Открыть модалку получения щитов
+                function openShieldAdModal() {
+                    if (!gameActive) {
+                        // Если игра не активна, можно показать уведомление
+                        showSaveNotification('🎮 Сначала начните игру!');
+                        return;
+                    }
+                    // Ставим игру на паузу
+                    if (!paus) {
+                        pauseGameForShield();
+                    }
+                    if (shieldAdModal) {
+                        shieldAdModal.classList.add('active');
+                    }
+                }
+
+                // Закрыть модалку получения щитов
+                function closeShieldAdModal() {
+                    if (shieldAdModal) {
+                        shieldAdModal.classList.remove('active');
+                    }
+                    // Снимаем паузу, если она была поставлена
+                    if (shieldPopupPaused) {
+                        shieldPopupPaused = false;
+                        resumeGameAfterShield();
+                    }
+                }
+
+                // Получить щиты через рекламу
+                function getShieldsViaAd() {
+                    // Закрываем модалку с предложением
+                    closeShieldAdModal();
+                    
+                    // Показываем модалку загрузки
+                    if (shieldAdLoadingModal) {
+                        shieldAdLoadingModal.classList.add('active');
+                    }
+                    
+                    // Проверяем доступность VK Bridge
+                    if (typeof vkBridge === 'undefined') {
+                        // Если VK Bridge недоступен - даём щиты без рекламы
+                        setTimeout(function() {
+                            if (shieldAdLoadingModal) {
+                                shieldAdLoadingModal.classList.remove('active');
+                            }
+                            // Даём +1 щит как компенсацию
+                            shields += 1;
+                            updateShieldDisplay();
+                            showSaveNotification('🛡️ +1 щит (реклама недоступна)!');
+                            playShieldSound();
+                            // Возобновляем игру
+                            resumeGameAfterShield();
+                        }, 1000);
+                        return;
+                    }
+                    
+                    // Пытаемся показать рекламу за вознаграждение
+                    var sendMethod = vkBridge.sendPromise || vkBridge.send;
+                    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+                        .then(function(data) {
+                            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+                            // Реклама просмотрена → +3 щита
+                            setTimeout(function() {
+                                if (shieldAdLoadingModal) {
+                                    shieldAdLoadingModal.classList.remove('active');
+                                }
+                                shields += 3;
+                                updateShieldDisplay();
+                                showSaveNotification('🛡️ +3 щита получено!');
+                                playShieldSound();
+                                // Синхронизация с VK Storage
+                                setTimeout(syncAllDataToVK, 300);
+                                // Возобновляем игру с обратным отсчётом
+                                resumeGameWithCountdown();
+                            }, 500);
+                        })
+                        .catch(function(error) {
+                            console.log("❌ Ошибка или реклама не досмотрена:", error);
+                            // Реклама не показана или не досмотрена → +1 щит
+                            setTimeout(function() {
+                                if (shieldAdLoadingModal) {
+                                    shieldAdLoadingModal.classList.remove('active');
+                                }
+                                shields += 1;
+                                updateShieldDisplay();
+                                showSaveNotification('🛡️ +1 щит (реклама недоступна)!');
+                                playShieldSound();
+                                // Синхронизация с VK Storage
+                                setTimeout(syncAllDataToVK, 300);
+                                // Возобновляем игру с обратным отсчётом
+                                resumeGameWithCountdown();
+                            }, 500);
+                        });
+                }
+
+                // Пауза для получения щитов
+                function pauseGameForShield() {
+                    if (!gameActive) return;
+                    clearAllIntervals();
+                    if (u) u.disabled = true;
+                    if (d) d.disabled = true;
+                    if (r) r.disabled = true;
+                    if (l) l.disabled = true;
+                    paus = true;
+                    shieldPopupPaused = true;
+                    if (pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+                    }
+                    window.keysBlocked = true;
+                    console.log('⏸️ Игра на паузе (получение щитов)');
+                }
+
+                // Возобновить игру после получения щитов
+                function resumeGameAfterShield() {
+                    if (!gameActive) return;
+                    if (u) u.disabled = false;
+                    if (d) d.disabled = false;
+                    if (r) r.disabled = false;
+                    if (l) l.disabled = false;
+                    paus = false;
+                    shieldPopupPaused = false;
+                    window.keysBlocked = false;
+                    if (pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                    }
+                    if (iint) {
+                        setTimeout(iint, t);
+                    }
+                    playButtonSound();
+                    console.log('▶️ Игра возобновлена после получения щитов');
+                }
+
+                // Возобновить игру с обратным отсчётом
+                function resumeGameWithCountdown() {
+                    // Показываем обратный отсчёт
+                    let countdown = 3;
+                    showShieldResumeNotification('⏳ ' + countdown);
+                    
+                    var countdownInterval = setInterval(function() {
+                        countdown--;
+                        if (countdown > 0) {
+                            showShieldResumeNotification('⏳ ' + countdown);
+                        } else {
+                            clearInterval(countdownInterval);
+                            showShieldResumeNotification('🎮 Вперёд!');
+                            setTimeout(function() {
+                                resumeGameAfterShield();
+                            }, 500);
+                        }
+                    }, 1000);
+                }
+
+                // Показ уведомления об обратном отсчёте (для щитов)
+                function showShieldResumeNotification(text) {
+                    var notification = document.createElement('div');
+                    notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
+                        'z-index:35;font-size:20px;color:#4fc3f7;text-shadow:0 0 20px rgba(79,195,247,0.8);' +
+                        'animation:saveAnim 1.5s ease-out forwards;pointer-events:none;' +
+                        'background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:12px;' +
+                        'border:2px solid rgba(79,195,247,0.3);font-weight:bold;';
+                    notification.textContent = text;
+                    gameblock.appendChild(notification);
+                    setTimeout(function() { 
+                        if (notification.parentNode) notification.remove(); 
+                    }, 1200);
+                }
         // ============================================================
         //  20. ВИДИМОСТЬ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
