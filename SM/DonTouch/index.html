@@ -1813,7 +1813,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     <!-- ===== ИГРОВОЙ КОНТЕЙНЕР ===== -->
     <div id="gameContainer">
         <div id="topBar">
-            <button class="btn-small" data-menu-btn="true" onclick="goToMenu()">🏠 <span class="label">Меню</span></button>
+            <button class="btn-small" onclick="goToMenu()">🏠 <span class="label">Меню</span></button>
             <button class="btn-small icon-only" onclick="openShieldAdModal()" title="Получить щиты">🛡️</button>
             <button class="btn-small icon-only" onclick="inviteFriends()">👥</button>
             <button class="btn-small icon-only" onclick="showGamesModal()">🎮</button>
@@ -2992,57 +2992,63 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 }
 
 function goToMenu() {
-    // 1. Мгновенно останавливаем игру
+    console.log('🔴 goToMenu() вызвана! Текущее состояние:', {
+        gameActive: gameActive,
+        paus: paus,
+        mainMenuDisplay: mainMenu.style.display,
+        x: x,
+        y: y
+    });
+    // Отменяем все таймауты
+    if (int1) { clearTimeout(int1); int1 = null; }
+    if (int2) { clearTimeout(int2); int2 = null; }
+    if (int3) { clearTimeout(int3); int3 = null; }
+    if (int4) { clearTimeout(int4); int4 = null; }
+    
+    // Отменяем таймауты бонусов
+    if (magnetTimer) { clearTimeout(magnetTimer); magnetTimer = null; }
+    if (speedBoostTimer) { clearTimeout(speedBoostTimer); speedBoostTimer = null; }
+    if (slowMotionTimer) { clearTimeout(slowMotionTimer); slowMotionTimer = null; }
+    
+    // Сбрасываем iint, чтобы никакой setTimeout не выполнился
+    iint = "";
+    
     gameActive = false;
-    
-    // 2. Очищаем все интервалы
     clearAllIntervals();
-    
-    // 3. Останавливаем фоновые эффекты
     stopBackgroundEffects();
     stopParticles();
     stopParticlesBlue();
-    
-    // 4. Закрываем все модалки
     closeGameOverModal();
+    
+    // Закрываем все модалки
     closeShieldAdModal();
     closeRepairModal();
     if (repairErrorModal) {
         repairErrorModal.classList.remove('active');
     }
     
-    // 5. Останавливаем звуки
+    if (gameContainer) gameContainer.style.display = 'none';
+    if (mainMenu) mainMenu.style.display = 'flex';
+    
     if (window.buttonSoundTimer) {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
     }
     
-    // 6. Сбрасываем флаги
     paus = false;
     wasPausedByHide = false;
     shieldPopupPaused = false;
     repairPopupPaused = false;
     window.keysBlocked = false;
     
-    // 7. Разблокируем кнопки
-    if (u) u.disabled = false;
-    if (d) d.disabled = false;
-    if (r) r.disabled = false;
-    if (l) l.disabled = false;
-    
-    // 8. Восстанавливаем иконку паузы
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
     
-    // 9. Показываем меню, скрываем игру
-    if (gameContainer) gameContainer.style.display = 'none';
-    if (mainMenu) mainMenu.style.display = 'flex';
-    
-    // 10. Синхронизация
+    // Синхронизация
     setTimeout(syncAllDataToVK, 500);
     
-    console.log('🏠 Выход в меню');
+    console.log('🏠 Выход в меню. Все таймауты отменены.');
 }
 
 
@@ -3131,16 +3137,24 @@ function showCountdownNotification(text) {
             if (modal) modal.classList.remove('active');
         }
 
-        function showGameOverModal() {
-            if (finalScoreEl) finalScoreEl.textContent = score;
-            if (finalLevelEl) finalLevelEl.textContent = level;
-            if (gameOverModal) gameOverModal.classList.add('active');
-            playGameOverSound();
-            if (window.buttonSoundTimer) {
-                clearTimeout(window.buttonSoundTimer);
-                window.buttonSoundTimer = null;
-            }
-        }
+       function showGameOverModal() {
+    // ЗАЩИТА: не показываем модалку, если меню видно или игра не активна
+    if (mainMenu.style.display === 'flex' || !gameActive) {
+        console.log('🛡️ showGameOverModal() заблокирована - меню видно или игра не активна');
+        return;
+    }
+    
+    console.log('💀 showGameOverModal() вызвана!');
+    
+    if (finalScoreEl) finalScoreEl.textContent = score;
+    if (finalLevelEl) finalLevelEl.textContent = level;
+    if (gameOverModal) gameOverModal.classList.add('active');
+    playGameOverSound();
+    if (window.buttonSoundTimer) {
+        clearTimeout(window.buttonSoundTimer);
+        window.buttonSoundTimer = null;
+    }
+}
 
       function closeGameOverModal() {
         if (gameOverModal) {        gameOverModal.classList.remove('active');
@@ -3631,7 +3645,7 @@ function showCountdownNotification(text) {
         //  16. ИГРОВАЯ ЛОГИКА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
   function clearAllIntervals() {
-    // Очищаем все интервалы
+    // Очищаем интервалы
     if (int1) { clearInterval(int1); int1 = null; }
     if (int2) { clearInterval(int2); int2 = null; }
     if (int3) { clearInterval(int3); int3 = null; }
@@ -3643,8 +3657,10 @@ function showCountdownNotification(text) {
     if (particleBlueInterval) { clearInterval(particleBlueInterval); particleBlueInterval = null; }
     if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; }
     
-    // Сбрасываем iint, чтобы никакой setTimeout не выполнился
-    iint = "";
+    // Очищаем таймауты
+    if (magnetTimer) { clearTimeout(magnetTimer); magnetTimer = null; }
+    if (speedBoostTimer) { clearTimeout(speedBoostTimer); speedBoostTimer = null; }
+    if (slowMotionTimer) { clearTimeout(slowMotionTimer); slowMotionTimer = null; }
 }
 
 
@@ -3786,7 +3802,7 @@ function showCountdownNotification(text) {
         }
 
         function checkCollision() {
-            if (paus) return false;
+            if (paus || !gameActive || mainMenu.style.display !== 'none') return false;
             
             var blockSize = 28;
             var playerSize = rad;
@@ -3876,6 +3892,14 @@ function showCountdownNotification(text) {
         }
 
         function gameover() {
+    console.trace('💥 gameover() вызвана! Стек вызовов:'); // ← Добавьте эту строку
+    console.log('💥 gameover() вызвана!', {
+        gameActive: gameActive,
+        paus: paus,
+        mainMenuDisplay: mainMenu.style.display,
+        x: x,
+        y: y
+    });        
             gameActive = false;
             clearAllIntervals();
             stopBackgroundEffects();
