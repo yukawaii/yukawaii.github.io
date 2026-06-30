@@ -7,20 +7,6 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>Батискаф в западне!</title>
     <style>
-        /* ===== ПРЕДОТВРАЩАЕМ БЕЛЫЙ ФОН ПРИ ЗАГРУЗКЕ ===== */
-html, body {
-    background: #1a1a2e !important;
-}
-
-/* Плавное появление меню */
-#mainMenu {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-#mainMenu.loaded {
-    opacity: 1;
-}
-
 
 /* Блокировка скролла для всех элементов */
 * {
@@ -89,7 +75,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 }
         /* ===== ВСЕ ВАШИ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
         body {
-            background: url(./background3.jpg) no-repeat center fixed;
+              background: #1a1a2e url(./background3.jpg) no-repeat center fixed;
             background-size: cover;
             margin: 0;
             padding: 10px;
@@ -1754,6 +1740,14 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 opacity: 0;
             }
         }
+
+        #mainMenu {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+#mainMenu.loaded {
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -5516,22 +5510,13 @@ document.getElementById('gameblock')?.addEventListener('touchstart', function(e)
         console.log('🏆 Система достижений активна!');
         console.log('☁️ VK Storage синхронизация активна!');
 
-
-    // Показываем меню после загрузки
-    document.addEventListener('DOMContentLoaded', function() {
-        var menu = document.getElementById('mainMenu');
-        if (menu) {
-            menu.classList.add('loaded');
-        }
-    });
-    
-    // Форсируем показ через 300ms на случай, если DOMContentLoaded уже сработал
+  // Показываем меню после загрузки
     setTimeout(function() {
         var menu = document.getElementById('mainMenu');
         if (menu) {
             menu.classList.add('loaded');
         }
-    }, 300);
+    }, 100);
 
     </script>
 </body>
