@@ -2991,17 +2991,33 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     }, '🎮');
 }
 function goToMenu() {
-     // Предотвращаем повторные вызовы
+    // Предотвращаем повторные вызовы
     if (isGoingToMenu) return;
     isGoingToMenu = true;
-    // 1. МГНОВЕННО останавливаем игру (первым делом!)
-    gameActive = false;
     
-    // 2. МГНОВЕННО очищаем все интервалы (движение останавливается сразу)
-    clearInterval(int1);
-    clearInterval(int2);
-    clearInterval(int3);
-    clearInterval(int4);
+    // ===== 1. СНАЧАЛА СТАВИМ ИГРУ НА ПАУЗУ =====
+    if (gameActive && !paus) {
+        // Останавливаем все интервалы движения
+        clearInterval(int1);
+        clearInterval(int2);
+        clearInterval(int3);
+        clearInterval(int4);
+        // Ставим флаг паузы
+        paus = true;
+        // Блокируем кнопки управления
+        if (u) u.disabled = true;
+        if (d) d.disabled = true;
+        if (r) r.disabled = true;
+        if (l) l.disabled = true;
+        // Меняем иконку паузы
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+        }
+        console.log('⏸️ Игра на паузе перед выходом в меню');
+    }
+    
+    // ===== 2. ТЕПЕРЬ ОСТАНАВЛИВАЕМ ИГРУ =====
+    gameActive = false;
     
     // 3. Очищаем остальные интервалы
     clearInterval(bgInterval);
@@ -3039,8 +3055,7 @@ function goToMenu() {
         repairErrorModal.classList.remove('active');
     }
     
-    // 9. Сбрасываем состояние паузы
-    paus = false;
+    // 9. Сбрасываем состояние паузы (но не паузу!)
     wasPausedByHide = false;
     shieldPopupPaused = false;
     repairPopupPaused = false;
@@ -3057,17 +3072,20 @@ function goToMenu() {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
     
-    // 12. Скрываем игровой контейнер
+    // 12. Сбрасываем флаг паузы (уже не нужен)
+    paus = false;
+    
+    // 13. Скрываем игровой контейнер
     if (gameContainer) {
         gameContainer.style.display = 'none';
     }
     
-    // 13. Показываем меню
+    // 14. Показываем меню
     if (mainMenu) {
         mainMenu.style.display = 'flex';
     }
     
-    // 14. Очищаем тосты
+    // 15. Очищаем тосты
     if (toastTimeout) {
         clearTimeout(toastTimeout);
         toastTimeout = null;
@@ -3077,15 +3095,16 @@ function goToMenu() {
         toast.classList.remove('show');
     }
     
-    // 15. Очищаем уведомления
+    // 16. Очищаем уведомления
     var notifications = document.querySelectorAll('.countdown-notification, .save-notification');
     notifications.forEach(function(el) {
         if (el.parentNode) el.remove();
     });
     
-    // 16. Синхронизация при выходе в меню
+    // 17. Синхронизация при выходе в меню
     setTimeout(syncAllDataToVK, 500);
-     // Сбрасываем флаг через секунду
+    
+    // Сбрасываем флаг через секунду
     setTimeout(function() {
         isGoingToMenu = false;
     }, 1000);
