@@ -2989,6 +2989,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         setTimeout(syncAllDataToVK, 1000);
     }, '🎮');
 }
+
 function goToMenu() {
     // Предотвращаем повторные вызовы
     if (isGoingToMenu) return;
@@ -2997,10 +2998,7 @@ function goToMenu() {
     // ===== 1. СНАЧАЛА СТАВИМ ИГРУ НА ПАУЗУ =====
     if (gameActive && !paus) {
         // Останавливаем все интервалы движения
-        clearInterval(int1);
-        clearInterval(int2);
-        clearInterval(int3);
-        clearInterval(int4);
+        clearAllIntervals();
         // Ставим флаг паузы
         paus = true;
         // Блокируем кнопки управления
