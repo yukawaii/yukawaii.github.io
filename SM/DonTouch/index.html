@@ -101,6 +101,18 @@
             background: linear-gradient(135deg, #8a9ee8, #6a80d4);
         }
 
+        /* ===== КНОПКА ПОЧИНКИ В МОДАЛКЕ ПРОИГРЫША ===== */
+                .modal-btn.repair {
+                    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+                    min-width: 100px;
+                }
+                .modal-btn.repair:hover {
+                    background: linear-gradient(135deg, #6dd0f8, #039be5);
+                }
+                .modal-btn.repair:active {
+                    transform: scale(0.96);
+                }
+
         .menu-btn.games {
             background: linear-gradient(135deg, #9b59b6, #7d3c98);
         }
@@ -223,6 +235,19 @@
                             0% { transform: translateX(-100%); }
                             100% { transform: translateX(100%); }
                         }
+/* ===== МОДАЛКА ОШИБКИ ПОЧИНКИ ===== */
+#repairErrorModal .modal-content h2 {
+    color: #ff6b6b;
+    text-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+}
+
+#repairErrorModal .modal-content .modal-buttons .modal-btn.primary {
+    background: linear-gradient(135deg, #43b581, #2d8f5e);
+}
+#repairErrorModal .modal-content .modal-buttons .modal-btn.primary:hover {
+    background: linear-gradient(135deg, #4fcb91, #329e68);
+}
+
         /* ===== СТЕНА С ШИПАМИ ===== */
         #wallDecor {
             position: absolute;
@@ -1658,18 +1683,23 @@
         </div>
     </div>
 
-    <div id="gameOverModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="danger">💥 Крушение!</h2>
-            <p>Батискаф разбился о проклятую стену!</p>
-            <div class="score-text">🐚 <span id="finalScore">0</span> ракушек</div>
-            <div class="score-text" style="font-size:18px; color:#ff6b6b;">📊 Уровень: <span id="finalLevel">1</span></div>
-            <div class="modal-buttons">
-                <button class="modal-btn primary" onclick="restartGame()">🔄 Ещё раз</button>
-                <button class="modal-btn secondary" onclick="goToMenuFromOver()">🏠 В меню</button>
+            <div id="gameOverModal" class="modal-overlay">
+                <div class="modal-content">
+                    <h2 class="danger">💥 Крушение!</h2>
+                    <p>Батискаф разбился о проклятую стену!</p>
+                    <div class="score-text">🐚 <span id="finalScore">0</span> ракушек</div>
+                    <div class="score-text" style="font-size:18px; color:#ff6b6b;">📊 Уровень: <span id="finalLevel">1</span></div>
+                    <div class="modal-buttons">
+                        <!-- ↓↓↓ НОВАЯ КНОПКА "ПОЧИНИТЬ" ↓↓↓ -->
+                        <button class="modal-btn" onclick="openRepairModal()" style="background: linear-gradient(135deg, #4fc3f7, #0288d1); min-width: 100px;">
+                            📺 Починить
+                        </button>
+                        <!-- ↑↑↑ КОНЕЦ НОВОЙ КНОПКИ ↑↑↑ -->
+                        <button class="modal-btn primary" onclick="restartGame()">🔄 Ещё раз</button>
+                        <button class="modal-btn secondary" onclick="goToMenuFromOver()">🏠 В меню</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
     <!-- ===== ИГРОВОЙ КОНТЕЙНЕР ===== -->
     <div id="gameContainer">
@@ -1853,6 +1883,41 @@
         <button class="modal-btn close-btn" onclick="closeAchievementsModal()" style="width: 100%; margin-top: 12px; padding: 10px;">📊 Закрыть</button>
     </div>
 </div>
+    <!-- ===== МОДАЛКА ПОЧИНКИ БАТИСКАФА ===== -->
+    <div id="repairModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 340px; padding: 30px 24px;">
+            <div style="font-size: 56px; text-align: center; margin-bottom: 8px;">🔧</div>
+            <h2 style="text-align: center; color: #4fc3f7; margin: 0 0 12px 0;">Починить батискаф?</h2>
+            <p style="text-align: center; font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">
+                Посмотрите рекламу, чтобы <strong style="color: #faa61a;">починить батискаф</strong><br>
+                и продолжить этот раунд!
+            </p>
+            <p style="text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px;">
+                Вы сохраните все очки и уровень
+            </p>
+            <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: center;">
+                <button class="modal-btn secondary" onclick="closeRepairModal()" style="min-width: 100px;">❌ Отмена</button>
+                <button class="modal-btn primary" id="repairConfirmBtn" onclick="getRepairViaAd()" style="min-width: 100px; background: linear-gradient(135deg, #4fc3f7, #0288d1);">🔧 Починить</button>
+            </div>
+        </div>
+    </div>
+    <!-- ===== МОДАЛКА ОШИБКИ ПОЧИНКИ ===== -->
+<div id="repairErrorModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 340px; padding: 30px 24px;">
+        <div style="font-size: 56px; text-align: center; margin-bottom: 8px;">🔧</div>
+        <h2 style="text-align: center; color: #ff6b6b; margin: 0 0 12px 0;">❌ Не удалось починить!</h2>
+        <p style="text-align: center; font-size: 16px; color: rgba(255,255,255,0.8); margin-bottom: 8px;">
+            Не удалось найти инструменты для починки!
+        </p>
+        <p style="text-align: center; font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px;">
+            Нет доступной рекламы. Попробуйте позже.
+        </p>
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: center;">
+            <button class="modal-btn primary" onclick="closeRepairErrorAndRestart()" style="min-width: 120px;">🔄 Новая игра</button>
+            <button class="modal-btn secondary" onclick="closeRepairErrorAndMenu()" style="min-width: 100px;">🏠 Меню</button>
+        </div>
+    </div>
+</div>
 
     <script>
         // ============================================================
@@ -1865,9 +1930,15 @@
             ACHIEVEMENTS: 'bathyscaphe_achievements_v1',
             COUNTERS: 'bathyscaphe_counters_v1'
         };
-                        var shieldPopupPaused = false;
+            
+        //для щитов и починки за рекламу 
+                 var shieldPopupPaused = false;
                 var shieldAdLoadingModal = document.getElementById('shieldAdLoadingModal');
                 var shieldAdModal = document.getElementById('shieldAdModal');
+                var repairPopupPaused = false;
+                var repairModal = document.getElementById('repairModal');
+                var repairErrorModal = document.getElementById('repairErrorModal');
+
         // Сохранение в VK Storage
         function saveToVKStorage(key, value) {
             if (typeof vkBridge === 'undefined') {
@@ -2868,7 +2939,12 @@
                 if (e.target === shieldModal) {
                     closeShieldAdModal();
                 }
-        
+                // Закрытие модалки починки по клику вне
+                var repairModalEl = document.getElementById('repairModal');
+                if (e.target === repairModalEl) {
+                    closeRepairModal();
+                }
+
         });
 
         function inviteFriends() {
@@ -4515,6 +4591,275 @@
         // ============================================================
         //  20. ВИДИМОСТЬ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
+// ============================================================
+//  ПОЧИНКА БАТИСКАФА ЧЕРЕЗ РЕКЛАМУ
+// ============================================================
+
+// Открыть модалку починки
+function openRepairModal() {
+    // Закрываем модалку проигрыша
+    closeGameOverModal();
+    
+    // Ставим игру на паузу (если ещё не на паузе)
+    if (!paus) {
+        clearAllIntervals();
+        if (u) u.disabled = true;
+        if (d) d.disabled = true;
+        if (r) r.disabled = true;
+        if (l) l.disabled = true;
+        paus = true;
+        repairPopupPaused = true;
+        window.keysBlocked = true;
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+        }
+    }
+    
+    if (repairModal) {
+        repairModal.classList.add('active');
+    }
+}
+
+// Закрыть модалку починки
+function closeRepairModal() {
+    if (repairModal) {
+        repairModal.classList.remove('active');
+    }
+    
+    // Если игра не активна и это не перезапуск, показываем модалку проигрыша
+    if (!gameActive && !repairPopupPaused) {
+        showGameOverModal();
+    }
+    
+    // Снимаем паузу, если она была поставлена
+    if (repairPopupPaused) {
+        repairPopupPaused = false;
+        // Если игра всё ещё активна, возобновляем
+        if (gameActive) {
+            resumeGameAfterRepair();
+        }
+    }
+}
+
+// Починить батискаф через рекламу
+function getRepairViaAd() {
+    // Закрываем модалку с предложением
+    closeRepairModal();
+    
+    // Показываем модалку загрузки
+    if (shieldAdLoadingModal) {
+        shieldAdLoadingModal.classList.add('active');
+    }
+    
+    // Проверяем доступность VK Bridge
+    if (typeof vkBridge === 'undefined') {
+        // Если VK Bridge недоступен - показываем ошибку
+        setTimeout(function() {
+            if (shieldAdLoadingModal) {
+                shieldAdLoadingModal.classList.remove('active');
+            }
+            // Показываем модалку ошибки
+            showRepairErrorModal();
+        }, 800);
+        return;
+    }
+    
+    // Пытаемся показать рекламу за вознаграждение
+    var sendMethod = vkBridge.sendPromise || vkBridge.send;
+    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+        .then(function(data) {
+            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+            // Реклама просмотрена → починка
+            setTimeout(function() {
+                if (shieldAdLoadingModal) {
+                    shieldAdLoadingModal.classList.remove('active');
+                }
+                // Выполняем починку
+                performRepair();
+                showSaveNotification('🔧 Батискаф починен! Продолжаем!');
+                playLevelUpSound();
+                // Синхронизация с VK Storage
+                setTimeout(syncAllDataToVK, 300);
+                // Возобновляем игру с обратным отсчётом
+                resumeGameWithCountdownRepair();
+            }, 500);
+        })
+        .catch(function(error) {
+            console.log("❌ Ошибка или реклама не досмотрена:", error);
+            // Реклама недоступна → показываем ошибку
+            setTimeout(function() {
+                if (shieldAdLoadingModal) {
+                    shieldAdLoadingModal.classList.remove('active');
+                }
+                // Показываем модалку ошибки
+                showRepairErrorModal();
+            }, 500);
+        });
+}
+    
+// Показать модалку ошибки починки
+function showRepairErrorModal() {
+    // Снимаем паузу, если она была
+    if (repairPopupPaused) {
+        repairPopupPaused = false;
+        // Снимаем паузу, но не возобновляем игру
+        paus = false;
+        if (u) u.disabled = false;
+        if (d) d.disabled = false;
+        if (r) r.disabled = false;
+        if (l) l.disabled = false;
+        window.keysBlocked = false;
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+        }
+    }
+    
+    // Останавливаем игру
+    gameActive = false;
+    clearAllIntervals();
+    stopBackgroundEffects();
+    if (window.buttonSoundTimer) {
+        clearTimeout(window.buttonSoundTimer);
+        window.buttonSoundTimer = null;
+    }
+    
+    if (repairErrorModal) {
+        repairErrorModal.classList.add('active');
+    }
+}
+
+// Закрыть модалку ошибки и начать новую игру
+function closeRepairErrorAndRestart() {
+    if (repairErrorModal) {
+        repairErrorModal.classList.remove('active');
+    }
+    // Закрываем модалку проигрыша
+    closeGameOverModal();
+    // Запускаем новую игру
+    restartGame();
+}
+
+// Закрыть модалку ошибки и вернуться в меню
+function closeRepairErrorAndMenu() {
+    if (repairErrorModal) {
+        repairErrorModal.classList.remove('active');
+    }
+    // Закрываем модалку проигрыша
+    closeGameOverModal();
+    // Возвращаемся в меню
+    goToMenuFromOver();
+}
+// Выполнить починку батискафа
+function performRepair() {
+    // Возвращаем батискаф в центр поля
+    x = 140;
+    y = 160;
+    
+    // Обновляем позицию игрока
+    if (player) {
+        player.style.left = x + 'px';
+        player.style.top = y + 'px';
+    }
+    
+    // Сбрасываем флаг смерти и активируем игру
+    gameActive = true;
+    
+    // Очищаем эффекты
+    document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash').forEach(function(el) {
+        el.remove();
+    });
+    
+    // Восстанавливаем размер батискафа, если он слишком маленький
+    if (rad < 20) {
+        rad = 25;
+        if (player) {
+            player.style.width = rad + 'px';
+            player.style.height = rad + 'px';
+        }
+    }
+    
+    // Показываем эффект починки
+    showEffect(x, y, '🔧', '#4fc3f7');
+    setTimeout(function() {
+        showEffect(x, y, '✨', '#ffd700');
+    }, 300);
+    
+    // Сбрасываем состояние паузы (но не возобновляем игру сразу)
+    repairPopupPaused = false;
+    paus = true; // Оставляем на паузе до обратного отсчёта
+    
+    console.log('🔧 Батискаф починен! Позиция: x=' + x + ', y=' + y);
+}
+
+// Возобновить игру после починки с обратным отсчётом
+function resumeGameWithCountdownRepair() {
+    // Показываем обратный отсчёт
+    let countdown = 3;
+    showRepairResumeNotification('🔧 Починка... ' + countdown);
+    
+    var countdownInterval = setInterval(function() {
+        countdown--;
+        if (countdown > 0) {
+            showRepairResumeNotification('🔧 Починка... ' + countdown);
+        } else {
+            clearInterval(countdownInterval);
+            showRepairResumeNotification('🚀 Вперёд!');
+            setTimeout(function() {
+                resumeGameAfterRepair();
+            }, 500);
+        }
+    }, 1000);
+}
+
+// Возобновить игру после починки
+function resumeGameAfterRepair() {
+    if (!gameActive) {
+        // Если игра не активна, активируем
+        gameActive = true;
+    }
+    
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    paus = false;
+    repairPopupPaused = false;
+    window.keysBlocked = false;
+    
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    
+    // Запускаем движение
+    if (iint) {
+        setTimeout(iint, t);
+    }
+    
+    // Возобновляем фоновые эффекты
+    startBackgroundEffects();
+    
+    playButtonSound();
+    console.log('▶️ Игра возобновлена после починки');
+}
+
+// Показ уведомления об обратном отсчёте (для починки)
+function showRepairResumeNotification(text) {
+    var notification = document.createElement('div');
+    notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
+        'z-index:35;font-size:20px;color:#4fc3f7;text-shadow:0 0 20px rgba(79,195,247,0.8);' +
+        'animation:saveAnim 1.5s ease-out forwards;pointer-events:none;' +
+        'background:rgba(0,0,0,0.8);padding:15px 30px;border-radius:12px;' +
+        'border:2px solid rgba(79,195,247,0.3);font-weight:bold;';
+    notification.textContent = text;
+    gameblock.appendChild(notification);
+    setTimeout(function() { 
+        if (notification.parentNode) notification.remove(); 
+    }, 1200);
+}
+      
+      
+      
+      
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
                 if (gameActive && !paus) {
