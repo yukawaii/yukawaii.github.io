@@ -2197,7 +2197,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     const currentLocal = getCurrentGameData();
                     const merged = mergeGameData(currentLocal, gameData);
                     
-                    // Применяем объединённые данные
                     if (merged.level > currentLocal.level || merged.score > currentLocal.score) {
                         if (typeof level !== 'undefined') level = merged.level;
                         if (typeof score !== 'undefined') score = merged.score;
@@ -2206,6 +2205,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         if (typeof y !== 'undefined') y = merged.playerY;
                         loaded = true;
                         console.log(`✅ Данные игры объединены: уровень ${merged.level}, очки ${merged.score}`);
+                        
+                                            // ★★★ СОХРАНЯЕМ В localStorage ДЛЯ КНОПКИ ПРОДОЛЖИТЬ ★★★
+                        localStorage.setItem('bathyscaphe_max_level', merged.level);
+                        maxSavedLevel = merged.level;
+                        // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
+                        updateContinueButton();
                     } else {
                         console.log('ℹ️ Новых данных игры из VK нет');
                     }
@@ -2259,13 +2264,18 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     console.log('📤 Обновление VK Storage после загрузки...');
                     setTimeout(syncAllDataToVK, 500);
                 }
+                    // ★★★ ОБНОВЛЯЕМ КНОПКУ ПРОДОЛЖИТЬ ★★★
+                updateContinueButton();
                 
                 return loaded;
             }).catch((error) => {
                 console.warn('⚠️ Ошибка загрузки из VK:', error);
+                // Всё равно обновляем кнопку
+                updateContinueButton();
                 return false;
             });
         }
+
 
         // ===== НАСТРОЙКА АВТО-СИНХРОНИЗАЦИИ =====
         let syncInitialized = false;
@@ -2321,23 +2331,19 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             if (typeof vkBridge === 'undefined') {
                 console.log('ℹ️ VK Bridge не доступен, синхронизация отключена');
                 return;
-            }
-            
-            console.log('🌐 Инициализация VK Storage синхронизации...');
-            
+            }            
+            console.log('🌐 Инициализация VK Storage синхронизации...');            
             // Загружаем данные из VK до старта игры
             loadAllDataFromVK().then((loaded) => {
                 // Настраиваем авто-синхронизацию
-                setupAutoSync();
-                
+                setupAutoSync();                
                 // Если данные не были загружены — сохраняем текущие
                 if (!loaded) {
                     console.log('📤 Отправка текущих данных в VK Storage...');
                     setTimeout(syncAllDataToVK, 1000);
-                }
-                
-                // Обновляем UI (меню)
-                updateMainMenuUI();
+                }              
+                updateMainMenuUI(); // Обновляем UI (меню)
+                updateContinueButton(); // ★★★
             });
         }
 
@@ -2568,6 +2574,23 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
             return 0;
         }
+
+
+        function updateContinueButton() {
+    var savedLevel = loadSavedLevel();
+    var continueBtn = document.querySelector('.menu-btn.continue');
+    if (continueBtn) {
+        if (savedLevel >= 3) {
+            continueBtn.style.display = 'block';
+            continueBtn.textContent = '↩️ Продолжить (Ур. ' + savedLevel + ')';
+        } else {
+            continueBtn.style.display = 'block';
+            continueBtn.textContent = '↩️ Продолжить';
+            // Можно показать, что нет сохранений
+        }
+    }
+}
+
 
        function continueGame() {
     var savedLevel = loadSavedLevel();
@@ -3439,17 +3462,22 @@ function showCountdownNotification(text) {
         // ============================================================
         //  12. ЩИТ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
-                function spawnShield() {
-                    if (shieldItem.style.display === 'flex' || paus) return;
-                    // Не спавним щиты, если их уже много
-                    if (shields >= 99) return;
-                    sx = (Math.floor(Math.random() * 240 + 20));
-                    sy = (Math.floor(Math.random() * 280 + 20));
-                    shieldItem.style.display = 'flex';
-                    shieldItem.style.left = sx + 'px';
-                    shieldItem.style.top = sy + 'px';
-                    playShieldSound();
-                }
+              function spawnShield() {
+    if (shieldItem.style.display === 'flex' || paus) return;
+    if (shields >= 99) return;
+    
+    // Отступ от стен (30px)
+    var margin = 30;
+    var maxX = 300 - 30 - margin;
+    var maxY = 370 - 30 - margin;
+    
+    sx = (Math.floor(Math.random() * (maxX - margin) + margin));
+    sy = (Math.floor(Math.random() * (maxY - margin) + margin));
+    shieldItem.style.display = 'flex';
+    shieldItem.style.left = sx + 'px';
+    shieldItem.style.top = sy + 'px';
+    playShieldSound();
+}
 
         // ============================================================
         //  13. БОНУСЫ - БЕЗ ИЗМЕНЕНИЙ
@@ -3770,57 +3798,62 @@ function showCountdownNotification(text) {
                     }
                 }
             }
-        function poyman() {
-            cx = (Math.floor(Math.random() * 240 + 20));
-            cy = (Math.floor(Math.random() * 280 + 20));
-            intcount++;
-            
-            block.style.transform = 'scale(0)';
+  function poyman() {
+    // Отступ от стен (30px)
+    var margin = 30;
+    var maxX = 300 - 28 - margin; // 300 - ширина блока - отступ
+    var maxY = 370 - 28 - margin; // 370 - высота блока - отступ
+    
+    cx = (Math.floor(Math.random() * (maxX - margin) + margin));
+    cy = (Math.floor(Math.random() * (maxY - margin) + margin));
+    intcount++;
+    
+    block.style.transform = 'scale(0)';
+    setTimeout(function() {
+        block.style.transform = 'scale(1)';
+    }, 50);
+    
+    if (rad < 60) {
+        rad++;
+        x--;
+        y--;
+        t++;
+    }
+    
+    if (intcount >= intval) {
+        bx = (Math.floor(Math.random() * (maxX - margin) + margin));
+        by = (Math.floor(Math.random() * (maxY - margin) + margin));
+        intcount = 0;
+        if (block2) {
+            block2.style.display = 'flex';
+            block2.style.top = by + 'px';
+            block2.style.left = bx + 'px';
+            block2.style.animation = 'none';
             setTimeout(function() {
-                block.style.transform = 'scale(1)';
-            }, 50);
-            
-            if (rad < 60) {
-                rad++;
-                x--;
-                y--;
-                t++;
-            }
-            
-            if (intcount >= intval) {
-                bx = (Math.floor(Math.random() * 240 + 20));
-                by = (Math.floor(Math.random() * 280 + 20));
-                intcount = 0;
-                if (block2) {
-                    block2.style.display = 'flex';
-                    block2.style.top = by + 'px';
-                    block2.style.left = bx + 'px';
-                    block2.style.animation = 'none';
-                    setTimeout(function() {
-                        block2.style.animation = 'starAppear 0.5s ease-out';
-                    }, 10);
-                }
-                intval = (Math.floor(Math.random() * 10 + 15));
-            }
-            
-            if (player) {
-                player.style.width = rad + 'px';
-                player.style.height = rad + 'px';
-                player.style.top = y + 'px';
-                player.style.left = x + 'px';
-            }
-            if (block) {
-                block.style.top = cy + 'px';
-                block.style.left = cx + 'px';
-            }
-            if (level >= 100) {
-                document.querySelector('.shell .spiral').style.background = 
-                    'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
-                document.querySelector('.shell .spiral').style.borderColor = '#ffd700';
-                document.querySelector('.shell .spiral').style.boxShadow = 
-                    'inset -5px -5px 20px rgba(200,100,0,0.4), inset 5px 5px 20px rgba(255,220,180,0.3), 0 0 30px rgba(255,215,0,0.3)';
-            }
+                block2.style.animation = 'starAppear 0.5s ease-out';
+            }, 10);
         }
+        intval = (Math.floor(Math.random() * 10 + 15));
+    }
+    
+    if (player) {
+        player.style.width = rad + 'px';
+        player.style.height = rad + 'px';
+        player.style.top = y + 'px';
+        player.style.left = x + 'px';
+    }
+    if (block) {
+        block.style.top = cy + 'px';
+        block.style.left = cx + 'px';
+    }
+    if (level >= 100) {
+        document.querySelector('.shell .spiral').style.background = 
+            'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
+        document.querySelector('.shell .spiral').style.borderColor = '#ffd700';
+        document.querySelector('.shell .spiral').style.boxShadow = 
+            'inset -5px -5px 20px rgba(200,100,0,0.4), inset 5px 5px 20px rgba(255,220,180,0.3), 0 0 30px rgba(255,215,0,0.3)';
+    }
+}
 
         function checkCollision() {
             if (paus || !gameActive || mainMenu.style.display !== 'none') return false;
@@ -5516,6 +5549,8 @@ document.getElementById('gameblock')?.addEventListener('touchstart', function(e)
         if (menu) {
             menu.classList.add('loaded');
         }
+        // ★★★ ОБНОВЛЯЕМ КНОПКУ ПОСЛЕ ЗАГРУЗКИ ★★★
+    updateContinueButton();
     }, 100);
 
     </script>
