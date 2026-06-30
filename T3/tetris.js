@@ -2254,7 +2254,7 @@ function showDailyBonusModal(isClaimed) {
                         ${t('cancel') || 'Отмена'}
                     </button>
                     <button onclick="claimEnhancedDailyBonus()" style="flex: 1; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                        🎁 +25 за рекламу
+                        🎁 +25
                     </button>
                 </div>
             </div>
@@ -2279,7 +2279,7 @@ function showDailyBonusModal(isClaimed) {
                         ✅ +10
                     </button>
                     <button onclick="claimEnhancedDailyBonus()" style="flex: 1; min-width: 120px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                        🎁 +25 за рекламу
+                        🎁 +25
                     </button>
                 </div>
             </div>
@@ -2345,7 +2345,7 @@ function claimEnhancedDailyBonus() {
                 
                 showCustomModal({
                     title: '🎉 Усиленный бонус получен!',
-                    text: '+25 очков! Спасибо за просмотр рекламы!',
+                    text: '+25 очков! Приятной игры!',
                     type: 'success',
                     button: 'OK'
                 });

@@ -610,7 +610,6 @@ function claimScrollWithSync(scrollId) {
     progress[scrollId] = true;
     localStorage.setItem('scrollsProgress', JSON.stringify(progress));
     
-    // Синхронизация с VK Storage
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_scrolls_v1', progress);
     }
@@ -618,14 +617,10 @@ function claimScrollWithSync(scrollId) {
     console.log(`📜 Свиток ${scrollId} открыт и синхронизирован`);
     return true;
 }
-// Функция загрузки прогресса свитков (с синхронизацией)
+
 function getScrollsProgressWithSync() {
-    // Сначала проверяем localStorage
     const localProgress = JSON.parse(localStorage.getItem('scrollsProgress') || '{}');
-    
-    // Если VK Storage доступен и мы уже загрузили данные — используем их
     if (typeof window.vkScrollsProgress !== 'undefined') {
-        // Объединяем: VK Storage имеет приоритет
         const merged = { ...localProgress };
         for (const key in window.vkScrollsProgress) {
             if (window.vkScrollsProgress[key] && !merged[key]) {
@@ -634,7 +629,6 @@ function getScrollsProgressWithSync() {
         }
         return merged;
     }
-    
     return localProgress;
 }
 

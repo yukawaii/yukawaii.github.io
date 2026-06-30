@@ -671,37 +671,20 @@ function savePlayedDifficulty() {
     }
 }
 
-// ======================== ОТКРЫТИЕ СВИТКА С СИНХРОНИЗАЦИЕЙ ========================
-
-function claimScrollWithSync(scrollId) {
-    const progress = JSON.parse(localStorage.getItem('scrollsProgress') || '{}');
-    if (progress[scrollId]) return false;
-    
-    progress[scrollId] = true;
-    localStorage.setItem('scrollsProgress', JSON.stringify(progress));
-    
-    // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
-    saveToVKStorage(VK_STORAGE_KEYS.SCROLLS_PROGRESS, progress);
-    
-    console.log(`📜 Свиток ${scrollId} открыт и синхронизирован`);
-    return true;
-}
-
-function getScrollsProgressWithSync() {
-    return JSON.parse(localStorage.getItem('scrollsProgress') || '{}');
-}
-
 // ======================== ОТКРЫТИЕ КАРТИНКИ В КОЛЛЕКЦИИ С СИНХРОНИЗАЦИЕЙ ========================
 
 function claimCollectionItemWithSync(itemId) {
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
     if (progress[itemId]) return false;
     
+    // ✅ СНАЧАЛА ЛОКАЛЬНО
     progress[itemId] = true;
     localStorage.setItem('collectionsProgress', JSON.stringify(progress));
     
-    // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
-    saveToVKStorage(VK_STORAGE_KEYS.COLLECTIONS_PROGRESS, progress);
+    // ✅ ПОТОМ В VK
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('tetris_collections_v1', progress);
+    }
     
     console.log(`🖼️ Картинка ${itemId} открыта и синхронизирована`);
     return true;
@@ -5058,8 +5041,6 @@ window.loadFromVKStorage = loadFromVKStorage;
 window.syncAllDataToVK = syncAllDataToVK;
 window.loadAllDataFromVK = loadAllDataFromVK;
 
-window.claimScrollWithSync = claimScrollWithSync;
-window.getScrollsProgressWithSync = getScrollsProgressWithSync;
 window.claimCollectionItemWithSync = claimCollectionItemWithSync;
 window.getCollectionsProgressWithSync = getCollectionsProgressWithSync;
 window.claimDailyBonusWithSync = claimDailyBonusWithSync;
