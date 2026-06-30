@@ -3099,10 +3099,8 @@ function showCountdownNotification(text) {
     if (mainMenu.style.display === 'flex') {
         console.log('🛡️ showGameOverModal() заблокирована - меню видно или игра не активна');
         return;
-    }
-    
-    console.log('💀 showGameOverModal() вызвана!');
-    
+    }    
+    //console.log('💀 showGameOverModal() вызвана!');    
     if (finalScoreEl) finalScoreEl.textContent = score;
     if (finalLevelEl) finalLevelEl.textContent = level;
     if (gameOverModal) gameOverModal.classList.add('active');
@@ -3846,24 +3844,10 @@ function showCountdownNotification(text) {
         }
 
        function gameover() {
-    console.trace('💥 gameover() вызвана! Стек вызовов:');
-    console.log('💥 gameover() вызвана!', {
-        gameActive: gameActive,
-        paus: paus,
-        mainMenuDisplay: mainMenu.style.display,
-        x: x,
-        y: y
-    });
-    
-    // ===== 1. СНАЧАЛА ПОКАЗЫВАЕМ МОДАЛКУ =====
-    // Она должна показаться ДО того, как мы что-то меняем
-    showGameOverModal(); // <-- ПЕРЕНЕСИТЕ СЮДА
-    
+    // ===== 1. СНАЧАЛА ПОКАЗЫВАЕМ МОДАЛКУ =====    // Она должна показаться ДО того, как мы что-то меняем
+    showGameOverModal();     
     // ===== 2. ПОТОМ ОСТАНАВЛИВАЕМ ИГРУ =====
-    gameActive = false;
-    clearAllIntervals();
-    stopBackgroundEffects();
-    
+    gameActive = false;    clearAllIntervals();    stopBackgroundEffects();    
     if (window.buttonSoundTimer) {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
@@ -4741,27 +4725,30 @@ function closeShieldAdModal() {
     if (shieldAdModal) {
         shieldAdModal.classList.remove('active');
     }
-    // Снимаем паузу, если она была поставлена
-    if (shieldPopupPaused) {
+    // Снимаем паузу, только если это была кнопка "Отмена"
+    // и только если мы НЕ в процессе загрузки рекламы
+    if (shieldPopupPaused && !shieldAdLoadingModal.classList.contains('active')) {
         shieldPopupPaused = false;
-        // Проверяем, что игра активна и функция существует
-        if (gameActive && typeof resumeGameAfterShield === 'function') {
-            resumeGameAfterShield();
-        } else if (gameActive) {
-            // Если функция не определена, просто снимаем паузу вручную
-            paus = false;
-            if (u) u.disabled = false;
-            if (d) d.disabled = false;
-            if (r) r.disabled = false;
-            if (l) l.disabled = false;
-            window.keysBlocked = false;
-            if (pausa) {
-                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-            }
-            if (iint) {
-                setTimeout(iint, t);
-            }
-            playButtonSound();
+        if (gameActive) {
+            startCountdown(function() {
+                if (typeof resumeGameAfterShield === 'function') {
+                    resumeGameAfterShield();
+                } else if (gameActive) {
+                    paus = false;
+                    if (u) u.disabled = false;
+                    if (d) d.disabled = false;
+                    if (r) r.disabled = false;
+                    if (l) l.disabled = false;
+                    window.keysBlocked = false;
+                    if (pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                    }
+                    if (iint) {
+                        setTimeout(iint, t);
+                    }
+                    playButtonSound();
+                }
+            }, '🛡️');
         }
     }
 }
@@ -4802,8 +4789,11 @@ function resumeGameAfterShield() {
 // Получить щиты через рекламу
 // Получить щиты через рекламу
 function getShieldsViaAd() {
-    // Закрываем модалку с предложением
-    closeShieldAdModal();
+    // НЕ ЗАКРЫВАЕМ модалку с предложением - просто скрываем её, но НЕ снимаем паузу!
+    if (shieldAdModal) {
+        shieldAdModal.classList.remove('active');
+    }
+    // Пауза уже поставлена в openShieldAdModal(), НЕ снимаем её!
     
     // Показываем модалку загрузки
     if (shieldAdLoadingModal) {
@@ -4820,28 +4810,35 @@ function getShieldsViaAd() {
             if (shieldAdLoadingModal) {
                 shieldAdLoadingModal.classList.remove('active');
             }
-            // Показываем сообщение об ошибке
-            showToast('❌ Реклама недоступна. Проверьте интернет-соединение.', true);
-            // Возобновляем игру (без щитов!)
+            
+            showToast('❌ Реклама недоступна. 🛡️+1 щит', true);
+            
+            shields += 1;
+            updateShieldDisplay();
+            playShieldSound();
+            
             if (shieldPopupPaused) {
                 shieldPopupPaused = false;
-                if (gameActive && typeof resumeGameAfterShield === 'function') {
-                    resumeGameAfterShield();
-                } else if (gameActive) {
-                    // Ручное возобновление
-                    paus = false;
-                    if (u) u.disabled = false;
-                    if (d) d.disabled = false;
-                    if (r) r.disabled = false;
-                    if (l) l.disabled = false;
-                    window.keysBlocked = false;
-                    if (pausa) {
-                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-                    }
-                    if (iint) {
-                        setTimeout(iint, t);
-                    }
-                    playButtonSound();
+                if (gameActive) {
+                    startCountdown(function() {
+                        if (typeof resumeGameAfterShield === 'function') {
+                            resumeGameAfterShield();
+                        } else if (gameActive) {
+                            paus = false;
+                            if (u) u.disabled = false;
+                            if (d) d.disabled = false;
+                            if (r) r.disabled = false;
+                            if (l) l.disabled = false;
+                            window.keysBlocked = false;
+                            if (pausa) {
+                                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                            }
+                            if (iint) {
+                                setTimeout(iint, t);
+                            }
+                            playButtonSound();
+                        }
+                    }, '🛡️');
                 }
             }
         }
@@ -4853,27 +4850,34 @@ function getShieldsViaAd() {
         if (shieldAdLoadingModal) {
             shieldAdLoadingModal.classList.remove('active');
         }
-        // Показываем сообщение об ошибке - щиты НЕ ДАЁМ!
-        showToast('❌ Реклама недоступна. Попробуйте позже.', true);
+        showToast('❌ Реклама недоступна. 🛡️+1 щит', true);
+        
+        shields += 1;
+        updateShieldDisplay();
+        playShieldSound();
+        
         if (shieldPopupPaused) {
             shieldPopupPaused = false;
-            if (gameActive && typeof resumeGameAfterShield === 'function') {
-                resumeGameAfterShield();
-            } else if (gameActive) {
-                // Ручное возобновление
-                paus = false;
-                if (u) u.disabled = false;
-                if (d) d.disabled = false;
-                if (r) r.disabled = false;
-                if (l) l.disabled = false;
-                window.keysBlocked = false;
-                if (pausa) {
-                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-                }
-                if (iint) {
-                    setTimeout(iint, t);
-                }
-                playButtonSound();
+            if (gameActive) {
+                startCountdown(function() {
+                    if (typeof resumeGameAfterShield === 'function') {
+                        resumeGameAfterShield();
+                    } else if (gameActive) {
+                        paus = false;
+                        if (u) u.disabled = false;
+                        if (d) d.disabled = false;
+                        if (r) r.disabled = false;
+                        if (l) l.disabled = false;
+                        window.keysBlocked = false;
+                        if (pausa) {
+                            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                        }
+                        if (iint) {
+                            setTimeout(iint, t);
+                        }
+                        playButtonSound();
+                    }
+                }, '🛡️');
             }
         }
         return;
@@ -4886,7 +4890,6 @@ function getShieldsViaAd() {
             adShown = true;
             clearTimeout(adTimeout);
             console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
-            // Реклама просмотрена → +3 щита
             setTimeout(function() {
                 if (shieldAdLoadingModal) {
                     shieldAdLoadingModal.classList.remove('active');
@@ -4895,16 +4898,13 @@ function getShieldsViaAd() {
                 updateShieldDisplay();
                 showToast('🛡️ +3 щита получено!');
                 playShieldSound();
-                // Синхронизация с VK Storage
                 setTimeout(syncAllDataToVK, 300);
-                // Возобновляем игру с обратным отсчётом
                 if (shieldPopupPaused) {
                     shieldPopupPaused = false;
                     startCountdown(function() {
                         if (typeof resumeGameAfterShield === 'function') {
                             resumeGameAfterShield();
                         } else {
-                            // Ручное возобновление
                             paus = false;
                             if (u) u.disabled = false;
                             if (d) d.disabled = false;
@@ -4927,31 +4927,38 @@ function getShieldsViaAd() {
             adShown = true;
             clearTimeout(adTimeout);
             console.log("❌ Ошибка или реклама не досмотрена:", error);
-            // Реклама НЕДОСТУПНА → щиты НЕ ДАЁМ!
             setTimeout(function() {
                 if (shieldAdLoadingModal) {
                     shieldAdLoadingModal.classList.remove('active');
                 }
                 showToast('❌ Реклама недоступна. Попробуйте позже.', true);
+                
+                shields += 1;
+                updateShieldDisplay();
+                playShieldSound();
+                
                 if (shieldPopupPaused) {
                     shieldPopupPaused = false;
-                    if (gameActive && typeof resumeGameAfterShield === 'function') {
-                        resumeGameAfterShield();
-                    } else if (gameActive) {
-                        // Ручное возобновление
-                        paus = false;
-                        if (u) u.disabled = false;
-                        if (d) d.disabled = false;
-                        if (r) r.disabled = false;
-                        if (l) l.disabled = false;
-                        window.keysBlocked = false;
-                        if (pausa) {
-                            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-                        }
-                        if (iint) {
-                            setTimeout(iint, t);
-                        }
-                        playButtonSound();
+                    if (gameActive) {
+                        startCountdown(function() {
+                            if (typeof resumeGameAfterShield === 'function') {
+                                resumeGameAfterShield();
+                            } else if (gameActive) {
+                                paus = false;
+                                if (u) u.disabled = false;
+                                if (d) d.disabled = false;
+                                if (r) r.disabled = false;
+                                if (l) l.disabled = false;
+                                window.keysBlocked = false;
+                                if (pausa) {
+                                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                                }
+                                if (iint) {
+                                    setTimeout(iint, t);
+                                }
+                                playButtonSound();
+                            }
+                        }, '🛡️');
                     }
                 }
             }, 500);
