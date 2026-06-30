@@ -4712,18 +4712,70 @@ function openShieldAdModal() {
     }
 }
                 // Закрыть модалку получения щитов
-                function closeShieldAdModal() {
-                    if (shieldAdModal) {
-                        shieldAdModal.classList.remove('active');
-                    }
-                    // Снимаем паузу, если она была поставлена
-                    if (shieldPopupPaused) {
-                        shieldPopupPaused = false;
-                        resumeGameAfterShield();
-                    }
-                }
+// Закрыть модалку получения щитов
+function closeShieldAdModal() {
+    if (shieldAdModal) {
+        shieldAdModal.classList.remove('active');
+    }
+    // Снимаем паузу, если она была поставлена
+    if (shieldPopupPaused) {
+        shieldPopupPaused = false;
+        // Проверяем, что игра активна и функция существует
+        if (gameActive && typeof resumeGameAfterShield === 'function') {
+            resumeGameAfterShield();
+        } else if (gameActive) {
+            // Если функция не определена, просто снимаем паузу вручную
+            paus = false;
+            if (u) u.disabled = false;
+            if (d) d.disabled = false;
+            if (r) r.disabled = false;
+            if (l) l.disabled = false;
+            window.keysBlocked = false;
+            if (pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+            }
+            if (iint) {
+                setTimeout(iint, t);
+            }
+            playButtonSound();
+        }
+    }
+}
 
+// Возобновить игру после получения щитов
+function resumeGameAfterShield() {
+    if (!gameActive) {
+        // Если игра не активна, активируем её
+        gameActive = true;
+    }
+    
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    paus = false;
+    shieldPopupPaused = false;
+    window.keysBlocked = false;
+    
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    
+    // Запускаем движение, если оно было
+    if (iint) {
+        setTimeout(iint, t);
+    }
+    
+    // Возобновляем фоновые эффекты, если они были остановлены
+    if (gameActive) {
+        startBackgroundEffects();
+    }
+    
+    playButtonSound();
+    console.log('▶️ Игра возобновлена после получения щитов');
+}
                 // Получить щиты через рекламу
+// Получить щиты через рекламу
 // Получить щиты через рекламу
 function getShieldsViaAd() {
     // Закрываем модалку с предложением
@@ -4746,13 +4798,30 @@ function getShieldsViaAd() {
             }
             // Показываем сообщение об ошибке
             showToast('❌ Реклама недоступна. Проверьте интернет-соединение.', true);
-            // Закрываем модалку загрузки и возобновляем игру
+            // Возобновляем игру (без щитов!)
             if (shieldPopupPaused) {
                 shieldPopupPaused = false;
-                resumeGameAfterShield();
+                if (gameActive && typeof resumeGameAfterShield === 'function') {
+                    resumeGameAfterShield();
+                } else if (gameActive) {
+                    // Ручное возобновление
+                    paus = false;
+                    if (u) u.disabled = false;
+                    if (d) d.disabled = false;
+                    if (r) r.disabled = false;
+                    if (l) l.disabled = false;
+                    window.keysBlocked = false;
+                    if (pausa) {
+                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                    }
+                    if (iint) {
+                        setTimeout(iint, t);
+                    }
+                    playButtonSound();
+                }
             }
         }
-    }, 10000); // 10 секунд на загрузку
+    }, 10000);
     
     // Проверяем доступность VK Bridge
     if (typeof vkBridge === 'undefined') {
@@ -4760,15 +4829,28 @@ function getShieldsViaAd() {
         if (shieldAdLoadingModal) {
             shieldAdLoadingModal.classList.remove('active');
         }
-        // Даём +1 щит как компенсацию
-        shields += 1;
-        updateShieldDisplay();
-        showToast('🛡️ +1 щит (реклама недоступна)!');
-        playShieldSound();
-        // Возобновляем игру
+        // Показываем сообщение об ошибке - щиты НЕ ДАЁМ!
+        showToast('❌ Реклама недоступна. Попробуйте позже.', true);
         if (shieldPopupPaused) {
             shieldPopupPaused = false;
-            resumeGameAfterShield();
+            if (gameActive && typeof resumeGameAfterShield === 'function') {
+                resumeGameAfterShield();
+            } else if (gameActive) {
+                // Ручное возобновление
+                paus = false;
+                if (u) u.disabled = false;
+                if (d) d.disabled = false;
+                if (r) r.disabled = false;
+                if (l) l.disabled = false;
+                window.keysBlocked = false;
+                if (pausa) {
+                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                }
+                if (iint) {
+                    setTimeout(iint, t);
+                }
+                playButtonSound();
+            }
         }
         return;
     }
@@ -4794,9 +4876,26 @@ function getShieldsViaAd() {
                 // Возобновляем игру с обратным отсчётом
                 if (shieldPopupPaused) {
                     shieldPopupPaused = false;
-                   startCountdown(function() {
-    resumeGameAfterShield();
-}, '🛡️');
+                    startCountdown(function() {
+                        if (typeof resumeGameAfterShield === 'function') {
+                            resumeGameAfterShield();
+                        } else {
+                            // Ручное возобновление
+                            paus = false;
+                            if (u) u.disabled = false;
+                            if (d) d.disabled = false;
+                            if (r) r.disabled = false;
+                            if (l) l.disabled = false;
+                            window.keysBlocked = false;
+                            if (pausa) {
+                                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                            }
+                            if (iint) {
+                                setTimeout(iint, t);
+                            }
+                            playButtonSound();
+                        }
+                    }, '🛡️');
                 }
             }, 500);
         })
@@ -4804,28 +4903,37 @@ function getShieldsViaAd() {
             adShown = true;
             clearTimeout(adTimeout);
             console.log("❌ Ошибка или реклама не досмотрена:", error);
-            // Реклама не показана или не досмотрена → +1 щит
+            // Реклама НЕДОСТУПНА → щиты НЕ ДАЁМ!
             setTimeout(function() {
                 if (shieldAdLoadingModal) {
                     shieldAdLoadingModal.classList.remove('active');
                 }
-                shields += 1;
-                updateShieldDisplay();
-                showToast('🛡️ +1 щит (реклама недоступна)!');
-                playShieldSound();
-                // Синхронизация с VK Storage
-                setTimeout(syncAllDataToVK, 300);
-                // Возобновляем игру с обратным отсчётом
+                showToast('❌ Реклама недоступна. Попробуйте позже.', true);
                 if (shieldPopupPaused) {
                     shieldPopupPaused = false;
-                    startCountdown(function() {
-    resumeGameAfterShield();
-}, '🛡️');
+                    if (gameActive && typeof resumeGameAfterShield === 'function') {
+                        resumeGameAfterShield();
+                    } else if (gameActive) {
+                        // Ручное возобновление
+                        paus = false;
+                        if (u) u.disabled = false;
+                        if (d) d.disabled = false;
+                        if (r) r.disabled = false;
+                        if (l) l.disabled = false;
+                        window.keysBlocked = false;
+                        if (pausa) {
+                            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+                        }
+                        if (iint) {
+                            setTimeout(iint, t);
+                        }
+                        playButtonSound();
+                    }
                 }
             }, 500);
         });
 }
-                
+
 // Пауза для получения щитов
                 function pauseGameForShield() {
                     if (!gameActive) return;
