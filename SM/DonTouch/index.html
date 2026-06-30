@@ -2523,13 +2523,34 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         }
 
         function checkAndSaveLevel() {
-            if (level % 3 === 0 && level > 0) {
-                localStorage.setItem('bathyscaphe_max_level', level);
-                maxSavedLevel = level;
-                // Сохраняем в VK Storage
-                setTimeout(syncAllDataToVK, 300);
-            }
-        }
+    if (level % 3 === 0 && level > 0) {
+        // Сохраняем локально
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        
+        // ===== ПРИНУДИТЕЛЬНАЯ СИНХРОНИЗАЦИЯ С VK STORAGE =====
+        console.log('💾 Сохранение уровня ' + level + ' в VK Storage...');
+        
+        // Сохраняем все данные
+        var gameData = {
+            level: level,
+            score: score,
+            shields: shields,
+            playerX: x,
+            playerY: y
+        };
+        
+        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+        saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+        
+        // Показываем уведомление
+        showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+        
+        // Дополнительная синхронизация через 1 секунду
+        setTimeout(syncAllDataToVK, 1000);
+    }
+}
 
         function loadSavedLevel() {
             var saved = localStorage.getItem('bathyscaphe_max_level');
@@ -3116,41 +3137,122 @@ function showCountdownNotification(text) {
         }
     }
 
-        function restartGame() {
-            closeGameOverModal();
-            
-            if (gameActive) {
-                paus = true;
-                clearAllIntervals();
-                if (u) u.disabled = true;
-                if (d) d.disabled = true;
-                if (r) r.disabled = true;
-                if (l) l.disabled = true;
-                if (pausa) {
-                    pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-                }
-            }
-            
-            if (typeof vkBridge !== 'undefined') {
-                var now = Date.now();
-                if ((now - lastAdTime) >= adCooldown) {
-                    lastAdTime = now;
-                    vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
-                        .then(function() {
-                            console.log('📱 Реклама показана');
-                        })
-                        .catch(function(e) {
-                            console.log('⚠️ Ошибка рекламы:', e);
-                        });
-                }
-            }
-            
-            startBubbleTransition(function() {
-                resumeGameAfterRestart();
-            });
+       function restartGame() {
+    // Закрываем модалку проигрыша
+    closeGameOverModal();
+    
+    // ===== 1. ПОЛНОСТЬЮ СБРАСЫВАЕМ СОСТОЯНИЕ ИГРЫ =====
+    // Останавливаем всё
+    gameActive = false;
+    clearAllIntervals();
+    stopBackgroundEffects();
+    stopParticles();
+    stopParticlesBlue();
+    
+    // Сбрасываем все переменные
+    level = 1;
+    score = 0;
+    shields = 0;
+    rad = 40;
+    t = 75;
+    x = 140;
+    y = 160;
+    cx = Math.floor(Math.random() * 240 + 20);
+    cy = Math.floor(Math.random() * 280 + 20);
+    intcount = 0;
+    intval = (Math.floor(Math.random() * 10 + 15));
+    jellyfishActive = false;
+    paus = false;
+    wasPausedByHide = false;
+    shieldPopupPaused = false;
+    repairPopupPaused = false;
+    window.keysBlocked = false;
+    
+    // Сбрасываем счётчики
+    jellyfishDeflected = 0;
+    jellyfishHits = 0;
+    deathCount = 0;
+    speedBoostCount = 0;
+    slowMotionCount = 0;
+    magnetCount = 0;
+    achievementsChecked = false;
+    
+    // Обновляем UI
+    scoresEl.innerHTML = '0';
+    levelDisplay.textContent = '1';
+    shieldCountDisplay.textContent = '0';
+    
+    // Сбрасываем позицию игрока
+    if (player) {
+        player.style.left = x + 'px';
+        player.style.top = y + 'px';
+        player.style.width = rad + 'px';
+        player.style.height = rad + 'px';
+    }
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
+    if (block2) block2.style.display = 'none';
+    if (shieldItem) shieldItem.style.display = 'none';
+    
+    // Сбрасываем цвета
+    gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
+    document.querySelector('.vine').style.opacity = '0.5';
+    document.querySelector('.bathyscaphe .body').style.background = 
+        'radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300)';
+    document.querySelector('.bathyscaphe .window').style.background = 
+        'radial-gradient(circle at 35% 35%, #66ccff, #1a6699)';
+    document.querySelector('.shell .spiral').style.background = 
+        'radial-gradient(ellipse at 60% 40%, #ffd4a8, #d49a6a, #b8784a)';
+    
+    // Удаляем эффекты
+    document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
+        el.remove();
+    });
+    
+    // Восстанавливаем иконку паузы
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+    }
+    
+    // Разблокируем кнопки
+    if (u) u.disabled = false;
+    if (d) d.disabled = false;
+    if (r) r.disabled = false;
+    if (l) l.disabled = false;
+    
+    isSoundEnabled = true;
+    
+    // ===== 2. ПОКАЗЫВАЕМ РЕКЛАМУ =====
+    if (typeof vkBridge !== 'undefined') {
+        var now = Date.now();
+        if ((now - lastAdTime) >= adCooldown) {
+            lastAdTime = now;
+            vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
+                .then(function() {
+                    console.log('📱 Реклама показана');
+                })
+                .catch(function(e) {
+                    console.log('⚠️ Ошибка рекламы:', e);
+                });
         }
-
-        function resumeGameAfterRestart() {
+    }
+    
+    // ===== 3. ЗАПУСКАЕМ АНИМАЦИЮ ПУЗЫРЕЙ И НОВУЮ ИГРУ =====
+    startBubbleTransition(function() {
+        // После анимации пузырей запускаем новую игру с обратным отсчётом
+        paus = true;
+        if (u) u.disabled = true;
+        if (d) d.disabled = true;
+        if (r) r.disabled = true;
+        if (l) l.disabled = true;
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+        }
+        
+        startCountdown(function() {
+            gameActive = true;
             paus = false;
             if (u) u.disabled = false;
             if (d) d.disabled = false;
@@ -3159,16 +3261,14 @@ function showCountdownNotification(text) {
             if (pausa) {
                 pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
             }
-            
-            gameActive = true;
             down();
             startBackgroundEffects();
-            isSoundEnabled = true;
-            wasPausedByHide = false;
-            
             playButtonSound();
-        }
+        }, '🔄');
+    });
+}
 
+     
         function createBubbleOverlay() {
             var overlay = document.getElementById('bubbleOverlay');
             if (overlay) return;
@@ -3178,45 +3278,6 @@ function showCountdownNotification(text) {
             overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:2000;pointer-events:none;display:none;overflow:hidden;background:transparent;';
             document.body.appendChild(overlay);
         }
-
-        document.addEventListener('click', function(e) {
-
-    // Закрытие модалки "Как играть"
-    var howToModal = document.getElementById('howToModal');
-    if (e.target === howToModal && howToModal.classList.contains('active')) {
-        closeHowTo();
-    }
-    
-    // Закрытие модалки "Другие игры"
-    var gamesModal = document.getElementById('gamesModal');
-    if (e.target === gamesModal && gamesModal.classList.contains('active')) {
-        closeGamesModal();
-    }
-    
-    // Закрытие модалки проигрыша
-    var gameOverModal = document.getElementById('gameOverModal');
-    if (e.target === gameOverModal && gameOverModal.classList.contains('active')) {
-        closeGameOverModal();
-    }
-    
-    // Закрытие модалки достижений
-    var achievementsModal = document.getElementById('achievementsModal');
-    if (e.target === achievementsModal && achievementsModal.classList.contains('active')) {
-        closeAchievementsModal();
-    }
-    
-    // Закрытие модалки щитов
-    var shieldModal = document.getElementById('shieldAdModal');
-    if (e.target === shieldModal && shieldModal.classList.contains('active')) {
-        closeShieldAdModal();
-    }
-    
-    // Закрытие модалки починки
-    var repairModal = document.getElementById('repairModal');
-    if (e.target === repairModal && repairModal.classList.contains('active')) {
-        closeRepairModal();
-    }
-});
   
         function inviteFriends() {
             if (typeof vkBridge !== 'undefined') {
