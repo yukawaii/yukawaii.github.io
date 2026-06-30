@@ -11,7 +11,8 @@ let audioInitialized = false;
 let selectedMode = 'classic';
 let selectedDifficulty = 'medium';
 let difficultyMultiplier = 1;
-
+let slowDownInterval = null;
+let isSlowDownActive = false;
 // ======================== ПЕРЕМЕННЫЕ ДЛЯ ПАГИНАЦИИ ========================
 let currentScrollPage = 1;
 const SCROLLS_PER_PAGE = 5;
@@ -1043,6 +1044,8 @@ function endGame() {
     if (typeof saveTotalProgress === 'function') {
         saveTotalProgress();
     }
+    
+    // Показываем обновлённую модалку с кнопкой "Продолжить за рекламу"
     showGameOverModal(player.score);
     updatePauseButtonText();
     if (typeof drawGame === 'function') drawGame();
@@ -1218,8 +1221,87 @@ function initAudio() {
 function showGameOverModal(score) {
     const modal = document.getElementById('gameover-modal');
     const scoreEl = document.getElementById('gameover-score');
+    
     if (modal) {
         if (scoreEl) scoreEl.textContent = score;
+        
+        // Находим или создаём контейнер для кнопок
+        let buttonsContainer = modal.querySelector('.gameover-buttons-container');
+        if (!buttonsContainer) {
+            // Если контейнера нет — создаём
+            const contentDiv = modal.querySelector('div[style*="border: 2px solid rgba(239, 68, 68, 0.4)"]');
+            if (contentDiv) {
+                // Удаляем старые кнопки, если они есть
+                const oldBtns = contentDiv.querySelectorAll('button');
+                oldBtns.forEach(btn => {
+                    // Сохраняем только кнопку "Новая игра" и "В меню", если они есть
+                    const text = btn.textContent.trim();
+                    if (text.includes('Новая игра') || text.includes('В меню')) {
+                        // оставляем
+                    } else {
+                        btn.remove();
+                    }
+                });
+                
+                // Создаём контейнер для кнопок
+                buttonsContainer = document.createElement('div');
+                buttonsContainer.className = 'gameover-buttons-container';
+                buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px; margin-top: 16px;';
+                
+                // Переносим существующие кнопки в контейнер
+                const existingBtns = contentDiv.querySelectorAll('button');
+                const newGameBtn = contentDiv.querySelector('button[onclick*="closeGameOverModal"]');
+                const menuBtn = contentDiv.querySelector('button[onclick*="closeGameOverModalAndMenu"]');
+                
+                // Создаём новую кнопку "Продолжить за рекламу"
+                const continueBtn = document.createElement('button');
+                continueBtn.style.cssText = `
+                    width: 100%; padding: 14px; font-size: 16px;
+                    font-family: 'Russo One', sans-serif; text-transform: uppercase;
+                    letter-spacing: 2px; color: #fff;
+                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                    border: none; border-radius: 14px; cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+                    display: flex; align-items: center; justify-content: center; gap: 10px;
+                `;
+                continueBtn.innerHTML = '🧹 Продолжить за рекламу';
+                continueBtn.onclick = handleContinueWithAd;
+                
+                // Собираем все кнопки в контейнер
+                buttonsContainer.appendChild(continueBtn);
+                
+                if (newGameBtn) {
+                    // Изменяем стиль кнопки "Новая игра"
+                    newGameBtn.style.cssText = `
+                        width: 100%; padding: 14px; font-size: 16px;
+                        font-family: 'Russo One', sans-serif; text-transform: uppercase;
+                        letter-spacing: 2px; color: #fff;
+                        background: linear-gradient(135deg, #22c55e, #16a34a);
+                        border: none; border-radius: 14px; cursor: pointer;
+                        transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+                    `;
+                    buttonsContainer.appendChild(newGameBtn);
+                }
+                
+                if (menuBtn) {
+                    // Изменяем стиль кнопки "В меню"
+                    menuBtn.style.cssText = `
+                        width: 100%; padding: 14px; font-size: 16px;
+                        font-family: 'Russo One', sans-serif; text-transform: uppercase;
+                        letter-spacing: 2px; color: #94a3b8;
+                        background: rgba(255,255,255,0.03);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 14px; cursor: pointer; transition: all 0.2s;
+                    `;
+                    buttonsContainer.appendChild(menuBtn);
+                }
+                
+                // Добавляем контейнер в модалку
+                contentDiv.appendChild(buttonsContainer);
+            }
+        }
+        
         modal.style.display = 'flex';
         if (typeof updateInterfaceLanguage === 'function') updateInterfaceLanguage();
     }
@@ -2082,6 +2164,8 @@ function countUnlockedScrolls(playerScore) {
 }
 
 // ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
+// ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
+
 function getTodayKey() {
     const today = new Date();
     return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
@@ -2110,47 +2194,104 @@ function openDailyBonus() {
     const todayKey = getTodayKey();
     const lastClaimed = localStorage.getItem('dailyBonusDate');
     const isClaimed = lastClaimed === todayKey;
-    if (isClaimed) { showDailyBonusModal('alreadyClaimed'); return; }
-    showDailyBonusModal('claim');
+    
+    // Всегда показываем модалку с обоими вариантами
+    showDailyBonusModal(isClaimed);
 }
 
-function showDailyBonusModal(type) {
+function showDailyBonusModal(isClaimed) {
+    const t = window.getText || (key => key);
     const oldModal = document.getElementById('daily-bonus-modal');
     if (oldModal) oldModal.remove();
+    
     const modal = document.createElement('div');
     modal.id = 'daily-bonus-modal';
-    modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100002; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
-    const t = window.getText || (key => key);
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100002;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('1.jpg') no-repeat center center fixed;
+        background-size: cover;
+    `;
+    
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: -1;
+    `;
+    modal.appendChild(overlay);
+    
     let content = '';
-    if (type === 'alreadyClaimed') {
+    
+    if (isClaimed) {
+        // Бонус уже получен — показываем усиленный вариант за рекламу
         content = `
-            <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
+            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(245, 158, 11, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+                <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
                 <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-                <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('alreadyClaimed') || 'Уже получено!'}</h2>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${t('dailyBonusAlreadyClaimed') || 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!'}</p>
-                <button onclick="this.parentElement.parentElement.remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s;">${t('ok') || 'OK'}</button>
+                <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+                    ${t('alreadyClaimed') || 'Уже получено!'}
+                </h2>
+                <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 6px;">
+                    ${t('dailyBonusAlreadyClaimed') || 'Ты уже получил ежедневный бонус сегодня.'}
+                </p>
+                <p style="color: #fcd34d; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
+                    🎯 Посмотри рекламу и получи <strong>+25 очков</strong> вместо +10!
+                </p>
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                        ${t('cancel') || 'Отмена'}
+                    </button>
+                    <button onclick="claimEnhancedDailyBonus()" style="flex: 1; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                        🎁 +25 за рекламу
+                    </button>
+                </div>
             </div>
         `;
     } else {
+        // Бонус ещё не получен — показываем обычный и усиленный
         content = `
-            <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(245, 158, 11, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
+            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+                <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
                 <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-                <h2 style="color: #f59e0b; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('dailyBonus') || 'Ежедневный бонус'}</h2>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${t('dailyBonusText') || 'Получить +10 очков?'}</p>
-                <div style="display: flex; gap: 12px;">
-                    <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">${t('cancel') || 'Отмена'}</button>
-                    <button onclick="claimDailyBonus(this)" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">${t('getBonus') || 'Получить!'}</button>
+                <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+                    ${t('dailyBonus') || 'Ежедневный бонус'}
+                </h2>
+                <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
+                    ${t('dailyBonusText') || 'Получить +10 очков?'}
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; min-width: 80px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                        ${t('cancel') || 'Отмена'}
+                    </button>
+                    <button onclick="claimDailyBonus()" style="flex: 1; min-width: 100px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                        ✅ +10
+                    </button>
+                    <button onclick="claimEnhancedDailyBonus()" style="flex: 1; min-width: 120px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                        🎁 +25 за рекламу
+                    </button>
                 </div>
             </div>
         `;
     }
+    
     modal.innerHTML += content;
     document.body.appendChild(modal);
 }
 
-function claimDailyBonus(btn) {
+// Обычный бонус (+10)
+function claimDailyBonus() {
     if (typeof player !== 'undefined' && player) {
         player.score += 10;
         if (typeof saveTotalProgress === 'function') saveTotalProgress();
@@ -2165,16 +2306,68 @@ function claimDailyBonus(btn) {
         
         const modal = document.getElementById('daily-bonus-modal');
         if (modal) modal.remove();
+        
         const t = window.getText || (key => key);
-        showSuccessModal(t('bonusClaimed') || '🎉 Бонус получен!', t('bonusClaimedText') || '+10 очков! Возвращайся завтра за новым бонусом.');
-        const scoreEl = document.getElementById('rewards-player-score');
-        if (scoreEl) {
-            const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-            scoreEl.textContent = Math.max(player.score, savedScore);
-        }
+        showSuccessModal(
+            t('bonusClaimed') || '🎉 Бонус получен!',
+            '+10 очков! Возвращайся завтра за новым бонусом.'
+        );
+        
         updateDailyBonusStatus();
         if (typeof drawGame === 'function') drawGame();
     }
+}
+
+// Усиленный бонус за рекламу (+25)
+function claimEnhancedDailyBonus() {
+    // Ставим игру на паузу, если она идёт
+    if (isGameStarted && !isGameOver && !gameState.paused) {
+        pauseGame();
+    }
+    
+    // Закрываем модалку бонуса
+    const modal = document.getElementById('daily-bonus-modal');
+    if (modal) modal.remove();
+    
+    showRewardedAdForContinue().then((success) => {
+        if (success) {
+            // Реклама просмотрена — начисляем бонус
+            if (typeof player !== 'undefined' && player) {
+                player.score += 25;
+                if (typeof saveTotalProgress === 'function') saveTotalProgress();
+                localStorage.setItem('dailyBonusDate', getTodayKey());
+                
+                if (typeof claimDailyBonusWithSync === 'function') {
+                    claimDailyBonusWithSync();
+                } else if (typeof saveToVKStorage === 'function') {
+                    saveToVKStorage('tetris_daily_bonus_v1', getTodayKey());
+                }
+                
+                showCustomModal({
+                    title: '🎉 Усиленный бонус получен!',
+                    text: '+25 очков! Спасибо за просмотр рекламы!',
+                    type: 'success',
+                    button: 'OK'
+                });
+                
+                updateDailyBonusStatus();
+                if (typeof drawGame === 'function') drawGame();
+            }
+        } else {
+            // Реклама не показана
+            showCustomModal({
+                title: '❌ Реклама недоступна',
+                text: 'Попробуйте позже или возьмите обычный бонус (+10).',
+                type: 'error',
+                button: 'OK'
+            });
+            
+            // Возобновляем игру, если была на паузе
+            if (gameState.paused && isGameStarted && !isGameOver) {
+                resumeGame();
+            }
+        }
+    });
 }
 
 function showSuccessModal(title, text) {
@@ -2193,6 +2386,605 @@ function showSuccessModal(title, text) {
     `;
     document.body.appendChild(modal);
 }
+//стирание рядов за рекламу
+        // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
+        function clearTopRows() {
+            const rowsToClear = 7;
+            let clearedCount = 0;
+            
+            // Проверяем, есть ли блоки в верхних рядах
+            for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
+                let hasBlocks = false;
+                for (let x = 0; x < arenaWidth; x++) {
+                    if (arena[y][x] !== 0 && arena[y][x] !== 'bonus') {
+                        hasBlocks = true;
+                        break;
+                    }
+                }
+                if (hasBlocks) {
+                    clearedCount++;
+                }
+            }
+            
+            // Если верхние ряды пустые — ничего не делаем
+            if (clearedCount === 0) {
+                showCustomModal({
+                    title: '⚠️ Верхние ряды пусты',
+                    text: 'Нет блоков для удаления. Продолжайте игру!',
+                    type: 'info',
+                    button: 'OK'
+                });
+                return false;
+            }
+            
+            // Удаляем верхние ряды и сдвигаем всё вверх
+            for (let i = 0; i < rowsToClear; i++) {
+                // Удаляем первый ряд (верхний)
+                arena.shift();
+                // Добавляем пустой ряд вниз
+                arena.push(new Array(arenaWidth).fill(0));
+            }
+            
+            // Удаляем бонусы, которые могли оказаться в верхних рядах
+            for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
+                for (let x = 0; x < arenaWidth; x++) {
+                    if (arena[y][x] === 'bonus') {
+                        arena[y][x] = 0;
+                    }
+                }
+            }
+            
+            console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
+            return true;
+        }
+        // ======================== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ ========================
+let isRewardedAdLoading = false;
+
+function showRewardedAdForContinue() {
+    return new Promise((resolve) => {
+        if (isRewardedAdLoading) {
+            resolve(false);
+            return;
+        }
+        
+        if (!vkInitialized) {
+            console.warn('⚠️ VK не инициализирован');
+            resolve(false);
+            return;
+        }
+        
+        isRewardedAdLoading = true;
+        
+        // Показываем модалку загрузки
+        showLoadingAdModal();
+        
+        // Приостанавливаем музыку и звуки
+        if (typeof gameAudio !== 'undefined') {
+            gameAudio.pauseAll();
+        }
+        
+        // Показываем рекламу за вознаграждение
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+            .then((data) => {
+                console.log('✅ Реклама за вознаграждение показана:', data);
+                closeLoadingAdModal();
+                isRewardedAdLoading = false;
+                resolve(true);
+            })
+            .catch((error) => {
+                console.error('❌ Ошибка показа рекламы за вознаграждение:', error);
+                closeLoadingAdModal();
+                isRewardedAdLoading = false;
+                resolve(false);
+            });
+    });
+}
+
+// ====== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ======
+function showLoadingAdModal() {
+    const modal = document.createElement('div');
+    modal.id = 'loading-ad-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100010;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(10, 10, 14, 0.85);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    `;
+    modal.innerHTML = `
+        <div style="text-align: center; color: #fff;">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s ease-in-out infinite;">📺</div>
+            <h2 style="color: #34d399; font-size: 24px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+                Загрузка рекламы...
+            </h2>
+            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif;">
+                Пожалуйста, подождите
+            </p>
+            <div style="margin-top: 20px; width: 60px; height: 60px; margin-left: auto; margin-right: auto;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite; width: 100%; height: 100%;">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Добавляем стили для анимаций, если их нет
+    if (!document.getElementById('ad-animation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'ad-animation-styles';
+        style.textContent = `
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.1); opacity: 0.7; }
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+function closeLoadingAdModal() {
+    const modal = document.getElementById('loading-ad-modal');
+    if (modal) modal.remove();
+}
+
+    // ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПРОДОЛЖЕНИЯ ======
+    function showContinueConfirmationModal() {
+        return new Promise((resolve) => {
+            const modal = document.createElement('div');
+            modal.id = 'continue-confirm-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 100011;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: url('1.jpg') no-repeat center center fixed;
+                background-size: cover;
+            `;
+            
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: -1;
+            `;
+            modal.appendChild(overlay);
+            
+            modal.innerHTML += `
+                <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
+                    <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
+                        Продолжить эту игру!
+                    </h2>
+                    <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: 'Russo One', sans-serif; margin-bottom: 8px;">
+                        Посмотрите рекламу и <strong style="color: #fcd34d;">сотрите 7 верхних строк</strong>, чтобы продолжить этот раунд!
+                    </p>
+                    <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
+                        ⚡ Ваши очки и прогресс сохранятся
+                    </p>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="document.getElementById('continue-confirm-modal').remove(); resolve(false);" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                            Отмена
+                        </button>
+                        <button onclick="document.getElementById('continue-confirm-modal').remove(); resolve(true);" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                            Продолжить
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Сохраняем resolve для использования в кнопках
+            modal._resolve = resolve;
+            
+            // Переопределяем кнопки с использованием сохранённого resolve
+            modal.querySelectorAll('button').forEach(btn => {
+                const originalOnclick = btn.onclick;
+                btn.onclick = function(e) {
+                    if (originalOnclick) {
+                        // Вызываем оригинальный обработчик, который удалит модалку
+                        originalOnclick.call(this, e);
+                    }
+                    // Затем резолвим Promise
+                    const isConfirm = this.textContent.includes('Продолжить');
+                    modal._resolve(isConfirm);
+                };
+            });
+        });
+    }
+    // ======================== ПРОДОЛЖЕНИЕ ИГРЫ ЗА РЕКЛАМУ ========================
+async function handleContinueWithAd() {
+    // Сначала показываем модалку подтверждения
+    const confirmed = await showContinueConfirmationModal();
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    // Ставим игру на паузу (если не на паузе)
+    if (!gameState.paused) {
+        pauseGame();
+    }
+    
+    // Показываем рекламу
+    const adShown = await showRewardedAdForContinue();
+    
+    if (adShown) {
+        // Реклама показана — стираем верхние ряды
+        const cleared = clearTopRows();
+        
+        if (cleared) {
+            // Сбрасываем флаг gameOver, чтобы можно было продолжить
+            isGameOver = false;
+            gameState.over = false;
+            gameState.initialized = true;
+            isGameStarted = true;
+            
+            // Закрываем модалку окончания игры
+            const modal = document.getElementById('gameover-modal');
+            if (modal) modal.style.display = 'none';
+            
+            // Обновляем отображение
+            if (typeof drawGame === 'function') drawGame();
+            
+            // Показываем уведомление об успехе
+            showCustomModal({
+                title: '🧹 Ряды стёрты!',
+                text: '7 верхних строк удалены. Нажмите "Дальше" чтобы продолжить игру!',
+                type: 'success',
+                button: 'OK'
+            });
+            
+            // Обновляем текст кнопки паузы
+            updatePauseButtonText();
+            
+            // Игра остаётся на паузе — игрок сам нажмёт "Дальше"
+            // Музыка и звуки уже приостановлены в showRewardedAdForContinue()
+        } else {
+            // Нечего стирать — просто закрываем модалку
+            showCustomModal({
+                title: '⚠️ Верхние ряды пусты',
+                text: 'Нет блоков для удаления. Продолжайте игру!',
+                type: 'info',
+                button: 'OK'
+            });
+        }
+    } else {
+        // Реклама не показана
+        showCustomModal({
+            title: '❌ Реклама недоступна',
+            text: 'Попробуйте позже или начните новую игру.',
+            type: 'error',
+            button: 'OK'
+        });
+        
+        // Возобновляем звуки
+        if (typeof gameAudio !== 'undefined') {
+            gameAudio.resumeAll();
+        }
+    }
+}
+
+// ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ (ПРОМИС) ======
+function showContinueConfirmationModal() {
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.id = 'continue-confirm-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100011;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        `;
+        
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        `;
+        modal.appendChild(overlay);
+        
+        modal.innerHTML += `
+            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
+                <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
+                    Продолжить эту игру!
+                </h2>
+                <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: 'Russo One', sans-serif; margin-bottom: 8px;">
+                    Посмотрите рекламу и <strong style="color: #fcd34d;">сотрите 7 верхних строк</strong>, чтобы продолжить этот раунд!
+                </p>
+                <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
+                    ⚡ Ваши очки и прогресс сохранятся
+                </p>
+                <div style="display: flex; gap: 12px;">
+                    <button id="continue-cancel-btn" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                        Отмена
+                    </button>
+                    <button id="continue-confirm-btn" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                        Продолжить
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        document.getElementById('continue-cancel-btn').onclick = function() {
+            modal.remove();
+            resolve(false);
+        };
+        
+        document.getElementById('continue-confirm-btn').onclick = function() {
+            modal.remove();
+            resolve(true);
+        };
+        
+        // Закрытие по клику вне модалки
+        modal.onclick = function(e) {
+            if (e.target === modal) {
+                modal.remove();
+                resolve(false);
+            }
+        };
+    });
+}
+// ======================== ЗАМЕДЛЕНИЕ ПАДЕНИЯ (ЧЕРЕПАШКА) ========================
+function showSlowDownModal() {
+    // Проверяем, что игра идёт
+    if (!isGameStarted || isGameOver) {
+        showCustomModal({
+            title: '⚠️ Игра не активна',
+            text: 'Начните игру, чтобы использовать замедление!',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+    
+    // Проверяем, не активно ли уже замедление
+    if (isSlowDownActive) {
+        showCustomModal({
+            title: '🐢 Замедление уже активно!',
+            text: 'Подождите, пока эффект закончится.',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+    
+    // Ставим игру на паузу
+    if (!gameState.paused) {
+        pauseGame();
+    }
+    
+    // Показываем модалку подтверждения
+    const modal = document.createElement('div');
+    modal.id = 'slowdown-confirm-modal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100020;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('1.jpg') no-repeat center center fixed;
+        background-size: cover;
+    `;
+    
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: -1;
+    `;
+    modal.appendChild(overlay);
+    
+    modal.innerHTML += `
+        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>
+            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
+                Замедлить?
+            </h2>
+            <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: 'Russo One', sans-serif; margin-bottom: 8px;">
+                Посмотрите рекламу и <strong style="color: #fcd34d;">замедлите падение фигурок</strong> на <strong>15 секунд</strong>!
+            </p>
+            <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
+                ⏱️ Идеально для сложных моментов!
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button onclick="document.getElementById('slowdown-confirm-modal').remove(); if (gameState.paused) resumeGame();" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                    Отмена
+                </button>
+                <button onclick="activateSlowDown()" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #34d399, #059669); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(52, 211, 153, 0.3);">
+                    🐢 Замедлить
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+function activateSlowDown() {
+    // Закрываем модалку подтверждения
+    const confirmModal = document.getElementById('slowdown-confirm-modal');
+    if (confirmModal) confirmModal.remove();
+    
+    // Показываем рекламу
+    showRewardedAdForContinue().then((success) => {
+        if (success) {
+            // Реклама просмотрена — активируем замедление
+            applySlowDownEffect();
+            
+            showCustomModal({
+                title: '🐢 Фигурки замедлятся!',
+                text: 'Падение замедлено на 15 секунд!',
+                type: 'success',
+                button: 'OK',
+                timer: 2000
+            });
+            
+            // Снимаем паузу после закрытия модалки (или по таймеру)
+            setTimeout(() => {
+                if (gameState.paused && isGameStarted && !isGameOver) {
+                    resumeGame();
+                }
+            }, 2500);
+            
+        } else {
+            // Реклама не показана
+            showCustomModal({
+                title: '❌ Реклама недоступна',
+                text: 'Попробуйте позже.',
+                type: 'error',
+                button: 'OK'
+            });
+            
+            // Возобновляем игру, если была на паузе
+            if (gameState.paused && isGameStarted && !isGameOver) {
+                resumeGame();
+            }
+        }
+    });
+}
+
+function applySlowDownEffect() {
+    if (isSlowDownActive) return;
+    
+    isSlowDownActive = true;
+    
+    // Сохраняем оригинальный интервал
+    const originalDropInterval = dropInterval;
+    
+    // Замедляем в 3 раза (увеличиваем интервал)
+    dropInterval = originalDropInterval * 3;
+    
+    // Показываем визуальный индикатор
+    showSlowDownIndicator();
+    
+    console.log('🐢 Замедление активировано на 15 секунд');
+    
+    // Через 15 секунд возвращаем скорость
+    setTimeout(() => {
+        dropInterval = originalDropInterval;
+        isSlowDownActive = false;
+        hideSlowDownIndicator();
+        console.log('⏱️ Замедление закончилось');
+        
+        showCustomModal({
+            title: '⏱️ Время вышло!',
+            text: 'Скорость падения восстановлена.',
+            type: 'info',
+            button: 'OK',
+            timer: 1500
+        });
+    }, 15000);
+}
+
+function showSlowDownIndicator() {
+    // Показываем индикатор замедления над игровым полем
+    let indicator = document.getElementById('slowdown-indicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'slowdown-indicator';
+        indicator.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #34d399;
+            text-shadow: 0 0 40px rgba(52, 211, 153, 0.5);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: 'Russo One', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        `;
+        indicator.innerHTML = `
+            <span>🐢</span>
+            <span style="font-size: 16px; color: #94a3b8;">ЗАМЕДЛЕНИЕ</span>
+            <span style="font-size: 12px; color: #64748b;" id="slowdown-timer">15с</span>
+        `;
+        document.body.appendChild(indicator);
+    }
+    
+    // Показываем с анимацией
+    setTimeout(() => {
+        indicator.style.opacity = '1';
+    }, 100);
+    
+    // Запускаем обратный отсчёт
+    let seconds = 15;
+    const timerEl = document.getElementById('slowdown-timer');
+    if (timerEl) {
+        timerEl.textContent = `${seconds}с`;
+        const interval = setInterval(() => {
+            seconds--;
+            if (seconds <= 0) {
+                clearInterval(interval);
+                return;
+            }
+            timerEl.textContent = `${seconds}с`;
+        }, 1000);
+    }
+}
+
+function hideSlowDownIndicator() {
+    const indicator = document.getElementById('slowdown-indicator');
+    if (indicator) {
+        indicator.style.opacity = '0';
+        setTimeout(() => {
+            if (indicator.parentNode) indicator.remove();
+        }, 400);
+    }
+}
+
+
 
 // ======================== ЭКСПОРТ ========================
 window.selectMode = selectMode;
@@ -2257,5 +3049,20 @@ window.claimDailyBonus = claimDailyBonus;
 window.showDailyBonusModal = showDailyBonusModal;
 window.showSuccessModal = showSuccessModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
+// ======================== рекл за вознагр
+window.handleContinueWithAd = handleContinueWithAd;
+window.clearTopRows = clearTopRows;
+window.showContinueConfirmationModal = showContinueConfirmationModal;
+// Бонусы
+window.claimDailyBonus = claimDailyBonus;
+window.claimEnhancedDailyBonus = claimEnhancedDailyBonus;
+window.openDailyBonus = openDailyBonus;
+window.showDailyBonusModal = showDailyBonusModal;
+window.updateDailyBonusStatus = updateDailyBonusStatus;
+
+// Замедление
+window.showSlowDownModal = showSlowDownModal;
+window.activateSlowDown = activateSlowDown;
+window.applySlowDownEffect = applySlowDownEffect;
 
 console.log('🔥 Тетрис Дарк загружен!');

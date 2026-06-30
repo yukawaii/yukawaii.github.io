@@ -66,6 +66,8 @@
         .rotate-btn {  width: 50px;               /* ← УМЕНЬШЕНО */        height: 50px;              /* ← УМЕНЬШЕНО */ background: linear-gradient(135deg, #10b981, #047857); border: 1px solid #34d399; border-radius: 50%; color: white;  font-size: 18px;           /* ← УМЕНЬШЕНО */ display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 0 #064e3b; }
         .rotate-btn:active { background: linear-gradient(135deg, #059669, #065f46); transform: translateY(3px); box-shadow: none; }
         .action-label {  font-size: 7px;          /* ← УМЕНЬШЕНО */ color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; text-align: center; display: block; width: 100%; }
+   #slowdown-btn {        width: 30px !important;   height: 26px !important;      border-radius: 6px !important;        margin-top: 2px !important;        padding: 0 !important;        display: inline-flex !important;        justify-content: center !important;        align-items: center !important;    }
+        #slowdown-btn svg {        width: 20px !important;           height: 20px !important;    }
     }
 
 /* ПК — только если есть мышь И ширина большая */
@@ -897,7 +899,11 @@ div[id$="-modal"]::before {
                             <path fill="#8fbffa" fill-rule="evenodd" d="M12.781.23a1.2 1.2 0 0 0-.555.02h-.006L4.587 2.369a1.23 1.23 0 0 0-.905 1.177V9.04a2.477 2.477 0 1 0 1.5 2.277V6.076l7.09-1.97V6.57a2.477 2.477 0 1 0 1.5 2.345V1.403a1.226 1.226 0 0 0-.99-1.172Z" clip-rule="evenodd"/>
                         </svg>
                     </button>
-                    
+                    <!-- Кнопка ЧЕРЕПАШКА (замедление) -->
+                            <!-- Кнопка ЧЕРЕПАШКА (замедление) -->
+                            <button class="iksweb1" onclick="showSlowDownModal()" id="slowdown-btn" title="Замедлить падение" style="width: 50px; height: 48px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; font-size: 22px;">
+                                🐢
+                            </button>
                     <button class="iksweb1" onclick="inviteFriends()" title="Пригласить друзей">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8899a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
