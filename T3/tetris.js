@@ -863,9 +863,9 @@ function drawGame() {
     
     // Следующая фигура
     if (player && player.nextMatrix) {
-        const nextX = canvasWidth * 0.78;
+        const nextX = canvasWidth * 0.70;
         const nextY = isMobile ? 5 : 12;
-        let blockNext = Math.min(isMobile ? 16 : 20, canvasWidth / 18);
+        let blockNext = Math.min(isMobile ? 9 : 12, canvasWidth / 18);
         const isTetra = player.isTetraMode;
         const isPenta = player.isPentaMode;
         for (let y = 0; y < player.nextMatrix.length; y++) {
