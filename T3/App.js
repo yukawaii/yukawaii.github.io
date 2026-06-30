@@ -704,13 +704,14 @@ function claimDailyBonusWithSync() {
     
     localStorage.setItem('dailyBonusDate', today);
     
-    // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
-    saveToVKStorage(VK_STORAGE_KEYS.DAILY_BONUS, today);
+    // Синхронизация с VK Storage
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('tetris_daily_bonus_v1', today);
+    }
     
-    console.log('🎁 Ежедневный бонус получен и синхронизирован');
+    console.log('🎁 Ежедневный бонус синхронизирован');
     return true;
 }
-
 // ======================== МОДАЛКИ ========================
 
 function closeLeaderboardModal() {

@@ -14,6 +14,7 @@ let difficultyMultiplier = 1;
 let slowDownInterval = null;
 let isSlowDownActive = false;
 let comboDisplayTimer = null;
+let dailyBonusClaimedToday = false; 
 // ======================== ПЕРЕМЕННЫЕ ДЛЯ ПАГИНАЦИИ ========================
 let currentScrollPage = 1;
 const SCROLLS_PER_PAGE = 5;
@@ -1499,6 +1500,10 @@ setTimeout(() => {
         setTimeout(() => { container.style.opacity = '1'; }, 200);
     }
     update();
+     // ====== ЗАГРУЖАЕМ СТАТУС ЕЖЕДНЕВНОГО БОНУСА ======
+    dailyBonusClaimedToday = isDailyBonusClaimedToday();
+    updateDailyBonusStatus();
+    // =================================================
 }, 100);
 
 window.addEventListener('load', function() {
@@ -2174,20 +2179,27 @@ function countUnlockedScrolls(playerScore) {
 }
 
 // ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
-// ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
 
 function getTodayKey() {
     const today = new Date();
     return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
 }
 
-function updateDailyBonusStatus() {
-    const statusEl = document.getElementById('daily-bonus-status');
-    if (!statusEl) return;
+// Проверка, получал ли игрок бонус сегодня
+function isDailyBonusClaimedToday() {
     const todayKey = getTodayKey();
     const lastClaimed = localStorage.getItem('dailyBonusDate');
-    const isClaimed = lastClaimed === todayKey;
-    if (isClaimed) {
+    return lastClaimed === todayKey;
+}
+
+// Обновляем статус бонуса в интерфейсе
+function updateDailyBonusStatus() {
+    dailyBonusClaimedToday = isDailyBonusClaimedToday();
+    
+    const statusEl = document.getElementById('daily-bonus-status');
+    if (!statusEl) return;
+    
+    if (dailyBonusClaimedToday) {
         statusEl.innerHTML = getCheckmarkSVG();
         statusEl.style.color = '#34d399';
         statusEl.style.fontSize = '20px';
@@ -2200,16 +2212,23 @@ function updateDailyBonusStatus() {
     }
 }
 
+// Открыть ежедневный бонус
 function openDailyBonus() {
-    const todayKey = getTodayKey();
-    const lastClaimed = localStorage.getItem('dailyBonusDate');
-    const isClaimed = lastClaimed === todayKey;
+    // Обновляем статус перед открытием
+    dailyBonusClaimedToday = isDailyBonusClaimedToday();
     
-    // Всегда показываем модалку с обоими вариантами
-    showDailyBonusModal(isClaimed);
-}
-
-function showDailyBonusModal(isClaimed) {
+    // Если бонус уже получен — показываем сообщение и выходим
+    if (dailyBonusClaimedToday) {
+        showCustomModal({
+            title: '✅ Уже получено!',
+            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+    
+    // Создаём модалку с кнопками
     const t = window.getText || (key => key);
     const oldModal = document.getElementById('daily-bonus-modal');
     if (oldModal) oldModal.remove();
@@ -2226,145 +2245,156 @@ function showDailyBonusModal(isClaimed) {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url('1.jpg') no-repeat center center fixed;
-        background-size: cover;
     `;
     
     const overlay = document.createElement('div');
     overlay.style.cssText = `
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.8);
         z-index: -1;
     `;
     modal.appendChild(overlay);
     
-    let content = '';
-    
-    if (isClaimed) {
-        // Бонус уже получен — показываем усиленный вариант за рекламу
-        content = `
-            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(245, 158, 11, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
-                <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-                <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
-                    ${t('alreadyClaimed') || 'Уже получено!'}
-                </h2>
-                <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 6px;">
-                    ${t('dailyBonusAlreadyClaimed') || 'Ты уже получил ежедневный бонус сегодня.'}
-                </p>
-                <p style="color: #fcd34d; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
-                    🎯 Посмотри рекламу и получи <strong>+25 очков</strong> вместо +10!
-                </p>
-                <div style="display: flex; gap: 12px;">
-                    <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                        ${t('cancel') || 'Отмена'}
-                    </button>
-                    <button onclick="claimEnhancedDailyBonus()" style="flex: 1; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                        🎁 +25
-                    </button>
-                </div>
+    modal.innerHTML += `
+        <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
+            <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
+            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+                ${t('dailyBonus') || 'Ежедневный бонус'}
+            </h2>
+            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
+                ${t('dailyBonusText') || 'Получить +10 очков?'}
+            </p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; min-width: 80px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                    ${t('cancel') || 'Отмена'}
+                </button>
+                <button onclick="claimDailyBonus()" style="flex: 1; min-width: 100px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                    ✅ +10
+                </button>
+                <button onclick="claimEnhancedDailyBonus()" style="flex: 1; min-width: 120px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                    🎁 +25 за рекламу
+                </button>
             </div>
-        `;
-    } else {
-        // Бонус ещё не получен — показываем обычный и усиленный
-        content = `
-            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
-                <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-                <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
-                    ${t('dailyBonus') || 'Ежедневный бонус'}
-                </h2>
-                <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
-                    ${t('dailyBonusText') || 'Получить +10 очков?'}
-                </p>
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                    <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; min-width: 80px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                        ${t('cancel') || 'Отмена'}
-                    </button>
-                    <button onclick="claimDailyBonus()" style="flex: 1; min-width: 100px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
-                        ✅ +10
-                    </button>
-                    <button onclick="claimEnhancedDailyBonus()" style="flex: 1; min-width: 120px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                        🎁 +25
-                    </button>
-                </div>
-            </div>
-        `;
-    }
+        </div>
+    `;
     
-    modal.innerHTML += content;
     document.body.appendChild(modal);
 }
 
 // Обычный бонус (+10)
 function claimDailyBonus() {
+    // Проверяем статус
+    dailyBonusClaimedToday = isDailyBonusClaimedToday();
+    
+    if (dailyBonusClaimedToday) {
+        const modal = document.getElementById('daily-bonus-modal');
+        if (modal) modal.remove();
+        
+        showCustomModal({
+            title: '✅ Уже получено!',
+            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+    
     if (typeof player !== 'undefined' && player) {
+        const todayKey = getTodayKey();
+        
         player.score += 10;
         if (typeof saveTotalProgress === 'function') saveTotalProgress();
-        localStorage.setItem('dailyBonusDate', getTodayKey());
+        
+        localStorage.setItem('dailyBonusDate', todayKey);
+        dailyBonusClaimedToday = true;
         
         // Синхронизация с VK Storage
-        if (typeof claimDailyBonusWithSync === 'function') {
-            claimDailyBonusWithSync();
-        } else if (typeof saveToVKStorage === 'function') {
-            saveToVKStorage('tetris_daily_bonus_v1', getTodayKey());
+        if (typeof saveToVKStorage === 'function') {
+            saveToVKStorage('tetris_daily_bonus_v1', todayKey);
         }
         
         const modal = document.getElementById('daily-bonus-modal');
         if (modal) modal.remove();
         
-        const t = window.getText || (key => key);
+        if (typeof drawGame === 'function') drawGame();
+        updateDailyBonusStatus();
+        
+        const scoreEl = document.getElementById('rewards-player-score');
+        if (scoreEl) {
+            const totalScore = parseInt(localStorage.getItem('totalScore') || '0');
+            scoreEl.textContent = formatScore(totalScore);
+        }
+        
         showSuccessModal(
-            t('bonusClaimed') || '🎉 Бонус получен!',
+            '🎉 Бонус получен!',
             '+10 очков! Возвращайся завтра за новым бонусом.'
         );
-        
-        updateDailyBonusStatus();
-        if (typeof drawGame === 'function') drawGame();
     }
 }
 
 // Усиленный бонус за рекламу (+25)
 function claimEnhancedDailyBonus() {
+    // Проверяем статус
+    dailyBonusClaimedToday = isDailyBonusClaimedToday();
+    
+    if (dailyBonusClaimedToday) {
+        const modal = document.getElementById('daily-bonus-modal');
+        if (modal) modal.remove();
+        
+        showCustomModal({
+            title: '✅ Уже получено!',
+            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+    
     // Ставим игру на паузу, если она идёт
     if (isGameStarted && !isGameOver && !gameState.paused) {
         pauseGame();
     }
     
-    // Закрываем модалку бонуса
     const modal = document.getElementById('daily-bonus-modal');
     if (modal) modal.remove();
     
     showRewardedAdForContinue().then((success) => {
         if (success) {
-            // Реклама просмотрена — начисляем бонус
             if (typeof player !== 'undefined' && player) {
+                const todayKey = getTodayKey();
+                
                 player.score += 25;
                 if (typeof saveTotalProgress === 'function') saveTotalProgress();
-                localStorage.setItem('dailyBonusDate', getTodayKey());
                 
-                if (typeof claimDailyBonusWithSync === 'function') {
-                    claimDailyBonusWithSync();
-                } else if (typeof saveToVKStorage === 'function') {
-                    saveToVKStorage('tetris_daily_bonus_v1', getTodayKey());
+                localStorage.setItem('dailyBonusDate', todayKey);
+                dailyBonusClaimedToday = true;
+                
+                if (typeof saveToVKStorage === 'function') {
+                    saveToVKStorage('tetris_daily_bonus_v1', todayKey);
+                }
+                
+                if (typeof drawGame === 'function') drawGame();
+                updateDailyBonusStatus();
+                
+                const scoreEl = document.getElementById('rewards-player-score');
+                if (scoreEl) {
+                    const totalScore = parseInt(localStorage.getItem('totalScore') || '0');
+                    scoreEl.textContent = formatScore(totalScore);
                 }
                 
                 showCustomModal({
                     title: '🎉 Усиленный бонус получен!',
-                    text: '+25 очков! Приятной игры!',
+                    text: '+25 очков! Спасибо за просмотр рекламы!',
                     type: 'success',
                     button: 'OK'
                 });
-                
-                updateDailyBonusStatus();
-                if (typeof drawGame === 'function') drawGame();
             }
         } else {
-            // Реклама не показана
             showCustomModal({
                 title: '❌ Реклама недоступна',
                 text: 'Попробуйте позже или возьмите обычный бонус (+10).',
@@ -2372,7 +2402,6 @@ function claimEnhancedDailyBonus() {
                 button: 'OK'
             });
             
-            // Возобновляем игру, если была на паузе
             if (gameState.paused && isGameStarted && !isGameOver) {
                 resumeGame();
             }
@@ -2382,20 +2411,45 @@ function claimEnhancedDailyBonus() {
 
 function showSuccessModal(title, text) {
     const modal = document.createElement('div');
-    modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100003; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100003;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    `;
+    
     const overlay = document.createElement('div');
-    overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1;`;
+    overlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: -1;
+    `;
     modal.appendChild(overlay);
+    
     modal.innerHTML += `
-        <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
             <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
-            <button onclick="this.parentElement.parentElement.remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s;">${window.getText('ok') || 'OK'}</button>
+            <button onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                OK
+            </button>
         </div>
     `;
+    
     document.body.appendChild(modal);
 }
+
+
 //стирание рядов за рекламу
         // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
         function clearTopRows() {
