@@ -7,7 +7,21 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <title>Батискаф в западне!</title>
     <style>
-        
+        /* ===== ПРЕДОТВРАЩАЕМ БЕЛЫЙ ФОН ПРИ ЗАГРУЗКЕ ===== */
+html, body {
+    background: #1a1a2e !important;
+}
+
+/* Плавное появление меню */
+#mainMenu {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+#mainMenu.loaded {
+    opacity: 1;
+}
+
+
 /* Блокировка скролла для всех элементов */
 * {
     -webkit-touch-callout: none !important;
@@ -5501,6 +5515,24 @@ document.getElementById('gameblock')?.addEventListener('touchstart', function(e)
         console.log('💾 Сохранение прогресса каждые 3 уровня');
         console.log('🏆 Система достижений активна!');
         console.log('☁️ VK Storage синхронизация активна!');
+
+
+    // Показываем меню после загрузки
+    document.addEventListener('DOMContentLoaded', function() {
+        var menu = document.getElementById('mainMenu');
+        if (menu) {
+            menu.classList.add('loaded');
+        }
+    });
+    
+    // Форсируем показ через 300ms на случай, если DOMContentLoaded уже сработал
+    setTimeout(function() {
+        var menu = document.getElementById('mainMenu');
+        if (menu) {
+            menu.classList.add('loaded');
+        }
+    }, 300);
+
     </script>
 </body>
 </html>
