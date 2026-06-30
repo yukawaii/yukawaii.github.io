@@ -2992,65 +2992,22 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 }
 
 function goToMenu() {
-    console.log('🔴 goToMenu() вызвана! Текущее состояние:', {
-        gameActive: gameActive,
-        paus: paus,
-        mainMenuDisplay: mainMenu.style.display,
-        x: x,
-        y: y
-    });
-    // Отменяем все таймауты
-    if (int1) { clearTimeout(int1); int1 = null; }
-    if (int2) { clearTimeout(int2); int2 = null; }
-    if (int3) { clearTimeout(int3); int3 = null; }
-    if (int4) { clearTimeout(int4); int4 = null; }
-    
-    // Отменяем таймауты бонусов
-    if (magnetTimer) { clearTimeout(magnetTimer); magnetTimer = null; }
-    if (speedBoostTimer) { clearTimeout(speedBoostTimer); speedBoostTimer = null; }
-    if (slowMotionTimer) { clearTimeout(slowMotionTimer); slowMotionTimer = null; }
-    
-    // Сбрасываем iint, чтобы никакой setTimeout не выполнился
-    iint = "";
-    
     gameActive = false;
     clearAllIntervals();
     stopBackgroundEffects();
-    stopParticles();
-    stopParticlesBlue();
     closeGameOverModal();
-    
-    // Закрываем все модалки
-    closeShieldAdModal();
-    closeRepairModal();
-    if (repairErrorModal) {
-        repairErrorModal.classList.remove('active');
-    }
-    
     if (gameContainer) gameContainer.style.display = 'none';
     if (mainMenu) mainMenu.style.display = 'flex';
-    
     if (window.buttonSoundTimer) {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
     }
-    
     paus = false;
     wasPausedByHide = false;
-    shieldPopupPaused = false;
-    repairPopupPaused = false;
-    window.keysBlocked = false;
-    
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
-    
-    // Синхронизация
-    setTimeout(syncAllDataToVK, 500);
-    
-    console.log('🏠 Выход в меню. Все таймауты отменены.');
 }
-
 
 
  function goToMenuFromOver() {    
@@ -3139,7 +3096,7 @@ function showCountdownNotification(text) {
 
        function showGameOverModal() {
     // ЗАЩИТА: не показываем модалку, если меню видно или игра не активна
-    if (mainMenu.style.display === 'flex' || !gameActive) {
+    if (mainMenu.style.display === 'flex') {
         console.log('🛡️ showGameOverModal() заблокирована - меню видно или игра не активна');
         return;
     }
@@ -3644,20 +3601,17 @@ function showCountdownNotification(text) {
         // ============================================================
         //  16. ИГРОВАЯ ЛОГИКА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
-  function clearAllIntervals() {
-    // Очищаем интервалы
-    if (int1) { clearInterval(int1); int1 = null; }
-    if (int2) { clearInterval(int2); int2 = null; }
-    if (int3) { clearInterval(int3); int3 = null; }
-    if (int4) { clearInterval(int4); int4 = null; }
+ function clearAllIntervals() {
+    if (int1) { clearTimeout(int1); int1 = null; }
+    if (int2) { clearTimeout(int2); int2 = null; }
+    if (int3) { clearTimeout(int3); int3 = null; }
+    if (int4) { clearTimeout(int4); int4 = null; }
     if (bgInterval) { clearInterval(bgInterval); bgInterval = null; }
     if (jellyfishTimer) { clearInterval(jellyfishTimer); jellyfishTimer = null; }
     if (shieldTimer) { clearInterval(shieldTimer); shieldTimer = null; }
     if (particleInterval) { clearInterval(particleInterval); particleInterval = null; }
     if (particleBlueInterval) { clearInterval(particleBlueInterval); particleBlueInterval = null; }
     if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; }
-    
-    // Очищаем таймауты
     if (magnetTimer) { clearTimeout(magnetTimer); magnetTimer = null; }
     if (speedBoostTimer) { clearTimeout(speedBoostTimer); speedBoostTimer = null; }
     if (slowMotionTimer) { clearTimeout(slowMotionTimer); slowMotionTimer = null; }
@@ -3891,29 +3845,37 @@ function showCountdownNotification(text) {
             return false;
         }
 
-        function gameover() {
-    console.trace('💥 gameover() вызвана! Стек вызовов:'); // ← Добавьте эту строку
+       function gameover() {
+    console.trace('💥 gameover() вызвана! Стек вызовов:');
     console.log('💥 gameover() вызвана!', {
         gameActive: gameActive,
         paus: paus,
         mainMenuDisplay: mainMenu.style.display,
         x: x,
         y: y
-    });        
-            gameActive = false;
-            clearAllIntervals();
-            stopBackgroundEffects();
-            if (window.buttonSoundTimer) {
-                clearTimeout(window.buttonSoundTimer);
-                window.buttonSoundTimer = null;
-            }
-            deathCount++;
-            achievementsChecked = false;
-            showBannerAd();
-            showGameOverModal();
-            // Синхронизация при game over
-            setTimeout(syncAllDataToVK, 500);
-        }
+    });
+    
+    // ===== 1. СНАЧАЛА ПОКАЗЫВАЕМ МОДАЛКУ =====
+    // Она должна показаться ДО того, как мы что-то меняем
+    showGameOverModal(); // <-- ПЕРЕНЕСИТЕ СЮДА
+    
+    // ===== 2. ПОТОМ ОСТАНАВЛИВАЕМ ИГРУ =====
+    gameActive = false;
+    clearAllIntervals();
+    stopBackgroundEffects();
+    
+    if (window.buttonSoundTimer) {
+        clearTimeout(window.buttonSoundTimer);
+        window.buttonSoundTimer = null;
+    }
+    
+    deathCount++;
+    achievementsChecked = false;
+    showBannerAd();
+    
+    // Синхронизация при game over
+    setTimeout(syncAllDataToVK, 500);
+}
 
         // ============================================================
         //  17. УПРАВЛЕНИЕ - БЕЗ ИЗМЕНЕНИЙ
@@ -3929,7 +3891,7 @@ function showCountdownNotification(text) {
             var delay = slowMotionActive ? t * 2 : t;
             int1 = setTimeout("right()", delay);
             if (x > 300 - rad) {
-                clearInterval(int1);
+               clearTimeout(int1);
                 gameover();
                 return;
             }
@@ -3951,7 +3913,7 @@ function showCountdownNotification(text) {
             var delay = slowMotionActive ? t * 2 : t;
             int2 = setTimeout("left()", delay);
             if (x < 0) {
-                clearInterval(int2);
+               clearTimeout(int2);
                 gameover();
                 return;
             }
@@ -3973,7 +3935,7 @@ function showCountdownNotification(text) {
             var delay = slowMotionActive ? t * 2 : t;
             int3 = setTimeout("down()", delay);
             if (y > 350 - rad) {
-                clearInterval(int3);
+                clearTimeout(int3)
                 gameover();
                 return;
             }
@@ -3995,7 +3957,7 @@ function showCountdownNotification(text) {
             var delay = slowMotionActive ? t * 2 : t;
             int4 = setTimeout("up()", delay);
             if (y < 0) {
-                clearInterval(int4);
+                clearTimeout(int4)
                 gameover();
                 return;
             }
