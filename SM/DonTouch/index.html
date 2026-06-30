@@ -2855,6 +2855,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         var finalScoreEl = document.getElementById('finalScore');
         var finalLevelEl = document.getElementById('finalLevel');
         var gameblock = document.getElementById('gameblock');
+        var toastTimeout = null;
 
         var x = 0, y = 0;
         var cx = 50, cy = 50;
@@ -2991,60 +2992,18 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 }
 
 function goToMenu() {
-    // Предотвращаем повторные вызовы
-    if (isGoingToMenu) return;
-    isGoingToMenu = true;
-    
-    // ===== 1. СНАЧАЛА СТАВИМ ИГРУ НА ПАУЗУ =====
-    if (gameActive && !paus) {
-        // Останавливаем все интервалы движения
-        clearAllIntervals();
-        // Ставим флаг паузы
-        paus = true;
-        // Блокируем кнопки управления
-        if (u) u.disabled = true;
-        if (d) d.disabled = true;
-        if (r) r.disabled = true;
-        if (l) l.disabled = true;
-        // Меняем иконку паузы
-        if (pausa) {
-            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-        }
-        console.log('⏸️ Игра на паузе перед выходом в меню');
-    }
-    
-    // ===== 2. ТЕПЕРЬ ОСТАНАВЛИВАЕМ ИГРУ =====
+    // 1. Мгновенно останавливаем игру
     gameActive = false;
     
-    // 3. Очищаем остальные интервалы
-    clearInterval(bgInterval);
-    clearInterval(jellyfishTimer);
-    clearInterval(shieldTimer);
-    clearInterval(particleInterval);
-    clearInterval(particleBlueInterval);
-    clearInterval(bubbleInterval);
+    // 2. Очищаем все интервалы
+    clearAllIntervals();
     
-    // 4. Останавливаем фоновые эффекты
+    // 3. Останавливаем фоновые эффекты
     stopBackgroundEffects();
-    
-    // 5. Останавливаем частицы
     stopParticles();
     stopParticlesBlue();
     
-    // 6. Останавливаем звуки кнопок
-    if (window.buttonSoundTimer) {
-        clearTimeout(window.buttonSoundTimer);
-        window.buttonSoundTimer = null;
-    }
-    
-    // 7. Останавливаем аудио контекст
-    if (audioCtx) {
-        try {
-            audioCtx.suspend();
-        } catch(e) {}
-    }
-    
-    // 8. Закрываем все модалки
+    // 4. Закрываем все модалки
     closeGameOverModal();
     closeShieldAdModal();
     closeRepairModal();
@@ -3052,62 +3011,41 @@ function goToMenu() {
         repairErrorModal.classList.remove('active');
     }
     
-    // 9. Сбрасываем состояние паузы (но не паузу!)
+    // 5. Останавливаем звуки
+    if (window.buttonSoundTimer) {
+        clearTimeout(window.buttonSoundTimer);
+        window.buttonSoundTimer = null;
+    }
+    
+    // 6. Сбрасываем флаги
+    paus = false;
     wasPausedByHide = false;
     shieldPopupPaused = false;
     repairPopupPaused = false;
     window.keysBlocked = false;
     
-    // 10. Разблокируем кнопки управления
+    // 7. Разблокируем кнопки
     if (u) u.disabled = false;
     if (d) d.disabled = false;
     if (r) r.disabled = false;
     if (l) l.disabled = false;
     
-    // 11. Восстанавливаем иконку паузы
+    // 8. Восстанавливаем иконку паузы
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
     
-    // 12. Сбрасываем флаг паузы (уже не нужен)
-    paus = false;
+    // 9. Показываем меню, скрываем игру
+    if (gameContainer) gameContainer.style.display = 'none';
+    if (mainMenu) mainMenu.style.display = 'flex';
     
-    // 13. Скрываем игровой контейнер
-    if (gameContainer) {
-        gameContainer.style.display = 'none';
-    }
-    
-    // 14. Показываем меню
-    if (mainMenu) {
-        mainMenu.style.display = 'flex';
-    }
-    
-    // 15. Очищаем тосты
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-        toastTimeout = null;
-    }
-    var toast = document.getElementById('toast');
-    if (toast) {
-        toast.classList.remove('show');
-    }
-    
-    // 16. Очищаем уведомления
-    var notifications = document.querySelectorAll('.countdown-notification, .save-notification');
-    notifications.forEach(function(el) {
-        if (el.parentNode) el.remove();
-    });
-    
-    // 17. Синхронизация при выходе в меню
+    // 10. Синхронизация
     setTimeout(syncAllDataToVK, 500);
     
-    // Сбрасываем флаг через секунду
-    setTimeout(function() {
-        isGoingToMenu = false;
-    }, 1000);
-    
-    console.log('🏠 Выход в меню. Игра полностью остановлена.');
+    console.log('🏠 Выход в меню');
 }
+
+
 
  function goToMenuFromOver() {    
     closeGameOverModal();
@@ -3693,29 +3631,21 @@ function showCountdownNotification(text) {
         //  16. ИГРОВАЯ ЛОГИКА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
   function clearAllIntervals() {
-    clearInterval(int1);
-    clearInterval(int2);
-    clearInterval(int3);
-    clearInterval(int4);
-    clearInterval(bgInterval);
-    clearInterval(jellyfishTimer);
-    clearInterval(shieldTimer);
-    clearInterval(particleInterval);
-    clearInterval(particleBlueInterval);
-    clearInterval(bubbleInterval);
-    // Сбрасываем переменные интервалов
-    int1 = null;
-    int2 = null;
-    int3 = null;
-    int4 = null;
-    bgInterval = null;
-    jellyfishTimer = null;
-    shieldTimer = null;
-    particleInterval = null;
-    particleBlueInterval = null;
-    bubbleInterval = null;
+    // Очищаем все интервалы
+    if (int1) { clearInterval(int1); int1 = null; }
+    if (int2) { clearInterval(int2); int2 = null; }
+    if (int3) { clearInterval(int3); int3 = null; }
+    if (int4) { clearInterval(int4); int4 = null; }
+    if (bgInterval) { clearInterval(bgInterval); bgInterval = null; }
+    if (jellyfishTimer) { clearInterval(jellyfishTimer); jellyfishTimer = null; }
+    if (shieldTimer) { clearInterval(shieldTimer); shieldTimer = null; }
+    if (particleInterval) { clearInterval(particleInterval); particleInterval = null; }
+    if (particleBlueInterval) { clearInterval(particleBlueInterval); particleBlueInterval = null; }
+    if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; }
+    
+    // Сбрасываем iint, чтобы никакой setTimeout не выполнился
+    iint = "";
 }
-
 
 
         function resetGame() {
@@ -5192,7 +5122,6 @@ function getRepairViaAd() {
 function showToast(message, isError = false, duration = 4000) {
     const toast = document.getElementById('toast');
     if (!toast) {
-        // Если нет элемента toast, создаём временный
         var tempToast = document.createElement('div');
         tempToast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);' +
             'background:' + (isError ? '#ef4444' : '#1f2937') + ';' +
@@ -5211,9 +5140,16 @@ function showToast(message, isError = false, duration = 4000) {
     toast.textContent = message;
     toast.style.background = isError ? '#ef4444' : '#1f2937';
     toast.classList.add('show');
-    if (toastTimeout) clearTimeout(toastTimeout);
+    
+    // Очищаем предыдущий таймаут
+    if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+    }
+    
     toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
+        toastTimeout = null;
     }, duration);
 }
 
