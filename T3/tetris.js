@@ -2995,8 +2995,6 @@ function hideSlowDownIndicator() {
 }
 
 // ======================== КОМБО-СИСТЕМА ========================
-
-
 function showComboDisplay(rowsCleared) {
     // Удаляем старую надпись, если есть
     const oldDisplay = document.getElementById('combo-display');
@@ -3006,6 +3004,13 @@ function showComboDisplay(rowsCleared) {
     if (comboDisplayTimer) {
         clearTimeout(comboDisplayTimer);
         comboDisplayTimer = null;
+    }
+    
+    // ====== ЗВУК КОМБО (только highspins) ======
+    if (rowsCleared >= 3) {
+        if (typeof gameAudio !== 'undefined') {
+            gameAudio.playOneShot('highspins', 0.2);
+        }
     }
     
     // Создаём элемент
@@ -3033,7 +3038,7 @@ function showComboDisplay(rowsCleared) {
     `;
     
     // Выбираем цвет в зависимости от количества линий
-    let color = '#fcd34d'; // золотой
+    let color = '#fcd34d';
     let glowColor = 'rgba(255, 215, 0, 0.8)';
     if (rowsCleared >= 5) {
         color = '#ff6b6b';
@@ -3071,7 +3076,7 @@ function showComboDisplay(rowsCleared) {
         display.style.transform = 'translate(-50%, -50%) scale(1)';
     });
     
-    // ====== ЗАПУСКАЕМ КОНФЕТТИ ПРИ x3 И ВЫШЕ ======
+    // ====== КОНФЕТТИ ======
     if (rowsCleared >= 3) {
         let confettiCount = 20;
         if (rowsCleared >= 5) confettiCount = 80;
