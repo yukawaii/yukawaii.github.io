@@ -3225,7 +3225,7 @@ function showCountdownNotification(text) {
     isSoundEnabled = true;
     
     // ===== 2. ПОКАЗЫВАЕМ РЕКЛАМУ =====
-    if (typeof vkBridge !== 'undefined') {
+   /* if (typeof vkBridge !== 'undefined') {
         var now = Date.now();
         if ((now - lastAdTime) >= adCooldown) {
             lastAdTime = now;
@@ -3237,7 +3237,7 @@ function showCountdownNotification(text) {
                     console.log('⚠️ Ошибка рекламы:', e);
                 });
         }
-    }
+    }*/
     
     // ===== 3. ЗАПУСКАЕМ АНИМАЦИЮ ПУЗЫРЕЙ И НОВУЮ ИГРУ =====
     startBubbleTransition(function() {
