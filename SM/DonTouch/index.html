@@ -2297,7 +2297,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             });
         }
 
-
         // ===== НАСТРОЙКА АВТО-СИНХРОНИЗАЦИИ =====
         let syncInitialized = false;
 
@@ -4303,37 +4302,286 @@ function showCountdownNotification(text) {
         // ============================================================
         //  18. КЛАВИАТУРА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
-        document.addEventListener('keydown', function(e) {
-            if (!gameContainer || gameContainer.style.display === 'none') return;
-            if (window.keysBlocked) {
-                e.preventDefault();
+     document.addEventListener('keydown', function(e) {
+    if (!gameContainer || gameContainer.style.display === 'none') return;
+    if (window.keysBlocked) {
+        e.preventDefault();
+        return;
+    }
+    
+    var key = e.key;
+    
+    // ★★★ ВЕРХ (W или стрелка вверх) ★★★
+    if (key === 'ArrowUp' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
+        e.preventDefault();
+        up();
+        return;
+    }
+    
+    // ★★★ НИЗ (S или стрелка вниз) ★★★
+    if (key === 'ArrowDown' || key === 's' || key === 'S' || key === 'ы' || key === 'Ы') {
+        e.preventDefault();
+        down();
+        return;
+    }
+    
+    // ★★★ ВЛЕВО (A или стрелка влево) ★★★
+    if (key === 'ArrowLeft' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
+        e.preventDefault();
+        left();
+        return;
+    }
+    
+    // ★★★ ВПРАВО (D или стрелка вправо) ★★★
+    if (key === 'ArrowRight' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
+        e.preventDefault();
+        right();
+        return;
+    }
+    
+    // Пробел - пауза
+    if (key === ' ') {
+        e.preventDefault();
+        pause();
+        return;
+    }
+});
+
+            // ============================================================
+//  ТАЧ-УПРАВЛЕНИЕ НА ТЕЛЕФОНАХ (прикосновение к полю)
+// ============================================================
+            (function setupTouchControls() {
+                var gameblock = document.getElementById('gameblock');
+                if (!gameblock) return;
+                
+                var touchId = null;
+                var moveInterval = null;
+                
+                function getDirection(touchX, touchY) {
+                    if (!gameblock) return null;
+                    
+                    var rect = gameblock.getBoundingClientRect();
+                    var centerX = rect.left + rect.width / 2;
+                    var centerY = rect.top + rect.height / 2;
+                    
+                    // Координаты касания относительно центра
+                    var dx = touchX - centerX;
+                    var dy = touchY - centerY;
+                    
+                    // Минимальное расстояние от центра (зона мёртвая, чтобы случайно не двигаться)
+                    var deadZone = 20;
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < deadZone) return null;
+                    
+                    // Определяем направление (горизонталь или вертикаль)
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        return dx > 0 ? 'right' : 'left';
+                    } else {
+                        return dy > 0 ? 'down' : 'up';
+                    }
+                }
+                
+                function startMove(direction) {
+                    stopMove();
+                    if (!gameActive || paus) return;
+                    
+                    // Запускаем движение в выбранном направлении
+                    moveInterval = setInterval(function() {
+                        if (!gameActive || paus) {
+                            stopMove();
+                            return;
+                        }
+                        switch(direction) {
+                            case 'up': up(); break;
+                            case 'down': down(); break;
+                            case 'left': left(); break;
+                            case 'right': right(); break;
+                        }
+                    }, 50); // Обновляем каждые 50мс для плавного движения
+                }
+                
+                function stopMove() {
+                    if (moveInterval) {
+                        clearInterval(moveInterval);
+                        moveInterval = null;
+                    }
+                    // Отключаем все кнопки
+                    if (u) u.disabled = false;
+                    if (d) d.disabled = false;
+                    if (l) l.disabled = false;
+                    if (r) r.disabled = false;
+                }
+                
+                // Обработчик начала касания
+                gameblock.addEventListener('touchstart', function(e) {
+                    // Игнорируем, если игра не активна или на паузе
+                    if (!gameActive || paus) return;
+                    // Игнорируем, если нажали на кнопку внутри игрового поля (если такие есть)
+                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+                    
+                    e.preventDefault();
+                    
+                    var touch = e.changedTouches[0];
+                    if (!touch) return;
+                    touchId = touch.identifier;
+                    
+                    var direction = getDirection(touch.clientX, touch.clientY);
+                    if (direction) {
+                        startMove(direction);
+                    }
+                }, { passive: false });
+                
+                // Обработчик перемещения пальца
+                gameblock.addEventListener('touchmove', function(e) {
+                    if (!gameActive || paus) return;
+                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+                    
+                    e.preventDefault();
+                    
+                    // Находим нужный палец
+                    var touch = null;
+                    for (var i = 0; i < e.changedTouches.length; i++) {
+                        if (e.changedTouches[i].identifier === touchId || touchId === null) {
+                            touch = e.changedTouches[i];
+                            break;
+                        }
+                    }
+                    if (!touch) return;
+                    
+                    if (touchId === null) touchId = touch.identifier;
+                    
+                    var direction = getDirection(touch.clientX, touch.clientY);
+                    if (direction) {
+                        startMove(direction);
+                    } else {
+                        stopMove();
+                    }
+                }, { passive: false });
+                
+                // Обработчик окончания касания
+                gameblock.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    // Проверяем, не осталось ли пальцев на экране
+                    var hasActiveTouch = false;
+                    for (var i = 0; i < e.touches.length; i++) {
+                        if (e.touches[i].identifier === touchId) {
+                            hasActiveTouch = true;
+                            break;
+                        }
+                    }
+                    if (!hasActiveTouch) {
+                        touchId = null;
+                        stopMove();
+                    }
+                }, { passive: false });
+                
+                // Обработчик отмены касания
+                gameblock.addEventListener('touchcancel', function(e) {
+                    e.preventDefault();
+                    touchId = null;
+                    stopMove();
+                }, { passive: false });
+                
+                console.log('✅ Тач-управление настроено');
+            })();
+        
+        // ============================================================
+//  УПРАВЛЕНИЕ МЫШЬЮ (клик по полю)
+// ============================================================
+(function setupMouseControls() {
+    var gameblock = document.getElementById('gameblock');
+    if (!gameblock) return;
+    
+    var isMouseDown = false;
+    var mouseInterval = null;
+    
+    function getMouseDirection(mouseX, mouseY) {
+        if (!gameblock) return null;
+        
+        var rect = gameblock.getBoundingClientRect();
+        var centerX = rect.left + rect.width / 2;
+        var centerY = rect.top + rect.height / 2;
+        
+        var dx = mouseX - centerX;
+        var dy = mouseY - centerY;
+        
+        var deadZone = 15;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < deadZone) return null;
+        
+        if (Math.abs(dx) > Math.abs(dy)) {
+            return dx > 0 ? 'right' : 'left';
+        } else {
+            return dy > 0 ? 'down' : 'up';
+        }
+    }
+    
+    function startMouseMove(direction) {
+        stopMouseMove();
+        if (!gameActive || paus) return;
+        
+        mouseInterval = setInterval(function() {
+            if (!gameActive || paus || !isMouseDown) {
+                stopMouseMove();
                 return;
             }
-            switch (e.key) {
-                case 'ArrowUp':
-                    e.preventDefault();
-                    up();
-                    break;
-                case 'ArrowDown':
-                    e.preventDefault();
-                    down();
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    left();
-                    break;
-                case 'ArrowRight':
-                    e.preventDefault();
-                    right();
-                    break;
-                case ' ':
-                    e.preventDefault();
-                    pause();
-                    break;
+            switch(direction) {
+                case 'up': up(); break;
+                case 'down': down(); break;
+                case 'left': left(); break;
+                case 'right': right(); break;
             }
-        });
-
-        // ============================================================
+        }, 50);
+    }
+    
+    function stopMouseMove() {
+        if (mouseInterval) {
+            clearInterval(mouseInterval);
+            mouseInterval = null;
+        }
+        if (u) u.disabled = false;
+        if (d) d.disabled = false;
+        if (l) l.disabled = false;
+        if (r) r.disabled = false;
+    }
+    
+    gameblock.addEventListener('mousedown', function(e) {
+        if (!gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        isMouseDown = true;
+        var direction = getMouseDirection(e.clientX, e.clientY);
+        if (direction) {
+            startMouseMove(direction);
+        }
+    });
+    
+    gameblock.addEventListener('mousemove', function(e) {
+        if (!isMouseDown || !gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        var direction = getMouseDirection(e.clientX, e.clientY);
+        if (direction) {
+            startMouseMove(direction);
+        } else {
+            stopMouseMove();
+        }
+    });
+    
+    gameblock.addEventListener('mouseup', function(e) {
+        isMouseDown = false;
+        stopMouseMove();
+    });
+    
+    gameblock.addEventListener('mouseleave', function(e) {
+        isMouseDown = false;
+        stopMouseMove();
+    });
+    
+    console.log('✅ Управление мышью настроено');
+})();
+        
+            // ============================================================
         //  19. ДОСТИЖЕНИЯ (С ИНТЕГРАЦИЕЙ VK STORAGE)
         // ============================================================
         
