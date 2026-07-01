@@ -1,0 +1,209 @@
+/* ===== ОХОТА НА ХИРАГАНУ ===== */
+
+.hunt-wrapper {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Верхняя панель */
+.hunt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 15px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.hunt-task {
+    font-weight: 600;
+}
+
+.hunt-task span {
+    color: var(--border-neon);
+    font-size: 28px;
+}
+
+.hunt-score,
+.hunt-lives {
+    font-weight: 500;
+}
+
+/* Игровое поле */
+.hunt-field {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid var(--border-neon);
+    box-shadow: 0 0 40px var(--glow-color);
+    background: #1a1a2e;
+}
+
+.hunt-field img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Символы на поле */
+.hunt-symbol {
+    position: absolute;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    border-radius: 50%;
+    text-shadow: 0 0 12px rgba(168,85,247,0.6);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+.hunt-symbol:hover {
+    transform: scale(1.15);
+    border-color: var(--border-neon);
+}
+
+.hunt-symbol.found {
+    animation: foundPop 0.5s ease forwards;
+    pointer-events: none;
+}
+
+.hunt-symbol.wrong {
+    animation: wrongShake 0.4s ease forwards;
+}
+
+@keyframes foundPop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.8; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); border-color: #ef4444; }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Кнопки управления */
+.hunt-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+.hunt-controls .btn-neon {
+    font-size: 14px;
+    padding: 10px 18px;
+    min-width: auto;
+}
+
+/* Модалки */
+.hunt-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+}
+
+.hunt-modal.show {
+    display: flex;
+}
+
+.hunt-modal-content {
+    background: var(--bg-card);
+    padding: 30px 40px;
+    border-radius: 24px;
+    border: 2px solid var(--border-neon);
+    box-shadow: 0 0 60px var(--glow-color);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: victoryPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hunt-modal-content h2 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--border-neon), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hunt-modal-content p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin: 6px 0;
+}
+
+.hunt-modal-content .btn-neon {
+    margin: 5px;
+}
+
+@keyframes victoryPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Адаптив */
+@media (max-width: 500px) {
+    .hunt-header {
+        font-size: 15px;
+        padding: 8px 12px;
+    }
+    .hunt-task span {
+        font-size: 22px;
+    }
+    .hunt-symbol {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+    }
+    .hunt-modal-content {
+        padding: 20px;
+    }
+    .hunt-modal-content h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .hunt-header {
+        font-size: 13px;
+    }
+    .hunt-symbol {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
+}
