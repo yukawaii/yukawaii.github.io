@@ -174,9 +174,6 @@ renderWithImage(img, grid) {
     const gridSize = this.gridSize;
     const totalTiles = gridSize * gridSize;
     
-    // Размер всего изображения в пикселях для backgroundSize
-    const fullSize = size * gridSize;
-    
     this.tiles.forEach((tileIndex, position) => {
         const tile = document.createElement('div');
         tile.className = 'puzzle-tile';
@@ -193,6 +190,7 @@ renderWithImage(img, grid) {
         tile.style.boxSizing = 'border-box';
         tile.style.transition = 'all 0.15s ease';
         tile.style.border = '1px solid rgba(255,255,255,0.06)';
+        tile.style.overflow = 'hidden';
         
         if (tileIndex === totalTiles - 1) {
             tile.dataset.empty = 'true';
@@ -200,14 +198,39 @@ renderWithImage(img, grid) {
             tile.style.border = '2px dashed rgba(255,255,255,0.08)';
             tile.style.cursor = 'default';
         } else {
-            // ===== ПРАВИЛЬНОЕ РАЗДЕЛЕНИЕ =====
+            // Создаем canvas для вырезания куска
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
             const srcRow = Math.floor(tileIndex / gridSize);
             const srcCol = tileIndex % gridSize;
             
-            // обновление: размер всего изображения в пикселях
-        tile.style.background = `url(${this.imageSrc}) no-repeat ${-srcCol * size}px ${-srcRow * size}px / ${fullSize}px ${fullSize}px !important`;
-
-
+            const imgWidth = img.naturalWidth || img.width;
+            const imgHeight = img.naturalHeight || img.height;
+            
+            const pieceWidth = imgWidth / gridSize;
+            const pieceHeight = imgHeight / gridSize;
+            
+            // Вырезаем кусок
+            ctx.drawImage(
+                img,
+                srcCol * pieceWidth,
+                srcRow * pieceHeight,
+                pieceWidth,
+                pieceHeight,
+                0,
+                0,
+                size,
+                size
+            );
+            
+            // Используем canvas как фон
+            tile.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
+            tile.style.backgroundSize = 'cover';
+            tile.style.backgroundPosition = 'center';
+            tile.style.backgroundRepeat = 'no-repeat';
             tile.style.cursor = 'pointer';
             tile.dataset.index = tileIndex;
             
@@ -227,8 +250,6 @@ renderWithImage(img, grid) {
         
         grid.appendChild(tile);
     });
-    
-    console.log('✅ Пазл отрисован, ячеек:', totalTiles, 'размер ячейки:', size, 'fullSize:', fullSize);
 }
 
     renderPlaceholder(grid) {
