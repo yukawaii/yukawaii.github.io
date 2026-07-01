@@ -1748,6 +1748,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 #mainMenu.loaded {
     opacity: 1;
 }
+
     </style>
 </head>
 <body>
@@ -4347,7 +4348,7 @@ function showCountdownNotification(text) {
 });
 
 // ============================================================
-//  ТАЧ-УПРАВЛЕНИЕ (привязано к батискафу)
+//  ТАЧ-УПРАВЛЕНИЕ (привязано к батискафу) - ИСПРАВЛЕНО
 // ============================================================
 (function setupTouchControls() {
     var gameblock = document.getElementById('gameblock');
@@ -4356,62 +4357,72 @@ function showCountdownNotification(text) {
     
     var touchId = null;
     var moveInterval = null;
+    var currentDirection = null; // ★★★ ХРАНИМ ТЕКУЩЕЕ НАПРАВЛЕНИЕ ★★★
     
     function getDirection(touchX, touchY) {
         if (!gameblock || !player) return null;
         
-        var rect = gameblock.getBoundingClientRect();
         var playerRect = player.getBoundingClientRect();
         
-        // Координаты батискафа (центр)
         var playerCenterX = playerRect.left + playerRect.width / 2;
         var playerCenterY = playerRect.top + playerRect.height / 2;
         
-        // Координаты касания относительно батискафа
         var dx = touchX - playerCenterX;
         var dy = touchY - playerCenterY;
         
-        // ★★★ НОВАЯ ЛОГИКА: простое сравнение ★★★
-        // Если dy больше dx по модулю - вертикаль
-        // Иначе - горизонталь
-        
-        // ★★★ ПОРОГ - чтобы случайные касания не срабатывали ★★★
         var threshold = 15;
         
         if (Math.abs(dy) > Math.abs(dx)) {
-            // Вертикальное движение
             if (dy > threshold) {
                 return 'down';
             } else if (dy < -threshold) {
                 return 'up';
             } else {
-                return null; // Слишком близко по вертикали
+                return null;
             }
         } else {
-            // Горизонтальное движение
             if (dx > threshold) {
                 return 'right';
             } else if (dx < -threshold) {
                 return 'left';
             } else {
-                return null; // Слишком близко по горизонтали
+                return null;
             }
         }
     }
     
     function startMove(direction) {
-        stopMove();
         if (!gameActive || paus) return;
         
-        // ★★★ ОТЛАДКА: показываем направление ★★★
+        // ★★★ ЕСЛИ НАПРАВЛЕНИЕ НЕ ИЗМЕНИЛОСЬ - НИЧЕГО НЕ ДЕЛАЕМ ★★★
+        if (direction === currentDirection && moveInterval !== null) {
+            return;
+        }
+        
+        // ★★★ ОСТАНАВЛИВАЕМ СТАРОЕ ДВИЖЕНИЕ ★★★
+        stopMove();
+        
+        // ★★★ ЗАПОМИНАЕМ НОВОЕ НАПРАВЛЕНИЕ ★★★
+        currentDirection = direction;
+        
         console.log('🚀 Движение:', direction);
         
+        // ★★★ ЗАПУСКАЕМ НОВОЕ ДВИЖЕНИЕ СРАЗУ ★★★
+        // Выполняем первый шаг сразу
+        switch(direction) {
+            case 'up': up(); break;
+            case 'down': down(); break;
+            case 'left': left(); break;
+            case 'right': right(); break;
+        }
+        
+        // ★★★ ЗАПУСКАЕМ ИНТЕРВАЛ ДЛЯ ПРОДОЛЖЕНИЯ ★★★
         moveInterval = setInterval(function() {
             if (!gameActive || paus) {
                 stopMove();
                 return;
             }
-            switch(direction) {
+            switch(currentDirection) {
                 case 'up': up(); break;
                 case 'down': down(); break;
                 case 'left': left(); break;
@@ -4425,37 +4436,70 @@ function showCountdownNotification(text) {
             clearInterval(moveInterval);
             moveInterval = null;
         }
+        currentDirection = null;
         if (u) u.disabled = false;
         if (d) d.disabled = false;
         if (l) l.disabled = false;
         if (r) r.disabled = false;
     }
     
-    // ★★★ ДОБАВЛЯЕМ ВИЗУАЛЬНУЮ ПОДСКАЗКУ (для отладки) ★★★
-    function showDirectionHint(direction, x, y) {
-        // Удаляем старую подсказку
-        var oldHint = document.getElementById('touchHint');
-        if (oldHint) oldHint.remove();
-        
-        if (!direction) return;
-        
-        var hint = document.createElement('div');
-        hint.id = 'touchHint';
-        hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
-            'color:#fff;font-size:24px;font-weight:bold;' +
-            'text-shadow:0 0 20px rgba(255,255,255,0.8);' +
-            'animation:saveAnim 0.8s ease-out forwards;';
-        hint.textContent = direction === 'up' ? '⬆' : 
-                          direction === 'down' ? '⬇' : 
-                          direction === 'left' ? '⬅' : '➡';
-        hint.style.left = (x - 20) + 'px';
-        hint.style.top = (y - 20) + 'px';
-        gameblock.appendChild(hint);
-        setTimeout(function() {
-            if (hint.parentNode) hint.remove();
-        }, 800);
+   function showDirectionHint(direction, x, y) {
+    var oldHint = document.getElementById('touchHint');
+    if (oldHint) oldHint.remove();
+    
+    if (!direction) return;
+    
+    var hint = document.createElement('div');
+    hint.id = 'touchHint';
+    
+    // ★★★ КРАСИВЫЕ СТРЕЛКИ С ЦВЕТАМИ ★★★
+    var arrowText = '';
+    var color = '';
+    var glowColor = '';
+    
+    switch(direction) {
+        case 'up':
+            arrowText = '▲';
+            color = '#ff6b6b';
+            glowColor = 'rgba(255,107,107,0.6)';
+            break;
+        case 'down':
+            arrowText = '▼';
+            color = '#4fc3f7';
+            glowColor = 'rgba(79,195,247,0.6)';
+            break;
+        case 'left':
+            arrowText = '◀';
+            color = '#ffd93d';
+            glowColor = 'rgba(255,217,61,0.6)';
+            break;
+        case 'right':
+            arrowText = '▶';
+            color = '#a8e063';
+            glowColor = 'rgba(168,224,99,0.6)';
+            break;
     }
     
+    hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
+        'font-size:52px;font-weight:bold;' +
+        'color:' + color + ';' +
+        'text-shadow:0 0 30px ' + glowColor + ', ' +
+        '0 0 60px ' + glowColor + ', ' +
+        '0 0 90px ' + glowColor + ';' +
+        'animation:arrowPulse 1.2s ease-out forwards;' +
+        'transform:translate(-50%, -50%);' +
+        'font-family:Arial, sans-serif;';
+    
+    hint.textContent = arrowText;
+    hint.style.left = x + 'px';
+    hint.style.top = y + 'px';
+    gameblock.appendChild(hint);
+    
+    setTimeout(function() {
+        if (hint.parentNode) hint.remove();
+    }, 1200);
+}
+
     // Обработчик начала касания
     gameblock.addEventListener('touchstart', function(e) {
         if (!gameActive || paus) return;
@@ -4473,7 +4517,6 @@ function showCountdownNotification(text) {
         
         var direction = getDirection(touch.clientX, touch.clientY);
         if (direction) {
-            console.log('👉 Направление:', direction, 'dx:', touch.clientX - player.getBoundingClientRect().left - player.getBoundingClientRect().width/2, 'dy:', touch.clientY - player.getBoundingClientRect().top - player.getBoundingClientRect().height/2);
             showDirectionHint(direction, relX, relY);
             startMove(direction);
         }
@@ -4504,8 +4547,10 @@ function showCountdownNotification(text) {
         var direction = getDirection(touch.clientX, touch.clientY);
         if (direction) {
             showDirectionHint(direction, relX, relY);
+            // ★★★ ВСЕГДА ОБНОВЛЯЕМ НАПРАВЛЕНИЕ ★★★
             startMove(direction);
         } else {
+            // ★★★ ЕСЛИ НАПРАВЛЕНИЕ НЕ ОПРЕДЕЛЕНО - ОСТАНАВЛИВАЕМ ★★★
             stopMove();
         }
     }, { passive: false });
@@ -4536,11 +4581,12 @@ function showCountdownNotification(text) {
         if (hint) hint.remove();
     }, { passive: false });
     
-    console.log('✅ Тач-управление привязано к батискафу (исправлено)');
+    console.log('✅ Тач-управление привязано к батискафу (мгновенная реакция)');
 })();
 
+
 // ============================================================
-//  УПРАВЛЕНИЕ МЫШЬЮ (привязано к батискафу)
+//  УПРАВЛЕНИЕ МЫШЬЮ (привязано к батискафу) - С СО СТРЕЛКАМИ
 // ============================================================
 (function setupMouseControls() {
     var gameblock = document.getElementById('gameblock');
@@ -4549,6 +4595,7 @@ function showCountdownNotification(text) {
     
     var isMouseDown = false;
     var mouseInterval = null;
+    var currentDirection = null;
     
     function getMouseDirection(mouseX, mouseY) {
         if (!gameblock || !player) return null;
@@ -4561,10 +4608,8 @@ function showCountdownNotification(text) {
         var dx = mouseX - playerCenterX;
         var dy = mouseY - playerCenterY;
         
-        // ★★★ ПОРОГ ★★★
         var threshold = 15;
         
-        // ★★★ ПРИОРИТЕТ ВЕРТИКАЛИ ★★★
         if (Math.abs(dy) > Math.abs(dx)) {
             if (dy > threshold) {
                 return 'down';
@@ -4585,15 +4630,29 @@ function showCountdownNotification(text) {
     }
     
     function startMouseMove(direction) {
+        if (!gameActive || paus || !isMouseDown) return;
+        
+        if (direction === currentDirection && mouseInterval !== null) {
+            return;
+        }
+        
         stopMouseMove();
-        if (!gameActive || paus) return;
+        currentDirection = direction;
+        
+        // ★★★ ПЕРВЫЙ ШАГ СРАЗУ ★★★
+        switch(direction) {
+            case 'up': up(); break;
+            case 'down': down(); break;
+            case 'left': left(); break;
+            case 'right': right(); break;
+        }
         
         mouseInterval = setInterval(function() {
             if (!gameActive || paus || !isMouseDown) {
                 stopMouseMove();
                 return;
             }
-            switch(direction) {
+            switch(currentDirection) {
                 case 'up': up(); break;
                 case 'down': down(); break;
                 case 'left': left(); break;
@@ -4607,10 +4666,68 @@ function showCountdownNotification(text) {
             clearInterval(mouseInterval);
             mouseInterval = null;
         }
+        currentDirection = null;
         if (u) u.disabled = false;
         if (d) d.disabled = false;
         if (l) l.disabled = false;
         if (r) r.disabled = false;
+    }
+    
+    // ★★★ ФУНКЦИЯ ДЛЯ СТРЕЛОК (копия из тач-контрола) ★★★
+    function showMouseHint(direction, x, y) {
+        var oldHint = document.getElementById('mouseHint');
+        if (oldHint) oldHint.remove();
+        
+        if (!direction) return;
+        
+        var hint = document.createElement('div');
+        hint.id = 'mouseHint';
+        
+        var arrowText = '';
+        var color = '';
+        var glowColor = '';
+        
+        switch(direction) {
+            case 'up':
+                arrowText = '▲';
+                color = '#ff6b6b';
+                glowColor = 'rgba(255,107,107,0.6)';
+                break;
+            case 'down':
+                arrowText = '▼';
+                color = '#4fc3f7';
+                glowColor = 'rgba(79,195,247,0.6)';
+                break;
+            case 'left':
+                arrowText = '◀';
+                color = '#ffd93d';
+                glowColor = 'rgba(255,217,61,0.6)';
+                break;
+            case 'right':
+                arrowText = '▶';
+                color = '#a8e063';
+                glowColor = 'rgba(168,224,99,0.6)';
+                break;
+        }
+        
+        hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
+            'font-size:52px;font-weight:bold;' +
+            'color:' + color + ';' +
+            'text-shadow:0 0 30px ' + glowColor + ', ' +
+            '0 0 60px ' + glowColor + ', ' +
+            '0 0 90px ' + glowColor + ';' +
+            'animation:arrowPulse 1.2s ease-out forwards;' +
+            'transform:translate(-50%, -50%);' +
+            'font-family:Arial, sans-serif;';
+        
+        hint.textContent = arrowText;
+        hint.style.left = x + 'px';
+        hint.style.top = y + 'px';
+        gameblock.appendChild(hint);
+        
+        setTimeout(function() {
+            if (hint.parentNode) hint.remove();
+        }, 1200);
     }
     
     gameblock.addEventListener('mousedown', function(e) {
@@ -4618,9 +4735,16 @@ function showCountdownNotification(text) {
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
         
         isMouseDown = true;
+        
+        var rect = gameblock.getBoundingClientRect();
+        var relX = e.clientX - rect.left;
+        var relY = e.clientY - rect.top;
+        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
             console.log('🖱️ Направление мыши:', direction);
+            // ★★★ ПОКАЗЫВАЕМ СТРЕЛКУ ★★★
+            showMouseHint(direction, relX, relY);
             startMouseMove(direction);
         }
     });
@@ -4629,27 +4753,38 @@ function showCountdownNotification(text) {
         if (!isMouseDown || !gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
         
+        var rect = gameblock.getBoundingClientRect();
+        var relX = e.clientX - rect.left;
+        var relY = e.clientY - rect.top;
+        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
+            // ★★★ ПОКАЗЫВАЕМ СТРЕЛКУ ★★★
+            showMouseHint(direction, relX, relY);
             startMouseMove(direction);
         } else {
             stopMouseMove();
+            var hint = document.getElementById('mouseHint');
+            if (hint) hint.remove();
         }
     });
     
     gameblock.addEventListener('mouseup', function(e) {
         isMouseDown = false;
         stopMouseMove();
+        var hint = document.getElementById('mouseHint');
+        if (hint) hint.remove();
     });
     
     gameblock.addEventListener('mouseleave', function(e) {
         isMouseDown = false;
         stopMouseMove();
+        var hint = document.getElementById('mouseHint');
+        if (hint) hint.remove();
     });
     
-    console.log('✅ Управление мышью привязано к батискафу (исправлено)');
+    console.log('✅ Управление мышью со стрелками');
 })();
-
 
             // ============================================================
         //  19. ДОСТИЖЕНИЯ (С ИНТЕГРАЦИЕЙ VK STORAGE)
