@@ -2057,21 +2057,23 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 var isGoingToMenu = false;
 
         // Сохранение в VK Storage
-        function saveToVKStorage(key, value) {
-            if (typeof vkBridge === 'undefined') {
-                return Promise.resolve();
+       function saveToVKStorage(key, value) {
+                if (typeof vkBridge === 'undefined') {
+                    return Promise.resolve();
+                }
+                // ★★★ Всегда сохраняем как строку JSON ★★★
+                var stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+                return vkBridge.send('VKWebAppStorageSet', {
+                    key: key,
+                    value: stringValue
+                })
+                .then(() => {
+                    console.log(`✅ Сохранено в VK Storage: ${key}`, value);
+                })
+                .catch((error) => {
+                    console.warn(`❌ Ошибка сохранения ${key}:`, error);
+                });
             }
-            return vkBridge.send('VKWebAppStorageSet', {
-                key: key,
-                value: typeof value === 'string' ? value : JSON.stringify(value)
-            })
-            .then(() => {
-                console.log(`✅ Сохранено в VK Storage: ${key}`);
-            })
-            .catch((error) => {
-                console.warn(`❌ Ошибка сохранения ${key}:`, error);
-            });
-        }
 
         // Загрузка из VK Storage
         function loadFromVKStorage(key) {
@@ -2126,15 +2128,35 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 
         // ===== ОБЪЕДИНЕНИЕ ДАННЫХ (МАКСИМУМ) =====
         function mergeGameData(local, remote) {
-            if (!remote) return local;
-            return {
-                level: Math.max(local.level || 1, remote.level || 1),
-                score: Math.max(local.score || 0, remote.score || 0),
-                shields: Math.max(local.shields || 0, remote.shields || 0),
-                playerX: remote.playerX || local.playerX || 0,
-                playerY: remote.playerY || local.playerY || 0
-            };
-        }
+                    if (!remote) return local;
+                    
+                    // ★★★ Правильное объединение: берём данные с большим уровнем ★★★
+                    if (remote.level > local.level) {
+                        // Удалённый прогресс лучше - берём его полностью
+                        console.log('📥 Загружаем данные из VK (уровень ' + remote.level + ' > ' + local.level + ')');
+                        return {
+                            level: remote.level,
+                            score: remote.score || 0,
+                            shields: remote.shields || 0,
+                            playerX: remote.playerX || 0,
+                            playerY: remote.playerY || 0
+                        };
+                    } else if (local.level > remote.level) {
+                        // Локальный прогресс лучше - оставляем его
+                        console.log('📤 Локальный прогресс лучше (уровень ' + local.level + ' > ' + remote.level + ')');
+                        return local;
+                    } else {
+                        // Уровни равны - берём максимальные значения
+                        console.log('🔄 Уровни равны (' + local.level + '), объединяем значения');
+                        return {
+                            level: local.level,
+                            score: Math.max(local.score || 0, remote.score || 0),
+                            shields: Math.max(local.shields || 0, remote.shields || 0),
+                            playerX: remote.playerX || local.playerX || 0,
+                            playerY: remote.playerY || local.playerY || 0
+                        };
+                    }
+                }
 
         function mergeAchievements(local, remote) {
             if (!remote) return local;
@@ -2375,33 +2397,105 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         // ============================================================
         //  2. ИНИЦИАЛИЗАЦИЯ VK BRIDGE И ПОДПИСКА НА СОБЫТИЯ
         // ============================================================
-        if (typeof vkBridge !== 'undefined') {
-            vkBridge.subscribe((e) => {
-                if (e.detail.type === 'VKWebAppViewHide') {
-                    console.log('📱 Приложение скрыто (VKWebAppViewHide)');
-                    pauseGameOnHide();
-                }
-                if (e.detail.type === 'VKWebAppViewRestore') {
-                    console.log('📱 Приложение восстановлено (VKWebAppViewRestore)');
-                    isSoundEnabled = true;
-                    if (paus && pausa) {
-                        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+       if (typeof vkBridge !== 'undefined') {
+    vkBridge.subscribe((e) => {
+        if (e.detail.type === 'VKWebAppViewHide') {
+            console.log('📱 Приложение скрыто (VKWebAppViewHide)');
+            pauseGameOnHide();
+        }
+        if (e.detail.type === 'VKWebAppViewRestore') {
+            console.log('📱 Приложение восстановлено (VKWebAppViewRestore)');
+            isSoundEnabled = true;
+            if (paus && pausa) {
+                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+            }
+        }
+    });
+
+    vkBridge.send('VKWebAppInit')
+        .then(() => {
+            console.log('✅ VK Bridge инициализирован');
+            showBannerAd();
+            
+            // ★★★ ПЕРВЫМ ДЕЛОМ ЗАГРУЖАЕМ ДАННЫЕ ИЗ VK ★★★
+            console.log('🔄 НЕМЕДЛЕННАЯ ЗАГРУЗКА ДАННЫХ ИЗ VK STORAGE...');
+            
+            // Загружаем данные игры
+            loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
+                if (vkData && vkData.level && vkData.level >= 3) {
+                    console.log('✅ Найдено сохранение в VK: уровень ' + vkData.level);
+                    // Сохраняем в localStorage
+                    localStorage.setItem('bathyscaphe_max_level', vkData.level);
+                    maxSavedLevel = vkData.level;
+                    // Обновляем переменные игры
+                    if (typeof level !== 'undefined') level = vkData.level;
+                    if (typeof score !== 'undefined') score = vkData.score || 0;
+                    if (typeof shields !== 'undefined') shields = vkData.shields || 0;
+                    if (typeof x !== 'undefined') x = vkData.playerX || 140;
+                    if (typeof y !== 'undefined') y = vkData.playerY || 160;
+                } else {
+                    console.log('ℹ️ Нет сохранения в VK, проверяем локальное');
+                    var savedLevel = loadSavedLevel();
+                    if (savedLevel >= 3) {
+                        console.log('✅ Найдено локальное сохранение: уровень ' + savedLevel);
                     }
                 }
-            });
-
-            vkBridge.send('VKWebAppInit')
-                .then(() => {
-                    console.log('✅ VK Bridge инициализирован');
-                    showBannerAd();
+                
+                // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
+                updateContinueButton();
+                
+                // Загружаем достижения и счётчики
+                Promise.all([
+                    loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
+                    loadFromVKStorage(VK_STORAGE_KEYS.COUNTERS)
+                ]).then(function([achievementsData, countersData]) {
+                    if (achievementsData && typeof achievementsData === 'object') {
+                        if (typeof unlockedAchievements !== 'undefined') {
+                            // Объединяем достижения
+                            for (var key in achievementsData) {
+                                if (!unlockedAchievements[key]) {
+                                    unlockedAchievements[key] = achievementsData[key];
+                                    console.log('🔄 Добавлено достижение из VK: ' + key);
+                                }
+                            }
+                            // Сохраняем объединённые достижения
+                            saveAchievements(unlockedAchievements);
+                        }
+                    }
+                    if (countersData && typeof countersData === 'object') {
+                        if (typeof jellyfishDeflected !== 'undefined') jellyfishDeflected = Math.max(jellyfishDeflected || 0, countersData.jellyfishDeflected || 0);
+                        if (typeof jellyfishHits !== 'undefined') jellyfishHits = Math.max(jellyfishHits || 0, countersData.jellyfishHits || 0);
+                        if (typeof deathCount !== 'undefined') deathCount = Math.max(deathCount || 0, countersData.deathCount || 0);
+                        if (typeof speedBoostCount !== 'undefined') speedBoostCount = Math.max(speedBoostCount || 0, countersData.speedBoostCount || 0);
+                        if (typeof slowMotionCount !== 'undefined') slowMotionCount = Math.max(slowMotionCount || 0, countersData.slowMotionCount || 0);
+                        if (typeof magnetCount !== 'undefined') magnetCount = Math.max(magnetCount || 0, countersData.magnetCount || 0);
+                    }
                     
-                    // ===== ЗАПУСКАЕМ СИНХРОНИЗАЦИЮ ПОСЛЕ ИНИЦИАЛИЗАЦИИ =====
-                    setTimeout(initVKStorageSync, 500);
-                })
-                .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
-        } else {
-            console.warn('⚠️ vkBridge не загружен');
-        }
+                    // ★★★ ЕЩЁ РАЗ ОБНОВЛЯЕМ КНОПКУ (на всякий случай) ★★★
+                    updateContinueButton();
+                    
+                    // Обновляем UI
+                    updateMainMenuUI();
+                    
+                    console.log('✅ Все данные загружены из VK Storage');
+                });
+            }).catch(function(error) {
+                console.warn('⚠️ Ошибка загрузки из VK:', error);
+                // Всё равно обновляем кнопку
+                updateContinueButton();
+            });
+            
+            // Запускаем фоновую синхронизацию (она будет периодически обновлять данные)
+            setTimeout(initVKStorageSync, 2000);
+        })
+        .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
+} else {
+    console.warn('⚠️ vkBridge не загружен');
+    // Если VK Bridge нет - проверяем локальное сохранение
+    setTimeout(function() {
+        updateContinueButton();
+    }, 500);
+}
 
         // ============================================================
         //  3. ЗВУКИ (Web Audio API) - БЕЗ ИЗМЕНЕНИЙ
@@ -2535,35 +2629,29 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
         }
 
-        function checkAndSaveLevel() {
-    if (level % 3 === 0 && level > 0) {
-        // Сохраняем локально
-        localStorage.setItem('bathyscaphe_max_level', level);
-        maxSavedLevel = level;
-        
-        // ===== ПРИНУДИТЕЛЬНАЯ СИНХРОНИЗАЦИЯ С VK STORAGE =====
-        console.log('💾 Сохранение уровня ' + level + ' в VK Storage...');
-        
-        // Сохраняем все данные
-        var gameData = {
-            level: level,
-            score: score,
-            shields: shields,
-            playerX: x,
-            playerY: y
-        };
-        
-        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
-        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
-        saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
-        
-        // Показываем уведомление
-        showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
-        
-        // Дополнительная синхронизация через 1 секунду
-        setTimeout(syncAllDataToVK, 1000);
-    }
-}
+      function checkAndSaveLevel() {
+            if (level % 3 === 0 && level > 0) {
+                // Сохраняем локально
+                localStorage.setItem('bathyscaphe_max_level', level);
+                maxSavedLevel = level;
+                
+                // ★★★ Сохраняем ВСЕ данные, а не только уровень ★★★
+                var gameData = {
+                    level: level,
+                    score: score,
+                    shields: shields,
+                    playerX: x,
+                    playerY: y
+                };
+                
+                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+                saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+                
+                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+                setTimeout(syncAllDataToVK, 1000);
+            }
+        }
 
         function loadSavedLevel() {
             var saved = localStorage.getItem('bathyscaphe_max_level');
@@ -2577,8 +2665,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 
 function updateContinueButton() {
     var continueBtn = document.querySelector('.menu-btn.continue');
-    if (!continueBtn) return;
-    
+    if (!continueBtn) return;    
     // Проверяем VK Storage асинхронно
     if (typeof vkBridge !== 'undefined') {
         loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
