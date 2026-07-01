@@ -2784,6 +2784,20 @@ function continueGameFromLocal() {
     // Загружаем сохранённый уровень
     level = savedLevel;
     score = (level - 1) * 10;
+    
+    // ★★★ ГЕНЕРИРУЕМ ПОЗИЦИЮ РАКУШКИ ★★★
+    var margin = 35;
+    var blockSize = 28;
+    var maxX = 300 - blockSize - margin;
+    var maxY = 370 - blockSize - margin;
+    cx = Math.floor(Math.random() * (maxX - margin) + margin);
+    cy = Math.floor(Math.random() * (maxY - margin) + margin);
+    
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
+    
     continueGameWithCurrentData();
 }
 
@@ -2791,6 +2805,20 @@ function continueGameFromLocal() {
 function continueGameWithCurrentData() {
     scoresEl.innerHTML = score;
     levelDisplay.textContent = level;
+
+      // ★★★ ГЕНЕРИРУЕМ НОВУЮ ПОЗИЦИЮ РАКУШКИ С ОТСТУПОМ ОТ СТЕН ★★★
+    var margin = 35; // отступ от стен
+    var blockSize = 28;
+    var maxX = 300 - blockSize - margin;
+    var maxY = 370 - blockSize - margin;
+    cx = Math.floor(Math.random() * (maxX - margin) + margin);
+    cy = Math.floor(Math.random() * (maxY - margin) + margin);
+    
+    // Обновляем позицию ракушки на поле
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
         // ★★★ СОХРАНЯЕМ ЗАГРУЖЕННЫЕ ДАННЫЕ В VK ★★★
     if (level >= 3) {
         localStorage.setItem('bathyscaphe_max_level', level);

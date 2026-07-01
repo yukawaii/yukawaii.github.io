@@ -1748,6 +1748,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 #mainMenu.loaded {
     opacity: 1;
 }
+
     </style>
 </head>
 <body>
@@ -1774,9 +1775,8 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         <h2 class="warning">❓ Как играть</h2>
         <ul>
             <li>🛸 Управляй батискафом</li>
-            <li>🐚 Собирай ракушки для очков</li>
-            <li>⭐ Собирай звёзды, чтобы уменьшиться</li>
-            <li>🛡️ Собирай щиты для защиты</li>
+            <li>🐚 Управление: касания\клики вокруг батискафа, стрелки, WASD</li>
+            <li>🐚 Собирай ракушки для продвижения и 🛡️щиты для защиты</li> 
             <li>🧿 Избегай ядовитых медуз</li>    
             <li>💥 Не касайся проклятых стен!</li>
         </ul>
@@ -2411,89 +2411,105 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         }
     });
 
-    vkBridge.send('VKWebAppInit')
-        .then(() => {
-            console.log('✅ VK Bridge инициализирован');
-            showBannerAd();
+   vkBridge.send('VKWebAppInit')
+    .then(() => {
+        console.log('✅ VK Bridge инициализирован');
+        showBannerAd();
+        
+        console.log('🔄 НЕМЕДЛЕННАЯ ЗАГРУЗКА ДАННЫХ ИЗ VK STORAGE...');
+        
+        // Загружаем данные игры из VK
+        loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
+            if (vkData && vkData.level && vkData.level >= 3) {
+                console.log('✅ Найдено сохранение в VK: уровень ' + vkData.level);
+                // Сохраняем в localStorage
+                localStorage.setItem('bathyscaphe_max_level', vkData.level);
+                maxSavedLevel = vkData.level;
+                // Обновляем переменные игры
+                if (typeof level !== 'undefined') level = vkData.level;
+                if (typeof score !== 'undefined') score = vkData.score || 0;
+                if (typeof shields !== 'undefined') shields = vkData.shields || 0;
+                if (typeof x !== 'undefined') x = vkData.playerX || 140;
+                if (typeof y !== 'undefined') y = vkData.playerY || 160;
+            } else {
+                console.log('ℹ️ Нет сохранения в VK, проверяем локальное');
+                var savedLevel = loadSavedLevel();
+                if (savedLevel >= 3) {
+                    console.log('✅ Найдено локальное сохранение: уровень ' + savedLevel);
+                    
+                    // ★★★ СОХРАНЯЕМ ЛОКАЛЬНЫЕ ДАННЫЕ В VK STORAGE ★★★
+                    console.log('📤 Отправка локальных данных в VK Storage...');
+                    
+                    // Загружаем данные из localStorage
+                    var gameData = {
+                        level: savedLevel,
+                        score: (savedLevel - 1) * 10,
+                        shields: 0,
+                        playerX: 140,
+                        playerY: 160
+                    };
+                    
+                    // Сохраняем в VK Storage
+                    saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                    saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements || {});
+                    saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, {
+                        jellyfishDeflected: 0,
+                        jellyfishHits: 0,
+                        deathCount: 0,
+                        speedBoostCount: 0,
+                        slowMotionCount: 0,
+                        magnetCount: 0
+                    });
+                    
+                    console.log('✅ Локальные данные отправлены в VK Storage: уровень ' + savedLevel);
+                    
+                    // Обновляем переменные
+                    if (typeof level !== 'undefined') level = savedLevel;
+                    if (typeof score !== 'undefined') score = (savedLevel - 1) * 10;
+                }
+            }
             
-            // ★★★ ПЕРВЫМ ДЕЛОМ ЗАГРУЖАЕМ ДАННЫЕ ИЗ VK ★★★
-            console.log('🔄 НЕМЕДЛЕННАЯ ЗАГРУЗКА ДАННЫХ ИЗ VK STORAGE...');
+            // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
+            updateContinueButton();
             
-            // Загружаем данные игры
-            loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
-                if (vkData && vkData.level && vkData.level >= 3) {
-                    console.log('✅ Найдено сохранение в VK: уровень ' + vkData.level);
-                    // Сохраняем в localStorage
-                    localStorage.setItem('bathyscaphe_max_level', vkData.level);
-                    maxSavedLevel = vkData.level;
-                    // Обновляем переменные игры
-                    if (typeof level !== 'undefined') level = vkData.level;
-                    if (typeof score !== 'undefined') score = vkData.score || 0;
-                    if (typeof shields !== 'undefined') shields = vkData.shields || 0;
-                    if (typeof x !== 'undefined') x = vkData.playerX || 140;
-                    if (typeof y !== 'undefined') y = vkData.playerY || 160;
-                } else {
-                    console.log('ℹ️ Нет сохранения в VK, проверяем локальное');
-                    var savedLevel = loadSavedLevel();
-                    if (savedLevel >= 3) {
-                        console.log('✅ Найдено локальное сохранение: уровень ' + savedLevel);
+            // Загружаем достижения и счётчики
+            Promise.all([
+                loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
+                loadFromVKStorage(VK_STORAGE_KEYS.COUNTERS)
+            ]).then(function([achievementsData, countersData]) {
+                if (achievementsData && typeof achievementsData === 'object') {
+                    if (typeof unlockedAchievements !== 'undefined') {
+                        for (var key in achievementsData) {
+                            if (!unlockedAchievements[key]) {
+                                unlockedAchievements[key] = achievementsData[key];
+                                console.log('🔄 Добавлено достижение из VK: ' + key);
+                            }
+                        }
+                        saveAchievements(unlockedAchievements);
                     }
                 }
+                if (countersData && typeof countersData === 'object') {
+                    if (typeof jellyfishDeflected !== 'undefined') jellyfishDeflected = Math.max(jellyfishDeflected || 0, countersData.jellyfishDeflected || 0);
+                    if (typeof jellyfishHits !== 'undefined') jellyfishHits = Math.max(jellyfishHits || 0, countersData.jellyfishHits || 0);
+                    if (typeof deathCount !== 'undefined') deathCount = Math.max(deathCount || 0, countersData.deathCount || 0);
+                    if (typeof speedBoostCount !== 'undefined') speedBoostCount = Math.max(speedBoostCount || 0, countersData.speedBoostCount || 0);
+                    if (typeof slowMotionCount !== 'undefined') slowMotionCount = Math.max(slowMotionCount || 0, countersData.slowMotionCount || 0);
+                    if (typeof magnetCount !== 'undefined') magnetCount = Math.max(magnetCount || 0, countersData.magnetCount || 0);
+                }
                 
-                // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
                 updateContinueButton();
-                
-                // Загружаем достижения и счётчики
-                Promise.all([
-                    loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
-                    loadFromVKStorage(VK_STORAGE_KEYS.COUNTERS)
-                ]).then(function([achievementsData, countersData]) {
-                    if (achievementsData && typeof achievementsData === 'object') {
-                        if (typeof unlockedAchievements !== 'undefined') {
-                            // Объединяем достижения
-                            for (var key in achievementsData) {
-                                if (!unlockedAchievements[key]) {
-                                    unlockedAchievements[key] = achievementsData[key];
-                                    console.log('🔄 Добавлено достижение из VK: ' + key);
-                                }
-                            }
-                            // Сохраняем объединённые достижения
-                            saveAchievements(unlockedAchievements);
-                        }
-                    }
-                    if (countersData && typeof countersData === 'object') {
-                        if (typeof jellyfishDeflected !== 'undefined') jellyfishDeflected = Math.max(jellyfishDeflected || 0, countersData.jellyfishDeflected || 0);
-                        if (typeof jellyfishHits !== 'undefined') jellyfishHits = Math.max(jellyfishHits || 0, countersData.jellyfishHits || 0);
-                        if (typeof deathCount !== 'undefined') deathCount = Math.max(deathCount || 0, countersData.deathCount || 0);
-                        if (typeof speedBoostCount !== 'undefined') speedBoostCount = Math.max(speedBoostCount || 0, countersData.speedBoostCount || 0);
-                        if (typeof slowMotionCount !== 'undefined') slowMotionCount = Math.max(slowMotionCount || 0, countersData.slowMotionCount || 0);
-                        if (typeof magnetCount !== 'undefined') magnetCount = Math.max(magnetCount || 0, countersData.magnetCount || 0);
-                    }
-                    
-                    // ★★★ ЕЩЁ РАЗ ОБНОВЛЯЕМ КНОПКУ (на всякий случай) ★★★
-                    updateContinueButton();
-                    
-                    // Обновляем UI
-                    updateMainMenuUI();
-                    
-                    console.log('✅ Все данные загружены из VK Storage');
-                });
-            }).catch(function(error) {
-                console.warn('⚠️ Ошибка загрузки из VK:', error);
-                // Всё равно обновляем кнопку
-                updateContinueButton();
+                updateMainMenuUI();
+                console.log('✅ Все данные загружены из VK Storage');
             });
-            
-            // Запускаем фоновую синхронизацию (она будет периодически обновлять данные)
-            setTimeout(initVKStorageSync, 2000);
-        })
-        .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
-} else {
-    console.warn('⚠️ vkBridge не загружен');
-    // Если VK Bridge нет - проверяем локальное сохранение
-    setTimeout(function() {
-        updateContinueButton();
-    }, 500);
+        }).catch(function(error) {
+            console.warn('⚠️ Ошибка загрузки из VK:', error);
+            updateContinueButton();
+        });
+        
+        // Запускаем фоновую синхронизацию
+        setTimeout(initVKStorageSync, 2000);
+    })
+    .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
 }
 
         // ============================================================
@@ -2628,29 +2644,38 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
         }
 
-      function checkAndSaveLevel() {
-            if (level % 3 === 0 && level > 0) {
-                // Сохраняем локально
-                localStorage.setItem('bathyscaphe_max_level', level);
-                maxSavedLevel = level;
-                
-                // ★★★ Сохраняем ВСЕ данные, а не только уровень ★★★
-                var gameData = {
-                    level: level,
-                    score: score,
-                    shields: shields,
-                    playerX: x,
-                    playerY: y
-                };
-                
-                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
-                saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
-                saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
-                
-                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
-                setTimeout(syncAllDataToVK, 1000);
-            }
-        }
+     function checkAndSaveLevel() {
+    console.log('🔍 checkAndSaveLevel() вызвана! level=' + level + ', score=' + score);
+    
+    // ★★★ СОХРАНЯЕМ НА ЛЮБОМ УРОВНЕ, КРАТНОМ 3 ★★★
+    if (level % 3 === 0 && level > 0) {
+        console.log('✅ Сохраняем уровень ' + level);
+        
+        // Сохраняем локально
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        
+        // Сохраняем ВСЕ данные
+        var gameData = {
+            level: level,
+            score: score,
+            shields: shields,
+            playerX: x,
+            playerY: y
+        };
+        
+        console.log('💾 Данные для сохранения:', gameData); // ← ОТЛАДКА
+        
+        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+        saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+        
+        showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+        setTimeout(syncAllDataToVK, 1000);
+    } else {
+        console.log('❌ Условие НЕ выполнено: level=' + level + ', level%3=' + (level % 3));
+    }
+}
 
         function loadSavedLevel() {
             var saved = localStorage.getItem('bathyscaphe_max_level');
@@ -2699,33 +2724,41 @@ function updateContinueButton() {
     }
 }
 
-   function continueGame() {
-    // ★★★ ДОБАВЛЯЕМ: сначала проверяем VK Storage ★★★
+function continueGame() {
     if (typeof vkBridge !== 'undefined') {
         loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
             if (vkData && vkData.level && vkData.level >= 3) {
-                // Нашли сохранение в VK - сохраняем в localStorage и продолжаем
                 console.log('✅ Найдено сохранение в VK Storage: уровень ' + vkData.level);
-                localStorage.setItem('bathyscaphe_max_level', vkData.level);
-                maxSavedLevel = vkData.level;
+                
                 // Загружаем данные из VK
                 level = vkData.level;
                 score = vkData.score || ((level - 1) * 10);
                 shields = vkData.shields || 0;
                 x = vkData.playerX || 140;
                 y = vkData.playerY || 160;
-                // Запускаем игру с этими данными
+                
+                // ★★★ СОХРАНЯЕМ В LOCALSTORAGE ★★★
+                localStorage.setItem('bathyscaphe_max_level', level);
+                maxSavedLevel = level;
+                
+                // ★★★ СОХРАНЯЕМ ОБРАТНО В VK (чтобы синхронизировать) ★★★
+                var gameData = {
+                    level: level,
+                    score: score,
+                    shields: shields,
+                    playerX: x,
+                    playerY: y
+                };
+                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                
                 continueGameWithCurrentData();
             } else {
-                // В VK нет сохранения - проверяем локальное
                 continueGameFromLocal();
             }
         }).catch(function() {
-            // Ошибка загрузки из VK - проверяем локальное
             continueGameFromLocal();
         });
     } else {
-        // VK Bridge не доступен - только локальное
         continueGameFromLocal();
     }
 }
@@ -2751,6 +2784,20 @@ function continueGameFromLocal() {
     // Загружаем сохранённый уровень
     level = savedLevel;
     score = (level - 1) * 10;
+    
+    // ★★★ ГЕНЕРИРУЕМ ПОЗИЦИЮ РАКУШКИ ★★★
+    var margin = 35;
+    var blockSize = 28;
+    var maxX = 300 - blockSize - margin;
+    var maxY = 370 - blockSize - margin;
+    cx = Math.floor(Math.random() * (maxX - margin) + margin);
+    cy = Math.floor(Math.random() * (maxY - margin) + margin);
+    
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
+    
     continueGameWithCurrentData();
 }
 
@@ -2758,6 +2805,34 @@ function continueGameFromLocal() {
 function continueGameWithCurrentData() {
     scoresEl.innerHTML = score;
     levelDisplay.textContent = level;
+
+      // ★★★ ГЕНЕРИРУЕМ НОВУЮ ПОЗИЦИЮ РАКУШКИ С ОТСТУПОМ ОТ СТЕН ★★★
+    var margin = 35; // отступ от стен
+    var blockSize = 28;
+    var maxX = 300 - blockSize - margin;
+    var maxY = 370 - blockSize - margin;
+    cx = Math.floor(Math.random() * (maxX - margin) + margin);
+    cy = Math.floor(Math.random() * (maxY - margin) + margin);
+    
+    // Обновляем позицию ракушки на поле
+    if (block) {
+        block.style.left = cx + 'px';
+        block.style.top = cy + 'px';
+    }
+        // ★★★ СОХРАНЯЕМ ЗАГРУЖЕННЫЕ ДАННЫЕ В VK ★★★
+    if (level >= 3) {
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        var gameData = {
+            level: level,
+            score: score,
+            shields: shields,
+            playerX: x,
+            playerY: y
+        };
+        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+        console.log('💾 continueGameWithCurrentData Данные загружены и сохранены в VK: уровень ' + level);
+    }
 
     // Включаем эффекты для текущего уровня
     if (level >= 30 && level < 100) {
@@ -4135,10 +4210,28 @@ function showCountdownNotification(text) {
                     showLevelUp();
                     checkAchievements();
                     t = Math.max(30, t - 3);
-                    checkAndSaveLevel();
-                    // Синхронизация с VK Storage при повышении уровня
-                    setTimeout(syncAllDataToVK, 500);
-                }
+                    // ★★★ ПРИНУДИТЕЛЬНОЕ СОХРАНЕНИЕ ★★★
+                            if (level >= 3) {
+                                console.log('💾 Принудительное сохранение уровня ' + level);
+                                localStorage.setItem('bathyscaphe_max_level', level);
+                                maxSavedLevel = level;
+                                
+                                var gameData = {
+                                    level: level,
+                                    score: score,
+                                    shields: shields,
+                                    playerX: x,
+                                    playerY: y
+                                };
+                                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                                saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+                                saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+                                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+                            }
+                            
+                            checkAndSaveLevel(); // ← ОСТАВЛЯЕМ
+                            setTimeout(syncAllDataToVK, 500);
+                        }
 
                 if (level >= 30 && level < 100) {
                     startParticlesBlue();
@@ -4347,185 +4440,312 @@ function showCountdownNotification(text) {
     }
 });
 
-            // ============================================================
-//  ТАЧ-УПРАВЛЕНИЕ НА ТЕЛЕФОНАХ (прикосновение к полю)
 // ============================================================
-            (function setupTouchControls() {
-                var gameblock = document.getElementById('gameblock');
-                if (!gameblock) return;
-                
-                var touchId = null;
-                var moveInterval = null;
-                
-                function getDirection(touchX, touchY) {
-                    if (!gameblock) return null;
-                    
-                    var rect = gameblock.getBoundingClientRect();
-                    var centerX = rect.left + rect.width / 2;
-                    var centerY = rect.top + rect.height / 2;
-                    
-                    // Координаты касания относительно центра
-                    var dx = touchX - centerX;
-                    var dy = touchY - centerY;
-                    
-                    // Минимальное расстояние от центра (зона мёртвая, чтобы случайно не двигаться)
-                    var deadZone = 20;
-                    var distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < deadZone) return null;
-                    
-                    // Определяем направление (горизонталь или вертикаль)
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        return dx > 0 ? 'right' : 'left';
-                    } else {
-                        return dy > 0 ? 'down' : 'up';
-                    }
-                }
-                
-                function startMove(direction) {
-                    stopMove();
-                    if (!gameActive || paus) return;
-                    
-                    // Запускаем движение в выбранном направлении
-                    moveInterval = setInterval(function() {
-                        if (!gameActive || paus) {
-                            stopMove();
-                            return;
-                        }
-                        switch(direction) {
-                            case 'up': up(); break;
-                            case 'down': down(); break;
-                            case 'left': left(); break;
-                            case 'right': right(); break;
-                        }
-                    }, 50); // Обновляем каждые 50мс для плавного движения
-                }
-                
-                function stopMove() {
-                    if (moveInterval) {
-                        clearInterval(moveInterval);
-                        moveInterval = null;
-                    }
-                    // Отключаем все кнопки
-                    if (u) u.disabled = false;
-                    if (d) d.disabled = false;
-                    if (l) l.disabled = false;
-                    if (r) r.disabled = false;
-                }
-                
-                // Обработчик начала касания
-                gameblock.addEventListener('touchstart', function(e) {
-                    // Игнорируем, если игра не активна или на паузе
-                    if (!gameActive || paus) return;
-                    // Игнорируем, если нажали на кнопку внутри игрового поля (если такие есть)
-                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-                    
-                    e.preventDefault();
-                    
-                    var touch = e.changedTouches[0];
-                    if (!touch) return;
-                    touchId = touch.identifier;
-                    
-                    var direction = getDirection(touch.clientX, touch.clientY);
-                    if (direction) {
-                        startMove(direction);
-                    }
-                }, { passive: false });
-                
-                // Обработчик перемещения пальца
-                gameblock.addEventListener('touchmove', function(e) {
-                    if (!gameActive || paus) return;
-                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-                    
-                    e.preventDefault();
-                    
-                    // Находим нужный палец
-                    var touch = null;
-                    for (var i = 0; i < e.changedTouches.length; i++) {
-                        if (e.changedTouches[i].identifier === touchId || touchId === null) {
-                            touch = e.changedTouches[i];
-                            break;
-                        }
-                    }
-                    if (!touch) return;
-                    
-                    if (touchId === null) touchId = touch.identifier;
-                    
-                    var direction = getDirection(touch.clientX, touch.clientY);
-                    if (direction) {
-                        startMove(direction);
-                    } else {
-                        stopMove();
-                    }
-                }, { passive: false });
-                
-                // Обработчик окончания касания
-                gameblock.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    // Проверяем, не осталось ли пальцев на экране
-                    var hasActiveTouch = false;
-                    for (var i = 0; i < e.touches.length; i++) {
-                        if (e.touches[i].identifier === touchId) {
-                            hasActiveTouch = true;
-                            break;
-                        }
-                    }
-                    if (!hasActiveTouch) {
-                        touchId = null;
-                        stopMove();
-                    }
-                }, { passive: false });
-                
-                // Обработчик отмены касания
-                gameblock.addEventListener('touchcancel', function(e) {
-                    e.preventDefault();
-                    touchId = null;
-                    stopMove();
-                }, { passive: false });
-                
-                console.log('✅ Тач-управление настроено');
-            })();
+//  ТАЧ-УПРАВЛЕНИЕ (привязано к батискафу) - ИСПРАВЛЕНО
+// ============================================================
+(function setupTouchControls() {
+    var gameblock = document.getElementById('gameblock');
+    var player = document.getElementById('player');
+    if (!gameblock || !player) return;
+    
+    var touchId = null;
+    var moveInterval = null;
+    var currentDirection = null; // ★★★ ХРАНИМ ТЕКУЩЕЕ НАПРАВЛЕНИЕ ★★★
+    
+    function getDirection(touchX, touchY) {
+        if (!gameblock || !player) return null;
         
-        // ============================================================
-//  УПРАВЛЕНИЕ МЫШЬЮ (клик по полю)
+        var playerRect = player.getBoundingClientRect();
+        
+        var playerCenterX = playerRect.left + playerRect.width / 2;
+        var playerCenterY = playerRect.top + playerRect.height / 2;
+        
+        var dx = touchX - playerCenterX;
+        var dy = touchY - playerCenterY;
+        
+        var threshold = 15;
+        
+        if (Math.abs(dy) > Math.abs(dx)) {
+            if (dy > threshold) {
+                return 'down';
+            } else if (dy < -threshold) {
+                return 'up';
+            } else {
+                return null;
+            }
+        } else {
+            if (dx > threshold) {
+                return 'right';
+            } else if (dx < -threshold) {
+                return 'left';
+            } else {
+                return null;
+            }
+        }
+    }
+    
+    function startMove(direction) {
+        if (!gameActive || paus) return;
+        
+        // ★★★ ЕСЛИ НАПРАВЛЕНИЕ НЕ ИЗМЕНИЛОСЬ - НИЧЕГО НЕ ДЕЛАЕМ ★★★
+        if (direction === currentDirection && moveInterval !== null) {
+            return;
+        }
+        
+        // ★★★ ОСТАНАВЛИВАЕМ СТАРОЕ ДВИЖЕНИЕ ★★★
+        stopMove();
+        
+        // ★★★ ЗАПОМИНАЕМ НОВОЕ НАПРАВЛЕНИЕ ★★★
+        currentDirection = direction;
+        
+        console.log('🚀 Движение:', direction);
+        
+        // ★★★ ЗАПУСКАЕМ НОВОЕ ДВИЖЕНИЕ СРАЗУ ★★★
+        // Выполняем первый шаг сразу
+        switch(direction) {
+            case 'up': up(); break;
+            case 'down': down(); break;
+            case 'left': left(); break;
+            case 'right': right(); break;
+        }
+        
+        // ★★★ ЗАПУСКАЕМ ИНТЕРВАЛ ДЛЯ ПРОДОЛЖЕНИЯ ★★★
+        moveInterval = setInterval(function() {
+            if (!gameActive || paus) {
+                stopMove();
+                return;
+            }
+            switch(currentDirection) {
+                case 'up': up(); break;
+                case 'down': down(); break;
+                case 'left': left(); break;
+                case 'right': right(); break;
+            }
+        }, 50);
+    }
+    
+    function stopMove() {
+        if (moveInterval) {
+            clearInterval(moveInterval);
+            moveInterval = null;
+        }
+        currentDirection = null;
+        if (u) u.disabled = false;
+        if (d) d.disabled = false;
+        if (l) l.disabled = false;
+        if (r) r.disabled = false;
+    }
+    
+   function showDirectionHint(direction, x, y) {
+    var oldHint = document.getElementById('touchHint');
+    if (oldHint) oldHint.remove();
+    
+    if (!direction) return;
+    
+    var hint = document.createElement('div');
+    hint.id = 'touchHint';
+    
+    // ★★★ КРАСИВЫЕ СТРЕЛКИ С ЦВЕТАМИ ★★★
+    var arrowText = '';
+    var color = '';
+    var glowColor = '';
+    
+    switch(direction) {
+        case 'up':
+            arrowText = '▲';
+            color = '#ff6b6b';
+            glowColor = 'rgba(255,107,107,0.6)';
+            break;
+        case 'down':
+            arrowText = '▼';
+            color = '#4fc3f7';
+            glowColor = 'rgba(79,195,247,0.6)';
+            break;
+        case 'left':
+            arrowText = '◀';
+            color = '#ffd93d';
+            glowColor = 'rgba(255,217,61,0.6)';
+            break;
+        case 'right':
+            arrowText = '▶';
+            color = '#a8e063';
+            glowColor = 'rgba(168,224,99,0.6)';
+            break;
+    }
+    
+    hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
+        'font-size:52px;font-weight:bold;' +
+        'color:' + color + ';' +
+        'text-shadow:0 0 30px ' + glowColor + ', ' +
+        '0 0 60px ' + glowColor + ', ' +
+        '0 0 90px ' + glowColor + ';' +
+        'animation:arrowPulse 1.2s ease-out forwards;' +
+        'transform:translate(-50%, -50%);' +
+        'font-family:Arial, sans-serif;';
+    
+    hint.textContent = arrowText;
+    hint.style.left = x + 'px';
+    hint.style.top = y + 'px';
+    gameblock.appendChild(hint);
+    
+    setTimeout(function() {
+        if (hint.parentNode) hint.remove();
+    }, 1200);
+}
+
+    // Обработчик начала касания
+    gameblock.addEventListener('touchstart', function(e) {
+        if (!gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        e.preventDefault();
+        
+        var touch = e.changedTouches[0];
+        if (!touch) return;
+        touchId = touch.identifier;
+        
+        var rect = gameblock.getBoundingClientRect();
+        var relX = touch.clientX - rect.left;
+        var relY = touch.clientY - rect.top;
+        
+        var direction = getDirection(touch.clientX, touch.clientY);
+        if (direction) {
+            showDirectionHint(direction, relX, relY);
+            startMove(direction);
+        }
+    }, { passive: false });
+    
+    // Обработчик перемещения
+    gameblock.addEventListener('touchmove', function(e) {
+        if (!gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        e.preventDefault();
+        
+        var touch = null;
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === touchId || touchId === null) {
+                touch = e.changedTouches[i];
+                break;
+            }
+        }
+        if (!touch) return;
+        
+        if (touchId === null) touchId = touch.identifier;
+        
+        var rect = gameblock.getBoundingClientRect();
+        var relX = touch.clientX - rect.left;
+        var relY = touch.clientY - rect.top;
+        
+        var direction = getDirection(touch.clientX, touch.clientY);
+        if (direction) {
+            showDirectionHint(direction, relX, relY);
+            // ★★★ ВСЕГДА ОБНОВЛЯЕМ НАПРАВЛЕНИЕ ★★★
+            startMove(direction);
+        } else {
+            // ★★★ ЕСЛИ НАПРАВЛЕНИЕ НЕ ОПРЕДЕЛЕНО - ОСТАНАВЛИВАЕМ ★★★
+            stopMove();
+        }
+    }, { passive: false });
+    
+    // Обработчик окончания
+    gameblock.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        var hasActiveTouch = false;
+        for (var i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === touchId) {
+                hasActiveTouch = true;
+                break;
+            }
+        }
+        if (!hasActiveTouch) {
+            touchId = null;
+            stopMove();
+            var hint = document.getElementById('touchHint');
+            if (hint) hint.remove();
+        }
+    }, { passive: false });
+    
+    gameblock.addEventListener('touchcancel', function(e) {
+        e.preventDefault();
+        touchId = null;
+        stopMove();
+        var hint = document.getElementById('touchHint');
+        if (hint) hint.remove();
+    }, { passive: false });
+    
+    console.log('✅ Тач-управление привязано к батискафу (мгновенная реакция)');
+})();
+
+
+// ============================================================
+//  УПРАВЛЕНИЕ МЫШЬЮ (привязано к батискафу) - С СО СТРЕЛКАМИ
 // ============================================================
 (function setupMouseControls() {
     var gameblock = document.getElementById('gameblock');
-    if (!gameblock) return;
+    var player = document.getElementById('player');
+    if (!gameblock || !player) return;
     
     var isMouseDown = false;
     var mouseInterval = null;
+    var currentDirection = null;
     
     function getMouseDirection(mouseX, mouseY) {
-        if (!gameblock) return null;
+        if (!gameblock || !player) return null;
         
-        var rect = gameblock.getBoundingClientRect();
-        var centerX = rect.left + rect.width / 2;
-        var centerY = rect.top + rect.height / 2;
+        var playerRect = player.getBoundingClientRect();
         
-        var dx = mouseX - centerX;
-        var dy = mouseY - centerY;
+        var playerCenterX = playerRect.left + playerRect.width / 2;
+        var playerCenterY = playerRect.top + playerRect.height / 2;
         
-        var deadZone = 15;
-        var distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < deadZone) return null;
+        var dx = mouseX - playerCenterX;
+        var dy = mouseY - playerCenterY;
         
-        if (Math.abs(dx) > Math.abs(dy)) {
-            return dx > 0 ? 'right' : 'left';
+        var threshold = 15;
+        
+        if (Math.abs(dy) > Math.abs(dx)) {
+            if (dy > threshold) {
+                return 'down';
+            } else if (dy < -threshold) {
+                return 'up';
+            } else {
+                return null;
+            }
         } else {
-            return dy > 0 ? 'down' : 'up';
+            if (dx > threshold) {
+                return 'right';
+            } else if (dx < -threshold) {
+                return 'left';
+            } else {
+                return null;
+            }
         }
     }
     
     function startMouseMove(direction) {
+        if (!gameActive || paus || !isMouseDown) return;
+        
+        if (direction === currentDirection && mouseInterval !== null) {
+            return;
+        }
+        
         stopMouseMove();
-        if (!gameActive || paus) return;
+        currentDirection = direction;
+        
+        // ★★★ ПЕРВЫЙ ШАГ СРАЗУ ★★★
+        switch(direction) {
+            case 'up': up(); break;
+            case 'down': down(); break;
+            case 'left': left(); break;
+            case 'right': right(); break;
+        }
         
         mouseInterval = setInterval(function() {
             if (!gameActive || paus || !isMouseDown) {
                 stopMouseMove();
                 return;
             }
-            switch(direction) {
+            switch(currentDirection) {
                 case 'up': up(); break;
                 case 'down': down(); break;
                 case 'left': left(); break;
@@ -4539,10 +4759,68 @@ function showCountdownNotification(text) {
             clearInterval(mouseInterval);
             mouseInterval = null;
         }
+        currentDirection = null;
         if (u) u.disabled = false;
         if (d) d.disabled = false;
         if (l) l.disabled = false;
         if (r) r.disabled = false;
+    }
+    
+    // ★★★ ФУНКЦИЯ ДЛЯ СТРЕЛОК (копия из тач-контрола) ★★★
+    function showMouseHint(direction, x, y) {
+        var oldHint = document.getElementById('mouseHint');
+        if (oldHint) oldHint.remove();
+        
+        if (!direction) return;
+        
+        var hint = document.createElement('div');
+        hint.id = 'mouseHint';
+        
+        var arrowText = '';
+        var color = '';
+        var glowColor = '';
+        
+        switch(direction) {
+            case 'up':
+                arrowText = '▲';
+                color = '#ff6b6b';
+                glowColor = 'rgba(255,107,107,0.6)';
+                break;
+            case 'down':
+                arrowText = '▼';
+                color = '#4fc3f7';
+                glowColor = 'rgba(79,195,247,0.6)';
+                break;
+            case 'left':
+                arrowText = '◀';
+                color = '#ffd93d';
+                glowColor = 'rgba(255,217,61,0.6)';
+                break;
+            case 'right':
+                arrowText = '▶';
+                color = '#a8e063';
+                glowColor = 'rgba(168,224,99,0.6)';
+                break;
+        }
+        
+        hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
+            'font-size:52px;font-weight:bold;' +
+            'color:' + color + ';' +
+            'text-shadow:0 0 30px ' + glowColor + ', ' +
+            '0 0 60px ' + glowColor + ', ' +
+            '0 0 90px ' + glowColor + ';' +
+            'animation:arrowPulse 1.2s ease-out forwards;' +
+            'transform:translate(-50%, -50%);' +
+            'font-family:Arial, sans-serif;';
+        
+        hint.textContent = arrowText;
+        hint.style.left = x + 'px';
+        hint.style.top = y + 'px';
+        gameblock.appendChild(hint);
+        
+        setTimeout(function() {
+            if (hint.parentNode) hint.remove();
+        }, 1200);
     }
     
     gameblock.addEventListener('mousedown', function(e) {
@@ -4550,8 +4828,16 @@ function showCountdownNotification(text) {
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
         
         isMouseDown = true;
+        
+        var rect = gameblock.getBoundingClientRect();
+        var relX = e.clientX - rect.left;
+        var relY = e.clientY - rect.top;
+        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
+            console.log('🖱️ Направление мыши:', direction);
+            // ★★★ ПОКАЗЫВАЕМ СТРЕЛКУ ★★★
+            showMouseHint(direction, relX, relY);
             startMouseMove(direction);
         }
     });
@@ -4560,27 +4846,39 @@ function showCountdownNotification(text) {
         if (!isMouseDown || !gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
         
+        var rect = gameblock.getBoundingClientRect();
+        var relX = e.clientX - rect.left;
+        var relY = e.clientY - rect.top;
+        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
+            // ★★★ ПОКАЗЫВАЕМ СТРЕЛКУ ★★★
+            showMouseHint(direction, relX, relY);
             startMouseMove(direction);
         } else {
             stopMouseMove();
+            var hint = document.getElementById('mouseHint');
+            if (hint) hint.remove();
         }
     });
     
     gameblock.addEventListener('mouseup', function(e) {
         isMouseDown = false;
         stopMouseMove();
+        var hint = document.getElementById('mouseHint');
+        if (hint) hint.remove();
     });
     
     gameblock.addEventListener('mouseleave', function(e) {
         isMouseDown = false;
         stopMouseMove();
+        var hint = document.getElementById('mouseHint');
+        if (hint) hint.remove();
     });
     
-    console.log('✅ Управление мышью настроено');
+    console.log('✅ Управление мышью со стрелками');
 })();
-        
+
             // ============================================================
         //  19. ДОСТИЖЕНИЯ (С ИНТЕГРАЦИЕЙ VK STORAGE)
         // ============================================================
