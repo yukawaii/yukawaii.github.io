@@ -2628,29 +2628,38 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
         }
 
-      function checkAndSaveLevel() {
-            if (level % 3 === 0 && level > 0) {
-                // Сохраняем локально
-                localStorage.setItem('bathyscaphe_max_level', level);
-                maxSavedLevel = level;
-                
-                // ★★★ Сохраняем ВСЕ данные, а не только уровень ★★★
-                var gameData = {
-                    level: level,
-                    score: score,
-                    shields: shields,
-                    playerX: x,
-                    playerY: y
-                };
-                
-                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
-                saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
-                saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
-                
-                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
-                setTimeout(syncAllDataToVK, 1000);
-            }
-        }
+     function checkAndSaveLevel() {
+    console.log('🔍 checkAndSaveLevel() вызвана! level=' + level + ', score=' + score);
+    
+    // ★★★ СОХРАНЯЕМ НА ЛЮБОМ УРОВНЕ, КРАТНОМ 3 ★★★
+    if (level % 3 === 0 && level > 0) {
+        console.log('✅ Сохраняем уровень ' + level);
+        
+        // Сохраняем локально
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        
+        // Сохраняем ВСЕ данные
+        var gameData = {
+            level: level,
+            score: score,
+            shields: shields,
+            playerX: x,
+            playerY: y
+        };
+        
+        console.log('💾 Данные для сохранения:', gameData); // ← ОТЛАДКА
+        
+        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+        saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+        saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+        
+        showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+        setTimeout(syncAllDataToVK, 1000);
+    } else {
+        console.log('❌ Условие НЕ выполнено: level=' + level + ', level%3=' + (level % 3));
+    }
+}
 
         function loadSavedLevel() {
             var saved = localStorage.getItem('bathyscaphe_max_level');
@@ -2699,33 +2708,41 @@ function updateContinueButton() {
     }
 }
 
-   function continueGame() {
-    // ★★★ ДОБАВЛЯЕМ: сначала проверяем VK Storage ★★★
+function continueGame() {
     if (typeof vkBridge !== 'undefined') {
         loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
             if (vkData && vkData.level && vkData.level >= 3) {
-                // Нашли сохранение в VK - сохраняем в localStorage и продолжаем
                 console.log('✅ Найдено сохранение в VK Storage: уровень ' + vkData.level);
-                localStorage.setItem('bathyscaphe_max_level', vkData.level);
-                maxSavedLevel = vkData.level;
+                
                 // Загружаем данные из VK
                 level = vkData.level;
                 score = vkData.score || ((level - 1) * 10);
                 shields = vkData.shields || 0;
                 x = vkData.playerX || 140;
                 y = vkData.playerY || 160;
-                // Запускаем игру с этими данными
+                
+                // ★★★ СОХРАНЯЕМ В LOCALSTORAGE ★★★
+                localStorage.setItem('bathyscaphe_max_level', level);
+                maxSavedLevel = level;
+                
+                // ★★★ СОХРАНЯЕМ ОБРАТНО В VK (чтобы синхронизировать) ★★★
+                var gameData = {
+                    level: level,
+                    score: score,
+                    shields: shields,
+                    playerX: x,
+                    playerY: y
+                };
+                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                
                 continueGameWithCurrentData();
             } else {
-                // В VK нет сохранения - проверяем локальное
                 continueGameFromLocal();
             }
         }).catch(function() {
-            // Ошибка загрузки из VK - проверяем локальное
             continueGameFromLocal();
         });
     } else {
-        // VK Bridge не доступен - только локальное
         continueGameFromLocal();
     }
 }
@@ -2758,6 +2775,20 @@ function continueGameFromLocal() {
 function continueGameWithCurrentData() {
     scoresEl.innerHTML = score;
     levelDisplay.textContent = level;
+        // ★★★ СОХРАНЯЕМ ЗАГРУЖЕННЫЕ ДАННЫЕ В VK ★★★
+    if (level >= 3) {
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        var gameData = {
+            level: level,
+            score: score,
+            shields: shields,
+            playerX: x,
+            playerY: y
+        };
+        saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+        console.log('💾 continueGameWithCurrentData Данные загружены и сохранены в VK: уровень ' + level);
+    }
 
     // Включаем эффекты для текущего уровня
     if (level >= 30 && level < 100) {
@@ -4135,10 +4166,28 @@ function showCountdownNotification(text) {
                     showLevelUp();
                     checkAchievements();
                     t = Math.max(30, t - 3);
-                    checkAndSaveLevel();
-                    // Синхронизация с VK Storage при повышении уровня
-                    setTimeout(syncAllDataToVK, 500);
-                }
+                    // ★★★ ПРИНУДИТЕЛЬНОЕ СОХРАНЕНИЕ ★★★
+                            if (level >= 3) {
+                                console.log('💾 Принудительное сохранение уровня ' + level);
+                                localStorage.setItem('bathyscaphe_max_level', level);
+                                maxSavedLevel = level;
+                                
+                                var gameData = {
+                                    level: level,
+                                    score: score,
+                                    shields: shields,
+                                    playerX: x,
+                                    playerY: y
+                                };
+                                saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+                                saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
+                                saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
+                                showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+                            }
+                            
+                            checkAndSaveLevel(); // ← ОСТАВЛЯЕМ
+                            setTimeout(syncAllDataToVK, 500);
+                        }
 
                 if (level >= 30 && level < 100) {
                     startParticlesBlue();
