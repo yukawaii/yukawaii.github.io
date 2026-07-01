@@ -2209,8 +2209,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                                             // ★★★ СОХРАНЯЕМ В localStorage ДЛЯ КНОПКИ ПРОДОЛЖИТЬ ★★★
                         localStorage.setItem('bathyscaphe_max_level', merged.level);
                         maxSavedLevel = merged.level;
-                        // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
-                        updateContinueButton();
+                         updateContinueButton(); 
                     } else {
                         console.log('ℹ️ Новых данных игры из VK нет');
                     }
@@ -2576,23 +2575,77 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         }
 
 
-        function updateContinueButton() {
-    var savedLevel = loadSavedLevel();
+function updateContinueButton() {
     var continueBtn = document.querySelector('.menu-btn.continue');
-    if (continueBtn) {
+    if (!continueBtn) return;
+    
+    // Проверяем VK Storage асинхронно
+    if (typeof vkBridge !== 'undefined') {
+        loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
+            if (vkData && vkData.level && vkData.level >= 3) {
+                continueBtn.textContent = '↩️ Продолжить (Ур. ' + vkData.level + ')';
+                // Сохраняем в localStorage
+                localStorage.setItem('bathyscaphe_max_level', vkData.level);
+                maxSavedLevel = vkData.level;
+            } else {
+                var savedLevel = loadSavedLevel();
+                if (savedLevel >= 3) {
+                    continueBtn.textContent = '↩️ Продолжить (Ур. ' + savedLevel + ')';
+                } else {
+                    continueBtn.textContent = '↩️ Продолжить';
+                }
+            }
+        }).catch(function() {
+            var savedLevel = loadSavedLevel();
+            if (savedLevel >= 3) {
+                continueBtn.textContent = '↩️ Продолжить (Ур. ' + savedLevel + ')';
+            } else {
+                continueBtn.textContent = '↩️ Продолжить';
+            }
+        });
+    } else {
+        var savedLevel = loadSavedLevel();
         if (savedLevel >= 3) {
-            continueBtn.style.display = 'block';
             continueBtn.textContent = '↩️ Продолжить (Ур. ' + savedLevel + ')';
         } else {
-            continueBtn.style.display = 'block';
             continueBtn.textContent = '↩️ Продолжить';
-            // Можно показать, что нет сохранений
         }
     }
 }
 
+   function continueGame() {
+    // ★★★ ДОБАВЛЯЕМ: сначала проверяем VK Storage ★★★
+    if (typeof vkBridge !== 'undefined') {
+        loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
+            if (vkData && vkData.level && vkData.level >= 3) {
+                // Нашли сохранение в VK - сохраняем в localStorage и продолжаем
+                console.log('✅ Найдено сохранение в VK Storage: уровень ' + vkData.level);
+                localStorage.setItem('bathyscaphe_max_level', vkData.level);
+                maxSavedLevel = vkData.level;
+                // Загружаем данные из VK
+                level = vkData.level;
+                score = vkData.score || ((level - 1) * 10);
+                shields = vkData.shields || 0;
+                x = vkData.playerX || 140;
+                y = vkData.playerY || 160;
+                // Запускаем игру с этими данными
+                continueGameWithCurrentData();
+            } else {
+                // В VK нет сохранения - проверяем локальное
+                continueGameFromLocal();
+            }
+        }).catch(function() {
+            // Ошибка загрузки из VK - проверяем локальное
+            continueGameFromLocal();
+        });
+    } else {
+        // VK Bridge не доступен - только локальное
+        continueGameFromLocal();
+    }
+}
 
-       function continueGame() {
+// ★★★ НОВАЯ ФУНКЦИЯ: продолжение из локального сохранения ★★★
+function continueGameFromLocal() {
     var savedLevel = loadSavedLevel();
     if (savedLevel < 3) {
         var modal = document.createElement('div');
@@ -2612,6 +2665,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     // Загружаем сохранённый уровень
     level = savedLevel;
     score = (level - 1) * 10;
+    continueGameWithCurrentData();
+}
+
+// ★★★ НОВАЯ ФУНКЦИЯ: запуск игры с текущими данными (весь твой код) ★★★
+function continueGameWithCurrentData() {
     scoresEl.innerHTML = score;
     levelDisplay.textContent = level;
 
@@ -2696,6 +2754,107 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     }, '↩️');
 }
 
+// Загрузить игру из данных VK Storage
+function loadGameFromData(vkData) {
+    level = vkData.level || 1;
+    score = vkData.score || 0;
+    shields = vkData.shields || 0;
+    x = vkData.playerX || 140;
+    y = vkData.playerY || 160;
+    
+    // Обновляем локальное сохранение
+    localStorage.setItem('bathyscaphe_max_level', level);
+    maxSavedLevel = level;
+    
+    // Запускаем игру
+    continueGameWithLevel(level, score);
+}
+
+// Продолжить игру с указанным уровнем
+function continueGameWithLevel(level, score) {
+    scoresEl.innerHTML = score;
+    levelDisplay.textContent = level;
+    
+    // Включаем эффекты для текущего уровня
+    if (level >= 30 && level < 100) {
+        startParticlesBlue();
+    }
+    if (level >= 100) {
+        startParticles();
+    }
+    if (level >= 50) {
+        document.querySelector('.bathyscaphe .body').style.background = 
+            'radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)';
+        document.querySelector('.bathyscaphe .window').style.background = 
+            'radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';
+    }
+    if (level >= 100) {
+        document.querySelector('.bathyscaphe .body').style.background = 
+            'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
+        document.querySelector('.bathyscaphe .window').style.background = 
+            'radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)';
+        document.querySelector('.shell .spiral').style.background = 
+            'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
+    }
+
+    mainMenu.style.display = 'none';
+    gameContainer.style.display = 'flex';
+    
+    // Ставим игру на паузу для обратного отсчёта
+    paus = true;
+    if (u) u.disabled = true;
+    if (d) d.disabled = true;
+    if (r) r.disabled = true;
+    if (l) l.disabled = true;
+    if (pausa) {
+        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
+    }
+    
+    // Запускаем обратный отсчёт
+    startCountdown(function() {
+        // После отсчёта запускаем игру
+        gameActive = true;
+        paus = false;
+        if (u) u.disabled = false;
+        if (d) d.disabled = false;
+        if (r) r.disabled = false;
+        if (l) l.disabled = false;
+        if (pausa) {
+            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
+        }
+        
+        // Запускаем движение
+        down();
+        startBackgroundEffects();
+
+        // Бонусы для высоких уровней
+        if (level >= 30) {
+            setInterval(function() {
+                if (gameActive && !paus && !speedBoostActive && level >= 30) {
+                    spawnSpeedBoost();
+                }
+            }, 12000 + Math.random() * 8000);
+        }
+
+        if (level >= 60) {
+            setInterval(function() {
+                if (gameActive && !paus && !slowMotionActive && level >= 60) {
+                    spawnSlowMotion();
+                }
+            }, 18000 + Math.random() * 10000);
+        }
+
+        if (level >= 70) {
+            setInterval(function() {
+                if (gameActive && !paus && !magnetActive && level >= 70) {
+                    spawnMagnet();
+                }
+            }, 20000 + Math.random() * 12000);
+        }
+
+        playButtonSound();
+    }, '↩️');
+}
         // ============================================================
         //  5. ЧАСТИЦЫ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
