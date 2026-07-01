@@ -169,13 +169,13 @@ class PuzzleGame {
         }
     }
 
-  renderWithImage(img, grid) {
+renderWithImage(img, grid) {
     const size = this.tileSize;
     const gridSize = this.gridSize;
     const totalTiles = gridSize * gridSize;
     
-    // Вычисляем процент для каждого кусочка (как в старом коде)
-    const percentage = 100 / (gridSize - 1);
+    // Размер всего изображения в пикселях для backgroundSize
+    const fullSize = size * gridSize;
     
     this.tiles.forEach((tileIndex, position) => {
         const tile = document.createElement('div');
@@ -184,7 +184,6 @@ class PuzzleGame {
         const row = Math.floor(position / gridSize);
         const col = position % gridSize;
         
-        // Позиция кусочка в сетке
         tile.style.left = (col * size) + 'px';
         tile.style.top = (row * size) + 'px';
         tile.style.width = size + 'px';
@@ -195,30 +194,25 @@ class PuzzleGame {
         tile.style.transition = 'all 0.15s ease';
         tile.style.border = '1px solid rgba(255,255,255,0.06)';
         
-        // Если это пустая клетка
         if (tileIndex === totalTiles - 1) {
             tile.dataset.empty = 'true';
             tile.style.background = 'rgba(255,255,255,0.03)';
             tile.style.border = '2px dashed rgba(255,255,255,0.08)';
             tile.style.cursor = 'default';
         } else {
-            // ===== КЛЮЧЕВОЙ МОМЕНТ: правильное разделение картинки =====
-            // Вычисляем позицию кусочка в исходном изображении
+            // ===== ПРАВИЛЬНОЕ РАЗДЕЛЕНИЕ =====
             const srcRow = Math.floor(tileIndex / gridSize);
             const srcCol = tileIndex % gridSize;
             
-            // Как в старом коде: используем процентное смещение
-            const xpos = (percentage * srcCol) + '%';
-            const ypos = (percentage * srcRow) + '%';
-            
+            // backgroundSize: размер всего изображения в пикселях
             tile.style.backgroundImage = `url(${this.imageSrc})`;
-            tile.style.backgroundSize = (gridSize * 100) + '%'; // Растягиваем на весь размер
-            tile.style.backgroundPosition = xpos + ' ' + ypos; // Смещаем на нужный кусок
+            tile.style.backgroundSize = fullSize + 'px ' + fullSize + 'px';
+            // Смещение: сдвигаем на нужный кусок
+            tile.style.backgroundPosition = `-${srcCol * size}px -${srcRow * size}px`;
             tile.style.backgroundRepeat = 'no-repeat';
             tile.style.cursor = 'pointer';
             tile.dataset.index = tileIndex;
             
-            // Обработчики кликов
             tile.addEventListener('click', () => {
                 if (!this.isGameOver) {
                     this.moveTile(position);
@@ -236,7 +230,7 @@ class PuzzleGame {
         grid.appendChild(tile);
     });
     
-    console.log('✅ Пазл отрисован, ячеек:', totalTiles, 'размер:', size);
+    console.log('✅ Пазл отрисован, ячеек:', totalTiles, 'размер ячейки:', size, 'fullSize:', fullSize);
 }
 
     renderPlaceholder(grid) {

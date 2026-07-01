@@ -1,15 +1,12 @@
 // ===== ЗАПРЕТ КОНТЕКСТНОГО МЕНЮ И СВАЙПА =====
 function disableContextMenuAndSwipe() {
-  // Запрет правой кнопки мыши
   document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
     return false;
   });
 
-  // Запрет свайпа влево/вправо на телефонах
   document.addEventListener('touchstart', function(e) {
     const touch = e.touches[0];
-    // Запоминаем начальную позицию касания
     if (touch) {
       window._touchStartX = touch.clientX;
     }
@@ -19,7 +16,6 @@ function disableContextMenuAndSwipe() {
     const touch = e.touches[0];
     if (touch && window._touchStartX) {
       const deltaX = touch.clientX - window._touchStartX;
-      // Если свайп больше 30px влево или вправо - блокируем
       if (Math.abs(deltaX) > 30) {
         e.preventDefault();
         return false;
@@ -27,28 +23,23 @@ function disableContextMenuAndSwipe() {
     }
   }, { passive: false });
 
-  // Запрет жеста "pull to refresh" на телефонах
   document.addEventListener('touchmove', function(e) {
-    // Если скролл вверх на самом верху страницы
     if (window.scrollY === 0 && e.touches[0].clientY < 50) {
       e.preventDefault();
       return false;
     }
   }, { passive: false });
 
-  // Запрет двойного касания для зума
   document.addEventListener('dblclick', function(e) {
     e.preventDefault();
     return false;
   });
 
-  // Запрет выделения текста
   document.addEventListener('selectstart', function(e) {
     e.preventDefault();
     return false;
   });
 
-  // Запрет перетаскивания изображений
   document.addEventListener('dragstart', function(e) {
     e.preventDefault();
     return false;
@@ -61,53 +52,22 @@ function disableContextMenuAndSwipe() {
 function initVKBridge() {
   console.log('🔌 Инициализация VK Bridge...');
 
-  // Проверяем наличие VK Bridge
-  if (typeof vkBridge === 'undefined') {
-    console.warn('⚠️ VK Bridge не загружен, пробуем подключить...');
-    // Пытаемся загрузить VK Bridge динамически
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
-    script.onload = function() {
-      console.log('✅ VK Bridge загружен динамически');
-      initVKBridgeInternal();
-    };
-    script.onerror = function() {
-      console.error('❌ Не удалось загрузить VK Bridge');
-    };
-    document.head.appendChild(script);
-    return;
-  }
-
-  // Если VK Bridge уже есть - инициализируем
-  initVKBridgeInternal();
-}
-
-function initVKBridgeInternal() {
-  // Проверяем, что vkBridge доступен в window
   if (typeof vkBridge === 'undefined' && typeof window.vkBridge === 'undefined') {
-    console.error('❌ VK Bridge не доступен');
+    console.warn('⚠️ VK Bridge не загружен');
     return;
   }
 
   const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
   window.vkBridge = bridge;
 
-  // Инициализация моста
   bridge.send('VKWebAppInit')
     .then((data) => {
       console.log('✅ VK Bridge инициализирован:', data);
-      // После успешной инициализации показываем баннер
       showBannerAd();
     })
     .catch((error) => {
       console.error('❌ Ошибка инициализации VK Bridge:', error);
-      // Пробуем показать баннер даже если инициализация не удалась
-      setTimeout(showBannerAd, 1000);
     });
-
-  // Сохраняем bridge глобально
-  window.vkBridge = bridge;
-  console.log('✅ VK Bridge доступен глобально');
 }
 
 // ===== РЕКЛАМНЫЙ БАННЕР =====
@@ -117,7 +77,7 @@ function showBannerAd() {
   const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
 
   if (!bridge) {
-    console.warn('⚠️ VK Bridge не доступен, баннер не будет показан');
+    console.warn('⚠️ VK Bridge не доступен');
     return;
   }
 
@@ -125,14 +85,10 @@ function showBannerAd() {
     banner_location: 'bottom' 
   })
   .then((data) => {
-    if (data.result) {
-      console.log('✅ Баннерная реклама отобразилась успешно');
-    } else {
-      console.warn('⚠️ Баннер не отобразился:', data);
-    }
+    console.log('✅ Баннер показан:', data);
   })
   .catch((error) => {
-    console.error('❌ Ошибка показа баннера:', error);
+    console.error('❌ Ошибка баннера:', error);
   });
 }
 
@@ -149,7 +105,6 @@ function share2() {
         console.error('❌ Ошибка при шеринге:', error);
       });
   } else {
-    // fallback для тестирования вне VK
     if (navigator.share) {
       navigator.share({
         title: document.title,
@@ -195,7 +150,6 @@ function joingroup() {
 
 // ===== СОЗДАНИЕ КОСМИЧЕСКОГО ФОНА =====
 function createCosmicBackground() {
-  // Удаляем старый фон, если есть
   const oldBg = document.getElementById('cosmic-bg');
   if (oldBg) oldBg.remove();
 
@@ -203,7 +157,6 @@ function createCosmicBackground() {
   bg.id = 'cosmic-bg';
   document.body.prepend(bg);
 
-  // Цветные звезды
   const starColors = ['#ffffff', '#f0e6ff', '#c8b8ff', '#ffd6e8', '#b8d4ff', '#ffd700'];
   
   for (let i = 0; i < 250; i++) {
@@ -222,7 +175,6 @@ function createCosmicBackground() {
     bg.appendChild(star);
   }
 
-  // Метеоры с разноцветным следом
   const meteorColors = ['#a855f7', '#ec4899', '#3b82f6', '#f59e0b', '#10b981'];
   
   for (let i = 0; i < 8; i++) {
@@ -240,7 +192,6 @@ function createCosmicBackground() {
     bg.appendChild(meteor);
   }
 
-  // Добавляем туманности (цветные размытые пятна)
   const nebulaColors = [
     'rgba(120, 40, 200, 0.15)',
     'rgba(200, 50, 150, 0.10)',
@@ -265,7 +216,6 @@ function createCosmicBackground() {
     bg.appendChild(nebula);
   }
 
-  // Применяем текущую тему к фону
   const currentTheme = document.documentElement.getAttribute('data-theme') || 'cosmic';
   applyThemeToBackground(currentTheme);
 
@@ -298,12 +248,10 @@ function setTheme(themeName) {
   document.documentElement.setAttribute('data-theme', themeName);
   localStorage.setItem('preferredTheme', themeName);
   
-  // Обновляем активную кнопку
   document.querySelectorAll('.theme-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.theme === themeName);
   });
 
-  // Обновляем фон
   applyThemeToBackground(themeName);
 }
 
@@ -318,24 +266,15 @@ function loadSavedTheme() {
 function initApp() {
   console.log('🚀 Инициализация приложения...');
   
-  // 1. Запрещаем контекстное меню и свайп
   disableContextMenuAndSwipe();
-  
-  // 2. Создаем космический фон
   createCosmicBackground();
-  
-  // 3. Загружаем сохраненную тему
   loadSavedTheme();
-  
-  // 4. Инициализируем VK Bridge
   initVKBridge();
 
-  // Проверяем, что фон создан
   if (document.getElementById('cosmic-bg')) {
     console.log('✅ Фон успешно создан и виден');
   } else {
     console.error('❌ Ошибка: фон не создан!');
-    // Повторная попытка
     setTimeout(() => {
       createCosmicBackground();
     }, 100);
@@ -343,15 +282,12 @@ function initApp() {
 }
 
 // ===== ЗАПУСК =====
-// Если DOM уже загружен
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   initApp();
 } else {
-  // Ждем загрузки DOM
   document.addEventListener('DOMContentLoaded', initApp);
 }
 
-// Дополнительная проверка через 500ms (на случай проблем с загрузкой)
 setTimeout(() => {
   if (!document.getElementById('cosmic-bg')) {
     console.warn('⚠️ Фон не найден, создаем принудительно...');
@@ -360,7 +296,6 @@ setTimeout(() => {
   }
 }, 500);
 
-// Дополнительная инициализация VK Bridge через 1 секунду (на случай проблем)
 setTimeout(() => {
   if (typeof window.vkBridge === 'undefined' && typeof vkBridge !== 'undefined') {
     window.vkBridge = vkBridge;
