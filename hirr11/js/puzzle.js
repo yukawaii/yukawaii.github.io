@@ -206,9 +206,9 @@ renderWithImage(img, grid) {
             
             // backgroundSize: размер всего изображения в пикселях
             tile.style.backgroundImage = `url(${this.imageSrc})`;
-            tile.style.backgroundSize = fullSize + 'px ' + fullSize + 'px';
-            // Смещение: сдвигаем на нужный кусок
-            tile.style.backgroundPosition = `-${srcCol * size}px -${srcRow * size}px`;
+           // Вместо фиксированных пикселей используйте проценты
+                tile.style.backgroundSize = `${gridSize * 100}% ${gridSize * 100}%`;
+                tile.style.backgroundPosition = `-${srcCol * 100}% -${srcRow * 100}%`;
             tile.style.backgroundRepeat = 'no-repeat';
             tile.style.cursor = 'pointer';
             tile.dataset.index = tileIndex;
