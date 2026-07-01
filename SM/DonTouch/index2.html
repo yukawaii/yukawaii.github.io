@@ -4346,145 +4346,163 @@ function showCountdownNotification(text) {
     }
 });
 
-            // ============================================================
+           
+// ============================================================
 //  ТАЧ-УПРАВЛЕНИЕ НА ТЕЛЕФОНАХ (прикосновение к полю)
 // ============================================================
-            (function setupTouchControls() {
-                var gameblock = document.getElementById('gameblock');
-                if (!gameblock) return;
-                
-                var touchId = null;
-                var moveInterval = null;
-                
-                function getDirection(touchX, touchY) {
-                    if (!gameblock) return null;
-                    
-                    var rect = gameblock.getBoundingClientRect();
-                    var centerX = rect.left + rect.width / 2;
-                    var centerY = rect.top + rect.height / 2;
-                    
-                    // Координаты касания относительно центра
-                    var dx = touchX - centerX;
-                    var dy = touchY - centerY;
-                    
-                    // Минимальное расстояние от центра (зона мёртвая, чтобы случайно не двигаться)
-                    var deadZone = 20;
-                    var distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < deadZone) return null;
-                    
-                    // Определяем направление (горизонталь или вертикаль)
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        return dx > 0 ? 'right' : 'left';
-                    } else {
-                        return dy > 0 ? 'down' : 'up';
-                    }
-                }
-                
-                function startMove(direction) {
-                    stopMove();
-                    if (!gameActive || paus) return;
-                    
-                    // Запускаем движение в выбранном направлении
-                    moveInterval = setInterval(function() {
-                        if (!gameActive || paus) {
-                            stopMove();
-                            return;
-                        }
-                        switch(direction) {
-                            case 'up': up(); break;
-                            case 'down': down(); break;
-                            case 'left': left(); break;
-                            case 'right': right(); break;
-                        }
-                    }, 50); // Обновляем каждые 50мс для плавного движения
-                }
-                
-                function stopMove() {
-                    if (moveInterval) {
-                        clearInterval(moveInterval);
-                        moveInterval = null;
-                    }
-                    // Отключаем все кнопки
-                    if (u) u.disabled = false;
-                    if (d) d.disabled = false;
-                    if (l) l.disabled = false;
-                    if (r) r.disabled = false;
-                }
-                
-                // Обработчик начала касания
-                gameblock.addEventListener('touchstart', function(e) {
-                    // Игнорируем, если игра не активна или на паузе
-                    if (!gameActive || paus) return;
-                    // Игнорируем, если нажали на кнопку внутри игрового поля (если такие есть)
-                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-                    
-                    e.preventDefault();
-                    
-                    var touch = e.changedTouches[0];
-                    if (!touch) return;
-                    touchId = touch.identifier;
-                    
-                    var direction = getDirection(touch.clientX, touch.clientY);
-                    if (direction) {
-                        startMove(direction);
-                    }
-                }, { passive: false });
-                
-                // Обработчик перемещения пальца
-                gameblock.addEventListener('touchmove', function(e) {
-                    if (!gameActive || paus) return;
-                    if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-                    
-                    e.preventDefault();
-                    
-                    // Находим нужный палец
-                    var touch = null;
-                    for (var i = 0; i < e.changedTouches.length; i++) {
-                        if (e.changedTouches[i].identifier === touchId || touchId === null) {
-                            touch = e.changedTouches[i];
-                            break;
-                        }
-                    }
-                    if (!touch) return;
-                    
-                    if (touchId === null) touchId = touch.identifier;
-                    
-                    var direction = getDirection(touch.clientX, touch.clientY);
-                    if (direction) {
-                        startMove(direction);
-                    } else {
-                        stopMove();
-                    }
-                }, { passive: false });
-                
-                // Обработчик окончания касания
-                gameblock.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    // Проверяем, не осталось ли пальцев на экране
-                    var hasActiveTouch = false;
-                    for (var i = 0; i < e.touches.length; i++) {
-                        if (e.touches[i].identifier === touchId) {
-                            hasActiveTouch = true;
-                            break;
-                        }
-                    }
-                    if (!hasActiveTouch) {
-                        touchId = null;
-                        stopMove();
-                    }
-                }, { passive: false });
-                
-                // Обработчик отмены касания
-                gameblock.addEventListener('touchcancel', function(e) {
-                    e.preventDefault();
-                    touchId = null;
-                    stopMove();
-                }, { passive: false });
-                
-                console.log('✅ Тач-управление настроено');
-            })();
+(function setupTouchControls() {
+    var gameblock = document.getElementById('gameblock');
+    if (!gameblock) return;
+    
+    var touchId = null;
+    var moveInterval = null;
+    
+    function getDirection(touchX, touchY) {
+        if (!gameblock) return null;
         
-        // ============================================================
+        var rect = gameblock.getBoundingClientRect();
+        
+        // ★★★ Координаты касания ОТНОСИТЕЛЬНО игрового поля ★★★
+        var relX = touchX - rect.left;
+        var relY = touchY - rect.top;
+        
+        // ★★★ Центр игрового поля ★★★
+        var centerX = rect.width / 2;
+        var centerY = rect.height / 2;
+        
+        // ★★★ Координаты относительно центра ★★★
+        var dx = relX - centerX;
+        var dy = relY - centerY;
+        
+        // ★★★ Отладка (можно убрать потом) ★★★
+        // console.log('relX:', relX, 'relY:', relY, 'centerX:', centerX, 'centerY:', centerY, 'dx:', dx, 'dy:', dy);
+        
+        // Мёртвая зона (20px от центра)
+        var deadZone = 25;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < deadZone) return null;
+        
+        // Определяем направление
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // Горизонтальное движение
+            if (dx > 0) {
+                // ★★★ Если нажали ПРАВЕЕ центра - ВПРАВО ★★★
+                return 'right';
+            } else {
+                // ★★★ Если нажали ЛЕВЕЕ центра - ВЛЕВО ★★★
+                return 'left';
+            }
+        } else {
+            // Вертикальное движение
+            if (dy > 0) {
+                // ★★★ Если нажали НИЖЕ центра - ВНИЗ ★★★
+                return 'down';
+            } else {
+                // ★★★ Если нажали ВЫШЕ центра - ВВЕРХ ★★★
+                return 'up';
+            }
+        }
+    }
+    
+    function startMove(direction) {
+        stopMove();
+        if (!gameActive || paus) return;
+        
+        moveInterval = setInterval(function() {
+            if (!gameActive || paus) {
+                stopMove();
+                return;
+            }
+            switch(direction) {
+                case 'up': up(); break;
+                case 'down': down(); break;
+                case 'left': left(); break;
+                case 'right': right(); break;
+            }
+        }, 50);
+    }
+    
+    function stopMove() {
+        if (moveInterval) {
+            clearInterval(moveInterval);
+            moveInterval = null;
+        }
+        if (u) u.disabled = false;
+        if (d) d.disabled = false;
+        if (l) l.disabled = false;
+        if (r) r.disabled = false;
+    }
+    
+    // ★★★ ОБРАБОТЧИК НАЧАЛА КАСАНИЯ ★★★
+    gameblock.addEventListener('touchstart', function(e) {
+        if (!gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        e.preventDefault();
+        
+        var touch = e.changedTouches[0];
+        if (!touch) return;
+        touchId = touch.identifier;
+        
+        var direction = getDirection(touch.clientX, touch.clientY);
+        if (direction) {
+            console.log('👉 Направление:', direction); // Отладка
+            startMove(direction);
+        }
+    }, { passive: false });
+    
+    // ★★★ ОБРАБОТЧИК ПЕРЕМЕЩЕНИЯ ★★★
+    gameblock.addEventListener('touchmove', function(e) {
+        if (!gameActive || paus) return;
+        if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
+        
+        e.preventDefault();
+        
+        var touch = null;
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === touchId || touchId === null) {
+                touch = e.changedTouches[i];
+                break;
+            }
+        }
+        if (!touch) return;
+        
+        if (touchId === null) touchId = touch.identifier;
+        
+        var direction = getDirection(touch.clientX, touch.clientY);
+        if (direction) {
+            startMove(direction);
+        } else {
+            stopMove();
+        }
+    }, { passive: false });
+    
+    // ★★★ ОБРАБОТЧИК ОКОНЧАНИЯ ★★★
+    gameblock.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        var hasActiveTouch = false;
+        for (var i = 0; i < e.touches.length; i++) {
+            if (e.touches[i].identifier === touchId) {
+                hasActiveTouch = true;
+                break;
+            }
+        }
+        if (!hasActiveTouch) {
+            touchId = null;
+            stopMove();
+        }
+    }, { passive: false });
+    
+    gameblock.addEventListener('touchcancel', function(e) {
+        e.preventDefault();
+        touchId = null;
+        stopMove();
+    }, { passive: false });
+    
+    console.log('✅ Тач-управление настроено (относительно центра поля)');
+})();
+
+// ============================================================
 //  УПРАВЛЕНИЕ МЫШЬЮ (клик по полю)
 // ============================================================
 (function setupMouseControls() {
@@ -4498,13 +4516,19 @@ function showCountdownNotification(text) {
         if (!gameblock) return null;
         
         var rect = gameblock.getBoundingClientRect();
-        var centerX = rect.left + rect.width / 2;
-        var centerY = rect.top + rect.height / 2;
         
-        var dx = mouseX - centerX;
-        var dy = mouseY - centerY;
+        // ★★★ Координаты мыши ОТНОСИТЕЛЬНО игрового поля ★★★
+        var relX = mouseX - rect.left;
+        var relY = mouseY - rect.top;
         
-        var deadZone = 15;
+        // ★★★ Центр игрового поля ★★★
+        var centerX = rect.width / 2;
+        var centerY = rect.height / 2;
+        
+        var dx = relX - centerX;
+        var dy = relY - centerY;
+        
+        var deadZone = 20;
         var distance = Math.sqrt(dx * dx + dy * dy);
         if (distance < deadZone) return null;
         
@@ -4551,6 +4575,7 @@ function showCountdownNotification(text) {
         isMouseDown = true;
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
+            console.log('🖱️ Направление мыши:', direction);
             startMouseMove(direction);
         }
     });
@@ -4577,7 +4602,7 @@ function showCountdownNotification(text) {
         stopMouseMove();
     });
     
-    console.log('✅ Управление мышью настроено');
+    console.log('✅ Управление мышью настроено (относительно центра поля)');
 })();
         
             // ============================================================
