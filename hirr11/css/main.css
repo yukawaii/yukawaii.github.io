@@ -1,0 +1,268 @@
+/* ===== БАЗОВЫЕ ПЕРЕМЕННЫЕ (ТЕМЫ) ===== */
+:root {
+  --bg-primary: #0a0a1a;
+  --bg-secondary: rgba(20, 10, 50, 0.85);
+  --bg-card: rgba(30, 15, 70, 0.6);
+  --text-primary: #f0eaff;
+  --text-secondary: #c8b8ff;
+  --border-neon: #a855f7;
+  --glow-color: rgba(168, 85, 247, 0.6);
+  --btn-bg: rgba(168, 85, 247, 0.2);
+  --btn-hover: #a855f7;
+  --shadow-color: rgba(168, 85, 247, 0.3);
+  --star-color: #ffffff;
+  --neon-pink: #ec4899;
+  --neon-blue: #3b82f6;
+}
+
+/* ===== ТЕМА: ПАСТЕЛЬ ===== */
+[data-theme="pastel"] {
+  --bg-primary: #faf0f5;
+  --bg-secondary: rgba(255, 240, 245, 0.9);
+  --bg-card: rgba(255, 240, 245, 0.7);
+  --text-primary: #4a2c3a;
+  --text-secondary: #7a5a6a;
+  --border-neon: #f472b6;
+  --glow-color: rgba(244, 114, 182, 0.3);
+  --btn-bg: rgba(244, 114, 182, 0.15);
+  --btn-hover: #f472b6;
+  --shadow-color: rgba(244, 114, 182, 0.2);
+  --star-color: #f9a8d4;
+}
+
+/* ===== ТЕМА: ГОЛУБАЯ ===== */
+[data-theme="blue"] {
+  --bg-primary: #0a1628;
+  --bg-secondary: rgba(10, 30, 80, 0.85);
+  --bg-card: rgba(20, 50, 120, 0.5);
+  --text-primary: #e0f0ff;
+  --text-secondary: #90c8ff;
+  --border-neon: #3b82f6;
+  --glow-color: rgba(59, 130, 246, 0.5);
+  --btn-bg: rgba(59, 130, 246, 0.2);
+  --btn-hover: #3b82f6;
+  --shadow-color: rgba(59, 130, 246, 0.3);
+  --star-color: #93c5fd;
+}
+
+/* ===== ГЛОБАЛЬНЫЕ СТИЛИ ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html, body {
+  min-height: 100vh;
+  min-height: 100dvh; /* Для мобильных */
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===== КОСМИЧЕСКИЙ ФОН ===== */
+#cosmic-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(80, 20, 160, 0.4) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(30, 60, 200, 0.3) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(200, 50, 150, 0.2) 0%, transparent 50%),
+              #0a0a1a;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Звезды */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  animation: twinkle var(--duration, 3s) ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Метеоры */
+.meteor {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  animation: meteorShoot linear infinite;
+}
+
+@keyframes meteorShoot {
+  0% {
+    transform: translate(0, 0) rotate(-35deg) scale(1);
+    opacity: 0;
+  }
+  3% { opacity: 1; }
+  15% {
+    transform: translate(-350px, 250px) rotate(-35deg) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-800px, 560px) rotate(-35deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ===== ОБЩИЕ КОМПОНЕНТЫ ===== */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 30px 25px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.08),
+              0 0 60px var(--glow-color);
+  width: 100%;
+  max-width: 800px;
+}
+
+/* ===== НЕОНОВЫЕ КНОПКИ ===== */
+.btn-neon {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--btn-bg);
+  border: 2px solid var(--border-neon);
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 0 20px var(--glow-color), inset 0 0 20px rgba(255, 255, 255, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  min-width: 120px;
+  font-family: inherit;
+  user-select: none;
+}
+
+.btn-neon:hover {
+  background: var(--btn-hover);
+  color: #fff;
+  box-shadow: 0 0 40px var(--glow-color), 0 0 80px var(--glow-color);
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--btn-hover);
+}
+
+.btn-neon:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* ===== ПАНЕЛЬ ТЕМ ===== */
+.theme-picker {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.theme-btn {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 2px solid var(--border-neon);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  font-family: inherit;
+  user-select: none;
+}
+
+.theme-btn:hover {
+  background: var(--btn-hover);
+  color: #fff;
+  box-shadow: 0 0 30px var(--glow-color);
+}
+
+.theme-btn.active {
+  background: var(--border-neon);
+  color: #fff;
+  box-shadow: 0 0 30px var(--glow-color);
+}
+
+/* ===== ЗАГОЛОВКИ ===== */
+h1, h2, h3, h4 {
+  color: var(--text-primary);
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 768px) {
+  .glass-card { 
+    padding: 20px 15px; 
+    border-radius: 18px; 
+  }
+  .btn-neon { 
+    padding: 10px 20px; 
+    font-size: 14px; 
+    min-width: 90px; 
+  }
+  .theme-btn { 
+    padding: 6px 14px; 
+    font-size: 12px; 
+  }
+  .container { 
+    padding: 12px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-card { 
+    padding: 15px 10px; 
+    border-radius: 14px; 
+  }
+  .btn-neon { 
+    padding: 8px 14px; 
+    font-size: 12px; 
+    min-width: 70px; 
+  }
+  .theme-btn { 
+    padding: 5px 10px; 
+    font-size: 11px; 
+  }
+}
+
+/* ===== СПЕЦИАЛЬНО ДЛЯ IFRAME VK (1000x750) ===== */
+@media (max-width: 1000px) and (max-height: 800px) {
+  .container { padding: 10px; }
+  .glass-card { padding: 15px 12px; border-radius: 16px; }
+  .btn-neon { padding: 8px 16px; font-size: 13px; min-width: 80px; }
+}

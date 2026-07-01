@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Викторина — Хирагана</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <style>
+    .quiz-levels {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .quiz-levels .btn-neon {
+      width: 200px;
+    }
+    .back-link {
+      margin-top: 20px;
+      display: inline-block;
+    }
+    @media (max-width: 600px) {
+      .quiz-levels .btn-neon { width: 160px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="glass-card" style="text-align: center;">
+
+    <h2 style="font-size: 2rem; margin-bottom: 5px;">✦ Викторина ✦</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 15px;">Выбери уровень сложности</p>
+
+    <!-- ТЕМЫ (дублируем для удобства) -->
+    <div class="theme-picker">
+      <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌</button>
+      <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸</button>
+      <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
+    </div>
+
+    <div class="quiz-levels">
+      <a href="quiz1.html" class="btn-neon">⭐ Уровень 1</a>
+      <a href="quiz2.html" class="btn-neon">⭐⭐ Уровень 2</a>
+      <a href="quiz3.html" class="btn-neon">⭐⭐⭐ Уровень 3</a>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="../index.html" class="btn-neon">🏠 В начало</a>
+      <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+      <button class="btn-neon" onclick="favor1()">⭐ В избранное</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="../App.js"></script>
+</body>
+</html>

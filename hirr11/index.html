@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Аниме мини-игры</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <style>
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .menu-grid .btn-neon {
+      width: 100%;
+      text-align: center;
+    }
+    .app-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      text-align: center;
+      background: linear-gradient(135deg, var(--border-neon), var(--neon-pink), var(--neon-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .app-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+    .action-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .app-title { font-size: 2rem; }
+      .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .action-row .btn-neon { font-size: 12px; padding: 8px 14px; }
+    }
+    @media (max-width: 400px) {
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="glass-card" style="text-align: center;">
+      
+      <div class="app-title">✦ Хирагана ✦</div>
+      <div class="app-subtitle">Изучай хирагану в стиле киберпанк</div>
+
+      <div class="theme-picker">
+        <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌</button>
+        <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸</button>
+        <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
+      </div>
+
+      <div class="menu-grid">
+        <a href="quiz/quiz.html" class="btn-neon">📝 Викторина</a>   
+           <a href="puzz/puzz0.html" class="btn-neon">🧩 Пазлы</a>
+        <a href="mem/mem0.html" class="btn-neon">🃏 Мемори</a>
+        <a href="col/coloring.html" class="btn-neon">🎨 Раскраски</a>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        <button class="btn-neon" onclick="favor1()">⭐ В избранное</button>      
+      </div>
+
+    </div>
+  </div>
+
+  <script src="App.js"></script>
+</body>
+</html>

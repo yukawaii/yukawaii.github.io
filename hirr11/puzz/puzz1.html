@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Пазлы — Уровень 1</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+   <style>
+    .puzzle-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    #puzzleContainer {
+        position: relative;
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        padding: 12px;
+        margin: 0 auto;
+        width: fit-content;
+        max-width: 100%;
+        min-height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .puzzle-grid {
+        position: relative;
+        margin: 0 auto;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        overflow: hidden;
+        /* Размеры задаются через JS */
+    }
+
+    .puzzle-tile {
+        position: absolute;
+        transition: all 0.15s ease;
+        box-sizing: border-box;
+        border-radius: 3px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+    }
+
+    .puzzle-tile:not([data-empty="true"]) {
+        cursor: pointer;
+    }
+
+    .puzzle-tile:not([data-empty="true"]):hover {
+        transform: scale(1.04);
+        z-index: 2;
+        box-shadow: 0 0 25px var(--glow-color);
+        border-color: var(--border-neon) !important;
+    }
+
+    .puzzle-tile:not([data-empty="true"]):active {
+        transform: scale(0.93);
+    }
+
+    .puzzle-tile[data-empty="true"] {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 2px dashed rgba(255, 255, 255, 0.08);
+        cursor: default;
+    }
+
+    .puzzle-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 15px 20px;
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .puzzle-stats {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 10px;
+        color: var(--text-secondary);
+        font-size: 18px;
+    }
+
+    .puzzle-stats span {
+        font-weight: 700;
+        color: var(--border-neon);
+        font-size: 22px;
+    }
+
+    .puzzle-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .level-controls {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .level-controls label {
+        color: var(--text-secondary);
+        font-size: 15px;
+        cursor: pointer;
+        padding: 8px 18px;
+        border-radius: 50px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .level-controls input[type="radio"] {
+        display: none;
+    }
+
+    .level-controls input[type="radio"]:checked+label {
+        border-color: var(--border-neon);
+        background: var(--btn-bg);
+        color: var(--text-primary);
+        box-shadow: 0 0 20px var(--glow-color);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .action-buttons .btn-neon {
+        font-size: 14px;
+        padding: 10px 18px;
+        min-width: auto;
+    }
+
+    /* ===== АДАПТИВНОСТЬ ===== */
+    @media (max-width: 600px) {
+        #puzzleContainer {
+            padding: 8px;
+        }
+        .puzzle-stats {
+            font-size: 15px;
+        }
+        .puzzle-stats span {
+            font-size: 18px;
+        }
+        .puzzle-title {
+            font-size: 18px;
+        }
+        .puzzle-controls {
+            padding: 12px 14px;
+        }
+        .action-buttons .btn-neon {
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+        .level-controls label {
+            font-size: 13px;
+            padding: 6px 14px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        #puzzleContainer {
+            padding: 6px;
+        }
+        .puzzle-stats {
+            font-size: 13px;
+            gap: 5px;
+        }
+        .puzzle-stats span {
+            font-size: 15px;
+        }
+        .puzzle-title {
+            font-size: 15px;
+        }
+        .puzzle-controls {
+            padding: 10px 10px;
+        }
+        .action-buttons .btn-neon {
+            font-size: 11px;
+            padding: 6px 10px;
+        }
+        .level-controls label {
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+    }
+
+    @media (max-width: 350px) {
+        #puzzleContainer {
+            padding: 4px;
+        }
+        .puzzle-stats {
+            font-size: 11px;
+        }
+        .puzzle-stats span {
+            font-size: 13px;
+        }
+        .puzzle-title {
+            font-size: 13px;
+        }
+        .action-buttons .btn-neon {
+            font-size: 10px;
+            padding: 5px 8px;
+        }
+        .level-controls label {
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+    }
+
+    /* Экран победы */
+    #gameOver {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(8px);
+        justify-content: center;
+        align-items: center;
+    }
+
+    #gameOver.show {
+        display: flex;
+    }
+
+    .victory-card {
+        background: var(--bg-card);
+        padding: 35px 45px;
+        border-radius: 24px;
+        border: 2px solid var(--border-neon);
+        box-shadow: 0 0 60px var(--glow-color);
+        text-align: center;
+        max-width: 420px;
+        width: 90%;
+        animation: victoryPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes victoryPop {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .victory-card h2 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, var(--border-neon), var(--neon-pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 0 0 10px 0;
+    }
+
+    .victory-card p {
+        color: var(--text-secondary);
+        font-size: 18px;
+        margin: 8px 0;
+    }
+
+    .victory-card p span {
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .victory-card .btn-neon {
+        margin: 5px;
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    @media (max-width: 480px) {
+        .victory-card {
+            padding: 25px 20px;
+        }
+        .victory-card h2 {
+            font-size: 2rem;
+        }
+        .victory-card p {
+            font-size: 16px;
+        }
+        .victory-card .btn-neon {
+            font-size: 12px;
+            padding: 8px 14px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-card">
+        <div class="puzzle-wrapper">
+
+            <!-- Заголовок -->
+            <div class="puzzle-title" id="imgTitle">Уровень 1: あ行・か行</div>
+
+            <!-- Поле пазла -->
+            <div id="puzzleContainer"></div>
+
+            <!-- Панель управления -->
+            <div class="puzzle-controls">
+                <div class="puzzle-stats">
+                    <div>🔄 Ходов: <span id="stepCount">0</span></div>
+                    <div>⏱ Время: <span id="timerPanel">0</span> сек</div>
+                </div>
+
+                <div class="level-controls" id="levelPanel">
+                    <input type="radio" name="level" id="easy" checked="checked" value="3" onchange="changeGridSize(this.value)">
+                    <label for="easy">😊 3×3</label>
+                    <input type="radio" name="level" id="medium" value="4" onchange="changeGridSize(this.value)">
+                    <label for="medium">🤔 4×4</label>
+                    <input type="radio" name="level" id="hard" value="5" onchange="changeGridSize(this.value)">
+                    <label for="hard">😈 5×5</label>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-neon" onclick="rules()">📖 Как играть?</button>
+                    <button class="btn-neon" onclick="restartPuzzle()">🔄 Перемешать</button>
+                    <button class="btn-neon" onclick="newImage()">🎨 Новая картина</button>
+                    <a href="puzz0.html" class="btn-neon">📚 Выбрать уровень</a>
+                    <a href="../index.html" class="btn-neon">🏠 В начало</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Экран победы -->
+<div id="gameOver">
+    <div class="victory-card">
+        <h2>🎉 Молодец!</h2>
+        <p>Картина собрана! 🧩</p>
+        <p>🔄 Ходов: <span class="victory-steps">0</span></p>
+        <p>⏱ Время: <span class="victory-time">0</span> сек</p>
+        <br>
+        <button class="btn-neon" onclick="restartPuzzle()">🔄 Играть ещё</button>
+        <button class="btn-neon" onclick="newImage()">🎨 Новая картина</button>
+        <br><br>
+        <button class="btn-neon" onclick="closeVictory()">✖ Закрыть</button>
+    </div>
+</div>
+
+<script src="../js/puzzle.js"></script>
+<script src="../App.js"></script>
+
+<script>
+    // ===== СПИСОК КАРТИНОК ДЛЯ УРОВНЯ 1 =====
+    var images = [
+        '../images/bus.jpg',
+        '../images/otel.jpg',
+        '../images/plaj.jpg',
+        '../images/osobnyak.jpg',
+        '../images/cafe.jpg',
+        '../images/stol.jpg',
+        '../images/mag.jpg',
+        '../images/bas.jpg',
+        '../images/kuh.jpg',
+        '../images/per.jpg',
+    ];
+
+    var currentImageIndex = 0;
+    var currentGridSize = 4;
+
+    // ===== ЗАПУСК ИГРЫ =====
+    window.onload = function() {
+        // Получаем размер сетки
+        currentGridSize = parseInt(document.querySelector('#levelPanel input[type="radio"]:checked').value);
+        // Запускаем с первой картинкой
+        startPuzzle(images[0], currentGridSize);
+    };
+
+    // ===== СМЕНА КАРТИНКИ =====
+    function newImage() {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        const gridSize = parseInt(document.querySelector('#levelPanel input[type="radio"]:checked').value);
+        startPuzzle(images[currentImageIndex], gridSize);
+        // Обновляем заголовок с названием картинки
+        const title = images[currentImageIndex].split('/').pop().replace('.jpg', '');
+        document.getElementById('imgTitle').textContent = '🎨 ' + title;
+    }
+
+    // ===== СМЕНА СЛОЖНОСТИ =====
+    function changeGridSize(size) {
+        currentGridSize = parseInt(size);
+        startPuzzle(images[currentImageIndex], currentGridSize);
+    }
+
+    // ===== ПРАВИЛА =====
+    function rules() {
+        swal({
+            title: "🧩 Как играть в пазлы:",
+            text: "Цель игры: собрать целую картинку из фрагментов. Нажимайте на квадратики рядом с пустым местом, чтобы перемещать их. Соберите все фрагменты в правильном порядке! 🌟",
+            button: "🚀 Вперёд!",
+            className: "puzzle-swal",
+        });
+    }
+
+    // ===== ПЕРЕХВАТ ЗАКРЫТИЯ ПОБЕДЫ =====
+    function closeVictory() {
+        document.getElementById('gameOver').classList.remove('show');
+    }
+
+    console.log('🧩 Пазлы Уровень 1 загружены!');
+    console.log('📸 Доступно картинок:', images.length);
+</script>
+</body>
+</html>

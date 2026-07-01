@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Хирагана Викторина — Уровень 1</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <style>
+        /* Стили для викторины */
+        .custom-box {
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 20px 25px;
+            border-radius: 20px;
+        }
+
+        .quiz-home-box {
+            text-align: center;
+            display: none;
+        }
+        .quiz-home-box.show {
+            display: block;
+        }
+
+        .quiz-box {
+            display: none;
+        }
+        .quiz-box.show {
+            display: block;
+        }
+
+        .quiz-over-box {
+            display: none;
+            text-align: center;
+        }
+        .quiz-over-box.show {
+            display: block;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid var(--border-neon);
+            border-radius: 50px;
+            background: var(--btn-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: var(--btn-hover);
+            color: #fff;
+            box-shadow: 0 0 30px var(--glow-color);
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .quiz-time .remaining-time {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50%;
+            border: 2px solid var(--border-neon);
+            color: var(--border-neon);
+            font-weight: 700;
+            font-size: 20px;
+        }
+        .remaining-time.less-time {
+            border-color: #ef4444;
+            color: #ef4444;
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .time-up-text {
+            display: none;
+            color: #ef4444;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        .time-up-text.show {
+            display: inline-block;
+        }
+
+        .score-board .correct-answers {
+            font-weight: 700;
+            color: var(--border-neon);
+            font-size: 24px;
+        }
+
+        .question-box {
+            background: var(--bg-card);
+            padding: 25px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .current-question-num {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--border-neon);
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 0 30px var(--glow-color);
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 10px;
+        }
+        .question-text img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 12px;
+            margin: 10px 0;
+            box-shadow: 0 0 30px var(--glow-color);
+        }
+
+        /* ===== ОСНОВНАЯ СЕТКА ДЛЯ ВАРИАНТОВ ===== */
+        .option-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Всегда 2 колонки */
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .option-box .option {
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .option-box .option:hover:not(.already-answered) {
+            border-color: var(--border-neon);
+            box-shadow: 0 0 20px var(--glow-color);
+            transform: scale(1.02);
+        }
+        .option-box .option.already-answered {
+            cursor: default;
+            opacity: 0.7;
+        }
+        .option-box .option.correct {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.3);
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+        }
+        .option-box .option.wrong {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+        }
+        .option-box .option.show-correct {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .answer-description {
+            display: none;
+            padding: 12px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin: 10px 0;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+        .answer-description.show {
+            display: block;
+        }
+
+        .next-question {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .next-question-btn, .see-result-btn {
+            display: none;
+        }
+        .next-question-btn.show, .see-result-btn.show {
+            display: inline-block;
+        }
+
+        .quiz-over-box h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--border-neon), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .quiz-over-box h4 {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin: 8px 0;
+        }
+        .quiz-over-box h4 span {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 768px) {
+            .custom-box { padding: 15px; }
+            .question-text { font-size: 22px; }
+            .question-text img { max-width: 130px; }
+            .stats { font-size: 18px; }
+            .btn { padding: 10px 20px; font-size: 14px; }
+            
+            /* На планшетах и телефонах кнопки чуть меньше */
+            .option-box .option {
+                font-size: 18px;
+                padding: 12px 8px;
+                min-height: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .custom-box { padding: 12px; }
+            .question-text { font-size: 20px; }
+            .question-text img { max-width: 110px; }
+            .stats { font-size: 16px; }
+            .btn { padding: 8px 16px; font-size: 13px; }
+            
+            /* На телефонах кнопки компактнее */
+            .option-box {
+                gap: 8px;
+            }
+            .option-box .option {
+                font-size: 16px;
+                padding: 10px 6px;
+                min-height: 44px;
+                border-radius: 10px;
+            }
+            
+            .current-question-num {
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                font-size: 14px;
+                top: -20px;
+            }
+            
+            .quiz-time .remaining-time {
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                font-size: 16px;
+            }
+            
+            .score-board .correct-answers {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .question-text { font-size: 17px; }
+            .question-text img { max-width: 90px; }
+            .option-box .option {
+                font-size: 14px;
+                padding: 8px 4px;
+                min-height: 38px;
+            }
+            .stats { font-size: 14px; }
+            .btn { padding: 6px 12px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="glass-card" style="text-align: center;">
+
+            <!-- ===== НАЧАЛЬНЫЙ ЭКРАН ===== -->
+            <div class="quiz-home-box custom-box show" id="homeBox">
+                <h2 style="font-size: 2rem; margin-bottom: 5px;">✦ Хирагана ✦</h2>
+                <h3 style="font-size: 1.5rem; color: var(--border-neon);">Уровень 1</h3>
+                <p style="color: var(--text-secondary); margin: 15px 0;">
+                    ⏱ 10 секунд на вопрос<br>
+                    📝 25 вопросов
+                </p>
+
+                <button type="button" class="btn" id="startQuizBtn">🚀 Начать игру</button>
+                <br><br>
+                <a href="quiz.html" class="btn-neon" style="display: inline-block;">📚 Другой уровень</a>
+            </div>
+
+            <!-- ===== ИГРОВОЙ ЭКРАН ===== -->
+            <div class="quiz-box custom-box" id="quizBox">
+                <div class="stats">
+                    <div class="quiz-time">
+                        <div class="remaining-time" id="remainingTime">10</div>
+                        <span class="time-up-text" id="timeUpText">⏰ Время вышло!</span>
+                    </div>
+                    <div class="score-board">
+                        <span class="score-text">⭐ Очки:</span>
+                        <span class="correct-answers" id="correctAnswers">0</span>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <div class="current-question-num" id="currentQuestionNum">1</div>
+                    <div class="question-text" id="questionText">あ</div>
+                </div>
+
+                <div class="option-box" id="optionBox"></div>
+
+                <div class="answer-description" id="answerDescription"></div>
+
+                <div class="next-question">
+                    <button type="button" class="btn next-question-btn" id="nextBtn">➡️ Дальше</button>
+                    <button type="button" class="btn see-result-btn" id="resultBtn">📊 Результат</button>
+                </div>
+            </div>
+
+            <!-- ===== ЭКРАН РЕЗУЛЬТАТОВ ===== -->
+            <div class="quiz-over-box custom-box" id="resultBox">
+                <h1>🏆 Результаты</h1>
+                <h4>Всего вопросов: <span id="totalQuestions">25</span></h4>
+                <h4>✅ Дано ответов: <span id="totalAttempt">0</span></h4>
+                <h4>✅ Верно: <span id="totalCorrect">0</span></h4>
+                <h4>❌ Ошибки: <span id="totalWrong">0</span></h4>
+                <h4>📊 Процент: <span id="percentage">0%</span></h4>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn" id="startAgainBtn">🔄 Играть ещё</button>
+                    <a href="quiz.html" class="btn-neon">📚 Выбрать уровень</a>
+                    <a href="../index.html" class="btn-neon">🏠 В начало</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Подключаем логику викторины -->
+    <script src="../js/quiz1.js"></script>
+</body>
+</html>
