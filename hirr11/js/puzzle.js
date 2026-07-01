@@ -205,11 +205,10 @@ renderWithImage(img, grid) {
             const srcCol = tileIndex % gridSize;
             
             // backgroundSize: размер всего изображения в пикселях
-            tile.style.backgroundImage = `url(${this.imageSrc})`;
-           // Вместо фиксированных пикселей используйте проценты
-                   tile.style.backgroundSize = fullSize + 'px ' + fullSize + 'px !important';
-                    tile.style.backgroundPosition = `-${srcCol * size}px -${srcRow * size}px !important`;
-                    tile.style.backgroundRepeat = 'no-repeat !important';
+           tile.style.backgroundImage = `url(${this.imageSrc})`;
+            tile.style.backgroundSize = fullSize + 'px ' + fullSize + 'px !important';
+            tile.style.backgroundPosition = `-${srcCol * size}px -${srcRow * size}px !important`;
+            tile.style.backgroundRepeat = 'no-repeat !important';
             tile.style.cursor = 'pointer';
             tile.dataset.index = tileIndex;
             
