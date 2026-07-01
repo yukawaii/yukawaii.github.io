@@ -1,36 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-		 
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-	<title>Аниме мини-игры</title>
-	<link rel="stylesheet" href="../styles/style.css">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<style type="text/css">
-	 BODY {
-	  background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
-	  background-color: #c7b39b
-	 }
-/* Стили кнопки */
-.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
-.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <title>Раскраска</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="../js/coloring.js"></script>
+    <style>
+        .coloring-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .coloring-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        jl-coloringbook {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--border-neon);
+            box-shadow: 0 0 40px var(--glow-color);
+        }
+        jl-coloringbook img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .coloring-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .coloring-controls .btn-neon {
+            font-size: 14px;
+            padding: 10px 20px;
+            min-width: auto;
+        }
+        @media (max-width: 500px) {
+            jl-coloringbook {
+                max-width: 100%;
+            }
+            .coloring-title {
+                font-size: 18px;
+            }
+            .coloring-controls .btn-neon {
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+        }
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            user-select: none !important;
+            outline: none !important;
+        }
+        jl-coloringbook,
+        jl-coloringbook img,
+        jl-coloringbook canvas {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+        }
+    </style>
 </head>
 <body>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="../js/coloring.js"></script>
-     <jl-coloringbook style="width: 500px" css="customizedTheme.css">
-    <img src="../images/4.jpg" />
-  </jl-coloringbook>
-  <script src = "../App.js"></script>
-	<div class ="myclass2">
-				<button class = "iksweb" onclick="window.location.href = './coloring.html';">Другая картинка</button>
-		<button class = "iksweb" onclick="window.location.href = '../quiz/quiz.html';">Викторина</button>
-    <button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
-	<button class = "iksweb" onclick="share2()">Поделиться</button> </div>
-	<script src = "../App.js"></script>
-    <script>
-        myadd1();
-    </script>
+
+<div class="container">
+    <div class="glass-card">
+        <div class="coloring-wrapper">
+
+            <div class="coloring-title">🎨 Раскрась картинку</div>
+
+            <jl-coloringbook css="customizedTheme.css">
+                <img src="../images/4.jpg" />
+            </jl-coloringbook>
+
+            <div class="coloring-controls">
+                <a href="coloring.html" class="btn-neon">🖼 Другая картинка</a>
+                <a href="../quiz/quiz.html" class="btn-neon">📝 Викторина</a>
+                <a href="../index.html" class="btn-neon">🏠 В начало</a>
+                <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="../App.js"></script>
 </body>
 </html>

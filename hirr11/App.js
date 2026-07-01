@@ -159,7 +159,7 @@ function createCosmicBackground() {
 
   const starColors = ['#ffffff', '#f0e6ff', '#c8b8ff', '#ffd6e8', '#b8d4ff', '#ffd700'];
   
-  for (let i = 0; i < 250; i++) {
+  for (let i = 0; i < 20; i++) {
     const star = document.createElement('div');
     star.className = 'star';
     const size = Math.random() * 4 + 1;
@@ -177,14 +177,14 @@ function createCosmicBackground() {
 
   const meteorColors = ['#a855f7', '#ec4899', '#3b82f6', '#f59e0b', '#10b981'];
   
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 3; i++) {
     const meteor = document.createElement('div');
     meteor.className = 'meteor';
     const color = meteorColors[Math.floor(Math.random() * meteorColors.length)];
     meteor.style.left = (Math.random() * 70 + 10) + '%';
     meteor.style.top = (Math.random() * 40 + 5) + '%';
     meteor.style.animationDuration = (Math.random() * 10 + 8) + 's';
-    meteor.style.animationDelay = (Math.random() * 20) + 's';
+    meteor.style.animationDelay = '0s';
     meteor.style.background = color;
     meteor.style.boxShadow = `0 0 12px 4px ${color}40, 0 0 40px 8px ${color}20`;
     meteor.style.width = '4px';

@@ -19,7 +19,7 @@
 [data-theme="pastel"] {
   --bg-primary: #faf0f5;
   --bg-secondary: rgba(255, 240, 245, 0.9);
-  --bg-card: rgba(255, 240, 245, 0.7);
+    --bg-card: rgba(200, 170, 190, 0.35);
   --text-primary: #4a2c3a;
   --text-secondary: #7a5a6a;
   --border-neon: #f472b6;
@@ -34,7 +34,7 @@
 [data-theme="blue"] {
   --bg-primary: #0a1628;
   --bg-secondary: rgba(10, 30, 80, 0.85);
-  --bg-card: rgba(20, 50, 120, 0.5);
+  --bg-card: rgba(30, 70, 160, 0.4); 
   --text-primary: #e0f0ff;
   --text-secondary: #90c8ff;
   --border-neon: #3b82f6;
@@ -61,6 +61,25 @@ html, body {
   color: var(--text-primary);
   overflow-x: hidden;
   position: relative;
+      background-color: transparent !important;
+    background: transparent !important;
+}
+/* Затемнение фона при загрузке */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-primary);
+    z-index: -1;
+}
+
+/* Для ссылок - убираем мигание при клике */
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ===== КОСМИЧЕСКИЙ ФОН ===== */
@@ -265,4 +284,278 @@ h1, h2, h3, h4 {
   .container { padding: 10px; }
   .glass-card { padding: 15px 12px; border-radius: 16px; }
   .btn-neon { padding: 8px 16px; font-size: 13px; min-width: 80px; }
+}
+
+/* ===== КРАСИВЫЙ СКРОЛЛ ДЛЯ ВСЕХ СТРАНИЦ ===== */
+
+/* Для WebKit браузеров (Chrome, Safari, Edge, Opera) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Дорожка скролла */
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+/* Ползунок скролла */
+::-webkit-scrollbar-thumb {
+  background: var(--border-neon);
+  border-radius: 10px;
+  box-shadow: 0 0 15px var(--glow-color);
+  transition: all 0.3s ease;
+}
+
+/* Ползунок при наведении */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--btn-hover);
+  box-shadow: 0 0 25px var(--glow-color);
+}
+
+/* Уголок скролла (для двойного скролла) */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===== ДЛЯ FIREFOX ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-neon) rgba(255, 255, 255, 0.05);
+}
+
+/* ===== БОНУС: ПЛАВНЫЙ СКРОЛЛ ===== */
+html {
+  scroll-behavior: smooth;
+}
+/* ===== УБИРАЕМ ВЫДЕЛЕНИЕ ПРИ КЛИКЕ ===== */
+.memory-card,
+.memory-card *,
+.btn-neon,
+.btn-neon *,
+a,
+button {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    outline: none !important;
+}
+
+/* Убираем outline при фокусе */
+.memory-card:focus,
+.memory-card:focus-visible,
+.btn-neon:focus,
+.btn-neon:focus-visible,
+a:focus,
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+/* ===== УБИРАЕМ ВЫДЕЛЕНИЕ У РАСКРАСОК ===== */
+jl-coloringbook,
+jl-coloringbook *,
+jl-coloringbook img,
+jl-coloringbook .tools,
+jl-coloringbook .tools * {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    outline: none !important;
+}
+
+jl-coloringbook:focus,
+jl-coloringbook:focus-visible,
+jl-coloringbook *:focus,
+jl-coloringbook *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Убираем выделение у холста раскраски */
+jl-coloringbook canvas {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
+}
+
+/* ===== ПРИНУДИТЕЛЬНОЕ ПЕРЕКЛЮЧЕНИЕ ТЕМ ДЛЯ ВИКТОРИН (ЧЕРЕЗ data-theme) ===== */
+
+/* --- ПАСТЕЛЬНАЯ ТЕМА --- */
+[data-theme="pastel"] .glass-card,
+[data-theme="pastel"] .custom-box,
+[data-theme="pastel"] .quiz-home-box,
+[data-theme="pastel"] .quiz-box,
+[data-theme="pastel"] .quiz-over-box {
+    background: rgba(255, 240, 245, 0.9) !important;
+}
+
+[data-theme="pastel"] .question-box {
+    background: rgba(255, 230, 240, 0.85) !important;
+}
+
+[data-theme="pastel"] .option-box .option {
+    background: rgba(255, 240, 245, 0.85) !important;
+    color: #4a2c3a !important;
+    border-color: #f472b6 !important;
+}
+
+[data-theme="pastel"] .question-text {
+    color: #4a2c3a !important;
+}
+
+[data-theme="pastel"] .stats {
+    color: #7a5a6a !important;
+}
+
+[data-theme="pastel"] .score-board .correct-answers {
+    color: #f472b6 !important;
+}
+
+[data-theme="pastel"] .quiz-time .remaining-time {
+    border-color: #f472b6 !important;
+    color: #f472b6 !important;
+}
+
+[data-theme="pastel"] .current-question-num {
+    background: #f472b6 !important;
+}
+
+[data-theme="pastel"] .btn {
+    color: #4a2c3a !important;
+    border-color: #f472b6 !important;
+    background: rgba(244, 114, 182, 0.2) !important;
+}
+
+[data-theme="pastel"] .btn:hover {
+    background: #f472b6 !important;
+    color: #fff !important;
+}
+
+[data-theme="pastel"] .btn-neon {
+    color: #4a2c3a !important;
+    border-color: #f472b6 !important;
+    background: rgba(244, 114, 182, 0.2) !important;
+}
+
+[data-theme="pastel"] .btn-neon:hover {
+    background: #f472b6 !important;
+    color: #fff !important;
+}
+
+[data-theme="pastel"] .quiz-over-box h1 {
+    background: linear-gradient(135deg, #f472b6, #ec4899) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+[data-theme="pastel"] .quiz-over-box h4 {
+    color: #7a5a6a !important;
+}
+
+[data-theme="pastel"] .quiz-over-box h4 span {
+    color: #4a2c3a !important;
+}
+
+[data-theme="pastel"] .answer-description {
+    background: rgba(255, 240, 245, 0.8) !important;
+    color: #4a2c3a !important;
+}
+
+[data-theme="pastel"] .h3,
+[data-theme="pastel"] h3,
+[data-theme="pastel"] h2,
+[data-theme="pastel"] h4 {
+    color: #4a2c3a !important;
+}
+
+/* --- ГОЛУБАЯ ТЕМА --- */
+[data-theme="blue"] .glass-card,
+[data-theme="blue"] .custom-box,
+[data-theme="blue"] .quiz-home-box,
+[data-theme="blue"] .quiz-box,
+[data-theme="blue"] .quiz-over-box {
+    background: rgba(10, 30, 80, 0.88) !important;
+}
+
+[data-theme="blue"] .question-box {
+    background: rgba(20, 50, 120, 0.6) !important;
+}
+
+[data-theme="blue"] .option-box .option {
+    background: rgba(20, 50, 120, 0.55) !important;
+    color: #e0f0ff !important;
+    border-color: #3b82f6 !important;
+}
+
+[data-theme="blue"] .question-text {
+    color: #e0f0ff !important;
+}
+
+[data-theme="blue"] .stats {
+    color: #90c8ff !important;
+}
+
+[data-theme="blue"] .score-board .correct-answers {
+    color: #3b82f6 !important;
+}
+
+[data-theme="blue"] .quiz-time .remaining-time {
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+}
+
+[data-theme="blue"] .current-question-num {
+    background: #3b82f6 !important;
+}
+
+[data-theme="blue"] .btn {
+    color: #e0f0ff !important;
+    border-color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.2) !important;
+}
+
+[data-theme="blue"] .btn:hover {
+    background: #3b82f6 !important;
+    color: #fff !important;
+}
+
+[data-theme="blue"] .btn-neon {
+    color: #e0f0ff !important;
+    border-color: #3b82f6 !important;
+    background: rgba(59, 130, 246, 0.2) !important;
+}
+
+[data-theme="blue"] .btn-neon:hover {
+    background: #3b82f6 !important;
+    color: #fff !important;
+}
+
+[data-theme="blue"] .quiz-over-box h1 {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+[data-theme="blue"] .quiz-over-box h4 {
+    color: #90c8ff !important;
+}
+
+[data-theme="blue"] .quiz-over-box h4 span {
+    color: #e0f0ff !important;
+}
+
+[data-theme="blue"] .answer-description {
+    background: rgba(20, 50, 120, 0.5) !important;
+    color: #e0f0ff !important;
+}
+
+[data-theme="blue"] .h3,
+[data-theme="blue"] h3,
+[data-theme="blue"] h2,
+[data-theme="blue"] h4 {
+    color: #e0f0ff !important;
 }

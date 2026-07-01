@@ -1,42 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-		 
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-	<title>Аниме мини-игры</title>
-	<link rel="stylesheet" href="../styles/style.css">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<style type="text/css">
-	 BODY {
-	  background: url(../resources/background.png) no-repeat 1px 1px; /* Параметры фона */
-	  background-color: #c7b39b
-	 }
-/* Стили кнопки */
-.iksweb{display: inline-block;cursor: pointer; font-size:15px;text-decoration:none;padding:7px 9px; color:#0f0f0f;background:#FDEED9;border-radius:33px;border:6px solid #C6D8FF;}
-.iksweb:hover{background:#62b0f5;color:#ffffff;border:6px solid #8ad5f2;transition: all 0.4s ease;}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Память — Хирагана</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <style>
+        .memory-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .memory-menu-grid .btn-neon {
+            width: 100%;
+            font-size: 14px;
+            padding: 10px 8px;
+            text-align: center;
+            white-space: normal;
+            line-height: 1.3;
+        }
+        .menu-label {
+            display: block;
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        @media (max-width: 600px) {
+            .memory-menu-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .memory-menu-grid .btn-neon {
+                font-size: 13px;
+                padding: 8px 6px;
+            }
+        }
+        @media (max-width: 400px) {
+            .memory-menu-grid {
+                gap: 8px;
+            }
+            .memory-menu-grid .btn-neon {
+                font-size: 12px;
+                padding: 6px 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-	<script src = "../App.js"></script>
-	<div class ="myclass1">
-		<h3> Карточки "あ＋А". Выберите уровень игры</h3>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index12.html';">あ、い、う、え、お</button>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index13.html';">か、き、く、け、こ</button>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index14.html';">さ、し、す、せ、そ</button><br>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index15.html';">た、ち、つ、て、と</button>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index16.html';">な、に、ぬ、ね、の</button>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index17.html';">は、ひ、ふ、へ、ほ</button><br>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index18.html';">ま、み、む、め、も</button>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index19.html';">ら、り、る、れ、ろ</button><br>
-		<button class = "iksweb" onclick="window.location.href = '../mem/index20.html';">や、ゆ、よ、わ、を、ん</button>
-		<button class = "iksweb" onclick="window.location.href = './indexmemory.html';">Карточки "あ＋あ"</button><br>
-		<button class = "iksweb" onclick="window.location.href = '../index.html';">В начало</button>
-				<button class = "iksweb" onclick="share2()">Поделиться</button>
 
-	</div>
-	<script src = "../App.js"></script>
-    <script>
-        myadd1();
-    </script>
+<div class="container">
+    <div class="glass-card" style="text-align: center;">
+
+        <h2 style="font-size: 2rem; margin-bottom: 5px;">🃏 Космическая Память</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">Найди пары карточек со знаками хирагана</p>
+
+        <div class="theme-picker">
+            <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌</button>
+            <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸</button>
+            <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
+        </div>
+
+        <div class="memory-menu-grid">
+            <a href="index2.html" class="btn-neon">あ行 <span class="menu-label">あ・い・う・え・お</span></a>
+            <a href="index3.html" class="btn-neon">か行 <span class="menu-label">か・き・く・け・こ</span></a>
+            <a href="index4.html" class="btn-neon">さ行 <span class="menu-label">さ・し・す・せ・そ</span></a>
+            <a href="index5.html" class="btn-neon">た行 <span class="menu-label">た・ち・つ・て・と</span></a>
+            <a href="index6.html" class="btn-neon">な行 <span class="menu-label">な・に・ぬ・ね・の</span></a>
+            <a href="index7.html" class="btn-neon">は行 <span class="menu-label">は・ひ・ふ・へ・ほ</span></a>
+            <a href="index8.html" class="btn-neon">ま行 <span class="menu-label">ま・み・む・め・も</span></a>
+            <a href="index9.html" class="btn-neon">ら行 <span class="menu-label">ら・り・る・れ・ろ</span></a>
+            <a href="index10.html" class="btn-neon">や・わ行 <span class="menu-label">や・ゆ・よ・わ・を・ん</span></a>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+            <a href="indexmemory.html" class="btn-neon">🔄 Карточки "あ＋あ"</a>
+            <a href="../index.html" class="btn-neon">🏠 В начало</a>
+            <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        </div>
+
+    </div>
+</div>
+
+<script src="../App.js"></script>
 </body>
 </html>
