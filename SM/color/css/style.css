@@ -1,0 +1,1256 @@
+/* ===== БАЗОВЫЙ СБРОС ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a1a;
+    color: #f0eaff;
+    overflow-x: hidden;
+}
+
+/* --- ПЕРЕМЕННЫЕ ТЕМ (должны быть в начале) --- */
+:root {
+    --bg-primary: #0a0a1a;
+    --bg-card: rgba(30, 15, 70, 0.6);
+    --text-primary: #f0eaff;
+    --text-secondary: #c8b8ff;
+    --border-neon: #a855f7;
+    --glow-color: rgba(168, 85, 247, 0.6);
+    --btn-bg: rgba(168, 85, 247, 0.2);
+    --btn-hover: #a855f7;
+    --neon-pink: #ec4899;
+}
+
+[data-theme="pastel"] {
+    --bg-primary: #faf0f5;
+    --bg-card: rgba(255, 240, 245, 0.85);
+    --text-primary: #4a2c3a;
+    --text-secondary: #7a5a6a;
+    --border-neon: #f472b6;
+    --glow-color: rgba(244, 114, 182, 0.3);
+    --btn-bg: rgba(244, 114, 182, 0.15);
+    --btn-hover: #f472b6;
+    --neon-pink: #ec4899;
+}
+
+[data-theme="blue"] {
+    --bg-primary: #0a1628;
+    --bg-card: rgba(10, 30, 80, 0.85);
+    --text-primary: #e0f0ff;
+    --text-secondary: #90c8ff;
+    --border-neon: #3b82f6;
+    --glow-color: rgba(59, 130, 246, 0.5);
+    --btn-bg: rgba(59, 130, 246, 0.2);
+    --btn-hover: #3b82f6;
+    --neon-pink: #06b6d4;
+}
+
+/* --- КОСМИЧЕСКИЙ ФОН --- */
+#cosmic-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 20% 50%, rgba(80, 20, 160, 0.4) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(30, 60, 200, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(200, 50, 150, 0.2) 0%, transparent 50%),
+                #0a0a1a;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    border-radius: 50%;
+    animation: twinkle var(--duration) ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.3); }
+}
+
+.meteor {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: meteorShoot linear infinite;
+}
+
+@keyframes meteorShoot {
+    0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+    3% { opacity: 1; }
+    15% { transform: translate(-350px, 250px) rotate(-35deg); opacity: 1; }
+    100% { transform: translate(-800px, 560px) rotate(-35deg); opacity: 0; }
+}
+
+/* --- КОНТЕЙНЕР --- */
+.app-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 60px var(--glow-color);
+    width: 100%;
+    text-align: center;
+}
+
+/* --- ЗАГОЛОВКИ --- */
+.app-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--border-neon), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.app-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* --- КНОПКИ --- */
+.btn-neon {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--btn-bg);
+    border: 2px solid var(--border-neon);
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 0 20px var(--glow-color);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-family: inherit;
+    user-select: none;
+}
+
+.btn-neon:hover {
+    background: var(--btn-hover);
+    color: #fff;
+    box-shadow: 0 0 40px var(--glow-color);
+    transform: translateY(-2px);
+}
+
+.btn-neon:active {
+    transform: scale(0.97);
+}
+
+.btn-small {
+    padding: 6px 16px;
+    font-size: 13px;
+    border: 2px solid var(--border-neon);
+    border-radius: 50px;
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-small:hover {
+    background: var(--btn-hover);
+    color: #fff;
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+/* --- ТЕМЫ --- */
+.theme-picker {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.theme-btn {
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: 2px solid var(--border-neon);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-btn:hover {
+    background: var(--btn-hover);
+    color: #fff;
+}
+
+.theme-btn.active {
+    background: var(--border-neon);
+    color: #fff;
+    box-shadow: 0 0 30px var(--glow-color);
+}
+
+/* --- СТАТИСТИКА --- */
+.user-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.stat-value {
+    font-weight: 700;
+    color: var(--border-neon);
+    font-size: 22px;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+/* --- МЕНЮ --- */
+.main-menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.main-menu .btn-neon {
+    width: 100%;
+    font-size: 15px;
+    padding: 12px 8px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.action-buttons .btn-neon {
+    font-size: 14px;
+    padding: 10px 18px;
+    min-width: auto;
+}
+
+/* --- МОДАЛКИ --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 2px solid var(--border-neon);
+    box-shadow: 0 0 60px var(--glow-color);
+    max-width: 700px;
+    width: 100%;
+    max-height: 98vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-large {
+    max-width: 700px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 2;
+    border-radius: 24px 24px 0 0;
+}
+
+.modal-header h2 {
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* --- СЕТКА КАРТИНОК --- */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.category-item {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.06);
+    transition: all 0.3s ease;
+}
+
+.category-item:hover {
+    border-color: var(--border-neon);
+    transform: scale(1.03);
+    box-shadow: 0 0 30px var(--glow-color);
+}
+
+.category-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.category-item .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 6px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-item:hover .overlay {
+    opacity: 1;
+}
+
+.category-item .check-mark {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(34, 197, 94, 0.9);
+    color: #fff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.category-item.colored .check-mark {
+    display: flex;
+}
+
+/* ===== МОДАЛКА РАСКРАСКИ ===== */
+#coloringModal .modal-content {
+    max-width: 700px;
+    width: 100%;
+    max-height: 98vh;
+    height: 98vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 20px;
+    margin: 0;
+}
+
+#coloringModal .modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 16px 16px 16px;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Верхняя панель */
+.coloring-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0 10px 0;
+    color: var(--text-secondary);
+    font-size: 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+/* Контейнер для канваса */
+#coloringCanvasWrapper {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border-neon);
+    position: relative;
+}
+
+#coloringCanvasWrapper jl-coloringbook {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .wrapper {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvasWrapper {
+    flex: 1 !important;
+    min-height: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvasBackgroundImage {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvas,
+#coloringCanvasWrapper jl-coloringbook .activeCanvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+/* --- ДОСТИЖЕНИЯ --- */
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.achievement-item .icon { font-size: 32px; width: 48px; text-align: center; }
+.achievement-item .info { flex: 1; }
+.achievement-item .info .title { font-weight: 600; color: var(--text-primary); font-size: 15px; }
+.achievement-item .info .desc { color: var(--text-secondary); font-size: 13px; }
+.achievement-item .status { font-size: 14px; color: var(--text-secondary); }
+
+.achievement-item.unlocked {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+.achievement-item.unlocked .status { color: #22c55e; }
+
+/* --- КОЛЛЕКЦИИ --- */
+.collection-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.collection-item .icon { font-size: 28px; width: 44px; text-align: center; }
+.collection-item .info { flex: 1; }
+.collection-item .info .title { font-weight: 600; color: var(--text-primary); font-size: 15px; }
+.collection-item .info .desc { color: var(--text-secondary); font-size: 13px; }
+.collection-item .progress { color: var(--text-secondary); font-size: 13px; }
+
+/* --- TOAST --- */
+.toast-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid var(--border-neon);
+    box-shadow: 0 0 40px var(--glow-color);
+    z-index: 200;
+    font-weight: 500;
+    animation: toastSlide 0.4s ease;
+}
+
+@keyframes toastSlide {
+    0% { transform: translateX(-50%) translateY(30px); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 600px) {
+    .main-menu { grid-template-columns: 1fr 1fr; }
+    .category-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .user-stats { gap: 15px; flex-wrap: wrap; }
+    .app-title { font-size: 1.8rem; }
+    .action-buttons .btn-neon { font-size: 12px; padding: 8px 12px; }
+    .main-menu .btn-neon { font-size: 13px; padding: 10px 6px; }
+    .glass-card { padding: 20px 15px; }
+}
+
+@media (max-width: 400px) {
+    .category-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .main-menu { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .modal-body { padding: 12px; }
+}
+/* ===== КРУГЛЫЕ КНОПКИ VK ===== */
+.vk-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.btn-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--border-neon);
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    user-select: none;
+}
+
+.btn-circle:hover {
+    background: var(--btn-hover);
+    color: #fff;
+    box-shadow: 0 0 30px var(--glow-color);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.btn-circle:active {
+    transform: scale(0.93);
+}
+
+@media (max-width: 480px) {
+    .btn-circle {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+}
+
+/* ===== СТИЛИ ДЛЯ ИНСТРУМЕНТОВ РАСКРАСКИ ===== */
+
+/* Контейнер раскраски */
+#coloringCanvasWrapper jl-coloringbook {
+    display: block !important;
+    width: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .wrapper {
+    width: 100% !important;
+}
+
+/* Панель инструментов */
+#coloringCanvasWrapper jl-coloringbook .toolbar {
+    background: var(--bg-card) !important;
+    border-radius: 12px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button {
+    background: var(--btn-bg) !important;
+    border: 1px solid var(--border-neon) !important;
+    border-radius: 8px !important;
+    color: var(--text-primary) !important;
+    padding: 4px 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 14px !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button:hover {
+    background: var(--btn-hover) !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px var(--glow-color) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button i {
+    font-size: 18px !important;
+}
+
+/* Палитра цветов */
+#coloringCanvasWrapper jl-coloringbook .palette {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    padding: 6px 0 !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    display: inline-block !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor:hover {
+    transform: scale(1.15) !important;
+    border-color: var(--border-neon) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor.selected {
+    border-color: var(--border-neon) !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 0 20px var(--glow-color) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor.eraser {
+    background: linear-gradient(135deg, white 43%, red 45%, red 55%, white 57%, white) !important;
+    border-color: red !important;
+}
+
+/* Размер кисти */
+#coloringCanvasWrapper jl-coloringbook .sizerTool {
+    width: 80px !important;
+    accent-color: var(--border-neon) !important;
+    cursor: pointer !important;
+}
+
+/* Канвас */
+#coloringCanvasWrapper jl-coloringbook .canvasWrapper {
+    position: relative !important;
+    width: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvasBackgroundImage {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    border-radius: 12px !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvas,
+#coloringCanvasWrapper jl-coloringbook .activeCanvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 12px !important;
+}
+
+/* Навигация по картинкам (если их несколько) */
+#coloringCanvasWrapper jl-coloringbook .imageNav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .imageNav img {
+    width: 60px !important;
+    height: 40px !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+    border: 2px solid transparent !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .imageNav img:hover {
+    border-color: var(--border-neon) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .imageNav img.selected {
+    border-color: var(--border-neon) !important;
+    box-shadow: 0 0 20px var(--glow-color) !important;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 500px) {
+    #coloringCanvasWrapper jl-coloringbook .paletteColor {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    #coloringCanvasWrapper jl-coloringbook .sizerTool {
+        width: 60px !important;
+    }
+    #coloringCanvasWrapper jl-coloringbook .tools .button {
+        font-size: 12px !important;
+        padding: 3px 6px !important;
+    }
+    #coloringCanvasWrapper jl-coloringbook .imageNav img {
+        width: 44px !important;
+        height: 30px !important;
+    }
+}
+/* ===== ОТКЛЮЧАЕМ ВЫДЕЛЕНИЕ ПРИ КЛИКЕ ===== */
+* {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+*:focus,
+*:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Особенно для модалок и контейнера раскраски */
+.modal,
+.modal *,
+#coloringCanvasWrapper,
+#coloringCanvasWrapper *,
+jl-coloringbook,
+jl-coloringbook * {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
+}
+
+/* Для canvas внутри раскраски */
+jl-coloringbook canvas {
+    -webkit-tap-highlight-color: transparent !important;
+    outline: none !important;
+    touch-action: none !important;
+}
+/* ===== МОДАЛКА УРОВНЕЙ ===== */
+.modal-levels {
+    max-width: 500px !important;
+}
+
+.modal-small {
+    max-width: 380px !important;
+}
+
+/* Пагинация */
+.level-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 15px;
+}
+
+.btn-pagination {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-neon);
+    background: var(--btn-bg);
+    color: var(--text-primary);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-pagination:hover {
+    background: var(--btn-hover);
+    color: #fff;
+    box-shadow: 0 0 30px var(--glow-color);
+}
+
+.btn-pagination:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.page-info {
+    color: var(--text-secondary);
+    font-size: 16px;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Сетка уровней */
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.level-btn {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.level-btn:hover:not(.locked):not(.disabled) {
+    border-color: var(--border-neon);
+    box-shadow: 0 0 30px var(--glow-color);
+    transform: scale(1.05);
+}
+
+.level-btn.completed {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.level-btn.completed::after {
+    content: '✓';
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.level-btn.locked {
+    cursor: pointer;
+    border-color: rgba(255, 100, 100, 0.3);
+    background: rgba(255, 100, 100, 0.05);
+}
+
+.level-btn.locked::after {
+    content: '🔒';
+    position: absolute;
+    font-size: 14px;
+    top: -8px;
+    right: -8px;
+}
+
+.level-btn.current {
+    border-color: var(--border-neon);
+    box-shadow: 0 0 30px var(--glow-color);
+}
+
+.level-btn.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Прогресс категории */
+.category-progress {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.category-progress span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--border-neon), var(--neon-pink));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+/* Спиннер загрузки */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top-color: var(--border-neon);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Адаптив */
+@media (max-width: 500px) {
+    .level-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+    }
+    .level-btn {
+        font-size: 16px;
+    }
+    .level-btn.completed::after {
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        top: -4px;
+        right: -4px;
+    }
+    .level-btn.locked::after {
+        font-size: 12px;
+        top: -4px;
+        right: -4px;
+    }
+    .btn-pagination {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 380px) {
+    .level-grid {
+        gap: 6px;
+    }
+    .level-btn {
+        font-size: 14px;
+    }
+}
+/* ===== СТИЛИ ДЛЯ КОМПАКТНОЙ ПАЛИТРЫ ===== */
+
+#coloringCanvasWrapper jl-coloringbook .toolbar {
+    background: var(--bg-card) !important;
+    border-radius: 12px !important;
+    padding: 6px 10px !important;
+    margin-bottom: 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button {
+    background: var(--btn-bg) !important;
+    border: 1px solid var(--border-neon) !important;
+    border-radius: 8px !important;
+    color: var(--text-primary) !important;
+    padding: 4px 8px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 14px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button:hover {
+    background: var(--btn-hover) !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px var(--glow-color) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .tools .button i {
+    font-size: 18px !important;
+}
+
+/* Контейнер для палитры (выдвижной) */
+#coloringCanvasWrapper jl-coloringbook .paletteContainer {
+    padding: 6px 0 2px 0 !important;
+    border-top: 1px solid rgba(255,255,255,0.05) !important;
+    margin-top: 4px !important;
+}
+
+/* Палитра */
+#coloringCanvasWrapper jl-coloringbook .palette {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    padding: 2px 0 !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor:hover {
+    transform: scale(1.15) !important;
+    border-color: var(--border-neon) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor.selected {
+    border-color: var(--border-neon) !important;
+    transform: scale(1.2) !important;
+    box-shadow: 0 0 20px var(--glow-color) !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .paletteColor.eraser {
+    background: linear-gradient(135deg, white 43%, red 45%, red 55%, white 57%, white) !important;
+    border-color: red !important;
+}
+
+/* Размер кисти */
+#coloringCanvasWrapper jl-coloringbook .sizerTool {
+    width: 60px !important;
+    accent-color: var(--border-neon) !important;
+    cursor: pointer !important;
+    height: 4px !important;
+}
+/* Дополнительные стили для зума */
+.canvasContainer {
+    position: relative;
+    transform-origin: 0 0;
+    touch-action: none;
+}
+
+.zoom-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.zoom-level {
+    color: #f0eaff;
+    font-size: 12px;
+    min-width: 36px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.fill-btn.active {
+    background: #22d3ee !important;
+    color: #fff !important;
+}
+/* Стили для модалки достижений */
+#achievementsList {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+#achievementsList::-webkit-scrollbar {
+    width: 4px;
+}
+
+#achievementsList::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
+
+#achievementsList::-webkit-scrollbar-thumb {
+    background: var(--border-neon, #a855f7);
+    border-radius: 4px;
+}
+
+/* Стили для элементов достижений */
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+    transition: all 0.2s ease;
+}
+
+.achievement-item .icon {
+    font-size: 24px;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.achievement-item .info {
+    flex: 1;
+    min-width: 0;
+}
+
+.achievement-item .title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 15px;
+}
+
+.achievement-item .desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.achievement-item .status {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.achievement-item.locked {
+    opacity: 0.5;
+}
+
+.achievement-item.unlocked {
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.15);
+}
+/* Запрет скролла на всей странице */
+html, body {
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+/* Разрешаем скролл только внутри модалок */
+.modal-content, .level-grid, #achievementsList, #collectionsList {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Запрет выделения текста */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Разрешаем выделение текста только в полях ввода */
+input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
