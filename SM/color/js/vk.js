@@ -203,7 +203,10 @@ function loadVKBridgeScript() {
     });
 }
 
+
+
 // ===== ПОЛНАЯ ИНИЦИАЛИЗАЦИЯ =====
+preloadRewardAd// В vk.js или app.js - обновите initVK()
 function initVK() {
     console.log('🔌 Запуск инициализации VK...');
 
@@ -211,6 +214,10 @@ function initVK() {
         .then(() => initVKBridge())
         .then(() => {
             console.log('✅ VK полностью инициализирован');
+            // Загружаем состояние кистей из VK
+            return loadBrushesFromVK();
+        })
+        .then(() => {
             // Предзагружаем рекламу
             if (typeof preloadRewardAd === 'function') {
                 setTimeout(preloadRewardAd, 1000);
@@ -221,6 +228,94 @@ function initVK() {
             console.warn('⚠️ VK недоступен, работаем в офлайн-режиме:', error);
             return false;
         });
+}
+
+// ===== СИНХРОНИЗАЦИЯ КИСТЕЙ ЧЕРЕЗ VK STORAGE =====
+function saveBrushesToVK() {
+    const bridge = getVKBridge();
+    if (!bridge) {
+        console.log('ℹ️ VK не доступен, синхронизация кистей отключена');
+        return;
+    }
+    
+    // Сохраняем только актуальные данные (без expired)
+    const dataToSave = {};
+    for (const [id, data] of Object.entries(brushesState)) {
+        if (data.unlocked && data.expiresAt) {
+            dataToSave[id] = {
+                unlocked: true,
+                expiresAt: data.expiresAt
+            };
+        } else if (data.unlocked && !data.expiresAt) {
+            // Дефолтные кисти (без срока)
+            dataToSave[id] = {
+                unlocked: true,
+                expiresAt: null
+            };
+        }
+    }
+    
+    bridge.send('VKWebAppStorageSet', {
+        key: 'brushesState',
+        value: JSON.stringify(dataToSave)
+    })
+    .then(() => {
+        console.log('✅ Состояние кистей сохранено в VK');
+    })
+    .catch((error) => {
+        console.warn('⚠️ Ошибка сохранения кистей в VK:', error);
+    });
+}
+
+function loadBrushesFromVK() {
+    const bridge = getVKBridge();
+    if (!bridge) {
+        console.log('ℹ️ VK не доступен, загрузка кистей из VK отключена');
+        return Promise.resolve();
+    }
+    
+    return bridge.send('VKWebAppStorageGet', {
+        keys: ['brushesState']
+    })
+    .then((data) => {
+        if (data && data.keys && data.keys.length > 0) {
+            const stored = data.keys[0].value;
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    const now = Date.now();
+                    let hasChanges = false;
+                    
+                    for (const [id, remoteData] of Object.entries(parsed)) {
+                        // Проверяем, не истекло ли время
+                        if (remoteData.expiresAt && remoteData.expiresAt < now) {
+                            // Истекло - не загружаем
+                            continue;
+                        }
+                        
+                        // Обновляем локальное состояние
+                        if (brushesState[id]) {
+                            if (!brushesState[id].unlocked && remoteData.unlocked) {
+                                brushesState[id].unlocked = true;
+                                brushesState[id].expiresAt = remoteData.expiresAt || null;
+                                hasChanges = true;
+                            }
+                        }
+                    }
+                    
+                    if (hasChanges) {
+                        saveBrushesState();
+                        console.log('✅ Кисти синхронизированы с VK');
+                    }
+                } catch(e) {
+                    console.warn('⚠️ Ошибка парсинга кистей из VK:', e);
+                }
+            }
+        }
+    })
+    .catch((error) => {
+        console.warn('⚠️ Ошибка загрузки кистей из VK:', error);
+    });
 }
 
 // ===== ЗАПУСК ИНИЦИАЛИЗАЦИИ =====

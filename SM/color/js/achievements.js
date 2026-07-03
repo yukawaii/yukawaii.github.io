@@ -14,7 +14,13 @@ const ACHIEVEMENTS = [
     { id: 'all_cosmos', icon: '🌌', title: 'Исследователь космоса', desc: 'Раскрась все картинки в категории "Космос"', check: () => appState.coloredImages.filter(i => i.category === 'cosmos').length >= 50 },
     { id: 'all_animals', icon: '🐾', title: 'Друг животных', desc: 'Раскрась все картинки в категории "Животные"', check: () => appState.coloredImages.filter(i => i.category === 'animals').length >= 50 },
     { id: 'all_anime', icon: '🎌', title: 'Аниме-фанат', desc: 'Раскрась все картинки в категории "Аниме"', check: () => appState.coloredImages.filter(i => i.category === 'anime').length >= 50 },
-    { id: 'all_categories', icon: '🌈', title: 'Мастер всех категорий', desc: 'Раскрась все картинки во всех категориях', check: () => appState.coloredImages.length >= 300 }
+     // ===== ДОБАВЬТЕ ДОСТИЖЕНИЯ ДЛЯ "ЛЁГКИЕ" =====
+    { id: 'easy_5', icon: '🌟', title: 'Лёгкий старт', desc: 'Раскрась 5 лёгких картинок', check: () => appState.coloredImages.filter(i => i.category === 'easy').length >= 5 },
+    { id: 'easy_10', icon: '✨', title: 'Мастер простоты', desc: 'Раскрась 10 лёгких картинок', check: () => appState.coloredImages.filter(i => i.category === 'easy').length >= 10 },
+    { id: 'easy_20', icon: '🏅', title: 'Просто и красиво', desc: 'Раскрась 20 лёгких картинок', check: () => appState.coloredImages.filter(i => i.category === 'easy').length >= 20 },
+    { id: 'all_easy', icon: '💫', title: 'Коллекционер простоты', desc: 'Раскрась все лёгкие картинки', check: () => appState.coloredImages.filter(i => i.category === 'easy').length >= 30 },
+    // ===== КОНЕЦ =====
+    { id: 'all_categories', icon: '🌈', title: 'Мастер всех категорий', desc: 'Раскрась все картинки во всех категориях', check: () => appState.coloredImages.length >= 330 }, // 50*6 + 30 = 330
 ];
 
 function checkAchievements() {
@@ -96,7 +102,7 @@ function renderCollections() {
     container.innerHTML = '';
     let total = 0, colored = 0;
 
-    const emojis = { cosmos: '🌌', animals: '🐾', anime: '🎌', plants: '🌿', doodles: '✏️', mandala: '🌀' };
+      const emojis = { cosmos: '🌌', animals: '🐾', anime: '🎌', plants: '🌿', doodles: '✏️', mandala: '🌀', easy: '🌟' };
 
     for (const key in CATEGORIES) {
         const cat = CATEGORIES[key];

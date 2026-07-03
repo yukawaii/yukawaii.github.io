@@ -381,6 +381,55 @@ function closeAdErrorModal() {
     }
 }
 
+// ===== ПРОСМОТР РЕКЛАМЫ ДЛЯ КИСТИ =====
+function watchAdForBrushUnlock() {
+    const brushId = window._pendingBrushUnlock;
+    if (!brushId) return;
+    
+    closeUnlockModal();
+    document.getElementById('adLoadingModal').classList.add('show');
+    
+    const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
+    
+    if (bridge) {
+        bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+        .then(function(data) {
+            if (data && data.result) {
+                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+            } else {
+                document.getElementById('adLoadingModal').classList.remove('show');
+                showAdError();
+                return Promise.reject('Ad not available');
+            }
+        })
+        .then(function(adResult) {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            // Разблокируем кисть на 24 часа
+            if (typeof unlockBrushFor24Hours === 'function') {
+                unlockBrushFor24Hours(brushId);
+            }
+            window._pendingBrushUnlock = null;
+            window._pendingBrushUnlockFromColoring = false;
+            showToast(`✅ Кисть открыта на 24 часа!`);
+        })
+        .catch(function(error) {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            showAdError();
+        });
+    } else {
+        // Если VK нет - для тестирования
+        setTimeout(function() {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            if (typeof unlockBrushFor24Hours === 'function') {
+                unlockBrushFor24Hours(brushId);
+            }
+            window._pendingBrushUnlock = null;
+            window._pendingBrushUnlockFromColoring = false;
+            showToast(`✅ Кисть открыта на 24 часа!`);
+        }, 1500);
+    }
+}
+
 // ===== РАСКРАСКА =====
 function openColoring(categoryKey, index) {
     appState.currentImage = { category: categoryKey, index };
@@ -552,6 +601,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
     });
     
+    // В DOMContentLoaded добавьте:
+document.addEventListener('DOMContentLoaded', function() {
+    createCosmicBackground();
+    loadTheme();
+    loadState();
+    loadUnlockedState();
+    loadBrushesState(); // ← ДОБАВЬТЕ
+    initThemeButtons();
+    console.log('🎨 Раскраска загружена!');
+});
     // Запрет свайпов (pull-to-refresh)
     document.addEventListener('touchmove', function(e) {
         // Проверяем, не является ли элемент скроллируемым
@@ -598,6 +657,87 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('🚫 Контекстное меню и свайпы отключены');
 });
+// ===== КИСТИ: КОНФИГУРАЦИЯ =====
+const BRUSHES_CONFIG = {
+    simple: { id: 'simple', name: 'Простая', icon: '🖊️', defaultUnlocked: true },
+    solid: { id: 'solid', name: 'Твёрдая', icon: '✏️', defaultUnlocked: true },
+    soft: { id: 'soft', name: 'Мягкая', icon: '🖌️', defaultUnlocked: true },
+    sparkle: { id: 'sparkle', name: 'Блёстки', icon: '✨', defaultUnlocked: false },
+    texture: { id: 'texture', name: 'Текстура', icon: '🌟', defaultUnlocked: false },
+    dotted: { id: 'dotted', name: 'Пунктир', icon: '▪️', defaultUnlocked: false },
+    outline: { id: 'outline', name: 'Обводка', icon: '🔲', defaultUnlocked: false },
+    neon: { id: 'neon', name: 'Неон', icon: '💡', defaultUnlocked: false },
+    rainbow: { id: 'rainbow', name: 'Радуга', icon: '🌈', defaultUnlocked: false }
+};
+
+// ===== СОСТОЯНИЕ КИСТЕЙ =====
+let brushesState = {};
+
+function loadBrushesState() {
+    try {
+        const saved = localStorage.getItem('coloringBrushesState');
+        if (saved) {
+            brushesState = JSON.parse(saved);
+            // Проверяем, не истекло ли время
+            const now = Date.now();
+            for (const [id, data] of Object.entries(brushesState)) {
+                if (data.unlocked && data.expiresAt && data.expiresAt < now) {
+                    data.unlocked = false;
+                    data.expiresAt = null;
+                }
+            }
+        } else {
+            // Инициализируем состояние
+            for (const [id, config] of Object.entries(BRUSHES_CONFIG)) {
+                brushesState[id] = {
+                    unlocked: config.defaultUnlocked || false,
+                    expiresAt: null
+                };
+            }
+        }
+        saveBrushesState();
+    } catch(e) {}
+}
+
+function saveBrushesState() {
+    try {
+        localStorage.setItem('coloringBrushesState', JSON.stringify(brushesState));
+    } catch(e) {}
+}
+
+function isBrushUnlocked(brushId) {
+    const state = brushesState[brushId];
+    if (!state) return false;
+    
+    // Если unlocked и есть expiresAt - проверяем не истекло ли
+    if (state.unlocked && state.expiresAt) {
+        if (Date.now() > state.expiresAt) {
+            state.unlocked = false;
+            state.expiresAt = null;
+            saveBrushesState();
+            return false;
+        }
+        return true;
+    }
+    return state.unlocked || false;
+}
+
+function unlockBrushFor24Hours(brushId) {
+    const now = Date.now();
+    const expiresAt = now + (24 * 60 * 60 * 1000); // 24 часа в миллисекундах
+    
+    if (!brushesState[brushId]) {
+        brushesState[brushId] = { unlocked: false, expiresAt: null };
+    }
+    
+    brushesState[brushId].unlocked = true;
+    brushesState[brushId].expiresAt = expiresAt;
+    saveBrushesState();
+    
+    // Сохраняем в VK Storage для синхронизации
+    saveBrushesToVK();
+}
+
 
 // ===== ЗАПУСК =====
 document.addEventListener('DOMContentLoaded', function() {

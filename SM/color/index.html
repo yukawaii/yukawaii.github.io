@@ -42,6 +42,7 @@
 
         <!-- Категории -->
         <div class="main-menu">
+            <button class="btn-neon" onclick="openCategory('easy')">🌟 Лёгкие</button>
             <button class="btn-neon" onclick="openCategory('cosmos')">🌌 Космос</button>
             <button class="btn-neon" onclick="openCategory('animals')">🐾 Животные</button>
             <button class="btn-neon" onclick="openCategory('anime')">🎌 Аниме</button>
@@ -152,11 +153,14 @@
 <div class="modal" id="coloringModal">
     <div class="modal-content modal-large">
         <div class="modal-body" style="padding: 10px 16px 16px 16px;">
-            <div class="coloring-toolbar">
-                <button class="modal-close" onclick="closeColoring()" style="background: none; border: none; color: var(--text-secondary); font-size: 22px; cursor: pointer; padding: 0 8px 0 0; line-height: 1;">✖</button>
-                <span>Прогресс: <span id="progressPercent">0</span>%</span>
-                <span>⭐ <span id="coloringPoints">0</span></span>
-            </div>
+<div class="coloring-toolbar" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="modal-close" onclick="closeColoring()" style="background: none; border: none; color: var(--text-secondary); font-size: 22px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;">✖</button>
+        <span style="display: flex; align-items: center; gap: 4px; font-size: 16px; color: var(--text-secondary);">⭐ <span id="coloringPoints" style="color: var(--text-primary); font-weight: 600;">0</span></span>
+    </div>
+    <span style="font-size: 16px; color: var(--text-secondary); text-align: center;">Прогресс: <span id="progressPercent" style="color: var(--text-primary); font-weight: 600;">0</span>%</span>
+    <div style="width: 40px; flex-shrink: 0;"></div>
+</div>
             <div id="coloringCanvasWrapper"></div>
         </div>
     </div>
