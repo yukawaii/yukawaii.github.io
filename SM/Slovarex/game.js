@@ -364,8 +364,6 @@ let gameState = {
     
     thresholdReached: false
 };
-
-// ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
 function getCurrentThreshold() {
     const step = Math.max(0, gameState.level - 1);
