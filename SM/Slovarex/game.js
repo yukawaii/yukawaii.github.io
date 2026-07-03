@@ -424,30 +424,45 @@ function updateProgressBar() {
 }
 
 function updateUI() {
-    document.getElementById("level").textContent = gameState.level;
-    document.getElementById("score").textContent = gameState.totalScore + gameState.levelScore;
+document.getElementById("level").textContent = gameState.level;   
+    document.getElementById("score").textContent = gameState.levelScore;
     document.getElementById("timer").textContent = formatTime(gameState.timeLeft);
     document.getElementById("hintCount").textContent = gameState.hintsLeft;
-    document.getElementById("baseWord").textContent = gameState.baseWord;
-    
-    // ← НОВОЕ: обновляем бонус
+    document.getElementById("baseWord").textContent = gameState.baseWord;       
     const bonusCount = document.getElementById("bonusCount");
     if (bonusCount) {
         bonusCount.textContent = `🏆 Бонус: ${gameState.bonusScore}`;
-    }
-    
+    }    
     const timerCard = document.querySelector(".stat-time");
     if (gameState.timeLeft <= 10 && !gameState.frozen) {
         timerCard.classList.add("warning");
     } else {
         timerCard.classList.remove("warning");
-    }
-    
+    }    
     updateNextButton();
     updateProgressBar();
     updateSubmitButtonState();
+    updateTotalScoreInMenu();
+}
+// Обновление отображения общих очков в меню
+function updateTotalScoreInMenu() {
+    const totalScoreEl = document.getElementById('totalScoreDisplay');
+    if (totalScoreEl) { totalScoreEl.textContent = `⭐ ${gameState.totalScore || 0}`;
+    }
 }
 
+// Функция для добавления очков к общему счету (используется только при переходе уровня)
+function addToTotalScore(amount) {
+    if (!amount || amount <= 0) return;    
+    gameState.totalScore = (gameState.totalScore || 0) + amount;    
+    // Синхронизируем с VK Storage
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
+        console.log(`☁️ Общие очки синхронизированы: ${gameState.totalScore}`);
+    }    
+    // Обновляем отображение в меню
+    updateTotalScoreInMenu();
+}
 function updateSubmitButtonState() {
     const submitBtn = document.getElementById("submitBtn");
     if (submitBtn) {
@@ -566,7 +581,7 @@ function initLevel() {
     gameState.currentWord = [];
     gameState.foundWords.clear();
     gameState.foundList = [];
-    gameState.levelScore = 0;
+     gameState.levelScore = 0;
         gameState.bonusScore = 0;    
     gameState.thresholdReached = false;
     gameState.frozen = false;
@@ -704,20 +719,23 @@ function closeGameOverModal() {
 }
 
 function gameOverToMenu() {
-    closeGameOverModal();
-    
+    closeGameOverModal();    
     // Останавливаем таймер
     if (gameState.timerId) {
         clearInterval(gameState.timerId);
         gameState.timerId = null;
-    }
-    
-    // Очищаем паузу
-    cleanupPauseHandlers();
-    
-    // Частицы — над фоном меню
-    setParticlesAboveMenu();
-    
+    }    
+    // Очищаем паузу 
+    cleanupPauseHandlers();    
+      setParticlesAboveMenu();   
+        gameState.levelScore = 0;
+    gameState.bonusScore = 0;
+    gameState.frozen = true;
+    // Синхронизация
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+        saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
+    } 
     // Показываем начальный экран
     const startScreen = document.getElementById('startScreen');
     if (startScreen) {
@@ -725,44 +743,46 @@ function gameOverToMenu() {
         setTimeout(() => {
             startScreen.classList.remove('hidden');
         }, 10);
-    }
-    
+    }    
     // Скрываем игровой контейнер
     const gameContainer = document.querySelector('.game-container');
     if (gameContainer) {
         gameContainer.style.display = 'none';
-    }
-    
+    }    
     // Показываем VK навигацию
     if (typeof showVKView === 'function') {
         setTimeout(showVKView, 300);
     }
-    
+      
     // Очищаем тост
-    clearPermanentToast();
-    
+    clearPermanentToast();    
     console.log('🏠 Возврат в главное меню');
 }
 
 function gameOverRestart() {
     closeGameOverModal();   
-    // Очищаем паузу
     cleanupPauseHandlers();    
-    // Очищаем постоянный тост
-    clearPermanentToast();    
-    // Сбрасываем состояние
-    gameState.level = 1;
-    gameState.totalScore = 0;
-    gameState.hintsLeft = CONFIG.HINTS_START;
+    clearPermanentToast();
+    
+    // ====== НЕ ОБНУЛЯЕМ УРОВЕНЬ! и очки-звезды общие======
+    gameState.levelScore = 0;
+    gameState.bonusScore = 0;
     gameState.frozen = false;
-    gamePaused = false;    
-    // Показываем баннер
-    setTimeout(checkAndShowBanner, 500);    
-    // Запускаем уровень
+    gamePaused = false;
+    
+    // ====== СИНХРОНИЗАЦИЯ ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+        saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+        console.log(`☁️ Данные синхронизированы после gameOverRestart: уровень ${gameState.level}`);
+    }
+    // ===========================
+    
+    setTimeout(checkAndShowBanner, 500);
     initLevel();
     updateUI();
-    playSound("click");    
-    showToast("🔄 Игра перезапущена!");
+    playSound("click");
+    showToast(`🔄 Игра перезапущена на уровне ${gameState.level}!`);
 }
 
 // ========== ПОСТОЯННЫЙ ТОСТ ==========
@@ -942,8 +962,8 @@ updateGalaxyProgress(1);  // +1 слово к прогрессу галакти�
     const points = word.length;
        const bonus = calculateBonus(word); // ← НОВОЕ
     
-    gameState.levelScore += points + bonus;  // ← БОНУС ДОБАВЛЯЕТСЯ
-    gameState.bonusScore += bonus;            // ← НОВОЕ: общий бонус
+    gameState.levelScore += points + bonus;
+    gameState.bonusScore += bonus;
     gameState.timeLeft += CONFIG.TIME_BONUS_PER_WORD;
     
     playSound("success");
@@ -1014,7 +1034,11 @@ function useHint() {
     
     const hintWord = notFound[Math.floor(Math.random() * notFound.length)];
     gameState.hintsLeft--;
-    
+    // ====== СИНХРОНИЗАЦИЯ ПОДСКАЗОК С VK STORAGE ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+        console.log('☁️ Подсказки синхронизированы с VK Storage');
+    }  
     gameState.foundWords.add(hintWord);
     gameState.foundList.push(hintWord);
     
@@ -1082,31 +1106,31 @@ if (restartModal) {
 // Подтверждение — перезапускаем игру
 if (restartModalConfirm) {
     restartModalConfirm.onclick = () => {
-        restartModal.classList.remove('show');
-        
+        restartModal.classList.remove('show');        
         // Очищаем паузу
-        cleanupPauseHandlers();
-        
+        cleanupPauseHandlers();        
         // Очищаем постоянный тост
-        clearPermanentToast();
-        
-        // Сбрасываем состояние
-        gameState.level = 1;
-        gameState.totalScore = 0;
-        gameState.hintsLeft = CONFIG.HINTS_START;
+        clearPermanentToast();        
+        // ====== НЕ ОБНУЛЯЕМ УРОВЕНЬ! и общие очки-звезды
+           gameState.levelScore = 0;
+        gameState.bonusScore = 0;     
+        // Снимаем фриз и паузу
         gameState.frozen = false;
-        gamePaused = false;
-        
+        gamePaused = false;        
+        // ====== СИНХРОНИЗАЦИЯ ПОСЛЕ ПЕРЕЗАПУСКА ======
+        if (typeof saveToVKStorage === 'function') {
+            // Сохраняем текущий уровень и подсказки
+            saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+            saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+            console.log(`☁️ Данные синхронизированы после перезапуска: уровень ${gameState.level}, подсказок ${gameState.hintsLeft}`);
+        }        
         // Показываем баннер
-        setTimeout(checkAndShowBanner, 500);
-        
-        // Запускаем уровень
+        setTimeout(checkAndShowBanner, 500);        
+        // Запускаем уровень с сохраненным уровнем
         initLevel();
         updateUI();
-        playSound("click");
-        
-        // Показываем уведомление
-        showToast("🔄 Игра перезапущена!");
+        playSound("click");        
+        showToast(`🔄 Игра перезапущена на уровне ${gameState.level}!`);
     };
 }
 
@@ -1120,21 +1144,20 @@ document.addEventListener('keydown', (e) => {
 });
 
 function nextLevel() {
-    if (!gameState.thresholdReached) {
-        showToast("Сначала достигните порога!", true);
-        return;
-    }
-    
-    gameState.totalScore += gameState.levelScore + CONFIG.SCORE_BONUS_PER_LEVEL;
-    gameState.level++;
-        // ========== ОТПРАВКА УРОВНЯ В ВК ==========
-  //  if (typeof sendscore === 'function') {
-   //     sendscore();  // вызов вашей функции
-  //  }
+    if (!gameState.thresholdReached) { showToast("Сначала достигните порога!", true); return; }    
+    // ← ИЗМЕНЕНО: добавляем очки уровня к общим
+    const levelBonus = CONFIG.SCORE_BONUS_PER_LEVEL;
+    const totalToAdd = gameState.levelScore + levelBonus;    
+    // Добавляем к общим очкам
+    addToTotalScore(totalToAdd);    gameState.level++;       
       // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
 checkAchievements();
-// ================================
-    
+       // ====== СИНХРОНИЗАЦИЯ УРОВНЯ С VK STORAGE ======
+    if (typeof saveToVKStorage === 'function') {        saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+        saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+        console.log('☁️ Уровень и подсказки синхронизированы с VK Storage');
+    }
+    // ==============================================
     initLevel();
     updateUI();
     showToast(`🎉 Уровень ${gameState.level}! +${CONFIG.SCORE_BONUS_PER_LEVEL} бонусных очков!`);
@@ -1168,107 +1191,117 @@ function blinkNextButton() {
 
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 function initGame() {
-    // ====== ПРИМЕНЯЕМ ТЕМУ ======
     applyTheme(currentTheme);
     
-    // Проверяем, есть ли слова для загадывания
     if (BASE_WORDS_POOL.length === 0) {
-        console.error("❌ Нет слов длиннее 6 букв! Добавьте слова в DICTIONARY.");
+        console.error("❌ Нет слов длиннее 6 букв!");
         showToast("Ошибка: нет подходящих слов для игры", true);
         return;
     }
     
-    // ====== ИНИЦИАЛИЗАЦИЯ VK STORAGE ======
-    if (typeof loadAllDataFromVK === 'function') {
-        setTimeout(function() {
-            loadAllDataFromVK().then(function() {
-                // После загрузки данных обновляем UI
-                if (typeof updateUI === 'function') {
-                    updateUI();
-                }
-            });
-        }, 500);
-    }
+    // ====== ЗАГРУЗКА УРОВНЯ И ПОДСКАЗОК ИЗ VK STORAGE ======
+    // Проверяем, есть ли мост и интернет
+    const hasVKBridge = typeof vkBridge !== 'undefined' && typeof loadFromVKStorage === 'function';
     
-    // ====== ЗАПУСКАЕМ ИГРУ ТОЛЬКО ЕСЛИ ОНА ЕЩЁ НЕ ЗАПУЩЕНА ======
+    if (hasVKBridge) {
+        // Пытаемся загрузить данные с таймаутом 3 секунды
+        const loadPromise = Promise.all([
+            loadFromVKStorage(VK_STORAGE_KEYS.LEVEL),
+            loadFromVKStorage(VK_STORAGE_KEYS.HINTS)
+        ]);
+        
+        const timeoutPromise = new Promise((resolve) => {
+            setTimeout(() => {
+                console.warn('⏰ Таймаут загрузки из VK Storage, используем локальные данные');
+                resolve([null, null]);
+            }, 3000);
+        });
+        
+        Promise.race([loadPromise, timeoutPromise])
+            .then(([levelData, hintsData]) => {
+                // Загружаем уровень (максимальное значение)
+                if (levelData !== null && levelData !== undefined) {
+                    const vkLevel = Number(levelData) || 1;
+                    if (vkLevel > gameState.level) {
+                        gameState.level = vkLevel;
+                        console.log(`📥 Уровень загружен из VK: ${gameState.level}`);
+                    } else {
+                        console.log(`📤 Локальный уровень ${gameState.level} >= VK (${vkLevel})`);
+                    }
+                }
+                
+                // Загружаем подсказки
+                if (hintsData !== null && hintsData !== undefined) {
+                    const vkHints = Number(hintsData) || CONFIG.HINTS_START;
+                    // Подсказки не могут быть меньше 0 и больше разумного максимума
+                    gameState.hintsLeft = Math.max(0, Math.min(vkHints, CONFIG.HINTS_START * 3));
+                    console.log(`📥 Подсказки загружены из VK: ${gameState.hintsLeft}`);
+                }
+                
+                // Запускаем игру в любом случае
+                startGameAfterLoad();
+            })
+            .catch((error) => {
+                // Ошибка загрузки (нет интернета) — просто запускаем игру
+                console.warn('⚠️ Ошибка загрузки из VK (возможно нет интернета):', error);
+                showToast('ℹ️ Игра загружена с локальными данными');
+                startGameAfterLoad();
+            });
+    } else {
+        // VK Bridge недоступен — сразу запускаем
+        console.log('ℹ️ VK Bridge не доступен, используем локальные данные');
+        startGameAfterLoad();
+    }
+}
+
+// Вспомогательная функция для запуска игры после загрузки данных
+function startGameAfterLoad() {
     // Проверяем, не запущена ли уже игра
     if (gameState.timerId) {
         console.log('ℹ️ Игра уже запущена');
         return;
     }
     
+    // Убеждаемся, что уровень не меньше 1
+    if (!gameState.level || gameState.level < 1) {
+        gameState.level = 1;
+    }
+    
+    // Убеждаемся, что подсказки не отрицательные
+    if (gameState.hintsLeft < 0) {
+        gameState.hintsLeft = CONFIG.HINTS_START;
+    }
+    
+    console.log(`🎮 Запуск игры: уровень ${gameState.level}, подсказок ${gameState.hintsLeft}`);
+    
     initLevel();
     initAudio();
-    // ===========================================================
-   
+    
+    // Привязываем обработчики
     document.getElementById("submitBtn").onclick = submitWord;
     document.getElementById("backspaceBtn").onclick = backspace;
     document.getElementById("clearBtn").onclick = clearWord;
     document.getElementById("shuffleBtn").onclick = shuffleLetters;
     document.getElementById("hintBtn").onclick = useHint;
     document.getElementById("soundBtn").onclick = toggleSound;
- //   document.getElementById("restartBtn").onclick = restartGame;
     document.getElementById("nextLevelBtn").onclick = nextLevel;
-   
-/*// Таблица лидеров =================
-const leaderboardBtn = document.getElementById("leaderboardBtn");
-if (leaderboardBtn) {
-    leaderboardBtn.onclick = () => {
-        if (typeof top0 === 'function') {
-            top0();
-        } else {
-            console.log("Функция top0 не найдена в App.js");
-        }
-    };
-}  */
-// Кнопка "Пригласить"
-const shareBtn = document.getElementById("shareBtn");
-if (shareBtn) {
-    shareBtn.onclick = () => {
-        if (typeof share2 === 'function') {
-            share2();
-        } else {
-            console.log("Функция share2 не найдена в App.js");
-        }
-    };
-}
-//========================================================
+    
+    const shareBtn = document.getElementById("shareBtn");
+    if (shareBtn) shareBtn.onclick = () => { if (typeof share2 === 'function') share2(); };
     
     const modal = document.getElementById("modal");
     const modalNext = document.getElementById("modalNextBtn");
     const modalRestart = document.getElementById("modalRestartBtn");
     
-    if (modalNext) modalNext.onclick = () => {
-        modal.classList.remove("show");
-        nextLevel();
-    };
-    if (modalRestart) modalRestart.onclick = () => {
-        modal.classList.remove("show");
-        restartGame();
-    };
+    if (modalNext) modalNext.onclick = () => { modal.classList.remove("show"); nextLevel(); };
+    if (modalRestart) modalRestart.onclick = () => { modal.classList.remove("show"); restartGame(); };
+    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove("show"); };
     
-    modal.onclick = (e) => {
-        if (e.target === modal) modal.classList.remove("show");
-    };
-    
-    const style = document.createElement("style");
-    style.textContent = `
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-    `;
-    document.head.appendChild(style);
-    
- // ====== ПОДПИСКА НА СОБЫТИЯ ПАУЗЫ ======
-    // Слушаем изменение видимости страницы
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    // Слушаем фокус окна
     window.addEventListener('focus', handleWindowFocus);
     window.addEventListener('blur', handleWindowBlur);
     
-    console.log(`✅ Игра запущена! Доступно слов для загадывания: ${BASE_WORDS_POOL.length}`);
+    console.log(`✅ Игра запущена! Уровень: ${gameState.level}, Подсказок: ${gameState.hintsLeft}`);
 }
 
 // ========== НАЧАЛЬНЫЙ ЭКРАН ==========
@@ -1828,11 +1861,9 @@ if (exitModalConfirm) {
         if (gameState.timerId) {
             clearInterval(gameState.timerId);
             gameState.timerId = null;
-        }
-        
+        }        
         // Очищаем паузу
         cleanupPauseHandlers();
-  // Частицы — над фоном меню
         setParticlesAboveMenu();
         // Показываем начальный экран
         const startScreen = document.getElementById('startScreen');
@@ -1842,19 +1873,18 @@ if (exitModalConfirm) {
                 startScreen.classList.remove('hidden');
             }, 10);
         }
-        
-        // Скрываем игровой контейнер
+                // Скрываем игровой контейнер
         const gameContainer = document.querySelector('.game-container');
         if (gameContainer) {
             gameContainer.style.display = 'none';
         }
-        
+         gameState.levelScore = 0;
+        gameState.bonusScore = 0;
         // Сбрасываем флаг игры
-        gameState.frozen = true;
-        
+        gameState.frozen = true;        
         // Очищаем тост
         clearPermanentToast();
-        
+          updateTotalScoreInMenu();
         console.log('🏠 Возврат в главное меню');
     };
 }
