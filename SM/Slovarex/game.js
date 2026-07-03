@@ -161,7 +161,7 @@ const CONFIG = {
     MIN_WORD_LEN: 2,
     TIME_PER_LEVEL: 120,
     TIME_BONUS_PER_WORD: 15,
-    SCORE_BONUS_PER_LEVEL: 10,
+    SCORE_BONUS_PER_LEVEL: 0,
     HINTS_START: 3,
     LEVEL_THRESHOLD_START: 0.4,
     LEVEL_THRESHOLD_STEP: 0.05,
@@ -346,7 +346,7 @@ let gameState = {
     levelScore: 0,
     hintsLeft: CONFIG.HINTS_START,
     soundEnabled: true,
-        bonusScore: 0,    
+     //   bonusScore: 0,    
     
     baseWord: "",
     baseLetters: [],
@@ -429,10 +429,10 @@ document.getElementById("level").textContent = gameState.level;
     document.getElementById("timer").textContent = formatTime(gameState.timeLeft);
     document.getElementById("hintCount").textContent = gameState.hintsLeft;
     document.getElementById("baseWord").textContent = gameState.baseWord;       
-    const bonusCount = document.getElementById("bonusCount");
+  /* const bonusCount = document.getElementById("bonusCount");
     if (bonusCount) {
         bonusCount.textContent = `🏆 Бонус: ${gameState.bonusScore}`;
-    }    
+    }   */ 
     const timerCard = document.querySelector(".stat-time");
     if (gameState.timeLeft <= 10 && !gameState.frozen) {
         timerCard.classList.add("warning");
@@ -582,7 +582,7 @@ function initLevel() {
     gameState.foundWords.clear();
     gameState.foundList = [];
      gameState.levelScore = 0;
-        gameState.bonusScore = 0;    
+      //  gameState.bonusScore = 0;    
     gameState.thresholdReached = false;
     gameState.frozen = false;
     gameState.timeLeft = CONFIG.TIME_PER_LEVEL;
@@ -953,37 +953,38 @@ function submitWord() {
         return;
     }
     
-    // Принимаем слово
     gameState.foundWords.add(word);
     gameState.foundList.push(word);
-    // ====== ОБНОВЛЯЕМ ГАЛАКТИКУ ======
-updateGalaxyProgress(1);  // +1 слово к прогрессу галактики
-// ================================
-    const points = word.length;
-       const bonus = calculateBonus(word); // ← НОВОЕ
     
-    gameState.levelScore += points + bonus;
-    gameState.bonusScore += bonus;
+    updateGalaxyProgress(1);
+    
+    // ====== НОВАЯ СИСТЕМА ОЧКОВ ======
+    // Слова до 5 букв (включительно) — 1 очко
+    // Слова от 6 букв и длиннее — 2 очка
+    const points = word.length <= 5 ? 1 : 2;
+    // ==================================
+    
+    // Бонус больше не нужен, удаляем
+    // const bonus = calculateBonus(word);
+    
+    gameState.levelScore += points;
+    // gameState.bonusScore += bonus; // удаляем или оставляем 0
     gameState.timeLeft += CONFIG.TIME_BONUS_PER_WORD;
     
     playSound("success");
-     // ← ИЗМЕНЕНО: показываем бонус в тосте
+    
+    // Показываем тост
     let toastMessage = `✅ "${word}" +${points} очков! +${CONFIG.TIME_BONUS_PER_WORD} сек!`;
-    if (bonus > 0) {
-        toastMessage += ` 🎁 Бонус +${bonus}!`;
-    }
     showToast(toastMessage);
-        // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
-checkAchievements(word
-);
-// ================================
+    
+    checkAchievements(word);
+    
     gameState.currentWord = [];
     renderCurrentWord();
     renderFoundWords();
     updateLettersDisabled();
     updateUI();
     updateThresholdFlag();
-
 }
 
 function backspace() {

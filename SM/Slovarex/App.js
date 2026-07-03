@@ -118,6 +118,7 @@ function syncAllDataToVK() {
     const sound = localStorage.getItem('wordgame:v1:sound') || '1';
     const level = gameState ? gameState.level : 1;
     const hints = gameState ? gameState.hintsLeft : CONFIG.HINTS_START;    
+     const totalScore = gameState ? gameState.totalScore : 0;
     // Сохраняем ВСЕГДА (даже если 0) — это нормально, потому что мы уже убедились, что локальные данные актуальны
     return Promise.all([
         saveToVKStorage(VK_STORAGE_KEYS.GALAXY, galaxy),
@@ -146,7 +147,7 @@ function loadAllDataFromVK() {
         loadFromVKStorage(VK_STORAGE_KEYS.LEVEL),   
         loadFromVKStorage(VK_STORAGE_KEYS.HINTS),
          loadFromVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE)  
-    ]).then(([galaxyData, achievementsData, themeData, soundData]) => {
+    ]).then(([galaxyData, achievementsData, themeData, soundData, levelData, hintsData, totalScoreData]) => { // ← ИСПРАВЛЕНО: добавил levelData, hintsData, totalScoreData
         let loaded = false;
       // ====== УРОВЕНЬ: БЕРЁМ МАКСИМУМ ======
         if (levelData !== null && levelData !== undefined) {
