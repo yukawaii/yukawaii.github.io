@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
           <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <script src="index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <!-- Для корректной работы в iframe ВК -->
@@ -86,17 +85,7 @@
             #startScreen.loaded {
                 opacity: 1 !important;
             }
-            .start-screen__content {
-                background: ${colors.card} !important;
-                color: ${colors.text} !important;
-                border-radius: 40px;
-                padding: 48px 40px 36px;
-                max-width: 420px;
-                width: 100%;
-                text-align: center;
-                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-                transition: background 0.4s ease, color 0.4s ease;
-            }
+ .start-screen__content{ background: ${colors.card} !important; color: ${colors.text} !important; border-radius: 40px; padding: 48px 40px 36px; max-width: 420px; width: 100%; text-align: center; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); transition: background 0.4s ease, color 0.4s ease;}
             .start-screen__title {
                 color: ${colors.text} !important;
             }
@@ -388,10 +377,7 @@
 
         <!-- Панель управления -->
         <div class="control-panel">
-            <button class="control-btn" id="submitBtn">✅ Отправить</button>
-            <button class="control-btn" id="backspaceBtn">⌫ Удалить</button>
-            <button class="control-btn" id="clearBtn">🗑️ Очистить</button>
-            <button class="control-btn" id="shuffleBtn">🎲 Перемешать</button>
+       <button class="control-btn" id="submitBtn">✅ Отправить</button><button class="control-btn" id="backspaceBtn">⌫ Удалить</button><button class="control-btn" id="clearBtn">🗑️ Очистить</button><button class="control-btn" id="shuffleBtn">🎲 Перемешать</button>
         </div>
 <!-- ПРАВАЯ КОЛОНКА (ПК) -->
 <div class="right-column">
@@ -531,7 +517,6 @@
         console.log('✅ VK Bridge найден');
     })();
 </script>
-<script src="words.js"></script>
-<script src="game.js"></script>
+<script src="words.js"></script><script src="game.js"></script>
 </body>
 </html>
