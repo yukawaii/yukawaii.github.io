@@ -99,9 +99,23 @@ const VK_STORAGE_KEYS = {
     GALAXY: 'wordgame_galaxy_v2',
     ACHIEVEMENTS: 'wordgame_achievements_v2',
     THEME: 'wordgame_theme_v2',
-    SOUND: 'wordgame_sound_v2'
+    SOUND: 'wordgame_sound_v2',
+     PLAYER: 'wordgame_player_v2'
 };
+// Функция сохранения данных игрока
+function savePlayerDataToVK() {
+    const playerData = {
+        level: gameState.level,
+        totalScore: gameState.totalScore,
+        hintsLeft: gameState.hintsLeft
+    };
+    return saveToVKStorage(VK_STORAGE_KEYS.PLAYER, playerData);
+}
 
+// Функция загрузки данных игрока
+function loadPlayerDataFromVK() {
+    return loadFromVKStorage(VK_STORAGE_KEYS.PLAYER);
+}
 // Сохранение данных в VK Storage
 function saveToVKStorage(key, value) {
     if (typeof vkBridge === 'undefined') {
@@ -151,22 +165,27 @@ function loadFromVKStorage(key) {
 }
 
 // Полная синхронизация всех данных
+// Обновите syncAllDataToVK()
 function syncAllDataToVK() {
     console.log('🔄 Синхронизация данных с VK Storage...');
     
-    // Получаем текущие данные
     const galaxy = getGalaxyProgress();
     const achievements = loadAchievements();
     const theme = localStorage.getItem(THEME_KEY) || 'light';
     const sound = localStorage.getItem('wordgame:v1:sound') || '1';
     
-    // Сохраняем ВСЕГДА (даже если 0) — это нормально,
-    // потому что мы уже убедились, что локальные данные актуальны
-    return Promise.all([
+    // Сохраняем данные игрока
+    const playerData = {
+        level: gameState.level || 1,
+        totalScore: gameState.totalScore || 0,
+        hintsLeft: gameState.hintsLeft || 3
+    };
+        return Promise.all([
         saveToVKStorage(VK_STORAGE_KEYS.GALAXY, galaxy),
         saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, achievements),
         saveToVKStorage(VK_STORAGE_KEYS.THEME, theme),
-        saveToVKStorage(VK_STORAGE_KEYS.SOUND, sound)
+        saveToVKStorage(VK_STORAGE_KEYS.SOUND, sound),
+        saveToVKStorage(VK_STORAGE_KEYS.PLAYER, playerData) // ← ДОБАВЛЯЕМ
     ]).then(() => {
         console.log('✅ Полная синхронизация завершена');
     }).catch((error) => {
@@ -174,22 +193,21 @@ function syncAllDataToVK() {
     });
 }
 
+
 // Загрузка всех данных из VK Storage
 function loadAllDataFromVK() {
-    console.log('🔄 Загрузка данных из VK Storage...');
-    
+    console.log('🔄 Загрузка данных из VK Storage...');    
     return Promise.all([
         loadFromVKStorage(VK_STORAGE_KEYS.GALAXY),
         loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
         loadFromVKStorage(VK_STORAGE_KEYS.THEME),
-        loadFromVKStorage(VK_STORAGE_KEYS.SOUND)
-    ]).then(([galaxyData, achievementsData, themeData, soundData]) => {
-        let loaded = false;
-        
+        loadFromVKStorage(VK_STORAGE_KEYS.SOUND),
+        loadFromVKStorage(VK_STORAGE_KEYS.PLAYER) // ← ДОБАВЛЯЕМ
+    ]).then(([galaxyData, achievementsData, themeData, soundData, playerData]) => {
+        let loaded = false;        
 // ====== ГАЛАКТИКА: БЕРЁМ МАКСИМУМ ======
 if (galaxyData && galaxyData.totalWords !== undefined) {
-    const currentLocal = getGalaxyProgress();
-    
+    const currentLocal = getGalaxyProgress();    
     // Берём максимум по каждому полю
     const merged = {
         totalWords: Math.max(currentLocal.totalWords || 0, galaxyData.totalWords || 0),
@@ -268,8 +286,35 @@ if (achievementsData && typeof achievementsData === 'object') {
         if (!loaded) {
             console.log('ℹ️ В VK Storage нет данных или локальные данные новее');
         }
-        
+         // ====== ДАННЫЕ ИГРОКА ======
+        if (playerData && typeof playerData === 'object') {
+            const localLevel = gameState.level || 1;
+            const vkLevel = playerData.level || 1;
+            const localScore = gameState.totalScore || 0;
+            const vkScore = playerData.totalScore || 0;
+            const localHints = gameState.hintsLeft || 3;
+            const vkHints = playerData.hintsLeft || 3;
+            
+            // Берём максимальные значения
+            const mergedLevel = Math.max(localLevel, vkLevel);
+            const mergedScore = Math.max(localScore, vkScore);
+            const mergedHints = Math.max(localHints, vkHints);
+            
+            if (mergedLevel !== localLevel || mergedScore !== localScore || mergedHints !== localHints) {
+                gameState.level = mergedLevel;
+                gameState.totalScore = mergedScore;
+                gameState.hintsLeft = mergedHints;
+                loaded = true;
+                console.log(`✅ Данные игрока загружены: уровень ${mergedLevel}, очков ${mergedScore}, подсказок ${mergedHints}`);
+                
+                // Перезапускаем игру на загруженном уровне
+                if (typeof initLevel === 'function') {
+                    setTimeout(initLevel, 300);
+                }
+            }
+        }
         // ====== ПОСЛЕ ЗАГРУЗКИ — СОХРАНЯЕМ ВСЁ В VK ======
+        
         // Это важно: если локальные данные новее — обновляем VK
         syncAllDataToVK();
         
