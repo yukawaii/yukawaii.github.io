@@ -447,7 +447,7 @@ document.getElementById("level").textContent = gameState.level;
 // Обновление отображения общих очков в меню
 function updateTotalScoreInMenu() {
     const totalScoreEl = document.getElementById('totalScoreDisplay');
-    if (totalScoreEl) { totalScoreEl.textContent = `⭐ ${gameState.totalScore || 0}`;
+    if (totalScoreEl) { totalScoreEl.textContent = `💎 ${gameState.totalScore || 0}`;
     }
 }
 
