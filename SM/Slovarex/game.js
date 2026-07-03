@@ -700,7 +700,7 @@ function showGameOverModal() {
                 <span class="stat-value">${gameState.foundWords.size}</span>
             </div>
             <div class="stat-item">
-                <span class="stat-label">⭐ Очки</span>
+                <span class="stat-label">💎 Очки</span>
                 <span class="stat-value highlight">${gameState.totalScore + gameState.levelScore}</span>
             </div>
             <div class="stat-item">
