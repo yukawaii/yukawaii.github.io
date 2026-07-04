@@ -4,8 +4,8 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 
-// Импортируем звуки из ресурсов
-var musicModule = require('../../unit/music');
+// ===== МЕНЯЕМ ИМПОРТ: вместо musicModule используем arcadeSounds =====
+var arcadeSounds = require('../../unit/arcadeSounds');
 
 class RacingGame extends Component {
   constructor(props) {
@@ -146,8 +146,8 @@ class RacingGame extends Component {
     this.lastSoundTime = now;
     
     try {
-      if (musicModule.move) {
-        musicModule.move();
+      if (arcadeSounds && arcadeSounds.move) {
+        arcadeSounds.move();
       }
     } catch(e) {}
   }
@@ -155,10 +155,10 @@ class RacingGame extends Component {
   playCrashSound() {
     if (!this.state.soundEnabled) return;
     try {
-      if (musicModule.gameover) {
-        musicModule.gameover();
-      } else if (musicModule.clear) {
-        musicModule.clear();
+      if (arcadeSounds && arcadeSounds.gameover) {
+        arcadeSounds.gameover();
+      } else if (arcadeSounds && arcadeSounds.hit) {
+        arcadeSounds.hit();
       }
     } catch(e) {}
   }
@@ -581,7 +581,7 @@ updateGame() {
           
           <div className={style.road}>
             <div className={style.car} style={{ left: this.state.carX, top: this.state.carY }}>
-              🚗
+              🚘
             </div>
             {this.state.obstacles.map(function(obs, i) {
               return (
@@ -624,7 +624,7 @@ updateGame() {
           )}
           
           <div className={style.controls}>
-            <span>← → ↑ ↓ (WASD/ЦЫФВ)</span>
+            <span>← → ↑ ↓ (WASD)</span>
           </div>
         </div>
       </div>

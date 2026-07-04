@@ -4,7 +4,7 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 
-var musicModule = require('../../unit/music');
+var arcadeSounds = require('../../unit/arcadeSounds');
 
 class ArkanoidGame extends Component {
   constructor(props) {
@@ -192,22 +192,26 @@ saveScore(score) {
   }
 }
 
-  playMoveSound() {
-    if (!this.state.soundEnabled) return;
-    var now = Date.now();
-    if (now - this.lastSoundTime < 80) return;
-    this.lastSoundTime = now;
-    try {
-      if (musicModule.move) musicModule.move();
-    } catch(e) {}
-  }
+ playMoveSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.move) {
+      arcadeSounds.move();
+    }
+  } catch(e) {}
+}
 
-  playCrashSound() {
-    if (!this.state.soundEnabled) return;
-    try {
-      if (musicModule.clear) musicModule.clear();
-    } catch(e) {}
-  }
+// В playCrashSound:
+playCrashSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.gameover) {
+      arcadeSounds.gameover();
+    } else if (arcadeSounds && arcadeSounds.hit) {
+      arcadeSounds.hit();
+    }
+  } catch(e) {}
+}
 
   toggleSound() {
     this.setState({ soundEnabled: !this.state.soundEnabled });
