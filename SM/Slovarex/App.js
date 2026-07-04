@@ -429,40 +429,51 @@ function closeHintAdModal() {
     }
 }
 
-// В конце App.js, после всех определений в начале игры загружаем данные из вк-стораджа
-// ====== МГНОВЕННАЯ ЗАГРУЗКА ДАННЫХ ПОСЛЕ ИНИЦИАЛИЗАЦИИ VK ======
+// ====== МГНОВЕННАЯ ЗАГРУЗКА И СИНХРОНИЗАЦИЯ ======
 (function() {
     if (typeof vkBridge === 'undefined') {
         console.log('ℹ️ VK Bridge не доступен');
         return;
-    }    
-    console.log('🌐 загрузка данных из VK Storage...');    
-    // Ждем только инициализацию VK Bridge, затем сразу загружаем данные
-    if (typeof loadAllDataFromVK === 'function') {
-        loadAllDataFromVK().then(function(loaded) {
-            console.log('📦 Данные из VK Storage загружены:', loaded);
-            if (loaded) {
-                if (typeof updateUI === 'function') {
-                    updateUI();  // ← БЕЗ ЗАДЕРЖКИ
-                }
-                if (typeof updateTotalScoreInMenu === 'function') {
-                    updateTotalScoreInMenu();  // ← МГНОВЕННОЕ ОБНОВЛЕНИЕ АЛМАЗОВ В МЕНЮ
-                }
-            }
-        });
     }
-})();
-
-// Инициализация синхронизации сразу после загрузки моста
-if (typeof vkBridge !== 'undefined') {
-    // Ждем только инициализацию VK Bridge
+    
+    console.log('🌐 Инициализация VK Bridge и загрузка данных...');
+    
+    // Единственная инициализация VK Bridge
     vkBridge.send('VKWebAppInit', {})
         .then(() => {
-            console.log('✅ VK Bridge инициализирован, запускаем синхронизацию');
-            initVKStorageSync();
+            console.log('✅ VK Bridge инициализирован');
+            
+            // Сразу загружаем данные
+            if (typeof loadAllDataFromVK === 'function') {
+                loadAllDataFromVK().then(function(loaded) {
+                    console.log('📦 Данные из VK Storage загружены:', loaded);
+                    
+                    // Мгновенное обновление UI
+                    if (typeof updateUI === 'function') {
+                        updateUI();
+                    }
+                    if (typeof updateTotalScoreInMenu === 'function') {
+                        updateTotalScoreInMenu();
+                    }
+                    
+                    // Настраиваем авто-синхронизацию
+                    if (typeof syncOnChange === 'function') {
+                        syncOnChange();
+                    }
+                    
+                    // Если данных нет — сохраняем текущие
+                    if (!loaded && typeof syncAllDataToVK === 'function') {
+                        console.log('📤 Отправка текущих данных в VK Storage...');
+                        syncAllDataToVK();
+                    }
+                });
+            }
         })
-        .catch(() => {
-            console.warn('⚠️ VK Bridge не инициализирован, но продолжаем');
-            initVKStorageSync();
+        .catch((error) => {
+            console.warn('⚠️ Ошибка инициализации VK Bridge:', error);
+            // Всё равно пытаемся загрузить данные
+            if (typeof loadAllDataFromVK === 'function') {
+                loadAllDataFromVK();
+            }
         });
-}
+})();
