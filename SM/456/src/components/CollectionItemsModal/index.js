@@ -233,7 +233,7 @@ if (result.error === 'not_enough_points') {
     }.bind(this)}
   >
     <img 
-      src={'/images/' + config.path + '/' + index + '.png'} 
+      src={'/SM/456/src/images/' + config.path + '/' + index + '.png'} 
       alt={index}
       className={style.itemImage}
       onError={(e) => { e.target.src = ''; e.target.alt = '🖼️'; }}

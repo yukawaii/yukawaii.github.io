@@ -97,7 +97,7 @@ class ItemPreviewModal extends Component {
             
             <div className={style.imageWrapper}>
               <img 
-                src={'/images/' + config.path + '/' + itemIndex + '.png'} 
+                src={'/SM/456/src/images/' + config.path + '/' + itemIndex + '.png'} 
                 alt={itemIndex}
                 className={style.image}
                 onError={(e) => { 
