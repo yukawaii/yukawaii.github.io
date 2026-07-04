@@ -1,0 +1,422 @@
+// src/components/ScrollsModal/index.less
+
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+  pointer-events: none;
+  background: transparent;
+}
+
+.modal {
+  background: #ffd700;
+  border: 6px solid #b8960f;
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 400px;
+  max-width: 95%;
+  max-height: 90%;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  animation: modalFadeIn 0.3s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 4px solid #b8960f;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: bold;
+  color: #2c2c2c;
+  text-shadow: none;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.count {
+  font-size: 30px;
+  color: #2c2c2c;
+  text-shadow: none;
+}
+
+.closeBtn {
+  background: #b8960f;
+  border: 3px solid #8b7a00;
+  color: #ffd700;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 45px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  &:hover {
+    background: #8b7a00;
+    transform: scale(1.1);
+  }
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 30px;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  padding: 10px 0;
+  border-bottom: 2px solid rgba(184, 150, 15, 0.3);
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.scrollsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  overflow-y: auto;
+  padding: 4px;
+  flex: 1;
+  max-height: 400px;
+  overflow-x: hidden;
+}
+
+.scrollItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: rgba(44, 44, 44, 0.1);
+  border: 2px solid #8b7a00;
+  transition: all 0.2s;
+  position: relative;
+  padding: 10px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  
+  &:hover {
+    background: rgba(44, 44, 44, 0.2);
+    border-color: #b8960f;
+  }
+}
+
+.scrollIcon {
+  font-size: 38px;
+  margin-bottom: 4px;
+}
+
+.scrollTitle {
+  font-size: 16px;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  font-weight: bold;
+  word-break: break-word;
+  width: 100%;
+  line-height: 1.2;
+}
+
+.scrollPrice {
+  margin-top: 4px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.buyBtn {
+  background: #2c2c2c;
+  color: #ffd700;
+  border: 2px solid #b8960f;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 18px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  white-space: nowrap;
+  
+  &:hover {
+    background: #3c3c3c;
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.priceText {
+  font-size: 20px;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  opacity: 0.6;
+}
+
+.scrollRead {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 20px;
+  color: #4caf50;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding-top: 14px;
+  border-top: 2px solid rgba(184, 150, 15, 0.3);
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+
+.pageBtn {
+  background: #2c2c2c;
+  color: #ffd700;
+  border: 3px solid #b8960f;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 35px;
+  cursor: pointer;
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) {
+    background: #3c3c3c;
+    transform: scale(1.05);
+  }
+  
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.pageInfo {
+  font-size: 30px;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+// ===== ТЕЛЕФОНЫ ПОРТРЕТ =====
+@media (max-width: 480px) and (orientation: portrait) {
+  .modal {
+    padding: 18px 16px;
+    min-width: auto;
+    width: 96%;
+    max-width: 96%;
+    max-height: 90vh;
+    border-width: 4px;
+    border-radius: 12px;
+  }
+  
+  .title {
+    font-size: 30px !important;
+  }
+  
+  .count {
+    font-size: 24px !important;
+  }
+  
+  .closeBtn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 35px !important;
+  }
+  
+  .progressInfo {
+    font-size: 24px !important;
+  }
+  
+  .scrollsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-height: 300px;
+  }
+  
+  .scrollIcon {
+    font-size: 30px;
+  }
+  
+  .scrollTitle {
+    font-size: 14px !important;
+  }
+  
+  .buyBtn {
+    font-size: 16px;
+    padding: 3px 8px;
+  }
+  
+  .priceText {
+    font-size: 16px;
+  }
+  
+  .pageBtn {
+    font-size: 28px;
+    padding: 6px 14px;
+  }
+  
+  .pageInfo {
+    font-size: 24px;
+  }
+}
+
+// ===== ТЕЛЕФОНЫ ЛАНДШАФТ =====
+@media (max-width: 800px) and (orientation: landscape) {
+  .modal {
+    padding: 24px 30px;
+    min-width: auto;
+    width: 94vw;
+    max-width: 100%;
+     max-height: 100%;
+    min-height: 88vh;
+    border-width: 4px;
+    border-radius: 14px;
+  }
+  
+  .title {
+    font-size: 32px !important;
+  }
+  
+  .count {
+    font-size: 26px !important;
+  }
+  
+  .closeBtn {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 38px !important;
+  }
+  
+  .progressInfo {
+    font-size: 26px !important;
+    padding: 8px 0;
+  }
+  
+   
+  .scrollsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-height: 400px;
+  }
+  
+  .scrollIcon {
+    font-size: 32px;
+     margin-bottom: 2px;
+  }
+  .scrollItem {
+  border-radius: 4px;
+  padding: 6px 2px;
+
+  }
+  .scrollTitle {
+    font-size: 18px !important;
+  }
+  
+  .buyBtn {
+    font-size: 16px;
+  }
+  
+  .priceText {
+    font-size: 18px;
+  }
+  
+  .pageBtn {
+    font-size: 30px;
+    padding: 6px 18px;
+  }
+  
+  .pageInfo {
+    font-size: 26px;
+  }
+}
+
+// ===== МАЛЕНЬКИЕ ТЕЛЕФОНЫ =====
+@media (max-width: 380px) {
+  .modal {
+    padding: 14px 12px;
+    width: 98%;
+    max-width: 98%;
+    max-height: 90vh;
+    border-width: 3px;
+  }
+  
+  .title {
+    font-size: 26px !important;
+  }
+  
+  .count {
+    font-size: 20px !important;
+  }
+  
+  .closeBtn {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 28px !important;
+  }
+  
+  .progressInfo {
+    font-size: 20px !important;
+  }
+  
+  .scrollsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    max-height: 250px;
+  }
+  
+  .scrollIcon {
+    font-size: 26px;
+  }
+  
+  .scrollTitle {
+    font-size: 12px !important;
+  }
+  
+  .buyBtn {
+    font-size: 14px;
+    padding: 2px 6px;
+  }
+  
+  .priceText {
+    font-size: 14px;
+  }
+  
+  .pageBtn {
+    font-size: 24px;
+    padding: 4px 10px;
+  }
+  
+  .pageInfo {
+    font-size: 20px;
+  }
+}

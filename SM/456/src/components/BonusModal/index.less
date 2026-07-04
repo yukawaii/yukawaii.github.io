@@ -1,0 +1,209 @@
+// src/components/BonusModal/index.less
+
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10002;
+  pointer-events: none;
+}
+
+.modal {
+  background: #ffd700;
+  border: 6px solid #b8960f;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 90%;
+  max-height: 90vh;
+  width: 400px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.8);
+  position: relative;
+  pointer-events: auto;
+  animation: modalFadeIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  background: #b8960f;
+  border: 3px solid #8b7a00;
+  color: #ffd700;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  
+  &:hover {
+    background: #8b7a00;
+    transform: scale(1.1);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.icon {
+  font-size: 64px;
+  margin-bottom: 8px;
+}
+
+.titleText {
+  font-size: 35px;
+  font-weight: bold;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+}
+
+.description {
+  font-size: 30px;
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.timer {
+  font-size: 32px;
+  font-weight: bold;
+  color: #b8960f;
+  display: block;
+  margin-top: 8px;
+}
+
+.buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  justify-content: center;
+}
+
+.cancelBtn {
+  background: #8b7a00;
+  color: #ffd700;
+  border: 3px solid #6b5a00;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 25px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+  min-width: 120px;
+  
+  &:hover {
+    background: #6b5a00;
+    transform: scale(1.05);
+  }
+}
+
+.getBtn {
+  background: #2c2c2c;
+  color: #ffd700;
+  border: 3px solid #b8960f;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 30px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+  min-width: 120px;
+  
+  &:hover {
+    background: #3c3c3c;
+    transform: scale(1.05);
+  }
+}
+
+.okBtn {
+  background: #2c2c2c;
+  color: #ffd700;
+  border: 3px solid #b8960f;
+  border-radius: 8px;
+  padding: 12px 50px;
+  font-size: 30px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: bold;
+  min-width: 150px;
+  
+  &:hover {
+    background: #3c3c3c;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 20px;
+    width: 95%;
+  }
+  
+  .closeBtn {
+    top: -14px;
+    right: -14px;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+  }
+  
+  .icon {
+    font-size: 48px;
+  }
+  
+  .titleText {
+    font-size: 35px;
+  }
+  
+  .description {
+    font-size: 30px;
+  }
+  
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cancelBtn, .getBtn, .okBtn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+// ===== ТЕЛЕФОНЫ ЛАНДШАФТ =====
+@media (max-width: 800px) and (orientation: landscape) {
+  .modal {
+    padding: 20px 30px;
+    width: 94vw;
+    max-width: 100%;
+     max-height: 95%;
+    min-height: 45%;
+    border-width: 4px;
+    border-radius: 14px;
+  }
+}
