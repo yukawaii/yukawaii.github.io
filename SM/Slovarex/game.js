@@ -759,7 +759,6 @@ function gameOverToMenu() {
     clearPermanentToast();    
     console.log('🏠 Возврат в главное меню');
 }
-
 function gameOverRestart() {
     closeGameOverModal();   
     cleanupPauseHandlers();    
