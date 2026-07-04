@@ -303,23 +303,7 @@ function syncOnChange() {
     console.log('✅ Авто-синхронизация настроена');
 }
 
-// Инициализация синхронизации
-function initVKStorageSync() {
-    if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен');
-        return;
-    }
-    
-    console.log('🌐 Инициализация VK Storage синхронизации...');
-    
-    loadAllDataFromVK().then((loaded) => {
-        syncOnChange();
-        if (!loaded) {
-            console.log('📤 Отправка текущих данных в VK Storage...');
-            syncAllDataToVK();  // ← БЕЗ ЗАДЕРЖКИ
-        }
-    });
-}
+
 // Ручная синхронизация (можно вызвать из консоли)
 function manualSync() {
     console.log('🔄 Ручная синхронизация...');
@@ -427,6 +411,7 @@ function closeHintAdModal() {
         resumeGame();
     }
 }
+
 
 // ====== МГНОВЕННАЯ ЗАГРУЗКА И СИНХРОНИЗАЦИЯ ======
 (function() {
