@@ -730,7 +730,7 @@ function gameOverToMenu() {
     cleanupPauseHandlers();    
       setParticlesAboveMenu();   
         gameState.levelScore = 0;
-    gameState.bonusScore = 0;
+   // gameState.bonusScore = 0;
     gameState.frozen = true;
     // Синхронизация
     if (typeof saveToVKStorage === 'function') {
@@ -767,7 +767,7 @@ function gameOverRestart() {
     
     // ====== НЕ ОБНУЛЯЕМ УРОВЕНЬ! и очки-звезды общие======
     gameState.levelScore = 0;
-    gameState.bonusScore = 0;
+ //   gameState.bonusScore = 0;
     gameState.frozen = false;
     gamePaused = false;
     
@@ -775,6 +775,7 @@ function gameOverRestart() {
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
         saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+         saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
         console.log(`☁️ Данные синхронизированы после gameOverRestart: уровень ${gameState.level}`);
     }
     // ===========================
@@ -1115,7 +1116,7 @@ if (restartModalConfirm) {
         clearPermanentToast();        
         // ====== НЕ ОБНУЛЯЕМ УРОВЕНЬ! и общие очки-звезды
            gameState.levelScore = 0;
-        gameState.bonusScore = 0;     
+     //   gameState.bonusScore = 0;     
         // Снимаем фриз и паузу
         gameState.frozen = false;
         gamePaused = false;        
@@ -1124,6 +1125,7 @@ if (restartModalConfirm) {
             // Сохраняем текущий уровень и подсказки
             saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
             saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
+             saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
             console.log(`☁️ Данные синхронизированы после перезапуска: уровень ${gameState.level}, подсказок ${gameState.hintsLeft}`);
         }        
         // Показываем баннер
@@ -1886,13 +1888,18 @@ if (exitModalConfirm) {
             gameContainer.style.display = 'none';
         }
          gameState.levelScore = 0;
-        gameState.bonusScore = 0;
+     //   gameState.bonusScore = 0;
         // Сбрасываем флаг игры
         gameState.frozen = true;        
         // Очищаем тост
         clearPermanentToast();
           updateTotalScoreInMenu();
         console.log('🏠 Возврат в главное меню');
+         // Синхронизация перед выходом
+        if (typeof saveToVKStorage === 'function') {
+            saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+            saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
+        }
     };
 }
 
