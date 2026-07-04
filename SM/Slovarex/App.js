@@ -259,6 +259,15 @@ if (achievementsData && typeof achievementsData === 'object') {
         if (!loaded) {
             console.log('ℹ️ В VK Storage нет данных или локальные данные новее');
         }        
+         // ====== МГНОВЕННОЕ ОБНОВЛЕНИЕ ПОСЛЕ ЗАГРУЗКИ ======
+        // Просто вызываем существующие функции (они определены в game.js)
+        if (typeof updateTotalScoreInMenu === 'function') {
+            updateTotalScoreInMenu();
+        }
+        if (typeof updateUI === 'function') {
+            updateUI();
+        }
+        // ===============================================
         // ====== ПОСЛЕ ЗАГРУЗКИ — СОХРАНЯЕМ ВСЁ В VK ======
         // Это важно: если локальные данные новее — обновляем VK
         syncAllDataToVK();        
@@ -304,24 +313,20 @@ function initVKStorageSync() {
     
     console.log('🌐 Инициализация VK Storage синхронизации...');
     
-    // Сначала загружаем данные из VK
     loadAllDataFromVK().then((loaded) => {
-        // После загрузки настраиваем авто-синхронизацию
         syncOnChange();
-        
-        // Если данные не были загружены — сохраняем текущие
         if (!loaded) {
             console.log('📤 Отправка текущих данных в VK Storage...');
-            setTimeout(syncAllDataToVK, 1000);
+            syncAllDataToVK();  // ← БЕЗ ЗАДЕРЖКИ
         }
     });
 }
-
 // Ручная синхронизация (можно вызвать из консоли)
 function manualSync() {
     console.log('🔄 Ручная синхронизация...');
     syncAllDataToVK();
 }
+
 
 // Отладка: показать, что сохранено в VK Storage
 function debugVKStorage() {
@@ -425,29 +430,39 @@ function closeHintAdModal() {
 }
 
 // В конце App.js, после всех определений в начале игры загружаем данные из вк-стораджа
+// ====== МГНОВЕННАЯ ЗАГРУЗКА ДАННЫХ ПОСЛЕ ИНИЦИАЛИЗАЦИИ VK ======
 (function() {
     if (typeof vkBridge === 'undefined') {
         console.log('ℹ️ VK Bridge не доступен');
         return;
-    }
-    
-    console.log('🌐 Загружаем данные из VK Storage...');
-    setTimeout(function() {
-        if (typeof loadAllDataFromVK === 'function') {
-            loadAllDataFromVK().then(function(loaded) {
-                console.log('📦 Данные из VK Storage загружены:', loaded);
-                if (loaded) {
-                    if (typeof updateUI === 'function') {
-                        setTimeout(updateUI, 300);
-                    }
+    }    
+    console.log('🌐 загрузка данных из VK Storage...');    
+    // Ждем только инициализацию VK Bridge, затем сразу загружаем данные
+    if (typeof loadAllDataFromVK === 'function') {
+        loadAllDataFromVK().then(function(loaded) {
+            console.log('📦 Данные из VK Storage загружены:', loaded);
+            if (loaded) {
+                if (typeof updateUI === 'function') {
+                    updateUI();  // ← БЕЗ ЗАДЕРЖКИ
                 }
-            });
-        }
-    }, 1500);
+                if (typeof updateTotalScoreInMenu === 'function') {
+                    updateTotalScoreInMenu();  // ← МГНОВЕННОЕ ОБНОВЛЕНИЕ АЛМАЗОВ В МЕНЮ
+                }
+            }
+        });
+    }
 })();
 
-// В конце App.js, после всех определений вызов синхронизации
+// Инициализация синхронизации сразу после загрузки моста
 if (typeof vkBridge !== 'undefined') {
-    // Инициализируем синхронизацию после загрузки
-    setTimeout(initVKStorageSync, 2000);
+    // Ждем только инициализацию VK Bridge
+    vkBridge.send('VKWebAppInit', {})
+        .then(() => {
+            console.log('✅ VK Bridge инициализирован, запускаем синхронизацию');
+            initVKStorageSync();
+        })
+        .catch(() => {
+            console.warn('⚠️ VK Bridge не инициализирован, но продолжаем');
+            initVKStorageSync();
+        });
 }

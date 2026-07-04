@@ -449,18 +449,21 @@ function updateTotalScoreInMenu() {
     }
 }
 
-// Функция для добавления очков к общему счету (используется только при переходе уровня)
 function addToTotalScore(amount) {
     if (!amount || amount <= 0) return;    
     gameState.totalScore = (gameState.totalScore || 0) + amount;    
-    // Синхронизируем с VK Storage
+    // Мгновенная синхронизация
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
-        console.log(`☁️ Общие очки синхронизированы: ${gameState.totalScore}`);
     }    
-    // Обновляем отображение в меню
-    updateTotalScoreInMenu();
+    // Мгновенное обновление в меню
+    if (typeof updateTotalScoreInMenu === 'function') {
+        updateTotalScoreInMenu();
+    }
+    
+    console.log(`💎 Алмазы обновлены: ${gameState.totalScore}`);
 }
+
 function updateSubmitButtonState() {
     const submitBtn = document.getElementById("submitBtn");
     if (submitBtn) {
@@ -1151,12 +1154,17 @@ function nextLevel() {
     addToTotalScore(totalToAdd);    gameState.level++;       
       // ====== ПРОВЕРКА ДОСТИЖЕНИЙ ======
 checkAchievements();
-       // ====== СИНХРОНИЗАЦИЯ УРОВНЯ С VK STORAGE ======
-    if (typeof saveToVKStorage === 'function') {        saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
+// ====== МГНОВЕННАЯ СИНХРОНИЗАЦИЯ ======
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage(VK_STORAGE_KEYS.LEVEL, gameState.level);
         saveToVKStorage(VK_STORAGE_KEYS.HINTS, gameState.hintsLeft);
-        console.log('☁️ Уровень и подсказки синхронизированы с VK Storage');
+        saveToVKStorage(VK_STORAGE_KEYS.TOTAL_SCORE, gameState.totalScore);
     }
-    // ==============================================
+    // Мгновенно обновляем меню (если видно)
+    if (typeof updateTotalScoreInMenu === 'function') {
+        updateTotalScoreInMenu();
+    }
+    // =====================================
     initLevel();
     updateUI();
     showToast(`🎉 Уровень ${gameState.level}! +${CONFIG.SCORE_BONUS_PER_LEVEL} бонусных очков!`);
