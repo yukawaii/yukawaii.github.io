@@ -1,7 +1,6 @@
 var score,id,token, name1;
   window.vkBridge = vkBridge; 
-// Инициализация моста
-window.vkBridge&&window.vkBridge.send("VKWebAppInit").then((d=>{})).catch((d=>{}));
+
 function getid(){vkBridge.send("VKWebAppGetUserInfo").then((e=>{id=e.id,name1=e.first_name,sessionStorage.setItem("id",id),setTimeout((function(){}),3e3)})).catch((e=>{}))}
   getid();
   /* function gettoken(){
