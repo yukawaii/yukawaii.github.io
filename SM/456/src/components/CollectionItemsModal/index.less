@@ -105,6 +105,7 @@
   background: rgba(44, 44, 44, 0.1);
   border: 2px solid #8b7a00;
   position: relative;
+  
 }
 
 .itemUnlocked {
@@ -119,9 +120,12 @@
 }
 
 .itemImage {
-  width: 100%;
+ width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;  // ← меняем с cover на contain
+  image-rendering: pixelated;  // ← добавляем для четкости
+  max-width: 150px;  // ← ограничиваем размер
+  max-height: 200px;  // ← ограничиваем размер
 }
 
 .itemOverlay {
