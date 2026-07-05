@@ -442,6 +442,7 @@ function saveVKScore(scoreValue) {
     }
     if (scoreValue <= 0) return;
     
+    // Сначала получаем текущий рекорд из VK
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'apps.getScore',
         params: {
@@ -452,7 +453,10 @@ function saveVKScore(scoreValue) {
     })
     .then(data => {
         let currentScore = parseInt(data.response) || 0;
+        console.log(`📊 Текущий рекорд в VK: ${currentScore}, новый: ${scoreValue}`);
+        
         if (scoreValue > currentScore) {
+            // Сохраняем новый рекорд
             return vkBridge.send('VKWebAppCallAPIMethod', {
                 method: 'secure.addAppEvent',
                 params: {
@@ -467,9 +471,8 @@ function saveVKScore(scoreValue) {
         return null;
     })
     .then(() => {
-        console.log('Рекорд сохранён:', scoreValue);
-        
         // ✅ ОБНОВЛЯЕМ ВСЕ ПЕРЕМЕННЫЕ
+        console.log('✅ Рекорд сохранён:', scoreValue);
         window.vkHighscore = scoreValue;
         localStorage.setItem('vkHighscore', scoreValue);
         localStorage.setItem('localHighscore', scoreValue);
@@ -478,11 +481,11 @@ function saveVKScore(scoreValue) {
         updateRecordText(`Рекорд: ${scoreValue}`);
         updateHighscoreDisplay();
         
-        // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
+        // ✅ СИНХРОНИЗАЦИЯ С VK STORAGE
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, scoreValue);
     })
     .catch(err => {
-        console.error('Ошибка сохранения рекорда:', err);
+        console.error('❌ Ошибка сохранения рекорда:', err);
         saveLocalScore(scoreValue);
     });
 }
@@ -490,12 +493,13 @@ function saveVKScore(scoreValue) {
 function saveLocalScore(scoreValue) {
     const currentLocal = parseInt(localStorage.getItem('localHighscore') || '0');
     if (scoreValue > currentLocal) {
+        console.log(`📊 Новый локальный рекорд: ${scoreValue}`);
         localStorage.setItem('localHighscore', scoreValue);
         localStorage.setItem('vkHighscore', scoreValue);
-        window.vkHighscore = scoreValue;  // ✅ ДОБАВИТЬ
+        window.vkHighscore = scoreValue;
         updateRecordText(`Рекорд: ${scoreValue} (локально)`);
-        updateHighscoreDisplay();  // ✅ ДОБАВИТЬ
-        console.log(`Локальный рекорд сохранён: ${scoreValue}`);
+        updateHighscoreDisplay();
+        saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, scoreValue);
     }
 }
 
@@ -518,6 +522,7 @@ function loadVKHighScore() {
     })
     .then((data) => {
         let highScore = parseInt(data.response) || 0;
+        console.log(`🏆 Загружен рекорд из VK API: ${highScore}`);
         
         // ✅ ОБНОВЛЯЕМ ВСЁ
         window.vkHighscore = highScore;
@@ -526,12 +531,10 @@ function loadVKHighScore() {
         
         updateRecordText(`Рекорд: ${highScore}`);
         updateHighscoreDisplay();
-        
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, highScore);
-        console.log('🏆 Загружен рекорд из VK API:', highScore);
     })
     .catch(err => {
-        console.error('Ошибка загрузки рекорда:', err);
+        console.error('❌ Ошибка загрузки рекорда из VK:', err);
         loadLocalHighScore();
     });
 }
@@ -541,14 +544,10 @@ function loadLocalHighScore() {
     const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
     const highScore = Math.max(vkScore, localScore);
     
-    if (highScore > 0) {
-        updateRecordText(`Рекорд: ${highScore}`);
-        window.vkHighscore = highScore;
-    } else {
-        updateRecordText('Рекорд: 0');
-        window.vkHighscore = 0;
-    }
-    if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
+    console.log(`🏆 Загружен локальный рекорд: ${highScore}`);
+    window.vkHighscore = highScore;
+    updateRecordText(`Рекорд: ${highScore}`);
+    updateHighscoreDisplay();
 }
 
 // ======================== ОБНОВЛЕНИЕ ОТОБРАЖЕНИЯ РЕКОРДА ========================
@@ -558,6 +557,7 @@ function updateRecordText(text) {
     const sideEl = document.getElementById('yandex-highscore-side');
     if (topEl) topEl.innerText = text;
     if (sideEl) sideEl.innerText = text;
+    console.log(`📝 Обновлён текст рекорда: ${text}`);
 }
 
 function updateHighscoreDisplay() {
@@ -570,30 +570,26 @@ function updateHighscoreDisplay() {
         const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
         const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
         currentHighscore = Math.max(vkScore, localScore);
-        window.vkHighscore = currentHighscore;  // ✅ ОБНОВЛЯЕМ
+        window.vkHighscore = currentHighscore;
     }
     
     const sideElement = document.getElementById('yandex-highscore-side');
     const topElement = document.getElementById('yandex-highscore-top');
     
-    if (sideElement) sideElement.innerHTML = 'Рекорд: ' + currentHighscore;
-    if (topElement) topElement.innerHTML = 'Рекорд: ' + currentHighscore;
+    const text = 'Рекорд: ' + currentHighscore;
+    if (sideElement) sideElement.innerHTML = text;
+    if (topElement) topElement.innerHTML = text;
     
-    console.log('🏆 Рекорд обновлён:', currentHighscore);
+    console.log('🏆 Рекорд обновлён в интерфейсе:', currentHighscore);
 }
+
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
 function showVKLeaderboard() {
-    // ✅ БЕРЁМ РЕКОРД ИЗ window.vkHighscore ИЛИ localStorage
-    let highScore = 0;
-    
-    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-        highScore = window.vkHighscore;
-    } else {
-        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
-        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
-        highScore = Math.max(vkScore, localScore);
-    }
+    // ✅ БЕРЁМ РЕКОРД ИЗ window.vkHighscore
+    let highScore = typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0 
+        ? window.vkHighscore 
+        : parseInt(localStorage.getItem('vkHighscore') || '0');
     
     console.log('📊 Открываем таблицу лидеров, рекорд игрока:', highScore);
     
@@ -602,7 +598,6 @@ function showVKLeaderboard() {
     }
     
     if (typeof vkBridge === 'undefined') {
-        console.warn("⚠️ VK Bridge не найден");
         swal({
             title: "Таблица лидеров",
             text: "Функция доступна только в приложении ВКонтакте",
