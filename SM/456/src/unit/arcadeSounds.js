@@ -48,37 +48,7 @@ function playSound(startTime, duration) {
   };
   req.send();
 })();
-// src/unit/arcadeSounds.js
 
-// ===== ГЕНЕРАЦИЯ ПРОГРАММНОГО ЗВУКА ДЛЯ ОТСКОКА =====
-function playBounceSound() {
-  console.log('🔊 playBounceSound вызван!');  // ← добавить
-
-  if (!hasWebAudioAPI || !context) {
-    console.warn('❌ Нет Web Audio API или контекста');
-    return;
-  }
-  
-  try {
-    var state = store.getState();
-    if (!state.get('music')) {
-      console.log('🔇 Звук выключен в настройках');
-      return;
-    }
-  } catch(e) { 
-    console.warn('❌ Ошибка проверки звука:', e);
-    return; 
-  }
-  
-  try {
-    var oscillator = context.createOscillator();
-    var gainNode = context.createGain();
-    // ... остальной код
-    console.log('✅ Звук отскока воспроизведён');
-  } catch(e) {
-    console.error('❌ Ошибка воспроизведения:', e);
-  }
-}
 
 module.exports = {
   playSound: function(start, duration) {
@@ -101,5 +71,5 @@ module.exports = {
   score: function() { playSound(1.2558, 0.3546); },
   gameover: function() { playSound(8.1276, 1.1437); },
   move: function() { playSound(2.9088, 0.1437); },
-     bounce: function() { playBounceSound(); }
+
 };

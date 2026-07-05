@@ -158,15 +158,7 @@ ballSpeedY: 1.75,
     }
   } catch(e) {}
 }
-// ===== ЗВУК ОТСКОКА (НОВЫЙ МЕТОД) =====
-playBounceSound() {
-  if (!this.state.soundEnabled) return;
-  try {
-    if (arcadeSounds && arcadeSounds.bounce) {
-      arcadeSounds.bounce();
-    }
-  } catch(e) {}
-}
+
 // В playCrashSound:
 playCrashSound() {
   if (!this.state.soundEnabled) return;
@@ -382,7 +374,6 @@ if (ballBottom >= paddleTop &&
   newBallSpeedX = (hitPos - 0.5) * 5;
   newBallY = paddleTop - BS;
   newHits++;
-  this.playBounceSound();
   
   if (newHits % 20 === 0) {
     this.saveScore(1);

@@ -82,22 +82,21 @@
 }
 
 .imageWrapper {
-  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 350px;
   max-height: 100%;
   border-radius: 8px;
-  overflow: hidden;
   border: 4px solid #b8960f;
   background: #2c2c2c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
 .image {
-  width: 100%;
-  height: 100%;
+    max-width: 150px;   // ← оригинальный размер
+  max-height: 200px;  // ← оригинальный размер
   max-height: 100%;
   object-fit: contain;
   display: block;

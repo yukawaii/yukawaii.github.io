@@ -201,22 +201,6 @@ saveScore(score) {
   } catch(e) {}
 }
 
-playBounceSound() {
-  console.log('🎯 playBounceSound в игре вызван');  // ← добавить
-  if (!this.state.soundEnabled) {
-    console.log('🔇 Звук отключен в игре');
-    return;
-  }
-  try {
-    if (arcadeSounds && arcadeSounds.bounce) {
-      arcadeSounds.bounce();
-    } else {
-      console.warn('❌ arcadeSounds.bounce не найден');
-    }
-  } catch(e) {
-    console.error('❌ Ошибка:', e);
-  }
-}
 
 // В playCrashSound:
 playCrashSound() {
@@ -419,7 +403,6 @@ updateGame() {
     newBallSpeedX = (hitPos - 0.5) * 5;
     newBallY = paddleTop - BS;
     newHits++;
-    this.playBounceSound();
     
     if (newHits % 20 === 0) {
       this.saveScore(1);
