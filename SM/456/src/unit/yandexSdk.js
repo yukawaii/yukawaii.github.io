@@ -596,7 +596,7 @@ export var fetchYandexLeaderboard = function() {
       return;
     }
     var currentMaxScore = store.getState().get('max') || 0;
-    vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: currentMaxScore })
+    vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: currentMaxScore, global: 1 })
       .then(function() { resolve({ status: 'success' }); })
       .catch(function(error) {
         console.error('fetchYandexLeaderboard Ошибка открытия лидерборда:', error);
