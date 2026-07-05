@@ -551,18 +551,16 @@ function playerRotate(dir) {
         if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
         player.spins++;
     }
-    if (player.spins > 25) {
-        player.crazySpins = true;
-        if (typeof gameAudio !== 'undefined') gameAudio.pauseLoop();
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('highspins', 0.2);
-        player.spins = 0;
-        setTimeout(() => {
-            player.crazySpins = false;
-            if (isGameStarted && !isGameOver && !gameState.paused && !soundMuted) {
-                if (typeof gameAudio !== 'undefined') gameAudio.resumeLoop();
-            }
-        }, 2000);
+   if (player.spins > 25) {
+    player.crazySpins = true;
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.playOneShot('highspins', 0.2);
     }
+    player.spins = 0;
+    setTimeout(() => {
+        player.crazySpins = false;
+    }, 2000);
+}
 }
 
 function playerReset() {

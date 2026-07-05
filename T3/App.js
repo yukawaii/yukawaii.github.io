@@ -3,7 +3,6 @@ let lastAdShowTime = 0;
 const APP_ID = 54659768;  
 let vkUserToken = null;
 let vkUserId = null;
-let gameLanguage = 'ru';
 const ServToken = '36bb7f1c36bb7f1c36bb7f1c6335f975a4336bb36bb7f1c5cf8d7250dc913db99e9ea4d';
 
 // ======================== VK STORAGE ========================
