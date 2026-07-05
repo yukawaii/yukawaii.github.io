@@ -330,27 +330,37 @@ function updateHighscoreDisplay() {
     console.log('🏆 Рекорд обновлён в интерфейсе:', current);
 }
 
-// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
-// ===== НОВАЯ ФУНКЦИЯ showVKLeaderboard =====
+// ===== ФУНКЦИЯ ОТМЕНЫ ЗАГРУЗКИ =====
+function cancelLeaderboardLoading() {
+    if (leaderboardCheckInterval) {
+        clearInterval(leaderboardCheckInterval);
+        leaderboardCheckInterval = null;
+    }
+    if (leaderboardTimeoutId) {
+        clearTimeout(leaderboardTimeoutId);
+        leaderboardTimeoutId = null;
+    }
+    leaderboardLoading = false;
+    closeCustomModal();
+}
+
+// ===== НОВАЯ showVKLeaderboard (без swal) =====
 function showVKLeaderboard() {
-    // Если уже идёт загрузка — игнорируем повторный клик
     if (leaderboardLoading) return;
 
-    // Проверяем, доступен ли VK Bridge в принципе
     if (typeof vkBridge === 'undefined') {
-        swal({
+        showCustomModal({
             title: "Таблица лидеров",
             text: "Функция доступна только в приложении ВКонтакте",
-            icon: "info",
+            type: "info",
             button: "OK"
         });
         return;
     }
 
-    // Блокируем повторные вызовы
     leaderboardLoading = true;
 
-    // Показываем модалку загрузки (без кнопки, только крестик для отмены)
+    // Показываем модалку загрузки
     const modal = document.createElement('div');
     modal.id = 'custom-modal';
     modal.style.cssText = `
@@ -384,25 +394,27 @@ function showVKLeaderboard() {
                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                 </svg>
             </div>
+            <div style="margin-top: 20px; color: #64748b; font-size: 12px; font-family: 'Russo One', sans-serif;">
+                Ожидание ответа от сервера...
+            </div>
         </div>
     `;
     document.body.appendChild(modal);
 
-    // Функция, которая попытается открыть таблицу
-    const tryOpen = () => {
-        // Останавливаем интервал
+    // Функция открытия таблицы
+    const openLeaderboard = () => {
         if (leaderboardCheckInterval) {
             clearInterval(leaderboardCheckInterval);
             leaderboardCheckInterval = null;
         }
-        // Закрываем модалку загрузки
+        if (leaderboardTimeoutId) {
+            clearTimeout(leaderboardTimeoutId);
+            leaderboardTimeoutId = null;
+        }
         closeCustomModal();
-        // Разблокируем
         leaderboardLoading = false;
 
-        // Если VK инициализирован — открываем
         if (vkInitialized && typeof vkBridge !== 'undefined') {
-            // Берём рекорд (как в старом коде)
             let highScore = 0;
             if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
                 highScore = window.vkHighscore;
@@ -411,11 +423,9 @@ function showVKLeaderboard() {
                                      parseInt(localStorage.getItem('localHighscore') || '0'));
                 window.vkHighscore = highScore;
             }
-            // Ставим игру на паузу, если нужно
             if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
                 pauseGame();
             }
-            // Отправляем запрос
             vkBridge.send('VKWebAppShowLeaderBoardBox', {
                 user_result: highScore,
                 global: 1
@@ -428,63 +438,52 @@ function showVKLeaderboard() {
                     .then(() => console.log('✅ Открыто без user_result'))
                     .catch((err) => {
                         console.error('❌ Вторая попытка:', err);
-                        swal({
-                            title: "📊 Таблица лидеров",
+                        showCustomModal({
+                            title: "Таблица лидеров",
                             text: "Временно недоступна. Попробуйте позже.",
-                            icon: "info",
+                            type: "info",
                             button: "OK"
                         });
                     });
             });
         } else {
-            // Если всё равно не готово — показываем ошибку
-            swal({
+            showCustomModal({
                 title: "Таблица лидеров",
                 text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
-                icon: "info",
+                type: "info",
                 button: "OK"
             });
         }
     };
 
-    // Если VK уже готов — открываем сразу
+    // Если VK уже готов — сразу открываем
     if (vkInitialized && typeof vkBridge !== 'undefined') {
-        tryOpen();
+        openLeaderboard();
         return;
     }
 
-    // Иначе начинаем проверку каждые 300 мс, максимум 10 секунд
+    // Ожидание инициализации с проверкой каждые 300 мс, таймаут 20 секунд
     let attempts = 0;
-    const maxAttempts = 33; // 10 сек / 300 мс
+    const maxAttempts = 67; // 20 сек / 300 мс
     leaderboardCheckInterval = setInterval(() => {
         attempts++;
         if (vkInitialized && typeof vkBridge !== 'undefined') {
-            tryOpen();
+            openLeaderboard();
             return;
         }
         if (attempts >= maxAttempts) {
-            // Время вышло
             clearInterval(leaderboardCheckInterval);
             leaderboardCheckInterval = null;
             leaderboardLoading = false;
             closeCustomModal();
-            swal({
+            showCustomModal({
                 title: "Таблица лидеров",
                 text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
-                icon: "info",
+                type: "info",
                 button: "OK"
             });
         }
     }, 300);
-}
-// Функция для отмены загрузки по крестику
-function cancelLeaderboardLoading() {
-    if (leaderboardCheckInterval) {
-        clearInterval(leaderboardCheckInterval);
-        leaderboardCheckInterval = null;
-    }
-    leaderboardLoading = false;
-    closeCustomModal();
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
