@@ -2133,6 +2133,7 @@ function closeScrollsModal() {
 }
 
 function openScrollTextModal(scrollId) {
+      console.log('📜 openScrollTextModal вызван для', scrollId);
     const playerScore = player ? player.score : 0;
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
     const totalScore = Math.max(playerScore, savedScore);
@@ -2164,6 +2165,8 @@ function openScrollTextModal(scrollId) {
     const modal = document.getElementById('scroll-text-modal');
     const titleEl = document.getElementById('scroll-text-title');
     const contentEl = document.getElementById('scroll-text-content');
+     console.log('📜 Элементы модалки:', { modal, titleEl, contentEl });
+     
     if (modal && titleEl && contentEl) {
         titleEl.textContent = `📜 ${window.getText ? window.getText('scroll') : 'Свиток'} ${scrollId}`;
         contentEl.textContent = getScrollText(scrollId);

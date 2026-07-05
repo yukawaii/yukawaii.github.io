@@ -7,17 +7,21 @@ class HelpModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      currentPage: 0
     };
     this.closeModal = this.closeModal.bind(this);
+    this.goToPage = this.goToPage.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
+    this.handleOverlayClick = this.handleOverlayClick.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
-    this.handleOverlayClick = this.handleOverlayClick.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('openHelp', function() {
-      this.setState({ isOpen: true });
+      this.setState({ isOpen: true, currentPage: 0 });
     }.bind(this));
     
     document.addEventListener('keydown', function(e) {
@@ -49,12 +53,53 @@ class HelpModal extends Component {
     e.stopPropagation();
   }
 
+  goToPage(page) {
+    var totalPages = this.getTotalPages();
+    if (page >= 0 && page < totalPages) {
+      this.setState({ currentPage: page });
+    }
+  }
+
+  nextPage() {
+    this.goToPage(this.state.currentPage + 1);
+  }
+
+  prevPage() {
+    this.goToPage(this.state.currentPage - 1);
+  }
+
+  getTotalPages() {
+    return this.pages ? this.pages.length : 0;
+  }
+
   render() {
     if (!this.state.isOpen) return null;
 
+    // Страницы: по 2 секции на страницу
+    this.pages = [
+      // Страница 0: Управление + Очки
+      [
+        { title: '🎮 Управление Тетра', items: ['← → — движение влево/вправо', '↑ или Поворот — вращение фигуры', '↓ — ускоренное падение', 'Пробел — мгновенное падение'] },
+        { title: '⭐ Очки в Тетра', items: ['Очки начисляются за упавшие блоки и очищенные линии:', '1 линия → 2 очка', '2 линии → 3 очка', '3 линии → 4 очка', '4 линии → 5 очков', 'Очки можно тратить на покупку Свитков и экспонатов!', 'hint'] }
+      ],
+      // Страница 1: Коллекции + Свитки
+      [
+        { title: '🖼️ Коллекции', items: ['Собирайте коллекции за очки.', 'Каждый экспонат стоит 300 очков.', 'Чтобы открыть следующую коллекцию, нужно собрать все экспонаты в предыдущей.'] },
+        { title: '📜 Свитки', items: ['Покупайте и читайте свитки, чтобы узнать много интересного!'] }
+      ],
+      // Страница 2: Аркады + Таблица лидеров
+      [
+        { title: '🎯 Аркады', items: ['В аркадах тоже можно заработать очки!', '🏎️ Гонки — 1 очко за 50 препятствий', '🐍 Змейка — 1 очко за 10 яблок', '🏓 Пинг-понг — 1 очко за 20 ударов', '🧱 Арканоид — 1 очко за 50 кирпичей'] },
+        { title: '🏆 Таблица лидеров', items: ['В таблице лидеров хранится ваш рекорд за одну игру в Тетра (в любом режиме).', 'Это не общее количество очков, а максимальный результат в одной партии!', 'hint'] }
+      ]
+    ];
+
+    var currentPage = this.state.currentPage;
+    var totalPages = this.pages.length;
+    var sections = this.pages[currentPage] || [];
+
     return (
-      <div    className={style.modalWrapper}
-            >
+      <div className={style.modalWrapper}>
         <div className={style.modal}>
           <div className={style.header}>
             <span className={style.title}>❓ Как играть?</span>
@@ -67,51 +112,47 @@ class HelpModal extends Component {
               ✕
             </button>
           </div>
-          
+
           <div className={style.content}>
-            <div className={style.section}>
-              <h3>🎮 Управление Тетра</h3>
-              <p>← → — движение влево/вправо</p>
-              <p>↑ или Поворот — вращение фигуры</p>
-              <p>↓ — ускоренное падение</p>
-              <p>Пробел — мгновенное падение</p>
-            </div>
-            
-            <div className={style.section}>
-              <h3>⭐ Очки в Тетра</h3>
-              <p>Очки начисляются за упавшие блоки и очищенные линии:</p>
-              <p>1 линия → <strong>2 очка</strong></p>
-              <p>2 линии → <strong>3 очка</strong></p>
-              <p>3 линии → <strong>4 очка</strong></p>
-              <p>4 линии → <strong>5 очков</strong></p>
-              <p className={style.hint}>Очки можно тратить на покупку Свитков и экспонатов!</p>
-            </div>
-            
-            <div className={style.section}>
-              <h3>🖼️ Коллекции</h3>
-              <p>Собирайте коллекции за очки.</p>
-              <p>Каждый экспонат стоит <strong>300 очков</strong>.</p>
-              <p>Чтобы открыть следующую коллекцию, нужно собрать все экспонаты в предыдущей.</p>
-            </div>
-            
-            <div className={style.section}>
-              <h3>📜 Свитки</h3>           
-              <p>Покупайте и читайте свитки, чтобы узнать много интересного!</p>
-            </div>
-            
-            <div className={style.section}>
-              <h3>🎯 Аркады</h3>
-              <p>В аркадах тоже можно заработать очки!</p>
-              <p>🏎️ Гонки — 1 очко за 50 препятствий</p>
-              <p>🐍 Змейка — 1 очко за 10 яблок</p>
-              <p>🏓 Пинг-понг — 1 очко за 20 ударов</p>
-              <p>🧱 Арканоид — 1 очко за 50 кирпичей</p>
-            </div>
-              <div className={style.section}>
-    <h3>🏆 Таблица лидеров</h3>
-    <p>В таблице лидеров хранится ваш <strong>рекорд за одну игру</strong> в Тетра (в любом режиме).</p>
-    <p className={style.hint}>Это не общее количество очков, а максимальный результат в одной партии!</p>
-  </div>
+            {sections.map(function(section, idx) {
+              var isHint = false;
+              var items = section.items.map(function(item, i) {
+                if (item === 'hint') {
+                  isHint = true;
+                  return null;
+                }
+                return <p key={i}>{item}</p>;
+              });
+              return (
+                <div key={idx} className={style.section}>
+                  <h3>{section.title}</h3>
+                  {items}
+                  {isHint && <p className={style.hint}>{section.items[section.items.length-1]}</p>}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className={style.pagination}>
+            <button 
+              className={style.pageBtn} 
+              onClick={this.prevPage}
+              disabled={currentPage === 0}
+              onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
+              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); this.prevPage(); }}
+            >
+              ◀
+            </button>
+            <span className={style.pageInfo}>{currentPage + 1} / {totalPages}</span>
+            <button 
+              className={style.pageBtn} 
+              onClick={this.nextPage}
+              disabled={currentPage === totalPages - 1}
+              onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}
+              onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); this.nextPage(); }}
+            >
+              ▶
+            </button>
           </div>
         </div>
       </div>
