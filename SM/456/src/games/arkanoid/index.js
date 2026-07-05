@@ -368,17 +368,17 @@ updateGame() {
   if (newBallX < leftPadding) {
     newBallX = leftPadding;
     newBallSpeedX = -newBallSpeedX;
-    this.playMoveSound();
+  //  this.playMoveSound();
   }
   if (newBallX + BS > FW) {
     newBallX = FW - BS;
     newBallSpeedX = -newBallSpeedX;
-    this.playMoveSound();
+   // this.playMoveSound();
   }
   if (newBallY < 0) {
     newBallY = 0;
     newBallSpeedY = -newBallSpeedY;
-    this.playMoveSound();
+  //  this.playMoveSound();
   }
   
   // ===== ПЛАТФОРМА (ТОЧНО КАК В ПИНГ-ПОНГЕ) =====
