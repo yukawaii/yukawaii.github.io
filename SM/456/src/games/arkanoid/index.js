@@ -18,8 +18,8 @@ class ArkanoidGame extends Component {
       paddleX: 140,
       ballX: 170,
       ballY: 250,
-      ballSpeedX: 2.5,
-      ballSpeedY: -3.5,
+   ballSpeedX: 1.25,
+ballSpeedY: -1.75,
       bricks: [],
       hits: 0,
       gameTime: 0,
@@ -136,8 +136,8 @@ this.BALL_SIZE = 12;
       paddleX: (this.state.fieldWidth - this.state.paddleWidth) / 2,
       ballX: this.state.fieldWidth / 2 - this.state.ballSize / 2,
       ballY: 250,
-      ballSpeedX: 2.5,
-      ballSpeedY: -3.5,
+    ballSpeedX: 1.25,
+ballSpeedY: -1.75,
       bricks: this.initBricks(),
       hits: 0,
       gameTime: 0,
@@ -197,6 +197,14 @@ saveScore(score) {
   try {
     if (arcadeSounds && arcadeSounds.move) {
       arcadeSounds.move();
+    }
+  } catch(e) {}
+}
+playBounceSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.bounce) {
+      arcadeSounds.bounce();
     }
   } catch(e) {}
 }
@@ -402,7 +410,7 @@ updateGame() {
     newBallSpeedX = (hitPos - 0.5) * 5;
     newBallY = paddleTop - BS;
     newHits++;
-    this.playMoveSound();
+    this.playBounceSound();
     
     if (newHits % 20 === 0) {
       this.saveScore(1);

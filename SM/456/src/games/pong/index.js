@@ -18,8 +18,8 @@ class PongGame extends Component {
       paddleX: 140,
       ballX: 170,
       ballY: 30,
-      ballSpeedX: 2.5,
-      ballSpeedY: 3.5,
+      ballSpeedX: 1.25,
+      ballSpeedY: 1.75,
       hits: 0,
       gameTime: 0,
       speed: 1
@@ -96,8 +96,8 @@ class PongGame extends Component {
       paddleX: (this.FIELD_WIDTH - this.PADDLE_WIDTH) / 2,
       ballX: this.FIELD_WIDTH / 2 - this.BALL_SIZE / 2,
       ballY: 30,
-      ballSpeedX: 2.5,
-      ballSpeedY: 3.5,
+   ballSpeedX: 1.25,
+ballSpeedY: 1.75,
       hits: 0,
       gameTime: 0,
       speed: 1
@@ -158,7 +158,15 @@ class PongGame extends Component {
     }
   } catch(e) {}
 }
-
+// ===== ЗВУК ОТСКОКА (НОВЫЙ МЕТОД) =====
+playBounceSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.hit) {  // ← используем hit для отскока
+      arcadeSounds.hit();
+    }
+  } catch(e) {}
+}
 // В playCrashSound:
 playCrashSound() {
   if (!this.state.soundEnabled) return;
@@ -374,7 +382,7 @@ if (ballBottom >= paddleTop &&
   newBallSpeedX = (hitPos - 0.5) * 5;
   newBallY = paddleTop - BS;
   newHits++;
-  this.playMoveSound();
+  this.playBounceSound();
   
   if (newHits % 20 === 0) {
     this.saveScore(1);

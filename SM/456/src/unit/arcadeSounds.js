@@ -57,5 +57,6 @@ module.exports = {
   hit: function() { playSound(0, 0.2); },
   score: function() { playSound(1.2558, 0.3546); },
   gameover: function() { playSound(8.1276, 1.1437); },
-  move: function() { playSound(2.9088, 0.1437); }
+  move: function() { playSound(2.9088, 0.1437); },
+    bounce: function() { playSound(2.2471, 0.0807); } 
 };

@@ -64,7 +64,10 @@
   overflow-y: auto;
   padding-right: 8px;
   flex: 1;
-   -webkit-overflow-scrolling: touch;  
+   max-height: 70%;              // ← ограничиваем высоту
+  overflow-y: auto;              // ← добавляем скролл
+  -webkit-overflow-scrolling: touch;  // ← для плавности на iPhone
+  padding-right: 4px;            // ← отступ для скролла
   
   // ===== СТИЛИ ДЛЯ СКРОЛЛА =====
   &::-webkit-scrollbar {
