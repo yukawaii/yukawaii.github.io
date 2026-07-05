@@ -177,12 +177,18 @@ class RacingGame extends Component {
       this.moveLeft = true;
       this.moveRight = false;
       moved = true;
+      if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
       moved = true;
+      if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
       e.preventDefault();
@@ -199,11 +205,8 @@ class RacingGame extends Component {
     if (key === 'Escape' || key === 'Esc') {
       e.preventDefault();
       this.closeGame();
-    }
-    
-    if (moved && !this.state.isPaused && !this.state.gameOver) {
-      this.playMoveSound();
-    }
+    }    
+  
   }
 
   handleKeyUp(e) {
@@ -269,12 +272,18 @@ class RacingGame extends Component {
       this.moveLeft = (action === 'down');
       if (action === 'down') this.moveRight = false;
       moved = true;
+      if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
     if (key === 'right') {
       this.moveRight = (action === 'down');
       if (action === 'down') this.moveLeft = false;
       moved = true;
+      if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
     if (key === 'up') {
@@ -289,10 +298,7 @@ class RacingGame extends Component {
       moved = true;
       return;
     }
-    
-    if (moved && action === 'down' && !this.state.isPaused && !this.state.gameOver) {
-      this.playMoveSound();
-    }
+     
   }
 
   togglePause() {
@@ -336,10 +342,16 @@ class RacingGame extends Component {
       this.moveLeft = true;
       this.moveRight = false;
       moved = true;
+       if (!this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
     } else {
       this.moveRight = true;
       this.moveLeft = false;
       moved = true;
+       if (!this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
     }
     
     if (touchY < screenHeight / 3) {
@@ -350,11 +362,7 @@ class RacingGame extends Component {
       this.moveDown = true;
       this.moveUp = false;
       moved = true;
-    }
-    
-    if (moved && !this.state.isPaused && !this.state.gameOver) {
-      this.playMoveSound();
-    }
+    }     
   }
 
   handleTouchEnd(e) {

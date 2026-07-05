@@ -229,7 +229,7 @@ playCrashSound() {
     
     if (dir && !this.state.isPaused && !this.state.gameOver) {
       this.setDirection(dir);
-      this.playMoveSound();
+   //   this.playMoveSound();
     }
   }
 
@@ -282,7 +282,7 @@ playCrashSound() {
     
     if (dir && action === 'down' && !this.state.isPaused && !this.state.gameOver) {
       this.setDirection(dir);
-      this.playMoveSound();
+     // this.playMoveSound();
     }
   }
 
@@ -319,7 +319,7 @@ playCrashSound() {
     
     if (dir && !this.state.isPaused && !this.state.gameOver) {
       this.setDirection(dir);
-      this.playMoveSound();
+    //  this.playMoveSound();
     }
   }
 
@@ -389,6 +389,7 @@ playCrashSound() {
     // Проверка еды
    if (head.x === this.state.food.x && head.y === this.state.food.y) {
   var newScore = this.state.score + 1;
+  this.playMoveSound();
   var newFood = this.generateFood(snake);
   
   // ===== НАЧИСЛЯЕМ ОЧКИ В ОБЩИЙ СЧЕТ ЗА КАЖДЫЕ 10 ЯБЛОК =====
@@ -421,7 +422,7 @@ playCrashSound() {
   });
   
   if (newScore % 5 === 0) {
-    this.playMoveSound();
+   // this.playMoveSound();
   }
 } else {
   snake.pop();
