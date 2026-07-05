@@ -947,6 +947,7 @@ function update(time = 0) {
     animationFrameId = requestAnimationFrame(update);
 }
 
+
 // ======================== УПРАВЛЕНИЕ ИГРОЙ ========================
 function startGame() {
    /* const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
