@@ -269,6 +269,12 @@ function initVKSDK() {
                 // Сохраняем ID для таблицы лидеров
                 window.vkUserIdForLeaderboard = vkUserId || vkOriginalId;
                 vkUserId = vkOriginalId || vkUserId || vkOkUserId;
+
+                // ✅ ДОБАВИТЬ СОХРАНЕНИЕ В localStorage
+    if (window.vkUserId) {
+        localStorage.setItem('vk_user_id', window.vkUserId);
+    }
+      
                 
                 console.log('👤 ID пользователя для лидерборда:', window.vkUserIdForLeaderboard);
                 
@@ -330,7 +336,13 @@ function initVKSDK() {
             .catch((err) => {
                 console.warn('❌ Ошибка инициализации VK:', err);
                 vkInitialized = false;
-                
+                // ✅ ВОССТАНАВЛИВАЕМ ID ИЗ localStorage
+    const savedId = localStorage.getItem('vk_user_id');
+    if (savedId) {
+        window.vkUserId = savedId;
+        window.vkUserIdForLeaderboard = savedId;
+        console.log('🔄 ID восстановлен из localStorage:', savedId);
+    }
                 // Fallback — язык браузера
                 const browserLang = navigator.language ? navigator.language.split('-')[0] : 'ru';
                 const supportedLangs = Object.keys(translations);
@@ -577,19 +589,11 @@ function updateHighscoreDisplay() {
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
 function showVKLeaderboard() {
-    // Берём рекорд
-    let highScore = 0;
-    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-        highScore = window.vkHighscore;
-    } else {
-        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
-        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
-        highScore = Math.max(vkScore, localScore);
-    }
+     // ✅ ИСПОЛЬЗУЕМ ТОЛЬКО window.vkHighscore
+    let highScore = window.vkHighscore || 0;
     
     console.log('📊 Открываем таблицу лидеров, рекорд:', highScore);
-    console.log('📊 vkUserIdForLeaderboard:', window.vkUserIdForLeaderboard);
-    
+     
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
@@ -613,10 +617,10 @@ function showVKLeaderboard() {
     .catch((error) => {
         console.error('❌ Ошибка:', error);
         
-        // Повторная попытка без user_result
-        vkBridge.send('VKWebAppShowLeaderBoardBox', {})
+        // Повторная попытка 
+        vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: highScore, global: 1})
             .then(() => {
-                console.log('✅ Открыто без user_result');
+                console.log('✅ Открыто со 2 раза');
             })
             .catch((err) => {
                 console.error('❌ Вторая попытка:', err);
