@@ -48,6 +48,35 @@ function playSound(startTime, duration) {
   };
   req.send();
 })();
+// ===== ГЕНЕРАЦИЯ ПРОГРАММНОГО ЗВУКА ДЛЯ ОТСКОКА =====
+function playBounceSound() {
+  if (!hasWebAudioAPI || !context) return;
+  
+  try {
+    var state = store.getState();
+    if (!state.get('music')) return;
+  } catch(e) { return; }
+  
+  try {
+    // Создаем осциллятор
+    var oscillator = context.createOscillator();
+    var gainNode = context.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    
+    // Низкая частота (80-120 Гц) для "бум"
+    oscillator.frequency.setValueAtTime(100, context.currentTime);
+    oscillator.type = 'sine';  // мягкий звук
+    
+    // Быстрое затухание
+    gainNode.gain.setValueAtTime(0.15, context.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.08);
+    
+    oscillator.start(context.currentTime);
+    oscillator.stop(context.currentTime + 0.08);
+  } catch(e) {}
+}
 
 module.exports = {
   playSound: function(start, duration) {
@@ -58,5 +87,5 @@ module.exports = {
   score: function() { playSound(1.2558, 0.3546); },
   gameover: function() { playSound(8.1276, 1.1437); },
   move: function() { playSound(2.9088, 0.1437); },
-    bounce: function() { playSound(2.2471, 0.0807); } 
+     bounce: function() { playBounceSound(); }
 };

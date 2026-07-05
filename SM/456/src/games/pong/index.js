@@ -162,8 +162,8 @@ ballSpeedY: 1.75,
 playBounceSound() {
   if (!this.state.soundEnabled) return;
   try {
-    if (arcadeSounds && arcadeSounds.hit) {  // ← используем hit для отскока
-      arcadeSounds.hit();
+    if (arcadeSounds && arcadeSounds.bounce) {
+      arcadeSounds.bounce();
     }
   } catch(e) {}
 }
