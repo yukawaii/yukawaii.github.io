@@ -51,14 +51,14 @@ class GameAudio {
         this.isLoading = true;
         
         const sounds = {
-            intro: 'audio/tetrismf.ogg',
-            collide: 'audio/tetriscollide.ogg',
-            rotate: 'audio/tetrisrotate.ogg',
-            sweep: 'audio/tetrissweep.ogg',
-            pause: 'audio/tetrispause.ogg',
-            gameover: 'audio/tetrisgameover.ogg',
-            highspins: 'audio/tetrishighspins.ogg',
-            levelup: 'audio/tetrislevelup.ogg',
+            intro: 'audio/mf.ogg',
+            collide: 'audio/collide.ogg',
+            rotate: 'audio/rotate.ogg',
+            sweep: 'audio/sweep.ogg',
+            pause: 'audio/pause.ogg',
+            gameover: 'audio/gameover.ogg',
+            highspins: 'audio/highspins.ogg',
+            levelup: 'audio/levelup.ogg',
             '1': 'audio/1.ogg',
             '2': 'audio/2.ogg',
                      '4': 'audio/4.ogg'
