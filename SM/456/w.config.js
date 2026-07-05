@@ -89,11 +89,17 @@ var productionPlugins = [
   }),
   // JS压缩
   new webpack.optimize.UglifyJsPlugin({
-    compress: {
-      warnings: false
-    }}
-  ),
-  // css打包
+  compress: {
+      warnings: false,
+      drop_console: true,   // ← добавляем
+      dead_code: true,      // ← добавляем (опционально)
+      unused: true,         // ← добавляем (опционально)
+    },
+    output: {
+      comments: false,      // ← добавляем
+    },
+    mangle: true,           // ← добавляем
+  }),
   new ExtractTextPlugin('css-' + version + '.css', {
     allChunks: true
   }),
