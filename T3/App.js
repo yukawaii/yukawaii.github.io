@@ -39,6 +39,13 @@ function loadFromVKStorage(key) {
         .catch(error => { console.warn(`❌ Ошибка загрузки ${key}:`, error); return null; });
 }
 
+
+// ===== ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ ЗАКРЫТИЯ МОДАЛКИ ЗАГРУЗКИ =====
+function closeCustomModal() {
+    const modal = document.getElementById('custom-modal');
+    if (modal) modal.remove();
+}
+
 function syncAllDataToVK() {
     console.log('🔄 Синхронизация данных с VK Storage...');
     const totalScore = parseInt(localStorage.getItem('totalScore') || '0');
