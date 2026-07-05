@@ -468,10 +468,15 @@ function saveVKScore(scoreValue) {
     })
     .then(() => {
         console.log('Рекорд сохранён:', scoreValue);
-        updateRecordText(`Рекорд: ${scoreValue}`);
+        
+        // ✅ ОБНОВЛЯЕМ ВСЕ ПЕРЕМЕННЫЕ
+        window.vkHighscore = scoreValue;
         localStorage.setItem('vkHighscore', scoreValue);
         localStorage.setItem('localHighscore', scoreValue);
-        window.vkHighscore = scoreValue;
+        
+        // ✅ ОБНОВЛЯЕМ ОТОБРАЖЕНИЕ
+        updateRecordText(`Рекорд: ${scoreValue}`);
+        updateHighscoreDisplay();
         
         // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, scoreValue);
@@ -486,7 +491,10 @@ function saveLocalScore(scoreValue) {
     const currentLocal = parseInt(localStorage.getItem('localHighscore') || '0');
     if (scoreValue > currentLocal) {
         localStorage.setItem('localHighscore', scoreValue);
+        localStorage.setItem('vkHighscore', scoreValue);
+        window.vkHighscore = scoreValue;  // ✅ ДОБАВИТЬ
         updateRecordText(`Рекорд: ${scoreValue} (локально)`);
+        updateHighscoreDisplay();  // ✅ ДОБАВИТЬ
         console.log(`Локальный рекорд сохранён: ${scoreValue}`);
     }
 }
@@ -510,15 +518,16 @@ function loadVKHighScore() {
     })
     .then((data) => {
         let highScore = parseInt(data.response) || 0;
-        updateRecordText(`Рекорд: ${highScore}`);
+        
+        // ✅ ОБНОВЛЯЕМ ВСЁ
         window.vkHighscore = highScore;
         localStorage.setItem('vkHighscore', highScore);
         localStorage.setItem('localHighscore', highScore);
         
-        // ====== СИНХРОНИЗАЦИЯ С VK STORAGE ======
-        saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, highScore);
+        updateRecordText(`Рекорд: ${highScore}`);
+        updateHighscoreDisplay();
         
-        if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
+        saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, highScore);
         console.log('🏆 Загружен рекорд из VK API:', highScore);
     })
     .catch(err => {
@@ -554,12 +563,14 @@ function updateRecordText(text) {
 function updateHighscoreDisplay() {
     let currentHighscore = 0;
     
+    // ✅ СНАЧАЛА ПРОВЕРЯЕМ window.vkHighscore
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         currentHighscore = window.vkHighscore;
     } else {
         const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
         const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
         currentHighscore = Math.max(vkScore, localScore);
+        window.vkHighscore = currentHighscore;  // ✅ ОБНОВЛЯЕМ
     }
     
     const sideElement = document.getElementById('yandex-highscore-side');
@@ -570,18 +581,26 @@ function updateHighscoreDisplay() {
     
     console.log('🏆 Рекорд обновлён:', currentHighscore);
 }
-
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
 function showVKLeaderboard() {
-    console.log('📊 Открываем таблицу лидеров');
+    // ✅ БЕРЁМ РЕКОРД ИЗ window.vkHighscore ИЛИ localStorage
+    let highScore = 0;
     
-    // Ставим игру на паузу, если она идёт
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highScore = window.vkHighscore;
+    } else {
+        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
+        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
+        highScore = Math.max(vkScore, localScore);
+    }
+    
+    console.log('📊 Открываем таблицу лидеров, рекорд игрока:', highScore);
+    
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
     
-    // Проверяем, есть ли VK Bridge
     if (typeof vkBridge === 'undefined') {
         console.warn("⚠️ VK Bridge не найден");
         swal({
@@ -593,19 +612,6 @@ function showVKLeaderboard() {
         return;
     }
     
-    // Загружаем рекорд игрока
-    let highScore = 0;
-    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-        highScore = window.vkHighscore;
-    } else {
-        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
-        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
-        highScore = Math.max(vkScore, localScore);
-    }
-    
-    console.log('📊 Рекорд для отправки:', highScore);
-    
-    // Просто открываем таблицу — VK сам разберётся
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: highScore,
         global: 1
@@ -615,22 +621,16 @@ function showVKLeaderboard() {
     })
     .catch((error) => {
         console.error('❌ Ошибка:', error);
-        
-        // Пробуем открыть без user_result
-        vkBridge.send('VKWebAppShowLeaderBoardBox', {
-            global: 1
-        })
-        .then(() => {
-            console.log('✅ Открыто без user_result');
-        })
-        .catch(() => {
-            swal({
-                title: "📊 Таблица лидеров",
-                text: "Временно недоступна. Попробуйте позже.",
-                icon: "info",
-                button: "OK"
+        vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
+            .then(() => console.log('✅ Открыто без user_result'))
+            .catch(() => {
+                swal({
+                    title: "📊 Таблица лидеров",
+                    text: "Временно недоступна. Попробуйте позже.",
+                    icon: "info",
+                    button: "OK"
+                });
             });
-        });
     });
 }
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
