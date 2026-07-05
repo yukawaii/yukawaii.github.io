@@ -53,11 +53,8 @@ class HelpModal extends Component {
     if (!this.state.isOpen) return null;
 
     return (
-      <div 
-        className={style.modalWrapper}
-        onTouchStart={this.handleTouchStart}
-        onTouchEnd={this.handleTouchEnd}
-      >
+      <div    className={style.modalWrapper}
+            >
         <div className={style.modal}>
           <div className={style.header}>
             <span className={style.title}>❓ Как играть?</span>
