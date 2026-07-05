@@ -573,6 +573,8 @@ function updateHighscoreDisplay() {
 
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
+// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
+
 function showVKLeaderboard() {
     // Загружаем сохранённый рекорд
     let highScore = 0;
@@ -593,34 +595,67 @@ function showVKLeaderboard() {
         pauseGame();
     }
     
-    if (!vkInitialized) {
-        console.warn("⚠️ VK Bridge не инициализирован");
+    // Проверяем vkBridge напрямую, а не vkInitialized
+    if (typeof vkBridge === 'undefined') {
+        console.warn("⚠️ VK Bridge не найден");
         swal({
             title: "Таблица лидеров",
-            text: "Недоступно. Попробуйте позже.",
+            text: "Функция доступна только в приложении ВКонтакте",
             icon: "info",
             button: "OK"
         });
         return;
     }
     
+    // Проверяем, что пользователь авторизован
+    if (!vkUserId) {
+        console.warn("⚠️ Пользователь не авторизован");
+        swal({
+            title: "Таблица лидеров",
+            text: "Войдите в ВК, чтобы увидеть таблицу лидеров!",
+            icon: "info",
+            button: "OK"
+        });
+        return;
+    }
+    
+    // Открываем таблицу лидеров через VK Bridge
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: highScore,
         global: 1
     })
     .then((data) => {
-        if (data && data.success) {
-            console.log('✅ Таблица лидеров успешно открыта');
-        }
+        console.log('✅ Таблица лидеров успешно открыта', data);
     })
     .catch((error) => {
         console.error('❌ Ошибка открытия таблицы лидеров:', error);
-        swal({
-            title: "📊 Таблица лидеров",
-            text: "Временно недоступна. Попробуйте обновить страницу.",
-            icon: "info",
-            button: "OK"
-        });
+        
+        // Если ошибка связана с тем, что таблица не создана — пробуем создать
+        if (error && error.message && error.message.includes('not found')) {
+            // Пробуем просто открыть без user_result
+            vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                global: 1
+            })
+            .then(() => {
+                console.log('✅ Таблица лидеров открыта без user_result');
+            })
+            .catch((err2) => {
+                console.error('❌ Вторая попытка тоже失败了:', err2);
+                swal({
+                    title: "📊 Таблица лидеров",
+                    text: "Временно недоступна. Попробуйте позже.",
+                    icon: "info",
+                    button: "OK"
+                });
+            });
+        } else {
+            swal({
+                title: "📊 Таблица лидеров",
+                text: "Временно недоступна. Попробуйте позже.",
+                icon: "info",
+                button: "OK"
+            });
+        }
     });
 }
 
