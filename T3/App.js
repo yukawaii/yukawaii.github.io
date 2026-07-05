@@ -15,7 +15,6 @@ const VK_STORAGE_KEYS = {
     DAILY_BONUS: 'tetris_daily_bonus_v1',
     HIGHSCORE: 'tetris_highscore_v1'
 };
-
 // ======================== VK STORAGE ФУНКЦИИ ========================
 
 function saveToVKStorage(key, value) {
