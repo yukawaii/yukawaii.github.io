@@ -1084,9 +1084,9 @@ function endGame() {
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
-    if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.audioContext.suspend();
-    }
+  if (typeof gameAudio !== 'undefined') {
+    gameAudio.pauseAll();
+}
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
     }
@@ -1114,7 +1114,7 @@ function resumeGame() {
     gameState.paused = false;
     lastTime = performance.now();
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.audioContext.resume().catch(err => console.log('Ошибка возобновления аудио:', err));
+        gameAudio.resumeAll().catch(err => console.log('Ошибка возобновления аудио:', err));
     }
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
@@ -1193,15 +1193,19 @@ function updatePauseButtonText() {
 
 // ======================== МУЗЫКА И ЗВУКИ ========================
 function playBackgroundMusic() {
-    if (musicMuted || !gameAudio || !gameAudio.initialized) return;
+   if (musicMuted || !gameAudio || !gameAudio.initialized) return;
+    if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) {
+        // уже играет нужный трек
+        return;
+    }
     
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+   // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     let track;
     
-    if (isMobile) {
+  /*  if (isMobile) {
         // 🔥 НА ТЕЛЕФОНЕ — ВСЕГДА ОДНА МЕЛОДИЯ
         track = '2';
-    } else {
+    } else {*/
         // НА ПК — В ЗАВИСИМОСТИ ОТ РЕЖИМА
         const isClassic = selectedMode === 'classic';
         if (isClassic && selectedDifficulty === 'easy') track = '2';
@@ -1210,7 +1214,7 @@ function playBackgroundMusic() {
         else if (!isClassic && selectedDifficulty === 'easy') track = '2';
         else if (!isClassic && selectedDifficulty === 'medium') track = '1';
         else track = '1';
-    }
+  //  }
     
     currentMusicTrack = track;
     gameAudio.playMusic(track, 0.15);
@@ -1264,24 +1268,35 @@ function updateMusicIcon() {
 function initAudio() {
     if (!audioInitialized) {
         if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-            gameAudio.resumeContext();
+            gameAudio.resumeContext(); // возобновляем основной контекст
             audioInitialized = true;
-              // После возобновления контекста запускаем музыку, если не muted
-            if (!musicMuted && !soundMuted) {
+            // Запускаем музыку только если она ещё не запущена и не muted
+            if (!musicMuted && !soundMuted && !gameAudio.musicStarted) {
                 playBackgroundMusic();
             }
         }
         return;
     }
-    if (!gameAudio || !gameAudio.initialized) {
-        gameAudio.init().then(() => {
-            if (!soundMuted && !musicMuted) playBackgroundMusic();
-        }).catch(e => console.log('Аудио не загружено:', e));
+    // Если уже инициализировано, просто убеждаемся, что контексты не приостановлены
+    if (gameAudio && gameAudio.initialized) {
+        if (gameAudio.audioContext && gameAudio.audioContext.state === 'suspended') {
+            gameAudio.audioContext.resume();
+        }
+        if (gameAudio.musicContext && gameAudio.musicContext.state === 'suspended') {
+            gameAudio.musicContext.resume();
+        }
+        // Музыку не перезапускаем, если она уже играет
         return;
     }
-    if (!soundMuted && !musicMuted) playBackgroundMusic();
+    // Если аудио не инициализировано (редкий случай)
+    if (gameAudio && !gameAudio.initialized) {
+        gameAudio.init().then(() => {
+            if (!soundMuted && !musicMuted && !gameAudio.musicStarted) {
+                playBackgroundMusic();
+            }
+        }).catch(e => console.log('Аудио не загружено:', e));
+    }
 }
-
 // ======================== МОДАЛКИ ========================
 function showGameOverModal(score) {
     const modal = document.getElementById('gameover-modal');
@@ -1514,9 +1529,9 @@ document.addEventListener('touchstart', initAudio);
                                 pauseGame();
                                 console.log('📱 Вкладка скрыта — игра на паузе. Нажмите "Дальше" чтобы продолжить.');
                             }       // Останавливаем аудио
-                            if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-                                gameAudio.audioContext.suspend();
-                            }
+                          if (typeof gameAudio !== 'undefined') {
+    gameAudio.pauseAll();
+}
                         }            // ❌ НЕТ автоматического resume! Игрок сам нажмёт "Дальше"
                     });
 

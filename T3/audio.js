@@ -156,6 +156,39 @@ class GameAudio {
         }
     }
     
+pauseMusic() {
+    if (this.musicContext && this.musicContext.state === 'running') {
+        this.musicContext.suspend();
+        console.log('🎵 Музыкальный контекст приостановлен');
+    }
+}
+
+resumeMusic() {
+    if (this.musicContext && this.musicContext.state === 'suspended') {
+        this.musicContext.resume();
+        console.log('🎵 Музыкальный контекст возобновлён');
+    }
+}
+
+// Обновить существующие методы pauseAll/resumeAll
+pauseAll() {
+    if (this.audioContext && this.audioContext.state === 'running') {
+        this.audioContext.suspend();
+    }
+    if (this.musicContext && this.musicContext.state === 'running') {
+        this.musicContext.suspend();
+    }
+}
+
+resumeAll() {
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+    }
+    if (this.musicContext && this.musicContext.state === 'suspended') {
+        this.musicContext.resume();
+    }
+}
+
     // Воспроизведение музыки (через отдельный канал music)
 playMusic(trackName, volume = 0.15) {
     if (this.musicMuted || !this.musicContext || !this.buffers[trackName]) {
@@ -242,12 +275,7 @@ playMusic(trackName, volume = 0.15) {
         }
     }
     
-    // Возобновление всего аудио
-    resumeAll() {
-        if (this.audioContext && this.audioContext.state === 'suspended') {
-            this.audioContext.resume();
-        }
-    }
+ 
     
     // Возобновление контекста после жеста пользователя
     resumeContext() {
