@@ -48,35 +48,49 @@ function playSound(startTime, duration) {
   };
   req.send();
 })();
+// src/unit/arcadeSounds.js
+
 // ===== ГЕНЕРАЦИЯ ПРОГРАММНОГО ЗВУКА ДЛЯ ОТСКОКА =====
 function playBounceSound() {
-  if (!hasWebAudioAPI || !context) return;
+  console.log('🔊 playBounceSound вызван!');  // ← добавить
+
+  if (!hasWebAudioAPI || !context) {
+    console.warn('❌ Нет Web Audio API или контекста');
+    return;
+  }
   
   try {
     var state = store.getState();
-    if (!state.get('music')) return;
-  } catch(e) { return; }
+    if (!state.get('music')) {
+      console.log('🔇 Звук выключен в настройках');
+      return;
+    }
+  } catch(e) { 
+    console.warn('❌ Ошибка проверки звука:', e);
+    return; 
+  }
   
   try {
-    // Создаем осциллятор
     var oscillator = context.createOscillator();
     var gainNode = context.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
-    
-    // Низкая частота (80-120 Гц) для "бум"
-    oscillator.frequency.setValueAtTime(100, context.currentTime);
-    oscillator.type = 'sine';  // мягкий звук
-    
-    // Быстрое затухание
-    gainNode.gain.setValueAtTime(0.15, context.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.08);
-    
-    oscillator.start(context.currentTime);
-    oscillator.stop(context.currentTime + 0.08);
-  } catch(e) {}
+    // ... остальной код
+    console.log('✅ Звук отскока воспроизведён');
+  } catch(e) {
+    console.error('❌ Ошибка воспроизведения:', e);
+  }
 }
+
+module.exports = {
+  playSound: function(start, duration) {
+    playSound(start, duration);
+  },
+  hit: function() { playSound(0, 0.2); },
+  score: function() { playSound(1.2558, 0.3546); },
+  gameover: function() { playSound(8.1276, 1.1437); },
+  move: function() { playSound(2.9088, 0.1437); },
+  // ===== ИСПОЛЬЗУЕМ ПРОГРАММНЫЙ ЗВУК =====
+  bounce: function() { playBounceSound(); }
+};
 
 module.exports = {
   playSound: function(start, duration) {

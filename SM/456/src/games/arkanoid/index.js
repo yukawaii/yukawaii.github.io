@@ -200,13 +200,22 @@ saveScore(score) {
     }
   } catch(e) {}
 }
+
 playBounceSound() {
-  if (!this.state.soundEnabled) return;
+  console.log('🎯 playBounceSound в игре вызван');  // ← добавить
+  if (!this.state.soundEnabled) {
+    console.log('🔇 Звук отключен в игре');
+    return;
+  }
   try {
     if (arcadeSounds && arcadeSounds.bounce) {
       arcadeSounds.bounce();
+    } else {
+      console.warn('❌ arcadeSounds.bounce не найден');
     }
-  } catch(e) {}
+  } catch(e) {
+    console.error('❌ Ошибка:', e);
+  }
 }
 
 // В playCrashSound:
@@ -435,7 +444,7 @@ for (var i = 0; i < newBricks.length; i++) {
     
     brick.alive = false;
     brokenCount++;
-    this.playCrashSound();
+   // this.playCrashSound();
     
     // Определяем направление отскока
     var overlapX = Math.min(newBallX + BS - brickLeft, brickRight - newBallX);

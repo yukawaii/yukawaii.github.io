@@ -336,19 +336,19 @@ if (newPaddleX + PW > FW) newPaddleX = FW - PW;
 if (newBallX < leftPadding) {  // ← было 0
   newBallX = leftPadding;      // ← было 0
   newBallSpeedX = -newBallSpeedX;
-  this.playMoveSound();
+ // this.playMoveSound();
 }
     // Правая стена
     if (newBallX + BS > FW) {
       newBallX = FW - BS;
       newBallSpeedX = -newBallSpeedX;
-      this.playMoveSound();
+   //   this.playMoveSound();
     }
     // Верхняя стена
     if (newBallY < 0) {
       newBallY = 0;
       newBallSpeedY = -newBallSpeedY;
-      this.playMoveSound();
+   //   this.playMoveSound();
     }
     
 // ===== РАКЕТКА =====
