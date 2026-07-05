@@ -16,6 +16,9 @@ class GameAudio {
         
         // Отдельный узел для звуковых эффектов
         this.sfxGain = null;
+
+         this.isLoading = false; // ← ДОБАВИТЬ
+        this.loadedTracks = []; // ← ДОБАВИТЬ
     }
     
     async init() {
@@ -41,7 +44,12 @@ class GameAudio {
         }
     }
     
+       
+    // ====== НОВАЯ ВЕРСИЯ loadSounds С ПРИОРИТЕТАМИ ======
     async loadSounds() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+        
         const sounds = {
             intro: 'audio/tetrismf.wav',
             collide: 'audio/tetriscollide.wav',
@@ -57,34 +65,64 @@ class GameAudio {
             '4': 'audio/4.ogg'
         };
         
-        const loadPromises = [];
+        // 🔥 КРИТИЧЕСКИ ВАЖНЫЕ ЗВУКИ (загружаются первыми)
+        const essential = ['collide', 'rotate', 'sweep', 'gameover'];
         
-        for (const [name, url] of Object.entries(sounds)) {
-            const promise = fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        console.warn(`⚠️ Файл ${url} не найден (${response.status})`);
-                        throw new Error(`Файл ${url} не найден`);
-                    }
-                    return response.arrayBuffer();
-                })
-                .then(arrayBuffer => this.audioContext.decodeAudioData(arrayBuffer))
-                .then(audioBuffer => {
-                    this.buffers[name] = audioBuffer;
-                    console.log(`✅ Загружен звук: ${name}`);
-                })
-                .catch(err => console.error(`❌ Ошибка загрузки ${name}:`, err));
-            
-            loadPromises.push(promise);
+        // 🎵 МУЗЫКА (загружается в фоне после основных звуков)
+        const musicTracks = ['1', '2', '3', '4', 'intro', 'loop'];
+        
+        // Остальные звуки (загружаются после музыки)
+        const otherSounds = ['pause', 'highspins', 'levelup'];
+        
+        // 1️⃣ Сначала загружаем критически важные звуки
+        console.log('🔊 Загрузка основных звуков...');
+        const essentialPromises = essential.map(name => this.loadSound(name, sounds[name]));
+        await Promise.all(essentialPromises);
+        this.essentialLoaded = true;
+        console.log('✅ Основные звуки загружены');
+        
+        // 2️⃣ Загружаем музыку (не блокируя)
+        console.log('🎵 Загрузка музыки...');
+        const musicPromises = musicTracks.map(name => this.loadSound(name, sounds[name]));
+        Promise.all(musicPromises).then(() => {
+            console.log('✅ Музыка загружена');
+        }).catch(() => {});
+        
+        // 3️⃣ Загружаем остальные звуки (в фоне)
+        const otherPromises = otherSounds.map(name => this.loadSound(name, sounds[name]));
+        Promise.all(otherPromises).then(() => {
+            console.log('✅ Остальные звуки загружены');
+        }).catch(() => {});
+        
+        this.isLoading = false;
+    }
+    
+    // Вспомогательная функция загрузки одного звука
+    async loadSound(name, url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.warn(`⚠️ Файл ${url} не найден (${response.status})`);
+                return;
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+            this.buffers[name] = audioBuffer;
+            console.log(`✅ Загружен: ${name}`);
+        } catch (err) {
+            console.warn(`⚠️ Ошибка загрузки ${name}:`, err);
         }
-        
-        await Promise.all(loadPromises);
-        console.log('📢 Все звуки загружены');
     }
     
     // Воспроизведение звукового эффекта (через отдельный канал sfx)
     playOneShot(name, volume = 0.3) {
-        if (this.muted || !this.audioContext || !this.buffers[name]) return;
+        if (this.muted || !this.audioContext || !this.buffers[name]) {
+            // Если звук ещё не загружен — пробуем загрузить прямо сейчас
+            if (!this.buffers[name]) {
+                console.log(`🔄 Звук ${name} ещё не загружен, пропускаем`);
+            }
+            return;
+        }
         if (this.audioContext.state === 'suspended') {
             this.audioContext.resume();
         }
