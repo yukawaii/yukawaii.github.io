@@ -532,6 +532,12 @@ function loadVKHighScore() {
         return;
     }
     
+    if (!vkUserId) {
+        console.log('⚠️ Нет ID пользователя, загружаем локальный рекорд');
+        loadLocalHighScore();
+        return;
+    }
+    
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'apps.getScore',
         request_id: 'loadScore_' + Date.now(),
@@ -552,11 +558,27 @@ function loadVKHighScore() {
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, highScore);
     })
     .catch(err => {
-        console.error('❌ Ошибка загрузки рекорда из VK:', err);
-        loadLocalHighScore();
+        console.warn('⚠️ Ошибка загрузки рекорда из VK API:', err);
+        // Пробуем загрузить из VK Storage
+        loadFromVKStorage(VK_STORAGE_KEYS.HIGHSCORE)
+            .then((storedScore) => {
+                if (storedScore !== null && storedScore !== undefined) {
+                    const score = parseInt(storedScore) || 0;
+                    console.log(`🏆 Загружен рекорд из VK Storage: ${score}`);
+                    window.vkHighscore = score;
+                    localStorage.setItem('vkHighscore', score);
+                    localStorage.setItem('localHighscore', score);
+                    updateRecordText(`Рекорд: ${score}`);
+                    updateHighscoreDisplay();
+                } else {
+                    loadLocalHighScore();
+                }
+            })
+            .catch(() => {
+                loadLocalHighScore();
+            });
     });
 }
-
 function loadLocalHighScore() {
     const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
     const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
@@ -598,12 +620,8 @@ function updateHighscoreDisplay() {
     console.log('🏆 Рекорд обновлён в интерфейсе:', currentHighscore);
 }
 
-// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
-
-// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
-
 function showVKLeaderboard() {
-    // Берём рекорд игрока
+    // Берём рекорд
     let highScore = 0;
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         highScore = window.vkHighscore;
@@ -629,9 +647,10 @@ function showVKLeaderboard() {
         return;
     }
     
-    // ✅ ПРОСТО ОТКРЫВАЕМ ТАБЛИЦУ С РЕКОРДОМ
+    // ✅ С global: 1 И user_result
     vkBridge.send('VKWebAppShowLeaderBoardBox', { 
-        user_result: highScore, global: 1
+        user_result: highScore,
+        global: 1
     })
     .then(() => {
         console.log('✅ Таблица лидеров открыта');

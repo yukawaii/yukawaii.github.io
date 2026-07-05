@@ -138,7 +138,7 @@ class GameAudio {
             source.connect(gain);
             gain.connect(this.sfxGain);
             
-            source.start();
+            source.start(this.audioContext.currentTime);
             
             // Автоматическое отключение после окончания
             source.onended = () => {
