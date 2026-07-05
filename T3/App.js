@@ -5,6 +5,7 @@ let vkUserToken = null;
 let vkUserId = null;
 let leaderboardLoading = false;
 let leaderboardCheckInterval = null;
+let leaderboardTimeoutId = null;
 const ServToken = '36bb7f1c36bb7f1c36bb7f1c6335f975a4336bb36bb7f1c5cf8d7250dc913db99e9ea4d';
 
 // ======================== VK STORAGE ========================
@@ -16,6 +17,18 @@ const VK_STORAGE_KEYS = {
     DAILY_BONUS: 'tetris_daily_bonus_v1',
     HIGHSCORE: 'tetris_highscore_v1'
 };
+
+function clearLeaderboardTimers() {
+    if (leaderboardCheckInterval) {
+        clearInterval(leaderboardCheckInterval);
+        leaderboardCheckInterval = null;
+    }
+    if (leaderboardTimeoutId) {
+        clearTimeout(leaderboardTimeoutId);
+        leaderboardTimeoutId = null;
+    }
+}
+
 
 function saveToVKStorage(key, value) {
     if (typeof vkBridge === 'undefined') return Promise.resolve();
@@ -344,7 +357,7 @@ function cancelLeaderboardLoading() {
     closeCustomModal();
 }
 
-// ===== НОВАЯ showVKLeaderboard (без swal) =====
+// ===== НОВАЯ ФУНКЦИЯ showVKLeaderboard =====
 function showVKLeaderboard() {
     if (leaderboardLoading) return;
 
@@ -360,7 +373,7 @@ function showVKLeaderboard() {
 
     leaderboardLoading = true;
 
-    // Показываем модалку загрузки
+    // Показываем модалку загрузки (кастомная)
     const modal = document.createElement('div');
     modal.id = 'custom-modal';
     modal.style.cssText = `
@@ -394,23 +407,13 @@ function showVKLeaderboard() {
                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                 </svg>
             </div>
-            <div style="margin-top: 20px; color: #64748b; font-size: 12px; font-family: 'Russo One', sans-serif;">
-                Ожидание ответа от сервера...
-            </div>
         </div>
     `;
     document.body.appendChild(modal);
 
     // Функция открытия таблицы
-    const openLeaderboard = () => {
-        if (leaderboardCheckInterval) {
-            clearInterval(leaderboardCheckInterval);
-            leaderboardCheckInterval = null;
-        }
-        if (leaderboardTimeoutId) {
-            clearTimeout(leaderboardTimeoutId);
-            leaderboardTimeoutId = null;
-        }
+    const tryOpen = () => {
+        clearLeaderboardTimers();
         closeCustomModal();
         leaderboardLoading = false;
 
@@ -433,7 +436,7 @@ function showVKLeaderboard() {
             .then(() => console.log('✅ Таблица лидеров открыта'))
             .catch((error) => {
                 console.error('❌ Ошибка:', error);
-                // Повторная попытка без user_result
+                // повторная попытка без user_result
                 vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
                     .then(() => console.log('✅ Открыто без user_result'))
                     .catch((err) => {
@@ -456,24 +459,24 @@ function showVKLeaderboard() {
         }
     };
 
-    // Если VK уже готов — сразу открываем
+    // Если уже инициализирован — открываем сразу
     if (vkInitialized && typeof vkBridge !== 'undefined') {
-        openLeaderboard();
+        tryOpen();
         return;
     }
 
-    // Ожидание инициализации с проверкой каждые 300 мс, таймаут 20 секунд
+    // Иначе ждём с интервалом 300 мс, максимум 20 секунд
     let attempts = 0;
     const maxAttempts = 67; // 20 сек / 300 мс
+
     leaderboardCheckInterval = setInterval(() => {
         attempts++;
         if (vkInitialized && typeof vkBridge !== 'undefined') {
-            openLeaderboard();
+            tryOpen();
             return;
         }
         if (attempts >= maxAttempts) {
-            clearInterval(leaderboardCheckInterval);
-            leaderboardCheckInterval = null;
+            clearLeaderboardTimers();
             leaderboardLoading = false;
             closeCustomModal();
             showCustomModal({
