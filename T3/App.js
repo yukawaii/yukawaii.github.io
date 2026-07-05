@@ -630,7 +630,7 @@ function showVKLeaderboard() {
     
     // ✅ ПРОСТО ОТКРЫВАЕМ ТАБЛИЦУ С РЕКОРДОМ
     vkBridge.send('VKWebAppShowLeaderBoardBox', { 
-        user_result: highScore 
+        user_result: highScore, global: 1
     })
     .then(() => {
         console.log('✅ Таблица лидеров открыта');
