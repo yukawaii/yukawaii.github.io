@@ -573,29 +573,15 @@ function updateHighscoreDisplay() {
 
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
-// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
-
 function showVKLeaderboard() {
-    // Загружаем сохранённый рекорд
-    let highScore = 0;
+    console.log('📊 Открываем таблицу лидеров');
     
-    // Сначала проверяем vkHighscore (из VK)
-    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-        highScore = window.vkHighscore;
-    } else {
-        // Или из localStorage
-        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
-        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
-        highScore = Math.max(vkScore, localScore);
-    }
-    
-    console.log('📊 Открываем таблицу лидеров, рекорд игрока:', highScore);
-    
+    // Ставим игру на паузу, если она идёт
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
     
-    // Проверяем vkBridge напрямую, а не vkInitialized
+    // Проверяем, есть ли VK Bridge
     if (typeof vkBridge === 'undefined') {
         console.warn("⚠️ VK Bridge не найден");
         swal({
@@ -607,58 +593,46 @@ function showVKLeaderboard() {
         return;
     }
     
-    // Проверяем, что пользователь авторизован
-    if (!vkUserId) {
-        console.warn("⚠️ Пользователь не авторизован");
-        swal({
-            title: "Таблица лидеров",
-            text: "Войдите в ВК, чтобы увидеть таблицу лидеров!",
-            icon: "info",
-            button: "OK"
-        });
-        return;
+    // Загружаем рекорд игрока
+    let highScore = 0;
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highScore = window.vkHighscore;
+    } else {
+        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
+        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
+        highScore = Math.max(vkScore, localScore);
     }
     
-    // Открываем таблицу лидеров через VK Bridge
+    console.log('📊 Рекорд для отправки:', highScore);
+    
+    // Просто открываем таблицу — VK сам разберётся
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: highScore,
         global: 1
     })
     .then((data) => {
-        console.log('✅ Таблица лидеров успешно открыта', data);
+        console.log('✅ Таблица лидеров открыта', data);
     })
     .catch((error) => {
-        console.error('❌ Ошибка открытия таблицы лидеров:', error);
+        console.error('❌ Ошибка:', error);
         
-        // Если ошибка связана с тем, что таблица не создана — пробуем создать
-        if (error && error.message && error.message.includes('not found')) {
-            // Пробуем просто открыть без user_result
-            vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                global: 1
-            })
-            .then(() => {
-                console.log('✅ Таблица лидеров открыта без user_result');
-            })
-            .catch((err2) => {
-                console.error('❌ Вторая попытка тоже失败了:', err2);
-                swal({
-                    title: "📊 Таблица лидеров",
-                    text: "Временно недоступна. Попробуйте позже.",
-                    icon: "info",
-                    button: "OK"
-                });
-            });
-        } else {
+        // Пробуем открыть без user_result
+        vkBridge.send('VKWebAppShowLeaderBoardBox', {
+            global: 1
+        })
+        .then(() => {
+            console.log('✅ Открыто без user_result');
+        })
+        .catch(() => {
             swal({
                 title: "📊 Таблица лидеров",
                 text: "Временно недоступна. Попробуйте позже.",
                 icon: "info",
                 button: "OK"
             });
-        }
+        });
     });
 }
-
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
 
 function inviteFriends() {
