@@ -1,44 +1,51 @@
 // audio.js — Web Audio API система с независимыми каналами
 class GameAudio {  
     constructor() {
+        // Основной контекст для звуков (только sfx)
         this.audioContext = null;
+        // Отдельный контекст для музыки
+        this.musicContext = null;
         this.buffers = {};
+        this.musicBuffers = {};
         this.muted = false;
         this.musicMuted = false;
         this.initialized = false;
         this.isLocalDev = window.location.protocol === 'file:';
         
-        // Отдельные узлы для музыки и звуков
-        this.musicGain = null;
+        // Для музыки
         this.musicSource = null;
+        this.musicGain = null;
         this.currentMusicTrack = null;
         this.musicStarted = false;
         
-        // Отдельный узел для звуковых эффектов
+        // Для звуков
         this.sfxGain = null;
 
-         this.isLoading = false; // ← ДОБАВИТЬ
-        this.loadedTracks = []; // ← ДОБАВИТЬ
+        this.isLoading = false;
+        this.loadedTracks = [];
     }
     
     async init() {
         if (this.initialized) return;
         
         try {
+            // Два отдельных контекста
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.musicContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Создаём отдельные узлы для музыки и звуков
-            this.musicGain = this.audioContext.createGain();
+            // Узел для музыки
+            this.musicGain = this.musicContext.createGain();
             this.musicGain.gain.value = 0.15;
-            this.musicGain.connect(this.audioContext.destination);
+            this.musicGain.connect(this.musicContext.destination);
             
+            // Узел для звуков
             this.sfxGain = this.audioContext.createGain();
             this.sfxGain.gain.value = 0.3;
             this.sfxGain.connect(this.audioContext.destination);
             
             await this.loadSounds();
             this.initialized = true;
-            console.log('✅ Web Audio API инициализирован (независимые каналы)');
+            console.log('✅ Web Audio инициализирован (раздельные контексты)');
         } catch (e) {
             console.error('❌ Ошибка инициализации Web Audio:', e);
         }
