@@ -535,19 +535,18 @@ function updateHighscoreDisplay() {
 }
 
 function showVKLeaderboard() {
-    // Берём рекорд
+    // Получаем рекорд
     let highScore = 0;
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         highScore = window.vkHighscore;
     } else {
-        // Если нет рекорда в window, пробуем из localStorage
+        // Если нет в window, берём из localStorage
         const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
         const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
         highScore = Math.max(vkScore, localScore);
     }
     
     console.log('📊 Открываем таблицу лидеров, рекорд:', highScore);
-    console.log('📊 vkUserId:', vkUserId);
     
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
@@ -563,25 +562,35 @@ function showVKLeaderboard() {
         return;
     }
     
-    // Небольшая задержка, чтобы убедиться, что всё готово
+    // Небольшая задержка для уверенности, что всё инициализировалось
     setTimeout(() => {
         vkBridge.send('VKWebAppShowLeaderBoardBox', {
             user_result: highScore,
             global: 1
         })
-        .then((data) => {
-            console.log('✅ Таблица лидеров открыта', data);
+        .then(() => {
+            console.log('✅ Таблица лидеров открыта');
         })
         .catch((error) => {
             console.error('❌ Ошибка:', error);
-            swal({
-                title: "📊 Таблица лидеров",
-                text: "Временно недоступна. Попробуйте позже.",
-                icon: "info",
-                button: "OK"
+            // Если ошибка, попробуем открыть без user_result
+            vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                global: 1
+            })
+            .then(() => {
+                console.log('✅ Открыто без user_result');
+            })
+            .catch((err) => {
+                console.error('❌ Вторая попытка:', err);
+                swal({
+                    title: "📊 Таблица лидеров",
+                    text: "Временно недоступна. Попробуйте позже.",
+                    icon: "info",
+                    button: "OK"
+                });
             });
         });
-    }, 300); // 300ms задержка
+    }, 300);
 }
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
 
