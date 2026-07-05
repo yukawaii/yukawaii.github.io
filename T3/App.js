@@ -248,38 +248,49 @@ function loadAllDataFromVK() {
                 }
 function initVKSDK() {
     if (typeof vkBridge !== 'undefined') {
+        window.vkBridge = vkBridge;
         vkBridge.send('VKWebAppInit')
             .then(() => {
                 console.log('✅ VK SDK инициализирован');
                 vkInitialized = true;
-                return vkBridge.send("VKWebAppGetUserInfo");
+                return vkBridge.send('VKWebAppGetLaunchParams');
+            })
+            .then((launchParams) => {
+                const userId = launchParams.vk_user_id || launchParams.vk_original_vk_id;
+                if (userId) {
+                    vkUserId = userId;
+                    window.vkUserId = userId;
+                    localStorage.setItem('vk_user_id', userId);
+                    console.log('👤 ID пользователя:', userId);
+                } else {
+                    // Если не удалось получить из launchParams, пробуем getUserInfo
+                    return vkBridge.send('VKWebAppGetUserInfo');
+                }
             })
             .then((userInfo) => {
-                vkUserId = userInfo.id;
-                window.vkUserId = userInfo.id;
-                window.vkUserIdForLeaderboard = userInfo.id;
-                console.log('👤 Пользователь:', userInfo.first_name, 'ID:', vkUserId);
-                
+                if (userInfo && userInfo.id) {
+                    vkUserId = userInfo.id;
+                    window.vkUserId = userInfo.id;
+                    localStorage.setItem('vk_user_id', userInfo.id);
+                    console.log('👤 ID пользователя (из getUserInfo):', userInfo.id);
+                }
                 // Получаем токен
-                vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' })
-                    .then(authData => {
-                        vkUserToken = authData.access_token;
-                        console.log('✅ Токен получен');
-                        loadVKHighScore();
-                    })
-                    .catch(err => {
-                        console.warn('⚠️ Токен не получен:', err);
-                        updateRecordText('Рекорд: 0 (Гость)');
-                    });
-                
-                // Загружаем данные из VK Storage
-                loadAllDataFromVK().then(() => {
-                    console.log('✅ Все данные загружены из VK Storage');
-                });
+                return vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
+            })
+            .then((authData) => {
+                vkUserToken = authData.access_token;
+                console.log('✅ Токен получен');
+                loadVKHighScore(); // загружаем рекорд
             })
             .catch((err) => {
-                console.warn('❌ Ошибка инициализации VK:', err);
+                console.warn('⚠️ Ошибка инициализации VK:', err);
                 vkInitialized = false;
+                // Восстанавливаем ID из localStorage
+                const savedId = localStorage.getItem('vk_user_id');
+                if (savedId) {
+                    vkUserId = savedId;
+                    window.vkUserId = savedId;
+                }
                 updateRecordText('Рекорд: 0 (Гость)');
             });
     } else {
@@ -535,23 +546,21 @@ function updateHighscoreDisplay() {
 }
 
 function showVKLeaderboard() {
-    // Получаем рекорд
     let highScore = 0;
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         highScore = window.vkHighscore;
     } else {
-        // Если нет в window, берём из localStorage
         const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
         const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
         highScore = Math.max(vkScore, localScore);
     }
-    
+
     console.log('📊 Открываем таблицу лидеров, рекорд:', highScore);
-    
+
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
-    
+
     if (typeof vkBridge === 'undefined') {
         swal({
             title: "Таблица лидеров",
@@ -561,8 +570,8 @@ function showVKLeaderboard() {
         });
         return;
     }
-    
-    // Небольшая задержка для уверенности, что всё инициализировалось
+
+    // Небольшая задержка для инициализации
     setTimeout(() => {
         vkBridge.send('VKWebAppShowLeaderBoardBox', {
             user_result: highScore,
@@ -573,22 +582,18 @@ function showVKLeaderboard() {
         })
         .catch((error) => {
             console.error('❌ Ошибка:', error);
-            // Если ошибка, попробуем открыть без user_result
-            vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                global: 1
-            })
-            .then(() => {
-                console.log('✅ Открыто без user_result');
-            })
-            .catch((err) => {
-                console.error('❌ Вторая попытка:', err);
-                swal({
-                    title: "📊 Таблица лидеров",
-                    text: "Временно недоступна. Попробуйте позже.",
-                    icon: "info",
-                    button: "OK"
+            // Повторная попытка без user_result
+            vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
+                .then(() => console.log('✅ Открыто без user_result'))
+                .catch((err) => {
+                    console.error('❌ Вторая попытка:', err);
+                    swal({
+                        title: "📊 Таблица лидеров",
+                        text: "Временно недоступна. Попробуйте позже.",
+                        icon: "info",
+                        button: "OK"
+                    });
                 });
-            });
         });
     }, 300);
 }
