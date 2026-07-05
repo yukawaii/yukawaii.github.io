@@ -1118,7 +1118,12 @@ function resumeGame() {
     updatePauseButtonText();
     if (!musicMuted && gameState.introSongPlayed && typeof gameAudio !== 'undefined') {
         gameAudio.stopLoop();
-        gameAudio.playLoop('loop', 0.15);
+       if (currentMusicTrack) {
+    gameAudio.playMusic(currentMusicTrack, 0.15);
+} else {
+    // fallback
+    gameAudio.playMusic('2', 0.15);
+}
     }
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     update();
@@ -1257,6 +1262,10 @@ function initAudio() {
         if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
             gameAudio.resumeContext();
             audioInitialized = true;
+              // После возобновления контекста запускаем музыку, если не muted
+            if (!musicMuted && !soundMuted) {
+                playBackgroundMusic();
+            }
         }
         return;
     }
