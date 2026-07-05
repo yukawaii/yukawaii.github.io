@@ -1114,7 +1114,7 @@ function resumeGame() {
     gameState.paused = false;
     lastTime = performance.now();
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.resumeAll().catch(err => console.log('Ошибка возобновления аудио:', err));
+        gameAudio.resumeAll();
     }
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
