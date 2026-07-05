@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
+import { visibilityChangeEvent, isFocus } from '../../unit/';
 
 var arcadeSounds = require('../../unit/arcadeSounds');
 
@@ -51,6 +52,7 @@ class PongGame extends Component {
     this.playMoveSound = this.playMoveSound.bind(this);
     this.playCrashSound = this.playCrashSound.bind(this);
     this.saveScore = this.saveScore.bind(this);
+    this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +70,9 @@ class PongGame extends Component {
     document.addEventListener('keyup', this.handleKeyUp);
     document.addEventListener('touchstart', this.handleTouchStart, { passive: true });
     document.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    if (visibilityChangeEvent) {
+  document.addEventListener(visibilityChangeEvent, this.handleVisibilityChange);
+}
   }
 
   componentWillUnmount() {
@@ -79,6 +84,9 @@ class PongGame extends Component {
     if (typeof window._updateKeyboard === 'function') {
       window._updateKeyboard();
     }
+    if (visibilityChangeEvent) {
+  document.removeEventListener(visibilityChangeEvent, this.handleVisibilityChange);
+}
     window.removeEventListener('gameControl', this.handleGameControl);
     document.removeEventListener('keydown', this.handleKeyDown);
     document.removeEventListener('keyup', this.handleKeyUp);
@@ -459,6 +467,14 @@ if (ballBottom >= paddleTop &&
     this.initGame();
     this.startGame();
   }
+
+ handleVisibilityChange() {
+  if (document.hidden) {
+    if (this.state.isOpen && !this.state.isPaused && !this.state.gameOver) {
+      this.togglePause();
+    }
+  }
+}
 
   render() {
     if (!this.state.isOpen) return null;
