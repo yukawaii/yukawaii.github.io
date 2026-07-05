@@ -157,31 +157,29 @@ class GameAudio {
     }
     
     // Воспроизведение музыки (через отдельный канал music)
-    playMusic(trackName, volume = 0.15) {
-        if (this.musicMuted || !this.audioContext || !this.buffers[trackName]) {
-            console.warn(`Трек ${trackName} не загружен или музыка выключена`);
-            return;
-        }
-        
-        this.stopMusic();
-        this.currentMusicTrack = trackName;
-        
-        try {
-            this.musicSource = this.audioContext.createBufferSource();
-            this.musicSource.buffer = this.buffers[trackName];
-            this.musicSource.loop = true;
-            
-            // Подключаем к музыкальному каналу (не к sfx!)
-            this.musicSource.connect(this.musicGain);
-            this.musicGain.gain.value = volume;
-            
-            this.musicSource.start();
-            this.musicStarted = true;
-            console.log(`🎵 Музыка запущена: ${trackName}`);
-        } catch (e) {
-            console.warn('Ошибка воспроизведения музыки:', e);
-        }
+playMusic(trackName, volume = 0.15) {
+    if (this.musicMuted || !this.musicContext || !this.buffers[trackName]) {
+        console.warn(`Трек ${trackName} не загружен или музыка выключена`);
+        return;
     }
+    if (this.musicContext.state === 'suspended') {
+        this.musicContext.resume();
+    }
+    this.stopMusic();
+    this.currentMusicTrack = trackName;
+    try {
+        this.musicSource = this.musicContext.createBufferSource(); // ← используем musicContext
+        this.musicSource.buffer = this.buffers[trackName];
+        this.musicSource.loop = true;
+        this.musicSource.connect(this.musicGain);
+        this.musicGain.gain.value = volume;
+        this.musicSource.start();
+        this.musicStarted = true;
+        console.log(`🎵 Музыка запущена: ${trackName}`);
+    } catch (e) {
+        console.warn('Ошибка воспроизведения музыки:', e);
+    }
+}
     
     stopMusic() {
         if (this.musicSource) {

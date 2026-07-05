@@ -64,7 +64,7 @@ function calculateOptimalArenaWidth() {
     return 22;
 }
 
-function resizeGameField() {
+/*function resizeGameField() {
     const newWidth = calculateOptimalArenaWidth();
     if (newWidth === arenaWidth) return;
     
@@ -95,7 +95,7 @@ function resizeGameField() {
         if (player.pos.x > maxX) player.pos.x = maxX;
         if (player.pos.x < 0) player.pos.x = 0;
     }
-}
+}*/
 
 function updateCanvasSize() {
     const container = document.querySelector('.canvas-container');
@@ -949,14 +949,19 @@ function update(time = 0) {
 
 // ======================== УПРАВЛЕНИЕ ИГРОЙ ========================
 function startGame() {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+   /* const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) arenaWidth = 10;
     else {
         if (selectedDifficulty === 'easy') arenaWidth = 12;
         else if (selectedDifficulty === 'hard') arenaWidth = 16;
         else arenaWidth = 14;
-    }
-    arenaHeight = 20;
+    }*/
+// Стало:
+if (selectedDifficulty === 'easy') arenaWidth = 12;
+else if (selectedDifficulty === 'hard') arenaWidth = 16;
+else arenaWidth = 14;
+
+    arenaHeight = 18;
     
     if (selectedDifficulty === 'easy') {
         difficultyMultiplier = 0.5;
@@ -1522,7 +1527,7 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
         updateCanvasSize();
-        resizeGameField();
+       // resizeGameField();
         if (typeof drawGame === 'function') drawGame();
     }, 100);
 });
@@ -1577,7 +1582,7 @@ setTimeout(() => {
 window.addEventListener('load', function() {
     setTimeout(function() {
         updateCanvasSize();
-        resizeGameField();
+       // resizeGameField();
         drawGame();
         const container = document.querySelector('.canvas-container');
         if (container) container.style.opacity = '1';
