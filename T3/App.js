@@ -247,6 +247,7 @@ function loadAllDataFromVK() {
                     return Promise.resolve('ru');
                 }
 function initVKSDK() {
+     console.log('🔥🔥🔥 initVKSDK ВЫЗВАН!');
     if (typeof vkBridge !== 'undefined') {
         window.vkBridge = vkBridge;
         
