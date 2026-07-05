@@ -176,18 +176,29 @@ function loadAllDataFromVK() {
             }
         }
         
-        // ====== РЕКОРД ======
-        if (highscore !== null && highscore !== undefined) {
-            const currentLocal = parseInt(localStorage.getItem('vkHighscore') || localStorage.getItem('localHighscore') || '0');
-            const merged = Math.max(currentLocal, parseInt(highscore) || 0);
-            if (merged > currentLocal) {
-                localStorage.setItem('vkHighscore', merged);
-                localStorage.setItem('localHighscore', merged);
-                window.vkHighscore = merged;
-                loaded = true;
-                console.log(`✅ Рекорд загружен из VK: ${merged}`);
-            }
-        }
+      // ====== РЕКОРД ======
+                    if (highscore !== null && highscore !== undefined) {
+                        const currentLocal = parseInt(localStorage.getItem('vkHighscore') || localStorage.getItem('localHighscore') || '0');
+                        const merged = Math.max(currentLocal, parseInt(highscore) || 0);
+                        if (merged > currentLocal) {
+                            localStorage.setItem('vkHighscore', merged);
+                            localStorage.setItem('localHighscore', merged);
+                            window.vkHighscore = merged;
+                            loaded = true;
+                            console.log(`✅ Рекорд загружен из VK: ${merged}`);
+                            
+                            // ✅ ОБНОВЛЯЕМ ТЕКСТ РЕКОРДА НА ЭКРАНЕ
+                            if (typeof updateRecordText === 'function') {
+                                updateRecordText(`Рекорд: ${merged}`);
+                            }
+                        } else if (currentLocal > 0) {
+                            // Даже если не загрузили новый, убеждаемся, что window.vkHighscore установлен
+                            window.vkHighscore = currentLocal;
+                            if (typeof updateRecordText === 'function') {
+                                updateRecordText(`Рекорд: ${currentLocal}`);
+                            }
+                        }
+                    }
         
         if (!loaded) {
             console.log('ℹ️ В VK Storage нет новых данных');
@@ -423,8 +434,11 @@ function showVKFullscreenAd() {
 }
 
 // ======================== СОХРАНЕНИЕ РЕКОРДА ========================
+// ======================== СОХРАНЕНИЕ РЕКОРДА ========================
 
 function saveVKScore(scoreValue) {
+    console.log(`💾 saveVKScore вызван со значением: ${scoreValue}`);
+    
     if (!vkInitialized) {
         console.log('VK не инициализирован, рекорд не сохраняется');
         saveLocalScore(scoreValue);
@@ -436,13 +450,27 @@ function saveVKScore(scoreValue) {
         return;
     }
     if (!vkUserToken) {
-        console.log('Нет токена доступа (игрок не авторизован), рекорд не сохраняется');
+        console.log('Нет токена доступа, рекорд не сохраняется');
         saveLocalScore(scoreValue);
         return;
     }
-    if (scoreValue <= 0) return;
+    if (scoreValue <= 0) {
+        console.log('Счёт <= 0, пропускаем');
+        return;
+    }
     
-    // Сначала получаем текущий рекорд из VK
+    // Сначала обновляем локально (чтобы сразу видеть)
+    const currentLocal = parseInt(localStorage.getItem('localHighscore') || '0');
+    if (scoreValue > currentLocal) {
+        console.log(`📊 Новый рекорд! ${currentLocal} → ${scoreValue}`);
+        window.vkHighscore = scoreValue;
+        localStorage.setItem('localHighscore', scoreValue);
+        localStorage.setItem('vkHighscore', scoreValue);
+        updateRecordText(`Рекорд: ${scoreValue}`);
+        updateHighscoreDisplay();
+    }
+    
+    // Пытаемся сохранить в VK
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'apps.getScore',
         params: {
@@ -456,7 +484,6 @@ function saveVKScore(scoreValue) {
         console.log(`📊 Текущий рекорд в VK: ${currentScore}, новый: ${scoreValue}`);
         
         if (scoreValue > currentScore) {
-            // Сохраняем новый рекорд
             return vkBridge.send('VKWebAppCallAPIMethod', {
                 method: 'secure.addAppEvent',
                 params: {
@@ -471,33 +498,29 @@ function saveVKScore(scoreValue) {
         return null;
     })
     .then(() => {
-        // ✅ ОБНОВЛЯЕМ ВСЕ ПЕРЕМЕННЫЕ
-        console.log('✅ Рекорд сохранён:', scoreValue);
+        console.log(`✅ Рекорд ${scoreValue} сохранён в VK`);
         window.vkHighscore = scoreValue;
         localStorage.setItem('vkHighscore', scoreValue);
         localStorage.setItem('localHighscore', scoreValue);
-        
-        // ✅ ОБНОВЛЯЕМ ОТОБРАЖЕНИЕ
         updateRecordText(`Рекорд: ${scoreValue}`);
         updateHighscoreDisplay();
-        
-        // ✅ СИНХРОНИЗАЦИЯ С VK STORAGE
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, scoreValue);
     })
     .catch(err => {
-        console.error('❌ Ошибка сохранения рекорда:', err);
-        saveLocalScore(scoreValue);
+        console.error('❌ Ошибка сохранения рекорда в VK:', err);
+        // Уже сохранили локально, так что ничего страшного
     });
 }
 
 function saveLocalScore(scoreValue) {
+    console.log(`💾 saveLocalScore: ${scoreValue}`);
     const currentLocal = parseInt(localStorage.getItem('localHighscore') || '0');
     if (scoreValue > currentLocal) {
         console.log(`📊 Новый локальный рекорд: ${scoreValue}`);
         localStorage.setItem('localHighscore', scoreValue);
         localStorage.setItem('vkHighscore', scoreValue);
         window.vkHighscore = scoreValue;
-        updateRecordText(`Рекорд: ${scoreValue} (локально)`);
+        updateRecordText(`Рекорд: ${scoreValue}`);
         updateHighscoreDisplay();
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, scoreValue);
     }
@@ -506,6 +529,8 @@ function saveLocalScore(scoreValue) {
 // ======================== ЗАГРУЗКА РЕКОРДА ========================
 
 function loadVKHighScore() {
+    console.log('📥 loadVKHighScore вызван');
+    
     if (!vkInitialized) {
         loadLocalHighScore();
         return;
@@ -523,12 +548,9 @@ function loadVKHighScore() {
     .then((data) => {
         let highScore = parseInt(data.response) || 0;
         console.log(`🏆 Загружен рекорд из VK API: ${highScore}`);
-        
-        // ✅ ОБНОВЛЯЕМ ВСЁ
         window.vkHighscore = highScore;
         localStorage.setItem('vkHighscore', highScore);
         localStorage.setItem('localHighscore', highScore);
-        
         updateRecordText(`Рекорд: ${highScore}`);
         updateHighscoreDisplay();
         saveToVKStorage(VK_STORAGE_KEYS.HIGHSCORE, highScore);
@@ -543,7 +565,6 @@ function loadLocalHighScore() {
     const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
     const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
     const highScore = Math.max(vkScore, localScore);
-    
     console.log(`🏆 Загружен локальный рекорд: ${highScore}`);
     window.vkHighscore = highScore;
     updateRecordText(`Рекорд: ${highScore}`);
@@ -563,7 +584,6 @@ function updateRecordText(text) {
 function updateHighscoreDisplay() {
     let currentHighscore = 0;
     
-    // ✅ СНАЧАЛА ПРОВЕРЯЕМ window.vkHighscore
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         currentHighscore = window.vkHighscore;
     } else {
@@ -575,7 +595,6 @@ function updateHighscoreDisplay() {
     
     const sideElement = document.getElementById('yandex-highscore-side');
     const topElement = document.getElementById('yandex-highscore-top');
-    
     const text = 'Рекорд: ' + currentHighscore;
     if (sideElement) sideElement.innerHTML = text;
     if (topElement) topElement.innerHTML = text;
@@ -586,10 +605,16 @@ function updateHighscoreDisplay() {
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
 function showVKLeaderboard() {
-    // ✅ БЕРЁМ РЕКОРД ИЗ window.vkHighscore
-    let highScore = typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0 
-        ? window.vkHighscore 
-        : parseInt(localStorage.getItem('vkHighscore') || '0');
+    let highScore = 0;
+    
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highScore = window.vkHighscore;
+    } else {
+        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
+        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
+        highScore = Math.max(vkScore, localScore);
+        window.vkHighscore = highScore;
+    }
     
     console.log('📊 Открываем таблицу лидеров, рекорд игрока:', highScore);
     
@@ -616,9 +641,11 @@ function showVKLeaderboard() {
     })
     .catch((error) => {
         console.error('❌ Ошибка:', error);
+        // Пробуем открыть без user_result
         vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
             .then(() => console.log('✅ Открыто без user_result'))
-            .catch(() => {
+            .catch((err) => {
+                console.error('❌ Вторая попытка тоже ошибка:', err);
                 swal({
                     title: "📊 Таблица лидеров",
                     text: "Временно недоступна. Попробуйте позже.",

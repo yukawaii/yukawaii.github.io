@@ -1055,7 +1055,22 @@ function endGame() {
     if (typeof saveTotalProgress === 'function') {
         saveTotalProgress();
     }
+ // ====== СОХРАНЯЕМ РЕКОРД ======
+    if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
+        console.log(`📊 Сохраняем рекорд: ${player.score}`);
+        saveVKScore(player.score);
+    }
     
+    // ====== СОХРАНЯЕМ ОБЩИЙ ПРОГРЕСС ======
+    if (typeof saveTotalProgress === 'function') {
+        saveTotalProgress();
+    }
+    
+    // ====== ПОЛНАЯ СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof syncAllDataToVK === 'function') {
+        console.log('🔄 Полная синхронизация с VK Storage после окончания игры...');
+        syncAllDataToVK();
+    }
     // Показываем обновлённую модалку с кнопкой "Продолжить за рекламу"
     showGameOverModal(player.score);
     updatePauseButtonText();
@@ -1070,6 +1085,22 @@ function pauseGame() {
     }
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
+    }
+  // ====== СОХРАНЯЕМ РЕКОРД ======
+    if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
+        console.log(`📊 Сохраняем рекорд: ${player.score}`);
+        saveVKScore(player.score);
+    }
+    
+    // ====== СОХРАНЯЕМ ОБЩИЙ ПРОГРЕСС ======
+    if (typeof saveTotalProgress === 'function') {
+        saveTotalProgress();
+    }
+    
+    // ====== ПОЛНАЯ СИНХРОНИЗАЦИЯ С VK STORAGE ======
+    if (typeof syncAllDataToVK === 'function') {
+        console.log('🔄 Полная синхронизация с VK Storage в паузе...');
+        syncAllDataToVK();
     }
     updatePauseButtonText();
 }
