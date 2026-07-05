@@ -605,17 +605,7 @@ function showVKLeaderboard() {
     
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
-    }
-    
-    if (typeof vkBridge === 'undefined') {
-        swal({
-            title: "Таблица лидеров",
-            text: "Функция доступна только в приложении ВКонтакте",
-            icon: "info",
-            button: "OK"
-        });
-        return;
-    }
+    }    
     
     // Просто открываем таблицу, как в рабочей игре
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
@@ -629,13 +619,7 @@ function showVKLeaderboard() {
     })
     .catch((error) => {
         console.error('❌ Ошибка открытия таблицы лидеров:', error);
-        swal({
-            title: "📊 Таблица лидеров",
-            text: "Временно недоступна. Попробуйте обновить страницу.",
-            icon: "info",
-            button: "OK"
-        });
-    });
+            });
 }
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
 
