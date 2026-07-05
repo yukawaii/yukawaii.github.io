@@ -1199,7 +1199,7 @@ function playBackgroundMusic() {
         else if (isClassic && selectedDifficulty === 'medium') track = '4';
         else if (isClassic && selectedDifficulty === 'hard') track = '1';
         else if (!isClassic && selectedDifficulty === 'easy') track = '2';
-        else if (!isClassic && selectedDifficulty === 'medium') track = '3';
+        else if (!isClassic && selectedDifficulty === 'medium') track = '1';
         else track = '1';
     }
     

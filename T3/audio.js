@@ -61,15 +61,14 @@ class GameAudio {
             levelup: 'audio/tetrislevelup.ogg',
             '1': 'audio/1.ogg',
             '2': 'audio/2.ogg',
-            '3': 'audio/1.ogg',
-            '4': 'audio/4.ogg'
+                     '4': 'audio/4.ogg'
         };
         
         // 🔥 КРИТИЧЕСКИ ВАЖНЫЕ ЗВУКИ (загружаются первыми)
         const essential = ['collide', 'rotate', 'sweep', 'gameover'];
         
         // 🎵 МУЗЫКА (загружается в фоне после основных звуков)
-        const musicTracks = ['1', '2', '3', '4', 'intro', 'loop'];
+        const musicTracks = ['1', '2', '4', 'intro'];
         
         // Остальные звуки (загружаются после музыки)
         const otherSounds = ['pause', 'highspins', 'levelup'];
