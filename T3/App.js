@@ -610,7 +610,6 @@ function updateHighscoreDisplay() {
 }
 
 function showVKLeaderboard() {
-    // Берём рекорд
     let highScore = 0;
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         highScore = window.vkHighscore;
@@ -636,7 +635,27 @@ function showVKLeaderboard() {
         return;
     }
     
-    // ✅ С global: 1 И user_result
+    // ✅ Проверяем и восстанавливаем ID пользователя
+    if (!vkUserId) {
+        console.warn('⚠️ ID пользователя не получен, пытаемся восстановить из localStorage');
+        const savedId = localStorage.getItem('vk_user_id');
+        if (savedId) {
+            vkUserId = savedId;
+            window.vkUserId = savedId;
+            window.vkUserIdForLeaderboard = savedId;
+            console.log('🔄 ID восстановлен из localStorage:', savedId);
+        } else {
+            swal({
+                title: "Таблица лидеров",
+                text: "Не удалось определить пользователя. Попробуйте позже.",
+                icon: "info",
+                button: "OK"
+            });
+            return;
+        }
+    }
+    
+    // ✅ Открываем таблицу с рекордом
     vkBridge.send('VKWebAppShowLeaderBoardBox', { 
         user_result: highScore,
         global: 1
