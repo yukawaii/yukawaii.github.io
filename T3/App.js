@@ -3,6 +3,8 @@ let lastAdShowTime = 0;
 const APP_ID = 54659768;  
 let vkUserToken = null;
 let vkUserId = null;
+let leaderboardLoading = false;
+let leaderboardCheckInterval = null;
 const ServToken = '36bb7f1c36bb7f1c36bb7f1c6335f975a4336bb36bb7f1c5cf8d7250dc913db99e9ea4d';
 
 // ======================== VK STORAGE ========================
@@ -323,20 +325,12 @@ function updateHighscoreDisplay() {
 }
 
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
+// ===== НОВАЯ ФУНКЦИЯ showVKLeaderboard =====
 function showVKLeaderboard() {
-    let highScore = 0;
-    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-        highScore = window.vkHighscore;
-    } else {
-        highScore = Math.max(parseInt(localStorage.getItem('vkHighscore') || '0'), parseInt(localStorage.getItem('localHighscore') || '0'));
-        window.vkHighscore = highScore;
-    }
-    console.log('📊 Открываем таблицу лидеров, рекорд:', highScore);
+    // Если уже идёт загрузка — игнорируем повторный клик
+    if (leaderboardLoading) return;
 
-    if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
-        pauseGame();
-    }
-
+    // Проверяем, доступен ли VK Bridge в принципе
     if (typeof vkBridge === 'undefined') {
         swal({
             title: "Таблица лидеров",
@@ -347,31 +341,145 @@ function showVKLeaderboard() {
         return;
     }
 
-    // Небольшая задержка для инициализации
-    setTimeout(() => {
-        vkBridge.send('VKWebAppShowLeaderBoardBox', {
-            user_result: highScore,
-            global: 1
-        })
-        .then(() => {
-            console.log('✅ Таблица лидеров открыта');
-        })
-        .catch((error) => {
-            console.error('❌ Ошибка:', error);
-            // Повторная попытка без user_result
-            vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
-                .then(() => console.log('✅ Открыто без user_result'))
-                .catch((err) => {
-                    console.error('❌ Вторая попытка:', err);
-                    swal({
-                        title: "📊 Таблица лидеров",
-                        text: "Временно недоступна. Попробуйте позже.",
-                        icon: "info",
-                        button: "OK"
+    // Блокируем повторные вызовы
+    leaderboardLoading = true;
+
+    // Показываем модалку загрузки (без кнопки, только крестик для отмены)
+    const modal = document.createElement('div');
+    modal.id = 'custom-modal';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 100012; display: flex; justify-content: center; align-items: center;
+        background: url('1.jpg') no-repeat center center fixed; background-size: cover;
+    `;
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.7); z-index: -1;
+    `;
+    modal.appendChild(overlay);
+    modal.innerHTML += `
+        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.3);
+                    width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px;
+                    box-shadow: 0 25px 60px rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+                    text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <button onclick="cancelLeaderboardLoading()" style="position: absolute; top: 15px; right: 20px;
+                    background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer;
+                    font-family: 'Russo One', sans-serif;">✕</button>
+            <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px;
+                        margin-bottom: 10px; font-family: 'Russo One', sans-serif;">Загрузка...</h2>
+            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; line-height: 1.6;">
+                Подготовка таблицы лидеров
+            </p>
+            <div style="margin-top: 20px; width: 40px; height: 40px; margin-left: auto; margin-right: auto;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" style="animation: spin 1s linear infinite; width: 100%; height: 100%;">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Функция, которая попытается открыть таблицу
+    const tryOpen = () => {
+        // Останавливаем интервал
+        if (leaderboardCheckInterval) {
+            clearInterval(leaderboardCheckInterval);
+            leaderboardCheckInterval = null;
+        }
+        // Закрываем модалку загрузки
+        closeCustomModal();
+        // Разблокируем
+        leaderboardLoading = false;
+
+        // Если VK инициализирован — открываем
+        if (vkInitialized && typeof vkBridge !== 'undefined') {
+            // Берём рекорд (как в старом коде)
+            let highScore = 0;
+            if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+                highScore = window.vkHighscore;
+            } else {
+                highScore = Math.max(parseInt(localStorage.getItem('vkHighscore') || '0'),
+                                     parseInt(localStorage.getItem('localHighscore') || '0'));
+                window.vkHighscore = highScore;
+            }
+            // Ставим игру на паузу, если нужно
+            if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
+                pauseGame();
+            }
+            // Отправляем запрос
+            vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                user_result: highScore,
+                global: 1
+            })
+            .then(() => console.log('✅ Таблица лидеров открыта'))
+            .catch((error) => {
+                console.error('❌ Ошибка:', error);
+                // Повторная попытка без user_result
+                vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
+                    .then(() => console.log('✅ Открыто без user_result'))
+                    .catch((err) => {
+                        console.error('❌ Вторая попытка:', err);
+                        swal({
+                            title: "📊 Таблица лидеров",
+                            text: "Временно недоступна. Попробуйте позже.",
+                            icon: "info",
+                            button: "OK"
+                        });
                     });
-                });
-        });
+            });
+        } else {
+            // Если всё равно не готово — показываем ошибку
+            swal({
+                title: "Таблица лидеров",
+                text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
+                icon: "info",
+                button: "OK"
+            });
+        }
+    };
+
+    // Если VK уже готов — открываем сразу
+    if (vkInitialized && typeof vkBridge !== 'undefined') {
+        tryOpen();
+        return;
+    }
+
+    // Иначе начинаем проверку каждые 300 мс, максимум 10 секунд
+    let attempts = 0;
+    const maxAttempts = 33; // 10 сек / 300 мс
+    leaderboardCheckInterval = setInterval(() => {
+        attempts++;
+        if (vkInitialized && typeof vkBridge !== 'undefined') {
+            tryOpen();
+            return;
+        }
+        if (attempts >= maxAttempts) {
+            // Время вышло
+            clearInterval(leaderboardCheckInterval);
+            leaderboardCheckInterval = null;
+            leaderboardLoading = false;
+            closeCustomModal();
+            swal({
+                title: "Таблица лидеров",
+                text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
+                icon: "info",
+                button: "OK"
+            });
+        }
     }, 300);
+}
+
+// Функция для отмены загрузки по крестику
+function cancelLeaderboardLoading() {
+    if (leaderboardCheckInterval) {
+        clearInterval(leaderboardCheckInterval);
+        leaderboardCheckInterval = null;
+    }
+    leaderboardLoading = false;
+    closeCustomModal();
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
