@@ -19,7 +19,7 @@ function initVKSDK() {    if (typeof vkBridge !== 'undefined') {        vkBridge
                         // ИГРА НЕ ЗАВИСНЕТ - просто показываем "Рекорд: 0"
                         updateRecordText('Рекорд: 0 (Гость)');
                     });                
-                showVKFullscreenAd(); // Реклама работает и без токена
+               // showVKFullscreenAd(); // Реклама работает и без токена
             })
             .catch((err) => {                console.warn('Пользователь не авторизован:', err);    updateRecordText('Рекорд: 0 (Гость)');
                 vkInitialized = false; // Помечаем, что ВК-функции недоступны
