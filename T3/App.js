@@ -255,34 +255,30 @@ function initVKSDK() {
                 console.log('✅ VK SDK инициализирован');
                 vkInitialized = true;
                 
-                // ====== ПОЛУЧАЕМ LAUNCH PARAMS ДЛЯ ЯЗЫКА ======
-                return vkBridge.send('VKWebAppGetLaunchParams');
-            })
-            .then((launchParams) => {
-                console.log('📱 LaunchParams получены:', launchParams);
-                
-                // ====== ОПРЕДЕЛЯЕМ ЯЗЫК ======
-                const userLang = launchParams.vk_language || launchParams.language || 'ru';
-                const supportedLangs = Object.keys(translations);
-                gameLanguage = supportedLangs.includes(userLang) ? userLang : 'ru';
-                window.gameLanguage = gameLanguage;
-                console.log('🌐 Язык игры:', gameLanguage);
-                
-                // ====== ПОЛУЧАЕМ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЕ (ОБЯЗАТЕЛЬНО!) ======
+                // Сначала получаем информацию о пользователе (как в рабочей игре)
                 return vkBridge.send("VKWebAppGetUserInfo");
             })
             .then((userInfo) => {
-                console.log('👤 Информация о пользователе:', userInfo);
-                const userId = userInfo.id;
-                if (userId) {
-                    vkUserId = userId;
-                    window.vkUserId = userId;
-                    window.vkUserIdForLeaderboard = userId;
-                    localStorage.setItem('vk_user_id', userId);
-                    console.log('👤 ID пользователя установлен:', userId);
-                }
+                vkUserId = userInfo.id;
+                window.vkUserId = userInfo.id;
+                window.vkUserIdForLeaderboard = userInfo.id;
+                localStorage.setItem('vk_user_id', userInfo.id);
+                console.log('👤 Пользователь:', userInfo.first_name, 'ID:', userInfo.id);
                 
-                // ====== ПОДПИСКА НА СОБЫТИЯ VK ======
+                // Определяем язык (если нужно)
+                let userLang = userInfo.lang || userInfo.language || userInfo.locale || 'ru';
+                const supportedLangs = Object.keys(translations);
+                if (!supportedLangs.includes(userLang)) {
+                    const shortLang = userLang.split('-')[0];
+                    if (supportedLangs.includes(shortLang)) userLang = shortLang;
+                    else userLang = 'ru';
+                }
+                gameLanguage = userLang;
+                window.gameLanguage = userLang;
+                console.log('🌐 Язык игры:', gameLanguage);
+                updateInterfaceLanguage();
+                
+                // Подписка на события VK
                 vkBridge.subscribe((e) => {
                     const type = e.detail.type;
                     if (type === 'VKWebAppViewHide') {
@@ -302,52 +298,38 @@ function initVKSDK() {
                     }
                 });
                 
-                updateInterfaceLanguage();
-                
-                // ====== ЗАГРУЖАЕМ ДАННЫЕ ИЗ VK STORAGE ======
-                return loadAllDataFromVK().then(() => {
+                // Теперь загружаем данные из VK Storage (не блокируя инициализацию)
+                loadAllDataFromVK().then(() => {
                     console.log('✅ Все данные загружены из VK Storage');
-                    return vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
+                    // Обновляем интерфейс
+                    if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
+                    if (typeof updateCollectionsProgress === 'function') updateCollectionsProgress();
+                    if (typeof updateScrollsProgress === 'function') updateScrollsProgress();
+                    if (typeof updateDailyBonusStatus === 'function') updateDailyBonusStatus();
                 });
-            })
-            .then((authData) => {
-                vkUserToken = authData.access_token;
-                console.log('✅ Токен получен');
                 
-                // ====== ЗАГРУЖАЕМ РЕКОРД ======
-                return loadVKHighScore();
-            })
-            .then(() => {
-                // ====== ОБНОВЛЯЕМ ИНТЕРФЕЙС ======
-                if (typeof updateHighscoreDisplay === 'function') {
-                    updateHighscoreDisplay();
-                }
-                if (typeof updateCollectionsProgress === 'function') {
-                    updateCollectionsProgress();
-                }
-                if (typeof updateScrollsProgress === 'function') {
-                    updateScrollsProgress();
-                }
-                if (typeof updateDailyBonusStatus === 'function') {
-                    updateDailyBonusStatus();
-                }
-                console.log('✅ Все данные загружены и интерфейс обновлён');
+                // Получаем токен (не ждём)
+                vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' })
+                    .then(authData => {
+                        vkUserToken = authData.access_token;
+                        console.log('✅ Токен получен, рекорды будут сохраняться');
+                        loadVKHighScore(); // Загружаем рекорд
+                    })
+                    .catch(err => {
+                        console.warn('⚠️ Токен не получен (игрок не авторизован или отказал)', err);
+                        updateRecordText('Рекорд: 0 (Гость)');
+                    });
             })
             .catch((err) => {
-                console.warn('❌ Ошибка при загрузке данных:', err);
-                // Восстанавливаем ID из localStorage
-                const savedId = localStorage.getItem('vk_user_id');
-                if (savedId && !window.vkUserId) {
-                    window.vkUserId = savedId;
-                    window.vkUserIdForLeaderboard = savedId;
-                    vkUserId = savedId;
-                }
-                if (typeof loadLocalHighScore === 'function') {
-                    loadLocalHighScore();
-                }
-                if (typeof updateHighscoreDisplay === 'function') {
-                    updateHighscoreDisplay();
-                }
+                console.warn('Пользователь не авторизован:', err);
+                updateRecordText('Рекорд: 0 (Гость)');
+                vkInitialized = false;
+                // Fallback — язык браузера
+                const browserLang = navigator.language ? navigator.language.split('-')[0] : 'ru';
+                const supportedLangs = Object.keys(translations);
+                gameLanguage = supportedLangs.includes(browserLang) ? browserLang : 'ru';
+                window.gameLanguage = gameLanguage;
+                updateInterfaceLanguage();
             });
     } else {
         console.warn('VK Bridge не найден');
@@ -357,9 +339,8 @@ function initVKSDK() {
         gameLanguage = supportedLangs.includes(browserLang) ? browserLang : 'ru';
         window.gameLanguage = gameLanguage;
         updateInterfaceLanguage();
-        if (typeof loadLocalHighScore === 'function') {
-            loadLocalHighScore();
-        }
+        // Загружаем локальный рекорд
+        if (typeof loadLocalHighScore === 'function') loadLocalHighScore();
     }
 }
         // ========== ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ПРИ СМЕНЕ ЯЗЫКА ==========
@@ -610,6 +591,7 @@ function updateHighscoreDisplay() {
 }
 
 function showVKLeaderboard() {
+    // Берём рекорд
     let highScore = 0;
     if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
         highScore = window.vkHighscore;
@@ -635,39 +617,21 @@ function showVKLeaderboard() {
         return;
     }
     
-    // ✅ Проверяем и восстанавливаем ID пользователя
-    if (!vkUserId) {
-        console.warn('⚠️ ID пользователя не получен, пытаемся восстановить из localStorage');
-        const savedId = localStorage.getItem('vk_user_id');
-        if (savedId) {
-            vkUserId = savedId;
-            window.vkUserId = savedId;
-            window.vkUserIdForLeaderboard = savedId;
-            console.log('🔄 ID восстановлен из localStorage:', savedId);
-        } else {
-            swal({
-                title: "Таблица лидеров",
-                text: "Не удалось определить пользователя. Попробуйте позже.",
-                icon: "info",
-                button: "OK"
-            });
-            return;
-        }
-    }
-    
-    // ✅ Открываем таблицу с рекордом
-    vkBridge.send('VKWebAppShowLeaderBoardBox', { 
+    // Просто открываем таблицу, как в рабочей игре
+    vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: highScore,
         global: 1
     })
-    .then(() => {
-        console.log('✅ Таблица лидеров открыта');
+    .then((data) => {
+        if (data && data.success) {
+            console.log('✅ Таблица лидеров успешно открыта');
+        }
     })
     .catch((error) => {
-        console.error('❌ Ошибка:', error);
+        console.error('❌ Ошибка открытия таблицы лидеров:', error);
         swal({
             title: "📊 Таблица лидеров",
-            text: "Временно недоступна. Попробуйте позже.",
+            text: "Временно недоступна. Попробуйте обновить страницу.",
             icon: "info",
             button: "OK"
         });
