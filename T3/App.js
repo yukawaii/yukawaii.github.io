@@ -599,12 +599,21 @@ function updateHighscoreDisplay() {
 
 // ======================== ТАБЛИЦА ЛИДЕРОВ ========================
 
+// ======================== ТАБЛИЦА ЛИДЕРОВ ========================
+
 function showVKLeaderboard() {
-     // ✅ ИСПОЛЬЗУЕМ ТОЛЬКО window.vkHighscore
-    let highScore = window.vkHighscore || 0;
+    // Берём рекорд игрока
+    let highScore = 0;
+    if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
+        highScore = window.vkHighscore;
+    } else {
+        const vkScore = parseInt(localStorage.getItem('vkHighscore') || '0');
+        const localScore = parseInt(localStorage.getItem('localHighscore') || '0');
+        highScore = Math.max(vkScore, localScore);
+    }
     
     console.log('📊 Открываем таблицу лидеров, рекорд:', highScore);
-     
+    
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
         pauseGame();
     }
@@ -619,29 +628,21 @@ function showVKLeaderboard() {
         return;
     }
     
+    // ✅ ПРОСТО ОТКРЫВАЕМ ТАБЛИЦУ С РЕКОРДОМ
     vkBridge.send('VKWebAppShowLeaderBoardBox', { 
-        user_result: highScore, global: 1
+        user_result: highScore 
     })
-    .then((data) => {
-        console.log('✅ Таблица лидеров открыта', data);
+    .then(() => {
+        console.log('✅ Таблица лидеров открыта');
     })
     .catch((error) => {
         console.error('❌ Ошибка:', error);
-        
-        // Повторная попытка 
-        vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: highScore, global: 1})
-            .then(() => {
-                console.log('✅ Открыто со 2 раза');
-            })
-            .catch((err) => {
-                console.error('❌ Вторая попытка:', err);
-                swal({
-                    title: "📊 Таблица лидеров",
-                    text: "Временно недоступна. Попробуйте позже.",
-                    icon: "info",
-                    button: "OK"
-                });
-            });
+        swal({
+            title: "📊 Таблица лидеров",
+            text: "Временно недоступна. Попробуйте позже.",
+            icon: "info",
+            button: "OK"
+        });
     });
 }
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================

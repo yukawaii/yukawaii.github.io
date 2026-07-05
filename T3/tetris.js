@@ -1185,14 +1185,24 @@ function updatePauseButtonText() {
 // ======================== МУЗЫКА И ЗВУКИ ========================
 function playBackgroundMusic() {
     if (musicMuted || !gameAudio || !gameAudio.initialized) return;
-    const isClassic = selectedMode === 'classic';
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     let track;
-    if (isClassic && selectedDifficulty === 'easy') track = '2';
-    else if (isClassic && selectedDifficulty === 'medium') track = '4';
-    else if (isClassic && selectedDifficulty === 'hard') track = '1';
-    else if (!isClassic && selectedDifficulty === 'easy') track = '2';
-    else if (!isClassic && selectedDifficulty === 'medium') track = '3';
-    else track = '1';
+    
+    if (isMobile) {
+        // 🔥 НА ТЕЛЕФОНЕ — ВСЕГДА ОДНА МЕЛОДИЯ
+        track = '2';
+    } else {
+        // НА ПК — В ЗАВИСИМОСТИ ОТ РЕЖИМА
+        const isClassic = selectedMode === 'classic';
+        if (isClassic && selectedDifficulty === 'easy') track = '2';
+        else if (isClassic && selectedDifficulty === 'medium') track = '4';
+        else if (isClassic && selectedDifficulty === 'hard') track = '1';
+        else if (!isClassic && selectedDifficulty === 'easy') track = '2';
+        else if (!isClassic && selectedDifficulty === 'medium') track = '3';
+        else track = '1';
+    }
+    
     currentMusicTrack = track;
     gameAudio.playMusic(track, 0.15);
 }
