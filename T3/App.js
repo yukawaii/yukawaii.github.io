@@ -471,7 +471,6 @@ function showVKLeaderboard() {
         }
     }, 300);
 }
-
 // Функция для отмены загрузки по крестику
 function cancelLeaderboardLoading() {
     if (leaderboardCheckInterval) {
