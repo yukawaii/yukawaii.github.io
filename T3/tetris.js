@@ -2810,22 +2810,28 @@ async function handleContinueWithAd() {
     const adShown = await showRewardedAdForContinue();
     if (adShown) {
         const cleared = clearTopRows();
-        if (cleared) {
-            isGameOver = false;
-            gameState.over = false;
-            gameState.initialized = true;
-            isGameStarted = true;
-            const modal = document.getElementById('gameover-modal');
-            if (modal) modal.style.display = 'none';
-            if (typeof drawGame === 'function') drawGame();
-            showCustomModal({
-                title: '🧹 Ряды стёрты!',
-                text: '7 верхних строк удалены. Нажмите "Дальше" чтобы продолжить игру!',
-                type: 'success',
-                button: 'OK'
-            });
-            updatePauseButtonText();
-        } else {
+     if (cleared) {
+    isGameOver = false;
+    gameState.over = false;
+    gameState.initialized = true;
+    isGameStarted = true;
+    const modal = document.getElementById('gameover-modal');
+    if (modal) modal.style.display = 'none';
+    if (typeof drawGame === 'function') drawGame();
+    showCustomModal({
+        title: '🧹 Ряды стёрты!',
+        text: '7 верхних строк удалены. Нажмите "Дальше" чтобы продолжить игру!',
+        type: 'success',
+        button: 'OK'
+    });
+    updatePauseButtonText();
+    
+    // ✅ ПЕРЕЗАПУСКАЕМ ЦИКЛ, ЧТОБЫ ПОЯВИЛАСЬ НАДПИСЬ ПАУЗЫ
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    lastTime = 0;
+    dropCounter = 0;
+    update(); // ← теперь отобразится "ПАУЗА"
+} else {
             showCustomModal({
                 title: '⚠️ Верхние ряды пусты',
                 text: 'Нет блоков для удаления. Продолжайте игру!',
