@@ -262,6 +262,9 @@ function loadSavedTheme() {
   return theme;
 }
 
+
+
+
 // ===== УНИВЕРСАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ =====
 function initApp() {
   console.log('🚀 Инициализация приложения...');
