@@ -1130,7 +1130,6 @@ function pauseGame() {
 
 function resumeGame() {
     if (!gameState.paused) return;
-    // Если отложено замедление – активируем его при возобновлении
     if (pendingSlowDown) {
         pendingSlowDown = false;
         applySlowDownEffect();
@@ -1138,13 +1137,12 @@ function resumeGame() {
     gameState.paused = false;
     lastTime = performance.now();
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.resumeAll(); // просто возобновляем контексты, музыка продолжит с того же места
+        gameAudio.resumeAll(); // возобновляет и музыку, и звуки
     }
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
     }
     updatePauseButtonText();
-    // Убираем перезапуск музыки через stopLoop + playMusic — он не нужен
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     update();
 }
@@ -1216,32 +1214,36 @@ function updatePauseButtonText() {
 }
 
 // ======================== МУЗЫКА И ЗВУКИ ========================
-function playBackgroundMusic() {
-   if (musicMuted || !gameAudio || !gameAudio.initialized) return;
+async function playBackgroundMusic() {
+    if (musicMuted || !gameAudio || !gameAudio.initialized) return;
+    // Если уже играет нужный трек – не перезапускаем
     if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) {
-        // уже играет нужный трек
         return;
     }
     
-   // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     let track;
-    
-  /*  if (isMobile) {
-        // 🔥 НА ТЕЛЕФОНЕ — ВСЕГДА ОДНА МЕЛОДИЯ
-        track = '2';
-    } else {*/
-        // НА ПК — В ЗАВИСИМОСТИ ОТ РЕЖИМА
-        const isClassic = selectedMode === 'classic';
-        if (isClassic && selectedDifficulty === 'easy') track = '2';
-        else if (isClassic && selectedDifficulty === 'medium') track = '4';
-        else if (isClassic && selectedDifficulty === 'hard') track = '1';
-        else if (!isClassic && selectedDifficulty === 'easy') track = '2';
-        else if (!isClassic && selectedDifficulty === 'medium') track = '1';
-        else track = '1';
-  //  }
+    const isClassic = selectedMode === 'classic';
+    if (isClassic && selectedDifficulty === 'easy') track = '2';
+    else if (isClassic && selectedDifficulty === 'medium') track = '4';
+    else if (isClassic && selectedDifficulty === 'hard') track = '1';
+    else if (!isClassic && selectedDifficulty === 'easy') track = '2';
+    else if (!isClassic && selectedDifficulty === 'medium') track = '1';
+    else track = '1';
     
     currentMusicTrack = track;
-    gameAudio.playMusic(track, 0.15);
+    
+    // Ждём, пока буфер загрузится (максимум 5 попыток с интервалом 500 мс)
+    let attempts = 0;
+    const maxAttempts = 5;
+    while (attempts < maxAttempts) {
+        if (gameAudio.buffers[track]) {
+            gameAudio.playMusic(track, 0.15);
+            return;
+        }
+        attempts++;
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    console.warn('⚠️ Музыка не загружена после', maxAttempts, 'попыток');
 }
 
 function stopSounds() {
@@ -1259,9 +1261,12 @@ function toggleMusic() {
     if (typeof gameAudio === 'undefined') return;
     musicMuted = !musicMuted;
     gameAudio.setMusicMuted(musicMuted);
-    updateMusicIcon();
+    updateMusicIcon();    
+    // Если музыка только что включена и игра активна – запускаем её, если она не играет
     if (!musicMuted && isGameStarted && !isGameOver && !gameState.paused) {
-        playBackgroundMusic();
+        if (!gameAudio.musicStarted) {
+            playBackgroundMusic();
+        }
     }
 }
 
