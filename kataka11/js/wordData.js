@@ -1,0 +1,113 @@
+// js/wordData.js
+// Данные для викторины "Слова" – 3 уровня по 30 вопросов
+// Уровень 1: слова из 2 хирагана (теперь катакана)
+// Уровень 2: слова из 3 хирагана (теперь катакана)
+// Уровень 3: слова из 4 хирагана (теперь катакана)
+
+const WORD_LEVELS = {
+  1: {
+    title: 'Уровень 1 (2 буквы)',
+    questions: [
+      { question: "アイ", options: ["любовь", "собака", "кот", "дом"], correct: 0, explanation: "あい = любовь" },
+      { question: "ウエ", options: ["верх", "низ", "право", "лево"], correct: 0, explanation: "うえ = верх" },
+      { question: "オオイ", options: ["большой", "маленький", "быстрый", "медленный"], correct: 0, explanation: "おおい = большой" },
+      { question: "カオ", options: ["лицо", "рука", "нога", "глаз"], correct: 0, explanation: "かお = лицо" },
+      { question: "キク", options: ["слушать", "говорить", "читать", "писать"], correct: 0, explanation: "きく = слушать" },
+      { question: "コエ", options: ["голос", "шум", "тишина", "песня"], correct: 0, explanation: "こえ = голос" },
+      { question: "サケ", options: ["лосось", "тунец", "угорь", "креветка"], correct: 0, explanation: "さけ = лосось" },
+      { question: "シロイ", options: ["белый", "чёрный", "красный", "синий"], correct: 0, explanation: "しろい = белый" },
+      { question: "スシ", options: ["суши", "сашими", "рамэн", "удон"], correct: 0, explanation: "すし = суши" },
+      { question: "セキ", options: ["кашель", "чихание", "головная боль", "жар"], correct: 0, explanation: "せき = кашель" },
+      { question: "ソラ", options: ["небо", "море", "гора", "река"], correct: 0, explanation: "そら = небо" },
+      { question: "タケ", options: ["бамбук", "дерево", "цветок", "трава"], correct: 0, explanation: "たけ = бамбук" },
+      { question: "チチ", options: ["отец", "мать", "брат", "сестра"], correct: 0, explanation: "ちち = отец" },
+      { question: "ツキ", options: ["луна", "солнце", "звезда", "облако"], correct: 0, explanation: "つき = луна" },
+      { question: "テン", options: ["небо", "земля", "вода", "огонь"], correct: 0, explanation: "てん = небо (как элемент)" },
+      { question: "トリ", options: ["птица", "рыба", "насекомое", "зверь"], correct: 0, explanation: "とり = птица" },
+      { question: "ナカ", options: ["внутри", "снаружи", "рядом", "далеко"], correct: 0, explanation: "なか = внутри" },
+      { question: "ニシ", options: ["запад", "восток", "север", "юг"], correct: 0, explanation: "にし = запад" },
+      { question: "ヌノ", options: ["ткань", "бумага", "дерево", "металл"], correct: 0, explanation: "ぬの = ткань" },
+      { question: "ネコ", options: ["кот", "собака", "мышь", "птица"], correct: 0, explanation: "ねこ = кот" },
+      { question: "ハナ", options: ["цветок", "нос", "рука", "глаз"], correct: 0, explanation: "はな = цветок (или нос, но здесь цветок)" },
+      { question: "ヒロ", options: ["широкий", "узкий", "длинный", "короткий"], correct: 0, explanation: "ひろ = широкий" },
+      { question: "フネ", options: ["корабль", "машина", "самолёт", "поезд"], correct: 0, explanation: "ふね = корабль" },
+      { question: "ヘヤ", options: ["комната", "дом", "школа", "парк"], correct: 0, explanation: "へや = комната" },
+      { question: "ホシ", options: ["звезда", "луна", "солнце", "облако"], correct: 0, explanation: "ほし = звезда" },
+      { question: "マチ", options: ["город", "деревня", "страна", "мир"], correct: 0, explanation: "まち = город" },
+      { question: "ミチ", options: ["дорога", "река", "гора", "лес"], correct: 0, explanation: "みち = дорога" },
+      { question: "ムシ", options: ["насекомое", "птица", "рыба", "зверь"], correct: 0, explanation: "むし = насекомое" },
+      { question: "メガネ", options: ["очки", "глаза", "брови", "ресницы"], correct: 0, explanation: "めがね = очки" },
+      { question: "モリ", options: ["лес", "поле", "сад", "парк"], correct: 0, explanation: "もり = лес" }
+    ]
+  },
+  2: {
+    title: 'Уровень 2 (3 буквы)',
+    questions: [
+      { question: "アオイ", options: ["синий", "зелёный", "жёлтый", "фиолетовый"], correct: 0, explanation: "あおい = синий" },
+      { question: "アサヒ", options: ["утреннее солнце", "закат", "полдень", "ночь"], correct: 0, explanation: "あさひ = утреннее солнце" },
+      { question: "イノチ", options: ["жизнь", "смерть", "здоровье", "счастье"], correct: 0, explanation: "いのち = жизнь" },
+      { question: "ウミノ", options: ["морской", "небесный", "горный", "речной"], correct: 0, explanation: "うみの = морской" },
+      { question: "エイガ", options: ["кино", "театр", "книга", "музыка"], correct: 0, explanation: "えいが = кино" },
+      { question: "オニギ", options: ["онигири", "суши", "сашими", "бенто"], correct: 0, explanation: "おにぎ = онигири (рисовый шарик)" },
+      { question: "カゼノ", options: ["ветреный", "дождливый", "снежный", "солнечный"], correct: 0, explanation: "かぜの = ветреный" },
+      { question: "キョウ", options: ["сегодня", "вчера", "завтра", "сейчас"], correct: 0, explanation: "きょう = сегодня" },
+      { question: "クモリ", options: ["облачно", "ясно", "дождливо", "ветрено"], correct: 0, explanation: "くもり = облачно" },
+      { question: "ココロ", options: ["сердце", "душа", "мысль", "чувство"], correct: 0, explanation: "こころ = сердце (душа)" },
+      { question: "サクラ", options: ["сакура", "слива", "персик", "яблоня"], correct: 0, explanation: "さくら = сакура" },
+      { question: "シンゴ", options: ["Синго (имя)", "знак", "сигнал", "язык"], correct: 0, explanation: "しんご = Синго (имя, может означать 'знак')" },
+      { question: "スズメ", options: ["воробей", "голубь", "ворона", "ласточка"], correct: 0, explanation: "すずめ = воробей" },
+      { question: "セカイ", options: ["мир", "вселенная", "земля", "космос"], correct: 0, explanation: "せかい = мир" },
+      { question: "ソヨカ", options: ["лёгкий ветерок", "ураган", "шторм", "бриз"], correct: 0, explanation: "そよか = лёгкий ветерок" },
+      { question: "タマゴ", options: ["яйцо", "овощ", "фрукт", "мясо"], correct: 0, explanation: "たまご = яйцо" },
+      { question: "チカラ", options: ["сила", "энергия", "мощь", "воля"], correct: 0, explanation: "ちから = сила" },
+      { question: "ツバメ", options: ["ласточка", "воробей", "соловей", "синица"], correct: 0, explanation: "つばめ = ласточка" },
+      { question: "テガミ", options: ["письмо", "открытка", "газета", "журнал"], correct: 0, explanation: "てがみ = письмо" },
+      { question: "トンボ", options: ["стрекоза", "бабочка", "пчела", "муха"], correct: 0, explanation: "とんぼ = стрекоза" },
+      { question: "ナミダ", options: ["слеза", "капля", "дождь", "роса"], correct: 0, explanation: "なみだ = слеза" },
+      { question: "ニホン", options: ["Япония", "Китай", "Корея", "Тайвань"], correct: 0, explanation: "にほん = Япония" },
+      { question: "ヌイグ", options: ["плюшевый (мишка)", "мягкий", "пушистый", "тёплый"], correct: 0, explanation: "ぬいぐ (от ぬいぐるみ = плюшевая игрушка)" },
+      { question: "ネムリ", options: ["сон", "ява", "отдых", "работа"], correct: 0, explanation: "ねむり = сон" },
+      { question: "ハナビ", options: ["фейерверк", "цветок", "огонь", "свет"], correct: 0, explanation: "はなび = фейерверк" },
+      { question: "ヒカリ", options: ["свет", "тень", "луч", "блеск"], correct: 0, explanation: "ひかり = свет" },
+      { question: "フユノ", options: ["зимний", "летний", "весенний", "осенний"], correct: 0, explanation: "ふゆの = зимний" },
+      { question: "ヘイワ", options: ["мир", "война", "спокойствие", "хаос"], correct: 0, explanation: "へいわ = мир (спокойствие)" },
+      { question: "ホノオ", options: ["пламя", "огонь", "искра", "дым"], correct: 0, explanation: "ほのお = пламя" },
+      { question: "ヘイキ", options: ["спокойный", "беспокойный", "тихий", "громкий"], correct: 0, explanation: "へいき = спокойный" }
+    ]
+  },
+  3: {
+    title: 'Уровень 3 (4 буквы)',
+    questions: [
+      { question: "アイシテ", options: ["люблю", "ненавижу", "обижаю", "жалею"], correct: 0, explanation: "あいして = люблю" },
+      { question: "アサガオ", options: ["вьюнок", "роза", "тюльпан", "лилия"], correct: 0, explanation: "あさがお = вьюнок (утренняя слава)" },
+      { question: "イチゴノ", options: ["клубничный", "яблочный", "вишнёвый", "лимонный"], correct: 0, explanation: "いちごの = клубничный" },
+      { question: "ウタガワ", options: ["песенное (что-то)", "танцевать", "музыка", "поэзия"], correct: 0, explanation: "うたがわ = песенный (от うた)" },
+      { question: "エンピツ", options: ["карандаш", "ручка", "кисть", "мел"], correct: 0, explanation: "えんぴつ = карандаш" },
+      { question: "オハヨウ", options: ["доброе утро", "добрый день", "добрый вечер", "спокойной ночи"], correct: 0, explanation: "おはよう = доброе утро" },
+      { question: "カキゴリ", options: ["колотый лёд с сиропом", "мороженое", "сорбет", "коктейль"], correct: 0, explanation: "かきごり = колотый лёд с сиропом" },
+      { question: "キョウト", options: ["Киото", "Токио", "Осака", "Нагоя"], correct: 0, explanation: "きょうと = Киото" },
+      { question: "クウキノ", options: ["воздушный", "водный", "земной", "огненный"], correct: 0, explanation: "くうきの = воздушный" },
+      { question: "ケシゴム", options: ["ластик", "точилка", "линейка", "клей"], correct: 0, explanation: "けしごむ = ластик" },
+      { question: "コンニチワ", options: ["привет", "здравствуйте", "до свидания", "извините"], correct: 0, explanation: "こんにちは = привет (сокращённое)" },
+      { question: "サクラン", options: ["вишня (цвет)", "сакура", "слива", "персик"], correct: 0, explanation: "さくらん = вишнёвый (цвет)" },
+      { question: "シンカン", options: ["Синкан (буддийский)", "новый", "старый", "быстрый"], correct: 0, explanation: "しんかん = Синкан (может означать 'новый')" },
+      { question: "スイカン", options: ["арбузный", "дынный", "тыквенный", "огуречный"], correct: 0, explanation: "すいかん = арбузный" },
+      { question: "センパイ", options: ["старший (по статусу)", "младший", "учитель", "ученик"], correct: 0, explanation: "せんぱい = старший (по статусу)" },
+      { question: "ソラマメ", options: ["конские бобы", "горох", "фасоль", "соя"], correct: 0, explanation: "そらまめ = конские бобы" },
+      { question: "タンゴノ", options: ["словарный", "грамматический", "фонетический", "лексический"], correct: 0, explanation: "たんごの = словарный" },
+      { question: "チキュウ", options: ["Земля", "Марс", "Венера", "Юпитер"], correct: 0, explanation: "ちきゅう = Земля (планета)" },
+      { question: "ツクエ", options: ["письменный (стол)", "кухонный", "обеденный", "журнальный"], correct: 0, explanation: "つくえ = письменный (стол)" },
+      { question: "テンキヨ", options: ["прогноз погоды", "погода", "климат", "температура"], correct: 0, explanation: "てんきよ = прогноз погоды (сокращ.)" },
+      { question: "トンカツ", options: ["свиная отбивная", "курица", "рыба", "говядина"], correct: 0, explanation: "とんかつ = свиная отбивная" },
+      { question: "ナツヤス", options: ["летние каникулы", "зимние каникулы", "весенние каникулы", "осенние каникулы"], correct: 0, explanation: "なつやす = летние каникулы" },
+      { question: "ニンゲン", options: ["человек", "животное", "робот", "бог"], correct: 0, explanation: "にんげん = человек" },
+      { question: "ヌイグル", options: ["плюшевая игрушка", "кукла", "мяч", "конструктор"], correct: 0, explanation: "ぬいぐる = плюшевая игрушка" },
+      { question: "ネンドロ", options: ["глиняный", "керамический", "пластиковый", "металлический"], correct: 0, explanation: "ねんどろ = глиняный" },
+      { question: "ハガキ", options: ["открытка", "конверт", "бумага", "конверт"], correct: 0, explanation: "はがき = открытка" },
+      { question: "ヒルゴハ", options: ["обед", "завтрак", "ужин", "полдник"], correct: 0, explanation: "ひるごは = обед (сокращ. от ひるごはん)" },
+      { question: "フユヤス", options: ["зимние каникулы", "летние каникулы", "весенние каникулы", "осенние каникулы"], correct: 0, explanation: "ふゆやす = зимние каникулы" },
+      { question: "マイニチ", options: ["каждый день", "каждую ночь", "каждую неделю", "каждый месяц"], correct: 0, explanation: "まいにち = каждый день" },
+      { question: "ホンヤク", options: ["перевод", "переводчик", "словарь", "текст"], correct: 0, explanation: "ほんやく = перевод" }
+    ]
+  }
+};
