@@ -2573,55 +2573,59 @@ function showSuccessModal(title, text) {
 
 //стирание рядов за рекламу
         // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
-        function clearTopRows() {
-            const rowsToClear = 7;
-            let clearedCount = 0;
-            
-            // Проверяем, есть ли блоки в верхних рядах
-            for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
-                let hasBlocks = false;
-                for (let x = 0; x < arenaWidth; x++) {
-                    if (arena[y][x] !== 0 && arena[y][x] !== 'bonus') {
-                        hasBlocks = true;
-                        break;
-                    }
-                }
-                if (hasBlocks) {
-                    clearedCount++;
-                }
+     function clearTopRows() {
+    const rowsToClear = 7;
+    // Проверяем наличие блоков в верхних рядах
+    let hasBlocks = false;
+    for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
+        for (let x = 0; x < arenaWidth; x++) {
+            if (arena[y][x] !== 0 && arena[y][x] !== 'bonus') {
+                hasBlocks = true;
+                break;
             }
-            
-            // Если верхние ряды пустые — ничего не делаем
-            if (clearedCount === 0) {
-                showCustomModal({
-                    title: '⚠️ Верхние ряды пусты',
-                    text: 'Нет блоков для удаления. Продолжайте игру!',
-                    type: 'info',
-                    button: 'OK'
-                });
-                return false;
-            }
-            
-            // Удаляем верхние ряды и сдвигаем всё вверх
-            for (let i = 0; i < rowsToClear; i++) {
-                // Удаляем первый ряд (верхний)
-                arena.shift();
-                // Добавляем пустой ряд вниз
-                arena.push(new Array(arenaWidth).fill(0));
-            }
-            
-            // Удаляем бонусы, которые могли оказаться в верхних рядах
-            for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
-                for (let x = 0; x < arenaWidth; x++) {
-                    if (arena[y][x] === 'bonus') {
-                        arena[y][x] = 0;
-                    }
-                }
-            }
-            
-            console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
-            return true;
         }
+        if (hasBlocks) break;
+    }
+    
+    if (!hasBlocks) {
+        showCustomModal({
+            title: '⚠️ Верхние ряды пусты',
+            text: 'Нет блоков для удаления. Продолжайте игру!',
+            type: 'info',
+            button: 'OK'
+        });
+        return false;
+    }
+    
+    // Удаляем верхние 7 строк (сдвигаем остальные вниз)
+    arena.splice(0, rowsToClear);
+    // Добавляем 7 пустых строк в начало
+    for (let i = 0; i < rowsToClear; i++) {
+        arena.unshift(new Array(arenaWidth).fill(0));
+    }
+    
+    // Удаляем бонусы, которые могли оказаться в верхних рядах
+    for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
+        for (let x = 0; x < arenaWidth; x++) {
+            if (arena[y][x] === 'bonus') {
+                arena[y][x] = 0;
+            }
+        }
+    }
+    
+    // Сбрасываем позицию игрока наверх (чтобы фигура начала падать)
+    player.pos.y = 0;
+    const maxX = arenaWidth - player.matrix[0].length;
+    player.pos.x = Math.floor(maxX / 2);
+    
+    // Если коллизия — пробуем поднять на 1
+    if (collide(arena, player)) {
+        player.pos.y = -1;
+    }
+    
+    console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
+    return true;
+}
         // ======================== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ ========================
 let isRewardedAdLoading = false;
 
@@ -2800,54 +2804,28 @@ function closeLoadingAdModal() {
     }
     // ======================== ПРОДОЛЖЕНИЕ ИГРЫ ЗА РЕКЛАМУ ========================
 async function handleContinueWithAd() {
-    // Сначала показываем модалку подтверждения
     const confirmed = await showContinueConfirmationModal();
-    
-    if (!confirmed) {
-        return;
-    }
-    
-    // Ставим игру на паузу (если не на паузе)
-    if (!gameState.paused) {
-        pauseGame();
-    }
-    
-    // Показываем рекламу
+    if (!confirmed) return;
+    if (!gameState.paused) pauseGame();
     const adShown = await showRewardedAdForContinue();
-    
     if (adShown) {
-        // Реклама показана — стираем верхние ряды
         const cleared = clearTopRows();
-        
         if (cleared) {
-            // Сбрасываем флаг gameOver, чтобы можно было продолжить
             isGameOver = false;
             gameState.over = false;
             gameState.initialized = true;
             isGameStarted = true;
-            
-            // Закрываем модалку окончания игры
             const modal = document.getElementById('gameover-modal');
             if (modal) modal.style.display = 'none';
-            
-            // Обновляем отображение
             if (typeof drawGame === 'function') drawGame();
-            
-            // Показываем уведомление об успехе
             showCustomModal({
                 title: '🧹 Ряды стёрты!',
                 text: '7 верхних строк удалены. Нажмите "Дальше" чтобы продолжить игру!',
                 type: 'success',
                 button: 'OK'
             });
-            
-            // Обновляем текст кнопки паузы
             updatePauseButtonText();
-            
-            // Игра остаётся на паузе — игрок сам нажмёт "Дальше"
-            // Музыка и звуки уже приостановлены в showRewardedAdForContinue()
         } else {
-            // Нечего стирать — просто закрываем модалку
             showCustomModal({
                 title: '⚠️ Верхние ряды пусты',
                 text: 'Нет блоков для удаления. Продолжайте игру!',
@@ -2856,18 +2834,13 @@ async function handleContinueWithAd() {
             });
         }
     } else {
-        // Реклама не показана
         showCustomModal({
             title: '❌ Реклама недоступна',
             text: 'Попробуйте позже или начните новую игру.',
             type: 'error',
             button: 'OK'
         });
-        
-        // Возобновляем звуки
-        if (typeof gameAudio !== 'undefined') {
-            gameAudio.resumeAll();
-        }
+        if (typeof gameAudio !== 'undefined') gameAudio.resumeAll();
     }
 }
 
