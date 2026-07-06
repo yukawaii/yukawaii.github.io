@@ -578,3 +578,73 @@ setTimeout(() => {
             .catch(error => console.error('Ошибка при показе баннера:', error));
     }
 }, 3000);
+
+// ======================== КАСТОМНАЯ МОДАЛКА ========================
+function showCustomModal({ title, text, type = 'info', button = 'OK', timer = null }) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100012;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('1.jpg') no-repeat center center fixed;
+        background-size: cover;
+    `;
+    
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: -1;
+    `;
+    modal.appendChild(overlay);
+    
+    const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️',
+        warning: '⚠️'
+    };
+    
+    modal.innerHTML += `
+        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid ${type === 'success' ? 'rgba(34, 197, 94, 0.4)' : type === 'error' ? 'rgba(239, 68, 68, 0.4)' : type === 'warning' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(52, 211, 153, 0.3)'}; width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <div style="font-size: 48px; margin-bottom: 16px;">${icons[type] || 'ℹ️'}</div>
+            <h2 style="color: ${type === 'success' ? '#34d399' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#34d399'}; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+                ${title}
+            </h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif; line-height: 1.6;">
+                ${text}
+            </p>
+            <button onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);">
+                ${button}
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    if (timer) {
+        setTimeout(() => {
+            if (modal.parentNode) modal.remove();
+        }, timer);
+    }
+    
+    // Закрытие по клику вне модалки
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    };
+}
+
+// Экспорт
+window.showCustomModal = showCustomModal;
