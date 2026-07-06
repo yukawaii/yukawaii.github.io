@@ -283,6 +283,18 @@ playMusic(trackName, volume = 0.15) {
             this.audioContext.resume();
         }
     }
+
+         stopAll() {
+        this.stopMusic(); // останавливает источник музыки
+        if (this.audioContext && this.audioContext.state === 'running') {
+            this.audioContext.suspend();
+        }
+        if (this.musicContext && this.musicContext.state === 'running') {
+            this.musicContext.suspend();
+        }
+        this.musicStarted = false;
+        this.currentMusicTrack = null;
+    }
 }
 
 // Создаём глобальный экземпляр

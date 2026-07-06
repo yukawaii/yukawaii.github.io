@@ -15,6 +15,9 @@ let slowDownInterval = null;
 let isSlowDownActive = false;
 let comboDisplayTimer = null;
 let dailyBonusClaimedToday = false; 
+//для звкков
+let pendingSlowDown = false;
+let slowDownTimerId = null;
 // ======================== ПЕРЕМЕННЫЕ ДЛЯ ПАГИНАЦИИ ========================
 let currentScrollPage = 1;
 const SCROLLS_PER_PAGE = 5;
@@ -26,11 +29,7 @@ const COLLECTION_ITEMS_PER_PAGE = 15;
 const CATEGORY_ORDER = ['blocks', 'animals', 'plants', 'space'];
 
 // ======================== БОНУСЫ ========================
-const BONUS_TYPES = {
-    STAR: { symbol: '⭐', points: 3, color: '#FFD700', label: 'Звезда' },
-    CLOVER: { symbol: '🍀', points: 2, color: '#22c55e', label: 'Клевер' },
-    CANDY: { symbol: '🍬', points: 1, color: '#f472b6', label: 'Конфета' }
-};
+const BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};
 
 let activeBonus = null;
 let bonusSpawnCooldown = 0;
@@ -989,7 +988,14 @@ else arenaWidth = 14;
     gameState.initialized = true;
     gameState.introSongPlayed = false;
     updatePauseButtonText();
-    
+//вдля выкючения звуков и муз
+    pendingSlowDown = false;
+if (slowDownTimerId) {
+    clearTimeout(slowDownTimerId);
+    slowDownTimerId = null;
+}
+isSlowDownActive = false;
+    // конец
     player.score = 0;
     player.lines = 0;
     player.level = 1;
@@ -1040,6 +1046,14 @@ function startGameWithAudio() {
     } else if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) playBackgroundMusic();
     }
+    // // Сброс флагов замедления при старте новой игры
+    pendingSlowDown = false;
+if (slowDownTimerId) {
+    clearTimeout(slowDownTimerId);
+    slowDownTimerId = null;
+}
+isSlowDownActive = false;
+    // конец
 }
 
 function endGame() {
@@ -1050,7 +1064,12 @@ function endGame() {
     gameState.over = true;
     gameState.initialized = false;
     gameState.paused = false;
-    stopSounds();
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+    pendingSlowDown = false; // сбрасываем отложенное замедление
+    stopSounds(); // останавливает только музыку, звуки остаются для gameover
     if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('gameover', 0.3);
     
     if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
@@ -1084,9 +1103,9 @@ function endGame() {
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
-  if (typeof gameAudio !== 'undefined') {
-    gameAudio.pauseAll();
-}
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.pauseAll(); // приостанавливаем все контексты (и музыку, и звуки)
+    }
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
     }
@@ -1111,24 +1130,21 @@ function pauseGame() {
 
 function resumeGame() {
     if (!gameState.paused) return;
+    // Если отложено замедление – активируем его при возобновлении
+    if (pendingSlowDown) {
+        pendingSlowDown = false;
+        applySlowDownEffect();
+    }
     gameState.paused = false;
     lastTime = performance.now();
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.resumeAll();
+        gameAudio.resumeAll(); // просто возобновляем контексты, музыка продолжит с того же места
     }
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
     }
     updatePauseButtonText();
-    if (!musicMuted && gameState.introSongPlayed && typeof gameAudio !== 'undefined') {
-        gameAudio.stopLoop();
-       if (currentMusicTrack) {
-    gameAudio.playMusic(currentMusicTrack, 0.15);
-} else {
-    // fallback
-    gameAudio.playMusic('2', 0.15);
-}
-    }
+    // Убираем перезапуск музыки через stopLoop + playMusic — он не нужен
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     update();
 }
@@ -1162,7 +1178,15 @@ function togglePauseResume() {
 
 function returnToMenu() {
     if (isGameStarted && !isGameOver && !gameState.paused) pauseGame();
-    stopSounds();
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.stopAll(); // полностью останавливаем музыку и звуки
+    }
+    // stopSounds() убран, так как stopAll() уже всё сделал
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+    pendingSlowDown = false;
     isGameStarted = false;
     isGameOver = false;
     gameState.initialized = false;
@@ -3009,8 +3033,8 @@ function activateSlowDown() {
     // Показываем рекламу
     showRewardedAdForContinue().then((success) => {
         if (success) {
-            // Реклама просмотрена — активируем замедление
-            applySlowDownEffect();
+          
+            pendingSlowDown = true;
             
             showCustomModal({
                 title: '🐢 Фигурки замедлятся!',
@@ -3018,15 +3042,7 @@ function activateSlowDown() {
                 type: 'success',
                 button: 'OK',
                 timer: 2000
-            });
-            
-            // Снимаем паузу после закрытия модалки (или по таймеру)
-            setTimeout(() => {
-                if (gameState.paused && isGameStarted && !isGameOver) {
-                    resumeGame();
-                }
-            }, 2500);
-            
+            });                   
         } else {
             // Реклама не показана
             showCustomModal({
@@ -3034,39 +3050,27 @@ function activateSlowDown() {
                 text: 'Попробуйте позже.',
                 type: 'error',
                 button: 'OK'
-            });
-            
-            // Возобновляем игру, если была на паузе
-            if (gameState.paused && isGameStarted && !isGameOver) {
-                resumeGame();
-            }
+            });         
         }
     });
 }
 
 function applySlowDownEffect() {
     if (isSlowDownActive) return;
-    
     isSlowDownActive = true;
-    
-    // Сохраняем оригинальный интервал
     const originalDropInterval = dropInterval;
-    
-    // Замедляем в 3 раза (увеличиваем интервал)
     dropInterval = originalDropInterval * 3;
-    
-    // Показываем визуальный индикатор
     showSlowDownIndicator();
     
-    console.log('🐢 Замедление активировано на 15 секунд');
-    
-    // Через 15 секунд возвращаем скорость
-    setTimeout(() => {
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+    slowDownTimerId = setTimeout(() => {
         dropInterval = originalDropInterval;
         isSlowDownActive = false;
         hideSlowDownIndicator();
-        console.log('⏱️ Замедление закончилось');
-        
+        slowDownTimerId = null;
         showCustomModal({
             title: '⏱️ Время вышло!',
             text: 'Скорость падения восстановлена.',

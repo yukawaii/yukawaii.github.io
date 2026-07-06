@@ -194,6 +194,7 @@ body {    overscroll-behavior: none !important;    touch-action: none !important
     .top-menu {
         flex-direction: row;
         gap: 4px;
+         z-index: 5;  
         align-items: center;
         flex-shrink: 0;              /* ← добавили, чтобы не сжималась */
     }
@@ -213,33 +214,8 @@ body {    overscroll-behavior: none !important;    touch-action: none !important
     }
     .instructions { display: none; }
     
-    .mobile-joystick {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        align-items: flex-start;      /* ← вместо center */
-        margin-top: 0;
-        margin-bottom: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        flex: 0 1 auto;
-    }
-    
-    .d-pad {
-        display: grid;
-        grid-template-columns: repeat(3, 40px);  /* ← увеличены */
-        grid-template-rows: repeat(3, 40px);
-        background: transparent;      /* ← убрали фон */
-        border-radius: 0;             /* ← убрали скругление */
-        padding: 0;
-        border: none;                 /* ← убрали рамку */
-        gap: 4px;
-        align-self: flex-start;
-        margin: 0;
-        margin-top: -40px;            /* ← поднимаем вверх, как в первой игре */
-        position: relative;
-        top: 0;
-    }
+   .mobile-joystick{ display: flex; width: 100%; justify-content: space-between; align-items: flex-start; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; flex: 0 1 auto; z-index: 1;}
+ .d-pad{ display: grid; grid-template-columns: repeat(3, 40px); grid-template-rows: repeat(3, 40px); background: transparent; border-radius: 0; padding: 0; border: none; gap: 4px; align-self: flex-start; margin: 0; margin-top: -40px; position: relative; top: 0; z-index: 1;}
     
     .d-btn {
         background: #282836;
