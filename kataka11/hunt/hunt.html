@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Охота на хирагану</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .hunt-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin: 20px 0;
+        }
+        .hunt-menu-grid .btn-neon {
+            width: 100%;
+            text-align: center;
+        }
+        .hunt-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            text-align: center;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        @media (max-width: 600px) {
+            .hunt-menu-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-card" style="text-align: center;">
+
+        <h2 style="font-size: 2rem; margin-bottom: 5px;">🔍 Охота на хирагану</h2>
+        <p class="hunt-desc">
+            Найди правильный символ на картинке.<br>
+            Чем быстрее найдёшь — тем больше очков!
+        </p>
+
+        <div class="theme-picker">
+            <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌</button>
+            <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸</button>
+            <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
+        </div>
+
+        <div class="hunt-menu-grid">
+            <a href="hunt-game.html?level=easy" class="btn-neon">😊 Лёгкий<br><small>15 символов</small></a>
+            <a href="hunt-game.html?level=medium" class="btn-neon">🤔 Средний<br><small>30 символов</small></a>
+            <a href="hunt-game.html?level=hard" class="btn-neon">😈 Сложный<br><small>50 символов</small></a>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="../index.html" class="btn-neon">🏠 В начало</a>
+            <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        </div>
+
+    </div>
+</div>
+
+<script src="../App.js"></script>
+</body>
+</html>

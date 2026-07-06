@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <title>Игра на память</title>        
+    <!-- 2. НАША ТЕМА (ПЕРЕОПРЕДЕЛЯЕТ ФОН И КНОПКИ) -->
+    <link rel="stylesheet" href="../mem/css/memory-theme.css">
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+
+<div class="memory-wrapper">
+    <div class="memory-glass">
+        
+        <div class="memory-title">🃏 Память: <span>あ行</span></div>
+        
+        <!-- ОРИГИНАЛЬНАЯ ИГРА (НЕ МЕНЯТЬ!) -->
+        <section class="memory-game">
+            <div class="memory-card" data-framework="aurelia">
+                <img class="front-face" src="img/6.png" alt="Aurelia" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="aurelia">
+                <img class="front-face" src="img/6.png" alt="Aurelia" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="vue">
+                <img class="front-face" src="img/7.png" alt="Vue" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="vue">
+                <img class="front-face" src="img/7.png" alt="Vue" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="angular">
+                <img class="front-face" src="img/8.png" alt="Angular" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="angular">
+                <img class="front-face" src="img/8.png" alt="Angular" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="ember">
+                <img class="front-face" src="img/angular.png" alt="Ember" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="ember">
+                <img class="front-face" src="img/angular.png" alt="Ember" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="backbone">
+                <img class="front-face" src="img/9.png" alt="Backbone" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="backbone">
+                <img class="front-face" src="img/9.png" alt="Backbone" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="react">
+                <img class="front-face" src="img/10.png" alt="React" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+            <div class="memory-card" data-framework="react">
+                <img class="front-face" src="img/10.png" alt="React" />
+                <img class="back-face" src="img/js-badge.png" alt="JS Badge" />
+            </div>
+        </section>
+        
+        <!-- КНОПКИ -->
+        <div class="memory-controls">
+            <button class="btn-neon" onclick="window.location.href = './index2.html';">🔄 Играть ещё</button>
+            <a href="1mem.html" class="btn-neon">📚 Другой уровень</a>
+            <a href="../index.html" class="btn-neon">🏠 В начало</a>
+            <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        </div>
+        
+    </div>
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="./js/scripts2.js"></script>
+<script src="../App.js"></script>
+</body>
+</html>

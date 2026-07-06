@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Охота на хирагану — Игра</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="css/hunt.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-card">
+        <div class="hunt-wrapper">
+
+            <!-- Верхняя панель -->
+           <div class="hunt-header">
+    <div class="hunt-task">Найди <span id="targetSymbol">あ</span></div>
+    <div class="hunt-progress">📌 <span id="foundCountDisplay">0</span>/<span id="targetCount">10</span></div>
+    <div class="hunt-score">⭐ <span id="score">0</span></div>
+    <div class="hunt-lives">❤️ <span id="lives">3</span></div>
+</div>
+
+            <!-- Игровое поле -->
+            <div class="hunt-field" id="huntField">
+                <!-- Фон-картинка -->
+                <img id="bgImage" src="../images/bus.jpg" alt="Background" />
+                <!-- Сюда будут добавляться символы -->
+            </div>
+
+            <!-- Кнопки -->
+            <div class="hunt-controls">
+                <button class="btn-neon" id="newRoundBtn">🔄 Новый раунд</button>
+                <a href="hunt.html" class="btn-neon">📚 Другой уровень</a>
+                <a href="../index.html" class="btn-neon">🏠 В начало</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Модалка победы -->
+<div id="huntVictory" class="hunt-modal">
+    <div class="hunt-modal-content">
+        <h2>🎉 Молодец!</h2>
+        <p>Ты нашёл все символы!</p>
+        <p>⭐ Очки: <span id="finalScore">0</span></p>
+        <p>⏱ Время: <span id="finalTime">0</span> сек</p>
+        <br>
+        <button class="btn-neon" onclick="closeVictory()">🔄 Играть ещё</button>
+        <a href="hunt.html" class="btn-neon">📚 Выбрать уровень</a>
+    </div>
+</div>
+
+<!-- Модалка проигрыша -->
+<div id="huntGameOver" class="hunt-modal">
+    <div class="hunt-modal-content">
+        <h2>😢 Ой...</h2>
+        <p>Ты потерял все жизни!</p>
+        <p>Найдено символов: <span id="gameOverScore">0</span></p>
+        <br>
+        <button class="btn-neon" onclick="closeGameOver()">🔄 Попробовать ещё</button>
+        <a href="hunt.html" class="btn-neon">📚 Выбрать уровень</a>
+    </div>
+</div>
+
+<script src="js/hunt.js"></script>
+<script src="../App.js"></script>
+</body>
+</html>

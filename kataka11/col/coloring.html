@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <title>Раскраски</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .coloring-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 20px 0;
+        }
+        .coloring-grid .btn-neon {
+            width: 100%;
+            font-size: 14px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .coloring-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .coloring-grid .btn-neon {
+                font-size: 13px;
+                padding: 10px 8px;
+            }
+        }
+        @media (max-width: 400px) {
+            .coloring-grid {
+                gap: 8px;
+            }
+            .coloring-grid .btn-neon {
+                font-size: 12px;
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-card" style="text-align: center;">
+
+        <h2 style="font-size: 2rem; margin-bottom: 5px;">🎨 Космические раскраски</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">Раскрась картинку в своём стиле</p>
+
+        <div class="theme-picker">
+            <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌 Космос</button>
+            <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸 Пастель</button>
+            <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎 Голубая</button>
+        </div>
+
+        <div class="coloring-grid">
+            <a href="coloring6.html" class="btn-neon">👘 Дама в кимоно</a>
+            <a href="coloring1.html" class="btn-neon">🍥 Наруто 1</a>
+            <a href="coloring2.html" class="btn-neon">🍥 Наруто 2</a>
+            <a href="coloring3.html" class="btn-neon">🍥 Наруто 3</a>
+            <a href="coloring4.html" class="btn-neon">🛺 Рикша</a>
+            <a href="coloring5.html" class="btn-neon">👘 Гейша</a>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="../index.html" class="btn-neon">🏠 В начало</a>
+            <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        </div>
+
+    </div>
+</div>
+
+<script src="../App.js"></script>
+</body>
+</html>
