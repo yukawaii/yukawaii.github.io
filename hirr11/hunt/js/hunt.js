@@ -82,8 +82,8 @@ const BACKGROUNDS = [
 
 // Состояние игры
 let gameState = {
-     totalTime: 0,        // ← добавить
-    roundStartTime: 0,   // ← добавить
+    totalTime: 0,
+    roundStartTime: 0,
     level: 'easy',
     symbols: [],
     currentTarget: '',
@@ -124,7 +124,7 @@ function initGame() {
     gameState.maxLives = config.lives;
     gameState.lives = config.lives;
     gameState.targetCount = config.count;
-     gameState.totalTime = 0;
+    gameState.totalTime = 0;
     gameState.roundStartTime = Date.now();
     gameState.foundCount = 0;
     gameState.score = 0;
@@ -154,8 +154,8 @@ function startRound() {
     document.querySelectorAll('.hunt-symbol').forEach(el => el.remove());
     gameState.symbolsOnField = [];
     gameState.isProcessing = false;
-     gameState.roundStartTime = Date.now();
- // Меняем фон при каждом новом раунде
+    gameState.roundStartTime = Date.now();
+    // Меняем фон при каждом новом раунде
     const randomBg = BACKGROUNDS[Math.floor(Math.random() * BACKGROUNDS.length)];
     bgImage.src = randomBg;
 
@@ -276,8 +276,7 @@ function handleSymbolClick(el) {
         // ПРАВИЛЬНО!
         el.classList.add('found');
         gameState.foundCount++;
-         // ДЕБАГ
-    logState();
+        logState();
     
         // === НОВАЯ СИСТЕМА ОЧКОВ ===
         let points = 1; // база
@@ -299,13 +298,13 @@ function handleSymbolClick(el) {
 
         updateUI();
 
-   if (gameState.foundCount >= gameState.targetCount) {
-    console.log('🎉 ПОБЕДА! foundCount:', gameState.foundCount, 'targetCount:', gameState.targetCount);
-    gameState.isPlaying = false;
-    clearInterval(gameState.timerInterval);
-    setTimeout(showVictory, 400);
-    return;
-}
+        if (gameState.foundCount >= gameState.targetCount) {
+            console.log('🎉 ПОБЕДА! foundCount:', gameState.foundCount, 'targetCount:', gameState.targetCount);
+            gameState.isPlaying = false;
+            clearInterval(gameState.timerInterval);
+            setTimeout(showVictory, 400);
+            return;
+        }
 
         gameState.isProcessing = true;
         setTimeout(() => {
@@ -343,14 +342,41 @@ function updateUI() {
     scoreEl.textContent = gameState.score;
     livesEl.textContent = gameState.lives;
     targetCountEl.textContent = gameState.targetCount;
-     foundCountDisplay.textContent = gameState.foundCount;
+    // foundCountDisplay – удаляем или комментируем, если нет такого элемента
+    // foundCountDisplay.textContent = gameState.foundCount;
 }
 
+// ===== ПОБЕДА =====
 function showVictory() {
     console.log('🏆 Показываем экран победы!');
     finalScoreEl.textContent = gameState.score;
-     const totalSeconds = Math.floor((Date.now() - gameState.startTime) / 1000);
+    const totalSeconds = Math.floor((Date.now() - gameState.startTime) / 1000);
     finalTimeEl.textContent = totalSeconds;
+
+    // ===== НАЧИСЛЕНИЕ ЗВЁЗД =====
+    let starCount = 0;
+    switch (gameState.level) {
+        case 'easy': starCount = 1; break;
+        case 'medium': starCount = 2; break;
+        case 'hard': starCount = 3; break;
+    }
+    if (starCount > 0 && typeof window.addStars === 'function') {
+        window.addStars(starCount);
+        // Отображаем в модалке
+        let starsEl = document.getElementById('victoryStars');
+        if (!starsEl) {
+            // Если элемента нет, создаём его рядом с finalTimeEl
+            const container = finalTimeEl.parentNode;
+            starsEl = document.createElement('p');
+            starsEl.id = 'victoryStars';
+            starsEl.style.fontSize = '1.2rem';
+            starsEl.style.margin = '10px 0';
+            starsEl.style.color = 'var(--border-neon)';
+            container.appendChild(starsEl);
+        }
+        starsEl.textContent = '⭐+' + starCount;
+    }
+
     victoryModal.classList.add('show');
 }
 
