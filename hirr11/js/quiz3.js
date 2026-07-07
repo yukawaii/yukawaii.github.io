@@ -433,7 +433,7 @@ function quizResult() {
         window.addStars(earned);
         var starEl = document.getElementById('star-earned');
         if (starEl) {
-            starEl.textContent = '⭐ +' + earned;
+            starEl.textContent = ' ' + earned;
         }
     }
 }

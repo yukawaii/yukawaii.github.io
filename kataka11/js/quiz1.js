@@ -321,6 +321,21 @@ function quizResult() {
     document.getElementById("totalWrong").innerHTML = attempt - score;
     const percentage = (score / (myApp.length)) * 100;
     document.getElementById("percentage").innerHTML = Math.floor(percentage) + "%";
+
+    // ===== НАЧИСЛЕНИЕ ЗВЁЗД =====
+    var earned = 0;
+    if (attempt > 0 && (attempt - score) === 0) {
+        earned = 3; // без ошибок
+    } else if (attempt > 0) {
+        earned = 1; // просто за прохождение
+    }
+    if (earned > 0 && typeof window.addStars === 'function') {
+        window.addStars(earned);
+        var starEl = document.getElementById('star-earned');
+        if (starEl) {
+            starEl.textContent = ' ' + earned;
+        }
+    }
 }
 
 function resetQuiz() {
