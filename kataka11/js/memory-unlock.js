@@ -159,7 +159,7 @@ function clearMemoryAdResources() {
     memoryAdResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ =====
+// ===== ПОКАЗ РЕКЛАМЫ (упрощённо, как в hunt-unlock.js) =====
 function showRewardedAdForMemory(level) {
     const bridge = window.vkBridge;
 
@@ -173,43 +173,26 @@ function showRewardedAdForMemory(level) {
 
     console.log(`📺 Запуск рекламы для уровня ${level}`);
 
-    // ПОДПИСЫВАЕМСЯ ДО ВЫЗОВА РЕКЛАМЫ
-    const handler = (e) => {
-        if (e.detail.type === 'VKWebAppNativeAdResult' && !memoryAdResolved) {
+    // Показываем рекламу – награда выдаётся сразу в then
+    bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+        .then(function(data) {
             memoryAdResolved = true;
             clearMemoryAdResources();
-            console.log('🎁 Получен результат рекламы (память):', e.detail.data);
-            if (e.detail.data.result === true) {
-                console.log(`✅ Награда получена! Разблокируем уровень ${level}`);
-                setMemoryLevelUnlocked(level);
-                updateMemoryButtonState(level, true);
-                loadAllMemoryStatuses();
-                showMemorySuccessModal();
-            } else {
-                console.warn(`⚠️ Реклама не завершена (result: false)`);
-                showMemoryErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
-            }
-        }
-    };
-    bridge.subscribe(handler);
-    memoryAdResultHandler = handler;
-
-    // ТЕПЕРЬ ВЫЗЫВАЕМ РЕКЛАМУ
-    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(() => {
-            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-        })
-        .then((data) => {
-            console.log('📺 Реклама показана (память), ожидаем результат...', data);
+            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+            // Скрываем модалку загрузки
             hideMemoryLoadingModal();
+            // Разблокируем уровень
+            setMemoryLevelUnlocked(level);
+            updateMemoryButtonState(level, true);
+            loadAllMemoryStatuses(); // обновить все кнопки
+            showMemorySuccessModal();
         })
-        .catch((err) => {
-            console.error('❌ Ошибка при запуске рекламы (память):', err);
-            if (!memoryAdResolved) {
-                memoryAdResolved = true;
-                clearMemoryAdResources();
-                showMemoryErrorModal('Ой, рекламы нет. Попробуйте позже.');
-            }
+        .catch(function(error) {
+            memoryAdResolved = true;
+            clearMemoryAdResources();
+            console.log("❌ Ошибка или реклама не досмотрена:", error);
+            hideMemoryLoadingModal();
+            showMemoryErrorModal('Реклама недоступна. Попробуйте позже.');
         });
 }
 
