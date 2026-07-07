@@ -172,6 +172,327 @@ class SoundManager {
 // 4. Основная игра Судоку
 // ============================================================
 class SudokuGame {
+    constructor() {
+        this.sound = new SoundManager();
+        this.adManager = new AdManager();
+        this.difficulty = 'easy';
+        this.grid = [];
+        this.solution = [];
+        this.userGrid = [];
+        this.given = [];
+        this.selectedRow = -1;
+        this.selectedCol = -1;
+        this.timer = 0;
+        this.timerInterval = null;
+        this.isRunning = false;
+        this.isFinished = false;
+        this.hintsUsed = 0;
+            this.checksUsed = 0; 
+               this.checkedCells = {};
+        this.cellsToRemove = 0;
+        // Для серий
+this.totalChecks = 0;              // всего проверок
+this.totalPlaced = 0;              // всего поставленных цифр
+this.perfectGame = false;           // флаг для идеальной игры (сбрасывается при ошибке)
+this.gameErrors = 0;               // количество ошибок в текущей игре
+this.consecutiveSameNumber = 0;    // счётчик для "одной цифрой"
+this.lastPlacedNumber = 0;         // последняя поставленная цифра
+this.sevenCount = 0;               // для достижения lucky_7
+// Для чистых побед
+this.noHintWins = 0;
+this.winStreak = 0;
+this.maxWinStreak = 0;
+this.winsByLevel = { easy: 0, medium: 0, hard: 0, expert: 0 };
+// Для идеальных побед
+this.perfectWins = { easy: 0, medium: 0, hard: 0, expert: 0 };
+// Для времени
+this.totalGameTime = 0; // в секундах (суммарно)
+
+        this.totalWins = 0;
+this.totalHintsUsed = 0;
+this.totalBonuses = 0;
+this.achievements = {};
+this.achievementsPage = 0;
+this.achievementsPerPage = window.innerWidth < 600 ? 6 : 8;
+
+        this.currentDiamonds = 0;          // общее количество алмазов
+this.lastBonusDate = null;         // дата последнего получения бонуса (строка)
+this.diamondsAwardedForCurrentGame = false; // флаг, чтобы не начислять дважды за одну победу
+this.vkInitialized = false;
+this.vkUserId = null;
+this.vkUserToken = null;
+
+        // DOM элементы
+        this.menuScreen = document.getElementById('menuScreen');
+        this.gameScreen = document.getElementById('gameScreen');
+        this.gridElement = document.getElementById('sudoku-grid');
+        this.numPanel = document.getElementById('num-panel');
+        this.messageEl = document.getElementById('message');
+        this.statusEl = document.getElementById('gameStatus');
+        this.timerEl = document.getElementById('timerDisplay');
+       
+// Список всех достижений (описание)
+this.achievementList = [
+    // === Победные (10 шт) ===
+    { id: 'first_win',      name: 'Первая победа',          desc: 'Выиграть любую партию',                         icon: '🐌' },
+    { id: 'win_easy',       name: 'Легкотня',               desc: 'Выиграть на лёгком ур.',                     icon: '🟢' },
+    { id: 'win_medium',     name: 'Чемпион',                desc: 'Выиграть на среднем ур.',                           icon: '🟠' },
+    { id: 'win_hard',       name: 'Мастер',                 desc: 'Выиграть на сложном ур.',                           icon: '🔴' },
+    { id: 'win_expert',     name: 'Эксперт',                desc: 'Выиграть на эксперте',                          icon: '🟣' },
+    { id: 'win_5',          name: '5 побед',                desc: 'Одержать 5 побед',                                 icon: '🏅' },
+    { id: 'win_10',         name: '10 побед',               desc: 'Одержать 10 побед',                                icon: '🏆' },
+    { id: 'win_25',         name: '25 побед',               desc: 'Одержать 25 побед',                                icon: '🏆' },
+    { id: 'win_50',         name: '50 побед',               desc: 'Одержать 50 побед',                                icon: '👑' },
+    { id: 'win_100',        name: 'Победитель',              desc: 'Одержать 100 побед',                               icon: '💎' },
+
+    // === Очковые (алмазы) (5 шт) ===
+    { id: 'diamonds_10',    name: 'Собиратель',             desc: 'Накопить 10 алмазов',                           icon: '👼' },
+    { id: 'diamonds_50',    name: 'Любитель',             desc: 'Накопить 50 алмазов',                           icon: '💎' },
+    { id: 'diamonds_100',   name: 'Ценитель',            desc: 'Накопить 100 алмазов',                          icon: '💎' },
+    { id: 'diamonds_500',   name: 'Богач',            desc: 'Накопить 500 алмазов',                          icon: '💎' },
+    { id: 'diamonds_1000',  name: 'Златодержец',           desc: 'Накопить 1000 алмазов',                         icon: '💎' },
+
+    // === Бонусные (5 шт) ===
+    { id: 'bonus_1',        name: 'Первый бонус',           desc: 'Получить ежедневный бонус 1 раз',               icon: '🍭' },
+    { id: 'bonus_5',        name: '5 бонусов',              desc: 'Получить ежедневный бонус 5 раз',               icon: '🍬' },
+    { id: 'bonus_10',       name: '10 бонусов',             desc: 'Получить ежедневный бонус 10 раз',              icon: '🍑' },
+    { id: 'bonus_25',       name: '25 бонусов',             desc: 'Получить ежедневный бонус 25 раз',              icon: '🍒' },
+    { id: 'bonus_50',       name: '50 бонусов',             desc: 'Получить ежедневный бонус 50 раз',              icon: '🍓' },
+
+    // === Подсказочные (5 шт) ===
+    { id: 'hint_1',         name: 'Первая подсказка',       desc: 'Использовать 1 подсказку',                      icon: '👶' },
+    { id: 'hint_10',        name: '10 подсказок',           desc: 'Использовать 10 подсказок',                     icon: '🐭' },
+    { id: 'hint_25',        name: '25 подсказок',           desc: 'Использовать 25 подсказок',                     icon: '🐶' },
+    { id: 'hint_50',        name: '50 подсказок',           desc: 'Использовать 50 подсказок',                     icon: '🐹' },
+    { id: 'hint_100',       name: '100 подсказок',          desc: 'Использовать 100 подсказок',                    icon: '🐰' },
+
+    // === Проверочные (5 шт) ===
+    { id: 'check_1',        name: 'Первая проверка',        desc: 'Выполнить 1 проверку',                          icon: '🐣' },
+    { id: 'check_10',       name: '10 проверок',            desc: 'Выполнить 10 проверок',                         icon: '🐤' },
+    { id: 'check_25',       name: '25 проверок',            desc: 'Выполнить 25 проверок',                         icon: '🐥' },
+    { id: 'check_50',       name: '50 проверок',            desc: 'Выполнить 50 проверок',                         icon: '🐔' },
+    { id: 'check_100',      name: '100 проверок',           desc: 'Выполнить 100 проверок',                        icon: '🐧' },
+
+    // === Игровые (цифры) (5 шт) ===
+    { id: 'place_100',      name: 'Школяр',               desc: 'Поставить 100 цифр (вручную)',                  icon: '🐱' },
+    { id: 'place_500',      name: 'Студент',               desc: 'Поставить 500 цифр',                            icon: '🐗' },
+    { id: 'place_1000',     name: 'Бакалавр',              desc: 'Поставить 1000 цифр',                           icon: '🐯' },
+    { id: 'place_5000',     name: 'Магистр',              desc: 'Поставить 5000 цифр',                           icon: '🐲' },
+    { id: 'place_10000',    name: 'Профессор',             desc: 'Поставить 10000 цифр',                          icon: '👽' },
+
+    // === Временные (4 шт) ===
+  
+    { id: 'time_10min',     name: 'На чиле',           desc: 'Решить за 10 минут',                            icon: '⏱️' },
+    { id: 'time_20min',     name: 'Йог',         desc: 'Решить за 20 минут',                            icon: '🐌' },
+    { id: 'time_30min',     name: 'Дзэн',         desc: 'Решить за 30 минут',                            icon: '🐌' },
+
+    // === Идеальные игры (5 шт) ===
+    { id: 'perfect_easy',   name: 'Сорванец',       desc: 'Пройти лёгкий ур. без ошибок',              icon: '🍦' },
+    { id: 'perfect_medium', name: 'Потихоньку',      desc: 'Пройти средний без ошибок',         icon: '🍩' },
+    { id: 'perfect_hard',   name: 'Математик',      desc: 'Пройти сложный без ошибок',         icon: '🍉' },
+    { id: 'perfect_expert', name: 'Мозговитый',      desc: 'Пройти эксперт без ошибок',         icon: '🍌' },
+    { id: 'perfect_all',    name: 'Доцент',       desc: 'Пройти все уровни без ошибок',        icon: '🍰' },
+
+    // === Скрытые / забавные (6 шт) ===
+    { id: 'no_hint_win',    name: 'Без подсказок',          desc: 'Выиграть без подсказок',                       icon: '🤯' },
+    { id: 'all_checks_used',name: 'Проверено всё',          desc: 'Использовать все проверки за раунд',        icon: '📋' },
+    { id: 'first_move',     name: 'Первый шаг',             desc: 'Поставить первую цифру в игре',                 icon: '👣' },
+    { id: 'one_number',     name: 'Одной цифрой',           desc: 'Поставить одну и ту же цифру 10 раз подряд',    icon: '🔟' },
+    { id: 'comeback',       name: 'Возвращение',            desc: 'Выиграть после 3 ошибок в одной игре',          icon: '🔄' },
+    { id: 'lucky_7',        name: '777',     desc: 'Поставить цифру 7 в 7 разных клетках за игру',  icon: '🍀' },
+    // === Дополнительные (серии, скорость, время, коллекционер) ===
+{ id: 'streak_3',       name: 'Серия 3',            desc: 'Выиграть 3 партии подряд',           icon: '🔥' },
+{ id: 'streak_5',       name: 'Серия 5',            desc: 'Выиграть 5 партий подряд',           icon: '🔥' },
+{ id: 'streak_10',      name: 'Серия 10',           desc: 'Выиграть 10 партий подряд',          icon: '🔥' },
+{ id: 'streak_20',      name: 'Серия 20',           desc: 'Выиграть 20 партий подряд',          icon: '🔥' },
+{ id: 'streak_50',      name: 'Серия 50',           desc: 'Выиграть 50 партий подряд',          icon: '🐞' },
+{ id: 'all_levels',     name: 'Все уровни',         desc: 'Выиграть на всех уровнях',           icon: '🏁' },
+{ id: 'no_hint_10',     name: 'В 10-ку!',   desc: 'Выиграть 10 раз без подсказок',      icon: '🧠' },
+{ id: 'speed_1',        name: 'Молния',        desc: 'Решить за 1 минуту',                 icon: '⚡' },
+{ id: 'speed_2',        name: 'Быстрый',            desc: 'Решить за 2 минуты',                 icon: '⚡' },
+{ id: 'speed_3',        name: 'Скоростной',         desc: 'Решить за 3 минуты',                 icon: '⚡' },
+{ id: 'speed_5',        name: 'Гепард',      desc: 'Решить за 5 минут',                  icon: '🐎' },
+{ id: 'time_1h',        name: '1 час!',       desc: 'Наиграть 1 час',                     icon: '⏳' },
+{ id: 'time_5h',        name: '5 часов!',     desc: 'Наиграть 5 часов',                   icon: '⏳' },
+{ id: 'time_10h',       name: '10 часов!',    desc: 'Наиграть 10 часов',                  icon: '🌿' },
+{ id: 'time_24h',       name: 'Сутки!',     desc: 'Наиграть 24 часа',                   icon: '⏳' },
+{ id: 'time_100h',      name: 'Сотка!',   desc: 'Наиграть 100 часов',                 icon: '⏳' },
+{ id: 'early_bird',     name: 'Ранняя пташка',      desc: 'Получить бонус до 10 утра',          icon: '🌅' },
+{ id: 'night_owl',      name: 'Ночная сова',        desc: 'Получить бонус после 23:00',         icon: '🌙' },
+{ id: 'collector',      name: 'Коллекционер',       desc: 'Собрать 10 достижений',              icon: '📚' },
+{ id: 'collector_25',   name: 'СОбиратель', desc: 'Собрать 25 достижений',            icon: '📚' },
+{ id: 'collector_50',   name: 'Легенда', desc: 'Собрать 50 достижений',      icon: '📚' },
+];
+
+
+        // Кнопки
+        document.getElementById('btnStartGame').addEventListener('click', () => this.startNewGame());
+        document.getElementById('btnBackToMenu').addEventListener('click', () => this.goToMenu());
+        document.getElementById('btnToggleSound').addEventListener('click', () => this.toggleSound());
+        document.getElementById('btnInviteFriends').addEventListener('click', () => this.inviteFriends());
+       document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
+        document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
+        document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
+
+// Кнопка "Таблица лидеров"
+// В конструкторе SudokuGame
+document.getElementById('btnLeaderboard').addEventListener('click', () => {
+    this.sound.click();
+    this.showLeaderboard();
+});
+
+document.getElementById('btnDailyBonus').addEventListener('click', () => {
+    this.sound.click();
+    this.showDailyBonusModal();
+});
+// Открыть модалку с темами
+document.getElementById('btnThemeSun').addEventListener('click', function() {
+    document.getElementById('themeModal').style.display = 'flex';
+});
+
+        
+        // Кнопка "Как играть?"
+     document.getElementById('btnHowToPlay').addEventListener('click', () => {
+    this.sound.click();
+    document.getElementById('howToPlayModal').style.display = 'flex';
+});
+        // Достижения
+document.getElementById('btnAchievements').addEventListener('click', () => {
+    this.sound.click();
+    this.openAchievementsModal();
+});
+document.getElementById('closeAchievementsModal').addEventListener('click', () => this.closeAchievementsModal());
+document.getElementById('achPrevPage').addEventListener('click', () => this.achievementsPrevPage());
+document.getElementById('achNextPage').addEventListener('click', () => this.achievementsNextPage());
+        // Закрытие модального окна
+        document.getElementById('closeHowToPlay').addEventListener('click', () => {
+            document.getElementById('howToPlayModal').style.display = 'none';
+        });
+        document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
+            document.getElementById('howToPlayModal').style.display = 'none';
+        });
+        // Закрытие по клику вне окна
+        document.getElementById('howToPlayModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('howToPlayModal').style.display = 'none';
+            }
+        });
+
+        // Выбор сложности
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.difficulty = btn.dataset.diff;
+                this.sound.click();
+            });
+        });
+
+        // Подписка на VK
+        this.setupVKBridge();
+
+        // Показать меню
+        this.showMenu();
+        this.updateDiamondUI(); // чтобы сразу отобразить алмазы
+        this.initAdBanner();
+        this.initVK();
+    }
+
+// ============================================================
+// Проверка "Использовать все проверки"
+// ============================================================
+checkAllChecksUsed() {
+    let maxChecks = 0;
+    if (this.difficulty === 'easy') maxChecks = 3;
+    else if (this.difficulty === 'medium') maxChecks = 2;
+    else if (this.difficulty === 'hard' || this.difficulty === 'expert') maxChecks = 1;
+    if (this.checksUsed === maxChecks && maxChecks > 0) {
+        this.unlockAchievement('all_checks_used');
+    }
+}
+
+// ============================================================
+// Проверка "Первая цифра"
+// ============================================================
+checkFirstMove() {
+    if (this.totalPlaced === 1) {
+        this.unlockAchievement('first_move');
+    }
+}
+
+// ============================================================
+// Проверка "Одной цифрой"
+// ============================================================
+checkSameNumber(number) {
+    if (this.lastPlacedNumber === number) {
+        this.consecutiveSameNumber++;
+        if (this.consecutiveSameNumber >= 10) {
+            this.unlockAchievement('one_number');
+        }
+    } else {
+        this.consecutiveSameNumber = 1;
+        this.lastPlacedNumber = number;
+    }
+}
+
+// ============================================================
+// Проверка "Счастливая семёрка"
+// ============================================================
+checkSeven(number) {
+    if (number === 7) {
+        this.sevenCount++;
+        if (this.sevenCount >= 7) {
+            this.unlockAchievement('lucky_7');
+        }
+    }
+}
+
+// ============================================================
+// Проверка "Возвращение" (выиграть после 3 ошибок)
+// ============================================================
+checkComeback() {
+    if (this.gameErrors >= 3) {
+        this.unlockAchievement('comeback');
+    }
+}
+
+    // ============================================================
+    // VK Bridge
+    // ============================================================
+// В методе setupVKBridge добавляем:
+setupVKBridge() {
+    vkBridge.subscribe((e) => {
+        if (e.type === 'VKWebAppViewHide') {
+            if (this.sound.ctx && this.sound.ctx.state === 'running') {
+                this.sound.ctx.suspend();
+            }
+        } else if (e.type === 'VKWebAppViewRestore') {
+            if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
+                this.sound.ctx.resume();
+            }
+        } else if (e.type === 'VKWebAppShowBannerAdResult') {
+            if (e.data && e.data.result) {
+                console.log('Баннер показан успешно');
+            }
+        }
+        // 👇 ДОБАВЛЯЕМ ОБРАБОТКУ РЕКЛАМЫ ЗА ВОЗНАГРАЖДЕНИЕ
+        else if (e.type === 'VKWebAppShowNativeAdsResult') {
+            console.log('VKWebAppShowNativeAdsResult:', e.data);
+            // Здесь можно обработать результат показа рекламы
+            if (e.data && e.data.result === true) {
+                console.log('✅ Реклама за вознаграждение успешно показана');
+            }
+        }
+    });
+}
+    // ============================================================
+    // Реклама
+    // ============================================================
+    initAdBanner() {
+        // Показываем баннерную рекламу через VK Bridge
+        this.adManager.showBottomBanner();
+    }
+
   // ============================================================
 // Модалка "Реклама недоступна"
 // ============================================================
@@ -468,148 +789,6 @@ showConfirmDialog() {
         });
     });
 }
-
-
-
-    constructor() {
-        this.sound = new SoundManager();
-        this.adManager = new AdManager();
-        this.difficulty = 'easy';
-        this.grid = [];
-        this.solution = [];
-        this.userGrid = [];
-        this.given = [];
-        this.selectedRow = -1;
-        this.selectedCol = -1;
-        this.timer = 0;
-        this.timerInterval = null;
-        this.isRunning = false;
-        this.isFinished = false;
-        this.hintsUsed = 0;
-            this.checksUsed = 0; 
-               this.checkedCells = {};
-        this.cellsToRemove = 0;
-
-        this.currentDiamonds = 0;          // общее количество алмазов
-this.lastBonusDate = null;         // дата последнего получения бонуса (строка)
-this.diamondsAwardedForCurrentGame = false; // флаг, чтобы не начислять дважды за одну победу
-this.vkInitialized = false;
-this.vkUserId = null;
-this.vkUserToken = null;
-
-        // DOM элементы
-        this.menuScreen = document.getElementById('menuScreen');
-        this.gameScreen = document.getElementById('gameScreen');
-        this.gridElement = document.getElementById('sudoku-grid');
-        this.numPanel = document.getElementById('num-panel');
-        this.messageEl = document.getElementById('message');
-        this.statusEl = document.getElementById('gameStatus');
-        this.timerEl = document.getElementById('timerDisplay');
-       
-
-        // Кнопки
-        document.getElementById('btnStartGame').addEventListener('click', () => this.startNewGame());
-        document.getElementById('btnBackToMenu').addEventListener('click', () => this.goToMenu());
-        document.getElementById('btnToggleSound').addEventListener('click', () => this.toggleSound());
-        document.getElementById('btnInviteFriends').addEventListener('click', () => this.inviteFriends());
-       document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
-        document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
-        document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
-
-// Кнопка "Таблица лидеров"
-// В конструкторе SudokuGame
-document.getElementById('btnLeaderboard').addEventListener('click', () => {
-    this.sound.click();
-    this.showLeaderboard();
-});
-
-document.getElementById('btnDailyBonus').addEventListener('click', () => {
-    this.sound.click();
-    this.showDailyBonusModal();
-});
-// Открыть модалку с темами
-document.getElementById('btnThemeSun').addEventListener('click', function() {
-    document.getElementById('themeModal').style.display = 'flex';
-});
-
-        
-        // Кнопка "Как играть?"
-     document.getElementById('btnHowToPlay').addEventListener('click', () => {
-    this.sound.click();
-    document.getElementById('howToPlayModal').style.display = 'flex';
-});
-        
-        // Закрытие модального окна
-        document.getElementById('closeHowToPlay').addEventListener('click', () => {
-            document.getElementById('howToPlayModal').style.display = 'none';
-        });
-        document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
-            document.getElementById('howToPlayModal').style.display = 'none';
-        });
-        // Закрытие по клику вне окна
-        document.getElementById('howToPlayModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                document.getElementById('howToPlayModal').style.display = 'none';
-            }
-        });
-
-        // Выбор сложности
-        document.querySelectorAll('.diff-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.difficulty = btn.dataset.diff;
-                this.sound.click();
-            });
-        });
-
-        // Подписка на VK
-        this.setupVKBridge();
-
-        // Показать меню
-        this.showMenu();
-        this.updateDiamondUI(); // чтобы сразу отобразить алмазы
-        this.initAdBanner();
-        this.initVK();
-    }
-
-    // ============================================================
-    // VK Bridge
-    // ============================================================
-// В методе setupVKBridge добавляем:
-setupVKBridge() {
-    vkBridge.subscribe((e) => {
-        if (e.type === 'VKWebAppViewHide') {
-            if (this.sound.ctx && this.sound.ctx.state === 'running') {
-                this.sound.ctx.suspend();
-            }
-        } else if (e.type === 'VKWebAppViewRestore') {
-            if (this.sound.ctx && this.sound.ctx.state === 'suspended') {
-                this.sound.ctx.resume();
-            }
-        } else if (e.type === 'VKWebAppShowBannerAdResult') {
-            if (e.data && e.data.result) {
-                console.log('Баннер показан успешно');
-            }
-        }
-        // 👇 ДОБАВЛЯЕМ ОБРАБОТКУ РЕКЛАМЫ ЗА ВОЗНАГРАЖДЕНИЕ
-        else if (e.type === 'VKWebAppShowNativeAdsResult') {
-            console.log('VKWebAppShowNativeAdsResult:', e.data);
-            // Здесь можно обработать результат показа рекламы
-            if (e.data && e.data.result === true) {
-                console.log('✅ Реклама за вознаграждение успешно показана');
-            }
-        }
-    });
-}
-    // ============================================================
-    // Реклама
-    // ============================================================
-    initAdBanner() {
-        // Показываем баннерную рекламу через VK Bridge
-        this.adManager.showBottomBanner();
-    }
-
     // ============================================================
 // Инициализация VK и получение данных пользователя
 // ============================================================
@@ -617,6 +796,7 @@ initVK() {
     if (typeof vkBridge === 'undefined') {
         console.warn('VK Bridge не найден, работаем в локальном режиме');
         this.loadDiamondsLocal();
+               this.loadAchievements();  
         this.updateDiamondUI();
         return;
     }
@@ -626,7 +806,9 @@ initVK() {
     if (!isVK) {
         console.warn('Приложение запущено не внутри ВК, используем localStorage');
         this.loadDiamondsLocal();
+          this.loadAchievements(); 
         this.updateDiamondUI();
+
         return;
     }
 
@@ -652,6 +834,7 @@ initVK() {
             console.log('👤 Пользователь VK:', this.vkUserId);
             // Загружаем алмазы из VK Storage
             this.loadDiamonds();
+            this.loadAchievements();
         } else {
             throw new Error('Не удалось получить ID пользователя');
         }
@@ -836,6 +1019,457 @@ inviteFriends() {
     const sendMethod = vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, 'VKWebAppShowInviteBox', {});
 }
+// Проверка серий
+checkStreak() {
+    if (this.winStreak >= 3) this.unlockAchievement('streak_3');
+    if (this.winStreak >= 5) this.unlockAchievement('streak_5');
+    if (this.winStreak >= 10) this.unlockAchievement('streak_10');
+    if (this.winStreak >= 20) this.unlockAchievement('streak_20');
+    if (this.winStreak >= 50) this.unlockAchievement('streak_50');
+}
+
+
+// Проверка "все уровни"
+checkAllLevels() {
+    const levels = ['easy', 'medium', 'hard', 'expert'];
+    let all = true;
+    for (const level of levels) {
+        if (this.winsByLevel[level] < 1) all = false;
+    }
+    if (all) this.unlockAchievement('all_levels');
+}
+
+// Проверка накопления алмазов
+checkDiamonds() {
+    if (this.currentDiamonds >= 10) this.unlockAchievement('diamonds_10');
+    if (this.currentDiamonds >= 50) this.unlockAchievement('diamonds_50');
+    if (this.currentDiamonds >= 100) this.unlockAchievement('diamonds_100');
+    if (this.currentDiamonds >= 500) this.unlockAchievement('diamonds_500');
+    if (this.currentDiamonds >= 1000) this.unlockAchievement('diamonds_1000');
+}
+
+// Проверка коллекционера
+checkCollector() {
+    const count = Object.values(this.achievements).filter(v => v === true).length;
+    if (count >= 10) this.unlockAchievement('collector');
+    if (count >= 25) this.unlockAchievement('collector_25');
+    if (count >= 50) this.unlockAchievement('collector_50');
+}
+
+// Проверка времени суток для бонуса
+checkBonusTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    if (hours < 10) this.unlockAchievement('early_bird');
+    if (hours >= 23) this.unlockAchievement('night_owl');
+}
+
+// Обновление общего времени игры (вызывать при закрытии игры или раз в минуту)
+updateTotalGameTime(seconds) {
+    this.totalGameTime += seconds;
+    if (this.totalGameTime >= 3600) this.unlockAchievement('time_1h');
+    if (this.totalGameTime >= 18000) this.unlockAchievement('time_5h');
+    if (this.totalGameTime >= 36000) this.unlockAchievement('time_10h');
+    if (this.totalGameTime >= 86400) this.unlockAchievement('time_24h');
+    if (this.totalGameTime >= 360000) this.unlockAchievement('time_100h');
+    this.saveAchievements();
+}
+// ============================================================
+// Загрузка достижений из VK Storage и localStorage (с merge)
+// ============================================================
+loadAchievements() {
+    // Сначала загружаем из localStorage
+    try {
+        const local = localStorage.getItem('sudoku_achievements');
+        if (local) {
+            const parsed = JSON.parse(local);
+            // Объединяем с существующими (не затираем)
+            for (const key in parsed) {
+                if (parsed[key] === true) {
+                    this.achievements[key] = true;
+                }
+            }
+        }
+        
+        // Загружаем счётчики
+const winStreak = localStorage.getItem('sudoku_winStreak');
+if (winStreak) this.winStreak = parseInt(winStreak) || 0;
+const perfectWins = localStorage.getItem('sudoku_perfectWins');
+const winsByLevel = localStorage.getItem('sudoku_winsByLevel');
+if (winsByLevel) { try { this.winsByLevel = JSON.parse(winsByLevel); } catch(e) {} }
+const noHintWins = localStorage.getItem('sudoku_noHintWins');
+if (noHintWins) this.noHintWins = parseInt(noHintWins) || 0;
+const totalChecks = localStorage.getItem('sudoku_totalChecks');
+if (totalChecks) this.totalChecks = parseInt(totalChecks) || 0;
+const totalPlaced = localStorage.getItem('sudoku_totalPlaced');
+if (totalPlaced) this.totalPlaced = parseInt(totalPlaced) || 0;
+const totalGameTime = localStorage.getItem('sudoku_totalGameTime');
+if (totalGameTime) this.totalGameTime = parseInt(totalGameTime) || 0;
+const wins = localStorage.getItem('sudoku_totalWins');
+if (wins) this.totalWins = parseInt(wins) || 0;
+const hints = localStorage.getItem('sudoku_totalHints');
+if (hints) this.totalHintsUsed = parseInt(hints) || 0;
+const bonuses = localStorage.getItem('sudoku_totalBonuses');
+if (bonuses) this.totalBonuses = parseInt(bonuses) || 0;
+const maxWinStreak = localStorage.getItem('sudoku_maxWinStreak');
+if (maxWinStreak) this.maxWinStreak = parseInt(maxWinStreak) || 0;
+    } catch (e) {}
+
+    // Если есть VK Storage – загружаем оттуда и мержим
+    if (this.vkUserId && this.vkInitialized) {
+   vkBridge.send('VKWebAppStorageGet', {
+    keys: [
+        'achievements', 'totalWins', 'totalHints', 'totalBonuses',
+        'winStreak', 'maxWinStreak', 'winsByLevel', 'noHintWins',
+        'perfectWins', 'totalChecks', 'totalPlaced', 'totalGameTime'
+    ]
+})
+.then((data) => {
+            if (data && data.keys) {
+                data.keys.forEach(item => {
+                    if (item.key === 'achievements') {
+                        try {
+                            const parsed = JSON.parse(item.value);
+                            for (const key in parsed) {
+                                if (parsed[key] === true) {
+                                    this.achievements[key] = true;
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                    if (item.key === 'totalWins') {
+                        const val = parseInt(item.value) || 0;
+                        if (val > this.totalWins) this.totalWins = val;
+                    }
+                    if (item.key === 'totalHints') {
+                        const val = parseInt(item.value) || 0;
+                        if (val > this.totalHintsUsed) this.totalHintsUsed = val;
+                    }
+                    if (item.key === 'totalBonuses') {
+                        const val = parseInt(item.value) || 0;
+                        if (val > this.totalBonuses) this.totalBonuses = val;
+                    }
+           // Добавляем новые:
+            if (item.key === 'winStreak') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.winStreak) this.winStreak = val;
+            }
+            if (item.key === 'maxWinStreak') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.maxWinStreak) this.maxWinStreak = val;
+            }
+            if (item.key === 'winsByLevel') {
+                try { const parsed = JSON.parse(item.value); this.winsByLevel = parsed; } catch(e) {}
+            }
+            if (item.key === 'noHintWins') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.noHintWins) this.noHintWins = val;
+            }
+            if (item.key === 'perfectWins') {
+                try { const parsed = JSON.parse(item.value); this.perfectWins = parsed; } catch(e) {}
+            }
+            if (item.key === 'totalChecks') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.totalChecks) this.totalChecks = val;
+            }
+            if (item.key === 'totalPlaced') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.totalPlaced) this.totalPlaced = val;
+            }
+            if (item.key === 'totalGameTime') {
+                const val = parseInt(item.value) || 0;
+                if (val > this.totalGameTime) this.totalGameTime = val;
+            }
+        });
+    }
+            // После загрузки проверяем достижения и сохраняем
+            this.checkAchievements();
+            this.saveAchievements();
+        })
+        .catch(() => {
+            // Если VK Storage недоступен – всё равно проверяем и сохраняем локально
+            this.checkAchievements();
+            this.saveAchievements();
+        });
+    } else {
+        // Если нет VK – просто проверяем локально
+        this.checkAchievements();
+        this.saveAchievements();
+    }
+}
+
+// ============================================================
+// Сохранение достижений (в VK Storage и localStorage)
+// ============================================================
+saveAchievements() {
+    // Сохраняем в localStorage
+    try {
+        localStorage.setItem('sudoku_achievements', JSON.stringify(this.achievements));
+        localStorage.setItem('sudoku_totalWins', String(this.totalWins));
+        localStorage.setItem('sudoku_totalHints', String(this.totalHintsUsed));
+        localStorage.setItem('sudoku_totalBonuses', String(this.totalBonuses));
+        localStorage.setItem('sudoku_winStreak', String(this.winStreak));
+localStorage.setItem('sudoku_maxWinStreak', String(this.maxWinStreak));
+localStorage.setItem('sudoku_winsByLevel', JSON.stringify(this.winsByLevel));
+localStorage.setItem('sudoku_noHintWins', String(this.noHintWins));
+localStorage.setItem('sudoku_perfectWins', JSON.stringify(this.perfectWins));
+localStorage.setItem('sudoku_totalChecks', String(this.totalChecks));
+localStorage.setItem('sudoku_totalPlaced', String(this.totalPlaced));
+localStorage.setItem('sudoku_totalGameTime', String(this.totalGameTime));
+    } catch (e) {}
+
+    // Сохраняем в VK Storage, если доступно
+    if (this.vkUserId && this.vkInitialized) {
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'achievements',
+            value: JSON.stringify(this.achievements)
+        }).catch(err => console.warn('Ошибка сохранения достижений в VK:', err));
+
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'totalWins',
+            value: String(this.totalWins)
+        }).catch(err => console.warn('Ошибка сохранения totalWins:', err));
+
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'totalHints',
+            value: String(this.totalHintsUsed)
+        }).catch(err => console.warn('Ошибка сохранения totalHints:', err));
+
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'totalBonuses',
+            value: String(this.totalBonuses)
+        }).catch(err => console.warn('Ошибка сохранения totalBonuses:', err));
+        vkBridge.send('VKWebAppStorageSet', { key: 'winStreak', value: String(this.winStreak) })
+    .catch(err => console.warn('Ошибка сохранения winStreak:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'maxWinStreak', value: String(this.maxWinStreak) })
+    .catch(err => console.warn('Ошибка сохранения maxWinStreak:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'winsByLevel', value: JSON.stringify(this.winsByLevel) })
+    .catch(err => console.warn('Ошибка сохранения winsByLevel:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'noHintWins', value: String(this.noHintWins) })
+    .catch(err => console.warn('Ошибка сохранения noHintWins:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'perfectWins', value: JSON.stringify(this.perfectWins) })
+    .catch(err => console.warn('Ошибка сохранения perfectWins:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'totalChecks', value: String(this.totalChecks) })
+    .catch(err => console.warn('Ошибка сохранения totalChecks:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'totalPlaced', value: String(this.totalPlaced) })
+    .catch(err => console.warn('Ошибка сохранения totalPlaced:', err));
+vkBridge.send('VKWebAppStorageSet', { key: 'totalGameTime', value: String(this.totalGameTime) })
+    .catch(err => console.warn('Ошибка сохранения totalGameTime:', err));
+    }
+}
+
+// ============================================================
+// Разблокировка достижения
+// ============================================================
+unlockAchievement(id) {
+    if (!this.achievements[id]) {
+        this.achievements[id] = true;
+        this.saveAchievements();
+        
+        // Находим достижение в списке
+        const ach = this.achievementList.find(a => a.id === id);
+        if (ach) {
+            // Показываем красивый попап
+            this.showAchievementPopup(ach.icon, ach.name);
+            // Звук победы
+            this.sound.win();
+        }
+    }
+}
+// ============================================================
+// Показать всплывающее уведомление о достижении
+// ============================================================
+showAchievementPopup(icon, name) {
+    const popup = document.getElementById('achievementPopup');
+    const iconEl = document.getElementById('achievementPopupIcon');
+    const nameEl = document.getElementById('achievementPopupName');
+    
+    if (!popup || !iconEl || !nameEl) {
+        // Если элементов нет — используем старый тост как fallback
+        this.showToast(`🏅 Достижение разблокировано: ${name}!`);
+        return;
+    }
+    
+    // Устанавливаем иконку и название
+    iconEl.textContent = icon || '🏅';
+    nameEl.textContent = name || 'Достижение';
+    
+    // Убираем предыдущие классы
+    popup.classList.remove('show', 'hide');
+    
+    // Принудительно сбрасываем анимацию (перезапуск)
+    void popup.offsetWidth; // триггер reflow
+    
+    // Показываем (с анимацией)
+    popup.style.display = 'block';
+    // Небольшая задержка, чтобы display сработал, затем добавляем класс show
+    requestAnimationFrame(() => {
+        popup.classList.add('show');
+    });
+    
+    // Через 3 секунды скрываем
+    clearTimeout(this._popupTimeout);
+    this._popupTimeout = setTimeout(() => {
+        popup.classList.remove('show');
+        popup.classList.add('hide');
+        // После завершения анимации скрываем display
+        setTimeout(() => {
+            popup.style.display = 'none';
+            popup.classList.remove('hide');
+        }, 300); // длительность анимации
+    }, 3000);
+}
+// ============================================================
+// Проверка всех достижений (вызывать после изменения счётчиков)
+// ============================================================
+checkAchievements() {
+    // Победы
+    if (this.totalWins >= 1) this.unlockAchievement('first_win');
+    if (this.totalWins >= 5) this.unlockAchievement('win_5');
+    if (this.totalWins >= 10) this.unlockAchievement('win_10');
+    if (this.totalWins >= 25) this.unlockAchievement('win_25');
+    if (this.totalWins >= 50) this.unlockAchievement('win_50');
+    if (this.totalWins >= 100) this.unlockAchievement('win_100');
+
+    // Бонусы
+    if (this.totalBonuses >= 1) this.unlockAchievement('bonus_1');
+    if (this.totalBonuses >= 5) this.unlockAchievement('bonus_5');
+    if (this.totalBonuses >= 10) this.unlockAchievement('bonus_10');
+    if (this.totalBonuses >= 25) this.unlockAchievement('bonus_25');
+    if (this.totalBonuses >= 50) this.unlockAchievement('bonus_50');
+
+    // Подсказки
+    if (this.totalHintsUsed >= 1) this.unlockAchievement('hint_1');
+    if (this.totalHintsUsed >= 10) this.unlockAchievement('hint_10');
+    if (this.totalHintsUsed >= 25) this.unlockAchievement('hint_25');
+    if (this.totalHintsUsed >= 50) this.unlockAchievement('hint_50');
+    if (this.totalHintsUsed >= 100) this.unlockAchievement('hint_100');
+
+    // Проверки
+    if (this.totalChecks >= 1) this.unlockAchievement('check_1');
+    if (this.totalChecks >= 10) this.unlockAchievement('check_10');
+    if (this.totalChecks >= 25) this.unlockAchievement('check_25');
+    if (this.totalChecks >= 50) this.unlockAchievement('check_50');
+    if (this.totalChecks >= 100) this.unlockAchievement('check_100');
+
+    // Поставленные цифры
+    if (this.totalPlaced >= 100) this.unlockAchievement('place_100');
+    if (this.totalPlaced >= 500) this.unlockAchievement('place_500');
+    if (this.totalPlaced >= 1000) this.unlockAchievement('place_1000');
+    if (this.totalPlaced >= 5000) this.unlockAchievement('place_5000');
+    if (this.totalPlaced >= 10000) this.unlockAchievement('place_10000');
+
+    // Алмазы
+    if (this.currentDiamonds >= 10) this.unlockAchievement('diamonds_10');
+    if (this.currentDiamonds >= 50) this.unlockAchievement('diamonds_50');
+    if (this.currentDiamonds >= 100) this.unlockAchievement('diamonds_100');
+    if (this.currentDiamonds >= 500) this.unlockAchievement('diamonds_500');
+    if (this.currentDiamonds >= 1000) this.unlockAchievement('diamonds_1000');
+     // Проверяем коллекционера
+    this.checkCollector();
+}
+
+// ============================================================
+// Проверка победы на уровне (вызывать из checkWin)
+// ============================================================
+checkLevelAchievement(difficulty) {
+    const map = {
+        'easy': 'win_easy',
+        'medium': 'win_medium',
+        'hard': 'win_hard',
+        'expert': 'win_expert'
+    };
+    const id = map[difficulty];
+    if (id) this.unlockAchievement(id);
+}
+
+// ============================================================
+// Открыть модалку достижений
+// ============================================================
+openAchievementsModal() {
+    const modal = document.getElementById('achievementsModal');
+    if (!modal) return;
+    this.achievementsPage = 0;
+    modal.style.display = 'flex';
+    this.renderAchievements();
+}
+
+// ============================================================
+// Закрыть модалку достижений
+// ============================================================
+closeAchievementsModal() {
+    const modal = document.getElementById('achievementsModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// ============================================================
+// Рендеринг достижений с пагинацией
+// ============================================================
+renderAchievements() {
+    const container = document.getElementById('achievementsList');
+    const pageInfo = document.getElementById('achPageInfo');
+    if (!container) return;
+
+    // Сортируем: сначала разблокированные
+    const sorted = [...this.achievementList].sort((a, b) => {
+        const aUnlocked = this.achievements[a.id] || false;
+        const bUnlocked = this.achievements[b.id] || false;
+        return (aUnlocked === bUnlocked) ? 0 : (aUnlocked ? -1 : 1);
+    });
+
+    const total = sorted.length;
+    const perPage = this.achievementsPerPage;
+    const maxPage = Math.ceil(total / perPage) - 1;
+    if (this.achievementsPage > maxPage) this.achievementsPage = maxPage;
+    if (this.achievementsPage < 0) this.achievementsPage = 0;
+
+    const start = this.achievementsPage * perPage;
+    const end = Math.min(start + perPage, total);
+    const pageItems = sorted.slice(start, end);
+
+    container.innerHTML = '';
+    pageItems.forEach(ach => {
+        const unlocked = this.achievements[ach.id] || false;
+        const div = document.createElement('div');
+        div.className = `achievement-item ${unlocked ? 'unlocked' : 'locked'}`;
+        div.innerHTML = `
+            <span class="icon">${unlocked ? '🏅' : '🔒'}</span>
+            <div class="name">${ach.name}</div>
+            <div class="desc">${ach.desc}</div>
+        `;
+        container.appendChild(div);
+    });
+
+    // Обновляем информацию о странице
+    if (pageInfo) {
+        pageInfo.textContent = `${this.achievementsPage + 1} / ${maxPage + 1}`;
+    }
+
+    // Обновляем состояние кнопок
+    document.getElementById('achPrevPage').style.opacity = this.achievementsPage === 0 ? '0.3' : '1';
+    document.getElementById('achNextPage').style.opacity = this.achievementsPage === maxPage ? '0.3' : '1';
+    this.checkCollector();
+}
+
+// ============================================================
+// Пагинация достижений
+// ============================================================
+achievementsPrevPage() {
+    if (this.achievementsPage > 0) {
+        this.achievementsPage--;
+        this.renderAchievements();
+    }
+}
+
+achievementsNextPage() {
+    const total = this.achievementList.length;
+    const maxPage = Math.ceil(total / this.achievementsPerPage) - 1;
+    if (this.achievementsPage < maxPage) {
+        this.achievementsPage++;
+        this.renderAchievements();
+    }
+}
+
 // ============================================================
 // Проверка возможности получения ежедневного бонуса
 // ============================================================
@@ -945,7 +1579,10 @@ claimBonus(amount) {
             value: this.lastBonusDate
         }).catch(err => console.warn(err));
     }
-
+this.totalBonuses++;
+this.checkAchievements();
+this.checkBonusTime();
+this.saveAchievements();
     // Показываем модалку результата
     this.showBonusResult(amount);
 
@@ -996,6 +1633,7 @@ addDiamonds(amount) {
     this.saveDiamonds();
     this.updateDiamondUI();
     this.syncLeaderboard();
+    this.checkDiamonds();
     this.sound.click();
 }
 
@@ -1032,6 +1670,10 @@ showToast(message, isError = false) {
 
     goToMenu() {
         this.sound.click();
+            // Сохраняем время игры (если игра не завершена, добавляем текущее время)
+    if (!this.isFinished && this.timer > 0) {
+        this.updateTotalGameTime(this.timer);
+    }
         this.showMenu();
         this.updateDiamondUI(); // чтобы сразу отобразить алмазы
     }
@@ -1308,25 +1950,37 @@ updateTimer() {
         return;
     }
 
-    // Ставим цифру
-    this.grid[r][c] = num;
-    this.sound.click();
-    
-    // Удаляем статус проверки для этой клетки (она изменена)
-    delete this.checkedCells[cellKey];
-    
-    // На легком уровне показываем результат сразу
-    if (this.difficulty === 'easy') {
-        if (num === this.solution[r][c]) {
-            this.messageEl.textContent = '✅ Верно!';
-        } else {
-            this.messageEl.textContent = `❌ Неправильно!`;
-            this.sound.error();
-        }
+ // Ставим цифру
+this.grid[r][c] = num;
+this.sound.click();
+  this.totalPlaced++;
+  // После this.totalPlaced++;
+if (num !== 0) {
+    this.checkFirstMove();    // достижение "Первый шаг"
+    this.checkSameNumber(num); // достижение "Одной цифрой"
+    this.checkSeven(num);     // достижение "Счастливая семёрка"
+}
+
+// Удаляем статус проверки для этой клетки (она изменена)
+delete this.checkedCells[cellKey];
+
+// Проверяем правильность (для всех уровней)
+if (num !== this.solution[r][c]) {
+    this.gameErrors++; // увеличиваем счётчик ошибок
+}
+
+// На легком уровне показываем результат сразу
+if (this.difficulty === 'easy') {
+    if (num === this.solution[r][c]) {
+        this.messageEl.textContent = '✅ Верно!';
     } else {
-        this.messageEl.textContent = `Цифра ${num} поставлена`;
+        this.messageEl.textContent = `❌ Неправильно!`;
+        this.sound.error();
     }
-    
+} else {
+    this.messageEl.textContent = `Цифра ${num} поставлена`;
+}
+    this.checkAchievements();
     this.render();
     
     if (this.checkWin()) {
@@ -1338,6 +1992,7 @@ updateTimer() {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
+  
         this.render();
     }
 }
@@ -1513,6 +2168,10 @@ async giveHint() {
     this.sound.hint();
     this.hintsUsed++;
 
+   this.totalHintsUsed++;
+this.checkAchievements();
+this.saveAchievements();
+
     const correctNum = this.solution[r][c];
     this.grid[r][c] = correctNum;
     
@@ -1596,7 +2255,9 @@ checkNumber() {
 
     this.sound.init();
     this.checksUsed++;
-
+this.totalChecks++;
+this.checkAchievements();
+this.saveAchievements();
     let errors = 0;
     let correct = 0;
     
@@ -1733,24 +2394,84 @@ async solveAll() {
     // ============================================================
     // Проверка победы
     // ============================================================
-    checkWin() {
-        for (let r = 0; r < 9; r++) {
-            for (let c = 0; c < 9; c++) {
-                if (this.grid[r][c] !== this.solution[r][c]) {
-                    return false;
-                }
+checkWin() {
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (this.grid[r][c] !== this.solution[r][c]) {
+                return false;
             }
         }
-          // Если дошли сюда – победа
-    this.awardDiamondsForWin();
-    return true;
     }
 
+    // Если дошли сюда – победа
+    this.totalWins++;
+    this.winStreak++;
+    if (this.winStreak > this.maxWinStreak) this.maxWinStreak = this.winStreak;
+    this.winsByLevel[this.difficulty] = (this.winsByLevel[this.difficulty] || 0) + 1;
+
+    // Проверяем серии
+    this.checkStreak();
+
+    // Проверяем все уровни
+    this.checkAllLevels();
+
+    // Если без подсказок
+    if (this.hintsUsed === 0) {
+        this.noHintWins++;
+        this.unlockAchievement('no_hint_win');
+        if (this.noHintWins >= 10) this.unlockAchievement('no_hint_10');
+    }
+
+    // Идеальная игра
+    if (this.gameErrors === 0) {
+        this.perfectGame = true;
+        this.perfectWins[this.difficulty] = (this.perfectWins[this.difficulty] || 0) + 1;
+        this.unlockAchievement(`perfect_${this.difficulty}`);
+        // Проверяем все уровни (идеальные)
+        if (this.perfectWins.easy > 0 && this.perfectWins.medium > 0 &&
+            this.perfectWins.hard > 0 && this.perfectWins.expert > 0) {
+            this.unlockAchievement('perfect_all');
+        }
+    }
+    // После блока идеальной игры
+this.checkComeback();
+this.checkAllChecksUsed();
+
+    // Время (быстрые победы)
+    if (this.timer <= 60) {
+        this.unlockAchievement('speed_1');
+    } else if (this.timer <= 120) {
+        this.unlockAchievement('speed_2');
+    } else if (this.timer <= 180) {
+        this.unlockAchievement('speed_3');
+    } else if (this.timer <= 300) {
+        this.unlockAchievement('speed_5');
+    }
+
+    // Время (обычные)
+    if (this.timer <= 600) this.unlockAchievement('time_10min');
+    if (this.timer <= 1200) this.unlockAchievement('time_20min');
+    if (this.timer <= 1800) this.unlockAchievement('time_30min');
+
+
+    this.checkLevelAchievement(this.difficulty);
+    this.checkAchievements(); // общая проверка (алмазы, бонусы, подсказки, проверки, цифры)
+    this.updateTotalGameTime(this.timer); // добавляем время текущей партии
+    this.saveAchievements();
+    this.awardDiamondsForWin();
+
+    return true;
+}
     // ============================================================
     // Старт игры
     // ============================================================
     startNewGame() {
-        this.diamondsAwardedForCurrentGame = false;
+this.diamondsAwardedForCurrentGame = false;
+    this.perfectGame = false;     // <-- добавить
+    this.gameErrors = 0;          // <-- добавить
+this.consecutiveSameNumber = 0;
+this.lastPlacedNumber = 0;
+this.sevenCount = 0;
 // Подгружаем свежие данные из хранилища (на случай синхронизации между вкладками)
 this.loadDiamonds();
         this.sound.init();
@@ -1824,8 +2545,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__game = game;
 });
 document.addEventListener('touchmove', function(event) {
-    // Разрешаем скролл, только если внутри вашего приложения есть 
-    // отдельный блок, который должен прокручиваться (например, чат)
+    var target = event.target;
+    // Разрешаем скролл, если касание началось внутри модалки или её дочерних элементов
+    var modal = document.getElementById('howToPlayModal');
+    if (modal && modal.contains(target)) {
+        return; // не блокируем
+    }
     event.preventDefault();
 }, { passive: false });
 

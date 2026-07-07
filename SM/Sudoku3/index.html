@@ -25,75 +25,13 @@
                                 iframe, .container, body {
                                     overflow: hidden !important;
                                 }
-                                body {
-                                    overflow: hidden !important;
-                                    position: fixed !important;
-                                    width: 100% !important;
-                                    height: 100% !important;
-                                    top: 0 !important;
-                                    left: 0 !important;
-                                    overscroll-behavior: none !important;
-                                    touch-action: none !important;
-                                    margin: 0 !important;
-                                    padding: 0 !important;
-                                }
+                     body{ overflow: hidden !important; position: fixed !important; width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; overscroll-behavior: none !important; touch-action: none !important; margin: 0 !important; padding: 0 !important;}
 
                                 .container {
                                     overflow: hidden !important;
                                 }
                                 
-                                        /* Фон с точками-звёздами */
-                                        body::before {
-                                            content: '';
-                                            position: fixed;
-                                            top: 0;
-                                            left: 0;
-                                            right: 0;
-                                            bottom: 0;
-                                            background: 
-                                            /* Крупные звёзды */
-                                        radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 15% 85%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 45% 15%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)),
-                                        /* Мелкие звёзды */
-                                        radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 22% 40%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 48% 80%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 68% 20%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 88% 65%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)),
-                                        /* Мерцающие звёзды (чуть больше) */
-                                        radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        /* Градиент фона */
-                                        linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%);
-                                            background-size: 100% 100%;
-                                            z-index: 0;
-                                            pointer-events: none;
-                                        }
+                                       body::before{ content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%); background-size: 100% 100%; z-index: 0; pointer-events: none;}
                                         .container {
                                             background: rgba(22, 33, 62, 0.92);
                                             backdrop-filter: blur(10px);
@@ -131,20 +69,7 @@
                                             margin-bottom: 10px;
                                             letter-spacing: 2px;
                                         }
-                                        .menu-btn {
-                                            background: #e94560;
-                                            color: #fff;
-                                            border: none;
-                                            padding: 14px 30px;
-                                            border-radius: 50px;
-                                            font-size: 1.1rem;
-                                            font-weight: bold;
-                                            cursor: pointer;
-                                            width: 85%;
-                                            transition: transform 0.2s, box-shadow 0.2s;
-                                            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3);
-                                            touch-action: manipulation;
-                                        }
+                                        .menu-btn{ background: #e94560; color: #fff; border: none; padding: 14px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 85%; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3); touch-action: manipulation;}
                                         .menu-btn:active {
                                             transform: scale(0.95);
                                         }
@@ -300,21 +225,7 @@
                                             touch-action: manipulation;
                                             border: 3px solid #0f3460;
                                         }
-                                        .cell {
-                                            background: #1a1a2e;
-                                            display: flex;
-                                            justify-content: center;
-                                            align-items: center;
-                                            font-size: clamp(1rem, 5vw, 1.8rem);
-                                            font-weight: bold;
-                                            color: #fff;
-                                            cursor: pointer;
-                                            border-radius: 2px;
-                                            transition: 0.1s;
-                                            aspect-ratio: 1 / 1;
-                                            touch-action: manipulation;
-                                            position: relative;
-                                        }
+                                        .cell{ background: #1a1a2e; display: flex; justify-content: center; align-items: center; font-size: clamp(1rem, 5vw, 1.8rem); font-weight: bold; color: #fff; cursor: pointer; border-radius: 2px; transition: 0.1s; aspect-ratio: 1 / 1; touch-action: manipulation; position: relative;}
                                         /* Толстые границы для блоков 3x3 */
                                         .cell.block-border-right {
                                             border-right: 3px solid #4a6fa5;
@@ -439,6 +350,26 @@
                                             color: #ffd54f;
                                             margin-top: 2px;
                                         }
+                                        /* Скролл только для модального окна */
+#howToPlayModal > div {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Стилизация скролла для модалки */
+#howToPlayModal > div::-webkit-scrollbar {
+    width: 4px;
+}
+
+#howToPlayModal > div::-webkit-scrollbar-thumb {
+    background: #e94560;
+    border-radius: 4px;
+}
+
+#howToPlayModal > div::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
                                     
         /* Адаптив */
         @media (max-width: 450px) {
@@ -832,26 +763,7 @@
         min-height: 0.8em !important;
     }
 }
-/* Скролл только для модального окна */
-#howToPlayModal > div {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
 
-/* Стилизация скролла для модалки */
-#howToPlayModal > div::-webkit-scrollbar {
-    width: 4px;
-}
-
-#howToPlayModal > div::-webkit-scrollbar-thumb {
-    background: #e94560;
-    border-radius: 4px;
-}
-
-#howToPlayModal > div::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-    border-radius: 4px;
-}
 
 /* ============================================================
    ТЕМЫ ОФОРМЛЕНИЯ (меняют только фон и оформление)
@@ -860,48 +772,7 @@
 
 /* --- ТЁМНАЯ (по умолчанию) --- */
 
-body.theme-dark::before {
-    background: 
-                                            /* Крупные звёзды */
-                                        radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)),
-                                        /* Мелкие звёзды */
-                                        radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 88% 65%, #fff, rgba(206, 255, 239, 0)),
-                                        radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)),
-                                        /* Мерцающие звёзды (чуть больше) */
-                                        radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-                                        /* Градиент фона */
-                                        linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%);
-                                        }
+body.theme-dark::before{ background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%);}
 
 
 body.theme-dark {
@@ -966,45 +837,7 @@ body.theme-light #themeModal > div {
     background: #f0ebe3 !important;
     color: #1a1a2e !important;
 }
-body.theme-light::before {
-    background: 
-                                            /* Крупные звёзды */
-                                        radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)),
-                                        /* Мелкие звёзды */
-                                        radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)),
-                                        radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)),
-                                        /* Мерцающие звёзды (чуть больше) */
-                                        radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)),
-                                        radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)),
-                                        radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)),
-                                        radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)),
-                                        radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
+body.theme-light::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
                                         /* ===== ЗАВИТУШКИ ===== */
     /* ===== ЗАВИТУШКИ-ВОЛНЫ через SVG ===== */
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M20 150 Q70 100 120 150 T220 150' stroke='rgba(180,160,140,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M40 180 Q90 130 140 180 T240 180' stroke='rgba(180,160,140,0.1)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M10 120 Q60 70 110 120 T210 120' stroke='rgba(200,100,150,0.3)' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") repeat,
@@ -1138,46 +971,7 @@ body.theme-pastel #howToPlayModal > div .menu-btn.secondary { background: #d0c0b
 body.theme-pastel .cell.selected {    background: #FEE5AC !important; box-shadow: 0 0 25px rgba(253, 255, 160, 0.6) !important; }  
 body.theme-pastel #gameScreen .top-bar .status {    color: #e08060 !important;  }
 body.theme-pastel #gameScreen .top-bar .back-btn {    color: #e08060  !important;     border-color: #888 !important;}
-body.theme-pastel::before {
-    background: 
-                                            /* Крупные звёзды */
-                                        radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)),
-                                        radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)),
-                                        /* Мелкие звёзды */
-                                        radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)),
-                                        radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)),
-                                        radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)),
-                                        /* Мерцающие звёзды (чуть больше) */
-                                        radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)),
-                                        radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)),
-                                        radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)),
-                                        radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)),
-                                        radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
-
+body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
     /* ===== РОМБЫ ===== */
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M0 60 L60 0 L120 60 L60 120 Z' stroke='rgba(180,160,140,0.15)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M30 60 L60 30 L90 60 L60 90 Z' stroke='rgba(180,160,140,0.1)' stroke-width='1' fill='none'/%3E%3Cpath d='M15 60 L60 15 L105 60 L60 105 Z' stroke='rgba(180,160,140,0.08)' stroke-width='0.8' fill='none'/%3E%3C/svg%3E") repeat,
         
@@ -1611,16 +1405,283 @@ body.theme-pastel::before {
         font-size: 0.8rem;
     }
 }
+/* ============================================================
+   Модалка достижений
+   ============================================================ */
+#achievementsModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+#achievementsModal > div {
+    background: rgba(22, 33, 62, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 25px 20px 20px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.3s ease;
+}
+
+#closeAchievementsModal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 0 5px;
+}
+#closeAchievementsModal:hover {
+    opacity: 0.7;
+}
+
+#achievementsModal h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2px;
+    font-size: 1.5rem;
+}
+
+#achievementsModal .achievements-subtitle {
+    color: #8a8fa8;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* Список достижений */
+#achievementsList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-height: calc(85vh - 140px); /* учитываем заголовок, подзаголовок, пагинацию */
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Стилизация скролла для списка */
+#achievementsList::-webkit-scrollbar {
+    width: 4px;
+}
+#achievementsList::-webkit-scrollbar-thumb {
+    background: #e94560;
+    border-radius: 4px;
+}
+#achievementsList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+/* Элемент достижения */
+.achievement-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.achievement-item.unlocked {
+    border-color: #ffd54f;
+    background: rgba(255, 213, 79, 0.08);
+}
+.achievement-item.locked {
+    opacity: 0.5;
+}
+
+.achievement-item .icon {
+    font-size: 2rem;
+    display: block;
+    line-height: 1.2;
+}
+.achievement-item .name {
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+.achievement-item .desc {
+    color: #aaa;
+    font-size: 0.75rem;
+}
+
+/* Пагинация */
+.achievements-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.achievements-pagination button {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aaa;
+    padding: 8px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.9rem;
+}
+.achievements-pagination button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+.achievements-pagination button:active {
+    transform: scale(0.95);
+}
+.achievements-pagination .page-info {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   Адаптив для мобильных
+   ============================================================ */
+@media (max-width: 599px) {
+    #achievementsList {
+        grid-template-columns: 1fr;
+        max-height: calc(85vh - 120px);
+        gap: 8px;
+    }
+    .achievement-item {
+        padding: 10px;
+    }
+    .achievement-item .icon {
+        font-size: 1.8rem;
+    }
+    .achievement-item .name {
+        font-size: 0.85rem;
+    }
+    #achievementsModal > div {
+        padding: 20px 15px 15px;
+        max-width: 95%;
+    }
+    .achievements-pagination button {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 380px) {
+    #achievementsModal > div {
+        padding: 15px 10px;
+    }
+    .achievement-item {
+        padding: 8px;
+    }
+    .achievement-item .icon {
+        font-size: 1.5rem;
+    }
+    .achievement-item .name {
+        font-size: 0.8rem;
+    }
+    .achievement-item .desc {
+        font-size: 0.7rem;
+    }
+}
+
+/* Ландшафтная ориентация на телефонах */
+@media (orientation: landscape) and (max-height: 500px) {
+    #achievementsModal > div {
+        max-height: 90vh;
+        padding: 15px;
+    }
+    #achievementsList {
+        max-height: calc(90vh - 110px);
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+    .achievement-item {
+        padding: 6px;
+    }
+    .achievement-item .icon {
+        font-size: 1.4rem;
+    }
+    .achievement-item .name {
+        font-size: 0.7rem;
+    }
+    .achievement-item .desc {
+        font-size: 0.6rem;
+    }
+    #achievementsModal h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+    }
+    #achievementsModal .achievements-subtitle {
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+    }
+    .achievements-pagination {
+        margin-top: 8px;
+    }
+    .achievements-pagination button {
+        padding: 4px 12px;
+        font-size: 0.7rem;
+    }
+}
+/* ============================================================
+   Попап достижения
+   ============================================================ */
+#achievementPopup.show {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateX(-50%) scale(1) !important;
+    pointer-events: none;
+}
+
+#achievementPopup.hide {
+    opacity: 0 !important;
+    transform: translateX(-50%) scale(0.9) !important;
+    pointer-events: none;
+}
+
+/* Адаптив для маленьких экранов */
+@media (max-width: 480px) {
+    #achievementPopup {
+        top: 10px;
+        padding: 12px 20px;
+        min-width: unset;
+        width: 90%;
+    }
+    #achievementPopupIcon {
+        font-size: 2rem !important;
+    }
+    #achievementPopupName {
+        font-size: 1rem !important;
+    }
+}
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
 <div class="container" id="app">
     <!-- ЭКРАН МЕНЮ -->
     <div id="menuScreen">
         <h1>♢ СУДОКУ</h1>
         <div class="diamonds-row">
-    <span id="diamond-counter">💎 0</span>
+    <span id="diamond-counter" class="subtitle">💎 0</span>
 </div>
         <p class="subtitle">Выберите сложность</p>
         <div class="difficulty-section">
@@ -1634,6 +1695,7 @@ body.theme-pastel::before {
     <button class="menu-btn social-icon" id="btnInviteFriends">👤</button>
     <button class="menu-btn social-icon" id="btnThemeSun">☀️</button>
     <button class="menu-btn social-icon" id="btnLeaderboard">🏆</button>
+    <button class="menu-btn social-icon" id="btnAchievements">🏅</button>
       <button class="menu-btn social-icon" id="btnHowToPlay">❓</button>
 </div>
 <button class="menu-btn secondary" id="btnDailyBonus">🎁 Ежедневный бонус</button>
@@ -1659,7 +1721,18 @@ body.theme-pastel::before {
         <div id="adBanner"></div>
     </div>
 </div>
-<!-- Модалка "Подсказки закончились" -->
+<!-- ============================================================ -->
+<!-- Всплывающее уведомление для достижений -->
+<!-- ============================================================ -->
+<div id="achievementPopup" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:5000; background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:16px; padding:16px 30px; border:2px solid #ffd54f; box-shadow:0 10px 40px rgba(0,0,0,0.6); text-align:center; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease; opacity:0; transform:translateX(-50%) scale(0.9); min-width:200px; max-width:90%;">
+    <div style="display:flex; align-items:center; gap:12px; justify-content:center;">
+        <span id="achievementPopupIcon" style="font-size:2.5rem; line-height:1;">🏅</span>
+        <div style="text-align:left;">
+            <div style="color:#ffd54f; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; font-weight:bold;">Достижение разблокировано!</div>
+            <div id="achievementPopupName" style="color:#fff; font-size:1.2rem; font-weight:bold; margin-top:2px;">Название</div>
+        </div>
+    </div>
+</div>
 <!-- Модалка "Подсказки закончились" -->
 <div id="hintAdModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
     <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:420px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6);">
@@ -1778,9 +1851,21 @@ body.theme-pastel::before {
     </div>
 </div>
 
+<div id="achievementsModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:25px 20px; max-width:500px; width:100%; max-height:80vh; position:relative; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease; overflow:hidden;">
+        <button id="closeAchievementsModal" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;">✕</button>
+        <h2 style="color:#fff; text-align:center; margin-bottom:5px;">🏅 Достижения</h2>
+        <p style="color:#8a8fa8; text-align:center; font-size:0.9rem; margin-bottom:15px;">Разблокируйте все!</p>
+        <div id="achievementsList" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:5px;"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+            <button id="achPrevPage" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#aaa; padding:8px 20px; border-radius:30px; cursor:pointer;">◀</button>
+            <span id="achPageInfo" style="color:#aaa; font-size:0.9rem;">1 / 1</span>
+            <button id="achNextPage" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#aaa; padding:8px 20px; border-radius:30px; cursor:pointer;">▶</button>
+        </div>
+    </div>
+</div>
 
 <script>
-// Инициализация VK Bridge при загрузке
 // Инициализация VK Bridge, если он доступен
 if (typeof vkBridge !== 'undefined' && vkBridge.send) {
     vkBridge.send('VKWebAppInit').catch(function(e) {
@@ -1795,5 +1880,6 @@ if (typeof vkBridge !== 'undefined' && vkBridge.send) {
 
 </script>
 <script src="sudoku.js"></script>
+
 </body>
 </html>
