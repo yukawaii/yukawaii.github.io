@@ -144,6 +144,7 @@ function showRewardedAdForHunt(level, count) {
     clearAdResources();
     adResolved = false;
 
+    // Подписываемся на событие результата ДО вызова рекламы
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
             adResolved = true;
@@ -152,8 +153,11 @@ function showRewardedAdForHunt(level, count) {
             if (e.detail.data.result === true) {
                 setHuntLevelUnlocked(level, count);
                 updateHuntButtonState(level, count, true);
+                // Скрываем загрузочную модалку и показываем успех
+                hideLoadingModal();
                 showSuccessModal();
             } else {
+                hideLoadingModal();
                 showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
             }
         }
@@ -161,18 +165,21 @@ function showRewardedAdForHunt(level, count) {
     bridge.subscribe(handler);
     adResultHandler = handler;
 
+    // Запускаем рекламу
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then((data) => {
             console.log('📺 Реклама показана, ожидаем результат...', data);
+            // Не скрываем загрузочную модалку здесь – ждём события
         })
         .catch((err) => {
             console.error('❌ Ошибка при запуске рекламы:', err);
             if (!adResolved) {
                 adResolved = true;
                 clearAdResources();
+                hideLoadingModal();
                 showErrorModal('Ой, рекламы нет. Попробуйте позже.');
             }
         });
