@@ -191,7 +191,7 @@ function showRewardedAdWithTimeout(level) {
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             // Показываем рекламу
-            return bridge.send('VKWebAppShowNativeAd', { ad_format: 'reward' });
+            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then(() => {
             // Подписываемся на событие результата
