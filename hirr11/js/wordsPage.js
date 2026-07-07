@@ -156,7 +156,7 @@ function clearAdResources() {
 
 // ===== ПОКАЗ РЕКЛАМЫ (БЕЗ ТАЙМАУТА) =====
 function showRewardedAd(level) {
-    const bridge = window.vkBridge;
+ const bridge = window.vkBridge;
 
     if (!bridge) {
         showErrorModal('Реклама недоступна без подключения к интернету. Проверьте соединение.');
@@ -166,43 +166,21 @@ function showRewardedAd(level) {
     clearAdResources();
     adResolved = false;
 
-    // Подписываемся на событие результата ДО вызова рекламы
-    const handler = (e) => {
-        if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
+    bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+        .then(function(data) {
             adResolved = true;
             clearAdResources();
-            console.log('🎁 Получен результат рекламы:', e.detail.data);
-            if (e.detail.data.result === true) {
-                setLevelUnlocked(level);
-                updateButtonState(level, true);
-                hideLoadingModal();
-                showSuccessModal();
-            } else {
-                hideLoadingModal();
-                showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
-            }
-        }
-    };
-    bridge.subscribe(handler);
-    adResultHandler = handler;
-
-    // Запускаем рекламу
-    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-    .then(() => {
-        return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-    })
-    .then((data) => {
-        console.log('📺 Реклама показана, ожидаем результат...', data);
-        // Скрываем модалку загрузки, как только реклама запустилась
-        hideLoadingModal();
-    })
-        .catch((err) => {
-            console.error('❌ Ошибка при запуске рекламы:', err);
-            if (!adResolved) {
-                adResolved = true;
-                clearAdResources();
-                hideLoadingModal();
-                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
-            }
+            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+            hideLoadingModal();
+            setLevelUnlocked(level);
+            updateButtonState(level, true);
+            showSuccessModal();
+        })
+        .catch(function(error) {
+            adResolved = true;
+            clearAdResources();
+            console.log("❌ Ошибка или реклама не досмотрена:", error);
+            hideLoadingModal();
+            showErrorModal('Реклама недоступна. Попробуйте позже.');
         });
 }

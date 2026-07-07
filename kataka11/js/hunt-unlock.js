@@ -132,7 +132,7 @@ function clearAdResources() {
     adResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ (БЕЗ ТАЙМАУТА) =====
+// ===== ПОКАЗ РЕКЛАМЫ (упрощённо, как в рабочем примере) =====
 function showRewardedAdForHunt(level, count) {
     const bridge = window.vkBridge;
 
@@ -144,48 +144,27 @@ function showRewardedAdForHunt(level, count) {
     clearAdResources();
     adResolved = false;
 
-    // Подписываемся на событие результата ДО вызова рекламы
-    const handler = (e) => {
-        if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
+    // Показываем рекламу – награда выдаётся сразу в then
+    bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+        .then(function(data) {
             adResolved = true;
             clearAdResources();
-            console.log('🎁 Получен результат рекламы:', e.detail.data);
-            if (e.detail.data.result === true) {
-                setHuntLevelUnlocked(level, count);
-                updateHuntButtonState(level, count, true);
-                // Скрываем загрузочную модалку и показываем успех
-                hideLoadingModal();
-                showSuccessModal();
-            } else {
-                hideLoadingModal();
-                showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
-            }
-        }
-    };
-    bridge.subscribe(handler);
-    adResultHandler = handler;
-
-    // Запускаем рекламу
-  bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-    .then(() => {
-        return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-    })
-    .then((data) => {
-        console.log('📺 Реклама показана, ожидаем результат...', data);
-        // Скрываем модалку загрузки, как только реклама запустилась
-        hideLoadingModal();
-    })
-        .catch((err) => {
-            console.error('❌ Ошибка при запуске рекламы:', err);
-            if (!adResolved) {
-                adResolved = true;
-                clearAdResources();
-                hideLoadingModal();
-                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
-            }
+            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
+            // Скрываем модалку загрузки
+            hideLoadingModal();
+            // Разблокируем уровень
+            setHuntLevelUnlocked(level, count);
+            updateHuntButtonState(level, count, true);
+            showSuccessModal();
+        })
+        .catch(function(error) {
+            adResolved = true;
+            clearAdResources();
+            console.log("❌ Ошибка или реклама не досмотрена:", error);
+            hideLoadingModal();
+            showErrorModal('Реклама недоступна. Попробуйте позже.');
         });
 }
-
 // ===== ОБРАБОТЧИК КЛИКА НА ЗАБЛОКИРОВАННУЮ КНОПКУ (делегирование) =====
 function handleHuntButtonClick(e) {
     const btn = e.target.closest('.hunt-btn');
