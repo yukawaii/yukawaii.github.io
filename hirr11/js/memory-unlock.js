@@ -18,6 +18,7 @@ function isMemoryLevelUnlocked(level) {
 
         if (!bridge) {
             const val = localStorage.getItem(key);
+            console.log(`🔍 Проверка уровня ${level} (локально): ${val}`);
             resolve(val === 'true');
             return;
         }
@@ -25,10 +26,12 @@ function isMemoryLevelUnlocked(level) {
         bridge.send('VKWebAppStorageGet', { keys: [key] })
             .then(data => {
                 const value = data.keys[0]?.value;
+                console.log(`🔍 Проверка уровня ${level} (VK Storage): ${value}`);
                 resolve(value === 'true');
             })
             .catch(() => {
                 const val = localStorage.getItem(key);
+                console.log(`🔍 Проверка уровня ${level} (fallback): ${val}`);
                 resolve(val === 'true');
             });
     });
@@ -39,9 +42,16 @@ function setMemoryLevelUnlocked(level) {
     const bridge = window.vkBridge;
 
     localStorage.setItem(key, 'true');
+    console.log(`💾 Сохранено локально: ${key}=true`);
+
     if (bridge) {
         bridge.send('VKWebAppStorageSet', { key: key, value: 'true' })
-            .catch(console.error);
+            .then(() => {
+                console.log(`💾 Сохранено в VK Storage: ${key}=true`);
+            })
+            .catch(err => {
+                console.error(`❌ Ошибка сохранения в VK Storage:`, err);
+            });
     }
 }
 
@@ -49,18 +59,23 @@ function setMemoryLevelUnlocked(level) {
 function updateMemoryButtonState(level, unlocked) {
     const selector = `.memory-btn[data-level="${level}"]`;
     const btn = document.querySelector(selector);
-    if (!btn) return;
+    if (!btn) {
+        console.warn(`⚠️ Кнопка для уровня ${level} не найдена`);
+        return;
+    }
+
+    console.log(`🔄 Обновление кнопки уровня ${level}: разблокировано = ${unlocked}`);
 
     if (unlocked) {
         btn.classList.remove('locked');
         btn.classList.add('unlocked');
         btn.dataset.unlocked = 'true';
-        // Восстанавливаем href (если был удалён)
+        // Восстанавливаем href
         const originalHref = btn.dataset.originalHref;
         if (originalHref) {
             btn.href = originalHref;
         }
-        // Возвращаем исходный текст (без замка)
+        // Восстанавливаем текст
         const originalText = btn.dataset.originalText;
         if (originalText) {
             btn.innerHTML = originalText;
@@ -69,7 +84,6 @@ function updateMemoryButtonState(level, unlocked) {
         btn.classList.add('locked');
         btn.classList.remove('unlocked');
         btn.dataset.unlocked = 'false';
-        // Сохраняем исходный href и текст
         if (!btn.dataset.originalHref) {
             btn.dataset.originalHref = btn.href || '';
         }
@@ -77,8 +91,6 @@ function updateMemoryButtonState(level, unlocked) {
             btn.dataset.originalText = btn.innerHTML;
         }
         btn.removeAttribute('href');
-        // Добавляем замок перед текстом (сохраняя структуру)
-        // Если уже есть замок – не дублируем
         if (!btn.innerHTML.includes('🔒')) {
             btn.innerHTML = `🔒 ${btn.dataset.originalText}`;
         }
@@ -87,13 +99,15 @@ function updateMemoryButtonState(level, unlocked) {
 
 // ===== ЗАГРУЗКА СТАТУСОВ =====
 async function loadAllMemoryStatuses() {
+    console.log('🔄 Загрузка статусов разблокировки памяти...');
     for (let level = 1; level <= 9; level++) {
         const unlocked = await isMemoryLevelUnlocked(level);
         updateMemoryButtonState(level, unlocked);
     }
+    console.log('✅ Статусы памяти загружены');
 }
 
-// ===== МОДАЛКИ (ID с префиксом memory) =====
+// ===== МОДАЛКИ =====
 function showMemoryUnlockModal(level) {
     const modal = document.getElementById('memoryUnlockModal');
     if (modal) modal.classList.add('show');
@@ -157,16 +171,22 @@ function showRewardedAdForMemory(level) {
     clearMemoryAdResources();
     memoryAdResolved = false;
 
+    console.log(`📺 Запуск рекламы для уровня ${level}`);
+
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !memoryAdResolved) {
             memoryAdResolved = true;
             clearMemoryAdResources();
             console.log('🎁 Получен результат рекламы (память):', e.detail.data);
             if (e.detail.data.result === true) {
+                console.log(`✅ Награда получена! Разблокируем уровень ${level}`);
                 setMemoryLevelUnlocked(level);
                 updateMemoryButtonState(level, true);
+                // Дополнительно перезагружаем все статусы, чтобы обновить другие кнопки
+                loadAllMemoryStatuses();
                 showMemorySuccessModal();
             } else {
+                console.warn(`⚠️ Реклама не завершена (result: false)`);
                 showMemoryErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
             }
         }
@@ -196,18 +216,23 @@ function showRewardedAdForMemory(level) {
 function handleMemoryButtonClick(e) {
     const btn = e.target.closest('.memory-btn');
     if (!btn) return;
-    if (btn.dataset.unlocked === 'true') return;
 
     const level = parseInt(btn.dataset.level);
     if (!level) return;
 
+    // Если кнопка разблокирована – разрешаем переход
+    if (btn.dataset.unlocked === 'true') return;
+
     e.preventDefault();
+    console.log(`🔘 Клик по заблокированной кнопке уровня ${level}`);
     currentMemoryUnlockLevel = level;
     showMemoryUnlockModal(level);
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Инициализация memory-unlock.js');
+
     // Загружаем статусы
     loadAllMemoryStatuses();
 
@@ -215,6 +240,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.memory-menu-grid');
     if (container) {
         container.addEventListener('click', handleMemoryButtonClick);
+        console.log('✅ Обработчик клика навешен на .memory-menu-grid');
+    } else {
+        console.warn('⚠️ Контейнер .memory-menu-grid не найден');
     }
 
     // Обработчики модалок
@@ -222,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (confirmBtn) {
         confirmBtn.addEventListener('click', function() {
             if (!currentMemoryUnlockLevel) return;
+            console.log(`✅ Подтверждена разблокировка уровня ${currentMemoryUnlockLevel}`);
             hideMemoryModal('memoryUnlockModal');
             showMemoryLoadingModal();
             showRewardedAdForMemory(currentMemoryUnlockLevel);
@@ -269,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Перезагрузка статусов после инициализации VK (если нужно)
+// Перезагрузка статусов после инициализации VK
 window.onVKReady = window.onVKReady || function() {};
 const originalOnVKReady = window.onVKReady;
 window.onVKReady = function() {
