@@ -122,11 +122,23 @@ function addStars(amount) {
     return newTotal;
 }
 
+
 // ===== ОБНОВЛЕНИЕ UI В ГЛАВНОМ МЕНЮ =====
 function updateStarsUI() {
     const el = document.getElementById('star-counter');
     if (el) {
         el.textContent = currentStars;
+        console.log('⭐ Счётчик обновлён:', currentStars);
+    } else {
+        console.warn('⚠️ Элемент #star-counter не найден, обновление UI отложено');
+        // Повторим попытку через 100 мс (если DOM ещё не готов)
+        setTimeout(() => {
+            const el2 = document.getElementById('star-counter');
+            if (el2) {
+                el2.textContent = currentStars;
+                console.log('⭐ Счётчик обновлён (повторная попытка):', currentStars);
+            }
+        }, 100);
     }
 }
 
