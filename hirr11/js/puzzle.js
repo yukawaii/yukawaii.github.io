@@ -355,6 +355,14 @@ renderWithImage(img, grid) {
         const timeEl = document.querySelector('.victory-time');
         if (stepsEl) stepsEl.textContent = steps;
         if (timeEl) timeEl.textContent = time;
+        // ===== НАЧИСЛЕНИЕ ЗВЁЗД =====
+if (typeof window.addStars === 'function') {
+    window.addStars(1);
+    const starsEl = document.getElementById('puzzle-stars-earned');
+    if (starsEl) {
+        starsEl.textContent = '⭐ +1';
+    }
+}
         
         setTimeout(() => {
             const gameOverEl = document.getElementById('gameOver');
