@@ -256,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-if (window.vkBridgeInitialized) {
+window.onVKReady = function() {
+    console.log('🔄 VK готов, перезагружаем статусы разблокировки охоты');
     loadAllHuntStatuses();
-}
+};
