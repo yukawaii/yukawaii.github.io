@@ -268,8 +268,6 @@ playMusic(trackName, volume = 0.15) {
         }
     }
     
-
- 
     
     // Возобновление контекста после жеста пользователя
     resumeContext() {
