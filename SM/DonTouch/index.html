@@ -2831,6 +2831,7 @@ function continueGameWithCurrentData() {
             playerY: y
         };
         saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
+             updateContinueButton();
         console.log('💾 continueGameWithCurrentData Данные загружены и сохранены в VK: уровень ' + level);
     }
 
