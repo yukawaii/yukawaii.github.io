@@ -9,8 +9,39 @@ let currentDiamonds = 0;
 const APP_ID = 8165024; 
 const ServToken = '2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f'; 
 
-// ===== ИНИЦИАЛИЗАЦИЯ VK =====
 function initVKSDK() {
+    // Если VK Bridge уже инициализирован (например, через App.js), пропускаем повторную инициализацию,
+    // но загружаем данные пользователя и токен, если они ещё не получены.
+    if (window.vkBridgeInitialized) {
+        console.log('ℹ️ VK уже инициализирован в App.js, загружаем звёзды');
+        const bridge = window.vkBridge;
+        if (bridge && !vkUserId) {
+            bridge.send('VKWebAppGetUserInfo')
+                .then((userInfo) => {
+                    vkUserId = userInfo.id;
+                    console.log('👤 Пользователь:', userInfo.first_name);
+                    return bridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
+                })
+                .then((authData) => {
+                    vkUserToken = authData.access_token;
+                    console.log('🔑 Токен получен, загружаем звёзды');
+                    vkInitialized = true;
+                    loadStars();
+                })
+                .catch((err) => {
+                    console.warn('⚠️ Токен не получен, звёзды только в localStorage', err);
+                    vkInitialized = true; // помечаем как инициализированный, чтобы loadStars работал
+                    loadStars();
+                });
+        } else {
+            // Если userId уже есть или bridge отсутствует – просто загружаем звёзды
+            vkInitialized = true;
+            loadStars();
+        }
+        return;
+    }
+
+    // Если флаг не установлен – выполняем полную инициализацию (как было)
     if (typeof vkBridge !== 'undefined') {
         window.vkBridge = vkBridge;
 
@@ -18,6 +49,7 @@ function initVKSDK() {
             .then(() => {
                 console.log('✅ VK SDK инициализирован');
                 vkInitialized = true;
+                window.vkBridgeInitialized = true; // устанавливаем флаг, чтобы другие скрипты не повторяли
                 return vkBridge.send('VKWebAppGetUserInfo');
             })
             .then((userInfo) => {
