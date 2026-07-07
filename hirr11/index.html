@@ -6,51 +6,65 @@
   <title>Аниме мини-игры</title>
   <link rel="stylesheet" href="css/main.css">
   <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-  <style>
+<style>
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .menu-grid .btn-neon {
+    width: 100%;
+    text-align: center;
+  }
+  .app-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    text-align: center;
+    background: linear-gradient(135deg, var(--border-neon), var(--neon-pink), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .app-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 300;
+  }
+  .action-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  /* ===== МОБИЛЬНЫЕ УСТРОЙСТВА ===== */
+  @media (max-width: 600px) {
+    .app-title { font-size: 2rem; }
     .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 14px;
-      margin-top: 20px;
+      grid-template-columns: 1fr 1fr; /* Всегда 2 колонки */
+      gap: 10px;
+    }
+    .action-row .btn-neon { font-size: 12px; padding: 8px 14px; }
+  }
+
+  /* Для очень маленьких экранов (менее 360px) – тоже 2 колонки, но с меньшим шрифтом */
+  @media (max-width: 400px) {
+    .menu-grid {
+      grid-template-columns: 1fr 1fr; /* Оставляем 2 колонки */
+      gap: 8px;
     }
     .menu-grid .btn-neon {
-      width: 100%;
-      text-align: center;
+      font-size: 12px;
+      padding: 6px 4px;
     }
-    .app-title {
-      font-size: 2.6rem;
-      font-weight: 800;
-      text-align: center;
-      background: linear-gradient(135deg, var(--border-neon), var(--neon-pink), var(--neon-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-    }
-    .app-subtitle {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-      font-weight: 300;
-    }
-    .action-row {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-    @media (max-width: 600px) {
-      .app-title { font-size: 2rem; }
-      .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .action-row .btn-neon { font-size: 12px; padding: 8px 14px; }
-    }
-    @media (max-width: 400px) {
-      .menu-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
