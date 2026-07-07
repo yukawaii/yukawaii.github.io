@@ -173,6 +173,7 @@ function showRewardedAdForMemory(level) {
 
     console.log(`📺 Запуск рекламы для уровня ${level}`);
 
+    // ПОДПИСЫВАЕМСЯ ДО ВЫЗОВА РЕКЛАМЫ
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !memoryAdResolved) {
             memoryAdResolved = true;
@@ -182,7 +183,6 @@ function showRewardedAdForMemory(level) {
                 console.log(`✅ Награда получена! Разблокируем уровень ${level}`);
                 setMemoryLevelUnlocked(level);
                 updateMemoryButtonState(level, true);
-                // Дополнительно перезагружаем все статусы, чтобы обновить другие кнопки
                 loadAllMemoryStatuses();
                 showMemorySuccessModal();
             } else {
@@ -194,13 +194,14 @@ function showRewardedAdForMemory(level) {
     bridge.subscribe(handler);
     memoryAdResultHandler = handler;
 
+    // ТЕПЕРЬ ВЫЗЫВАЕМ РЕКЛАМУ
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then((data) => {
             console.log('📺 Реклама показана (память), ожидаем результат...', data);
-            hideMemoryLoadingModal(); // скрываем загрузку сразу после запуска
+            hideMemoryLoadingModal();
         })
         .catch((err) => {
             console.error('❌ Ошибка при запуске рекламы (память):', err);
