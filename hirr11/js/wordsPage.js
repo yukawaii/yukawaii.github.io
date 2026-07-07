@@ -1,9 +1,10 @@
 // js/wordsPage.js
 // Управление страницей выбора уровней (words.html)
-// Используем промис VKWebAppShowNativeAds напрямую, без подписки на событие (как в рабочем коде)
+// Исправлен таймаут – очищается после успешного запуска рекламы
 
 let currentUnlockLevel = null;
 let adTimeoutId = null;
+let adResultHandler = null;
 let adResolved = false;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -80,6 +81,8 @@ function showUnlockModal(level) {
 
 function showSuccessModal() {
     hideModal('loadingModal');
+    // Если случайно видна ошибка – скрываем
+    hideModal('errorModal');
     showModal('successModal');
 }
 
@@ -147,10 +150,17 @@ function clearAdResources() {
         clearTimeout(adTimeoutId);
         adTimeoutId = null;
     }
+    if (adResultHandler) {
+        const bridge = window.vkBridge;
+        if (bridge && bridge.unsubscribe) {
+            bridge.unsubscribe(adResultHandler);
+        }
+        adResultHandler = null;
+    }
     adResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ С ТАЙМ-АУТОМ (ПРОМИС) =====
+// ===== ПОКАЗ РЕКЛАМЫ (ТАЙМАУТ ОЧИЩАЕТСЯ ПРИ УСПЕШНОМ ЗАПУСКЕ) =====
 function showRewardedAdWithTimeout(level) {
     const bridge = window.vkBridge;
 
@@ -164,32 +174,51 @@ function showRewardedAdWithTimeout(level) {
     clearAdResources();
     adResolved = false;
 
-    // Тайм-аут 15 секунд
+    // Подписка на событие результата (награда)
+    const handler = (e) => {
+        if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
+            adResolved = true;
+            clearAdResources();
+            console.log('🎁 Получен результат рекламы:', e.detail.data);
+            if (e.detail.data.result === true) {
+                setLevelUnlocked(level);
+                updateButtonState(level, true);
+                showSuccessModal();
+            } else {
+                showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
+            }
+        }
+    };
+    bridge.subscribe(handler);
+    adResultHandler = handler;
+
+    // Таймаут на случай, если реклама вообще не запустится (15 сек)
     adTimeoutId = setTimeout(() => {
         if (!adResolved) {
             adResolved = true;
-            console.warn('⏰ Тайм-аут рекламы (15 сек)');
+            console.warn('⏰ Таймаут загрузки рекламы (15 сек)');
             showErrorModal('Ой, рекламы нет. Попробуйте позже.');
             clearAdResources();
         }
     }, 15000);
 
-    // Используем метод send (или sendPromise) как в рабочем коде
-    const sendMethod = bridge.sendPromise || bridge.send;
-    sendMethod.call(bridge, 'VKWebAppShowNativeAds', { ad_format: 'reward' })
-        .then((data) => {
-            adResolved = true;
-            clearAdResources();
-            console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
-            // Разблокируем уровень
-            setLevelUnlocked(level);
-            updateButtonState(level, true);
-            showSuccessModal();
+    // Запуск рекламы
+    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+        .then(() => {
+            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
-        .catch((error) => {
-            adResolved = true;
-            clearAdResources();
-            console.error('❌ Ошибка или реклама не досмотрена:', error);
-            showErrorModal('Реклама не была завершена или недоступна. Попробуйте позже.');
+        .then((data) => {
+            // Реклама успешно запущена – отменяем таймаут, потому что она уже показывается
+            clearTimeout(adTimeoutId);
+            adTimeoutId = null;
+            console.log('📺 Реклама показана, ожидаем результат...', data);
+        })
+        .catch((err) => {
+            console.error('❌ Ошибка при запуске рекламы:', err);
+            if (!adResolved) {
+                adResolved = true;
+                clearAdResources();
+                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
+            }
         });
 }
