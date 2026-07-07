@@ -63,7 +63,7 @@ const myApp = [{
 
 }, {
     question: "Как читается эта мора? <br> <img src='../mem/img/1.png' width='120' height='120' />",
-    options: ["НО", "KО", "СО", "CО"],
+    options: ["НО", "KО", "РО", "CО"],
     answer: 1,
 },
 //  CA-line
