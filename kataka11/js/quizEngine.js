@@ -41,6 +41,19 @@ function showQuestion() {
     }
     
     const q = state.questions[state.currentIndex];
+    
+    // Перемешиваем варианты ответов
+    const shuffledOptions = q.options.map((text, index) => ({
+        text: text,
+        isCorrect: index === q.correct
+    }));
+    shuffle(shuffledOptions);
+    // Находим новый индекс правильного ответа
+    const newCorrectIndex = shuffledOptions.findIndex(opt => opt.isCorrect);
+    // Сохраняем перемешанные опции и правильный индекс в состояние для текущего вопроса
+    state.currentShuffledOptions = shuffledOptions.map(opt => opt.text);
+    state.currentCorrectIndex = newCorrectIndex;
+    
     document.getElementById('questionText').innerHTML = q.question;
     document.getElementById('currentQuestionNum').textContent = state.currentIndex + 1;
     document.getElementById('correctAnswers').textContent = state.correctCount;
@@ -48,7 +61,7 @@ function showQuestion() {
     // Варианты ответов
     const optionBox = document.getElementById('optionBox');
     optionBox.innerHTML = '';
-    q.options.forEach((opt, idx) => {
+    state.currentShuffledOptions.forEach((opt, idx) => {
         const div = document.createElement('div');
         div.className = 'option';
         div.textContent = opt;
@@ -84,16 +97,16 @@ function startTimer() {
             if (!state.isAnswered) {
                 document.getElementById('timeUpText').className = 'time-up-text show';
                 // Показываем правильный ответ
-                const q = state.questions[state.currentIndex];
                 const options = document.querySelectorAll('.option');
                 options.forEach((el, idx) => {
                     el.classList.add('already-answered');
-                    if (idx === q.correct) {
+                    if (idx === state.currentCorrectIndex) {
                         el.classList.add('show-correct');
                     }
                 });
                 // Показываем объяснение
                 const desc = document.getElementById('answerDescription');
+                const q = state.questions[state.currentIndex];
                 desc.textContent = q.explanation || 'Правильный ответ выделен.';
                 desc.className = 'answer-description show';
                 state.isAnswered = true;
@@ -123,16 +136,15 @@ function handleAnswer(selectedIdx) {
     state.isAnswered = true;
     state.totalAttempted++;
     
-    const q = state.questions[state.currentIndex];
     const options = document.querySelectorAll('.option');
-    let isCorrect = (selectedIdx === q.correct);
+    let isCorrect = (selectedIdx === state.currentCorrectIndex);
     
     // Отключаем клики
     options.forEach(el => el.classList.add('already-answered'));
     
     // Подсвечиваем
     options.forEach((el, idx) => {
-        if (idx === q.correct) el.classList.add('correct');
+        if (idx === state.currentCorrectIndex) el.classList.add('correct');
         else if (idx === selectedIdx && !isCorrect) el.classList.add('wrong');
     });
     
@@ -145,6 +157,7 @@ function handleAnswer(selectedIdx) {
     
     // Показываем объяснение
     const desc = document.getElementById('answerDescription');
+    const q = state.questions[state.currentIndex];
     desc.textContent = q.explanation || (isCorrect ? 'Верно!' : 'Неверно. Попробуй запомнить.');
     desc.className = 'answer-description show';
     
@@ -181,6 +194,22 @@ function finishQuiz() {
     document.getElementById('percentage').textContent = percent + '%';
     
     if (state.onComplete) state.onComplete(state);
+    
+    // ===== НАЧИСЛЕНИЕ ЗВЁЗД =====
+    let earned = 0;
+    if (state.totalAttempted > 0 && state.totalWrong === 0) {
+        earned = 3; // без ошибок
+    } else if (state.totalAttempted > 0) {
+        earned = 1; // просто за прохождение
+    }
+    if (earned > 0 && typeof window.addStars === 'function') {
+        window.addStars(earned);
+        // Показываем в результатах (поддерживаем оба ID)
+        const resultText = document.getElementById('star-earned') || document.getElementById('victoryStars');
+        if (resultText) {
+            resultText.textContent = `⭐ +${earned}`;
+        }
+    }
 }
 
 // Экспортируем для использования в других скриптах
