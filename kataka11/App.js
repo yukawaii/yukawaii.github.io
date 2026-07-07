@@ -48,40 +48,49 @@ function disableContextMenuAndSwipe() {
   console.log('🚫 Контекстное меню и свайп отключены');
 }
 
-// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ =====
-// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (упрощённая, по рабочему примеру) =====
+// Глобальный флаг – объявить в самом начале файла (например, после всех функций или перед initVKBridge)
+if (typeof window.vkBridgeInitialized === 'undefined') {
+    window.vkBridgeInitialized = false;
+}
+
+// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (с проверкой на повторный вызов) =====
 function initVKBridge() {
-  console.log('🔌 Инициализация VK Bridge...');
-
-  // Проверяем, что глобальный объект vkBridge загружен
-  if (typeof vkBridge === 'undefined') {
-    console.warn('⚠️ VK Bridge не загружен');
-    return;
-  }
-
-  // Сохраняем в window для доступа из других скриптов (wordsPage.js и т.д.)
-  window.vkBridge = vkBridge;
-
-  // Подписываемся на события (обработка скрытия/восстановления приложения)
-  vkBridge.subscribe((e) => {
-    if (e.detail.type === 'VKWebAppViewHide') {
-      console.log('📱 Приложение скрыто');
-      // Можно добавить паузу для игр, если нужно
+    // Если уже инициализирован – просто выходим
+    if (window.vkBridgeInitialized) {
+        console.log('ℹ️ VK Bridge уже инициализирован, пропускаем');
+        return;
     }
-    if (e.detail.type === 'VKWebAppViewRestore') {
-      console.log('📱 Приложение восстановлено');
-    }
-  });
 
-  // Отправляем команду инициализации
-  vkBridge.send('VKWebAppInit')
-    .then(() => {
-      console.log('✅ VK Bridge инициализирован');
-      showBannerAd(); // показываем баннер после успешной инициализации
-    })
-    .catch((error) => {
-      console.error('❌ Ошибка инициализации VK Bridge:', error);
+    console.log('🔌 Инициализация VK Bridge...');
+
+    if (typeof vkBridge === 'undefined') {
+        console.warn('⚠️ VK Bridge не загружен');
+        return;
+    }
+
+    // Сохраняем в window для доступа из других скриптов
+    window.vkBridge = vkBridge;
+
+    // Подписываемся на события (только один раз)
+    vkBridge.subscribe((e) => {
+        if (e.detail.type === 'VKWebAppViewHide') {
+            console.log('📱 Приложение скрыто');
+        }
+        if (e.detail.type === 'VKWebAppViewRestore') {
+            console.log('📱 Приложение восстановлено');
+        }
     });
+
+    // Отправляем команду инициализации
+    vkBridge.send('VKWebAppInit')
+        .then(() => {
+            console.log('✅ VK Bridge инициализирован');
+            window.vkBridgeInitialized = true; // помечаем, что инициализация выполнена
+            showBannerAd();
+        })
+        .catch((error) => {
+            console.error('❌ Ошибка инициализации VK Bridge:', error);
+        });
 }
 
 // ===== РЕКЛАМНЫЙ БАННЕР =====
