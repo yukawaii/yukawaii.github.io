@@ -1,21 +1,19 @@
 // js/wordsPage.js
 // Управление страницей выбора уровней (words.html)
-// Проверка разблокировки через VK Storage, модалки, реклама за вознаграждение
-// Исправлена обработка событий рекламы
+// Исправлена подписка на событие рекламы – теперь подписываемся ДО вызова VKWebAppShowNativeAds
 
 let currentUnlockLevel = null;
 let adTimeoutId = null;
 let adResultHandler = null;
+let adResolved = false;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Сохраняем bridge в window
     if (typeof vkBridge !== 'undefined') {
         window.vkBridge = vkBridge;
     }
 
     loadAllStatuses();
 
-    // Обработчики для кнопок уровней
     document.querySelectorAll('.level-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const level = parseInt(this.dataset.level);
@@ -28,21 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Кнопка "Открыть" в модалке
     document.getElementById('unlockConfirm').addEventListener('click', function() {
         hideModal('unlockModal');
         showModal('loadingModal');
         showRewardedAdWithTimeout(currentUnlockLevel);
     });
 
-    // Кнопка "Отмена"
     document.getElementById('unlockCancel').addEventListener('click', function() {
         hideModal('unlockModal');
         currentUnlockLevel = null;
         clearAdResources();
     });
 
-    // Кнопка "Ок" в модалке успеха
     document.getElementById('okBtn').addEventListener('click', function() {
         hideModal('successModal');
         if (currentUnlockLevel) {
@@ -51,14 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Кнопка "Ок" в модалке ошибки
     document.getElementById('errorOkBtn').addEventListener('click', function() {
         hideModal('errorModal');
         clearAdResources();
         currentUnlockLevel = null;
     });
 
-    // Закрытие по клику на фон
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', function(e) {
             if (e.target === this) {
@@ -149,7 +142,7 @@ function updateButtonState(level, unlocked) {
     }
 }
 
-// ===== ОЧИСТКА РЕСУРСОВ (таймер + подписка) =====
+// ===== ОЧИСТКА РЕСУРСОВ =====
 function clearAdResources() {
     if (adTimeoutId) {
         clearTimeout(adTimeoutId);
@@ -162,13 +155,13 @@ function clearAdResources() {
         }
         adResultHandler = null;
     }
+    adResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ С ТАЙМ-АУТОМ =====
+// ===== ПОКАЗ РЕКЛАМЫ С ТАЙМ-АУТОМ (ПОДПИСКА ДО ВЫЗОВА) =====
 function showRewardedAdWithTimeout(level) {
     const bridge = window.vkBridge;
 
-    // Если нет VK Bridge – разблокируем бесплатно (для тестов)
     if (!bridge) {
         setLevelUnlocked(level);
         updateButtonState(level, true);
@@ -176,50 +169,51 @@ function showRewardedAdWithTimeout(level) {
         return;
     }
 
-    // Очищаем предыдущие ресурсы
     clearAdResources();
+    adResolved = false;
 
-    // Тайм-аут 15 секунд
+    // ПОДПИСЫВАЕМСЯ НА СОБЫТИЕ ДО ВЫЗОВА РЕКЛАМЫ
+    const handler = (e) => {
+        if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
+            adResolved = true;
+            clearAdResources();
+            console.log('🎁 Получен результат рекламы:', e.detail.data);
+            if (e.detail.data.result === true) {
+                setLevelUnlocked(level);
+                updateButtonState(level, true);
+                showSuccessModal();
+            } else {
+                showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
+            }
+        }
+    };
+    bridge.subscribe(handler);
+    adResultHandler = handler;
+
+    // ТАЙМ-АУТ 15 СЕКУНД
     adTimeoutId = setTimeout(() => {
-        console.warn('⏰ Тайм-аут рекламы (15 сек)');
-        showErrorModal('Ой, рекламы нет. Попробуйте позже.');
-        clearAdResources();
+        if (!adResolved) {
+            adResolved = true;
+            console.warn('⏰ Тайм-аут рекламы (15 сек)');
+            showErrorModal('Ой, рекламы нет. Попробуйте позже.');
+            clearAdResources();
+        }
     }, 15000);
 
-    // Шаг 1: Проверяем доступность рекламы
+    // ЗАПУСКАЕМ РЕКЛАМУ
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
-            // Шаг 2: Показываем рекламу
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then((data) => {
-            // Реклама показана (но награда ещё не получена)
             console.log('📺 Реклама показана, ожидаем результат...', data);
-            // Подписываемся на событие результата
-            const handler = (e) => {
-                if (e.detail.type === 'VKWebAppNativeAdResult') {
-                    console.log('🎁 Получен результат рекламы:', e.detail.data);
-                    // Очищаем тайм-аут и подписку
-                    clearAdResources();
-
-                    if (e.detail.data.result === true) {
-                        // Награда получена – разблокируем
-                        setLevelUnlocked(level);
-                        updateButtonState(level, true);
-                        showSuccessModal();
-                    } else {
-                        // Пользователь не получил награду (закрыл раньше)
-                        showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
-                    }
-                }
-            };
-            bridge.subscribe(handler);
-            adResultHandler = handler;
         })
         .catch((err) => {
             console.error('❌ Ошибка при показе рекламы:', err);
-            clearAdResources();
-            // Если ошибка – показываем модалку
-            showErrorModal('Ой, рекламы нет. Попробуйте позже.');
+            if (!adResolved) {
+                adResolved = true;
+                clearAdResources();
+                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
+            }
         });
 }
