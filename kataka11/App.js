@@ -49,21 +49,35 @@ function disableContextMenuAndSwipe() {
 }
 
 // ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ =====
+// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (упрощённая, по рабочему примеру) =====
 function initVKBridge() {
   console.log('🔌 Инициализация VK Bridge...');
 
-  if (typeof vkBridge === 'undefined' && typeof window.vkBridge === 'undefined') {
+  // Проверяем, что глобальный объект vkBridge загружен
+  if (typeof vkBridge === 'undefined') {
     console.warn('⚠️ VK Bridge не загружен');
     return;
   }
 
-  const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
-  window.vkBridge = bridge;
+  // Сохраняем в window для доступа из других скриптов (wordsPage.js и т.д.)
+  window.vkBridge = vkBridge;
 
-  bridge.send('VKWebAppInit')
-    .then((data) => {
-      console.log('✅ VK Bridge инициализирован:', data);
-      showBannerAd();
+  // Подписываемся на события (обработка скрытия/восстановления приложения)
+  vkBridge.subscribe((e) => {
+    if (e.detail.type === 'VKWebAppViewHide') {
+      console.log('📱 Приложение скрыто');
+      // Можно добавить паузу для игр, если нужно
+    }
+    if (e.detail.type === 'VKWebAppViewRestore') {
+      console.log('📱 Приложение восстановлено');
+    }
+  });
+
+  // Отправляем команду инициализации
+  vkBridge.send('VKWebAppInit')
+    .then(() => {
+      console.log('✅ VK Bridge инициализирован');
+      showBannerAd(); // показываем баннер после успешной инициализации
     })
     .catch((error) => {
       console.error('❌ Ошибка инициализации VK Bridge:', error);
@@ -296,11 +310,5 @@ setTimeout(() => {
   }
 }, 500);
 
-setTimeout(() => {
-  if (typeof window.vkBridge === 'undefined' && typeof vkBridge !== 'undefined') {
-    window.vkBridge = vkBridge;
-    console.log('✅ VK Bridge сохранен в window');
-  }
-}, 1000);
 
 console.log('📱 App.js полностью загружен!');
