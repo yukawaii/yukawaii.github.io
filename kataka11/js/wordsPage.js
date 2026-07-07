@@ -1,6 +1,6 @@
 // js/wordsPage.js
 // Управление страницей выбора уровней (words.html)
-// Исправлен таймаут – очищается после успешного запуска рекламы
+// Исправлено: закрытие модалки загрузки при любом исходе
 
 let currentUnlockLevel = null;
 let adTimeoutId = null;
@@ -81,7 +81,6 @@ function showUnlockModal(level) {
 
 function showSuccessModal() {
     hideModal('loadingModal');
-    // Если случайно видна ошибка – скрываем
     hideModal('errorModal');
     showModal('successModal');
 }
@@ -160,7 +159,7 @@ function clearAdResources() {
     adResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ (ТАЙМАУТ ОЧИЩАЕТСЯ ПРИ УСПЕШНОМ ЗАПУСКЕ) =====
+// ===== ПОКАЗ РЕКЛАМЫ =====
 function showRewardedAdWithTimeout(level) {
     const bridge = window.vkBridge;
 
@@ -174,17 +173,21 @@ function showRewardedAdWithTimeout(level) {
     clearAdResources();
     adResolved = false;
 
-    // Подписка на событие результата (награда)
+    // Подписка на событие результата
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
             adResolved = true;
             clearAdResources();
             console.log('🎁 Получен результат рекламы:', e.detail.data);
+            // Закрываем загрузку в любом случае
+            hideModal('loadingModal');
             if (e.detail.data.result === true) {
+                // Награда получена – разблокируем
                 setLevelUnlocked(level);
                 updateButtonState(level, true);
                 showSuccessModal();
             } else {
+                // Реклама не завершена (закрыта крестиком)
                 showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
             }
         }
@@ -197,6 +200,7 @@ function showRewardedAdWithTimeout(level) {
         if (!adResolved) {
             adResolved = true;
             console.warn('⏰ Таймаут загрузки рекламы (15 сек)');
+            hideModal('loadingModal');
             showErrorModal('Ой, рекламы нет. Попробуйте позже.');
             clearAdResources();
         }
@@ -208,7 +212,7 @@ function showRewardedAdWithTimeout(level) {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then((data) => {
-            // Реклама успешно запущена – отменяем таймаут, потому что она уже показывается
+            // Реклама успешно запущена – отменяем таймаут
             clearTimeout(adTimeoutId);
             adTimeoutId = null;
             console.log('📺 Реклама показана, ожидаем результат...', data);
@@ -217,8 +221,9 @@ function showRewardedAdWithTimeout(level) {
             console.error('❌ Ошибка при запуске рекламы:', err);
             if (!adResolved) {
                 adResolved = true;
-                clearAdResources();
+                hideModal('loadingModal');
                 showErrorModal('Ой, рекламы нет. Попробуйте позже.');
+                clearAdResources();
             }
         });
 }

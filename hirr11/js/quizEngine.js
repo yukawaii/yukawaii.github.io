@@ -181,6 +181,21 @@ function finishQuiz() {
     document.getElementById('percentage').textContent = percent + '%';
     
     if (state.onComplete) state.onComplete(state);
+  // ===== НАЧИСЛЕНИЕ АЛМАЗОВ =====
+    let earned = 0;
+    if (state.totalAttempted > 0 && state.totalWrong === 0) {
+        earned = 3; // без ошибок
+    } else if (state.totalAttempted > 0) {
+        earned = 1; // просто за прохождение
+    }
+    if (earned > 0 && typeof window.addDiamonds === 'function') {
+        window.addDiamonds(earned);
+        // Показываем в результатах
+        const resultText = document.getElementById('diamond-earned');
+        if (resultText) {
+            resultText.textContent = `💎 +${earned}`;
+        }
+    }
 }
 
 // Экспортируем для использования в других скриптах
