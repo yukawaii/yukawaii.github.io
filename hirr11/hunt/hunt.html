@@ -8,57 +8,209 @@
     <style>
         .hunt-menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 14px;
-            margin: 20px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 8px 0 12px 0;
         }
         .hunt-menu-grid .btn-neon {
             width: 100%;
             text-align: center;
+            padding: 8px 4px;
+            font-size: 14px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+        .hunt-menu-grid .btn-neon.locked {
+            opacity: 0.7;
+            border-color: #666;
+            cursor: pointer;
+        }
+        .hunt-menu-grid .btn-neon.locked:hover {
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            border-color: #ff4444;
+        }
+        .hunt-menu-grid .btn-neon.unlocked {
+            border-color: var(--border-neon);
         }
         .hunt-desc {
             color: var(--text-secondary);
-            font-size: 16px;
+            font-size: 14px;
             text-align: center;
-            margin: 10px 0;
-            line-height: 1.6;
+            margin: 6px 0;
+            line-height: 1.4;
         }
-        @media (max-width: 600px) {
-            .hunt-menu-grid { grid-template-columns: 1fr 1fr; }
+        .category-title {
+            font-size: 1rem;
+            color: var(--border-neon);
+            margin: 12px 0 4px 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .hunt-menu-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .hunt-menu-wrapper .btn-neon small {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+        /* Модалки (те же стили, что и в words.html) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: var(--bg-card);
+            padding: 30px 25px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .modal-box h3 { margin-top: 0; color: var(--border-neon); }
+        .modal-box p { color: var(--text-secondary); font-size: 16px; line-height: 1.5; }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .modal-actions .btn-neon { min-width: 120px; font-size: 15px; padding: 10px 20px; }
+        .modal-actions .btn {
+            min-width: 100px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-secondary);
+        }
+        .modal-actions .btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--border-neon);
+        }
+        .loader {
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--border-neon);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .success-icon { font-size: 48px; margin-bottom: 10px; }
+
+        @media (max-width: 500px) {
+            .hunt-menu-grid { gap: 5px; }
+            .hunt-menu-grid .btn-neon { font-size: 12px; padding: 6px 2px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="glass-card" style="text-align: center;">
+    <div class="glass-card" style="text-align: center; padding: 20px 15px;">
 
-        <h2 style="font-size: 2rem; margin-bottom: 5px;">🔍 Охота на хирагану</h2>
+        <h2 style="font-size: 1.8rem; margin-bottom: 2px;">🔍 Охота</h2>
         <p class="hunt-desc">
             Найди правильный символ на картинке.<br>
-            Чем быстрее найдёшь — тем больше очков!
+            Чем быстрее — тем больше очков!
         </p>
 
-        <div class="theme-picker">
+        <div class="theme-picker" style="margin: 6px 0 10px 0;">
             <button class="theme-btn active" data-theme="cosmic" onclick="setTheme('cosmic')">🌌</button>
             <button class="theme-btn" data-theme="pastel" onclick="setTheme('pastel')">🌸</button>
             <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
         </div>
 
-        <div class="hunt-menu-grid">
-            <a href="hunt-game.html?level=easy" class="btn-neon">😊 Лёгкий<br><small>15 символов</small></a>
-            <a href="hunt-game.html?level=medium" class="btn-neon">🤔 Средний<br><small>30 символов</small></a>
-            <a href="hunt-game.html?level=hard" class="btn-neon">😈 Сложный<br><small>50 символов</small></a>
+        <div class="hunt-menu-wrapper">
+
+            <!-- Категория Лёгкий -->
+            <div class="category-title">😊 Лёгкий (японские символы)</div>
+            <div class="hunt-menu-grid">
+                <a href="hunt-game.html?level=easy&count=15" class="btn-neon hunt-btn" data-level="easy" data-count="15">15 <small>мор</small></a>
+                <a href="#" class="btn-neon hunt-btn locked" data-level="easy" data-count="30">🔒 30 <small>мор</small></a>
+                <a href="#" class="btn-neon hunt-btn locked" data-level="easy" data-count="50">🔒 50 <small>мор</small></a>
+            </div>
+
+            <!-- Категория Средний -->
+            <div class="category-title">🤔 Средний (русские названия)</div>
+            <div class="hunt-menu-grid">
+                <a href="hunt-game.html?level=medium&count=15" class="btn-neon hunt-btn" data-level="medium" data-count="15">15 <small>мор</small></a>
+                <a href="#" class="btn-neon hunt-btn locked" data-level="medium" data-count="30">🔒 30 <small>мор</small></a>
+                <a href="#" class="btn-neon hunt-btn locked" data-level="medium" data-count="50">🔒 50 <small>мор</small></a>
+            </div>
+
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <a href="../index.html" class="btn-neon">🏠 В начало</a>
-            <button class="btn-neon" onclick="share2()">📤 Поделиться</button>
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px;">
+            <a href="../index.html" class="btn-neon" style="font-size:13px; padding:6px 14px;">🏠 В начало</a>
+            <button class="btn-neon" onclick="share2()" style="font-size:13px; padding:6px 14px;">📤 Поделиться</button>
         </div>
 
     </div>
 </div>
 
+<!-- ===== МОДАЛКИ ДЛЯ РАЗБЛОКИРОВКИ ===== -->
+
+<!-- Модалка "Открыть уровень?" -->
+<div id="huntUnlockModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>🔓 Открыть уровень?</h3>
+        <p>Посмотрите короткую рекламу, чтобы разблокировать этот уровень (30 или 50 мор).</p>
+        <div class="modal-actions">
+            <button class="btn-neon" id="huntUnlockConfirm">📺 Открыть</button>
+            <button class="btn" id="huntUnlockCancel">❌ Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка загрузки -->
+<div id="huntLoadingModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>⏳ Загрузка рекламы...</h3>
+        <div class="loader"></div>
+        <p style="color: var(--text-secondary);">Пожалуйста, подождите.</p>
+    </div>
+</div>
+
+<!-- Модалка успеха -->
+<div id="huntSuccessModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="success-icon">🎉</div>
+        <h3 style="color: #22c55e;">Удача!</h3>
+        <p>Уровень успешно разблокирован! Теперь вы можете играть.</p>
+        <div class="modal-actions">
+            <button class="btn-neon" id="huntSuccessOk">👌 Ок</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка ошибки -->
+<div id="huntErrorModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 style="color: #ef4444;">❌ Ошибка</h3>
+        <p id="huntErrorText">Не удалось загрузить рекламу. Попробуйте позже.</p>
+        <div class="modal-actions">
+            <button class="btn" id="huntErrorOk">Закрыть</button>
+        </div>
+    </div>
+</div>
+
 <script src="../App.js"></script>
+<script src="../js/hunt-unlock.js"></script>
 </body>
 </html>

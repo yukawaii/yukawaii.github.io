@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Охота на катакана — Игра</title>
+    <title>Охота на катакану — Игра</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="css/hunt.css">
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
@@ -14,22 +14,17 @@
     <div class="glass-card">
         <div class="hunt-wrapper">
 
-            <!-- Верхняя панель -->
-           <div class="hunt-header">
-    <div class="hunt-task">Найди <span id="targetSymbol">あ</span></div>
-    <div class="hunt-progress">📌 <span id="foundCountDisplay">0</span>/<span id="targetCount">10</span></div>
-    <div class="hunt-score">⭐ <span id="score">0</span></div>
-    <div class="hunt-lives">❤️ <span id="lives">3</span></div>
-</div>
-
-            <!-- Игровое поле -->
-            <div class="hunt-field" id="huntField">
-                <!-- Фон-картинка -->
-                <img id="bgImage" src="../images/bus.jpg" alt="Background" />
-                <!-- Сюда будут добавляться символы -->
+            <div class="hunt-header">
+                <div class="hunt-task">Найди <span id="targetSymbol">あ</span></div>
+                <div class="hunt-progress">📌 <span id="foundCountDisplay">0</span>/<span id="targetCount">10</span></div>
+                <div class="hunt-score">⭐ <span id="score">0</span></div>
+                <div class="hunt-lives">❤️ <span id="lives">3</span></div>
             </div>
 
-            <!-- Кнопки -->
+            <div class="hunt-field" id="huntField">
+                <img id="bgImage" src="../images/bus.jpg" alt="Background" />
+            </div>
+
             <div class="hunt-controls">
                 <button class="btn-neon" id="newRoundBtn">🔄 Новый раунд</button>
                 <a href="hunt.html" class="btn-neon">📚 Другой уровень</a>
@@ -47,6 +42,7 @@
         <p>Ты нашёл все символы!</p>
         <p>⭐ Очки: <span id="finalScore">0</span></p>
         <p>⏱ Время: <span id="finalTime">0</span> сек</p>
+        <p id="victoryStars" style="font-size:1.2rem; color:var(--border-neon);"></p>
         <br>
         <button class="btn-neon" onclick="closeVictory()">🔄 Играть ещё</button>
         <a href="hunt.html" class="btn-neon">📚Уровни</a>
@@ -59,15 +55,14 @@
         <h2>😢 Ой...</h2>
         <p>Ты потерял все жизни!</p>
         <p>Найдено символов: <span id="gameOverScore">0</span></p>
-        <p id="victoryStars"></p>
         <br>
         <button class="btn-neon" onclick="closeGameOver()">🔄 Попробовать ещё</button>
         <a href="hunt.html" class="btn-neon">📚Уровни</a>
     </div>
 </div>
 
-<script src="../js/stars.js"></script>
 <script src="js/hunt.js"></script>
 <script src="../App.js"></script>
+<script src="../js/stars.js"></script>
 </body>
 </html>

@@ -8,8 +8,10 @@ function logState() {
     console.log('  lives:', gameState.lives);
     console.log('  isPlaying:', gameState.isPlaying);
     console.log('  currentTarget:', gameState.currentTarget);
+    console.log('  currentTargetRu:', gameState.currentTargetRu);
 }
-// Список символов хираганы (с прозрачным фоном или просто текст)
+
+// Список символов хираганы
 const HIRAGANA = [
     'あ', 'い', 'う', 'え', 'お',
     'か', 'き', 'く', 'け', 'こ',
@@ -23,11 +25,18 @@ const HIRAGANA = [
     'わ', 'を', 'ん'
 ];
 
-// Уровни сложности
-const LEVELS = {
-    easy: { count: 15, lives: 5, timeBonus: 30 },
-    medium: { count: 30, lives: 3, timeBonus: 25 },
-    hard: { count: 50, lives: 2, timeBonus: 20 }
+// Русские названия (кириллица) для каждого символа
+const HIRAGANA_RU = {
+    'あ': 'А', 'い': 'И', 'う': 'У', 'え': 'Э', 'お': 'О',
+    'か': 'КА', 'き': 'КИ', 'く': 'КУ', 'け': 'КЭ', 'こ': 'КО',
+    'さ': 'СА', 'し': 'СИ', 'す': 'СУ', 'せ': 'СЭ', 'そ': 'СО',
+    'た': 'ТА', 'ち': 'ТИ', 'つ': 'ЦУ', 'て': 'ТЭ', 'と': 'ТО',
+    'な': 'НА', 'に': 'НИ', 'ぬ': 'НУ', 'ね': 'НЭ', 'の': 'НО',
+    'は': 'ХА', 'ひ': 'ХИ', 'ふ': 'ФУ', 'へ': 'ХЭ', 'ほ': 'ХО',
+    'ま': 'МА', 'み': 'МИ', 'む': 'МУ', 'め': 'МЭ', 'も': 'МО',
+    'や': 'Я', 'ゆ': 'Ю', 'よ': 'Ё',
+    'ら': 'РА', 'り': 'РИ', 'る': 'РУ', 'れ': 'РЭ', 'ろ': 'РО',
+    'わ': 'ВА', 'を': 'ВО', 'ん': 'Н'
 };
 
 // Фоновые картинки
@@ -82,11 +91,12 @@ const BACKGROUNDS = [
 
 // Состояние игры
 let gameState = {
+    level: 'easy',
+    count: 15,
     totalTime: 0,
     roundStartTime: 0,
-    level: 'easy',
-    symbols: [],
     currentTarget: '',
+    currentTargetRu: '',
     score: 0,
     lives: 3,
     maxLives: 3,
@@ -107,6 +117,7 @@ const targetSymbol = document.getElementById('targetSymbol');
 const scoreEl = document.getElementById('score');
 const livesEl = document.getElementById('lives');
 const targetCountEl = document.getElementById('targetCount');
+const foundCountDisplay = document.getElementById('foundCountDisplay');
 const victoryModal = document.getElementById('huntVictory');
 const gameOverModal = document.getElementById('huntGameOver');
 const finalScoreEl = document.getElementById('finalScore');
@@ -116,14 +127,23 @@ const newRoundBtn = document.getElementById('newRoundBtn');
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 function initGame() {
-    // Получаем уровень из URL
+    // Получаем параметры из URL
     const params = new URLSearchParams(window.location.search);
     const level = params.get('level') || 'easy';
+    const count = parseInt(params.get('count')) || 15;
+
     gameState.level = level;
-    const config = LEVELS[level];
-    gameState.maxLives = config.lives;
-    gameState.lives = config.lives;
-    gameState.targetCount = config.count;
+    gameState.count = count;
+    gameState.targetCount = count;
+
+    // Устанавливаем жизни в зависимости от уровня
+    if (level === 'easy') {
+        gameState.maxLives = 5;
+    } else { // medium
+        gameState.maxLives = 3;
+    }
+    gameState.lives = gameState.maxLives;
+
     gameState.totalTime = 0;
     gameState.roundStartTime = Date.now();
     gameState.foundCount = 0;
@@ -144,7 +164,7 @@ function initGame() {
     // Скрываем модалки
     victoryModal.classList.remove('show');
     gameOverModal.classList.remove('show');
-    console.log('🚀 Игра инициализирована!');
+    console.log('🚀 Игра инициализирована! Уровень:', level, 'Количество:', count);
     logState();
 }
 
@@ -155,41 +175,42 @@ function startRound() {
     gameState.symbolsOnField = [];
     gameState.isProcessing = false;
     gameState.roundStartTime = Date.now();
+
     // Меняем фон при каждом новом раунде
     const randomBg = BACKGROUNDS[Math.floor(Math.random() * BACKGROUNDS.length)];
     bgImage.src = randomBg;
 
     // Выбираем целевой символ
     const available = HIRAGANA.filter(s => !gameState.symbolsOnField.includes(s));
-    gameState.currentTarget = available[Math.floor(Math.random() * available.length)];
+    const selectedSymbol = available[Math.floor(Math.random() * available.length)];
+    gameState.currentTarget = selectedSymbol;
+    gameState.currentTargetRu = HIRAGANA_RU[selectedSymbol] || selectedSymbol;
+
+    // Отображаем задание: для лёгкого – символ, для среднего – русское название
+    if (gameState.level === 'easy') {
+        targetSymbol.textContent = gameState.currentTarget;
+    } else {
+        targetSymbol.textContent = gameState.currentTargetRu;
+    }
 
     // Количество символов на поле
-    const totalSymbols = 12 + Math.floor(Math.random() * 6); // 12-18 символов
+    const totalSymbols = 12 + Math.floor(Math.random() * 6); // 12-18
 
     // Генерируем символы для поля
     const symbols = [];
-    // Добавляем правильный символ
     symbols.push(gameState.currentTarget);
-
-    // Добавляем случайные символы (не повторяющиеся)
     const otherSymbols = HIRAGANA.filter(s => s !== gameState.currentTarget);
     while (symbols.length < totalSymbols) {
         const rand = otherSymbols[Math.floor(Math.random() * otherSymbols.length)];
         if (!symbols.includes(rand)) {
             symbols.push(rand);
         }
-        // Если закончились символы — выходим
         if (symbols.length >= HIRAGANA.length) break;
     }
-
-    // Перемешиваем
     shuffleArray(symbols);
 
     // Размещаем на поле
     placeSymbols(symbols);
-
-    // Обновляем задание
-    targetSymbol.textContent = gameState.currentTarget;
 
     // Старт таймера
     if (gameState.timerInterval) {
@@ -204,21 +225,15 @@ function startRound() {
 
 // ===== РАЗМЕЩЕНИЕ СИМВОЛОВ (РАВНОМЕРНО ПО ВСЕЙ КАРТИНКЕ) =====
 function placeSymbols(symbols) {
-    // Очищаем старые
     document.querySelectorAll('.hunt-symbol').forEach(el => el.remove());
 
-    const padding = 8; // отступ от края в %
+    const padding = 8;
     const symbolSize = window.innerWidth < 500 ? 38 : 48;
-
-    // Сетка для равномерного распределения
     const cols = Math.ceil(Math.sqrt(symbols.length * 1.5));
     const rows = Math.ceil(symbols.length / cols);
-    
-    // Смешиваем порядок, чтобы символы не шли строго по сетке
     const shuffledSymbols = [...symbols];
     shuffleArray(shuffledSymbols);
 
-    // Добавляем небольшой случайный сдвиг
     shuffledSymbols.forEach((char, index) => {
         const el = document.createElement('div');
         el.className = 'hunt-symbol';
@@ -226,15 +241,10 @@ function placeSymbols(symbols) {
         el.dataset.char = char;
         el.dataset.index = index;
 
-        // Равномерное распределение по сетке
         const col = index % cols;
         const row = Math.floor(index / cols);
-        
-        // Базовые координаты в процентах
         let x = (col / (cols - 1)) * (100 - padding * 2) + padding;
         let y = (row / (rows - 1)) * (100 - padding * 2) + padding;
-
-        // Добавляем случайное смещение ±6%, чтобы не было строго по сетке
         const offsetX = (Math.random() - 0.5) * 12;
         const offsetY = (Math.random() - 0.5) * 12;
         x = Math.max(padding, Math.min(100 - padding, x + offsetX));
@@ -247,7 +257,6 @@ function placeSymbols(symbols) {
         el.style.height = symbolSize + 'px';
         el.style.fontSize = (symbolSize * 0.7) + 'px';
 
-        // Цвет
         const hue = Math.random() * 360;
         el.style.color = `hsl(${hue}, 85%, 75%)`;
         el.style.background = `rgba(0,0,0,0.2)`;
@@ -271,35 +280,27 @@ function handleSymbolClick(el) {
     if (el.classList.contains('found')) return;
 
     const char = el.dataset.char;
+    const isCorrect = (gameState.level === 'easy')
+        ? (char === gameState.currentTarget)
+        : (HIRAGANA_RU[char] === gameState.currentTargetRu);
 
-    if (char === gameState.currentTarget) {
-        // ПРАВИЛЬНО!
+    if (isCorrect) {
         el.classList.add('found');
         gameState.foundCount++;
         logState();
-    
-        // === НОВАЯ СИСТЕМА ОЧКОВ ===
-        let points = 1; // база
-        
-        // Бонус за скорость (чем быстрее, тем больше)
-        if (gameState.elapsedTime < 3) {
-            points += 5; // супер-быстро
-        } else if (gameState.elapsedTime < 6) {
-            points += 3; // быстро
-        } else if (gameState.elapsedTime < 10) {
-            points += 1; // нормально
-        }
-        
-        // Бонус за сложность
-        if (gameState.level === 'hard') points += 2;
-        else if (gameState.level === 'medium') points += 1;
-        
-        gameState.score += points;
 
+        // Начисление очков (как было)
+        let points = 1;
+        if (gameState.elapsedTime < 3) points += 5;
+        else if (gameState.elapsedTime < 6) points += 3;
+        else if (gameState.elapsedTime < 10) points += 1;
+        if (gameState.level === 'medium') points += 1; // бонус за сложность
+
+        gameState.score += points;
         updateUI();
 
         if (gameState.foundCount >= gameState.targetCount) {
-            console.log('🎉 ПОБЕДА! foundCount:', gameState.foundCount, 'targetCount:', gameState.targetCount);
+            console.log('🎉 ПОБЕДА!');
             gameState.isPlaying = false;
             clearInterval(gameState.timerInterval);
             setTimeout(showVictory, 400);
@@ -312,7 +313,6 @@ function handleSymbolClick(el) {
         }, 500);
 
     } else {
-        // НЕПРАВИЛЬНО!
         el.classList.add('wrong');
         gameState.lives--;
         updateUI();
@@ -334,7 +334,7 @@ function updateTimer() {
     const now = Date.now();
     const roundElapsed = Math.floor((now - gameState.roundStartTime) / 1000);
     gameState.totalTime = Math.floor((now - gameState.startTime) / 1000);
-    // Можно показать общее время где-то
+    // Можно использовать для отображения времени, если нужно
 }
 
 // ===== ОБНОВЛЕНИЕ UI =====
@@ -342,11 +342,10 @@ function updateUI() {
     scoreEl.textContent = gameState.score;
     livesEl.textContent = gameState.lives;
     targetCountEl.textContent = gameState.targetCount;
-    // foundCountDisplay – удаляем или комментируем, если нет такого элемента
-    // foundCountDisplay.textContent = gameState.foundCount;
+    foundCountDisplay.textContent = gameState.foundCount;
 }
 
-// ===== ПОБЕДА =====
+// ===== ПОБЕДА (ИСПРАВЛЕНА) =====
 function showVictory() {
     console.log('🏆 Показываем экран победы!');
     finalScoreEl.textContent = gameState.score;
@@ -355,31 +354,23 @@ function showVictory() {
 
     // ===== НАЧИСЛЕНИЕ ЗВЁЗД =====
     let starCount = 0;
-    switch (gameState.level) {
-        case 'easy': starCount = 1; break;
-        case 'medium': starCount = 2; break;
-        case 'hard': starCount = 3; break;
+    switch (gameState.targetCount) {
+        case 15: starCount = 1; break;
+        case 30: starCount = 2; break;
+        case 50: starCount = 3; break;
     }
-    if (starCount > 0 && typeof window.addStars === 'function') {
-        window.addStars(starCount);
-        // Отображаем в модалке
-        let starsEl = document.getElementById('victoryStars');
-        if (!starsEl) {
-            // Если элемента нет, создаём его рядом с finalTimeEl
-            const container = finalTimeEl.parentNode;
-            starsEl = document.createElement('p');
-            starsEl.id = 'victoryStars';
-            starsEl.style.fontSize = '1.2rem';
-            starsEl.style.margin = '10px 0';
-            starsEl.style.color = 'var(--border-neon)';
-            container.appendChild(starsEl);
+    if (starCount > 0) {
+        if (typeof window.addStars === 'function') {
+            window.addStars(starCount);
         }
-        starsEl.textContent = '⭐+' + starCount;
+        const starsEl = document.getElementById('victoryStars');
+        if (starsEl) {
+            starsEl.textContent = '⭐ +' + starCount;
+        }
     }
 
     victoryModal.classList.add('show');
 }
-
 function closeVictory() {
     victoryModal.classList.remove('show');
     initGame();
@@ -413,14 +404,13 @@ function shuffleArray(arr) {
 // ===== ЗАПУСК =====
 document.addEventListener('DOMContentLoaded', initGame);
 
-// Перезапуск при изменении размера окна (для адаптации)
+// Адаптация к изменению размера окна
 let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        // Переразмещаем символы
         if (gameState.isPlaying) {
-            // Можно обновить размеры, но не трогаем позиции
+            // можно обновить размеры, но не обязательно
         }
     }, 300);
 });

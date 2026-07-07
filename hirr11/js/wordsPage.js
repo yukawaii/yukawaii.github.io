@@ -159,10 +159,8 @@ function showRewardedAd(level) {
     const bridge = window.vkBridge;
 
     if (!bridge) {
-        // Если нет VK Bridge – разблокируем бесплатно (для тестов)
-        setLevelUnlocked(level);
-        updateButtonState(level, true);
-        showSuccessModal();
+        // Если нет VK Bridge –
+        showErrorModal('Реклама недоступна без интернета. Проверьте соединение.');
         return;
     }
 
