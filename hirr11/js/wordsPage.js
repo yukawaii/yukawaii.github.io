@@ -1,9 +1,8 @@
 // js/wordsPage.js
 // Управление страницей выбора уровней (words.html)
-// Исправлено: закрытие модалки загрузки при любом исходе
+// Таймаут убран – модалка загрузки скрывается при любом ответе от рекламы
 
 let currentUnlockLevel = null;
-let adTimeoutId = null;
 let adResultHandler = null;
 let adResolved = false;
 
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('unlockConfirm').addEventListener('click', function() {
         hideModal('unlockModal');
         showModal('loadingModal');
-        showRewardedAdWithTimeout(currentUnlockLevel);
+        showRewardedAd(currentUnlockLevel);
     });
 
     document.getElementById('unlockCancel').addEventListener('click', function() {
@@ -81,7 +80,7 @@ function showUnlockModal(level) {
 
 function showSuccessModal() {
     hideModal('loadingModal');
-    hideModal('errorModal');
+    hideModal('errorModal'); // на всякий случай
     showModal('successModal');
 }
 
@@ -143,12 +142,8 @@ function updateButtonState(level, unlocked) {
     }
 }
 
-// ===== ОЧИСТКА РЕСУРСОВ =====
+// ===== ОЧИСТКА ПОДПИСКИ =====
 function clearAdResources() {
-    if (adTimeoutId) {
-        clearTimeout(adTimeoutId);
-        adTimeoutId = null;
-    }
     if (adResultHandler) {
         const bridge = window.vkBridge;
         if (bridge && bridge.unsubscribe) {
@@ -159,11 +154,12 @@ function clearAdResources() {
     adResolved = false;
 }
 
-// ===== ПОКАЗ РЕКЛАМЫ =====
-function showRewardedAdWithTimeout(level) {
+// ===== ПОКАЗ РЕКЛАМЫ (БЕЗ ТАЙМАУТА) =====
+function showRewardedAd(level) {
     const bridge = window.vkBridge;
 
     if (!bridge) {
+        // Если нет VK Bridge – разблокируем бесплатно (для тестов)
         setLevelUnlocked(level);
         updateButtonState(level, true);
         showSuccessModal();
@@ -173,21 +169,18 @@ function showRewardedAdWithTimeout(level) {
     clearAdResources();
     adResolved = false;
 
-    // Подписка на событие результата
+    // Подписка на событие результата (награда)
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
             adResolved = true;
             clearAdResources();
             console.log('🎁 Получен результат рекламы:', e.detail.data);
-            // Закрываем загрузку в любом случае
-            hideModal('loadingModal');
             if (e.detail.data.result === true) {
-                // Награда получена – разблокируем
                 setLevelUnlocked(level);
                 updateButtonState(level, true);
                 showSuccessModal();
             } else {
-                // Реклама не завершена (закрыта крестиком)
+                // Закрыто крестиком или не досмотрено
                 showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
             }
         }
@@ -195,35 +188,20 @@ function showRewardedAdWithTimeout(level) {
     bridge.subscribe(handler);
     adResultHandler = handler;
 
-    // Таймаут на случай, если реклама вообще не запустится (15 сек)
-    adTimeoutId = setTimeout(() => {
-        if (!adResolved) {
-            adResolved = true;
-            console.warn('⏰ Таймаут загрузки рекламы (15 сек)');
-            hideModal('loadingModal');
-            showErrorModal('Ой, рекламы нет. Попробуйте позже.');
-            clearAdResources();
-        }
-    }, 15000);
-
     // Запуск рекламы
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
         })
         .then((data) => {
-            // Реклама успешно запущена – отменяем таймаут
-            clearTimeout(adTimeoutId);
-            adTimeoutId = null;
             console.log('📺 Реклама показана, ожидаем результат...', data);
         })
         .catch((err) => {
             console.error('❌ Ошибка при запуске рекламы:', err);
             if (!adResolved) {
                 adResolved = true;
-                hideModal('loadingModal');
-                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
                 clearAdResources();
+                showErrorModal('Ой, рекламы нет. Попробуйте позже.');
             }
         });
 }
