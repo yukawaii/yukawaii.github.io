@@ -268,13 +268,7 @@ playMusic(trackName, volume = 0.15) {
         }
     }
     
-    // Пауза всего аудио (для сворачивания)
-    pauseAll() {
-        if (this.audioContext && this.audioContext.state === 'running') {
-            this.audioContext.suspend();
-        }
-    }
-    
+
  
     
     // Возобновление контекста после жеста пользователя
