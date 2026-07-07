@@ -2,7 +2,7 @@
 // Управление замками для уровней охоты (30 и 50 мор)
 // Использует VK Storage (и localStorage как fallback) для синхронизации
 
-let currentUnlockData = null; // { level: 'easy', count: 30 }
+let currentUnlockData = null;
 let adTimeoutId = null;
 let adResultHandler = null;
 let adResolved = false;
@@ -25,7 +25,6 @@ function isHuntLevelUnlocked(level, count) {
                 resolve(value === 'true');
             })
             .catch(() => {
-                // Если ошибка – пробуем localStorage
                 const val = localStorage.getItem(key);
                 resolve(val === 'true');
             });
@@ -37,7 +36,6 @@ function setHuntLevelUnlocked(level, count) {
     const key = `hunt_unlock_${level}_${count}`;
     const bridge = window.vkBridge;
 
-    // Всегда сохраняем в localStorage
     localStorage.setItem(key, 'true');
 
     if (bridge) {
@@ -58,19 +56,14 @@ function updateHuntButtonState(level, count, unlocked) {
         btn.classList.remove('locked');
         btn.classList.add('unlocked');
         btn.innerHTML = `${count} <small>мор</small>`;
-        btn.disabled = false;
+        btn.dataset.unlocked = 'true';
         btn.href = `hunt-game.html?level=${level}&count=${count}`;
     } else {
         btn.classList.add('locked');
         btn.classList.remove('unlocked');
         btn.innerHTML = `🔒 ${count} <small>мор</small>`;
-        btn.disabled = false; // чтобы клик работал для показа модалки
-        btn.removeAttribute('href'); // убираем переход
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            currentUnlockData = { level, count };
-            showUnlockModal(level, count);
-        });
+        btn.dataset.unlocked = 'false';
+        btn.removeAttribute('href');
     }
 }
 
@@ -87,7 +80,7 @@ async function loadAllHuntStatuses() {
     }
 }
 
-// ===== МОДАЛКИ (добавляем их в HTML) =====
+// ===== МОДАЛКИ =====
 function showUnlockModal(level, count) {
     const modal = document.getElementById('huntUnlockModal');
     if (modal) modal.classList.add('show');
@@ -144,15 +137,13 @@ function showRewardedAdForHunt(level, count) {
     const bridge = window.vkBridge;
 
     if (!bridge) {
-        // Если нет VK Bridge – разблокируем бесплатно (для тестов)
-       showErrorModal('Реклама недоступна без интернета. Проверьте соединение.');
+        showErrorModal('Реклама недоступна без подключения к интернету. Проверьте соединение.');
         return;
     }
 
     clearAdResources();
     adResolved = false;
 
-    // Подписка на событие результата
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
             adResolved = true;
@@ -170,7 +161,6 @@ function showRewardedAdForHunt(level, count) {
     bridge.subscribe(handler);
     adResultHandler = handler;
 
-    // Запуск рекламы
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
@@ -188,23 +178,41 @@ function showRewardedAdForHunt(level, count) {
         });
 }
 
-// ===== ОБРАБОТЧИК КНОПКИ "ОТКРЫТЬ" =====
-function handleUnlockConfirm() {
-    if (!currentUnlockData) return;
-    hideModal('huntUnlockModal');
-    showLoadingModal();
-    showRewardedAdForHunt(currentUnlockData.level, currentUnlockData.count);
+// ===== ОБРАБОТЧИК КЛИКА НА ЗАБЛОКИРОВАННУЮ КНОПКУ (делегирование) =====
+function handleHuntButtonClick(e) {
+    const btn = e.target.closest('.hunt-btn');
+    if (!btn) return;
+    if (btn.dataset.unlocked === 'true') return; // разблокировано – не обрабатываем
+
+    const level = btn.dataset.level;
+    const count = parseInt(btn.dataset.count);
+    if (!level || !count) return;
+
+    e.preventDefault();
+    currentUnlockData = { level, count };
+    showUnlockModal(level, count);
 }
 
-// ===== ЗАКРЫТИЕ МОДАЛОК =====
+// ===== ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ =====
 document.addEventListener('DOMContentLoaded', function() {
     // Загружаем статусы
     loadAllHuntStatuses();
 
-    // Обработчики для модалок
+    // Навешиваем делегирование на контейнер с кнопками
+    const menuWrapper = document.querySelector('.hunt-menu-wrapper');
+    if (menuWrapper) {
+        menuWrapper.addEventListener('click', handleHuntButtonClick);
+    }
+
+    // Обработчики модалок
     const confirmBtn = document.getElementById('huntUnlockConfirm');
     if (confirmBtn) {
-        confirmBtn.addEventListener('click', handleUnlockConfirm);
+        confirmBtn.addEventListener('click', function() {
+            if (!currentUnlockData) return;
+            hideModal('huntUnlockModal');
+            showLoadingModal();
+            showRewardedAdForHunt(currentUnlockData.level, currentUnlockData.count);
+        });
     }
 
     const cancelBtn = document.getElementById('huntUnlockCancel');
@@ -247,3 +255,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ===== ПЕРЕЗАГРУЗКА СТАТУСОВ ПОСЛЕ ИНИЦИАЛИЗАЦИИ VK =====
+window.onVKReady = function() {
+    console.log('🔄 VK готов, перезагружаем статусы разблокировки охоты');
+    loadAllHuntStatuses();
+};

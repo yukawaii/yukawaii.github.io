@@ -55,7 +55,6 @@ if (typeof window.vkBridgeInitialized === 'undefined') {
 
 // ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (с проверкой на повторный вызов) =====
 function initVKBridge() {
-    // Если уже инициализирован – просто выходим
     if (window.vkBridgeInitialized) {
         console.log('ℹ️ VK Bridge уже инициализирован, пропускаем');
         return;
@@ -63,16 +62,16 @@ function initVKBridge() {
 
     console.log('🔌 Инициализация VK Bridge...');
 
-    if (typeof vkBridge === 'undefined') {
+    // Проверяем наличие VK Bridge в глобальной области или в window
+    let bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
+    if (!bridge) {
         console.warn('⚠️ VK Bridge не загружен');
         return;
     }
 
-    // Сохраняем в window для доступа из других скриптов
-    window.vkBridge = vkBridge;
+    window.vkBridge = bridge;
 
-    // Подписываемся на события (только один раз)
-    vkBridge.subscribe((e) => {
+    bridge.subscribe((e) => {
         if (e.detail.type === 'VKWebAppViewHide') {
             console.log('📱 Приложение скрыто');
         }
@@ -81,11 +80,10 @@ function initVKBridge() {
         }
     });
 
-    // Отправляем команду инициализации
-    vkBridge.send('VKWebAppInit')
+    bridge.send('VKWebAppInit')
         .then(() => {
             console.log('✅ VK Bridge инициализирован');
-            window.vkBridgeInitialized = true; // помечаем, что инициализация выполнена
+            window.vkBridgeInitialized = true;
             showBannerAd();
         })
         .catch((error) => {
