@@ -479,7 +479,7 @@
 #howToPlayModal > div {
     animation: slideUp 0.3s ease;
        margin-bottom: 50px !important;
-         
+          color: #c4c2c2; 
     -webkit-overflow-scrolling: touch !important;
    }
 @keyframes fadeIn {
@@ -1745,10 +1745,23 @@ body.theme-pastel::before {
     <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:400px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease;">
         <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
         <h2 style="color:#fff; font-size:1.5rem; margin-bottom:8px;">Ежедневный бонус</h2>
-        <p style="color:#8a8fa8; font-size:0.95rem; margin-bottom:20px; line-height:1.5;">Выберите способ получения алмазов</p>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-            <button id="dailyBonus5" style="background:linear-gradient(135deg,#4caf50,#2e7d32); color:#fff; border:none; padding:14px; border-radius:50px; font-size:1.1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(76,175,80,0.4);">💎 +5 (бонус за вход)</button>
-            <button id="dailyBonus15" style="background:linear-gradient(135deg,#e94560,#c23152); color:#fff; border:none; padding:14px; border-radius:50px; font-size:1.1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(233,69,96,0.4);">📺 +15 (смотреть рекламу)</button>
+        <p style="color:#8a8fa8; font-size:0.95rem; margin-bottom:20px; line-height:1.5;">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
+ <!-- Круглые кнопки -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;">
+            <div style="display:flex; gap:30px; justify-content:center;">
+                <button id="dailyBonus5" style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#4caf50,#2e7d32); border:none; cursor:pointer; box-shadow:0 4px 15px rgba(76,175,80,0.4); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; font-weight:bold;">
+                    <span style="font-size:2.5rem;">🎁</span>
+                    <span style="font-size:0.9rem;">+5</span>
+                </button>
+                <button id="dailyBonus15" style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#81d4fa,#4fc3f7); border:none; cursor:pointer; box-shadow:0 4px 15px rgba(79,195,247,0.4); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#1a1a2e; font-size:1.5rem; font-weight:bold;">
+                    <span style="font-size:2.5rem;">📺</span>
+                    <span style="font-size:0.9rem;">+15</span>
+                </button>
+            </div>           
+        </div>
+        <button id="dailyBonusCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:50px; font-size:1rem; cursor:pointer; width:100%;">❌ Отмена</button>
+    </div>
+</div>
             <button id="dailyBonusCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:50px; font-size:1rem; cursor:pointer;">❌ Отмена</button>
         </div>
     </div>
