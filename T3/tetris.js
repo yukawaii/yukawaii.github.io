@@ -1136,9 +1136,18 @@ function resumeGame() {
     }
     gameState.paused = false;
     lastTime = performance.now();
+    
+    // Возобновляем аудио контексты
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.resumeAll(); // возобновляет и музыку, и звуки
+        gameAudio.resumeAll();
+        
+        // Если музыка всё ещё не играет — принудительно перезапускаем
+        if (!gameAudio.musicStarted && currentMusicTrack) {
+            console.log('🔄 Музыка не возобновилась, перезапускаем:', currentMusicTrack);
+            gameAudio.playMusic(currentMusicTrack, 0.15);
+        }
     }
+    
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
     }
