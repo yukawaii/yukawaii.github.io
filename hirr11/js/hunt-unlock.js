@@ -257,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===== ПЕРЕЗАГРУЗКА СТАТУСОВ ПОСЛЕ ИНИЦИАЛИЗАЦИИ VK =====
-window.onVKReady = function() {
-    console.log('🔄 VK готов, перезагружаем статусы разблокировки охоты');
+if (window.vkBridgeInitialized) {
     loadAllHuntStatuses();
-};
+}

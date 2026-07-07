@@ -55,7 +55,10 @@ if (typeof window.vkBridgeInitialized === 'undefined') {
 }
 
 // ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (с проверкой на повторный вызов) =====
-// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ (с проверкой на повторный вызов) =====
+// ===== VK BRIDGE ИНИЦИАЛИЗАЦИЯ =====
+let vkRetryCount = 0;
+const MAX_VK_RETRIES = 5;
+
 function initVKBridge() {
     if (window.vkBridgeInitialized) {
         console.log('ℹ️ VK Bridge уже инициализирован, пропускаем');
@@ -64,10 +67,17 @@ function initVKBridge() {
 
     console.log('🔌 Инициализация VK Bridge...');
 
-    // Проверяем наличие VK Bridge в глобальной области или в window
     let bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
     if (!bridge) {
-        console.warn('⚠️ VK Bridge не загружен');
+        vkRetryCount++;
+        if (vkRetryCount <= MAX_VK_RETRIES) {
+            console.warn(`⚠️ VK Bridge не загружен, попытка ${vkRetryCount} из ${MAX_VK_RETRIES}...`);
+            setTimeout(() => {
+                initVKBridge();
+            }, 400);
+        } else {
+            console.error('❌ VK Bridge не загружен после нескольких попыток');
+        }
         return;
     }
 
@@ -88,7 +98,6 @@ function initVKBridge() {
             window.vkBridgeInitialized = true;
             showBannerAd();
 
-            // Если есть глобальный колбэк – вызываем его (для перезагрузки статусов в hunt-unlock.js)
             if (typeof window.onVKReady === 'function') {
                 window.onVKReady();
             }
