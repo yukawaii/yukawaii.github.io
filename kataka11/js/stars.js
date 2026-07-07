@@ -202,7 +202,12 @@ function showLeaderboard() {
 
 // ===== ЗАПУСК ИНИЦИАЛИЗАЦИИ =====
 initVKSDK();
-
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        console.log('📄 Страница восстановлена из кеша, обновляем звёзды');
+        loadStars();
+    }
+});
 // Экспортируем функции для использования в других скриптах
 window.addStars = addStars;
 window.showLeaderboard = showLeaderboard;
