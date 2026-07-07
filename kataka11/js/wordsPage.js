@@ -159,15 +159,14 @@ function showRewardedAd(level) {
     const bridge = window.vkBridge;
 
     if (!bridge) {
-        // Если нет VK Bridge – разблокируем бесплатно (для тестов)
-           showErrorModal('Реклама недоступна без интернета. Проверьте соединение.');
+        showErrorModal('Реклама недоступна без подключения к интернету. Проверьте соединение.');
         return;
     }
 
     clearAdResources();
     adResolved = false;
 
-    // Подписка на событие результата (награда)
+    // Подписываемся на событие результата ДО вызова рекламы
     const handler = (e) => {
         if (e.detail.type === 'VKWebAppNativeAdResult' && !adResolved) {
             adResolved = true;
@@ -176,9 +175,10 @@ function showRewardedAd(level) {
             if (e.detail.data.result === true) {
                 setLevelUnlocked(level);
                 updateButtonState(level, true);
+                hideLoadingModal();
                 showSuccessModal();
             } else {
-                // Закрыто крестиком или не досмотрено
+                hideLoadingModal();
                 showErrorModal('Реклама не была завершена. Попробуйте ещё раз.');
             }
         }
@@ -186,7 +186,7 @@ function showRewardedAd(level) {
     bridge.subscribe(handler);
     adResultHandler = handler;
 
-    // Запуск рекламы
+    // Запускаем рекламу
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
         .then(() => {
             return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
@@ -199,6 +199,7 @@ function showRewardedAd(level) {
             if (!adResolved) {
                 adResolved = true;
                 clearAdResources();
+                hideLoadingModal();
                 showErrorModal('Ой, рекламы нет. Попробуйте позже.');
             }
         });
