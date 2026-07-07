@@ -1735,28 +1735,12 @@ body.theme-pastel::before {
 
 <script>
 
-
-  // Загружаем VK Bridge асинхронно
-  (function() {
-    var script = document.createElement('script');
-    script.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
-    script.async = true;
-    script.onload = function() {
-      // Когда скрипт загрузился – инициализируем мост
-      if (window.vkBridge && window.vkBridge.send) {
-        window.vkBridge.send('VKWebAppInit')
-          .then(function(data) { console.log('✅ VK инициализирован', data); })
-          .catch(function(e) { console.warn('VK init error', e); });
-      }
-    };
-    script.onerror = function() {
-      // Если не загрузился – ничего не делаем, sudoku.js создаст свою заглушку
-      console.warn('⚠️ VK Bridge не загружен, игра будет работать без соц. функций');
-    };
-    document.head.appendChild(script);
-  })();
-
-
+// Инициализация VK Bridge, если он доступен
+if (typeof vkBridge !== 'undefined' && vkBridge.send) {
+    vkBridge.send('VKWebAppInit').catch(function(e) {
+        console.warn('VK init error:', e);
+    });
+}
 
     // Отладка размеров для CSS
     console.log('Ширина:', window.innerWidth);
