@@ -10,7 +10,7 @@ let memoryAdResolved = false;
 // ===== ПРОВЕРКА СТАТУСА РАЗБЛОКИРОВКИ =====
 function isMemoryLevelUnlocked(level) {
     // Первые 3 уровня всегда разблокированы
-    if (level <= 3) return Promise.resolve(true);
+       if (level <= 3 || (level >= 10 && level <= 12)) return Promise.resolve(true);
 
     return new Promise((resolve) => {
         const key = `memory_unlock_${level}`;
@@ -100,7 +100,7 @@ function updateMemoryButtonState(level, unlocked) {
 // ===== ЗАГРУЗКА СТАТУСОВ =====
 async function loadAllMemoryStatuses() {
     console.log('🔄 Загрузка статусов разблокировки памяти...');
-    for (let level = 1; level <= 9; level++) {
+    for (let level = 1; level <= 18; level++) {
         const unlocked = await isMemoryLevelUnlocked(level);
         updateMemoryButtonState(level, unlocked);
     }
