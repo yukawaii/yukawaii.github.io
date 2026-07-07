@@ -188,12 +188,14 @@ function showRewardedAd(level) {
 
     // Запускаем рекламу
     bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(() => {
-            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-        })
-        .then((data) => {
-            console.log('📺 Реклама показана, ожидаем результат...', data);
-        })
+    .then(() => {
+        return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+    })
+    .then((data) => {
+        console.log('📺 Реклама показана, ожидаем результат...', data);
+        // Скрываем модалку загрузки, как только реклама запустилась
+        hideLoadingModal();
+    })
         .catch((err) => {
             console.error('❌ Ошибка при запуске рекламы:', err);
             if (!adResolved) {

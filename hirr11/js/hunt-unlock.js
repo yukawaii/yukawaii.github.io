@@ -166,14 +166,15 @@ function showRewardedAdForHunt(level, count) {
     adResultHandler = handler;
 
     // Запускаем рекламу
-    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(() => {
-            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-        })
-        .then((data) => {
-            console.log('📺 Реклама показана, ожидаем результат...', data);
-            // Не скрываем загрузочную модалку здесь – ждём события
-        })
+   bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+    .then(() => {
+        return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+    })
+    .then((data) => {
+        console.log('📺 Реклама показана, ожидаем результат...', data);
+        // Скрываем модалку загрузки, как только реклама запустилась
+        hideLoadingModal();
+    })
         .catch((err) => {
             console.error('❌ Ошибка при запуске рекламы:', err);
             if (!adResolved) {
