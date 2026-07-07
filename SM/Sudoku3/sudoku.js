@@ -13,6 +13,13 @@ const vkBridge = window.vkBridge || {
 // ============================================================
 // 2. Управление рекламой
 // ============================================================
+// ============================================================
+// Глобальные переменные для VK и алмазов
+// ============================================================
+let vkInitialized = false;
+let vkUserId = null;
+let vkUserToken = null;
+
 class AdManager {
     constructor() {
         this.bannerShown = false;
@@ -483,6 +490,13 @@ showConfirmDialog() {
                this.checkedCells = {};
         this.cellsToRemove = 0;
 
+        this.currentDiamonds = 0;          // общее количество алмазов
+this.lastBonusDate = null;         // дата последнего получения бонуса (строка)
+this.diamondsAwardedForCurrentGame = false; // флаг, чтобы не начислять дважды за одну победу
+this.vkInitialized = false;
+this.vkUserId = null;
+this.vkUserToken = null;
+
         // DOM элементы
         this.menuScreen = document.getElementById('menuScreen');
         this.gameScreen = document.getElementById('gameScreen');
@@ -502,12 +516,28 @@ showConfirmDialog() {
         document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
         document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
 
+// Кнопка "Таблица лидеров"
+// В конструкторе SudokuGame
+document.getElementById('btnLeaderboard').addEventListener('click', () => {
+    this.sound.click();
+    this.showLeaderboard();
+});
+
+document.getElementById('btnDailyBonus').addEventListener('click', () => {
+    this.sound.click();
+    this.showDailyBonusModal();
+});
+// Открыть модалку с темами
+document.getElementById('btnThemeSun').addEventListener('click', function() {
+    document.getElementById('themeModal').style.display = 'flex';
+});
+
         
         // Кнопка "Как играть?"
-        document.getElementById('btnHowToPlay').addEventListener('click', () => {
-            this.sound.click();
-            document.getElementById('howToPlayModal').style.display = 'flex';
-        });
+     document.getElementById('btnHowToPlay').addEventListener('click', () => {
+    this.sound.click();
+    document.getElementById('howToPlayModal').style.display = 'flex';
+});
         
         // Закрытие модального окна
         document.getElementById('closeHowToPlay').addEventListener('click', () => {
@@ -538,7 +568,9 @@ showConfirmDialog() {
 
         // Показать меню
         this.showMenu();
+        this.updateDiamondUI(); // чтобы сразу отобразить алмазы
         this.initAdBanner();
+        this.initVK();
     }
 
     // ============================================================
@@ -579,6 +611,224 @@ setupVKBridge() {
     }
 
     // ============================================================
+// Инициализация VK и получение данных пользователя
+// ============================================================
+initVK() {
+    if (typeof vkBridge === 'undefined') {
+        console.warn('VK Bridge не найден, работаем в локальном режиме');
+        this.loadDiamondsLocal();
+        this.updateDiamondUI();
+        return;
+    }
+
+    // Проверяем, запущено ли внутри ВК
+    const isVK = window.location !== window.parent.location;
+    if (!isVK) {
+        console.warn('Приложение запущено не внутри ВК, используем localStorage');
+        this.loadDiamondsLocal();
+        this.updateDiamondUI();
+        return;
+    }
+
+    // Запрашиваем токен для работы с storage и secure API
+    vkBridge.send('VKWebAppGetAuthToken', {
+        app_id: 51399364, // Ваш ID приложения (можно вынести в константу)
+        scope: 'storage,secure'
+    })
+    .then((data) => {
+        if (data && data.access_token) {
+            this.vkUserToken = data.access_token;
+            this.vkInitialized = true;
+            console.log('✅ Токен получен');
+            // Получаем информацию о пользователе
+            return vkBridge.send('VKWebAppGetUserInfo', {});
+        } else {
+            throw new Error('Токен не получен');
+        }
+    })
+    .then((userInfo) => {
+        if (userInfo && userInfo.id) {
+            this.vkUserId = userInfo.id;
+            console.log('👤 Пользователь VK:', this.vkUserId);
+            // Загружаем алмазы из VK Storage
+            this.loadDiamonds();
+        } else {
+            throw new Error('Не удалось получить ID пользователя');
+        }
+    })
+    .catch((err) => {
+        console.warn('Ошибка инициализации VK:', err);
+        // Работаем с localStorage как fallback
+        this.loadDiamondsLocal();
+        this.updateDiamondUI();
+    });
+}
+// ============================================================
+// Загрузка алмазов из VK Storage
+// ============================================================
+loadDiamonds() {
+    if (!this.vkUserId || !this.vkInitialized) {
+        this.loadDiamondsLocal();
+        return;
+    }
+
+    vkBridge.send('VKWebAppStorageGet', {
+        keys: ['diamonds', 'bonusDate']
+    })
+    .then((data) => {
+        if (data && data.keys) {
+            data.keys.forEach(item => {
+                if (item.key === 'diamonds') {
+                    this.currentDiamonds = parseInt(item.value) || 0;
+                }
+                if (item.key === 'bonusDate') {
+                    this.lastBonusDate = item.value || null;
+                }
+            });
+        }
+        this.updateDiamondUI();
+        // После загрузки синхронизируем таблицу лидеров (на случай, если локально было больше)
+        this.syncLeaderboard();
+    })
+    .catch((err) => {
+        console.warn('Ошибка загрузки из VK Storage:', err);
+        this.loadDiamondsLocal();
+    });
+}
+
+// ============================================================
+// Загрузка из localStorage (fallback)
+// ============================================================
+loadDiamondsLocal() {
+    try {
+        const saved = localStorage.getItem('sudoku_diamonds');
+        this.currentDiamonds = saved ? parseInt(saved) : 0;
+        const bonusDate = localStorage.getItem('sudoku_bonusDate');
+        this.lastBonusDate = bonusDate || null;
+    } catch (e) {
+        this.currentDiamonds = 0;
+        this.lastBonusDate = null;
+    }
+    this.updateDiamondUI();
+}
+
+// ============================================================
+// Сохранение алмазов (в VK Storage и localStorage)
+// ============================================================
+saveDiamonds() {
+    // Сохраняем локально
+    try {
+        localStorage.setItem('sudoku_diamonds', String(this.currentDiamonds));
+        if (this.lastBonusDate) {
+            localStorage.setItem('sudoku_bonusDate', this.lastBonusDate);
+        }
+    } catch (e) {}
+
+    // Сохраняем в VK Storage, если доступно
+    if (this.vkUserId && this.vkInitialized) {
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'diamonds',
+            value: String(this.currentDiamonds)
+        })
+        .then(() => {
+            console.log('💎 Алмазы сохранены в VK Storage');
+        })
+        .catch((err) => {
+            console.warn('Ошибка сохранения в VK Storage:', err);
+        });
+
+        if (this.lastBonusDate) {
+            vkBridge.send('VKWebAppStorageSet', {
+                key: 'bonusDate',
+                value: this.lastBonusDate
+            })
+            .catch((err) => console.warn('Ошибка сохранения даты бонуса:', err));
+        }
+    }
+
+    // Обновляем UI и таблицу лидеров
+    this.updateDiamondUI();
+    this.syncLeaderboard();
+}
+
+// ============================================================
+// Обновление счётчика алмазов в меню
+// ============================================================
+updateDiamondUI() {
+    const counter = document.getElementById('diamond-counter');
+    if (counter) {
+        counter.textContent = `💎 ${this.currentDiamonds}`;
+    } else {
+        console.warn('Элемент #diamond-counter не найден');
+    }
+}
+// ============================================================
+// Открытие таблицы лидеров
+// ============================================================
+showLeaderboard() {
+    if (!this.vkInitialized || !this.vkUserId) {
+        alert('Таблица лидеров доступна только в приложении VK');
+        return;
+    }
+    // Передаём текущее количество алмазов как результат пользователя
+    vkBridge.send('VKWebAppShowLeaderBoardBox', {
+        user_result: this.currentDiamonds,
+        global: 1
+    })
+    .then(() => {
+        console.log('📊 Таблица лидеров открыта');
+    })
+    .catch((err) => {
+        console.error('❌ Ошибка открытия таблицы лидеров:', err);
+        alert('Не удалось открыть таблицу лидеров. Попробуйте позже.');
+    });
+}
+
+// ============================================================
+// Синхронизация рекорда с таблицей лидеров (через secure.addAppEvent)
+// ============================================================
+syncLeaderboard() {
+    if (!this.vkInitialized || !this.vkUserId || !this.vkUserToken) {
+        console.log('⏳ Нет данных для синхронизации лидерборда');
+        return;
+    }
+    if (this.currentDiamonds <= 0) return;
+
+    // Получаем текущий рекорд пользователя
+    vkBridge.send('VKWebAppCallAPIMethod', {
+        method: 'apps.getScore',
+        params: {
+            user_id: this.vkUserId,
+            v: '5.131',
+            access_token: this.vkUserToken
+        }
+    })
+    .then((data) => {
+        let currentScore = parseInt(data.response) || 0;
+        if (this.currentDiamonds > currentScore) {
+            // Обновляем рекорд
+            return vkBridge.send('VKWebAppCallAPIMethod', {
+                method: 'secure.addAppEvent',
+                params: {
+                    user_id: this.vkUserId,
+                    activity_id: 2,   // 2 – очки (алмазы)
+                    value: this.currentDiamonds,
+                    v: '5.131',
+                    access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
+                }
+            });
+        } else {
+            return Promise.resolve();
+        }
+    })
+    .then(() => {
+        console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+    })
+    .catch((err) => {
+        console.error('❌ Ошибка синхронизации лидерборда:', err);
+    });
+}
+    // ============================================================
     // Социальные функции
     // ============================================================
 inviteFriends() {
@@ -586,7 +836,186 @@ inviteFriends() {
     const sendMethod = vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, 'VKWebAppShowInviteBox', {});
 }
+// ============================================================
+// Проверка возможности получения ежедневного бонуса
+// ============================================================
+canClaimDailyBonus() {
+    if (!this.lastBonusDate) return true;
+    const today = new Date().toDateString();
+    return this.lastBonusDate !== today;
+}
 
+// ============================================================
+// Показать модалку выбора бонуса
+// ============================================================
+showDailyBonusModal() {
+    if (!this.canClaimDailyBonus()) {
+        this.showToast('❌ Вы уже получили бонус сегодня!');
+        return;
+    }
+
+    const modal = document.getElementById('dailyBonusModal');
+    if (!modal) {
+        console.error('Модалка #dailyBonusModal не найдена');
+        return;
+    }
+
+    // Приостанавливаем таймер игры, если она активна
+    this.pauseTimer();
+
+    modal.style.display = 'flex';
+
+    // Убираем старые обработчики, чтобы не накапливались
+    const btn5 = document.getElementById('dailyBonus5');
+    const btn15 = document.getElementById('dailyBonus15');
+    const btnCancel = document.getElementById('dailyBonusCancel');
+
+    const newBtn5 = btn5.cloneNode(true);
+    const newBtn15 = btn15.cloneNode(true);
+    const newBtnCancel = btnCancel.cloneNode(true);
+
+    btn5.parentNode.replaceChild(newBtn5, btn5);
+    btn15.parentNode.replaceChild(newBtn15, btn15);
+    btnCancel.parentNode.replaceChild(newBtnCancel, btnCancel);
+
+    // Обработчики
+    newBtn5.addEventListener('click', () => {
+        this.sound.click();
+        this.closeModal('dailyBonusModal');
+        this.claimBonus(5);
+    });
+
+    newBtn15.addEventListener('click', async () => {
+        this.sound.click();
+        this.closeModal('dailyBonusModal');
+        // Показываем рекламу за вознаграждение
+        this.messageEl.textContent = '⏳ Загрузка рекламы...';
+        const adShown = await this.adManager.showRewardedAd();
+        if (adShown) {
+            this.claimBonus(15);
+        } else {
+            // Если реклама не показана – ничего не даём, показываем сообщение
+            this.showToast('❌ Реклама не была показана. Попробуйте позже.');
+            this.resumeTimer();
+        }
+    });
+
+    newBtnCancel.addEventListener('click', () => {
+        this.sound.click();
+        this.closeModal('dailyBonusModal');
+        this.resumeTimer();
+    });
+
+    // Закрытие по клику вне окна
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            this.closeModal('dailyBonusModal');
+            this.resumeTimer();
+        }
+    });
+}
+
+// ============================================================
+// Закрытие модалки по id
+// ============================================================
+closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+
+// ============================================================
+// Начисление бонуса
+// ============================================================
+claimBonus(amount) {
+    if (amount <= 0) return;
+
+    // Добавляем алмазы
+    this.addDiamonds(amount);
+
+    // Запоминаем дату получения
+    this.lastBonusDate = new Date().toDateString();
+    // Сохраняем дату в Storage
+    try {
+        localStorage.setItem('sudoku_bonusDate', this.lastBonusDate);
+    } catch (e) {}
+
+    if (this.vkUserId && this.vkInitialized) {
+        vkBridge.send('VKWebAppStorageSet', {
+            key: 'bonusDate',
+            value: this.lastBonusDate
+        }).catch(err => console.warn(err));
+    }
+
+    // Показываем модалку результата
+    this.showBonusResult(amount);
+
+    // Возобновляем таймер (если был приостановлен)
+    this.resumeTimer();
+}
+
+// ============================================================
+// Показать модалку "Бонус получен!"
+// ============================================================
+showBonusResult(amount) {
+    const modal = document.getElementById('bonusResultModal');
+    if (!modal) {
+        console.error('Модалка #bonusResultModal не найдена');
+        this.showToast(`💎 +${amount} алмазов!`);
+        return;
+    }
+
+    document.getElementById('bonusResultAmount').textContent = `💎 +${amount}`;
+    modal.style.display = 'flex';
+
+    const okBtn = document.getElementById('bonusResultOk');
+    const newOkBtn = okBtn.cloneNode(true);
+    okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+
+    newOkBtn.addEventListener('click', () => {
+        this.sound.click();
+        this.closeModal('bonusResultModal');
+        // Возобновляем таймер (если был приостановлен)
+        this.resumeTimer();
+    });
+
+    // Закрытие по клику вне
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            this.closeModal('bonusResultModal');
+            this.resumeTimer();
+        }
+    });
+}
+
+// ============================================================
+// Добавление алмазов (общий метод)
+// ============================================================
+addDiamonds(amount) {
+    if (amount <= 0) return;
+    this.currentDiamonds += amount;
+    this.saveDiamonds();
+    this.updateDiamondUI();
+    this.syncLeaderboard();
+    this.sound.click();
+}
+
+// ============================================================
+// Вспомогательный тост (если модалка не отображается)
+// ============================================================
+showToast(message, isError = false) {
+    const msgEl = document.getElementById('message');
+    if (msgEl) {
+        msgEl.textContent = message;
+        msgEl.style.color = isError ? '#ff5252' : '#ffd54f';
+        setTimeout(() => {
+            if (msgEl.textContent === message) {
+                msgEl.textContent = '';
+            }
+        }, 4000);
+    } else {
+        alert(message);
+    }
+}
     // ============================================================
     // Навигация
     // ============================================================
@@ -598,11 +1027,13 @@ inviteFriends() {
             this.timerInterval = null;
         }
         this.isRunning = false;
+        this.updateDiamondUI();
     }
 
     goToMenu() {
         this.sound.click();
         this.showMenu();
+        this.updateDiamondUI(); // чтобы сразу отобразить алмазы
     }
 
     showGame() {
@@ -1226,7 +1657,25 @@ checkNumber() {
         this.render();
     }
 }
-  
+  // ============================================================
+// Начисление алмазов за победу
+// ============================================================
+awardDiamondsForWin() {
+    if (this.diamondsAwardedForCurrentGame) return;
+    const rewards = {
+        easy: 1,
+        medium: 2,
+        hard: 3,
+        expert: 4
+    };
+    const amount = rewards[this.difficulty] || 0;
+    if (amount > 0) {
+        this.addDiamonds(amount);
+        this.diamondsAwardedForCurrentGame = true;
+        // Показываем сообщение (если не перекрыто другим)
+        this.showToast(`💎 +${amount} алмазов за победу!`);
+    }
+}
 // ============================================================
 // Решить всё (с рекламой за вознаграждение либо просто так, если рекламы нет)
 // ============================================================
@@ -1292,13 +1741,18 @@ async solveAll() {
                 }
             }
         }
-        return true;
+          // Если дошли сюда – победа
+    this.awardDiamondsForWin();
+    return true;
     }
 
     // ============================================================
     // Старт игры
     // ============================================================
     startNewGame() {
+        this.diamondsAwardedForCurrentGame = false;
+// Подгружаем свежие данные из хранилища (на случай синхронизации между вкладками)
+this.loadDiamonds();
         this.sound.init();
         this.sound.click();
         
@@ -1357,6 +1811,9 @@ updateHintButton() {
         hintBtn.classList.remove('no-hints');
     }
 }
+
+
+
 }
 
 // ============================================================
@@ -1372,20 +1829,7 @@ document.addEventListener('touchmove', function(event) {
     event.preventDefault();
 }, { passive: false });
 
-// Кнопки пригласить друзей и тема
-document.getElementById('btnInviteFriends').addEventListener('click', function() {
-    if (window.vkBridge) {
-        window.vkBridge.send('VKWebAppShowInviteBox')
-            .catch(e => console.warn('Ошибка приглашения:', e));
-    } else {
-        alert('Пригласить друзей');
-    }
-});
 
-// Открыть модалку с темами
-document.getElementById('btnThemeSun').addEventListener('click', function() {
-    document.getElementById('themeModal').style.display = 'flex';
-});
 
 // Закрыть модалку
 function closeThemeModal() {

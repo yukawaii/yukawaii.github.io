@@ -1620,6 +1620,9 @@ body.theme-pastel::before {
     <!-- ЭКРАН МЕНЮ -->
     <div id="menuScreen">
         <h1>♢ СУДОКУ</h1>
+        <div class="diamonds-row">
+    <span id="diamond-counter">💎 0</span>
+</div>
         <p class="subtitle">Выберите сложность</p>
         <div class="difficulty-section">
             <button class="diff-btn easy active" data-diff="easy">🟢 Лёгкий</button>
@@ -1628,12 +1631,14 @@ body.theme-pastel::before {
             <button class="diff-btn expert" data-diff="expert">🟣 Эксперт</button>
         </div>
         <button class="menu-btn" id="btnStartGame">▶ Начать игру</button>
-           <div class="social-row">
-        <button class="menu-btn social-icon" id="btnInviteFriends">👤</button>
-        <button class="menu-btn social-icon" id="btnThemeSun">☀️</button>
-    </div>
-        <button class="menu-btn secondary" id="btnHowToPlay">❓ Как играть?</button>
-        <button class="menu-btn secondary" id="btnToggleSound">🔊 Звук: Вкл</button>
+     <div class="social-row">
+    <button class="menu-btn social-icon" id="btnInviteFriends">👤</button>
+    <button class="menu-btn social-icon" id="btnThemeSun">☀️</button>
+    <button class="menu-btn social-icon" id="btnLeaderboard">🏆</button>
+      <button class="menu-btn social-icon" id="btnHowToPlay">❓</button>
+</div>
+<button class="menu-btn secondary" id="btnDailyBonus">🎁 Ежедневный бонус</button>
+             <button class="menu-btn secondary" id="btnToggleSound">🔊 Звук: Вкл</button>
         <div id="adBanner"></div>
     </div>
 
@@ -1733,6 +1738,34 @@ body.theme-pastel::before {
         </div>
     </div>
 </div>
+<!-- ============================================================ -->
+<!-- Модалка выбора ежедневного бонуса -->
+<!-- ============================================================ -->
+<div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2500; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:400px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease;">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
+        <h2 style="color:#fff; font-size:1.5rem; margin-bottom:8px;">Ежедневный бонус</h2>
+        <p style="color:#8a8fa8; font-size:0.95rem; margin-bottom:20px; line-height:1.5;">Выберите способ получения алмазов</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <button id="dailyBonus5" style="background:linear-gradient(135deg,#4caf50,#2e7d32); color:#fff; border:none; padding:14px; border-radius:50px; font-size:1.1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(76,175,80,0.4);">💎 +5 (бонус за вход)</button>
+            <button id="dailyBonus15" style="background:linear-gradient(135deg,#e94560,#c23152); color:#fff; border:none; padding:14px; border-radius:50px; font-size:1.1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(233,69,96,0.4);">📺 +15 (смотреть рекламу)</button>
+            <button id="dailyBonusCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:50px; font-size:1rem; cursor:pointer;">❌ Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Модалка "Бонус получен!" -->
+<!-- ============================================================ -->
+<div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2600; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:400px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease;">
+        <span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span>
+        <h2 style="color:#fff; font-size:1.6rem; margin-bottom:5px;" id="bonusResultTitle">Бонус получен!</h2>
+        <p style="font-size:1.8rem; font-weight:bold; color:#ffd54f; margin:10px 0 20px;" id="bonusResultAmount">💎 +5</p>
+        <button id="bonusResultOk" style="background:linear-gradient(135deg,#e94560,#c23152); color:#fff; border:none; padding:12px 40px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 25px rgba(233,69,96,0.4);">Ок</button>
+    </div>
+</div>
+
 <script src="sudoku.js"></script>
 <script>
 // Инициализация VK Bridge при загрузке

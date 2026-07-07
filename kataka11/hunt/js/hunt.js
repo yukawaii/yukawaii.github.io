@@ -415,4 +415,4 @@ window.addEventListener('resize', () => {
     }, 300);
 });
 
-console.log('🔍 Охота на хирагану загружена!');
+console.log('🔍 Охота на катакану загружена!');
