@@ -27,7 +27,7 @@ const myApp = [{
     answer: 3,
 }, {
     question: "Как читается эта мора? <br> <img src='../mem/img/10.png' width='120' height='120' />",
-    options: ["А", "A", "СЭ", "О"],
+    options: ["У", "A", "СЭ", "О"],
     answer: 1,
 }, {
     question: "Как читается эта мора? <br> <img src='../mem/img/9.png' width='120' height='120' />",

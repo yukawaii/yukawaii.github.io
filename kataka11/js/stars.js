@@ -1,5 +1,5 @@
 // js/diamonds.js
-// Управление алмазами, синхронизация с VK Storage и таблицей лидеров
+// Управление звездами, синхронизация с VK Storage и таблицей лидеров
 
 let vkInitialized = false;
 let vkUserId = null;
@@ -23,84 +23,78 @@ function initVKSDK() {
             .then((userInfo) => {
                 vkUserId = userInfo.id;
                 console.log('👤 Пользователь:', userInfo.first_name);
-                // Пытаемся получить токен
                 return vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
             })
             .then((authData) => {
                 vkUserToken = authData.access_token;
-                console.log('🔑 Токен получен, загружаем алмазы');
-                loadDiamonds(); // Загружаем алмазы из Storage
+                console.log('🔑 Токен получен, загружаем звёзды');
+                loadStars();
             })
             .catch((err) => {
-                console.warn('⚠️ Токен не получен, алмазы будут только в localStorage', err);
-                loadDiamonds(); // Всё равно пытаемся загрузить из localStorage
+                console.warn('⚠️ Токен не получен, звёзды только в localStorage', err);
+                loadStars();
             });
     } else {
         console.warn('⚠️ VK Bridge не найден, работаем с localStorage');
-        loadDiamonds();
+        loadStars();
     }
 }
 
-// ===== ЗАГРУЗКА АЛМАЗОВ =====
-function loadDiamonds() {
+// ===== ЗАГРУЗКА ЗВЁЗД =====
+function loadStars() {
     if (vkInitialized && vkUserId) {
-        // Пытаемся загрузить из VK Storage
-        vkBridge.send('VKWebAppStorageGet', { keys: ['diamonds'] })
+        vkBridge.send('VKWebAppStorageGet', { keys: ['stars'] })
             .then((data) => {
                 const value = data.keys[0]?.value;
-                const diamonds = parseInt(value) || 0;
-                currentDiamonds = diamonds;
-                updateDiamondUI();
-                console.log('💎 Алмазы загружены из VK Storage:', diamonds);
+                const stars = parseInt(value) || 0;
+                currentStars = stars;
+                updateStarsUI();
+                console.log('⭐ Звёзды загружены из VK Storage:', stars);
             })
             .catch(() => {
-                // Если не получилось — берём из localStorage
-                loadDiamondsFromLocal();
+                loadStarsFromLocal();
             });
     } else {
-        loadDiamondsFromLocal();
+        loadStarsFromLocal();
     }
 }
 
-function loadDiamondsFromLocal() {
-    const saved = localStorage.getItem('diamonds');
-    currentDiamonds = saved ? parseInt(saved) : 0;
-    updateDiamondUI();
-    console.log('💎 Алмазы загружены из localStorage:', currentDiamonds);
+function loadStarsFromLocal() {
+    const saved = localStorage.getItem('stars');
+    currentStars = saved ? parseInt(saved) : 0;
+    updateStarsUI();
+    console.log('⭐ Звёзды загружены из localStorage:', currentStars);
 }
 
-// ===== СОХРАНЕНИЕ АЛМАЗОВ =====
-function saveDiamonds(value) {
-    currentDiamonds = value;
-    // Сохраняем в localStorage (всегда)
-    localStorage.setItem('diamonds', String(value));
-    // Если VK доступен — сохраняем в Storage
+// ===== СОХРАНЕНИЕ ЗВЁЗД =====
+function saveStars(value) {
+    currentStars = value;
+    localStorage.setItem('stars', String(value));
     if (vkInitialized && vkUserId) {
-        vkBridge.send('VKWebAppStorageSet', { key: 'diamonds', value: String(value) })
+        vkBridge.send('VKWebAppStorageSet', { key: 'stars', value: String(value) })
             .then(() => {
-                console.log('💎 Алмазы сохранены в VK Storage:', value);
-                // Обновляем рекорд в таблице лидеров
+                console.log('⭐ Звёзды сохранены в VK Storage:', value);
                 saveVKScore(value);
             })
             .catch((err) => {
-                console.warn('⚠️ Не удалось сохранить в VK Storage, только локально', err);
+                console.warn('⚠️ Не удалось сохранить в VK Storage', err);
             });
     }
-    updateDiamondUI();
+    updateStarsUI();
 }
 
-// ===== ДОБАВЛЕНИЕ АЛМАЗОВ (ВЫЗЫВАЕТСЯ ПОСЛЕ ВИКТОРИНЫ) =====
-function addDiamonds(amount) {
-    const newTotal = currentDiamonds + amount;
-    saveDiamonds(newTotal);
+// ===== ДОБАВЛЕНИЕ ЗВЁЗД (ВЫЗЫВАЕТСЯ ПОСЛЕ ВИКТОРИНЫ) =====
+function addStars(amount) {
+    const newTotal = currentStars + amount;
+    saveStars(newTotal);
     return newTotal;
 }
 
 // ===== ОБНОВЛЕНИЕ UI В ГЛАВНОМ МЕНЮ =====
-function updateDiamondUI() {
-    const el = document.getElementById('diamond-counter');
+function updateStarsUI() {
+    const el = document.getElementById('star-counter');
     if (el) {
-        el.textContent = currentDiamonds;
+        el.textContent = currentStars;
     }
 }
 
@@ -112,7 +106,6 @@ function saveVKScore(scoreValue) {
     }
     if (scoreValue <= 0) return;
 
-    // Получаем текущий рекорд
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'apps.getScore',
         params: {
@@ -124,19 +117,18 @@ function saveVKScore(scoreValue) {
     .then((data) => {
         let currentScore = parseInt(data.response) || 0;
         if (scoreValue > currentScore) {
-            // Сохраняем новый рекорд (activity_id: 2 — это очки)
             return vkBridge.send('VKWebAppCallAPIMethod', {
                 method: 'secure.addAppEvent',
                 params: {
                     user_id: vkUserId,
-                    activity_id: 2,
+                    activity_id: 2,   // 2 – очки
                     value: scoreValue,
                     v: '5.131',
                     access_token: ServToken
                 }
             });
         } else {
-            return Promise.resolve(); // Рекорд не побит
+            return Promise.resolve();
         }
     })
     .then(() => {
@@ -154,7 +146,7 @@ function showLeaderboard() {
         return;
     }
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        user_result: currentDiamonds,
+        user_result: currentStars,
         global: 1
     })
     .then(() => {
@@ -170,6 +162,6 @@ function showLeaderboard() {
 initVKSDK();
 
 // Экспортируем функции для использования в других скриптах
-window.addDiamonds = addDiamonds;
+window.addStars = addStars;
 window.showLeaderboard = showLeaderboard;
-window.currentDiamonds = () => currentDiamonds;
+window.currentStars = () => currentStars;
