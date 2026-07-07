@@ -1367,8 +1367,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__game = game;
 });
 document.addEventListener('touchmove', function(event) {
-    // Разрешаем скролл, только если внутри вашего приложения есть 
-    // отдельный блок, который должен прокручиваться (например, чат)
+    var target = event.target;
+    // Разрешаем скролл, если касание началось внутри модалки или её дочерних элементов
+    var modal = document.getElementById('howToPlayModal');
+    if (modal && modal.contains(target)) {
+        return; // не блокируем
+    }
     event.preventDefault();
 }, { passive: false });
 

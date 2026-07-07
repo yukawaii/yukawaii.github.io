@@ -1781,64 +1781,12 @@ body.theme-pastel::before {
 
 <script>
 // Инициализация VK Bridge при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, запущено ли приложение внутри ВК
-    const isVK = window.location !== window.parent.location;
-    
-    if (isVK) {
-        // Запущено внутри ВК
-        const getBridge = () => {
-            if (typeof window.VKWebApp !== 'undefined') {
-                return window.VKWebApp;
-            }
-            if (typeof window.vkBridge !== 'undefined' && window.vkBridge !== window) {
-                return window.vkBridge;
-            }
-            if (typeof window.VK !== 'undefined' && window.VK.Bridge) {
-                return window.VK.Bridge;
-            }
-            return null;
-        };
-        
-        const bridge = getBridge();
-        if (bridge) {
-            window.vkBridge = bridge;
-            if (bridge.send) {
-                bridge.send('VKWebAppInit')
-                    .then(() => console.log('VK Bridge инициализирован'))
-                    .catch(e => console.warn('Ошибка инициализации VK Bridge:', e));
-            }
-        } else {
-            console.warn('VK Bridge не найден');
-            // Fallback
-            window.vkBridge = {
-                send: (event, data) => {
-                    console.log('[VK Bridge]', event, data);
-                    return Promise.resolve({ result: true });
-                },
-                sendPromise: (event, data) => {
-                    console.log('[VK Bridge]', event, data);
-                    return Promise.resolve({ result: true });
-                },
-                subscribe: () => {}
-            };
-        }
-    } else {
-        // Запущено НЕ внутри ВК (локальная разработка)
-        console.log('ℹ️ Локальная разработка: VK Bridge эмулируется');
-        window.vkBridge = {
-            send: (event, data) => {
-                console.log('[VK Bridge (локально)]', event, data);
-                return Promise.resolve({ result: true });
-            },
-            sendPromise: (event, data) => {
-                console.log('[VK Bridge (локально)]', event, data);
-                return Promise.resolve({ result: true });
-            },
-            subscribe: () => {}
-        };
-    }
-});
+// Инициализация VK Bridge, если он доступен
+if (typeof vkBridge !== 'undefined' && vkBridge.send) {
+    vkBridge.send('VKWebAppInit').catch(function(e) {
+        console.warn('VK init error:', e);
+    });
+}
     // Отладка размеров для CSS
     console.log('Ширина:', window.innerWidth);
     console.log('Высота:', window.innerHeight);
