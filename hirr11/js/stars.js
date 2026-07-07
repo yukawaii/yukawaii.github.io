@@ -6,8 +6,8 @@ let vkUserId = null;
 let vkUserToken = null;
 let currentDiamonds = 0;
 
-const APP_ID = 8165904; 
-const ServToken = '435fa635435fa635435fa635f943233c254435f435fa6352121dc97157664a5927e4d4f'; 
+const APP_ID = 8165024; 
+const ServToken = '2612c80d2612c80d2612c80d77266e5ead226122612c80d446f8f02f2b5426621bfea1f'; 
 
 // ===== ИНИЦИАЛИЗАЦИЯ VK =====
 function initVKSDK() {
