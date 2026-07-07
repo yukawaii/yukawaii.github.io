@@ -5736,7 +5736,7 @@ function getShieldsViaAd() {
                 }
             }
         }
-    }, 10000);
+    }, 60000);
     
     // Проверяем доступность VK Bridge
     if (typeof vkBridge === 'undefined') {
@@ -5953,7 +5953,7 @@ function getRepairViaAd() {
             // Показываем модалку ошибки починки
             showRepairErrorModal();
         }
-    }, 10000); // 10 секунд на загрузку
+    }, 60000); // 10 секунд на загрузку
     
     // Проверяем доступность VK Bridge
     if (typeof vkBridge === 'undefined') {
