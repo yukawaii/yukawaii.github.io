@@ -64,17 +64,17 @@
             <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')">💎</button>
         </div>
 
-        <div class="memory-menu-grid">
-            <a href="index12.html" class="btn-neon">あ行 <span class="menu-label">あ・い・う・え・お</span></a>
-            <a href="index13.html" class="btn-neon">か行 <span class="menu-label">か・き・く・け・こ</span></a>
-            <a href="index14.html" class="btn-neon">さ行 <span class="menu-label">さ・し・す・せ・そ</span></a>
-            <a href="index15.html" class="btn-neon">た行 <span class="menu-label">た・ち・つ・て・と</span></a>
-            <a href="index16.html" class="btn-neon">な行 <span class="menu-label">な・に・ぬ・ね・の</span></a>
-            <a href="index17.html" class="btn-neon">は行 <span class="menu-label">は・ひ・ふ・へ・ほ</span></a>
-            <a href="index18.html" class="btn-neon">ま行 <span class="menu-label">ま・み・む・め・も</span></a>
-            <a href="index19.html" class="btn-neon">ら行 <span class="menu-label">ら・り・る・れ・ろ</span></a>
-            <a href="index20.html" class="btn-neon">や・わ行 <span class="menu-label">や・ゆ・よ・わ・を・ん</span></a>
-        </div>
+<div class="memory-menu-grid">
+    <a href="index12.html" class="btn-neon memory-btn" data-level="1" data-unlocked="true">ア行 <span class="menu-label">ア・イ・ウ・エ・オ</span></a>
+    <a href="index13.html" class="btn-neon memory-btn" data-level="2" data-unlocked="true">カ行 <span class="menu-label">カ・キ・ク・ケ・コ</span></a>
+    <a href="index14.html" class="btn-neon memory-btn" data-level="3" data-unlocked="true">サ行 <span class="menu-label">サ・シ・ス・セ・ソ</span></a>
+    <a href="index15.html" class="btn-neon memory-btn" data-level="4" data-unlocked="false">タ行 <span class="menu-label">タ・チ・ツ・テ・ト</span></a>
+    <a href="index16.html" class="btn-neon memory-btn" data-level="5" data-unlocked="false">ナ行 <span class="menu-label">ナ・ニ・ヌ・ネ・ノ</span></a>
+    <a href="index17.html" class="btn-neon memory-btn" data-level="6" data-unlocked="false">ハ行 <span class="menu-label">ハ・ヒ・フ・ヘ・ホ</span></a>
+    <a href="index18.html" class="btn-neon memory-btn" data-level="7" data-unlocked="false">マ行 <span class="menu-label">マ・ミ・ム・メ・モ</span></a>
+    <a href="index19.html" class="btn-neon memory-btn" data-level="8" data-unlocked="false">ラ行 <span class="menu-label">ラ・リ・ル・レ・ロ</span></a>
+    <a href="index20.html" class="btn-neon memory-btn" data-level="9" data-unlocked="false">ヤ・ワ行 <span class="menu-label">ヤ・ユ・ヨ・ワ・ヲ・ン</span></a>
+</div>
 
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
             <a href="indexmemory.html" class="btn-neon">🔄 Карточки "あ＋あ"</a>
@@ -84,7 +84,47 @@
 
     </div>
 </div>
+<!-- ===== МОДАЛКИ ДЛЯ РАЗБЛОКИРОВКИ (ПАМЯТЬ) ===== -->
+<div id="memoryUnlockModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>🔓 Открыть уровень?</h3>
+        <p>Посмотрите короткую рекламу, чтобы разблокировать этот набор карточек.</p>
+        <div class="modal-actions">
+            <button class="btn-neon" id="memoryUnlockConfirm">📺 Открыть</button>
+            <button class="btn" id="memoryUnlockCancel">❌ Отмена</button>
+        </div>
+    </div>
+</div>
 
+<div id="memoryLoadingModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>⏳ Загрузка рекламы...</h3>
+        <div class="loader"></div>
+        <p style="color: var(--text-secondary);">Пожалуйста, подождите.</p>
+    </div>
+</div>
+
+<div id="memorySuccessModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="success-icon">🎉</div>
+        <h3 style="color: #22c55e;">Удача!</h3>
+        <p>Набор карточек разблокирован! Теперь вы можете играть.</p>
+        <div class="modal-actions">
+            <button class="btn-neon" id="memorySuccessOk">👌 Ок</button>
+        </div>
+    </div>
+</div>
+
+<div id="memoryErrorModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 style="color: #ef4444;">❌ Ошибка</h3>
+        <p id="memoryErrorText">Не удалось загрузить рекламу. Попробуйте позже.</p>
+        <div class="modal-actions">
+            <button class="btn" id="memoryErrorOk">Закрыть</button>
+        </div>
+    </div>
+</div>
 <script src="../App.js"></script>
+<script src="../js/memory-unlock.js"></script>
 </body>
 </html>
