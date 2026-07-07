@@ -167,8 +167,10 @@ button {
 
 /* ===== НЕОНОВЫЕ КНОПКИ ===== */
 .btn-neon {
-  display: inline-block;
-  padding: 12px 28px;
+    display: inline-flex; /* Меняем с inline-block */
+  align-items: center;  /* Центрируем по вертикали */
+  justify-content: center; /* Центрируем по горизонтали */
+  padding: 12px 20px;
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
