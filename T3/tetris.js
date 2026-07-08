@@ -1103,16 +1103,11 @@ function endGame() {
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
- if (typeof gameAudio !== 'undefined') {
-        // Приостанавливаем музыку (гарантированно)
-        if (gameAudio.musicContext && gameAudio.musicContext.state === 'running') {
-            gameAudio.musicContext.suspend();
-        }
-        // Приостанавливаем звуковые эффекты (по желанию)
-        if (gameAudio.audioContext && gameAudio.audioContext.state === 'running') {
-            gameAudio.audioContext.suspend();
-        }
-         }
+
+    // Останавливаем всю аудиосистему (музыку и звуки) – как при потере фокуса
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.pauseAll();
+    }
 
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
