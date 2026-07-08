@@ -449,11 +449,7 @@ document.getElementById('dailyBonusUnavailableModal').addEventListener('pointerd
 // Проверка "Использовать все проверки"
 // ============================================================
 checkAllChecksUsed() {
-    let maxChecks = 0;
-    if (this.difficulty === 'easy') maxChecks = 3;
-    else if (this.difficulty === 'medium') maxChecks = 2;
-    else if (this.difficulty === 'hard' || this.difficulty === 'expert') maxChecks = 1;
-    if (this.checksUsed === maxChecks && maxChecks > 0) {
+    if (this.checksUsed === this.maxChecks && this.maxChecks > 0) {
         this.unlockAchievement('all_checks_used');
     }
 }
@@ -1981,8 +1977,7 @@ if (this.difficulty === 'easy') {
             this.timerInterval = null;
         }
   
-        this.render();
-    }
+          }
 }
 
 // ============================================================
@@ -2082,7 +2077,7 @@ this.saveAchievements();
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
-           this.render();
+        
     }
 }
 
@@ -2209,7 +2204,7 @@ async checkNumber() {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
-        this.render();
+   
     }
 }
   // ============================================================
@@ -2282,7 +2277,7 @@ async solveAll() {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
-           this.render();
+       
     }
 }
 // ============================================================
