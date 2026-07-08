@@ -1103,10 +1103,9 @@ function endGame() {
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
-
-    // Останавливаем всю аудиосистему (музыку и звуки) – как при потере фокуса
+    
     if (typeof gameAudio !== 'undefined') {
-        gameAudio.pauseAll();
+        gameAudio.pauseAll(); // ✅ приостанавливает оба контекста
     }
 
     if (typeof window.notifyGameplayStop === 'function') {
