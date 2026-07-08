@@ -357,136 +357,30 @@ function cancelLeaderboardLoading() {
     closeCustomModal();
 }
 
-// ===== НОВАЯ ФУНКЦИЯ showVKLeaderboard =====
 function showVKLeaderboard() {
-    if (leaderboardLoading) return;
+    // 1. Вычисляем максимальный рекорд из всех хранилищ
+    let highScore = Math.max(
+        window.vkHighscore || 0,
+        parseInt(localStorage.getItem('vkHighscore') || '0'),
+        parseInt(localStorage.getItem('localHighscore') || '0')
+    );
 
-    if (typeof vkBridge === 'undefined') {
-        showCustomModal({
-            title: "Таблица лидеров",
-            text: "Функция доступна только в приложении ВКонтакте",
-            type: "info",
-            button: "OK"
+    // 2. Если есть хоть какой-то рекорд – пытаемся сохранить его в VK (синхронизация)
+    if (highScore > 0) {
+        saveVKScore(highScore);
+    }
+
+    // 3. Открываем таблицу лидеров (если VK Bridge доступен)
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppShowLeaderBoardBox', {
+            user_result: highScore,  // передаём максимум
+            global: 1
+        }).catch(err => {
+            console.warn('Ошибка открытия таблицы лидеров:', err);
         });
-        return;
+    } else {
+        console.warn('VK Bridge не доступен');
     }
-
-    leaderboardLoading = true;
-
-    // Показываем модалку загрузки (кастомная)
-    const modal = document.createElement('div');
-    modal.id = 'custom-modal';
-    modal.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        z-index: 100012; display: flex; justify-content: center; align-items: center;
-        background: url('1.jpg') no-repeat center center fixed; background-size: cover;
-    `;
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.7); z-index: -1;
-    `;
-    modal.appendChild(overlay);
-    modal.innerHTML += `
-        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.3);
-                    width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px;
-                    box-shadow: 0 25px 60px rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-                    text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-            <button onclick="cancelLeaderboardLoading()" style="position: absolute; top: 15px; right: 20px;
-                    background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer;
-                    font-family: 'Russo One', sans-serif;">✕</button>
-            <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
-            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px;
-                        margin-bottom: 10px; font-family: 'Russo One', sans-serif;">Загрузка...</h2>
-            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; line-height: 1.6;">
-                Подготовка таблицы лидеров
-            </p>
-            <div style="margin-top: 20px; width: 40px; height: 40px; margin-left: auto; margin-right: auto;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" style="animation: spin 1s linear infinite; width: 100%; height: 100%;">
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                </svg>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-
-    // Функция открытия таблицы
-    const tryOpen = () => {
-        clearLeaderboardTimers();
-        closeCustomModal();
-        leaderboardLoading = false;
-
-        if (vkInitialized && typeof vkBridge !== 'undefined') {
-            let highScore = 0;
-            if (typeof window.vkHighscore !== 'undefined' && window.vkHighscore > 0) {
-                highScore = window.vkHighscore;
-            } else {
-                highScore = Math.max(parseInt(localStorage.getItem('vkHighscore') || '0'),
-                                     parseInt(localStorage.getItem('localHighscore') || '0'));
-                window.vkHighscore = highScore;
-            }
-            if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
-                pauseGame();
-            }
-            vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                user_result: highScore,
-                global: 1
-            })
-            .then(() => console.log('✅ Таблица лидеров открыта'))
-            .catch((error) => {
-                console.error('❌ Ошибка:', error);
-                // повторная попытка без user_result
-                vkBridge.send('VKWebAppShowLeaderBoardBox', { global: 1 })
-                    .then(() => console.log('✅ Открыто без user_result'))
-                    .catch((err) => {
-                        console.error('❌ Вторая попытка:', err);
-                        showCustomModal({
-                            title: "Таблица лидеров",
-                            text: "Временно недоступна. Попробуйте позже.",
-                            type: "info",
-                            button: "OK"
-                        });
-                    });
-            });
-        } else {
-            showCustomModal({
-                title: "Таблица лидеров",
-                text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
-                type: "info",
-                button: "OK"
-            });
-        }
-    };
-
-    // Если уже инициализирован — открываем сразу
-    if (vkInitialized && typeof vkBridge !== 'undefined') {
-        tryOpen();
-        return;
-    }
-
-    // Иначе ждём с интервалом 300 мс, максимум 20 секунд
-    let attempts = 0;
-    const maxAttempts = 67; // 20 сек / 300 мс
-
-    leaderboardCheckInterval = setInterval(() => {
-        attempts++;
-        if (vkInitialized && typeof vkBridge !== 'undefined') {
-            tryOpen();
-            return;
-        }
-        if (attempts >= maxAttempts) {
-            clearLeaderboardTimers();
-            leaderboardLoading = false;
-            closeCustomModal();
-            showCustomModal({
-                title: "Таблица лидеров",
-                text: "Не удалось загрузить таблицу. Проверьте интернет и попробуйте позже.",
-                type: "info",
-                button: "OK"
-            });
-        }
-    }, 300);
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================

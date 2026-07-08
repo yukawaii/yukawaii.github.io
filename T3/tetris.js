@@ -1103,10 +1103,17 @@ function endGame() {
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
-    if (typeof gameAudio !== 'undefined') {
-        gameAudio.pauseAll(); // приостанавливаем все контексты (и музыку, и звуки)
-        
-    }
+ if (typeof gameAudio !== 'undefined') {
+        // Приостанавливаем музыку (гарантированно)
+        if (gameAudio.musicContext && gameAudio.musicContext.state === 'running') {
+            gameAudio.musicContext.suspend();
+        }
+        // Приостанавливаем звуковые эффекты (по желанию)
+        if (gameAudio.audioContext && gameAudio.audioContext.state === 'running') {
+            gameAudio.audioContext.suspend();
+        }
+         }
+
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
     }
@@ -3148,19 +3155,12 @@ function applySlowDownEffect() {
         clearTimeout(slowDownTimerId);
         slowDownTimerId = null;
     }
-    slowDownTimerId = setTimeout(() => {
-        dropInterval = originalDropInterval;
-        isSlowDownActive = false;
-        hideSlowDownIndicator();
-        slowDownTimerId = null;
-        showCustomModal({
-            title: '⏱️ Время вышло!',
-            text: 'Скорость падения восстановлена.',
-            type: 'info',
-            button: 'OK',
-            timer: 1500
-        });
-    }, 15000);
+  slowDownTimerId = setTimeout(() => {
+    dropInterval = originalDropInterval;
+    isSlowDownActive = false;
+    hideSlowDownIndicator();
+    slowDownTimerId = null;
+}, 15000);
 }
 
 function showSlowDownIndicator() {
