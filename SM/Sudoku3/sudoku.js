@@ -351,14 +351,27 @@ document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e
     e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
-    this.showLoadingAd(); // показать загрузку
-    const adShown = await this.adManager.showRewardedAd();
-    this.hideLoadingAd(); // скрыть
-    if (adShown) {
-        this.claimBonus(15);
-    } else {
-        this.showToast('❌ Реклама не была показана. Попробуйте позже.');
+
+    const btn = document.getElementById('dailyBonus15');
+    const originalText = btn.textContent;
+    btn.textContent = '⏳ Загрузка...';
+    btn.disabled = true;
+
+    try {
+        const adShown = await this.adManager.showRewardedAd();
+        if (adShown) {
+            this.claimBonus(15);
+        } else {
+            this.showToast('❌ Реклама не показана. Попробуйте позже.');
+            this.resumeTimer();
+        }
+    } catch (error) {
+        console.error('Ошибка в dailyBonus15:', error);
+        this.showToast('❌ Ошибка загрузки рекламы');
         this.resumeTimer();
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
     }
 });
 
@@ -2162,9 +2175,7 @@ async checkNumber() {
             const remaining = this.maxChecks - this.checksUsed;
             this.messageEl.textContent = `✅ Получены проверки! Осталось: ${remaining}`;
             this.sound.click();
-            this.render();
-            this.updateCheckButton();
-            // После получения проверок – продолжаем проверку
+                   // После получения проверок – продолжаем проверку
         } else {
             this.messageEl.textContent = '❌ Вы отменили получение проверок.';
             this.sound.error();
@@ -2260,45 +2271,56 @@ async solveAll() {
         return;
     }
     
-    this.messageEl.textContent = '⏳ Загрузка рекламы...';
-    const adShown = await this.adManager.showRewardedAd();
+    const solveBtn = document.getElementById('btnSolveAll');
+    const originalText = solveBtn.textContent;
+    solveBtn.textContent = '⏳ Загрузка...';
+    solveBtn.disabled = true;
     
-    if (!adShown) {
-        this.messageEl.textContent = '⚠️ Рекламы сейчас нет, но мы решим поле!';
-        this.sound.error();
-        // Пауза, чтобы пользователь увидел сообщение
-        await new Promise(resolve => setTimeout(resolve, 1500));
-    }    
-    
-    // РЕШАЕМ ВСЕГДА — и с рекламой, и без
-    this.sound.init();
-    this.sound.solve();
+    try {
+        const adShown = await this.adManager.showRewardedAd();
+        
+        if (!adShown) {
+            this.messageEl.textContent = '⚠️ Рекламы сейчас нет, но мы решим поле!';
+            this.sound.error();
+            await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+        
+        // РЕШАЕМ ВСЕГДА
+        this.sound.init();
+        this.sound.solve();
 
-    let solved = 0;
-    for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-            if (!this.given[r][c] && this.grid[r][c] !== this.solution[r][c]) {
-                this.grid[r][c] = this.solution[r][c];
-                const cellKey = `${r}-${c}`;
-                this.checkedCells[cellKey] = true;
-                solved++;
+        let solved = 0;
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (!this.given[r][c] && this.grid[r][c] !== this.solution[r][c]) {
+                    this.grid[r][c] = this.solution[r][c];
+                    const cellKey = `${r}-${c}`;
+                    this.checkedCells[cellKey] = true;
+                    solved++;
+                }
             }
         }
-    }
 
-    this.messageEl.textContent = `⚡ Решено ${solved} клеток!`;
-    this.render();
+        this.messageEl.textContent = `⚡ Решено ${solved} клеток!`;
+        this.render();
 
-    if (this.checkWin()) {
-        this.isFinished = true;
-        this.sound.win();
-        this.statusEl.textContent = '🎉 Победа!';
-        this.messageEl.textContent = '🏆 Судоку решено!';
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
+        if (this.checkWin()) {
+            this.isFinished = true;
+            this.sound.win();
+            this.statusEl.textContent = '🎉 Победа!';
+            this.messageEl.textContent = '🏆 Судоку решено!';
+            if (this.timerInterval) {
+                clearInterval(this.timerInterval);
+                this.timerInterval = null;
+            }
         }
-       
+    } catch (error) {
+        console.error('Ошибка в solveAll:', error);
+        this.messageEl.textContent = '❌ Ошибка при решении';
+        this.sound.error();
+    } finally {
+        solveBtn.textContent = originalText;
+        solveBtn.disabled = false;
     }
 }
 // ============================================================
