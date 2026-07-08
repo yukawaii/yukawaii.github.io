@@ -1667,7 +1667,93 @@ addDiamonds(amount) {
     this.checkDiamonds();
     this.sound.click();
 }
+// === Конфетти ===
+showConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    canvas.style.display = 'block';
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
+    const particles = [];
+    const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#2196f3', '#4caf50', '#ffeb3b', '#ff9800', '#ff5722'];
+    const numParticles = 150;
+
+    for (let i = 0; i < numParticles; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height * 0.5 - 50,
+            w: 6 + Math.random() * 8,
+            h: 4 + Math.random() * 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vy: 2 + Math.random() * 4,
+            vx: (Math.random() - 0.5) * 2,
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+            opacity: 0.8 + Math.random() * 0.2
+        });
+    }
+
+    let animationId;
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        for (const p of particles) {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rotation += p.rotSpeed;
+            if (p.y < canvas.height + 50) alive = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.globalAlpha = p.opacity * Math.min(1, (canvas.height - p.y + 50) / 100);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+            ctx.restore();
+        }
+        if (alive) {
+            animationId = requestAnimationFrame(animate);
+        } else {
+            this.hideConfetti();
+        }
+    };
+    animate();
+    // Через 6 секунд принудительно скрыть
+    setTimeout(() => {
+        if (animationId) cancelAnimationFrame(animationId);
+        this.hideConfetti();
+    }, 5000);
+}
+
+hideConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (canvas) {
+        canvas.style.display = 'none';
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
+// === Управление кнопкой "Решить всё" ===
+updateSolveButton() {
+    const btn = document.getElementById('btnSolveAll');
+    if (!btn) return;
+    if (this.isFinished) {
+        btn.textContent = '🎉 Новая игра';
+        btn.className = 'action-btn solve-btn win-btn'; // добавляем класс для зелёного и пульсации
+        // Убираем старый обработчик, если он был привязан к solveAll – но мы оставим один обработчик с проверкой
+    } else {
+        btn.textContent = '⚡ Решить всё';
+        btn.className = 'action-btn solve-btn';
+    }
+}
+
+// === Эффекты победы ===
+showWinEffects() {
+    this.showConfetti();
+    this.updateSolveButton();
+}
 // ============================================================
 // Вспомогательный тост (если модалка не отображается)
 // ============================================================
@@ -1700,6 +1786,7 @@ showToast(message, isError = false) {
     }
 
     goToMenu() {
+        this.hideConfetti();
         this.sound.click();
             // Сохраняем время игры (если игра не завершена, добавляем текущее время)
     if (!this.isFinished && this.timer > 0) {
@@ -2279,7 +2366,11 @@ awardDiamondsForWin() {
 // Решить всё (с рекламой за вознаграждение либо просто так, если рекламы нет)
 // ============================================================
 async solveAll() {
-    if (this.isFinished) return;
+       // Если игра завершена – запускаем новую игру
+    if (this.isFinished) {
+        this.startNewGame();
+        return;
+    }
     
     const confirmed = await this.showConfirmDialog();
     if (!confirmed) {
@@ -2520,13 +2611,14 @@ this.checkAllChecksUsed();
     this.updateTotalGameTime(this.timer); // добавляем время текущей партии
     this.saveAchievements();
     this.awardDiamondsForWin();
-
+this.showWinEffects();
     return true;
 }
     // ============================================================
     // Старт игры
     // ============================================================
     startNewGame() {
+         this.hideConfetti();
 this.diamondsAwardedForCurrentGame = false;
     this.perfectGame = false;     // <-- добавить
     this.gameErrors = 0;          // <-- добавить
@@ -2557,6 +2649,7 @@ this.loadDiamonds();
 this.maxChecks = 1;
 
 this.checksUsed = 0;
+this.updateSolveButton(); // вернёт исходный вид
 this.updateCheckButton();
 
           this.messageEl.textContent = '';
