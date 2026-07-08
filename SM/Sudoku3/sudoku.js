@@ -869,7 +869,7 @@ initVK() {
     // Запрашиваем токен для работы с storage и secure API
     vkBridge.send('VKWebAppGetAuthToken', {
         app_id: 51399364, // Ваш ID приложения (можно вынести в константу)
-        scope: 'secure'
+        scope: ''
     })
     .then((data) => {
         if (data && data.access_token) {
