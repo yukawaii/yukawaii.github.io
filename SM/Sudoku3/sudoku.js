@@ -1626,9 +1626,9 @@ claimBonus(amount) {
 // ============================================================
 showBonusResult(amount) {
     const modal = document.getElementById('bonusResultModal');
-    if (!modal) {
+   if (!modal) {
         console.error('Модалка #bonusResultModal не найдена');
-        this.showToast(`💎 +${amount} алмазов!`);
+        this.showGlobalToast(`💎 +${amount} алмазов!`, false);  
         return;
     }
 
