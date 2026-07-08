@@ -681,9 +681,11 @@ showHintAdModal() {
             if (isResolved) return;
             isResolved = true;
             modal.style.display = 'none';
+              setTimeout(() => {
             this.resumeTimer();
             console.log('Модалка закрыта с результатом:', result);
             resolve(result);
+                }, 500);
         };
         
         // Убираем старые обработчики
@@ -2365,34 +2367,40 @@ awardDiamondsForWin() {
 // Решить всё (с рекламой за вознаграждение либо просто так, если рекламы нет)
 // ============================================================
 async solveAll() {
-       // Если игра завершена – запускаем новую игру
+    // Если игра завершена – запускаем новую игру
     if (this.isFinished) {
         this.startNewGame();
         return;
     }
-    
+
+    // Ставим таймер на паузу перед показом диалога
+    this.pauseTimer();
+
     const confirmed = await this.showConfirmDialog();
     if (!confirmed) {
+        this.resumeTimer();
         this.messageEl.textContent = '❌ Решение отменено';
         this.sound.error();
         return;
     }
-    
+
+    // Снова ставим паузу, так как showConfirmDialog мог возобновить таймер
+    this.pauseTimer();
+
     const solveBtn = document.getElementById('btnSolveAll');
     const originalText = solveBtn.textContent;
     solveBtn.textContent = '⏳ Загрузка...';
     solveBtn.disabled = true;
-    
+
     try {
         const adShown = await this.adManager.showRewardedAd();
-        
+
         if (!adShown) {
             this.messageEl.textContent = '⚠️ Рекламы сейчас нет, но мы решим поле!';
             this.sound.error();
             await new Promise(resolve => setTimeout(resolve, 1500));
         }
-        
-        // РЕШАЕМ ВСЕГДА
+
         this.sound.init();
         this.sound.solve();
 
@@ -2412,14 +2420,7 @@ async solveAll() {
         this.render();
 
         if (this.checkWin()) {
-           // this.isFinished = true;
-            this.sound.win();
-            this.statusEl.textContent = '🎉 Победа!';
-            this.messageEl.textContent = '🏆 Судоку решено!';
-            if (this.timerInterval) {
-                clearInterval(this.timerInterval);
-                this.timerInterval = null;
-            }
+            // checkWin сам установит isFinished и покажет эффекты
         }
     } catch (error) {
         console.error('Ошибка в solveAll:', error);
@@ -2428,6 +2429,8 @@ async solveAll() {
     } finally {
         solveBtn.textContent = originalText;
         solveBtn.disabled = false;
+        // Возобновляем таймер после завершения всех действий
+        this.resumeTimer();
     }
 }
 // ============================================================
@@ -2455,9 +2458,11 @@ showCheckAdModal() {
             if (isResolved) return;
             isResolved = true;
             modal.style.display = 'none';
+             setTimeout(() => {
             this.resumeTimer();
             console.log('Модалка проверок закрыта с результатом:', result);
             resolve(result);
+                }, 500);
         };
 
         // Убираем старые обработчики (защита от дублирования)
