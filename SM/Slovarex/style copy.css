@@ -813,6 +813,7 @@ body.has-vk-banner .modal-overlay__content {
     flex-direction: column;
     gap: 14px;
     margin-bottom: 24px;
+    scroll-behavior: smooth;
 }
 
 .modal-overlay__rule {
