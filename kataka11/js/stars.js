@@ -36,7 +36,8 @@ function initVKSDK() {
         } else {
             // Если userId уже есть или bridge отсутствует – просто загружаем звёзды
             vkInitialized = true;
-            loadStars();
+            loadSta
+            rs();
         }
         return;
     }
