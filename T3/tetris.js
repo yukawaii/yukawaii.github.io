@@ -1033,25 +1033,26 @@ isSlowDownActive = false;
 async function startGameWithAudio() {
     console.log("startGameWithAudio вызван");
     
-    // Активируем аудио контекст
-    if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-        gameAudio.resumeContext();
-    }
-    
-    // Запускаем игру (без музыки)
-    startGame();
-    
-    // Загружаем аудио, если ещё не загружено
+    // 1. Инициализируем аудио (создаём контексты), если ещё не инициализировано
     if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
         await gameAudio.init();
-        console.log('✅ Аудио загружено');
+        console.log('✅ Аудио инициализировано');
     }
     
-    // 🔥 ЗАПУСКАЕМ МУЗЫКУ ПОСЛЕ ЗАГРУЗКИ
+    // 2. Возобновляем оба контекста (гарантированно, в ответ на клик)
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.resumeAll(); // возобновляет audioContext и musicContext
+        console.log('✅ Аудио контексты возобновлены');
+    }
+    
+    // 3. Запускаем игру (без музыки внутри)
+    startGame();
+    
+    // 4. Запускаем музыку, если не выключена
     if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) {
             console.log('🎵 Запускаем музыку после загрузки');
-            await playBackgroundMusic();
+            playBackgroundMusic(); // теперь контексты активны, музыка заиграет
         }
     }
 }
