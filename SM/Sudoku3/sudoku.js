@@ -341,7 +341,8 @@ document.getElementById('dailyBonusUnavailableOk').addEventListener('pointerdown
     this.resumeTimer();
 });
         // Обработчики для ежедневного бонуса (привязываем один раз)
-document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { e.preventDefault();
+document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.claimBonus(5);
@@ -359,61 +360,41 @@ document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e
     }
 
     const modal = document.getElementById('dailyBonusModal');
-    const content = modal.querySelector('.bonus-modal-content');
-    
-    // Сохраняем оригинальное содержимое для восстановления
-    const originalHTML = content.innerHTML;
+    const choiceBlock = modal.querySelector('.bonus-choice');
+    const loadingBlock = modal.querySelector('.bonus-loading');
 
-    // Показываем загрузку внутри модалки (она не закрывается)
-    content.innerHTML = `
-        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span>
-        <h2>Загрузка рекламы...</h2>
-        <p class="bonus-subtitle">Пожалуйста, подождите</p>
-        <div style="margin-top:15px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
-            <div style="width:30%; height:100%; background:linear-gradient(90deg, #e94560, #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div>
-        </div>
-        <style>
-            @keyframes loadingBar {
-                0% { transform: translateX(-100%); }
-                100% { transform: translateX(400%); }
-            }
-        </style>
-    `;
+    // Прячем выбор, показываем загрузку
+    choiceBlock.style.display = 'none';
+    loadingBlock.style.display = 'block';
 
     try {
-        // Пытаемся показать рекламу
         const adShown = await this.adManager.showRewardedAd();
-        
-        // Скрываем модалку выбора (реклама либо показана, либо нет)
+        // Скрываем модалку
         modal.style.display = 'none';
 
-        // Восстанавливаем оригинальное содержимое для будущих открытий
-        content.innerHTML = originalHTML;
-        // Перепривязываем обработчики (важно!)
-        this.attachDailyBonusHandlers();
-
         if (adShown) {
-            // Реклама показана – даём 15 алмазов
             this.claimBonus(15);
             this.showGlobalToast('🎉 +15 алмазов за просмотр рекламы!', false);
         } else {
-            // Реклама не показана – даём утешительный бонус +1
             this.claimBonus(1);
             this.showGlobalToast('⚠️ Реклама недоступна, вы получили +1 алмаз.', true);
         }
     } catch (error) {
         console.error('Ошибка в dailyBonus15:', error);
         modal.style.display = 'none';
-        content.innerHTML = originalHTML;
-        this.attachDailyBonusHandlers();
-        
-        // Даже при ошибке даём утешительный бонус, чтобы игрок не остался ни с чем
         this.claimBonus(1);
         this.showGlobalToast('❌ Ошибка загрузки рекламы, но вы получили +1 алмаз.', true);
+    } finally {
+        // Возвращаем видимость выбора (на случай, если модалка откроется снова)
+        choiceBlock.style.display = 'block';
+        loadingBlock.style.display = 'none';
+        // Восстанавливаем таймер, если был на паузе
+        this.resumeTimer();
     }
 });
 
-document.getElementById('dailyBonusCancel').addEventListener('pointerdown', (e) => { e.preventDefault();
+document.getElementById('dailyBonusCancel').addEventListener('pointerdown', (e) => {
+    e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.resumeTimer();
@@ -673,30 +654,7 @@ showNoAdModal(callback) {
         }
     });
 }
-attachDailyBonusHandlers() {
-    // Перепривязываем обработчики после восстановления содержимого
-    document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        this.sound.click();
-        this.closeModal('dailyBonusModal');
-        this.claimBonus(5);
-    });
 
-    document.getElementById('dailyBonus15').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        // Этот обработчик будет заменён, но чтобы не было рекурсии, 
-        // мы его переопределим (вызовем текущую логику) – 
-        // лучше вынести логику в отдельную функцию.
-        // Для простоты перезапишем обработчик при загрузке.
-    });
-
-    document.getElementById('dailyBonusCancel').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        this.sound.click();
-        this.closeModal('dailyBonusModal');
-        this.resumeTimer();
-    });
-}
 // ============================================================
 // Модалка для получения дополнительных подсказок
 // ============================================================
@@ -1434,42 +1392,20 @@ showAchievementPopup(icon, name) {
     iconEl.textContent = icon || '🏅';
     nameEl.textContent = name || 'Достижение';
 
-    // Убираем старые обработчики, чтобы не накапливались
-    popup.removeEventListener('transitionend', this._hidePopupHandler);
-    // Убираем предыдущие классы
+    clearTimeout(this._popupTimeout);
     popup.classList.remove('show', 'hide');
-    // Принудительный перезапуск
+    popup.style.display = 'block';
     void popup.offsetWidth;
 
-    // Показываем
-    popup.style.display = 'block';
-    // Сохраняем обработчик для скрытия
-    this._hidePopupHandler = () => {
-        popup.style.display = 'none';
-        popup.classList.remove('hide');
-        popup.removeEventListener('transitionend', this._hidePopupHandler);
-    };
-    popup.addEventListener('transitionend', this._hidePopupHandler);
+    popup.classList.add('show');
 
-    // Добавляем класс show через requestAnimationFrame
-    requestAnimationFrame(() => {
-        popup.classList.add('show');
-    });
-
-    // Автоматическое скрытие через 3 секунды (запускаем анимацию)
-    clearTimeout(this._popupTimeout);
     this._popupTimeout = setTimeout(() => {
         popup.classList.remove('show');
         popup.classList.add('hide');
-        // transitionend сработает и скроет popup
-        // Но на случай, если transitionend не сработает (баг), добавляем резервный таймер
         setTimeout(() => {
-            if (popup.style.display !== 'none') {
-                popup.style.display = 'none';
-                popup.classList.remove('hide');
-                popup.removeEventListener('transitionend', this._hidePopupHandler);
-            }
-        }, 500); // чуть больше длительности анимации (300ms)
+            popup.style.display = 'none';
+            popup.classList.remove('hide');
+        }, 400);
     }, 3000);
 }
 // ============================================================

@@ -2295,22 +2295,40 @@ body.theme-pastel .hint-check-text {
 
 <div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2500; justify-content:center; align-items:center; padding:20px;">
     <div class="bonus-modal-content">
-        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
-        <h2>Ежедневный бонус</h2>
-        <p class="bonus-subtitle">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;">
-            <div style="display:flex; gap:30px; justify-content:center;">
-                <button id="dailyBonus5" class="bonus-btn bonus-5">
-                    <span style="font-size:2.5rem;">🎁</span>
-                    <span style="font-size:0.9rem;">+5</span>
-                </button>
-                <button id="dailyBonus15" class="bonus-btn bonus-15">
-                    <span style="font-size:2.5rem;">📺</span>
-                    <span style="font-size:0.9rem;">+15</span>
-                </button>
-            </div>           
+        <!-- Блок выбора -->
+        <div class="bonus-choice">
+            <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
+            <h2>Ежедневный бонус</h2>
+            <p class="bonus-subtitle">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;">
+                <div style="display:flex; gap:30px; justify-content:center;">
+                    <button id="dailyBonus5" class="bonus-btn bonus-5">
+                        <span style="font-size:2.5rem;">🎁</span>
+                        <span style="font-size:0.9rem;">+5</span>
+                    </button>
+                    <button id="dailyBonus15" class="bonus-btn bonus-15">
+                        <span style="font-size:2.5rem;">📺</span>
+                        <span style="font-size:0.9rem;">+15</span>
+                    </button>
+                </div>           
+            </div>
+            <button id="dailyBonusCancel" class="bonus-cancel">❌ Отмена</button>
         </div>
-        <button id="dailyBonusCancel" class="bonus-cancel">❌ Отмена</button>
+        <!-- Блок загрузки (изначально скрыт) -->
+        <div class="bonus-loading" style="display:none; text-align:center;">
+            <span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span>
+            <h2>Загрузка рекламы...</h2>
+            <p class="bonus-subtitle">Пожалуйста, подождите</p>
+            <div style="margin-top:15px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+                <div style="width:30%; height:100%; background:linear-gradient(90deg, #e94560, #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div>
+            </div>
+            <style>
+                @keyframes loadingBar {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(400%); }
+                }
+            </style>
+        </div>
     </div>
 </div>
 
@@ -2323,12 +2341,14 @@ body.theme-pastel .hint-check-text {
         <button id="dailyBonusUnavailableOk" class="bonus-ok-btn">Ок</button>
     </div>
 </div>
+
+
 <!-- Модалка "Бонус получен!" -->
 <div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2600; justify-content:center; align-items:center; padding:20px;">
     <div class="bonus-modal-content">
         <span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span>
         <h2 id="bonusResultTitle">Бонус получен!</h2>
-        <p id="bonusResultAmount" class="bonus-amount">💎 +5</p>
+        <p id="bonusResultAmount" class="bonus-subtitle">💎 +5</p>
         <button id="bonusResultOk" class="bonus-ok-btn">Ок</button>
     </div>
 </div>
