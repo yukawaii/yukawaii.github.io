@@ -1209,16 +1209,12 @@ if (maxWinStreak) this.maxWinStreak = parseInt(maxWinStreak) || 0;
                 const val = parseInt(item.value) || 0;
                 if (val > this.maxWinStreak) this.maxWinStreak = val;
             }
-            if (item.key === 'winsByLevel') {
-                try { const parsed = JSON.parse(item.value); this.winsByLevel = parsed; } catch(e) {}
-            }
+if("winsByLevel"===item.key)try{const e=JSON.parse(item.value);for(const i in e)this.winsByLevel[i]=Math.max(this.winsByLevel[i]||0,e[i])}catch(e){}
             if (item.key === 'noHintWins') {
                 const val = parseInt(item.value) || 0;
                 if (val > this.noHintWins) this.noHintWins = val;
             }
-            if (item.key === 'perfectWins') {
-                try { const parsed = JSON.parse(item.value); this.perfectWins = parsed; } catch(e) {}
-            }
+if("perfectWins"===item.key)try{const t=JSON.parse(item.value);for(const e in t)this.perfectWins[e]=Math.max(this.perfectWins[e]||0,t[e])}catch(t){}
             if (item.key === 'totalChecks') {
                 const val = parseInt(item.value) || 0;
                 if (val > this.totalChecks) this.totalChecks = val;
@@ -1484,7 +1480,7 @@ renderAchievements() {
         const div = document.createElement('div');
         div.className = `achievement-item ${unlocked ? 'unlocked' : 'locked'}`;
         div.innerHTML = `
-            <span class="icon">${unlocked ? '🏅' : '🔒'}</span>
+            <span class="icon">${unlocked ? ach.icon : '🔒'}</span>
             <div class="name">${ach.name}</div>
             <div class="desc">${ach.desc}</div>
         `;
