@@ -2426,12 +2426,12 @@ async solveAll() {
         console.error('Ошибка в solveAll:', error);
         this.messageEl.textContent = '❌ Ошибка при решении';
         this.sound.error();
-    } finally {
-        solveBtn.textContent = originalText;
+    } finally {  
         solveBtn.disabled = false;
-        // Возобновляем таймер после завершения всех действий
+        // Восстанавливаем кнопку через общий метод, который учтёт состояние isFinished
+        this.updateSolveButton();
         this.resumeTimer();
-    }
+}
 }
 // ============================================================
 // Модалка для получения дополнительных проверок
