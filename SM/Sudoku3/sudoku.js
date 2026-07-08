@@ -2147,7 +2147,6 @@ updateCheckButton() {
 async checkNumber() {
     if (this.isFinished) return;
 
-    this.checkedCells = {};
     // Инициализируем maxChecks, если ещё не задан (на случай вызова до старта)
     if (this.maxChecks === undefined || this.maxChecks === 0) {
         this.maxChecks = 1;        
