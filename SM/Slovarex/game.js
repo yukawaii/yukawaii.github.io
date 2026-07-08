@@ -691,24 +691,28 @@ function showGameOverModal() {
     // Заполняем статистику
     const stats = document.getElementById('gameoverStats');
     if (stats) {
-        stats.innerHTML = `
-            <div class="stat-item">
-                <span class="stat-label">📊 Уровень</span>
-                <span class="stat-value highlight">${gameState.level}</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">🎯 Найдено слов</span>
-                <span class="stat-value">${gameState.foundWords.size}</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">💎 Очки</span>
-                <span class="stat-value highlight">${gameState.totalScore + gameState.levelScore}</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">💡 Подсказок</span>
-                <span class="stat-value">${gameState.hintsLeft}</span>
-            </div>
-        `;
+      stats.innerHTML = `
+    <div class="stat-item">
+        <span class="stat-label">📊 Уровень</span>
+        <span class="stat-value highlight">${gameState.level}</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">🎯 Найдено слов</span>
+        <span class="stat-value">${gameState.foundWords.size}</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">💎 Общие очки</span>
+        <span class="stat-value">${gameState.totalScore}</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">Очки уровня (будут потеряны)</span>
+        <span class="stat-value highlight">${gameState.levelScore}</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-label">💡 Подсказок</span>
+        <span class="stat-value">${gameState.hintsLeft}</span>
+    </div>
+`;
     }
     
     modal.classList.add('show');
