@@ -1423,20 +1423,6 @@ body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff0
     animation: fadeIn 0.3s ease;
 }
 
-#achievementsModal > div {
-    background: rgba(22, 33, 62, 0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 24px;
-    padding: 25px 20px 20px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 85vh;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    animation: slideUp 0.3s ease;
-}
 
 #closeAchievementsModal {
     position: absolute;
@@ -1672,6 +1658,445 @@ body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff0
         font-size: 1rem !important;
     }
 }
+/* === Стили для бонусных модалок (адаптируются под тему) === */
+.bonus-modal-content {
+    background: rgba(22,33,62,0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 30px 25px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    animation: slideUp 0.3s ease;
+}
+
+.bonus-modal-content h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+.bonus-subtitle {
+    color: #8a8fa8;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.bonus-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: transform 0.15s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.bonus-btn:active {
+    transform: scale(0.92);
+}
+
+.bonus-cancel {
+    background: rgba(255,255,255,0.08);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.bonus-cancel:active {
+    transform: scale(0.95);
+}
+
+.bonus-ok-btn {
+    border: none;
+    padding: 12px 40px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(233,69,96,0.4);
+    transition: transform 0.15s, background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+.bonus-ok-btn:active {
+    transform: scale(0.95);
+}
+
+/* Адаптация под темы */
+body.theme-light .bonus-modal-content {
+    background: rgba(255, 248, 240, 0.95);
+    border-color: rgba(0,0,0,0.1);
+}
+body.theme-light .bonus-modal-content h2 {
+    color: #1a1a2e;
+}
+body.theme-light .bonus-subtitle {
+    color: #555;
+}
+body.theme-light .bonus-cancel {
+    background: #e8e0d8;
+    color: #1a1a2e;
+    border-color: #ccc;
+}
+body.theme-light .bonus-ok-btn {
+    background: linear-gradient(135deg, #ef5350, #c62828);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(239,83,80,0.4);
+}
+
+body.theme-blue .bonus-modal-content {
+    background: rgba(15, 35, 75, 0.95);
+    border-color: rgba(100,150,255,0.15);
+}
+body.theme-blue .bonus-modal-content h2 {
+    color: #4a8af0;
+}
+body.theme-blue .bonus-subtitle {
+    color: #88aacc;
+}
+body.theme-blue .bonus-cancel {
+    background: rgba(255,255,255,0.08);
+    color: #88aacc;
+    border-color: rgba(255,255,255,0.1);
+}
+body.theme-blue .bonus-ok-btn {
+    background: linear-gradient(135deg, #2a6af0, #0d47a1);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(42,106,240,0.4);
+}
+
+body.theme-pastel .bonus-modal-content {
+    background: rgba(245, 230, 211, 0.95);
+    border-color: rgba(180,150,120,0.2);
+}
+body.theme-pastel .bonus-modal-content h2 {
+    color: #e08060;
+}
+body.theme-pastel .bonus-subtitle {
+    color: #7a6a5a;
+}
+body.theme-pastel .bonus-cancel {
+    background: #e8dcc8;
+    color: #5a4a3a;
+    border-color: #ccc;
+}
+body.theme-pastel .bonus-ok-btn {
+    background: linear-gradient(135deg, #ef9a9a, #c62828);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(239,154,154,0.4);
+}
+
+/* Также для кнопок +5 и +15 разные цвета в зависимости от темы */
+body.theme-dark .bonus-5 {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: #fff;
+}
+body.theme-dark .bonus-15 {
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: #fff;
+}
+body.theme-light .bonus-5 {
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+    color: #fff;
+}
+body.theme-light .bonus-15 {
+    background: linear-gradient(135deg, #4dd0e1, #00acc1);
+    color: #fff;
+}
+body.theme-blue .bonus-5 {
+    background: linear-gradient(135deg, #66bb6a, #2e7d32);
+    color: #fff;
+}
+body.theme-blue .bonus-15 {
+    background: linear-gradient(135deg, #4fc3f7, #0277bd);
+    color: #fff;
+}
+body.theme-pastel .bonus-5 {
+    background: linear-gradient(135deg, #81c784, #388e3c);
+    color: #fff;
+}
+body.theme-pastel .bonus-15 {
+    background: linear-gradient(135deg, #80deea, #00838f);
+    color: #fff;
+}
+/* === Стили для модалки "Бонус получен" === */
+.result-modal-content {
+    background: rgba(22,33,62,0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 30px 25px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    animation: slideUp 0.3s ease;
+}
+.result-modal-content h2 {
+    color: #fff;
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+}
+.result-modal-content #bonusResultAmount {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffd54f;
+    margin: 10px 0 20px;
+}
+.result-ok-btn {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 25px rgba(233,69,96,0.4);
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.15s;
+}
+.result-ok-btn:active {
+    transform: scale(0.95);
+}
+
+/* === Стили для модалки достижений === */
+.achievements-modal-content {
+    background: rgba(22,33,62,0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 25px 20px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    animation: slideUp 0.3s ease;
+    overflow: hidden;
+}
+.achievements-modal-content .ach-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.achievements-modal-content h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.achievements-modal-content .ach-subtitle {
+    color: #8a8fa8;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* Сетка достижений – 2 колонки */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-right: 5px;
+    overflow-y: auto;
+    max-height: calc(80vh - 140px); /* подстраивается под размер */
+}
+.achievements-grid::-webkit-scrollbar {
+    width: 4px;
+}
+.achievements-grid::-webkit-scrollbar-thumb {
+    background: #e94560;
+    border-radius: 4px;
+}
+.achievements-grid::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
+
+/* Пагинация */
+.ach-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+.ach-page-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #aaa;
+    padding: 8px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.ach-page-btn:active {
+    transform: scale(0.95);
+}
+.ach-page-info {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+/* ===== Адаптация под темы ===== */
+body.theme-light .result-modal-content {
+    background: rgba(255, 248, 240, 0.95);
+    border-color: rgba(0,0,0,0.1);
+}
+body.theme-light .result-modal-content h2 {
+    color: #1a1a2e;
+}
+body.theme-light .result-ok-btn {
+    background: linear-gradient(135deg, #ef5350, #c62828);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(239,83,80,0.4);
+}
+
+body.theme-blue .result-modal-content {
+    background: rgba(15, 35, 75, 0.95);
+    border-color: rgba(100,150,255,0.15);
+}
+body.theme-blue .result-modal-content h2 {
+    color: #4a8af0;
+}
+body.theme-blue .result-ok-btn {
+    background: linear-gradient(135deg, #2a6af0, #0d47a1);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(42,106,240,0.4);
+}
+
+body.theme-pastel .result-modal-content {
+    background: rgba(245, 230, 211, 0.95);
+    border-color: rgba(180,150,120,0.2);
+}
+body.theme-pastel .result-modal-content h2 {
+    color: #e08060;
+}
+body.theme-pastel .result-ok-btn {
+    background: linear-gradient(135deg, #ef9a9a, #c62828);
+    color: #fff;
+    box-shadow: 0 4px 25px rgba(239,154,154,0.4);
+}
+.achievements-modal-content {
+    background: rgba(22,33,62,0.95); /* основной */
+}
+body.theme-light .achievements-modal-content {
+    background: rgba(255,248,240,0.95);
+}
+body.theme-blue .achievements-modal-content {
+    background: rgba(15,35,75,0.95);
+}
+body.theme-pastel .achievements-modal-content {
+    background: rgba(245,230,211,0.95);
+}
+
+/* ===== Цвета текста в модалке достижений для разных тем ===== */
+/* ===== Цвета текста в модалке достижений для разных тем ===== */
+
+/* Светлая тема */
+body.theme-light .achievements-modal-content h2,
+body.theme-light #achievementsModal h2 {
+    color: #1a1a2e !important;
+}
+body.theme-light .achievements-modal-content .ach-subtitle,
+body.theme-light #achievementsModal .ach-subtitle {
+    color: #555 !important;
+}
+body.theme-light .achievements-modal-content .achievement-item .name {
+    color: #1a1a2e !important;
+}
+body.theme-light .achievements-modal-content .achievement-item .desc {
+    color: #666 !important;
+}
+body.theme-light .achievements-modal-content .ach-page-btn,
+body.theme-light #achievementsModal .ach-page-btn {
+    color: #1a1a2e !important;
+    border-color: #ccc !important;
+    background: #e8e0d8 !important;
+}
+body.theme-light .achievements-modal-content .ach-page-info,
+body.theme-light #achievementsModal .ach-page-info {
+    color: #1a1a2e !important;
+}
+body.theme-light .achievements-modal-content .ach-close-btn,
+body.theme-light #achievementsModal .ach-close-btn {
+    color: #1a1a2e !important;
+}
+
+/* Синяя тема */
+body.theme-blue .achievements-modal-content h2,
+body.theme-blue #achievementsModal h2 {
+    color: #4a8af0 !important;
+}
+body.theme-blue .achievements-modal-content .ach-subtitle,
+body.theme-blue #achievementsModal .ach-subtitle {
+    color: #88aacc !important;
+}
+body.theme-blue .achievements-modal-content .achievement-item .name {
+    color: #b8d4ff !important;
+}
+body.theme-blue .achievements-modal-content .achievement-item .desc {
+    color: #88aacc !important;
+}
+body.theme-blue .achievements-modal-content .ach-page-btn,
+body.theme-blue #achievementsModal .ach-page-btn {
+    color: #88aacc !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    background: rgba(255,255,255,0.08) !important;
+}
+body.theme-blue .achievements-modal-content .ach-page-info,
+body.theme-blue #achievementsModal .ach-page-info {
+    color: #88aacc !important;
+}
+body.theme-blue .achievements-modal-content .ach-close-btn,
+body.theme-blue #achievementsModal .ach-close-btn {
+    color: #b8d4ff !important;
+}
+
+/* Пастельная тема */
+body.theme-pastel .achievements-modal-content h2,
+body.theme-pastel #achievementsModal h2 {
+    color: #e08060 !important;
+}
+body.theme-pastel .achievements-modal-content .ach-subtitle,
+body.theme-pastel #achievementsModal .ach-subtitle {
+    color: #7a6a5a !important;
+}
+body.theme-pastel .achievements-modal-content .achievement-item .name {
+    color: #5a4a3a !important;
+}
+body.theme-pastel .achievements-modal-content .achievement-item .desc {
+    color: #7a6a5a !important;
+}
+body.theme-pastel .achievements-modal-content .ach-page-btn,
+body.theme-pastel #achievementsModal .ach-page-btn {
+    color: #5a4a3a !important;
+    border-color: #ccc !important;
+    background: #e8dcc8 !important;
+}
+body.theme-pastel .achievements-modal-content .ach-page-info,
+body.theme-pastel #achievementsModal .ach-page-info {
+    color: #5a4a3a !important;
+}
+body.theme-pastel .achievements-modal-content .ach-close-btn,
+body.theme-pastel #achievementsModal .ach-close-btn {
+    color: #5a4a3a !important;
+}
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
@@ -1813,58 +2238,63 @@ body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff0
 <!-- ============================================================ -->
 <!-- Модалка выбора ежедневного бонуса -->
 <!-- ============================================================ -->
+
 <div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2500; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:400px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease;">
+    <div class="bonus-modal-content">
         <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
-        <h2 style="color:#fff; font-size:1.5rem; margin-bottom:8px;">Ежедневный бонус</h2>
-        <p style="color:#8a8fa8; font-size:0.95rem; margin-bottom:20px; line-height:1.5;">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
- <!-- Круглые кнопки -->
+        <h2>Ежедневный бонус</h2>
+        <p class="bonus-subtitle">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
         <div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;">
             <div style="display:flex; gap:30px; justify-content:center;">
-                <button id="dailyBonus5" style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#4caf50,#2e7d32); border:none; cursor:pointer; box-shadow:0 4px 15px rgba(76,175,80,0.4); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; font-weight:bold;">
+                <button id="dailyBonus5" class="bonus-btn bonus-5">
                     <span style="font-size:2.5rem;">🎁</span>
                     <span style="font-size:0.9rem;">+5</span>
                 </button>
-                <button id="dailyBonus15" style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#81d4fa,#4fc3f7); border:none; cursor:pointer; box-shadow:0 4px 15px rgba(79,195,247,0.4); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#1a1a2e; font-size:1.5rem; font-weight:bold;">
+                <button id="dailyBonus15" class="bonus-btn bonus-15">
                     <span style="font-size:2.5rem;">📺</span>
                     <span style="font-size:0.9rem;">+15</span>
                 </button>
             </div>           
         </div>
-        <button id="dailyBonusCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:50px; font-size:1rem; cursor:pointer; width:100%;">❌ Отмена</button>
-    </div>
-</div>
-            <button id="dailyBonusCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:50px; font-size:1rem; cursor:pointer;">❌ Отмена</button>
-        </div>
+        <button id="dailyBonusCancel" class="bonus-cancel">❌ Отмена</button>
     </div>
 </div>
 
-<!-- ============================================================ -->
+<!-- Модалка "Бонус уже получен" -->
+<div id="dailyBonusUnavailableModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2501; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">❌</span>
+        <h2>Бонус уже получен</h2>
+        <p class="bonus-subtitle">Вы уже получили ежедневный бонус сегодня. Возвращайтесь завтра!</p>
+        <button id="dailyBonusUnavailableOk" class="bonus-ok-btn">Ок</button>
+    </div>
+</div>
 <!-- Модалка "Бонус получен!" -->
-<!-- ============================================================ -->
 <div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2600; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:400px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease;">
+    <div class="bonus-result-content">
         <span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span>
-        <h2 style="color:#fff; font-size:1.6rem; margin-bottom:5px;" id="bonusResultTitle">Бонус получен!</h2>
-        <p style="font-size:1.8rem; font-weight:bold; color:#ffd54f; margin:10px 0 20px;" id="bonusResultAmount">💎 +5</p>
-        <button id="bonusResultOk" style="background:linear-gradient(135deg,#e94560,#c23152); color:#fff; border:none; padding:12px 40px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:0 4px 25px rgba(233,69,96,0.4);">Ок</button>
+        <h2 id="bonusResultTitle">Бонус получен!</h2>
+        <p id="bonusResultAmount" class="bonus-amount">💎 +5</p>
+        <button id="bonusResultOk" class="bonus-result-ok">Ок</button>
     </div>
 </div>
 
+<!-- Модалка достижений -->
 <div id="achievementsModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:25px 20px; max-width:500px; width:100%; max-height:80vh; position:relative; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6); animation:slideUp 0.3s ease; overflow:hidden;">
-        <button id="closeAchievementsModal" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;">✕</button>
-        <h2 style="color:#fff; text-align:center; margin-bottom:5px;">🏅 Достижения</h2>
-        <p style="color:#8a8fa8; text-align:center; font-size:0.9rem; margin-bottom:15px;">Разблокируйте все!</p>
-        <div id="achievementsList" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:5px;"></div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-            <button id="achPrevPage" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#aaa; padding:8px 20px; border-radius:30px; cursor:pointer;">◀</button>
-            <span id="achPageInfo" style="color:#aaa; font-size:0.9rem;">1 / 1</span>
-            <button id="achNextPage" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#aaa; padding:8px 20px; border-radius:30px; cursor:pointer;">▶</button>
+    <div class="achievements-modal-content">
+        <button id="closeAchievementsModal" class="ach-close-btn">✕</button>
+        <h2>🏅 Достижения</h2>
+        <p class="ach-subtitle">Разблокируйте все!</p>
+        <div id="achievementsList" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:5px; max-height:calc(80vh - 140px); overflow-y:auto;"></div>
+        <div class="ach-pagination">
+            <button id="achPrevPage" class="ach-page-btn">◀</button>
+            <span id="achPageInfo" class="ach-page-info">1 / 1</span>
+            <button id="achNextPage" class="ach-page-btn">▶</button>
         </div>
     </div>
-</div>
 
+
+</div>
 <script>
 // Инициализация VK Bridge, если он доступен
 if (typeof vkBridge !== 'undefined' && vkBridge.send) {

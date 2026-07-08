@@ -334,6 +334,43 @@ this.achievementList = [
         document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
         document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
 
+        document.getElementById('dailyBonusUnavailableOk').addEventListener('click', () => {
+    this.sound.click();
+    this.closeModal('dailyBonusUnavailableModal');
+    this.resumeTimer();
+});
+      
+document.getElementById('dailyBonusUnavailableOk').addEventListener('click', () => {
+    this.sound.click();
+    this.closeModal('dailyBonusUnavailableModal');
+    this.resumeTimer();
+});
+        // Обработчики для ежедневного бонуса (привязываем один раз)
+document.getElementById('dailyBonus5').addEventListener('click', () => {
+    this.sound.click();
+    this.closeModal('dailyBonusModal');
+    this.claimBonus(5);
+});
+
+document.getElementById('dailyBonus15').addEventListener('click', async () => {
+    this.sound.click();
+    this.closeModal('dailyBonusModal');
+    this.messageEl.textContent = '⏳ Загрузка рекламы...';
+    const adShown = await this.adManager.showRewardedAd();
+    if (adShown) {
+        this.claimBonus(15);
+    } else {
+        this.showToast('❌ Реклама не была показана. Попробуйте позже.');
+        this.resumeTimer();
+    }
+});
+
+document.getElementById('dailyBonusCancel').addEventListener('click', () => {
+    this.sound.click();
+    this.closeModal('dailyBonusModal');
+    this.resumeTimer();
+});
+
 // Кнопка "Таблица лидеров"
 // В конструкторе SudokuGame
 document.getElementById('btnLeaderboard').addEventListener('click', () => {
@@ -387,7 +424,21 @@ document.getElementById('achNextPage').addEventListener('click', () => this.achi
                 this.sound.click();
             });
         });
+// Для модалки выбора бонуса
+document.getElementById('dailyBonusModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+        this.closeModal('dailyBonusModal');
+        this.resumeTimer();
+    }
+});
 
+// Для модалки "бонус уже получен"
+document.getElementById('dailyBonusUnavailableModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+        this.closeModal('dailyBonusUnavailableModal');
+        this.resumeTimer();
+    }
+});
         // Подписка на VK
         this.setupVKBridge();
 
@@ -1483,70 +1534,18 @@ canClaimDailyBonus() {
 // Показать модалку выбора бонуса
 // ============================================================
 showDailyBonusModal() {
-    if (!this.canClaimDailyBonus()) {
-        this.showToast('❌ Вы уже получили бонус сегодня!');
-        return;
-    }
-
-    const modal = document.getElementById('dailyBonusModal');
-    if (!modal) {
-        console.error('Модалка #dailyBonusModal не найдена');
-        return;
-    }
-
-    // Приостанавливаем таймер игры, если она активна
     this.pauseTimer();
 
-    modal.style.display = 'flex';
+    if (!this.canClaimDailyBonus()) {
+        // Бонус уже получен – показываем отдельную модалку-сообщение
+        const modal = document.getElementById('dailyBonusUnavailableModal');
+        if (modal) modal.style.display = 'flex';
+        return;
+    }
 
-    // Убираем старые обработчики, чтобы не накапливались
-    const btn5 = document.getElementById('dailyBonus5');
-    const btn15 = document.getElementById('dailyBonus15');
-    const btnCancel = document.getElementById('dailyBonusCancel');
-
-    const newBtn5 = btn5.cloneNode(true);
-    const newBtn15 = btn15.cloneNode(true);
-    const newBtnCancel = btnCancel.cloneNode(true);
-
-    btn5.parentNode.replaceChild(newBtn5, btn5);
-    btn15.parentNode.replaceChild(newBtn15, btn15);
-    btnCancel.parentNode.replaceChild(newBtnCancel, btnCancel);
-
-    // Обработчики
-    newBtn5.addEventListener('click', () => {
-        this.sound.click();
-        this.closeModal('dailyBonusModal');
-        this.claimBonus(5);
-    });
-
-    newBtn15.addEventListener('click', async () => {
-        this.sound.click();
-        this.closeModal('dailyBonusModal');
-        // Показываем рекламу за вознаграждение
-        this.messageEl.textContent = '⏳ Загрузка рекламы...';
-        const adShown = await this.adManager.showRewardedAd();
-        if (adShown) {
-            this.claimBonus(15);
-        } else {
-            // Если реклама не показана – ничего не даём, показываем сообщение
-            this.showToast('❌ Реклама не была показана. Попробуйте позже.');
-            this.resumeTimer();
-        }
-    });
-
-    newBtnCancel.addEventListener('click', () => {
-        this.sound.click();
-        this.closeModal('dailyBonusModal');
-        this.resumeTimer();
-    });
-
-    // Закрытие по клику вне окна
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            this.closeModal('dailyBonusModal');
-            this.resumeTimer();
-        }
-    });
+    // Бонус доступен – показываем модалку выбора
+    const modal = document.getElementById('dailyBonusModal');
+    if (modal) modal.style.display = 'flex';
 }
 
 // ============================================================
