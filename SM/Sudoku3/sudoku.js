@@ -54,7 +54,7 @@ class AdManager {
             const timeoutId = setTimeout(() => {
                 console.log('⏰ Таймаут показа рекламы (10 сек)');
                 resolve(false);
-            }, 10000);
+            }, 60000);
             
             if (typeof vkBridge === 'undefined') {
                 clearTimeout(timeoutId);
