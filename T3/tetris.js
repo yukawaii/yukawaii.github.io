@@ -1106,6 +1106,7 @@ function pauseGame() {
     
     if (typeof gameAudio !== 'undefined') {
         gameAudio.pauseAll(); // ✅ приостанавливает оба контекста
+           gameAudio.stopMusic();
     }
 
     if (typeof window.notifyGameplayStop === 'function') {
