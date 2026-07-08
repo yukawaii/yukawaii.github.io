@@ -326,33 +326,28 @@ this.achievementList = [
 
 
         // Кнопки
-        document.getElementById('btnStartGame').addEventListener('click', () => this.startNewGame());
-        document.getElementById('btnBackToMenu').addEventListener('click', () => this.goToMenu());
-        document.getElementById('btnToggleSound').addEventListener('click', () => this.toggleSound());
-        document.getElementById('btnInviteFriends').addEventListener('click', () => this.inviteFriends());
-       document.getElementById('btnHint').addEventListener('click', () => this.giveHint());
-        document.getElementById('btnCheck').addEventListener('click', () => this.checkNumber());
-        document.getElementById('btnSolveAll').addEventListener('click', () => this.solveAll());
+    document.getElementById('btnStartGame').addEventListener('pointerdown', (e) => { e.preventDefault(); this.startNewGame(); });
+      document.getElementById('btnBackToMenu').addEventListener('pointerdown', (e) => { e.preventDefault(); this.goToMenu(); });
+      document.getElementById('btnToggleSound').addEventListener('pointerdown', (e) => { e.preventDefault(); this.toggleSound(); });
+     document.getElementById('btnInviteFriends').addEventListener('pointerdown', (e) => { e.preventDefault(); this.inviteFriends(); });
+   document.getElementById('btnHint').addEventListener('pointerdown', (e) => { e.preventDefault(); this.giveHint(); });
+    document.getElementById('btnCheck').addEventListener('pointerdown', (e) => { e.preventDefault(); this.checkNumber(); });
+      document.getElementById('btnSolveAll').addEventListener('pointerdown', (e) => { e.preventDefault(); this.solveAll(); });
 
-        document.getElementById('dailyBonusUnavailableOk').addEventListener('click', () => {
-    this.sound.click();
-    this.closeModal('dailyBonusUnavailableModal');
-    this.resumeTimer();
-});
       
-document.getElementById('dailyBonusUnavailableOk').addEventListener('click', () => {
+document.getElementById('dailyBonusUnavailableOk').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusUnavailableModal');
     this.resumeTimer();
 });
         // Обработчики для ежедневного бонуса (привязываем один раз)
-document.getElementById('dailyBonus5').addEventListener('click', () => {
+ocument.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.claimBonus(5);
 });
 
-document.getElementById('dailyBonus15').addEventListener('click', async () => {
+document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e) => { e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.messageEl.textContent = '⏳ Загрузка рекламы...';
@@ -365,7 +360,7 @@ document.getElementById('dailyBonus15').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('dailyBonusCancel').addEventListener('click', () => {
+document.getElementById('dailyBonusCancel').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.resumeTimer();
@@ -373,17 +368,17 @@ document.getElementById('dailyBonusCancel').addEventListener('click', () => {
 
 // Кнопка "Таблица лидеров"
 // В конструкторе SudokuGame
-document.getElementById('btnLeaderboard').addEventListener('click', () => {
+document.getElementById('btnLeaderboard').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.showLeaderboard();
 });
 
-document.getElementById('btnDailyBonus').addEventListener('click', () => {
+document.getElementById('btnDailyBonus').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.showDailyBonusModal();
 });
 // Открыть модалку с темами
-document.getElementById('btnThemeSun').addEventListener('click', function() {
+document.getElementById('btnThemeSun').addEventListener('pointerdown', function(e) { e.preventDefault();
     document.getElementById('themeModal').style.display = 'flex';
 });
 
@@ -1980,6 +1975,7 @@ if (this.difficulty === 'easy') {
     
     if (this.checkWin()) {
         this.isFinished = true;
+    
         this.sound.win();
         this.statusEl.textContent = '🎉 Победа!';
         this.messageEl.textContent = '🏆 Вы решили Судоку!';
@@ -2195,6 +2191,7 @@ this.saveAchievements();
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
+           this.render();
     }
 }
 
@@ -2242,6 +2239,7 @@ updateCheckButton() {
 async checkNumber() {
     if (this.isFinished) return;
 
+    this.checkedCells = {};
     // Инициализируем maxChecks, если ещё не задан (на случай вызова до старта)
     if (this.maxChecks === undefined || this.maxChecks === 0) {
         this.maxChecks = 1;        
@@ -2393,6 +2391,7 @@ async solveAll() {
             clearInterval(this.timerInterval);
             this.timerInterval = null;
         }
+           this.render();
     }
 }
 // ============================================================
@@ -2609,7 +2608,7 @@ this.loadDiamonds();
     }
 
 // Внутри startNewGame() после установки difficulty
-ithis.maxChecks = 1;
+this.maxChecks = 1;
 
 this.checksUsed = 0;
 this.updateCheckButton();
