@@ -2102,18 +2102,8 @@ if (this.difficulty === 'easy') {
     this.checkAchievements();
     this.render();
     
-    if (this.checkWin()) {
-       // this.isFinished = true;
-    
-        this.sound.win();
-        this.statusEl.textContent = '🎉 Победа!';
-        this.messageEl.textContent = '🏆 Вы решили Судоку!';
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
-        }
-  
-          }
+ this.checkWin();
+
 }
 
 // ============================================================
@@ -2204,17 +2194,8 @@ this.saveAchievements();
     
     this.updateHintButton();
     
-    if (this.checkWin()) {
-     //   this.isFinished = true;
-        this.sound.win();
-        this.statusEl.textContent = '🎉 Победа!';
-        this.messageEl.textContent = '🏆 Вы решили Судоку!';
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
-        }
-        
-    }
+ this.checkWin();
+
 }
 
 
@@ -2332,17 +2313,8 @@ async checkNumber() {
     this.render();
     this.updateCheckButton();
 
-    if (this.checkWin()) {
-      //  this.isFinished = true;
-        this.sound.win();
-        this.statusEl.textContent = '🎉 Победа!';
-        this.messageEl.textContent = '🏆 Вы решили Судоку!';
-        if (this.timerInterval) {
-            clearInterval(this.timerInterval);
-            this.timerInterval = null;
-        }
-   
-    }
+ this.checkWin();
+
 }
   // ============================================================
 // Начисление алмазов за победу
@@ -2419,9 +2391,8 @@ async solveAll() {
         this.messageEl.textContent = `⚡ Решено ${solved} клеток!`;
         this.render();
 
-        if (this.checkWin()) {
-            // checkWin сам установит isFinished и покажет эффекты
-        }
+       this.checkWin();
+
     } catch (error) {
         console.error('Ошибка в solveAll:', error);
         this.messageEl.textContent = '❌ Ошибка при решении';
@@ -2616,8 +2587,15 @@ this.checkAllChecksUsed();
     this.saveAchievements();
     this.awardDiamondsForWin();
     this.isFinished = true;
-this.showWinEffects();
-    return true;
+this.updateStatus();               // обновит статус на "Победа!"
+this.messageEl.textContent = '🏆 Вы решили Судоку!';
+if (this.timerInterval) {
+    clearInterval(this.timerInterval);
+    this.timerInterval = null;
+}
+this.sound.win();                  // звук победы
+this.showWinEffects();             // конфетти и кнопка
+return true;
 }
     // ============================================================
     // Старт игры
