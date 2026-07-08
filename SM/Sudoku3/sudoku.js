@@ -347,11 +347,13 @@ document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { 
     this.claimBonus(5);
 });
 
-document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e) => { e.preventDefault();
+document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e) => {
+    e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
-    this.messageEl.textContent = '⏳ Загрузка рекламы...';
+    this.showLoadingAd(); // показать загрузку
     const adShown = await this.adManager.showRewardedAd();
+    this.hideLoadingAd(); // скрыть
     if (adShown) {
         this.claimBonus(15);
     } else {
@@ -832,6 +834,15 @@ showConfirmDialog() {
         });
     });
 }
+
+showLoadingAd() {
+    const modal = document.getElementById('loadingAdModal');
+    if (modal) modal.style.display = 'flex';
+}
+hideLoadingAd() {
+    const modal = document.getElementById('loadingAdModal');
+    if (modal) modal.style.display = 'none';
+}
     // ============================================================
 // Инициализация VK и получение данных пользователя
 // ============================================================
@@ -858,7 +869,7 @@ initVK() {
     // Запрашиваем токен для работы с storage и secure API
     vkBridge.send('VKWebAppGetAuthToken', {
         app_id: 51399364, // Ваш ID приложения (можно вынести в константу)
-        scope: 'storage,secure'
+        scope: 'secure'
     })
     .then((data) => {
         if (data && data.access_token) {
