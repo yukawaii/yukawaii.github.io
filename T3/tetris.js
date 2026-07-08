@@ -1034,26 +1034,30 @@ isSlowDownActive = false;
     update();
 }
 
-function startGameWithAudio() {
+async function startGameWithAudio() {
+    console.log("startGameWithAudio вызван");
+    
+    // Активируем аудио контекст (это быстро)
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
         gameAudio.resumeContext();
     }
+    
+    // Сразу запускаем игру (без ожидания аудио)
     startGame();
+    
+    // Загружаем аудио, если ещё не загружено
     if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
-        gameAudio.init().then(() => {
-            if (!musicMuted && !soundMuted) playBackgroundMusic();
-        }).catch(e => console.log('Аудио не загружено:', e));
+        await gameAudio.init(); // дожидаемся загрузки всех звуков
+        console.log('✅ Аудио загружено, запускаем музыку');
+        if (!musicMuted && !soundMuted) {
+            await playBackgroundMusic(); // дожидаемся запуска музыки
+        }
     } else if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
-        if (!musicMuted && !soundMuted) playBackgroundMusic();
+        // Если аудио уже загружено — сразу запускаем
+        if (!musicMuted && !soundMuted) {
+            await playBackgroundMusic();
+        }
     }
-    // // Сброс флагов замедления при старте новой игры
-    pendingSlowDown = false;
-if (slowDownTimerId) {
-    clearTimeout(slowDownTimerId);
-    slowDownTimerId = null;
-}
-isSlowDownActive = false;
-    // конец
 }
 
 function endGame() {
