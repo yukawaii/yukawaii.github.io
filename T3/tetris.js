@@ -1023,11 +1023,7 @@ isSlowDownActive = false;
     const maxX = arenaWidth - matrixWidth;
     player.pos.x = Math.floor(maxX / 2);
     player.pos.y = 0;
-    
-    if (typeof gameAudio !== 'undefined' && gameAudio.initialized && !soundMuted && !musicMuted) {
-        playBackgroundMusic();
-    }
-    
+      
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     lastTime = 0;
     dropCounter = 0;
@@ -1037,24 +1033,24 @@ isSlowDownActive = false;
 async function startGameWithAudio() {
     console.log("startGameWithAudio вызван");
     
-    // Активируем аудио контекст (это быстро)
+    // Активируем аудио контекст
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
         gameAudio.resumeContext();
     }
     
-    // Сразу запускаем игру (без ожидания аудио)
+    // Запускаем игру (без музыки)
     startGame();
     
     // Загружаем аудио, если ещё не загружено
     if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
-        await gameAudio.init(); // дожидаемся загрузки всех звуков
-        console.log('✅ Аудио загружено, запускаем музыку');
+        await gameAudio.init();
+        console.log('✅ Аудио загружено');
+    }
+    
+    // 🔥 ЗАПУСКАЕМ МУЗЫКУ ПОСЛЕ ЗАГРУЗКИ
+    if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) {
-            await playBackgroundMusic(); // дожидаемся запуска музыки
-        }
-    } else if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
-        // Если аудио уже загружено — сразу запускаем
-        if (!musicMuted && !soundMuted) {
+            console.log('🎵 Запускаем музыку после загрузки');
             await playBackgroundMusic();
         }
     }

@@ -1741,8 +1741,7 @@ updateSolveButton() {
     if (!btn) return;
     if (this.isFinished) {
         btn.textContent = '🎉 Новая игра';
-        btn.className = 'action-btn solve-btn win-btn'; // добавляем класс для зелёного и пульсации
-        // Убираем старый обработчик, если он был привязан к solveAll – но мы оставим один обработчик с проверкой
+        btn.className = 'action-btn solve-btn win-btn';
     } else {
         btn.textContent = '⚡ Решить всё';
         btn.className = 'action-btn solve-btn';
