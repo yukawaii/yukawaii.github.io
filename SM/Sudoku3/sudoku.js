@@ -341,7 +341,7 @@ document.getElementById('dailyBonusUnavailableOk').addEventListener('pointerdown
     this.resumeTimer();
 });
         // Обработчики для ежедневного бонуса (привязываем один раз)
-ocument.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { e.preventDefault();
+document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { e.preventDefault();
     this.sound.click();
     this.closeModal('dailyBonusModal');
     this.claimBonus(5);
@@ -384,43 +384,44 @@ document.getElementById('btnThemeSun').addEventListener('pointerdown', function(
 
         
         // Кнопка "Как играть?"
-     document.getElementById('btnHowToPlay').addEventListener('click', () => {
+     document.getElementById('btnHowToPlay').addEventListener('pointerdown', (e) => {
     this.sound.click();
     document.getElementById('howToPlayModal').style.display = 'flex';
 });
         // Достижения
-document.getElementById('btnAchievements').addEventListener('click', () => {
+document.getElementById('btnAchievements').addEventListener('pointerdown', (e) => {
     this.sound.click();
     this.openAchievementsModal();
 });
-document.getElementById('closeAchievementsModal').addEventListener('click', () => this.closeAchievementsModal());
-document.getElementById('achPrevPage').addEventListener('click', () => this.achievementsPrevPage());
-document.getElementById('achNextPage').addEventListener('click', () => this.achievementsNextPage());
+document.getElementById('closeAchievementsModal').addEventListener('pointerdown', (e) => { e.preventDefault(); this.closeAchievementsModal(); });
+document.getElementById('achPrevPage').addEventListener('pointerdown', (e) => { e.preventDefault(); this.achievementsPrevPage(); });
+document.getElementById('achNextPage').addEventListener('pointerdown', (e) => { e.preventDefault(); this.achievementsNextPage(); });
         // Закрытие модального окна
-        document.getElementById('closeHowToPlay').addEventListener('click', () => {
+      document.getElementById('closeHowToPlay').addEventListener('pointerdown', (e) => { e.preventDefault();
             document.getElementById('howToPlayModal').style.display = 'none';
         });
-        document.getElementById('closeHowToPlayBtn').addEventListener('click', () => {
+  document.getElementById('closeHowToPlayBtn').addEventListener('pointerdown', (e) => { e.preventDefault();
             document.getElementById('howToPlayModal').style.display = 'none';
         });
         // Закрытие по клику вне окна
-        document.getElementById('howToPlayModal').addEventListener('click', (e) => {
+        document.getElementById('howToPlayModal').addEventListener('pointerdown', (e) => { e.preventDefault();
             if (e.target === e.currentTarget) {
                 document.getElementById('howToPlayModal').style.display = 'none';
             }
         });
 
         // Выбор сложности
-        document.querySelectorAll('.diff-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.difficulty = btn.dataset.diff;
-                this.sound.click();
-            });
-        });
+   document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.difficulty = btn.dataset.diff;
+        this.sound.click();
+    });
+});
 // Для модалки выбора бонуса
-document.getElementById('dailyBonusModal').addEventListener('click', (e) => {
+document.getElementById('dailyBonusModal').addEventListener('pointerdown', (e) => { e.preventDefault();
     if (e.target === e.currentTarget) {
         this.closeModal('dailyBonusModal');
         this.resumeTimer();
@@ -428,7 +429,7 @@ document.getElementById('dailyBonusModal').addEventListener('click', (e) => {
 });
 
 // Для модалки "бонус уже получен"
-document.getElementById('dailyBonusUnavailableModal').addEventListener('click', (e) => {
+document.getElementById('dailyBonusUnavailableModal').addEventListener('pointerdown', (e) => { e.preventDefault();
     if (e.target === e.currentTarget) {
         this.closeModal('dailyBonusUnavailableModal');
         this.resumeTimer();
@@ -603,7 +604,7 @@ showNoAdModal(callback) {
     
     // Обработчик кнопки
     const okBtn = document.getElementById('noAdOkBtn');
-    okBtn.addEventListener('click', () => {
+    okBtn.addEventListener('pointerdown', (e) => { e.preventDefault();
         if (overlay.parentNode) {
             document.body.removeChild(overlay);
         }
@@ -612,7 +613,7 @@ showNoAdModal(callback) {
     });
     
     // Закрытие по клику вне диалога
-    overlay.addEventListener('click', (e) => {
+    overlay.addEventListener('pointerdown', (e) => { e.preventDefault();
         if (e.target === overlay) {
             if (overlay.parentNode) {
                 document.body.removeChild(overlay);
@@ -659,12 +660,12 @@ showHintAdModal() {
         cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
         confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
         
-        newCancelBtn.addEventListener('click', () => {
+        newCancelBtn.addEventListener('pointerdown', (e) => { e.preventDefault();
             this.sound.click();
             closeModal(false);
         });
         
-        newConfirmBtn.addEventListener('click', async () => {
+   newConfirmBtn.addEventListener('pointerdown', async (e) => {
             this.sound.click();
             console.log('Нажата кнопка "Получить"');
             
@@ -732,7 +733,7 @@ showHintAdModal() {
             }
         });
         
-        modal.addEventListener('click', (e) => {
+        modal.addEventListener('pointerdown', (e) => { e.preventDefault();
             if (e.target === modal) {
                 this.sound.click();
                 closeModal(false);
@@ -820,15 +821,15 @@ showConfirmDialog() {
             resolve(result);
         };
         
-        document.getElementById('confirmAdYes').addEventListener('click', () => {
+        document.getElementById('confirmAdYes').addEventListener('pointerdown', (e) => { e.preventDefault();
             closeDialog(true);
         });
         
-        document.getElementById('confirmAdNo').addEventListener('click', () => {
+        document.getElementById('confirmAdNo').addEventListener('pointerdown', (e) => { e.preventDefault();
             closeDialog(false);
         });
         
-        overlay.addEventListener('click', (e) => {
+        overlay.addEventListener('pointerdown', (e) => { e.preventDefault();
             if (e.target === overlay) {
                 closeDialog(false);
             }
@@ -995,11 +996,7 @@ updateDiamondUI() {
 // Открытие таблицы лидеров
 // ============================================================
 showLeaderboard() {
-    if (!this.vkInitialized || !this.vkUserId) {
-        alert('Таблица лидеров доступна только в приложении VK');
-        return;
-    }
-    // Передаём текущее количество алмазов как результат пользователя
+      // Передаём текущее количество алмазов как результат пользователя
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: this.currentDiamonds,
         global: 1
@@ -1598,7 +1595,7 @@ showBonusResult(amount) {
     const newOkBtn = okBtn.cloneNode(true);
     okBtn.parentNode.replaceChild(newOkBtn, okBtn);
 
-    newOkBtn.addEventListener('click', () => {
+    newOkBtn.addEventListener('pointerdown', (e) => { e.preventDefault();
         this.sound.click();
         this.closeModal('bonusResultModal');
         // Возобновляем таймер (если был приостановлен)
@@ -1606,7 +1603,7 @@ showBonusResult(amount) {
     });
 
     // Закрытие по клику вне
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener('pointerdown', (e) => { e.preventDefault();
         if (e.target === modal) {
             this.closeModal('bonusResultModal');
             this.resumeTimer();
@@ -1841,7 +1838,7 @@ if (this.selectedRow !== -1 && this.selectedCol !== -1) {
     }
 }
 
-            cell.addEventListener('click', () => this.selectCell(r, c));
+       cell.addEventListener('pointerdown', (e) => { e.preventDefault(); this.selectCell(r, c); });
             this.gridElement.appendChild(cell);
         }
     }
@@ -1857,13 +1854,13 @@ renderNumPanel() {
         const btn = document.createElement('button');
         btn.className = 'num-btn';
         btn.textContent = i;
-        btn.addEventListener('click', () => this.placeNumber(i));
+      btn.addEventListener('pointerdown', (e) => { e.preventDefault(); this.placeNumber(i); });
         this.numPanel.appendChild(btn);
     }
     const erase = document.createElement('button');
     erase.className = 'num-btn erase';
     erase.textContent = '✕';
-    erase.addEventListener('click', () => this.placeNumber(0));
+    erase.addEventListener('pointerdown', (e) => { e.preventDefault(); this.placeNumber(0); });
     this.numPanel.appendChild(erase);
 }
 // ============================================================
@@ -1988,112 +1985,6 @@ if (this.difficulty === 'easy') {
     }
 }
 
-// ============================================================
-// Модалка для получения дополнительных подсказок
-// ============================================================
-showHintAdModal() {
-    console.log('showHintAdModal вызван');
-    return new Promise((resolve) => {
-        const modal = document.getElementById('hintAdModal');
-        
-        if (!modal) {
-            console.error('Модалка #hintAdModal не найдена в DOM');
-            resolve(false);
-            return;
-        }
-        
-        // ⏸️ Ставим таймер на паузу
-        this.pauseTimer();
-        
-        modal.style.display = 'flex';
-        
-        const cancelBtn = document.getElementById('hintAdCancel');
-        const confirmBtn = document.getElementById('hintAdConfirm');
-        
-        let isResolved = false;
-        
-        const closeModal = (result) => {
-            if (isResolved) return;
-            isResolved = true;
-            modal.style.display = 'none';
-            this.resumeTimer();
-            console.log('Модалка закрыта с результатом:', result);
-            resolve(result);
-        };
-        
-        // Убираем старые обработчики
-        const newCancelBtn = cancelBtn.cloneNode(true);
-        const newConfirmBtn = confirmBtn.cloneNode(true);
-        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
-        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-        
-        newCancelBtn.addEventListener('click', () => {
-            this.sound.click();
-            closeModal(false);
-        });
-        
-                                            newConfirmBtn.addEventListener('click', async () => {
-                                        this.sound.click();
-                                        console.log('Нажата кнопка "Получить"');
-                                        
-                                        // Показываем сообщение о загрузке рекламы
-                                        this.messageEl.textContent = '⏳ Загрузка рекламы...';
-                                        
-                                        try {
-                                            const adShown = await this.adManager.showRewardedAd();
-                                            console.log('Результат показа рекламы:', adShown);
-                                            
-                                            if (adShown === true) {
-                                                // ✅ Реклама показана — даём 3 подсказки
-                                                this.maxHints += 3;
-                                                const remaining = this.maxHints - this.hintsUsed;
-                                                this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
-                                                this.sound.click();
-                                                this.render();
-                                                closeModal(true);
-                                            } else {
-                                                // ❌ Реклама НЕ показана
-                                                modal.style.display = 'none';
-                                                
-                                                this.showNoAdModal((result) => {
-                                                    if (result) {
-                                                        this.maxHints += 1;
-                                                        const remaining = this.maxHints - this.hintsUsed;
-                                                        this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
-                                                        this.sound.click();
-                                                        this.render();
-                                                        closeModal(true);
-                                                    } else {
-                                                        closeModal(false);
-                                                    }
-                                                });
-                                            }
-                                        } catch (error) {
-                                            console.error('Ошибка при показе рекламы:', error);
-                                            modal.style.display = 'none';
-                                            this.showNoAdModal((result) => {
-                                                if (result) {
-                                                    this.maxHints += 1;
-                                                    const remaining = this.maxHints - this.hintsUsed;
-                                                    this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
-                                                    this.sound.click();
-                                                    this.render();
-                                                    closeModal(true);
-                                                } else {
-                                                    closeModal(false);
-                                                }
-                                            });
-                                        }
-                                    });
-        
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                this.sound.click();
-                closeModal(false);
-            }
-        });
-    });
-}
 // ============================================================
 // Обновленная подсказка с модалкой для доп. подсказок
 // ============================================================
@@ -2430,12 +2321,12 @@ showCheckAdModal() {
         cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
         confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
-        newCancelBtn.addEventListener('click', () => {
+        newCancelBtn.addEventListener('pointerdown', (e) => { e.preventDefault();
             this.sound.click();
             closeModal(false);
         });
 
-        newConfirmBtn.addEventListener('click', async () => {
+        newConfirmBtn.addEventListener('pointerdown', async (e) => {
             this.sound.click();
             console.log('Нажата кнопка "Получить проверки"');
 
@@ -2498,7 +2389,7 @@ showCheckAdModal() {
             }
         });
 
-        modal.addEventListener('click', (e) => {
+        modal.addEventListener('pointerdown', (e) => { e.preventDefault();
             if (e.target === modal) {
                 this.sound.click();
                 closeModal(false);
@@ -2613,8 +2504,7 @@ this.maxChecks = 1;
 this.checksUsed = 0;
 this.updateCheckButton();
 
-    this.messageEl.textContent = '';
-        this.messageEl.textContent = '';
+          this.messageEl.textContent = '';
         this.updateHintButton();
 
         
@@ -2681,14 +2571,21 @@ function closeThemeModal() {
     document.getElementById('themeModal').style.display = 'none';
 }
 
-document.getElementById('closeThemeModal').addEventListener('click', closeThemeModal);
-document.getElementById('themeModal').addEventListener('click', function(e) {
-    if (e.target === this) closeThemeModal();
+document.getElementById('closeThemeModal').addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    closeThemeModal();
+});
+document.getElementById('themeModal').addEventListener('pointerdown', function(e) {
+    if (e.target === this) {
+        e.preventDefault();
+        closeThemeModal();
+    }
 });
 
 // Переключение тем
 document.querySelectorAll('.theme-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('pointerdown', function(e) {
+        e.preventDefault();
         // Убрать активный класс у всех
         document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active-theme'));
         this.classList.add('active-theme');

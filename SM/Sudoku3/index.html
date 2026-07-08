@@ -2097,6 +2097,56 @@ body.theme-pastel .achievements-modal-content .ach-close-btn,
 body.theme-pastel #achievementsModal .ach-close-btn {
     color: #5a4a3a !important;
 }
+/* Цвета уровней сложности в модалке "Как играть?" */
+.level-easy   { color: #4caf50; }
+.level-medium { color: #ff9800; }
+.level-hard   { color: #f44336; }
+.level-expert { color: #9c27b0; }
+
+/* Цвет текста "1 подсказка и 1 проверка" – будет браться из темы */
+.hint-check-text { color: #ffd54f; } /* по умолчанию (тёмная тема) */
+body.theme-light .level-easy   { color: #2e7d32; }
+body.theme-light .level-medium { color: #e65100; }
+body.theme-light .level-hard   { color: #c62828; }
+body.theme-light .level-expert { color: #6a1b9a; }
+body.theme-light .hint-check-text { color: #c62828; }
+/* ---- Цвета для текста в модалке "Как играть?" ---- */
+
+/* Основной текст (описание подсказок/проверок) */
+.hint-info-text {
+    font-size: 0.95rem;
+    margin: 5px 0 10px 0;
+    color: #ccc; /* цвет для тёмной темы (по умолчанию) */
+}
+
+body.theme-light .hint-info-text {
+    color: #333; /* тёмно-серый на светлом фоне */
+}
+
+body.theme-blue .hint-info-text {
+    color: #b8d4ff; /* светлый голубой на синем фоне */
+}
+
+body.theme-pastel .hint-info-text {
+    color: #5a4a3a; /* тёмный коричневый на пастельном фоне */
+}
+
+/* Выделенные слова "подсказка" и "проверка" */
+.hint-check-text {
+    color: #ffd54f; /* жёлтый по умолчанию (тёмная тема) */
+}
+
+body.theme-light .hint-check-text {
+    color: #c62828; /* красный для контраста на светлом */
+}
+
+body.theme-blue .hint-check-text {
+    color: #66ddff; /* яркий голубой на синем */
+}
+
+body.theme-pastel .hint-check-text {
+    color: #e08060; /* персиковый на пастели */
+}
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
@@ -2200,12 +2250,16 @@ body.theme-pastel #achievementsModal .ach-close-btn {
     <li><strong>✅ Проверить</strong> — проверяет правильность всех цифр на поле</li>
     <li><strong>⚡ Решить всё</strong> — заполняет все клетки верными цифрами</li>
 </ul>
-<p><strong >💡 Уровни сложности:</strong></p>
+<p><strong>💡 Уровни сложности:</strong></p>
+<p class="hint-info-text">
+    На каждом уровне вам доступны <strong class="hint-check-text">1 подсказка</strong> и <strong class="hint-check-text">1 проверка</strong>.<br>
+    Дополнительные можно получить за просмотр рекламы.
+</p>
 <ul style="padding-left:20px; margin:10px 0;">
-    <li><span style="color:#4caf50;">🟢 Лёгкий</span> — 1 подсказка и 3 проверки</li>
-    <li><span style="color:#ff9800;">🟠 Средний</span> — 1 подсказка и 2 проверки</li>
-    <li><span style="color:#f44336;">🔴 Сложный</span> — 1 подсказка и 1 проверка</li>
-    <li><span style="color:#9c27b0;">🟣 Эксперт</span> — 1 подсказка и 1 проверка</li>
+    <li><span class="level-easy">🟢 Лёгкий</span> — меньше всего пустых клеток, идеально для новичков.</li>
+    <li><span class="level-medium">🟠 Средний</span> — баланс между пустыми и заполненными клетками.</li>
+    <li><span class="level-hard">🔴 Сложный</span> — много пустых клеток, требует внимательности.</li>
+    <li><span class="level-expert">🟣 Эксперт</span> — максимальное количество пустых клеток, для настоящих мастеров.</li>
 </ul>
 
         </div>
