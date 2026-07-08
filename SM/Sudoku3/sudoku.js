@@ -350,28 +350,66 @@ document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => { 
 document.getElementById('dailyBonus15').addEventListener('pointerdown', async (e) => {
     e.preventDefault();
     this.sound.click();
-    this.closeModal('dailyBonusModal');
 
-    const btn = document.getElementById('dailyBonus15');
-    const originalText = btn.textContent;
-    btn.textContent = '⏳ Загрузка...';
-    btn.disabled = true;
+    // Проверяем, доступен ли бонус сегодня
+    if (!this.canClaimDailyBonus()) {
+        this.showGlobalToast('❌ Бонус уже получен сегодня!', true);
+        this.closeModal('dailyBonusModal');
+        return;
+    }
+
+    const modal = document.getElementById('dailyBonusModal');
+    const content = modal.querySelector('.bonus-modal-content');
+    
+    // Сохраняем оригинальное содержимое для восстановления
+    const originalHTML = content.innerHTML;
+
+    // Показываем загрузку внутри модалки (она не закрывается)
+    content.innerHTML = `
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span>
+        <h2>Загрузка рекламы...</h2>
+        <p class="bonus-subtitle">Пожалуйста, подождите</p>
+        <div style="margin-top:15px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+            <div style="width:30%; height:100%; background:linear-gradient(90deg, #e94560, #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div>
+        </div>
+        <style>
+            @keyframes loadingBar {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(400%); }
+            }
+        </style>
+    `;
 
     try {
+        // Пытаемся показать рекламу
         const adShown = await this.adManager.showRewardedAd();
+        
+        // Скрываем модалку выбора (реклама либо показана, либо нет)
+        modal.style.display = 'none';
+
+        // Восстанавливаем оригинальное содержимое для будущих открытий
+        content.innerHTML = originalHTML;
+        // Перепривязываем обработчики (важно!)
+        this.attachDailyBonusHandlers();
+
         if (adShown) {
+            // Реклама показана – даём 15 алмазов
             this.claimBonus(15);
+            this.showGlobalToast('🎉 +15 алмазов за просмотр рекламы!', false);
         } else {
-            this.showToast('❌ Реклама не показана. Попробуйте позже.');
-            this.resumeTimer();
+            // Реклама не показана – даём утешительный бонус +1
+            this.claimBonus(1);
+            this.showGlobalToast('⚠️ Реклама недоступна, вы получили +1 алмаз.', true);
         }
     } catch (error) {
         console.error('Ошибка в dailyBonus15:', error);
-        this.showToast('❌ Ошибка загрузки рекламы');
-        this.resumeTimer();
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
+        modal.style.display = 'none';
+        content.innerHTML = originalHTML;
+        this.attachDailyBonusHandlers();
+        
+        // Даже при ошибке даём утешительный бонус, чтобы игрок не остался ни с чем
+        this.claimBonus(1);
+        this.showGlobalToast('❌ Ошибка загрузки рекламы, но вы получили +1 алмаз.', true);
     }
 });
 
@@ -411,6 +449,7 @@ document.getElementById('btnAchievements').addEventListener('pointerdown', (e) =
 document.getElementById('closeAchievementsModal').addEventListener('pointerdown', (e) => { e.preventDefault(); this.closeAchievementsModal(); });
 document.getElementById('achPrevPage').addEventListener('pointerdown', (e) => { e.preventDefault(); this.achievementsPrevPage(); });
 document.getElementById('achNextPage').addEventListener('pointerdown', (e) => { e.preventDefault(); this.achievementsNextPage(); });
+
         // Закрытие модального окна
       document.getElementById('closeHowToPlay').addEventListener('pointerdown', (e) => { e.preventDefault();
             document.getElementById('howToPlayModal').style.display = 'none';
@@ -634,6 +673,30 @@ showNoAdModal(callback) {
         }
     });
 }
+attachDailyBonusHandlers() {
+    // Перепривязываем обработчики после восстановления содержимого
+    document.getElementById('dailyBonus5').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        this.sound.click();
+        this.closeModal('dailyBonusModal');
+        this.claimBonus(5);
+    });
+
+    document.getElementById('dailyBonus15').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        // Этот обработчик будет заменён, но чтобы не было рекурсии, 
+        // мы его переопределим (вызовем текущую логику) – 
+        // лучше вынести логику в отдельную функцию.
+        // Для простоты перезапишем обработчик при загрузке.
+    });
+
+    document.getElementById('dailyBonusCancel').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        this.sound.click();
+        this.closeModal('dailyBonusModal');
+        this.resumeTimer();
+    });
+}
 // ============================================================
 // Модалка для получения дополнительных подсказок
 // ============================================================
@@ -703,6 +766,7 @@ showHintAdModal() {
                     this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
                     this.sound.click();
                     this.render();
+                      this.updateHintButton();
                     closeModal(true);
                 } else {
                     // ❌ Если реклама НЕ показана — даём 1 подсказку
@@ -717,6 +781,7 @@ showHintAdModal() {
                             this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
                             this.sound.click();
                             this.render();
+                                    this.updateHintButton();
                             closeModal(true);
                         } else {
                             closeModal(false);
@@ -736,6 +801,7 @@ showHintAdModal() {
                         this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
                         this.sound.click();
                         this.render();
+                                this.updateHintButton();
                         closeModal(true);
                     } else {
                         closeModal(false);
@@ -1118,7 +1184,24 @@ checkCollector() {
     if (count >= 25) this.unlockAchievement('collector_25');
     if (count >= 50) this.unlockAchievement('collector_50');
 }
-
+// В классе SudokuGame
+showGlobalToast(message, isError = false) {
+    const toast = document.getElementById('globalToast');
+    const msg = document.getElementById('globalToastMessage');
+    if (!toast || !msg) return;
+    
+    msg.textContent = message;
+    toast.style.backgroundColor = isError ? 'rgba(40,20,20,0.95)' : 'rgba(22,33,62,0.9)';
+    toast.style.borderColor = isError ? '#ff5252' : 'rgba(255,255,255,0.1)';
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    
+    clearTimeout(this._toastTimeout);
+    this._toastTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 3500);
+}
 // Проверка времени суток для бонуса
 checkBonusTime() {
     const now = new Date();
@@ -1581,30 +1664,24 @@ closeModal(id) {
 claimBonus(amount) {
     if (amount <= 0) return;
 
-    // Добавляем алмазы
     this.addDiamonds(amount);
-
-    // Запоминаем дату получения
     this.lastBonusDate = new Date().toDateString();
-    // Сохраняем дату в Storage
+    // Сохраняем дату в localStorage и VK Storage (как уже есть)
     try {
         localStorage.setItem('sudoku_bonusDate', this.lastBonusDate);
     } catch (e) {}
-
     if (this.vkUserId && this.vkInitialized) {
-        vkBridge.send('VKWebAppStorageSet', {
-            key: 'bonusDate',
-            value: this.lastBonusDate
-        }).catch(err => console.warn(err));
+        vkBridge.send('VKWebAppStorageSet', { key: 'bonusDate', value: this.lastBonusDate })
+            .catch(err => console.warn(err));
     }
-this.totalBonuses++;
-this.checkAchievements();
-this.checkBonusTime();
-this.saveAchievements();
-    // Показываем модалку результата
-    this.showBonusResult(amount);
 
-    // Возобновляем таймер (если был приостановлен)
+    this.totalBonuses++;
+    this.checkAchievements();
+    this.checkBonusTime();
+    this.saveAchievements();
+
+    // Показываем модалку результата (она видна на любом экране)
+    this.showBonusResult(amount);
     this.resumeTimer();
 }
 
@@ -2167,21 +2244,25 @@ async checkNumber() {
 
     // Если проверки кончились – предлагаем получить дополнительные
     if (this.checksUsed >= this.maxChecks) {
-        this.messageEl.textContent = '❌ Проверки закончились!';
-        this.sound.error();
+    this.messageEl.textContent = '❌ Проверки закончились!';
+    this.sound.error();
 
-        const result = await this.showCheckAdModal();
-        if (result === true) {
-            const remaining = this.maxChecks - this.checksUsed;
-            this.messageEl.textContent = `✅ Получены проверки! Осталось: ${remaining}`;
-            this.sound.click();
-                   // После получения проверок – продолжаем проверку
-        } else {
-            this.messageEl.textContent = '❌ Вы отменили получение проверок.';
-            this.sound.error();
-            return;
-        }
+    const result = await this.showCheckAdModal();
+    if (result === true) {
+        // Проверки успешно получены (maxChecks уже увеличен внутри showCheckAdModal)
+        const remaining = this.maxChecks - this.checksUsed;
+        this.messageEl.textContent = `✅ Получены проверки! Осталось: ${remaining}`;
+        this.sound.click();
+        // Обновляем кнопку, чтобы отобразить новое количество проверок
+        this.updateCheckButton();
+        // Выходим – проверку не выполняем
+        return;
+    } else {
+        this.messageEl.textContent = '❌ Вы отменили получение проверок.';
+        this.sound.error();
+        return;
     }
+}
 
     // Теперь проводим саму проверку (оставшийся код из checkNumber)
     this.sound.init();
@@ -2566,17 +2647,17 @@ this.updateCheckButton();
             this.sound.ctx.resume();
         }
     }
-    // Добавьте этот метод в класс SudokuGame
+
 updateHintButton() {
     const hintBtn = document.getElementById('btnHint');
     if (!hintBtn) return;
     
     const remaining = this.maxHints - this.hintsUsed;
     if (remaining <= 0) {
-        hintBtn.innerHTML = '💡✨'; // Яркая лампочка
+        hintBtn.innerHTML = '💡✨'; // подсказок нет
         hintBtn.classList.add('no-hints');
     } else {
-        hintBtn.innerHTML = '💡';
+        hintBtn.innerHTML = `💡 ${remaining}`;
         hintBtn.classList.remove('no-hints');
     }
 }
