@@ -54,7 +54,7 @@ class AdManager {
             const timeoutId = setTimeout(() => {
                 console.log('⏰ Таймаут показа рекламы (10 сек)');
                 resolve(false);
-            }, 60000);
+            }, 40000);
             
             if (typeof vkBridge === 'undefined') {
                 clearTimeout(timeoutId);
@@ -1329,40 +1329,51 @@ showAchievementPopup(icon, name) {
     const popup = document.getElementById('achievementPopup');
     const iconEl = document.getElementById('achievementPopupIcon');
     const nameEl = document.getElementById('achievementPopupName');
-    
+
     if (!popup || !iconEl || !nameEl) {
-        // Если элементов нет — используем старый тост как fallback
         this.showToast(`🏅 Достижение разблокировано: ${name}!`);
         return;
     }
-    
-    // Устанавливаем иконку и название
+
     iconEl.textContent = icon || '🏅';
     nameEl.textContent = name || 'Достижение';
-    
+
+    // Убираем старые обработчики, чтобы не накапливались
+    popup.removeEventListener('transitionend', this._hidePopupHandler);
     // Убираем предыдущие классы
     popup.classList.remove('show', 'hide');
-    
-    // Принудительно сбрасываем анимацию (перезапуск)
-    void popup.offsetWidth; // триггер reflow
-    
-    // Показываем (с анимацией)
+    // Принудительный перезапуск
+    void popup.offsetWidth;
+
+    // Показываем
     popup.style.display = 'block';
-    // Небольшая задержка, чтобы display сработал, затем добавляем класс show
+    // Сохраняем обработчик для скрытия
+    this._hidePopupHandler = () => {
+        popup.style.display = 'none';
+        popup.classList.remove('hide');
+        popup.removeEventListener('transitionend', this._hidePopupHandler);
+    };
+    popup.addEventListener('transitionend', this._hidePopupHandler);
+
+    // Добавляем класс show через requestAnimationFrame
     requestAnimationFrame(() => {
         popup.classList.add('show');
     });
-    
-    // Через 3 секунды скрываем
+
+    // Автоматическое скрытие через 3 секунды (запускаем анимацию)
     clearTimeout(this._popupTimeout);
     this._popupTimeout = setTimeout(() => {
         popup.classList.remove('show');
         popup.classList.add('hide');
-        // После завершения анимации скрываем display
+        // transitionend сработает и скроет popup
+        // Но на случай, если transitionend не сработает (баг), добавляем резервный таймер
         setTimeout(() => {
-            popup.style.display = 'none';
-            popup.classList.remove('hide');
-        }, 300); // длительность анимации
+            if (popup.style.display !== 'none') {
+                popup.style.display = 'none';
+                popup.classList.remove('hide');
+                popup.removeEventListener('transitionend', this._hidePopupHandler);
+            }
+        }, 500); // чуть больше длительности анимации (300ms)
     }, 3000);
 }
 // ============================================================
