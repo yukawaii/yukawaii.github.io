@@ -50,7 +50,7 @@
                                             overflow: hidden;
                                         }
                                         /* МЕНЮ */
-                                        #menuScreen {
+                           #menuScreen {
                                             display: flex;
                                             flex-direction: column;
                                             align-items: center;
@@ -2292,8 +2292,22 @@ body.theme-pastel #achievementsModal .ach-close-btn {
             <button id="achNextPage" class="ach-page-btn">▶</button>
         </div>
     </div>
+</div>
 
-
+<!-- Модалка "Проверки закончились" (адаптивная под тему) -->
+<div id="checkAdModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">✅</span>
+        <h2 style="margin-bottom:8px;">Проверки закончились!</h2>
+        <p class="bonus-subtitle">
+            Посмотрите рекламу и получите <strong class="bonus-title">+3 проверки</strong>
+            <br><span style="font-size:0.8rem; opacity:0.7;">Доступно на любом уровне сложности</span>
+        </p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+            <button id="checkAdCancel" class="bonus-cancel" style="flex:1;">❌ Отмена</button>
+            <button id="checkAdConfirm" class="bonus-ok-btn" style="flex:1;">🎁 Получить</button>
+        </div>
+    </div>
 </div>
 <script>
 // Инициализация VK Bridge, если он доступен

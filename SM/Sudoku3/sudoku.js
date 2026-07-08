@@ -2221,86 +2221,96 @@ resumeTimer() {
         console.log('▶️ Таймер возобновлён');
     }
 }
+
+updateCheckButton() {
+    const checkBtn = document.getElementById('btnCheck');
+    if (!checkBtn) return;
+
+    const remaining = this.maxChecks - this.checksUsed;
+    if (remaining <= 0) {
+        checkBtn.innerHTML = '✅✨'; // звёздочка, когда нет проверок
+        checkBtn.classList.add('no-checks');
+    } else {
+        checkBtn.innerHTML = `✅ ${remaining}`;
+        checkBtn.classList.remove('no-checks');
+    }
+}
+
 // ============================================================
 // Проверка (проверяет ВСЕ цифры на поле)
 // ============================================================
-checkNumber() {
+async checkNumber() {
     if (this.isFinished) return;
-    
-    let maxChecks = 0;
-    if (this.difficulty === 'easy') {
-        maxChecks = 3;
-    } else if (this.difficulty === 'medium') {
-        maxChecks = 2;
-    } else if (this.difficulty === 'hard') {
-        maxChecks = 1;
-    } else if (this.difficulty === 'expert') {
-        maxChecks = 1;
-    } else {
-        this.messageEl.textContent = '❌ Проверка недоступна на этом уровне';
-        this.sound.error();
-        return;
+
+    // Инициализируем maxChecks, если ещё не задан (на случай вызова до старта)
+    if (this.maxChecks === undefined || this.maxChecks === 0) {
+        this.maxChecks = 1;        
     }
 
-    if (this.checksUsed >= maxChecks) {
-        this.messageEl.textContent = `❌ Проверки закончились! (${maxChecks}/${maxChecks})`;
+    // Если проверки кончились – предлагаем получить дополнительные
+    if (this.checksUsed >= this.maxChecks) {
+        this.messageEl.textContent = '❌ Проверки закончились!';
         this.sound.error();
-        return;
+
+        const result = await this.showCheckAdModal();
+        if (result === true) {
+            const remaining = this.maxChecks - this.checksUsed;
+            this.messageEl.textContent = `✅ Получены проверки! Осталось: ${remaining}`;
+            this.sound.click();
+            this.render();
+            this.updateCheckButton();
+            // После получения проверок – продолжаем проверку
+        } else {
+            this.messageEl.textContent = '❌ Вы отменили получение проверок.';
+            this.sound.error();
+            return;
+        }
     }
 
+    // Теперь проводим саму проверку (оставшийся код из checkNumber)
     this.sound.init();
     this.checksUsed++;
-this.totalChecks++;
-this.checkAchievements();
-this.saveAchievements();
+    this.totalChecks++;
+    this.checkAchievements();
+    this.saveAchievements();
+
     let errors = 0;
     let correct = 0;
-    
-    // Сохраняем результаты проверки
     const newCheckedCells = {};
-    
+
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
             const val = this.grid[r][c];
             const cellKey = `${r}-${c}`;
-            
-            // Пропускаем пустые клетки и "данные"
-            if (val === 0 || this.given[r][c]) {
-                // Если клетка пустая или данная — не сохраняем результат
-                continue;
-            }
-            
+            if (val === 0 || this.given[r][c]) continue;
             if (val === this.solution[r][c]) {
                 correct++;
-                newCheckedCells[cellKey] = true; // правильная
+                newCheckedCells[cellKey] = true;
             } else {
                 errors++;
-                newCheckedCells[cellKey] = false; // неправильная
+                newCheckedCells[cellKey] = false;
             }
         }
     }
-    
-    // Объединяем с предыдущими результатами (не перезаписываем уже проверенные)
+
     for (const key in newCheckedCells) {
         this.checkedCells[key] = newCheckedCells[key];
     }
 
-    // Сообщение о результате
     if (errors === 0 && correct > 0) {
-        this.messageEl.textContent = `✅ Все ${correct} цифр правильные! (${this.checksUsed}/${maxChecks})`;
+        this.messageEl.textContent = `✅ Все ${correct} цифр правильные! (${this.checksUsed}/${this.maxChecks})`;
         this.sound.click();
     } else if (errors === 0 && correct === 0) {
-        this.messageEl.textContent = `⚠️ Нет цифр для проверки (${this.checksUsed}/${maxChecks})`;
+        this.messageEl.textContent = `⚠️ Нет цифр для проверки (${this.checksUsed}/${this.maxChecks})`;
         this.sound.error();
     } else {
-        this.messageEl.textContent = `❌ Найдено ${errors} ошибок, ${correct} правильных (${this.checksUsed}/${maxChecks})`;
+        this.messageEl.textContent = `❌ Найдено ${errors} ошибок, ${correct} правильных (${this.checksUsed}/${this.maxChecks})`;
         this.sound.error();
     }
-    
-    // Перерендерим, чтобы показать результаты
+
     this.render();
-    
-    // Проверяем победу
+    this.updateCheckButton();
+
     if (this.checkWin()) {
         this.isFinished = true;
         this.sound.win();
@@ -2385,7 +2395,118 @@ async solveAll() {
         }
     }
 }
+// ============================================================
+// Модалка для получения дополнительных проверок
+// ============================================================
+showCheckAdModal() {
+    console.log('showCheckAdModal вызван');
+    return new Promise((resolve) => {
+        const modal = document.getElementById('checkAdModal');
+        if (!modal) {
+            console.error('Модалка #checkAdModal не найдена');
+            resolve(false);
+            return;
+        }
 
+        this.pauseTimer();
+        modal.style.display = 'flex';
+
+        const cancelBtn = document.getElementById('checkAdCancel');
+        const confirmBtn = document.getElementById('checkAdConfirm');
+
+        let isResolved = false;
+
+        const closeModal = (result) => {
+            if (isResolved) return;
+            isResolved = true;
+            modal.style.display = 'none';
+            this.resumeTimer();
+            console.log('Модалка проверок закрыта с результатом:', result);
+            resolve(result);
+        };
+
+        // Убираем старые обработчики (защита от дублирования)
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        newCancelBtn.addEventListener('click', () => {
+            this.sound.click();
+            closeModal(false);
+        });
+
+        newConfirmBtn.addEventListener('click', async () => {
+            this.sound.click();
+            console.log('Нажата кнопка "Получить проверки"');
+
+            const btn = document.getElementById('checkAdConfirm');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Загрузка...';
+            btn.disabled = true;
+
+            try {
+                const adShown = await this.adManager.showRewardedAd();
+                console.log('Результат показа рекламы (проверки):', adShown);
+
+                btn.textContent = originalText;
+                btn.disabled = false;
+
+                if (adShown === true) {
+                    this.maxChecks += 3;
+                    const remaining = this.maxChecks - this.checksUsed;
+                    this.messageEl.textContent = `🎉 +3 проверки! Осталось: ${remaining}`;
+                    this.sound.click();
+                    this.render();
+                    this.updateCheckButton();
+                    closeModal(true);
+                } else {
+                    // Реклама не показана – даём 1 проверку
+                    modal.style.display = 'none';
+                    this.showNoAdModal((result) => {
+                        if (result) {
+                            this.maxChecks += 1;
+                            const remaining = this.maxChecks - this.checksUsed;
+                            this.messageEl.textContent = `✅ +1 проверка! Осталось: ${remaining}`;
+                            this.sound.click();
+                            this.render();
+                            this.updateCheckButton();
+                            closeModal(true);
+                        } else {
+                            closeModal(false);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                btn.textContent = originalText;
+                btn.disabled = false;
+
+                modal.style.display = 'none';
+                this.showNoAdModal((result) => {
+                    if (result) {
+                        this.maxChecks += 1;
+                        const remaining = this.maxChecks - this.checksUsed;
+                        this.messageEl.textContent = `✅ +1 проверка! Осталось: ${remaining}`;
+                        this.sound.click();
+                        this.render();
+                        this.updateCheckButton();
+                        closeModal(true);
+                    } else {
+                        closeModal(false);
+                    }
+                });
+            }
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.sound.click();
+                closeModal(false);
+            }
+        });
+    });
+}
     // ============================================================
     // Проверка победы
     // ============================================================
@@ -2487,6 +2608,11 @@ this.loadDiamonds();
         this.maxHints = 1;
     }
 
+// Внутри startNewGame() после установки difficulty
+ithis.maxChecks = 1;
+
+this.checksUsed = 0;
+this.updateCheckButton();
 
     this.messageEl.textContent = '';
         this.messageEl.textContent = '';
