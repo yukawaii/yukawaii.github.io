@@ -189,7 +189,7 @@ function initVKSDK() {
             })
             .then(() => {
                 // Загружаем рекорд
-                loadVKHighScore();
+              //  loadVKHighScore();
                 // Обновляем интерфейс
                 if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
                 if (typeof updateCollectionsProgress === 'function') updateCollectionsProgress();

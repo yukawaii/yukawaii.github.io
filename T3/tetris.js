@@ -1105,6 +1105,7 @@ function pauseGame() {
     gameState.paused = true;
     if (typeof gameAudio !== 'undefined') {
         gameAudio.pauseAll(); // приостанавливаем все контексты (и музыку, и звуки)
+        
     }
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
@@ -1538,21 +1539,109 @@ function initMobileControls() {
     const btnDown = document.getElementById('btn-down');
     const btnRot = document.getElementById('btn-rot');
     if (!btnLeft) return;
-    
-    const handleMoveLeft = (e) => { e.preventDefault(); if (isGameStarted && !isGameOver && !gameState.paused) playerMove(-1); };
-    const handleMoveRight = (e) => { e.preventDefault(); if (isGameStarted && !isGameOver && !gameState.paused) playerMove(+1); };
-    const handleRotate = (e) => { e.preventDefault(); if (isGameStarted && !isGameOver && !gameState.paused) playerRotate(-1); };
-    const handleDrop = (e) => { e.preventDefault(); if (isGameStarted && !isGameOver && !gameState.paused) playerDrop(); };
-    
-    btnLeft.addEventListener('touchstart', handleMoveLeft);
-    btnLeft.addEventListener('mousedown', handleMoveLeft);
-    btnRight.addEventListener('touchstart', handleMoveRight);
-    btnRight.addEventListener('mousedown', handleMoveRight);
-    btnRot.addEventListener('touchstart', handleRotate);
-    btnRot.addEventListener('mousedown', handleRotate);
-    btnDown.addEventListener('touchstart', handleDrop);
-    btnDown.addEventListener('mousedown', handleDrop);
+
+    // Хранилище активных интервалов для удержания
+    const repeatIntervals = {};
+
+    /**
+     * Запускает повторяющееся действие с заданным интервалом.
+     * Сразу выполняет действие один раз, затем запускает setInterval.
+     * @param {string} id - уникальный идентификатор действия (например, 'moveLeft')
+     * @param {Function} action - функция, которую нужно повторять
+     * @param {number} interval - задержка между повторами (мс)
+     */
+    function startRepeating(id, action, interval = 150) {
+        if (repeatIntervals[id]) return; // уже активен
+        // Выполнить сразу
+        if (isGameStarted && !isGameOver && !gameState.paused) {
+            action();
+        }
+        // Запустить интервал
+        repeatIntervals[id] = setInterval(() => {
+            if (isGameStarted && !isGameOver && !gameState.paused) {
+                action();
+            }
+        }, interval);
+    }
+
+    /**
+     * Останавливает повторяющееся действие.
+     */
+    function stopRepeating(id) {
+        if (repeatIntervals[id]) {
+            clearInterval(repeatIntervals[id]);
+            delete repeatIntervals[id];
+        }
+    }
+
+    // ---- Удержание для кнопки "Влево" ----
+    function onLeftStart(e) {
+        e.preventDefault();
+        startRepeating('moveLeft', () => playerMove(-1), 150);
+    }
+    function onLeftEnd(e) {
+        e.preventDefault();
+        stopRepeating('moveLeft');
+    }
+
+    // ---- Удержание для кнопки "Вправо" ----
+    function onRightStart(e) {
+        e.preventDefault();
+        startRepeating('moveRight', () => playerMove(1), 150);
+    }
+    function onRightEnd(e) {
+        e.preventDefault();
+        stopRepeating('moveRight');
+    }
+
+    // ---- Удержание для кнопки "Вниз" (мягкий дроп) ----
+    // Для ускоренного падения используем меньший интервал (50-80 мс)
+    function onDownStart(e) {
+        e.preventDefault();
+        startRepeating('drop', () => playerDrop(), 70); // 70 мс между падениями
+    }
+    function onDownEnd(e) {
+        e.preventDefault();
+        stopRepeating('drop');
+    }
+
+    // ---- Обычные действия (без удержания) ----
+    function onRotate(e) {
+        e.preventDefault();
+        if (isGameStarted && !isGameOver && !gameState.paused) {
+            playerRotate(-1);
+        }
+    }
+
+    // ----- Привязка событий -----
+
+    // Левая кнопка
+    btnLeft.addEventListener('touchstart', onLeftStart);
+    btnLeft.addEventListener('touchend', onLeftEnd);
+    btnLeft.addEventListener('touchcancel', onLeftEnd);
+    btnLeft.addEventListener('mousedown', onLeftStart);
+    btnLeft.addEventListener('mouseup', onLeftEnd);
+
+    // Правая кнопка
+    btnRight.addEventListener('touchstart', onRightStart);
+    btnRight.addEventListener('touchend', onRightEnd);
+    btnRight.addEventListener('touchcancel', onRightEnd);
+    btnRight.addEventListener('mousedown', onRightStart);
+    btnRight.addEventListener('mouseup', onRightEnd);
+
+    // Кнопка "Вниз"
+    btnDown.addEventListener('touchstart', onDownStart);
+    btnDown.addEventListener('touchend', onDownEnd);
+    btnDown.addEventListener('touchcancel', onDownEnd);
+    btnDown.addEventListener('mousedown', onDownStart);
+    btnDown.addEventListener('mouseup', onDownEnd);
+
+    // Поворот
+    btnRot.addEventListener('touchstart', onRotate);
+    btnRot.addEventListener('touchcancel', (e) => e.preventDefault());
+    btnRot.addEventListener('mousedown', onRotate);
 }
+
 initMobileControls();
 
 // ======================== ОБРАБОТЧИКИ СОБЫТИЙ ========================
