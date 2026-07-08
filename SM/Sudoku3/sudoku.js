@@ -2101,7 +2101,7 @@ if (this.difficulty === 'easy') {
     this.render();
     
     if (this.checkWin()) {
-        this.isFinished = true;
+       // this.isFinished = true;
     
         this.sound.win();
         this.statusEl.textContent = '🎉 Победа!';
@@ -2203,7 +2203,7 @@ this.saveAchievements();
     this.updateHintButton();
     
     if (this.checkWin()) {
-        this.isFinished = true;
+     //   this.isFinished = true;
         this.sound.win();
         this.statusEl.textContent = '🎉 Победа!';
         this.messageEl.textContent = '🏆 Вы решили Судоку!';
@@ -2331,7 +2331,7 @@ async checkNumber() {
     this.updateCheckButton();
 
     if (this.checkWin()) {
-        this.isFinished = true;
+      //  this.isFinished = true;
         this.sound.win();
         this.statusEl.textContent = '🎉 Победа!';
         this.messageEl.textContent = '🏆 Вы решили Судоку!';
@@ -2412,7 +2412,7 @@ async solveAll() {
         this.render();
 
         if (this.checkWin()) {
-            this.isFinished = true;
+           // this.isFinished = true;
             this.sound.win();
             this.statusEl.textContent = '🎉 Победа!';
             this.messageEl.textContent = '🏆 Судоку решено!';
@@ -2610,6 +2610,7 @@ this.checkAllChecksUsed();
     this.updateTotalGameTime(this.timer); // добавляем время текущей партии
     this.saveAchievements();
     this.awardDiamondsForWin();
+    this.isFinished = true;
 this.showWinEffects();
     return true;
 }
