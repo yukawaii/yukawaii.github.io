@@ -38,141 +38,87 @@ export default class Keyboard extends React.Component {
   }, true);
   
   Object.keys(todo).forEach((key) => {
-    if (!this[`dom_${key}`] || !this[`dom_${key}`].dom) return;
-    
-    const triggerLeaderboard = (score) => {
-      if (key !== 'l') return;
-      if (this.props.showLeaderboard) {
-        this.props.showLeaderboard(score);
-      }
-    };
-    
-    // ===== MOUSEDOWN =====
-    this[`dom_${key}`].dom.addEventListener('mousedown', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'down' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (touchEventCatch[key] === true) return;
-      todo[key].down(store);
-      mouseDownEventCatch[key] = true;
-    }, true);
-    
-    // ===== MOUSEUP =====
-    this[`dom_${key}`].dom.addEventListener('mouseup', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (touchEventCatch[key] === true) {
-        touchEventCatch[key] = false;
-        return;
-      }
-      todo[key].up(store);
-      mouseDownEventCatch[key] = false;
-      triggerLeaderboard(this.props.max || 0);
-    }, true);
-    
-    this[`dom_${key}`].dom.addEventListener('mouseout', () => {
-      if (mouseDownEventCatch[key] === true) todo[key].up(store);
-    }, true);
-    
-    // ===== TOUCHSTART =====
-    this[`dom_${key}`].dom.addEventListener('touchstart', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'down' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      touchEventCatch[key] = true;
-      todo[key].down(store);
-    }, true);
-    
-    // ===== TOUCHEND =====
-    this[`dom_${key}`].dom.addEventListener('touchend', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      todo[key].up(store);
-      triggerLeaderboard(this.props.max || 0);
-    }, true);
-  });
+  if (!this[`dom_${key}`] || !this[`dom_${key}`].dom) return;
   
-  // ========== КНОПКА ПОВОРОТ (rotate) - дополнительная обработка для 'up' ==========
-  if (this.dom_rotate && this.dom_rotate.dom) {
-    this.dom_rotate.dom.addEventListener('mousedown', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: 'up', action: 'down' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (todo.rotate && todo.rotate.down) {
-        todo.rotate.down(store);
-      }
-    }, true);
-    
-    this.dom_rotate.dom.addEventListener('mouseup', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: 'up', action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (todo.rotate && todo.rotate.up) {
-        todo.rotate.up(store);
-      }
-    }, true);
-    
-    this.dom_rotate.dom.addEventListener('touchstart', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: 'up', action: 'down' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (todo.rotate && todo.rotate.down) {
-        todo.rotate.down(store);
-      }
-    }, true);
-    
-    this.dom_rotate.dom.addEventListener('touchend', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: 'up', action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (todo.rotate && todo.rotate.up) {
-        todo.rotate.up(store);
-      }
-    }, true);
-  }
+  const triggerLeaderboard = (score) => {
+    if (key !== 'l') return;
+    if (this.props.showLeaderboard) {
+      this.props.showLeaderboard(score);
+    }
+  };
   
+  // ===== MOUSEDOWN =====
+  this[`dom_${key}`].dom.addEventListener('mousedown', (e) => {
+    var eventKey = (key === 'rotate') ? 'up' : key;
+    window.dispatchEvent(new CustomEvent('gameControl', {
+      detail: { key: eventKey, action: 'down' }
+    }));
+    if (window._isRacingActive) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (touchEventCatch[key] === true) return;
+    todo[key].down(store);
+    mouseDownEventCatch[key] = true;
+  }, true);
+  
+  // ===== MOUSEUP =====
+  this[`dom_${key}`].dom.addEventListener('mouseup', (e) => {
+    var eventKey = (key === 'rotate') ? 'up' : key;
+    window.dispatchEvent(new CustomEvent('gameControl', {
+      detail: { key: eventKey, action: 'up' }
+    }));
+    if (window._isRacingActive) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (touchEventCatch[key] === true) {
+      touchEventCatch[key] = false;
+      return;
+    }
+    todo[key].up(store);
+    mouseDownEventCatch[key] = false;
+    triggerLeaderboard(this.props.max || 0);
+  }, true);
+  
+  this[`dom_${key}`].dom.addEventListener('mouseout', () => {
+    if (mouseDownEventCatch[key] === true) todo[key].up(store);
+  }, true);
+  
+  // ===== TOUCHSTART =====
+  this[`dom_${key}`].dom.addEventListener('touchstart', (e) => {
+    var eventKey = (key === 'rotate') ? 'up' : key;
+    window.dispatchEvent(new CustomEvent('gameControl', {
+      detail: { key: eventKey, action: 'down' }
+    }));
+    if (window._isRacingActive) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    touchEventCatch[key] = true;
+    todo[key].down(store);
+  }, true);
+  
+  // ===== TOUCHEND =====
+  this[`dom_${key}`].dom.addEventListener('touchend', (e) => {
+    var eventKey = (key === 'rotate') ? 'up' : key;
+    window.dispatchEvent(new CustomEvent('gameControl', {
+      detail: { key: eventKey, action: 'up' }
+    }));
+    if (window._isRacingActive) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    todo[key].up(store);
+    triggerLeaderboard(this.props.max || 0);
+  }, true);
+});
+  
+   
   // Слушаем события открытия и закрытия гонок
   window.addEventListener('openRacing', function() {
     setTimeout(function() {
