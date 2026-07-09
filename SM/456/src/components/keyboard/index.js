@@ -22,10 +22,18 @@ export default class Keyboard extends React.Component {
   const mouseDownEventCatch = {};
   
   document.addEventListener('touchstart', (e) => {
+              // Не блокируем скролл внутри модалок
+              if (e.target.closest('.modal-content') || e.target.closest('.modal')) {
+                return;
+              }
     if (e.cancelable && e.preventDefault) e.preventDefault();
   }, { passive: false, capture: true });
   
   document.addEventListener('touchend', (e) => {
+                    // Не блокируем скролл внутри модалок
+                if (e.target.closest('.modal-content') || e.target.closest('.modal')) {
+                  return;
+                }
     if (e.cancelable && e.preventDefault) e.preventDefault();
   }, { passive: false, capture: true });
   
