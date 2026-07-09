@@ -21,13 +21,13 @@ export default class Keyboard extends React.Component {
   const touchEventCatch = {};
   const mouseDownEventCatch = {};
   
-  /*document.addEventListener('touchstart', (e) => {
+  document.addEventListener('touchstart', (e) => {
     if (e.cancelable && e.preventDefault) e.preventDefault();
   }, { passive: false, capture: true });
   
   document.addEventListener('touchend', (e) => {
     if (e.cancelable && e.preventDefault) e.preventDefault();
-  }, { passive: false, capture: true });*/
+  }, { passive: false, capture: true });
   
   document.addEventListener('gesturestart', (e) => {
     if (e.preventDefault) event.preventDefault();
