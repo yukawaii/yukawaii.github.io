@@ -315,21 +315,21 @@ ensureMusicContextActive() {
     if (this.musicContext.state === 'running') return;
 
     try {
-        // Создаём пустой буфер длительностью 0.01 сек
         const emptyBuffer = this.musicContext.createBuffer(1, 1, 22050);
         const source = this.musicContext.createBufferSource();
         source.buffer = emptyBuffer;
         const gain = this.musicContext.createGain();
-        gain.gain.value = 0; // полностью беззвучно
+        gain.gain.value = 0;
         source.connect(gain);
         gain.connect(this.musicContext.destination);
         source.start();
         source.stop(this.musicContext.currentTime + 0.01);
-        console.log('🎵 Музыкальный контекст активирован (пустой буфер)');
+        console.log('🎵 Музыкальный контекст активирован');
     } catch (e) {
         console.warn('Не удалось активировать музыкальный контекст:', e);
     }
 }
+
 }
 
 // Создаём глобальный экземпляр

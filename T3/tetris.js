@@ -1041,6 +1041,11 @@ async function startGameWithAudio() {
     if (typeof gameAudio !== 'undefined') {
         gameAudio.resumeAll();
         console.log('✅ Аудио контексты возобновлены');
+
+        // 🟢 Активируем музыкальный контекст сразу после resume
+        gameAudio.ensureMusicContextActive();
+        // Даём контексту время перейти в running
+        await new Promise(r => setTimeout(r, 50));
     }
 
     startGame();
@@ -1048,7 +1053,7 @@ async function startGameWithAudio() {
     if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) {
             console.log('🎵 Запускаем музыку после загрузки');
-            // Не вызываем здесь playBackgroundMusic – она вызовется через initAudio или позже
+            playBackgroundMusic();
         }
     }
 }
@@ -1242,15 +1247,9 @@ async function playBackgroundMusic() {
     const maxAttempts = 40;
     while (attempts < maxAttempts) {
         if (gameAudio.buffers[track]) {
-
-    // 🟢 Активируем музыкальный контекст перед воспроизведением
+            // 🟢 Активируем музыкальный контекст непосредственно перед запуском
             gameAudio.ensureMusicContextActive();
-            // Небольшая задержка, чтобы контекст успел перейти в running
-            await new Promise(r => setTimeout(r, 50));
-
-
-            // Единственное исправление: перед воспроизведением гарантируем активный контекст
-            await gameAudio.resumeAll();
+            await new Promise(r => setTimeout(r, 30));
             gameAudio.playMusic(track, 0.15);
             return;
         }
@@ -1258,15 +1257,10 @@ async function playBackgroundMusic() {
         await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    // Если не загрузилось – повтор через 5 секунд
+    // Повторная попытка через 5 секунд
     setTimeout(() => {
         if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
-    // 🟢 Активируем музыкальный контекст перед воспроизведением
             gameAudio.ensureMusicContextActive();
-            // Небольшая задержка, чтобы контекст успел перейти в running
-            await new Promise(r => setTimeout(r, 50));
-
-            gameAudio.resumeAll();
             gameAudio.playMusic(track, 0.15);
         }
     }, 5000);
@@ -1461,6 +1455,7 @@ function selectMode(mode) {
     if (diffModal) diffModal.style.display = 'flex';
 }
 
+
 function closeDifficultyModal() {
     const diffModal = document.getElementById('difficulty-modal');
     if (diffModal) diffModal.style.display = 'none';
@@ -1475,13 +1470,8 @@ function selectDifficulty(difficulty) {
     if (diffModal) diffModal.style.display = 'none';
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'none';
-    //startGameWithAudio(); // ← только один вызов
+   startGameWithAudio(); // ← только один вызов
 
-    // Показываем экран загрузки
-    showLoadingScreen('Подготовка игры...');
-    updateLoadingStatus('Загрузка музыки...', 20);    
-    // Запускаем процесс старта игры с загрузкой музыки
-    startGameWithLoading();
 }
 
 // ======================== ОБЩИЙ ПРОГРЕСС ========================
