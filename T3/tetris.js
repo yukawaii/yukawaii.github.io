@@ -1043,6 +1043,9 @@ async function startGameWithAudio() {
     if (typeof gameAudio !== 'undefined') {
         gameAudio.resumeAll(); // возобновляет audioContext и musicContext
         console.log('✅ Аудио контексты возобновлены');
+         // 🟢 Активируем контекст через keepAlive и короткий звук
+        await gameAudio.keepAlive();
+        gameAudio.playOneShot('collide', 0.01); // очень тихий звук для "пробуждения"
     }
     
     // 3. Запускаем игру (без музыки внутри)
@@ -1245,19 +1248,30 @@ async function playBackgroundMusic() {
     
     currentMusicTrack = track;
     
-    // Ждём, пока буфер загрузится (максимум 5 попыток с интервалом 500 мс)
+     // Ждём загрузки трека (до 20 секунд)
     let attempts = 0;
-    const maxAttempts = 5;
+    const maxAttempts = 40;
     while (attempts < maxAttempts) {
         if (gameAudio.buffers[track]) {
+            // 🟢 Перед запуском убеждаемся, что контекст активен
+            await gameAudio.resumeAll();
+            await gameAudio.keepAlive(); // дополнительная активация
             gameAudio.playMusic(track, 0.15);
             return;
         }
         attempts++;
         await new Promise(resolve => setTimeout(resolve, 500));
     }
-    console.warn('⚠️ Музыка не загружена после', maxAttempts, 'попыток');
+
+    // Если не загрузилось – повтор через 5 секунд
+    setTimeout(() => {
+        if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
+            gameAudio.resumeAll();
+            gameAudio.playMusic(track, 0.15);
+        }
+    }, 5000);
 }
+
 
 function stopSounds() {
     if (typeof gameAudio !== 'undefined') gameAudio.stopLoop();
