@@ -55,7 +55,7 @@ class HelpModal extends Component {
     return (
       <div    className={style.modalWrapper}
             >
-        <div className={style.modal}>
+      <div className={`${style.modal} modal`}>
           <div className={style.header}>
             <span className={style.title}>❓ Как играть?</span>
             <button 
