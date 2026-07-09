@@ -4,13 +4,15 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 import { visibilityChangeEvent, isFocus } from '../../unit/';
+import store from '../../store';
+import actions from '../../actions';
 
 var arcadeSounds = require('../../unit/arcadeSounds');
 
 class ArkanoidGame extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {    
       isOpen: false,
       score: 0,
       gameOver: false,
@@ -31,7 +33,7 @@ ballSpeedY: -1.75,
       fieldWidth: 320,
       fieldHeight: 300,
       lives: 3,
-
+ soundEnabled: store.getState().get('music')
     };
 // В конструкторе:
 this.PADDLE_BOTTOM = 20; // ← то же, что в пинг-понге
@@ -222,9 +224,11 @@ playCrashSound() {
   } catch(e) {}
 }
 
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
+ toggleSound() {
+  var newState = !this.state.soundEnabled;
+  this.setState({ soundEnabled: newState });
+  store.dispatch(actions.music(newState));
+}
 
   handleKeyDown(e) {
     var key = e.key;

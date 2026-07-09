@@ -4,6 +4,8 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 import { visibilityChangeEvent, isFocus } from '../../unit/';
+import store from '../../store';
+import actions from '../../actions';
 
 var arcadeSounds = require('../../unit/arcadeSounds');
 
@@ -25,7 +27,8 @@ class SnakeGame extends Component {
       gameTime: 0,
       gridSize: 20,
       cols: 18,
-      rows: 16
+      rows: 16,
+       soundEnabled: store.getState().get('music')
     };
     this.gameLoop = null;
     this.lastSoundTime = 0;
@@ -205,9 +208,11 @@ playCrashSound() {
     }
   } catch(e) {}
 }
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
+ toggleSound() {
+  var newState = !this.state.soundEnabled;
+  this.setState({ soundEnabled: newState });
+  store.dispatch(actions.music(newState));
+}
 
   // ===== УПРАВЛЕНИЕ =====
   handleKeyDown(e) {
