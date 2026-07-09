@@ -1032,30 +1032,23 @@ isSlowDownActive = false;
 
 async function startGameWithAudio() {
     console.log("startGameWithAudio вызван");
-    
-    // 1. Инициализируем аудио (создаём контексты), если ещё не инициализировано
+
     if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
         await gameAudio.init();
         console.log('✅ Аудио инициализировано');
     }
-    
-    // 2. Возобновляем оба контекста (гарантированно, в ответ на клик)
+
     if (typeof gameAudio !== 'undefined') {
-        gameAudio.resumeAll(); // возобновляет audioContext и musicContext
+        gameAudio.resumeAll();
         console.log('✅ Аудио контексты возобновлены');
-         // 🟢 Активируем контекст через keepAlive и короткий звук
-        await gameAudio.keepAlive();
-        gameAudio.playOneShot('collide', 0.01); // очень тихий звук для "пробуждения"
     }
-    
-    // 3. Запускаем игру (без музыки внутри)
+
     startGame();
-    
-    // 4. Запускаем музыку, если не выключена
+
     if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) {
             console.log('🎵 Запускаем музыку после загрузки');
-            playBackgroundMusic(); // теперь контексты активны, музыка заиграет
+            // Не вызываем здесь playBackgroundMusic – она вызовется через initAudio или позже
         }
     }
 }
@@ -1232,11 +1225,8 @@ function updatePauseButtonText() {
 // ======================== МУЗЫКА И ЗВУКИ ========================
 async function playBackgroundMusic() {
     if (musicMuted || !gameAudio || !gameAudio.initialized) return;
-    // Если уже играет нужный трек – не перезапускаем
-    if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) {
-        return;
-    }
-    
+    if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) return;
+
     let track;
     const isClassic = selectedMode === 'classic';
     if (isClassic && selectedDifficulty === 'easy') track = '2';
@@ -1245,17 +1235,15 @@ async function playBackgroundMusic() {
     else if (!isClassic && selectedDifficulty === 'easy') track = '2';
     else if (!isClassic && selectedDifficulty === 'medium') track = '1';
     else track = '1';
-    
+
     currentMusicTrack = track;
-    
-     // Ждём загрузки трека (до 20 секунд)
+
     let attempts = 0;
     const maxAttempts = 40;
     while (attempts < maxAttempts) {
         if (gameAudio.buffers[track]) {
-            // 🟢 Перед запуском убеждаемся, что контекст активен
+            // Единственное исправление: перед воспроизведением гарантируем активный контекст
             await gameAudio.resumeAll();
-            await gameAudio.keepAlive(); // дополнительная активация
             gameAudio.playMusic(track, 0.15);
             return;
         }
@@ -1322,35 +1310,24 @@ function updateMusicIcon() {
 }
 
 function initAudio() {
-    if (!audioInitialized) {
-        if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
-            gameAudio.resumeContext(); // возобновляем основной контекст
-            audioInitialized = true;
-            // Запускаем музыку только если она ещё не запущена и не muted
-            if (!musicMuted && !soundMuted && !gameAudio.musicStarted) {
-                playBackgroundMusic();
-            }
-        }
-        return;
-    }
-    // Если уже инициализировано, просто убеждаемся, что контексты не приостановлены
-    if (gameAudio && gameAudio.initialized) {
-        if (gameAudio.audioContext && gameAudio.audioContext.state === 'suspended') {
-            gameAudio.audioContext.resume();
-        }
-        if (gameAudio.musicContext && gameAudio.musicContext.state === 'suspended') {
-            gameAudio.musicContext.resume();
-        }
-        // Музыку не перезапускаем, если она уже играет
-        return;
-    }
-    // Если аудио не инициализировано (редкий случай)
-    if (gameAudio && !gameAudio.initialized) {
+    if (typeof gameAudio === 'undefined') return;
+    if (!gameAudio.initialized) {
         gameAudio.init().then(() => {
-            if (!soundMuted && !musicMuted && !gameAudio.musicStarted) {
+            gameAudio.resumeAll();
+            audioInitialized = true;
+            // Если игра уже активна, попробовать запустить музыку
+            if (!musicMuted && !soundMuted && isGameStarted && !isGameOver && !gameState.paused) {
                 playBackgroundMusic();
             }
-        }).catch(e => console.log('Аудио не загружено:', e));
+        }).catch(e => console.warn('Ошибка инициализации аудио:', e));
+        return;
+    }
+    // Если уже инициализировано – просто возобновляем
+    if (gameAudio.audioContext && gameAudio.audioContext.state === 'suspended') {
+        gameAudio.resumeAll();
+    }
+    if (!gameAudio.musicStarted && !musicMuted && isGameStarted && !isGameOver && !gameState.paused) {
+        playBackgroundMusic();
     }
 }
 // ======================== МОДАЛКИ ========================
@@ -1486,7 +1463,13 @@ function selectDifficulty(difficulty) {
     if (diffModal) diffModal.style.display = 'none';
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'none';
-    startGameWithAudio();
+    //startGameWithAudio(); // ← только один вызов
+
+    // Показываем экран загрузки
+    showLoadingScreen('Подготовка игры...');
+    updateLoadingStatus('Загрузка музыки...', 20);    
+    // Запускаем процесс старта игры с загрузкой музыки
+    startGameWithLoading();
 }
 
 // ======================== ОБЩИЙ ПРОГРЕСС ========================
@@ -3344,6 +3327,171 @@ function showComboDisplay(rowsCleared) {
         }
         comboDisplayTimer = null;
     }, 1500);
+}
+
+// ======================== ЭКРАН ЗАГРУЗКИ ========================
+let loadingScreenVisible = false;
+
+function showLoadingScreen(message = 'Загрузка...') {
+    if (loadingScreenVisible) return;
+    loadingScreenVisible = true;
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'loading-screen-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 14, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 100000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-family: 'Russo One', sans-serif;
+        transition: opacity 0.3s ease;
+        opacity: 1;
+    `;
+    overlay.innerHTML = `
+        <div style="text-align: center; max-width: 300px;">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1.5s linear infinite;">🎵</div>
+            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">${message}</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;" id="loading-status">Подготовка музыки...</p>
+            <div style="width: 100%; height: 4px; background: #1e293b; border-radius: 4px; overflow: hidden;">
+                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #34d399, #22c55e); transition: width 0.3s ease;"></div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Добавляем ключевые кадры для анимации спиннера, если их ещё нет
+    if (!document.getElementById('loading-anim-styles')) {
+        const style = document.createElement('style');
+        style.id = 'loading-anim-styles';
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+function hideLoadingScreen() {
+    const overlay = document.getElementById('loading-screen-overlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+            loadingScreenVisible = false;
+        }, 300);
+    }
+}
+
+function updateLoadingStatus(text, progress) {
+    const status = document.getElementById('loading-status');
+    if (status) status.textContent = text;
+    const bar = document.getElementById('loading-progress-bar');
+    if (bar && progress !== undefined) {
+        bar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+    }
+}
+async function startGameWithLoading() {
+    try {
+        // 1. Инициализируем аудио, если ещё нет
+        if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
+            updateLoadingStatus('Инициализация аудио...', 30);
+            await gameAudio.init();
+        }
+        
+        // 2. Определяем, какой трек нужен
+        let track;
+        const isClassic = selectedMode === 'classic';
+        if (isClassic && selectedDifficulty === 'easy') track = '2';
+        else if (isClassic && selectedDifficulty === 'medium') track = '4';
+        else if (isClassic && selectedDifficulty === 'hard') track = '1';
+        else if (!isClassic && selectedDifficulty === 'easy') track = '2';
+        else if (!isClassic && selectedDifficulty === 'medium') track = '1';
+        else track = '1';
+        
+        // 3. Пытаемся загрузить трек (если ещё не загружен)
+        if (gameAudio && !gameAudio.buffers[track]) {
+            updateLoadingStatus(`Загрузка трека ${track}...`, 50);
+            // Загружаем трек через существующий метод loadSound
+            // Если в audio.js нет публичного метода для загрузки отдельного трека – добавим его
+            // Для простоты можно вызвать gameAudio.loadSound(track, `audio/${track}.ogg`)
+            // Но у нас в audio.js loadSound – приватный? Можно сделать публичным или использовать внутренний механизм.
+            // Поскольку мы уже вызывали loadSounds() при init, треки могут уже загружаться асинхронно.
+            // Поэтому мы можем подождать, пока трек появится в buffers, но с таймаутом.
+            await waitForTrackLoad(track, 8000); // ждём до 8 секунд
+        } else {
+            updateLoadingStatus('Трек уже загружен', 70);
+        }
+        
+        // 4. Гарантируем, что контексты активны
+        if (gameAudio) {
+            gameAudio.resumeAll();
+        }
+        
+        // 5. Запускаем игровую логику
+        updateLoadingStatus('Запуск игры...', 90);
+        startGame(); // синхронный старт (или асинхронный, но мы уже всё подготовили)
+        
+        // 6. После старта игры запускаем музыку (с небольшой задержкой, чтобы дать игре отрисоваться)
+        if (gameAudio && !musicMuted && !soundMuted) {
+            setTimeout(() => {
+                gameAudio.playMusic(track, 0.15);
+                console.log('🎵 Музыка запущена после загрузки');
+            }, 300);
+        }
+        
+        // 7. Закрываем экран загрузки
+        updateLoadingStatus('Готово!', 100);
+        setTimeout(hideLoadingScreen, 500);
+        
+    } catch (error) {
+        console.error('Ошибка при загрузке игры:', error);
+        // Если что-то пошло не так – всё равно запускаем игру без музыки и закрываем экран
+        startGame();
+        hideLoadingScreen();
+        if (gameAudio) {
+            gameAudio.resumeAll();
+        }
+        // Показываем сообщение об ошибке, но не блокируем игру
+        showCustomModal({
+            title: '⚠️ Ошибка загрузки музыки',
+            text: 'Не удалось загрузить музыку, но игра продолжается.',
+            type: 'warning',
+            button: 'OK'
+        });
+    }
+}
+
+// Вспомогательная функция для ожидания загрузки трека
+function waitForTrackLoad(trackName, timeout) {
+    return new Promise((resolve) => {
+        if (gameAudio.buffers[trackName]) {
+            resolve();
+            return;
+        }
+        const startTime = Date.now();
+        const interval = setInterval(() => {
+            if (gameAudio.buffers[trackName]) {
+                clearInterval(interval);
+                resolve();
+            } else if (Date.now() - startTime > timeout) {
+                clearInterval(interval);
+                console.warn(`⏰ Таймаут загрузки трека ${trackName}`);
+                resolve(); // всё равно разрешаем, чтобы не блокировать игру
+            }
+        }, 200);
+    });
 }
 
 // ======================== ЭКСПОРТ ========================

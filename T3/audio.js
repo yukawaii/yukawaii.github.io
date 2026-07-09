@@ -197,16 +197,22 @@ playMusic(trackName, volume = 0.15) {
         console.warn(`Трек ${trackName} не загружен или музыка выключена`);
         return;
     }
-
-    // Принудительно возобновляем контекст, если он приостановлен
     if (this.musicContext.state === 'suspended') {
         this.musicContext.resume();
-        // Даём время на возобновление (небольшая задержка)
-        setTimeout(() => {
-            this._playMusicInternal(trackName, volume);
-        }, 50);
-    } else {
-        this._playMusicInternal(trackName, volume);
+    }
+    this.stopMusic();
+    this.currentMusicTrack = trackName;
+    try {
+        this.musicSource = this.musicContext.createBufferSource();
+        this.musicSource.buffer = this.buffers[trackName];
+        this.musicSource.loop = true;
+        this.musicSource.connect(this.musicGain);
+        this.musicGain.gain.value = volume;
+        this.musicSource.start();
+        this.musicStarted = true;
+        console.log(`🎵 Музыка запущена: ${trackName}`);
+    } catch (e) {
+        console.warn('Ошибка воспроизведения музыки:', e);
     }
 }
 
@@ -301,30 +307,7 @@ _playMusicInternal(trackName, volume) {
         this.currentMusicTrack = null;
     }
 
-    // Внутри класса GameAudio, после конструктора
-
-/**
- * Воспроизводит короткий тихий звук (или пустой буфер),
- * чтобы "разбудить" AudioContext и удержать его активным.
- */
-async keepAlive() {
-    try {
-        if (!this.audioContext) return;
-        // Создаём пустой буфер длительностью 0.01 секунды
-        const emptyBuffer = this.audioContext.createBuffer(1, 1, 22050);
-        const source = this.audioContext.createBufferSource();
-        source.buffer = emptyBuffer;
-        const gain = this.audioContext.createGain();
-        gain.gain.value = 0.001; // очень тихо
-        source.connect(gain);
-        gain.connect(this.audioContext.destination);
-        source.start();
-        source.stop(this.audioContext.currentTime + 0.01);
-        console.log('🔊 AudioContext активирован через keepAlive');
-    } catch (e) {
-        console.warn('keepAlive не сработал:', e);
-    }
-}
+    
 }
 
 // Создаём глобальный экземпляр
