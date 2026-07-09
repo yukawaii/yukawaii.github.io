@@ -490,6 +490,10 @@ function playerDrop() {
 function playerMove(dir) {
     player.pos.x += dir;
     if (collide(arena, player)) player.pos.x -= dir;
+     // Добавляем звук при движении (тихо)
+    if (typeof gameAudio !== 'undefined' && !gameState.paused && isGameStarted) {
+        gameAudio.playOneShot('rotate', 0.02);
+    }
 }
 
 function rotate(matrix, dir) {
@@ -1041,6 +1045,11 @@ async function startGameWithAudio() {
     if (typeof gameAudio !== 'undefined') {
         gameAudio.resumeAll();
         console.log('✅ Аудио контексты возобновлены');
+
+          // Устанавливаем громкость музыки (0.08)
+        if (gameAudio.musicGain) {
+            gameAudio.musicGain.gain.value = 0.08;
+        }
 
         // 🟢 Активируем музыкальный контекст сразу после resume
         gameAudio.ensureMusicContextActive();
@@ -3404,97 +3413,7 @@ function updateLoadingStatus(text, progress) {
         bar.style.width = Math.min(100, Math.max(0, progress)) + '%';
     }
 }
-async function startGameWithLoading() {
-    try {
-        // 1. Инициализируем аудио, если ещё нет
-        if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
-            updateLoadingStatus('Инициализация аудио...', 30);
-            await gameAudio.init();
-        }
-        
-        // 2. Определяем, какой трек нужен
-        let track;
-        const isClassic = selectedMode === 'classic';
-        if (isClassic && selectedDifficulty === 'easy') track = '2';
-        else if (isClassic && selectedDifficulty === 'medium') track = '4';
-        else if (isClassic && selectedDifficulty === 'hard') track = '1';
-        else if (!isClassic && selectedDifficulty === 'easy') track = '2';
-        else if (!isClassic && selectedDifficulty === 'medium') track = '1';
-        else track = '1';
-        
-        // 3. Пытаемся загрузить трек (если ещё не загружен)
-        if (gameAudio && !gameAudio.buffers[track]) {
-            updateLoadingStatus(`Загрузка трека ${track}...`, 50);
-            // Загружаем трек через существующий метод loadSound
-            // Если в audio.js нет публичного метода для загрузки отдельного трека – добавим его
-            // Для простоты можно вызвать gameAudio.loadSound(track, `audio/${track}.ogg`)
-            // Но у нас в audio.js loadSound – приватный? Можно сделать публичным или использовать внутренний механизм.
-            // Поскольку мы уже вызывали loadSounds() при init, треки могут уже загружаться асинхронно.
-            // Поэтому мы можем подождать, пока трек появится в buffers, но с таймаутом.
-            await waitForTrackLoad(track, 8000); // ждём до 8 секунд
-        } else {
-            updateLoadingStatus('Трек уже загружен', 70);
-        }
-        
-        // 4. Гарантируем, что контексты активны
-        if (gameAudio) {
-            gameAudio.resumeAll();
-        }
-        
-        // 5. Запускаем игровую логику
-        updateLoadingStatus('Запуск игры...', 90);
-        startGame(); // синхронный старт (или асинхронный, но мы уже всё подготовили)
-        
-        // 6. После старта игры запускаем музыку (с небольшой задержкой, чтобы дать игре отрисоваться)
-        if (gameAudio && !musicMuted && !soundMuted) {
-            setTimeout(() => {
-                gameAudio.playMusic(track, 0.15);
-                console.log('🎵 Музыка запущена после загрузки');
-            }, 300);
-        }
-        
-        // 7. Закрываем экран загрузки
-        updateLoadingStatus('Готово!', 100);
-        setTimeout(hideLoadingScreen, 500);
-        
-    } catch (error) {
-        console.error('Ошибка при загрузке игры:', error);
-        // Если что-то пошло не так – всё равно запускаем игру без музыки и закрываем экран
-        startGame();
-        hideLoadingScreen();
-        if (gameAudio) {
-            gameAudio.resumeAll();
-        }
-        // Показываем сообщение об ошибке, но не блокируем игру
-        showCustomModal({
-            title: '⚠️ Ошибка загрузки музыки',
-            text: 'Не удалось загрузить музыку, но игра продолжается.',
-            type: 'warning',
-            button: 'OK'
-        });
-    }
-}
 
-// Вспомогательная функция для ожидания загрузки трека
-function waitForTrackLoad(trackName, timeout) {
-    return new Promise((resolve) => {
-        if (gameAudio.buffers[trackName]) {
-            resolve();
-            return;
-        }
-        const startTime = Date.now();
-        const interval = setInterval(() => {
-            if (gameAudio.buffers[trackName]) {
-                clearInterval(interval);
-                resolve();
-            } else if (Date.now() - startTime > timeout) {
-                clearInterval(interval);
-                console.warn(`⏰ Таймаут загрузки трека ${trackName}`);
-                resolve(); // всё равно разрешаем, чтобы не блокировать игру
-            }
-        }, 200);
-    });
-}
 
 // ======================== ЭКСПОРТ ========================
 window.selectMode = selectMode;
