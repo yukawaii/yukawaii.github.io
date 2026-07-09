@@ -478,7 +478,29 @@ document.getElementById('dailyBonusUnavailableModal').addEventListener('pointerd
         this.updateDiamondUI(); // чтобы сразу отобразить алмазы
         this.initAdBanner();
         this.initVK();
-    }
+       // Показываем экран загрузки
+    const loading = document.getElementById('loadingScreen');
+    if (loading) loading.style.display = 'flex';
+
+    // Запускаем инициализацию VK и ждём завершения
+    this.initVK()
+        .then(() => {
+            // Скрываем загрузку, показываем меню
+            if (loading) loading.style.display = 'none';
+            this.showMenu();
+            this.updateDiamondUI();
+            this.initAdBanner();
+        })
+        .catch(() => {
+            // При ошибке тоже показываем меню (с локальными данными)
+            if (loading) loading.style.display = 'none';
+            this.showMenu();
+            this.updateDiamondUI();
+            this.initAdBanner();
+        });
+}
+   
+    
 
 // ============================================================
 // Проверка "Использовать все проверки"
@@ -724,7 +746,7 @@ showHintAdModal() {
                     this.maxHints += 3;
                     const remaining = this.maxHints - this.hintsUsed;
                     this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
-                    this.sound.click();
+                 //   this.sound.click();
                     this.render();
                       this.updateHintButton();
                     closeModal(true);
@@ -739,7 +761,7 @@ showHintAdModal() {
                             this.maxHints += 1;
                             const remaining = this.maxHints - this.hintsUsed;
                             this.messageEl.textContent = `💡 +1 подсказка! Осталось: ${remaining}`;
-                            this.sound.click();
+                          //  this.sound.click();
                             this.render();
                                     this.updateHintButton();
                             closeModal(true);
@@ -885,7 +907,7 @@ hideLoadingAd() {
     // ============================================================
 // Инициализация VK и получение данных пользователя
 // ============================================================
-initVK() {
+async initVK() {
     if (typeof vkBridge === 'undefined') {
         console.warn('VK Bridge не найден, работаем в локальном режиме');
         this.loadDiamondsLocal();
@@ -926,11 +948,12 @@ initVK() {
             this.vkUserId = userInfo.id;
             console.log('👤 Пользователь VK:', this.vkUserId);
             // Загружаем алмазы из VK Storage
-            this.loadDiamonds();
-            this.loadAchievements();
+             await this.loadDiamonds();
+    await this.loadAchievements();
         } else {
             throw new Error('Не удалось получить ID пользователя');
         }
+        
     })
     .catch((err) => {
         console.warn('Ошибка инициализации VK:', err);
@@ -942,34 +965,39 @@ initVK() {
 // ============================================================
 // Загрузка алмазов из VK Storage
 // ============================================================
+// В классе SudokuGame
 loadDiamonds() {
     if (!this.vkUserId || !this.vkInitialized) {
         this.loadDiamondsLocal();
-        return;
+        return Promise.resolve();
     }
-
-    vkBridge.send('VKWebAppStorageGet', {
-        keys: ['diamonds', 'bonusDate']
-    })
-    .then((data) => {
-        if (data && data.keys) {
-            data.keys.forEach(item => {
-                if (item.key === 'diamonds') {
-                    this.currentDiamonds = parseInt(item.value) || 0;
-                }
-                if (item.key === 'bonusDate') {
-                    this.lastBonusDate = item.value || null;
-                }
-            });
-        }
-        this.updateDiamondUI();
-        // После загрузки синхронизируем таблицу лидеров (на случай, если локально было больше)
-        this.syncLeaderboard();
-    })
-    .catch((err) => {
-        console.warn('Ошибка загрузки из VK Storage:', err);
-        this.loadDiamondsLocal();
-    });
+    return vkBridge.send('VKWebAppStorageGet', { keys: ['diamonds', 'bonusDate'] })
+        .then((data) => {
+            if (data && data.keys) {
+                data.keys.forEach(item => {
+                    if (item.key === 'diamonds') {
+                        const vkVal = parseInt(item.value) || 0;
+                        this.currentDiamonds = Math.max(this.currentDiamonds, vkVal);
+                    }
+                    if (item.key === 'bonusDate') {
+                        const vkDate = item.value || null;
+                        if (vkDate && (!this.lastBonusDate || vkDate > this.lastBonusDate)) {
+                            this.lastBonusDate = vkDate;
+                        }
+                        // если локальная дата новее – она уже в this.lastBonusDate
+                    }
+                });
+            }
+            // Если локальная дата есть, а в VK её нет – она уже сохранена в this.lastBonusDate
+            // Сохраняем максимальные значения обратно в VK и локально
+            this.saveDiamonds();
+            this.updateDiamondUI();
+            this.syncLeaderboard();
+        })
+        .catch((err) => {
+            console.warn('Ошибка загрузки из VK Storage:', err);
+            this.loadDiamondsLocal();
+        });
 }
 
 // ============================================================
@@ -2467,7 +2495,7 @@ showCheckAdModal() {
                     this.maxChecks += 3;
                     const remaining = this.maxChecks - this.checksUsed;
                     this.messageEl.textContent = `🎉 +3 проверки! Осталось: ${remaining}`;
-                    this.sound.click();
+                  //  this.sound.click();
                     this.render();
                     this.updateCheckButton();
                     closeModal(true);
@@ -2479,7 +2507,7 @@ showCheckAdModal() {
                             this.maxChecks += 1;
                             const remaining = this.maxChecks - this.checksUsed;
                             this.messageEl.textContent = `✅ +1 проверка! Осталось: ${remaining}`;
-                            this.sound.click();
+                           // this.sound.click();
                             this.render();
                             this.updateCheckButton();
                             closeModal(true);
@@ -2522,6 +2550,7 @@ showCheckAdModal() {
     // Проверка победы
     // ============================================================
 checkWin() {
+    if (this.isFinished) return true;
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
             if (this.grid[r][c] !== this.solution[r][c]) {
