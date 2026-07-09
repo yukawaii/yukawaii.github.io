@@ -161,58 +161,53 @@ function loadAllDataFromVK() {
 }
 
 // ======================== ИНИЦИАЛИЗАЦИЯ VK ========================
-function initVKSDK() {
-    if (typeof vkBridge !== 'undefined') {
-        window.vkBridge = vkBridge;
-        vkBridge.send('VKWebAppInit')
-            .then(() => {
-                console.log('✅ VK SDK инициализирован');
-                vkInitialized = true;
-                return vkBridge.send('VKWebAppGetLaunchParams');
-            })
-            .then((launchParams) => {
-                const userId = launchParams.vk_user_id || launchParams.vk_original_vk_id;
-                if (userId) {
-                    vkUserId = userId;
-                    window.vkUserId = userId;
-                    localStorage.setItem('vk_user_id', userId);
-                    console.log('👤 ID пользователя (из launchParams):', userId);
-                }
-                // Пробуем получить токен
-                return vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
-            })
-            .then((authData) => {
-                vkUserToken = authData.access_token;
-                console.log('✅ Токен получен');
-                // Загружаем данные из VK Storage
-               await loadVKHighScore();                    // сначала рекорд – обновит экран
-loadAllDataFromVK().catch(err => console.warn('Ошибка загрузки остальных данных:', err));
-            })
-            .then(() => {
-                // Загружаем рекорд
-              //  loadVKHighScore();
-                // Обновляем интерфейс
-                if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
-                if (typeof updateCollectionsProgress === 'function') updateCollectionsProgress();
-                if (typeof updateDailyBonusStatus === 'function') updateDailyBonusStatus();
-                console.log('✅ Все данные загружены и интерфейс обновлён');
-            })
-            .catch((err) => {
-                console.warn('⚠️ Ошибка инициализации VK:', err);
-                vkInitialized = false;
-                const savedId = localStorage.getItem('vk_user_id');
-                if (savedId) {
-                    vkUserId = savedId;
-                    window.vkUserId = savedId;
-                }
-                updateRecordText('Рекорд: 0 (Гость)');
-                // Пробуем загрузить локальный рекорд
-                loadLocalHighScore();
-            });
-    } else {
+async function initVKSDK() {
+    if (typeof vkBridge === 'undefined') {
         console.warn('VK Bridge не найден');
         updateRecordText('Рекорд: 0');
-        loadLocalHighScore();
+        return;
+    }
+
+    try {
+        window.vkBridge = vkBridge;
+        await vkBridge.send('VKWebAppInit');
+        console.log('✅ VK SDK инициализирован');
+
+        const launchParams = await vkBridge.send('VKWebAppGetLaunchParams');
+        const userId = launchParams.vk_user_id || launchParams.vk_original_vk_id;
+        if (userId) {
+            vkUserId = userId;
+            window.vkUserId = userId;
+            localStorage.setItem('vk_user_id', userId);
+            console.log('👤 ID пользователя:', userId);
+        }
+
+        const authData = await vkBridge.send('VKWebAppGetAuthToken', { app_id: APP_ID, scope: '' });
+        vkUserToken = authData.access_token;
+        console.log('✅ Токен получен');
+
+        // ========== ПРИОРИТЕТНАЯ ЗАГРУЗКА РЕКОРДА ==========
+        await loadVKHighScore();   // сначала рекорд – обновит экран
+
+        // ========== ОСТАЛЬНЫЕ ДАННЫЕ – АСИНХРОННО (НЕ БЛОКИРУЮТ) ==========
+        loadAllDataFromVK().catch(err =>
+            console.warn('⚠️ Ошибка загрузки остальных данных:', err)
+        );
+
+        // Обновляем интерфейс (коллекции, бонусы)
+        if (typeof updateHighscoreDisplay === 'function') updateHighscoreDisplay();
+        if (typeof updateCollectionsProgress === 'function') updateCollectionsProgress();
+        if (typeof updateDailyBonusStatus === 'function') updateDailyBonusStatus();
+        console.log('✅ Все данные загружены и интерфейс обновлён');
+    } catch (err) {
+        console.warn('⚠️ Ошибка инициализации VK:', err);
+        const savedId = localStorage.getItem('vk_user_id');
+        if (savedId) {
+            vkUserId = savedId;
+            window.vkUserId = savedId;
+        }
+        updateRecordText('Рекорд: 0');   // ❌ без "Гость" и без локального рекорда
+        // Локальный рекорд НЕ загружаем
     }
 }
 
