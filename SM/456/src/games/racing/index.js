@@ -4,8 +4,6 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 import { visibilityChangeEvent, isFocus } from '../../unit/';
-import store from '../../store';
-import actions from '../../actions';
 
 // ===== МЕНЯЕМ ИМПОРТ: вместо musicModule используем arcadeSounds =====
 var arcadeSounds = require('../../unit/arcadeSounds');
@@ -24,8 +22,7 @@ class RacingGame extends Component {
       isPaused: false,
       speed: 4,
       gameTime: 0,
-      soundEnabled: true,
-       soundEnabled: store.getState().get('music')
+      soundEnabled: true
     };
     this.moveLeft = false;
     this.moveRight = false;
@@ -178,11 +175,9 @@ class RacingGame extends Component {
     } catch(e) {}
   }
 
- toggleSound() {
-  var newState = !this.state.soundEnabled;
-  this.setState({ soundEnabled: newState });
-  store.dispatch(actions.music(newState));
-}
+  toggleSound() {
+    this.setState({ soundEnabled: !this.state.soundEnabled });
+  }
 
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {

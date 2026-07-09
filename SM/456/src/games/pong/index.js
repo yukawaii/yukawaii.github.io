@@ -4,8 +4,6 @@ import style from './index.less';
 import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 import { visibilityChangeEvent, isFocus } from '../../unit/';
-import store from '../../store';
-import actions from '../../actions';
 
 var arcadeSounds = require('../../unit/arcadeSounds');
 
@@ -25,8 +23,7 @@ class PongGame extends Component {
       ballSpeedY: 1.75,
       hits: 0,
       gameTime: 0,
-      speed: 1,
-       soundEnabled: store.getState().get('music')
+      speed: 1
     };
     this.moveLeft = false;
     this.moveRight = false;
@@ -182,11 +179,9 @@ playCrashSound() {
   } catch(e) {}
 }
 
- toggleSound() {
-  var newState = !this.state.soundEnabled;
-  this.setState({ soundEnabled: newState });
-  store.dispatch(actions.music(newState));
-}
+  toggleSound() {
+    this.setState({ soundEnabled: !this.state.soundEnabled });
+  }
 
   handleKeyDown(e) {
     var key = e.key;
