@@ -1242,6 +1242,13 @@ async function playBackgroundMusic() {
     const maxAttempts = 40;
     while (attempts < maxAttempts) {
         if (gameAudio.buffers[track]) {
+
+    // 🟢 Активируем музыкальный контекст перед воспроизведением
+            gameAudio.ensureMusicContextActive();
+            // Небольшая задержка, чтобы контекст успел перейти в running
+            await new Promise(r => setTimeout(r, 50));
+
+
             // Единственное исправление: перед воспроизведением гарантируем активный контекст
             await gameAudio.resumeAll();
             gameAudio.playMusic(track, 0.15);
@@ -1254,6 +1261,11 @@ async function playBackgroundMusic() {
     // Если не загрузилось – повтор через 5 секунд
     setTimeout(() => {
         if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
+    // 🟢 Активируем музыкальный контекст перед воспроизведением
+            gameAudio.ensureMusicContextActive();
+            // Небольшая задержка, чтобы контекст успел перейти в running
+            await new Promise(r => setTimeout(r, 50));
+
             gameAudio.resumeAll();
             gameAudio.playMusic(track, 0.15);
         }
