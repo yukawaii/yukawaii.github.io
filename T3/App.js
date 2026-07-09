@@ -185,7 +185,8 @@ function initVKSDK() {
                 vkUserToken = authData.access_token;
                 console.log('✅ Токен получен');
                 // Загружаем данные из VK Storage
-                return loadAllDataFromVK();
+               await loadVKHighScore();                    // сначала рекорд – обновит экран
+loadAllDataFromVK().catch(err => console.warn('Ошибка загрузки остальных данных:', err));
             })
             .then(() => {
                 // Загружаем рекорд
