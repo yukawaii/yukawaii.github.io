@@ -1,0 +1,60 @@
+{
+  "urls": [
+    "assets/audio/audiosprite.mp3",
+    "assets/audio/audiosprite.ogg"
+  ],
+  "sprite": {
+    "cake_cover_lands": [
+      0,
+      522.4489795918367
+    ],
+    "cake_house_soundtrack": [
+      2000,
+      21333.356009070292
+    ],
+    "cake_revealed": [
+      25000,
+      1175.5102040816325
+    ],
+    "cake_special_revealed_after_spins": [
+      28000,
+      1440.0000000000014
+    ],
+    "claim_reward": [
+      31000,
+      992.653061224491
+    ],
+    "click_button": [
+      33000,
+      261.2244897959215
+    ],
+    "coin_emmited": [
+      35000,
+      384.01360544217766
+    ],
+    "merge": [
+      37000,
+      1152.0181405895685
+    ],
+    "merge_final": [
+      40000,
+      1872.0181405895673
+    ],
+    "new_recipe_appears": [
+      43000,
+      1828.5714285714291
+    ],
+    "pastry_saloon_soundtrack": [
+      46000,
+      13766.5306122449
+    ],
+    "surprise_cake_spin": [
+      61000,
+      992.6530612244875
+    ],
+    "tap": [
+      63000,
+      119.99999999999744
+    ]
+  }
+}

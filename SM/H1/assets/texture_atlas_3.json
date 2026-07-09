@@ -1,0 +1,839 @@
+{
+	"textures": [
+		{
+			"image": "texture_atlas_3.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 2048,
+				"h": 2048
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "biscuits_27",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 368,
+						"h": 383
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 368,
+						"h": 383
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 368,
+						"h": 383
+					}
+				},
+				{
+					"filename": "biscuits_36",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 366,
+						"h": 366
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 366,
+						"h": 366
+					},
+					"frame": {
+						"x": 1,
+						"y": 386,
+						"w": 366,
+						"h": 366
+					}
+				},
+				{
+					"filename": "biscuits_9",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 249,
+						"h": 363
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 249,
+						"h": 363
+					},
+					"frame": {
+						"x": 1,
+						"y": 754,
+						"w": 249,
+						"h": 363
+					}
+				},
+				{
+					"filename": "biscuits_30",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 338,
+						"h": 341
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 338,
+						"h": 341
+					},
+					"frame": {
+						"x": 1,
+						"y": 1119,
+						"w": 338,
+						"h": 341
+					}
+				},
+				{
+					"filename": "biscuits_39",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 360,
+						"h": 331
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 360,
+						"h": 331
+					},
+					"frame": {
+						"x": 252,
+						"y": 754,
+						"w": 360,
+						"h": 331
+					}
+				},
+				{
+					"filename": "biscuits_18",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 315,
+						"h": 327
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 315,
+						"h": 327
+					},
+					"frame": {
+						"x": 369,
+						"y": 386,
+						"w": 315,
+						"h": 327
+					}
+				},
+				{
+					"filename": "biscuits_17",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 316,
+						"h": 326
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 316,
+						"h": 326
+					},
+					"frame": {
+						"x": 371,
+						"y": 1,
+						"w": 316,
+						"h": 326
+					}
+				},
+				{
+					"filename": "biscuits_35",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 296,
+						"h": 326
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 296,
+						"h": 326
+					},
+					"frame": {
+						"x": 1,
+						"y": 1462,
+						"w": 296,
+						"h": 326
+					}
+				},
+				{
+					"filename": "biscuits_13",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 208,
+						"h": 251
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 208,
+						"h": 251
+					},
+					"frame": {
+						"x": 1,
+						"y": 1790,
+						"w": 208,
+						"h": 251
+					}
+				},
+				{
+					"filename": "biscuits_37",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 314,
+						"h": 250
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 314,
+						"h": 250
+					},
+					"frame": {
+						"x": 211,
+						"y": 1790,
+						"w": 314,
+						"h": 250
+					}
+				},
+				{
+					"filename": "biscuits_24",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 294,
+						"h": 325
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 294,
+						"h": 325
+					},
+					"frame": {
+						"x": 299,
+						"y": 1462,
+						"w": 294,
+						"h": 325
+					}
+				},
+				{
+					"filename": "biscuits_20",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 285,
+						"h": 247
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 285,
+						"h": 247
+					},
+					"frame": {
+						"x": 527,
+						"y": 1789,
+						"w": 285,
+						"h": 247
+					}
+				},
+				{
+					"filename": "biscuits_38",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 313,
+						"h": 324
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 313,
+						"h": 324
+					},
+					"frame": {
+						"x": 341,
+						"y": 1087,
+						"w": 313,
+						"h": 324
+					}
+				},
+				{
+					"filename": "biscuits_26",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 347,
+						"h": 322
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 347,
+						"h": 322
+					},
+					"frame": {
+						"x": 614,
+						"y": 715,
+						"w": 347,
+						"h": 322
+					}
+				},
+				{
+					"filename": "biscuits_33",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 313
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 313
+					},
+					"frame": {
+						"x": 595,
+						"y": 1413,
+						"w": 359,
+						"h": 313
+					}
+				},
+				{
+					"filename": "biscuits_32",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 338,
+						"h": 305
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 338,
+						"h": 305
+					},
+					"frame": {
+						"x": 814,
+						"y": 1728,
+						"w": 338,
+						"h": 305
+					}
+				},
+				{
+					"filename": "biscuits_34",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 310,
+						"h": 301
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 310,
+						"h": 301
+					},
+					"frame": {
+						"x": 656,
+						"y": 1039,
+						"w": 310,
+						"h": 301
+					}
+				},
+				{
+					"filename": "biscuits_8",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 284,
+						"h": 295
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 284,
+						"h": 295
+					},
+					"frame": {
+						"x": 956,
+						"y": 1342,
+						"w": 284,
+						"h": 295
+					}
+				},
+				{
+					"filename": "biscuits_12",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 337,
+						"h": 292
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 337,
+						"h": 292
+					},
+					"frame": {
+						"x": 686,
+						"y": 329,
+						"w": 337,
+						"h": 292
+					}
+				},
+				{
+					"filename": "biscuits_15",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 348,
+						"h": 291
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 348,
+						"h": 291
+					},
+					"frame": {
+						"x": 689,
+						"y": 1,
+						"w": 348,
+						"h": 291
+					}
+				},
+				{
+					"filename": "biscuits_29",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 277,
+						"h": 289
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 277,
+						"h": 289
+					},
+					"frame": {
+						"x": 1154,
+						"y": 1639,
+						"w": 277,
+						"h": 289
+					}
+				},
+				{
+					"filename": "biscuits_21",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 325,
+						"h": 286
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 325,
+						"h": 286
+					},
+					"frame": {
+						"x": 963,
+						"y": 623,
+						"w": 325,
+						"h": 286
+					}
+				},
+				{
+					"filename": "biscuits_23",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 302,
+						"h": 285
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 302,
+						"h": 285
+					},
+					"frame": {
+						"x": 1025,
+						"y": 294,
+						"w": 302,
+						"h": 285
+					}
+				},
+				{
+					"filename": "biscuits_25",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 309,
+						"h": 280
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 309,
+						"h": 280
+					},
+					"frame": {
+						"x": 1039,
+						"y": 1,
+						"w": 309,
+						"h": 280
+					}
+				},
+				{
+					"filename": "biscuits_7",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 218,
+						"h": 272
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 218,
+						"h": 272
+					},
+					"frame": {
+						"x": 968,
+						"y": 911,
+						"w": 218,
+						"h": 272
+					}
+				},
+				{
+					"filename": "biscuits_1",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 133
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 133
+					},
+					"frame": {
+						"x": 968,
+						"y": 1185,
+						"w": 128,
+						"h": 133
+					}
+				},
+				{
+					"filename": "biscuits_4",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 300,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 300,
+						"h": 128
+					},
+					"frame": {
+						"x": 1098,
+						"y": 1185,
+						"w": 300,
+						"h": 128
+					}
+				},
+				{
+					"filename": "biscuits_14",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 270,
+						"h": 267
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 270,
+						"h": 267
+					},
+					"frame": {
+						"x": 1188,
+						"y": 911,
+						"w": 270,
+						"h": 267
+					}
+				},
+				{
+					"filename": "biscuits_10",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 248,
+						"h": 264
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 248,
+						"h": 264
+					},
+					"frame": {
+						"x": 1242,
+						"y": 1315,
+						"w": 248,
+						"h": 264
+					}
+				},
+				{
+					"filename": "biscuits_28",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 275,
+						"h": 259
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 275,
+						"h": 259
+					},
+					"frame": {
+						"x": 1290,
+						"y": 581,
+						"w": 275,
+						"h": 259
+					}
+				},
+				{
+					"filename": "biscuits_3",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 268,
+						"h": 242
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 268,
+						"h": 242
+					},
+					"frame": {
+						"x": 1329,
+						"y": 283,
+						"w": 268,
+						"h": 242
+					}
+				},
+				{
+					"filename": "biscuits_11",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 306,
+						"h": 239
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 306,
+						"h": 239
+					},
+					"frame": {
+						"x": 1350,
+						"y": 1,
+						"w": 306,
+						"h": 239
+					}
+				},
+				{
+					"filename": "biscuits_31",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 329,
+						"h": 222
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 329,
+						"h": 222
+					},
+					"frame": {
+						"x": 1658,
+						"y": 1,
+						"w": 329,
+						"h": 222
+					}
+				},
+				{
+					"filename": "biscuits_22",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 282,
+						"h": 212
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 282,
+						"h": 212
+					},
+					"frame": {
+						"x": 1658,
+						"y": 225,
+						"w": 282,
+						"h": 212
+					}
+				},
+				{
+					"filename": "biscuits_5",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 257,
+						"h": 170
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 257,
+						"h": 170
+					},
+					"frame": {
+						"x": 1599,
+						"y": 439,
+						"w": 257,
+						"h": 170
+					}
+				},
+				{
+					"filename": "biscuits_6",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 247,
+						"h": 211
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 247,
+						"h": 211
+					},
+					"frame": {
+						"x": 1567,
+						"y": 611,
+						"w": 247,
+						"h": 211
+					}
+				},
+				{
+					"filename": "biscuits_19",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 210,
+						"h": 182
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 210,
+						"h": 182
+					},
+					"frame": {
+						"x": 1816,
+						"y": 611,
+						"w": 210,
+						"h": 182
+					}
+				},
+				{
+					"filename": "biscuits_2",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 199,
+						"h": 189
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 199,
+						"h": 189
+					},
+					"frame": {
+						"x": 1816,
+						"y": 795,
+						"w": 199,
+						"h": 189
+					}
+				},
+				{
+					"filename": "biscuits_16",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 246,
+						"h": 220
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 246,
+						"h": 220
+					},
+					"frame": {
+						"x": 1567,
+						"y": 824,
+						"w": 246,
+						"h": 220
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:f1efcb5bc04e4c21db8805a9b021c739:08483d7050264c1f1b5453f343e3e020:b87986fdd92f2882d179b98624ef4e28$"
+	}
+}

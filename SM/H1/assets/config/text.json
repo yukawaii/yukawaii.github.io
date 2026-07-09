@@ -1,0 +1,61 @@
+{
+    "en": {
+        "ACHIEVEMENTS" :[
+            {   
+                "title": "Innovative Baker",
+                "description": "Discover * new recipes"
+            },
+            {   
+                "title": "Expert Merger",
+                "description": "Reach level *"
+            },
+            {   
+                "title": "Sweet tooth buyer",
+                "description": "Buy * sweets"
+            },
+
+            {   
+                "title": "Chef Merger",
+                "description": "Merge * times"
+            },
+            {   
+                "title": "Impatient cook",
+                "description": "Tap sweet cover * times"
+            },
+            {   
+                "title": "Dessert lover",
+                "description": "Open * sweets covers"
+            },
+            {   
+                "title": "Exquisite Palate",
+                "description": "Open * surprise sweets"
+            }
+        ],
+        "NEW_GAME_MODE_DESCRIPTION_ITEM_1" : "the oven never stops in",
+        "NEW_GAME_MODE_DESCRIPTION_ITEM_2" : "let the dough get some rest in",
+        "FULL": "FULL",     
+        "RAN_OUT": "YOU RAN OUT OF\nCAKE TRAYS",
+        "EXTRA_SPACE": "EXTRA SPACE HAS\nBEEN UNLOCKED",
+        "NEW_BACKERY": "A NEW BAKERY HAS BEEN UNLOCKED",
+        "YOU_WON": "YOU WON",
+        "RESTART_1": "RESET YOUR PROGRESSION AND EARN PRIZES",
+        "RESTART_2": "Upgrade to",
+        "RESTART_3": "Keep Achievements and Badges. Earn a special Badge.",
+        "RESTART_4_1": "Receive permanent +10% production in Cake House.",
+        "RESTART_4_2": "Receive permanent +10% production in Pastry Saloon.",
+        "RECREATE_BADGE": "YOU WON THE RESTART BADGE *!",
+        "TUTORIAL_1": "WELCOME CHEF! LET'S PREPARE SOME DESSERTS",
+        "TUTORIAL_2": "TAP TO REVEAL THE DESSERT!",
+        "TUTORIAL_3": "LETS DO IT AGAIN.",
+        "TUTORIAL_4": "SAME KIND OF DESSERTS CAN BE MERGED",
+        "TUTORIAL_5": "REPEATEDLY TAP TO DROP MORE CAKE COVERS!",
+        "TUTORIAL_6": "OPEN THE SHOP TO PURCHASE CAKES",
+        "TUTORIAL_7": "USE YOUR COINS TO PURCHASE UPGRADED CAKES",
+        "SECONDS": "sec",
+        "UNLOCK_AT_LVL_5": "UNLOCK AT LEVEL 5",
+        "GIFT_SWEET": "GIFT SWEET!",
+        "DEVELOPED_BY": "developed by",
+        "LICENSED_TO": "licensed to ",
+        "NONE": "none"
+    }
+}

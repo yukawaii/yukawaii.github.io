@@ -48,38 +48,39 @@ export default class Keyboard extends React.Component {
     };
     
     // ===== MOUSEDOWN =====
-    this[`dom_${key}`].dom.addEventListener('mousedown', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'down' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (touchEventCatch[key] === true) return;
-      todo[key].down(store);
-      mouseDownEventCatch[key] = true;
-    }, true);
+this[`dom_${key}`].dom.addEventListener('mousedown', (e) => {
+  if (touchEventCatch[key] === true) return; // ← проверка перенесена в начало
+  window.dispatchEvent(new CustomEvent('gameControl', {
+    detail: { key: key, action: 'down' }
+  }));
+  if (window._isRacingActive) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  todo[key].down(store);
+  mouseDownEventCatch[key] = true;
+}, true);
     
     // ===== MOUSEUP =====
-    this[`dom_${key}`].dom.addEventListener('mouseup', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (touchEventCatch[key] === true) {
-        touchEventCatch[key] = false;
-        return;
-      }
-      todo[key].up(store);
-      mouseDownEventCatch[key] = false;
-      triggerLeaderboard(this.props.max || 0);
-    }, true);
+  this[`dom_${key}`].dom.addEventListener('mouseup', (e) => {
+  if (touchEventCatch[key] === true) {
+    // Не сбрасываем touchEventCatch здесь, это делает touchend
+    // Но для предотвращения двойного звука достаточно просто вернуть
+    return;
+  }
+  window.dispatchEvent(new CustomEvent('gameControl', {
+    detail: { key: key, action: 'up' }
+  }));
+  if (window._isRacingActive) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  todo[key].up(store);
+  mouseDownEventCatch[key] = false;
+  triggerLeaderboard(this.props.max || 0);
+}, true);
     
     this[`dom_${key}`].dom.addEventListener('mouseout', () => {
       if (mouseDownEventCatch[key] === true) todo[key].up(store);
@@ -100,18 +101,19 @@ export default class Keyboard extends React.Component {
     }, true);
     
     // ===== TOUCHEND =====
-    this[`dom_${key}`].dom.addEventListener('touchend', (e) => {
-      window.dispatchEvent(new CustomEvent('gameControl', {
-        detail: { key: key, action: 'up' }
-      }));
-      if (window._isRacingActive) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      todo[key].up(store);
-      triggerLeaderboard(this.props.max || 0);
-    }, true);
+this[`dom_${key}`].dom.addEventListener('touchend', (e) => {
+  window.dispatchEvent(new CustomEvent('gameControl', {
+    detail: { key: key, action: 'up' }
+  }));
+  if (window._isRacingActive) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+  todo[key].up(store);
+  triggerLeaderboard(this.props.max || 0);
+  touchEventCatch[key] = false; // ← добавить, если нет
+}, true);
   });
   
   // ========== КНОПКА ПОВОРОТ (rotate) - дополнительная обработка для 'up' ==========

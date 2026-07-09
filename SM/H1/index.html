@@ -1,0 +1,75 @@
+<!-- 1760001478584 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./cloner-v3-4.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+   navigator.serviceWorker.register("./cloner-sw-v1-6.js?/poki=ubg67/merge-cakes/");
+   navigator.serviceWorker.register= async function() {
+       return Promise.reject(new Error("Service Worker registration blocked by override"));
+   }
+}
+</script>
+
+
+    <title>Merge Cakes</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1, IE=9">    
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, minimal-ui" />
+    
+    <style>
+
+        * { -webkit-tap-highlight-color:rgba(0,0,0,0); }
+
+        body {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -khtml-user-select: none;
+            margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
+            background: rgb(0, 0, 0);
+        }
+
+        #content {
+            margin: 0 auto;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #orientation {
+            margin: 0 auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url(assets/rotate-device.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: rgb(0, 0, 0);
+            z-index: 999;
+            display: none;
+        }
+
+        @font-face {
+            font-family: "Baloo";
+            src: url("assets/fonts/Baloo-Regular.ttf");
+        }
+
+    </style>
+
+    <script src="./patch/poki/sdk-v2.js?//game-cdn.poki.com/scripts/v2/poki-sdk.js"></script>
+    <script src="dist/bundle.js"></script> 
+    <script src="dist/Poki Sitelock v2.2.js"></script>
+</head>
+<body style= "margin: 0px; padding: 0px; overflow: hidden;">
+    
+    <div id="content"></div>
+    <div id="orientation"></div> 
+</body>
+</html>
+
+
