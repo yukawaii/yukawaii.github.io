@@ -360,20 +360,13 @@ function cancelLeaderboardLoading() {
 }
 
 function showVKLeaderboard() {
-    // 1. Вычисляем максимальный рекорд
     let highScore = Math.max(
         window.vkHighscore || 0,
         parseInt(localStorage.getItem('vkHighscore') || '0'),
         parseInt(localStorage.getItem('localHighscore') || '0')
     );
 
-    // 2. Синхронизируем рекорд с VK, если есть что синхронизировать
-    if (highScore > 0) {
-        saveVKScore(highScore);
-    }
-
-    // 3. Проверяем наличие VK Bridge
-    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
+    if (typeof vkBridge === 'undefined') {
         showCustomModal({
             title: 'Таблица лидеров',
             text: 'Функция доступна только в приложении ВКонтакте',
@@ -383,32 +376,59 @@ function showVKLeaderboard() {
         return;
     }
 
-    // 4. Пробуем открыть таблицу. Если не получится – инициализируем и пробуем ещё раз.
-    function openLeaderboard() {
-        return vkBridge.send('VKWebAppShowLeaderBoardBox', {
-            user_result: highScore,
-            global: 1
-        });
-    }
-
-    openLeaderboard()
+    // Сначала синхронизируем рекорд (как в рабочем примере)
+    if (vkInitialized && vkUserId && vkUserToken && highScore > 0) {
+        vkBridge.send('VKWebAppCallAPIMethod', {
+            method: 'apps.getScore',
+            params: { user_id: vkUserId, v: '5.131', access_token: vkUserToken }
+        })
+        .then((data) => {
+            let currentScore = parseInt(data.response) || 0;
+            if (highScore > currentScore) {
+                return vkBridge.send('VKWebAppCallAPIMethod', {
+                    method: 'secure.addAppEvent',
+                    params: {
+                        user_id: vkUserId,
+                        activity_id: 2,
+                        value: highScore,
+                        v: '5.131',
+                        access_token: ServToken
+                    }
+                });
+            }
+            return Promise.resolve();
+        })
         .then(() => {
-            console.log('✅ Таблица лидеров открыта');
+            console.log('🏆 Рекорд синхронизирован');
+            openLeaderboardBox(highScore);
         })
         .catch((err) => {
-            console.warn('⚠️ Первая попытка открыть таблицу не удалась:', err);
-            // Если ошибка – инициализируем VK и пробуем снова
+            console.warn('⚠️ Ошибка синхронизации, но всё равно открываем таблицу');
+            openLeaderboardBox(highScore);
+        });
+    } else {
+        openLeaderboardBox(highScore);
+    }
+}
+
+function openLeaderboardBox(highScore) {
+    vkBridge.send('VKWebAppShowLeaderBoardBox', {
+        user_result: highScore,
+        global: 1
+    })
+    .catch((err) => {
+        console.error('❌ Ошибка открытия таблицы:', err);
+        // Если ошибка, пробуем инициализировать VK
+        if (!vkInitialized) {
             vkBridge.send('VKWebAppInit')
                 .then(() => {
                     vkInitialized = true;
-                    console.log('✅ VK инициализирован повторно');
-                    return openLeaderboard();
-                })
-                .then(() => {
-                    console.log('✅ Таблица лидеров открыта после инициализации');
+                    return vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                        user_result: highScore,
+                        global: 1
+                    });
                 })
                 .catch((err2) => {
-                    console.error('❌ Не удалось открыть таблицу лидеров:', err2);
                     showCustomModal({
                         title: 'Таблица лидеров',
                         text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
@@ -416,7 +436,15 @@ function showVKLeaderboard() {
                         button: 'OK'
                     });
                 });
-        });
+        } else {
+            showCustomModal({
+                title: 'Таблица лидеров',
+                text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
+                type: 'info',
+                button: 'OK'
+            });
+        }
+    });
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
