@@ -194,7 +194,7 @@ class SnakeGame extends Component {
     
     try {
       if (arcadeSounds && arcadeSounds.move) {
-        arcadeSounds.move();
+       this.playMoveSound();
       }
     } catch(e) {}
   }
@@ -313,6 +313,15 @@ toggleSound() {
   }
 
   handleTouchStart(e) {
+ // Игнорируем касания на кнопках управления
+  const target = e.target;
+  if (target.closest('.soundBtn') || 
+      target.closest('.pauseBtn') || 
+      target.closest('.closeBtn') || 
+      target.closest('.restartBtn')) {
+    return;
+  }
+
     if (this.state.isPaused || this.state.gameOver) return;
     if (!this.state.isOpen) return;
     

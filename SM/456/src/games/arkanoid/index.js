@@ -209,7 +209,7 @@ saveScore(score) {
     
     try {
       if (arcadeSounds && arcadeSounds.move) {
-        arcadeSounds.move();
+        this.playMoveSound();
       }
     } catch(e) {}
   }
@@ -325,6 +325,14 @@ playCrashSound() {
   }
 
   handleTouchStart(e) {
+  // Игнорируем касания на кнопках управления
+  const target = e.target;
+  if (target.closest('.soundBtn') || 
+      target.closest('.pauseBtn') || 
+      target.closest('.closeBtn') || 
+      target.closest('.restartBtn')) {
+    return;
+  }
     if (this.state.isPaused || this.state.gameOver) return;
     if (!this.state.isOpen) return;
     
@@ -501,13 +509,17 @@ for (var j = 0; j < newBricks.length; j++) {
 if (allBroken && newBricks.length > 0) {
   newBricks = this.initBricks();
   newScore += 5;
+  if (!this.state.isPaused && !this.state.gameOver) {
   this.playCrashSound();
+  }
 }
     // ===== ПРОВЕРКА ПРОИГРЫША =====
     if (newBallY > FH + 20) {
       var newLives = this.state.lives - 1;
       if (newLives <= 0) {
+        if (!this.state.isPaused && !this.state.gameOver) {
         this.playCrashSound();
+        }
         this.setState({ gameOver: true });
         if (this.gameLoop) {
           clearInterval(this.gameLoop);
