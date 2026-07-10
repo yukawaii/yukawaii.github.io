@@ -443,7 +443,7 @@ if (ballBottom >= paddleTop &&
     });
   }
 
-  togglePause() {
+togglePause() {
     if (this.state.gameOver) return;
     var newPaused = !this.state.isPaused;
     this.setState({ isPaused: newPaused });
