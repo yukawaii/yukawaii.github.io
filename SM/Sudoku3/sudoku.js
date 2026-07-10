@@ -477,7 +477,7 @@ document.getElementById('dailyBonusUnavailableModal').addEventListener('pointerd
         this.showMenu();
         this.updateDiamondUI(); // чтобы сразу отобразить алмазы
         this.initAdBanner();
-        this.initVK();
+       // this.initVK();
        // Показываем экран загрузки
     const loading = document.getElementById('loadingScreen');
     if (loading) loading.style.display = 'flex';
@@ -907,68 +907,55 @@ hideLoadingAd() {
     // ============================================================
 // Инициализация VK и получение данных пользователя
 // ============================================================
-async initVK() {
+initVK() {
+    const loading = document.getElementById('loadingScreen');
+    const finishLoading = () => {
+        if (loading) loading.style.display = 'none';
+        this.showMenu();
+        this.updateDiamondUI();
+        this.initAdBanner();
+    };
+
     if (typeof vkBridge === 'undefined') {
-        console.warn('VK Bridge не найден, работаем в локальном режиме');
         this.loadDiamondsLocal();
         this.loadAchievements();
-        this.updateDiamondUI();
+        finishLoading();
         return;
     }
 
-    const isVK = window.location !== window.parent.location;
-    if (!isVK) {
-        console.warn('Приложение запущено не внутри ВК, используем localStorage');
-        this.loadDiamondsLocal();
-        this.loadAchievements();
-        this.updateDiamondUI();
-        return;
-    }
-
-    try {
-        // 1. Получаем userInfo (не требует токена)
-        const userInfo = await vkBridge.send('VKWebAppGetUserInfo', {});
-        if (userInfo && userInfo.id) {
-            this.vkUserId = userInfo.id;
-            console.log('👤 Пользователь VK:', this.vkUserId);
-            this.vkInitialized = true; // помечаем, что можем работать со Storage
-             return Promise.all([
-            this.loadDiamonds(),
-            this.loadAchievements()
-        ]);
-        } else {
-            throw new Error('Не удалось получить ID пользователя');
-        }
-
-        // 2. Загружаем алмазы и достижения из VK Storage (токен не нужен)
-        await this.loadDiamonds();
-        await this.loadAchievements();
-
-        // 3. Запрашиваем токен для лидерборда (если не получится – не критично)
-        try {
-            const tokenData = await vkBridge.send('VKWebAppGetAuthToken', {
-                app_id: 51399364,
-                scope: ''
-            });
-            if (tokenData && tokenData.access_token) {
-                this.vkUserToken = tokenData.access_token;
-                this.vkInitialized = true; 
-                console.log('✅ Токен получен');
-                // Обновляем таблицу лидеров
-                this.syncLeaderboard();
+    vkBridge.send('VKWebAppGetAuthToken', { app_id: 51399364, scope: '' })
+        .then((data) => {
+            if (data && data.access_token) {
+                this.vkUserToken = data.access_token;
+                this.vkInitialized = true; // <-- УСТАНАВЛИВАЕМ ДО ВЫЗОВА loadDiamonds
+                return vkBridge.send('VKWebAppGetUserInfo', {});
+            } else {
+                throw new Error('Токен не получен');
             }
-        } catch (tokenErr) {
-            console.warn('Не удалось получить токен:', tokenErr);
-            // Продолжаем работу без токена
-        }
-
-    } catch (err) {
-        console.warn('Ошибка инициализации VK:', err);
-        // Fallback – локальные данные
-        this.loadDiamondsLocal();
-        this.loadAchievements();
-        this.updateDiamondUI();
-    }
+        })
+        .then((userInfo) => {
+            if (userInfo && userInfo.id) {
+                this.vkUserId = userInfo.id;
+                console.log('👤 Пользователь VK:', this.vkUserId);
+                // ТОЛЬКО ЗДЕСЬ вызываем загрузку данных
+                return Promise.all([
+                    this.loadDiamonds(),
+                    this.loadAchievements()
+                ]);
+            } else {
+                throw new Error('Не удалось получить ID пользователя');
+            }
+        })
+        .then(() => {
+            console.log('✅ Все данные загружены');
+            finishLoading();
+        })
+        .catch((err) => {
+            console.warn('Ошибка инициализации VK:', err);
+            this.loadDiamondsLocal();
+            this.loadAchievements();
+            finishLoading();
+        });
 }
 
 // ============================================================
@@ -984,8 +971,11 @@ loadDiamonds() {
         this.loadDiamondsLocal();
         return Promise.resolve();
     }
+     console.log('✅ loadDiamonds: отправляем запрос в VK Storage вытягиваем из стораджа алмазы и дату');
     return vkBridge.send('VKWebAppStorageGet', { keys: ['diamonds', 'bonusDate'] })
+   
         .then((data) => {
+
             if (data && data.keys) {
                 data.keys.forEach(item => {
                     if (item.key === 'diamonds') {
@@ -999,6 +989,7 @@ loadDiamonds() {
                         }
                         // если локальная дата новее – она уже в this.lastBonusDate
                     }
+                    console.log('📦 loadDiamonds: получены данные из VK Storage:', data);
                 });
             }
             // Если локальная дата есть, а в VK её нет – она уже сохранена в this.lastBonusDate
@@ -2653,8 +2644,8 @@ return true;
     startNewGame() {
          this.hideConfetti();
 this.diamondsAwardedForCurrentGame = false;
-    this.perfectGame = false;     // <-- добавить
-    this.gameErrors = 0;          // <-- добавить
+    this.perfectGame = false;     
+    this.gameErrors = 0;         
 this.consecutiveSameNumber = 0;
 this.lastPlacedNumber = 0;
 this.sevenCount = 0;
