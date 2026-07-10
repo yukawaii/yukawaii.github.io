@@ -372,16 +372,58 @@ function showVKLeaderboard() {
         saveVKScore(highScore);
     }
 
-    // 3. Открываем таблицу лидеров (если VK Bridge доступен)
-    if (typeof vkBridge !== 'undefined') {
-        vkBridge.send('VKWebAppShowLeaderBoardBox', {
-            user_result: highScore,  // передаём максимум
-            global: 1
-        }).catch(err => {
-            console.warn('Ошибка открытия таблицы лидеров:', err);
-        });
+// 3. Проверяем доступность VK Bridge
+    if (typeof vkBridge !== 'undefined' && vkBridge.send) {
+        // Проверяем, инициализирован ли VK (если нет – инициализируем)
+        if (!vkInitialized) {
+            // Пробуем инициализировать, если ещё не было
+            vkBridge.send('VKWebAppInit')
+                .then(() => {
+                    vkInitialized = true;
+                    console.log('✅ VK инициализирован для таблицы лидеров');
+                    // Открываем таблицу после инициализации
+                    return vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                        user_result: highScore,
+                        global: 1
+                    });
+                })
+                .then(() => {
+                    console.log('✅ Таблица лидеров открыта');
+                })
+                .catch(err => {
+                    console.warn('Ошибка открытия таблицы лидеров:', err);
+                    // Показываем альтернативное сообщение
+                    showCustomModal({
+                        title: 'Таблица лидеров',
+                        text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
+                        type: 'info',
+                        button: 'OK'
+                    });
+                });
+        } else {
+            // VK уже инициализирован – открываем таблицу
+            vkBridge.send('VKWebAppShowLeaderBoardBox', {
+                user_result: highScore,
+                global: 1
+            }).catch(err => {
+                console.warn('Ошибка открытия таблицы лидеров:', err);
+                showCustomModal({
+                    title: 'Таблица лидеров',
+                    text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
+                    type: 'info',
+                    button: 'OK'
+                });
+            });
+        }
     } else {
+        // VK Bridge не доступен
         console.warn('VK Bridge не доступен');
+        showCustomModal({
+            title: 'Таблица лидеров',
+            text: 'Функция доступна только в приложении ВКонтакте',
+            type: 'info',
+            button: 'OK'
+        });
     }
 }
 
