@@ -266,14 +266,7 @@ _playMusicInternal(trackName, volume) {
         }
     }
     
-    setMuted(muted) {
-        this.muted = muted;
-        // Отключаем SFX-канал
-        if (this.sfxGain) {
-            this.sfxGain.gain.value = muted ? 0 : 0.3;
-        }
-    }
-    
+     
     setMusicMuted(muted) {
         this.musicMuted = muted;
         if (this.musicGain) {
