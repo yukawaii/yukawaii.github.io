@@ -138,6 +138,7 @@ this.BALL_SIZE = 12;
   }
 
   initGame() {
+     this._soundEnabled = true; 
     this.setState({
       isOpen: true,
       score: 0,
@@ -204,7 +205,7 @@ saveScore(score) {
 }
 
  playMoveSound() {
-    if (!this.state._soundEnabled) return;
+    if (!this._soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
     this.lastSoundTime = now;

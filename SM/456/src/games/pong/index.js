@@ -97,12 +97,14 @@ class PongGame extends Component {
   }
 
   initGame() {
+     this._soundEnabled = true; 
     this.setState({
       isOpen: true,
       score: 0,
       gameOver: false,
       isPaused: false,
       soundEnabled: true,
+
       paddleX: (this.FIELD_WIDTH - this.PADDLE_WIDTH) / 2,
       ballX: this.FIELD_WIDTH / 2 - this.BALL_SIZE / 2,
       ballY: 30,
@@ -161,7 +163,7 @@ ballSpeedY: 1.75,
   }
 
  playMoveSound() {
-    if (!this.state._soundEnabled) return;
+    if (!this._soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
     this.lastSoundTime = now;
