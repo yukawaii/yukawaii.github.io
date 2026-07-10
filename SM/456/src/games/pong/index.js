@@ -30,6 +30,7 @@ class PongGame extends Component {
     this.moveRight = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
+     this._soundEnabled = true; // синхронный флаг для левоправо playmove
     
     // Константы игры (должны совпадать с CSS)
     this.FIELD_WIDTH = 321;
@@ -160,7 +161,7 @@ ballSpeedY: 1.75,
   }
 
  playMoveSound() {
-    if (!this.state.soundEnabled) return;
+    if (!this.state._soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
     this.lastSoundTime = now;
@@ -185,7 +186,8 @@ playCrashSound() {
 }
 
 toggleSound() {
-  this.setState({ soundEnabled: !this.state.soundEnabled });
+  this._soundEnabled = !this._soundEnabled;          // сразу меняем
+  this.setState({ soundEnabled: this._soundEnabled }); // для UI
 }
 
   handleKeyDown(e) {
@@ -386,7 +388,7 @@ if (newBallX < leftPadding) {  // ← было 0
     }
     
 // ===== РАКЕТКА =====
-var offsetY = 46;  // ← меняйте это значение!
+var offsetY = 56;  // ← меняйте это значение!
 var paddleY = FH - PH - PB + offsetY;
 var paddleLeft = newPaddleX;
 var paddleTop = paddleY;

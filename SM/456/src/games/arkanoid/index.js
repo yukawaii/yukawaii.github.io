@@ -31,7 +31,8 @@ ballSpeedY: -1.75,
       fieldWidth: 320,
       fieldHeight: 300,
       lives: 3,
-      soundEnabled: true 
+      soundEnabled: true,
+     
 
     };
 // В конструкторе:
@@ -44,6 +45,7 @@ this.BALL_SIZE = 12;
     this.moveRight = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
+     this._soundEnabled = true; // синхронный флаг для левоправо playmove
     
     this.closeGame = this.closeGame.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -202,7 +204,7 @@ saveScore(score) {
 }
 
  playMoveSound() {
-    if (!this.state.soundEnabled) return;
+    if (!this.state._soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
     this.lastSoundTime = now;
@@ -228,8 +230,10 @@ playCrashSound() {
 }
 
  toggleSound() {
-  this.setState({ soundEnabled: !this.state.soundEnabled });
+  this._soundEnabled = !this._soundEnabled;          // сразу меняем
+  this.setState({ soundEnabled: this._soundEnabled }); // для UI
 }
+
 
   handleKeyDown(e) {
     var key = e.key;
@@ -422,7 +426,7 @@ updateGame() {
   }
   
   // ===== ПЛАТФОРМА (ТОЧНО КАК В ПИНГ-ПОНГЕ) =====
-  var offsetY = 46;  // ← ТОТ ЖЕ СМЕЩЕНИЕ
+  var offsetY = 50;  // ← ТОТ ЖЕ СМЕЩЕНИЕ
   var paddleY = FH - PH - PB + offsetY;
   var paddleLeft = newPaddleX;
   var paddleRight = newPaddleX + PW;
