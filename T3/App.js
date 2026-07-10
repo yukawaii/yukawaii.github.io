@@ -360,39 +360,55 @@ function cancelLeaderboardLoading() {
 }
 
 function showVKLeaderboard() {
-    // 1. Вычисляем максимальный рекорд из всех хранилищ
+    // 1. Вычисляем максимальный рекорд
     let highScore = Math.max(
         window.vkHighscore || 0,
         parseInt(localStorage.getItem('vkHighscore') || '0'),
         parseInt(localStorage.getItem('localHighscore') || '0')
     );
 
-    // 2. Если есть хоть какой-то рекорд – пытаемся сохранить его в VK (синхронизация)
+    // 2. Синхронизируем рекорд с VK, если есть что синхронизировать
     if (highScore > 0) {
         saveVKScore(highScore);
     }
 
-// 3. Проверяем доступность VK Bridge
-    if (typeof vkBridge !== 'undefined' && vkBridge.send) {
-        // Проверяем, инициализирован ли VK (если нет – инициализируем)
-        if (!vkInitialized) {
-            // Пробуем инициализировать, если ещё не было
+    // 3. Проверяем наличие VK Bridge
+    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
+        showCustomModal({
+            title: 'Таблица лидеров',
+            text: 'Функция доступна только в приложении ВКонтакте',
+            type: 'info',
+            button: 'OK'
+        });
+        return;
+    }
+
+    // 4. Пробуем открыть таблицу. Если не получится – инициализируем и пробуем ещё раз.
+    function openLeaderboard() {
+        return vkBridge.send('VKWebAppShowLeaderBoardBox', {
+            user_result: highScore,
+            global: 1
+        });
+    }
+
+    openLeaderboard()
+        .then(() => {
+            console.log('✅ Таблица лидеров открыта');
+        })
+        .catch((err) => {
+            console.warn('⚠️ Первая попытка открыть таблицу не удалась:', err);
+            // Если ошибка – инициализируем VK и пробуем снова
             vkBridge.send('VKWebAppInit')
                 .then(() => {
                     vkInitialized = true;
-                    console.log('✅ VK инициализирован для таблицы лидеров');
-                    // Открываем таблицу после инициализации
-                    return vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                        user_result: highScore,
-                        global: 1
-                    });
+                    console.log('✅ VK инициализирован повторно');
+                    return openLeaderboard();
                 })
                 .then(() => {
-                    console.log('✅ Таблица лидеров открыта');
+                    console.log('✅ Таблица лидеров открыта после инициализации');
                 })
-                .catch(err => {
-                    console.warn('Ошибка открытия таблицы лидеров:', err);
-                    // Показываем альтернативное сообщение
+                .catch((err2) => {
+                    console.error('❌ Не удалось открыть таблицу лидеров:', err2);
                     showCustomModal({
                         title: 'Таблица лидеров',
                         text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
@@ -400,31 +416,7 @@ function showVKLeaderboard() {
                         button: 'OK'
                     });
                 });
-        } else {
-            // VK уже инициализирован – открываем таблицу
-            vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                user_result: highScore,
-                global: 1
-            }).catch(err => {
-                console.warn('Ошибка открытия таблицы лидеров:', err);
-                showCustomModal({
-                    title: 'Таблица лидеров',
-                    text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
-                    type: 'info',
-                    button: 'OK'
-                });
-            });
-        }
-    } else {
-        // VK Bridge не доступен
-        console.warn('VK Bridge не доступен');
-        showCustomModal({
-            title: 'Таблица лидеров',
-            text: 'Функция доступна только в приложении ВКонтакте',
-            type: 'info',
-            button: 'OK'
         });
-    }
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================

@@ -328,7 +328,7 @@ toggleSound() {
     
     if (dir && !this.state.isPaused && !this.state.gameOver) {
       this.setDirection(dir);
-    //  this.playMoveSound();
+     this.playMoveSound();
     }
   }
 
@@ -398,7 +398,7 @@ toggleSound() {
     // Проверка еды
    if (head.x === this.state.food.x && head.y === this.state.food.y) {
   var newScore = this.state.score + 1;
-  this.playMoveSound();
+  this.playBounceSound();
   var newFood = this.generateFood(snake);
   
   // ===== НАЧИСЛЯЕМ ОЧКИ В ОБЩИЙ СЧЕТ ЗА КАЖДЫЕ 10 ЯБЛОК =====

@@ -46,8 +46,7 @@ class GameAudio {
             await this.loadSounds();
             this.initialized = true;
             console.log('✅ Web Audio инициализирован (раздельные контексты)');
-              // 🟢 ВЫЗЫВАЕМ keepAlive() для активации контекста
-        await this.keepAlive();
+                 
         } catch (e) {
             console.error('❌ Ошибка инициализации Web Audio:', e);
         }
