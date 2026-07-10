@@ -360,13 +360,16 @@ function cancelLeaderboardLoading() {
 }
 
 function showVKLeaderboard() {
+    // 1. Определяем рекорд (минимум 1, чтобы избежать ошибки)
     let highScore = Math.max(
         window.vkHighscore || 0,
         parseInt(localStorage.getItem('vkHighscore') || '0'),
         parseInt(localStorage.getItem('localHighscore') || '0')
     );
+    if (highScore < 1) highScore = 1;
 
-    if (typeof vkBridge === 'undefined') {
+    // 2. Проверяем наличие VK Bridge
+    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
         showCustomModal({
             title: 'Таблица лидеров',
             text: 'Функция доступна только в приложении ВКонтакте',
@@ -376,75 +379,56 @@ function showVKLeaderboard() {
         return;
     }
 
-    // Сначала синхронизируем рекорд (как в рабочем примере)
-    if (vkInitialized && vkUserId && vkUserToken && highScore > 0) {
-        vkBridge.send('VKWebAppCallAPIMethod', {
-            method: 'apps.getScore',
-            params: { user_id: vkUserId, v: '5.131', access_token: vkUserToken }
-        })
-        .then((data) => {
-            let currentScore = parseInt(data.response) || 0;
-            if (highScore > currentScore) {
-                return vkBridge.send('VKWebAppCallAPIMethod', {
-                    method: 'secure.addAppEvent',
-                    params: {
-                        user_id: vkUserId,
-                        activity_id: 2,
-                        value: highScore,
-                        v: '5.131',
-                        access_token: ServToken
-                    }
-                });
-            }
-            return Promise.resolve();
-        })
-        .then(() => {
-            console.log('🏆 Рекорд синхронизирован');
-            openLeaderboardBox(highScore);
-        })
-        .catch((err) => {
-            console.warn('⚠️ Ошибка синхронизации, но всё равно открываем таблицу');
-            openLeaderboardBox(highScore);
+    // 3. Функция открытия таблицы
+    function openLeaderboard() {
+        return vkBridge.send('VKWebAppShowLeaderBoardBox', {
+            user_result: highScore,
+            global: 1
         });
-    } else {
-        openLeaderboardBox(highScore);
     }
-}
 
-function openLeaderboardBox(highScore) {
-    vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        user_result: highScore,
-        global: 1
-    })
-    .catch((err) => {
-        console.error('❌ Ошибка открытия таблицы:', err);
-        // Если ошибка, пробуем инициализировать VK
-        if (!vkInitialized) {
-            vkBridge.send('VKWebAppInit')
-                .then(() => {
-                    vkInitialized = true;
-                    return vkBridge.send('VKWebAppShowLeaderBoardBox', {
-                        user_result: highScore,
-                        global: 1
+    // 4. Если уже инициализирован – открываем, иначе – инициализируем и открываем
+    if (vkInitialized) {
+        openLeaderboard()
+            .then(() => console.log('✅ Таблица открыта'))
+            .catch((err) => {
+                console.warn('⚠️ Ошибка при открытии (возможно, сессия устарела):', err);
+                // Пробуем переинициализировать
+                vkBridge.send('VKWebAppInit')
+                    .then(() => {
+                        vkInitialized = true;
+                        return openLeaderboard();
+                    })
+                    .then(() => console.log('✅ Таблица открыта после переинициализации'))
+                    .catch((err2) => {
+                        console.error('❌ Ошибка после переинициализации:', err2);
+                        showCustomModal({
+                            title: 'Таблица лидеров',
+                            text: 'Не удалось открыть таблицу лидеров.\nПопробуйте перезапустить приложение.',
+                            type: 'error',
+                            button: 'OK'
+                        });
                     });
-                })
-                .catch((err2) => {
-                    showCustomModal({
-                        title: 'Таблица лидеров',
-                        text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
-                        type: 'info',
-                        button: 'OK'
-                    });
-                });
-        } else {
-            showCustomModal({
-                title: 'Таблица лидеров',
-                text: 'Не удалось открыть таблицу лидеров. Попробуйте позже.',
-                type: 'info',
-                button: 'OK'
             });
-        }
-    });
+    } else {
+        // Инициализируем VK и открываем
+        vkBridge.send('VKWebAppInit')
+            .then(() => {
+                vkInitialized = true;
+                console.log('✅ VK инициализирован для таблицы');
+                return openLeaderboard();
+            })
+            .then(() => console.log('✅ Таблица открыта после инициализации'))
+            .catch((err) => {
+                console.error('❌ Инициализация или открытие не удались:', err);
+                showCustomModal({
+                    title: 'Таблица лидеров',
+                    text: 'Не удалось открыть таблицу лидеров.\nПроверьте подключение к интернету.',
+                    type: 'error',
+                    button: 'OK'
+                });
+            });
+    }
 }
 
 // ======================== ПРИГЛАШЕНИЕ ДРУЗЕЙ ========================
