@@ -35,7 +35,7 @@ class GameAudio {
             
             // Узел для музыки
             this.musicGain = this.musicContext.createGain();
-            this.musicGain.gain.value = 0.15;
+            this.musicGain.gain.value = 0.08;
             this.musicGain.connect(this.musicContext.destination);
             
             // Узел для звуков
@@ -191,7 +191,7 @@ resumeAll() {
 }
 
     // Воспроизведение музыки (через отдельный канал music)
-playMusic(trackName, volume = 0.15) {
+playMusic(trackName, volume = 0.08) {
     if (this.musicMuted || !this.musicContext || !this.buffers[trackName]) {
         console.warn(`Трек ${trackName} не загружен или музыка выключена`);
         return;
@@ -245,7 +245,7 @@ _playMusicInternal(trackName, volume) {
     }
     
     // Алиас для совместимости
-    playLoop(name, volume = 0.15) {
+    playLoop(name, volume = 0.08) {
         this.playMusic(name, volume);
     }
     
@@ -277,7 +277,7 @@ _playMusicInternal(trackName, volume) {
     setMusicMuted(muted) {
         this.musicMuted = muted;
         if (this.musicGain) {
-            this.musicGain.gain.value = muted ? 0 : 0.15;
+            this.musicGain.gain.value = muted ? 0 : 0.08;
         }
         if (muted) {
             this.stopMusic();

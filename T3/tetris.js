@@ -1158,7 +1158,7 @@ function resumeGame() {
         // Если музыка всё ещё не играет — принудительно перезапускаем
         if (!gameAudio.musicStarted && currentMusicTrack) {
             console.log('🔄 Музыка не возобновилась, перезапускаем:', currentMusicTrack);
-            gameAudio.playMusic(currentMusicTrack, 0.15);
+            gameAudio.playMusic(currentMusicTrack, 0.08);
         }
     }
     
@@ -1259,7 +1259,7 @@ async function playBackgroundMusic() {
             // 🟢 Активируем музыкальный контекст непосредственно перед запуском
             gameAudio.ensureMusicContextActive();
             await new Promise(r => setTimeout(r, 30));
-            gameAudio.playMusic(track, 0.15);
+            gameAudio.playMusic(track, 0.08);
             return;
         }
         attempts++;
@@ -1270,7 +1270,7 @@ async function playBackgroundMusic() {
     setTimeout(() => {
         if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
             gameAudio.ensureMusicContextActive();
-            gameAudio.playMusic(track, 0.15);
+            gameAudio.playMusic(track, 0.08);
         }
     }, 5000);
 }
