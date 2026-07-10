@@ -932,6 +932,10 @@ async initVK() {
             this.vkUserId = userInfo.id;
             console.log('👤 Пользователь VK:', this.vkUserId);
             this.vkInitialized = true; // помечаем, что можем работать со Storage
+             return Promise.all([
+            this.loadDiamonds(),
+            this.loadAchievements()
+        ]);
         } else {
             throw new Error('Не удалось получить ID пользователя');
         }
@@ -948,6 +952,7 @@ async initVK() {
             });
             if (tokenData && tokenData.access_token) {
                 this.vkUserToken = tokenData.access_token;
+                this.vkInitialized = true; 
                 console.log('✅ Токен получен');
                 // Обновляем таблицу лидеров
                 this.syncLeaderboard();
@@ -971,6 +976,10 @@ async initVK() {
 // ============================================================
 // В классе SudokuGame
 loadDiamonds() {
+     console.log('🔵 loadDiamonds() вызван');
+      // 1. Всегда загружаем локальные данные
+    this.loadDiamondsLocal();
+
     if (!this.vkUserId || !this.vkInitialized) {
         this.loadDiamondsLocal();
         return Promise.resolve();
@@ -1216,6 +1225,7 @@ updateTotalGameTime(seconds) {
 // Загрузка достижений из VK Storage и localStorage (с merge)
 // ============================================================
 loadAchievements() {
+     console.log('🔵 loadAchievements() вызван');
     // Сначала загружаем из localStorage
     try {
         const local = localStorage.getItem('sudoku_achievements');
