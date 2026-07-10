@@ -277,7 +277,9 @@ function saveLocalScore(scoreValue) {
 
 function loadVKHighScore() {
     if (!vkInitialized || !vkUserId || !vkUserToken) {
-        loadLocalHighScore();
+        // Если VK не инициализирован – показываем 0
+        updateRecordText('Рекорд: 0');
+        updateHighscoreDisplay();
         return;
     }
     vkBridge.send('VKWebAppCallAPIMethod', {
@@ -297,6 +299,7 @@ function loadVKHighScore() {
     })
     .catch(err => {
         console.warn('⚠️ Ошибка загрузки рекорда из VK API:', err);
+        // Пытаемся получить из Storage
         loadFromVKStorage(VK_STORAGE_KEYS.HIGHSCORE)
             .then(score => {
                 if (score !== null && score !== undefined) {
@@ -307,10 +310,16 @@ function loadVKHighScore() {
                     updateRecordText(`Рекорд: ${s}`);
                     updateHighscoreDisplay();
                 } else {
-                    loadLocalHighScore();
+                    // Нет рекорда ни в VK, ни в Storage – показываем 0
+                    updateRecordText('Рекорд: 0');
+                    updateHighscoreDisplay();
                 }
             })
-            .catch(() => loadLocalHighScore());
+            .catch(() => {
+                // Ошибка доступа к Storage – показываем 0
+                updateRecordText('Рекорд: 0');
+                updateHighscoreDisplay();
+            });
     });
 }
 

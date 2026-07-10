@@ -600,6 +600,7 @@ function startGameOverAnimation() {
     lastTime = 0;
     dropCounter = 0;
     update();
+
 }
 
 function drawGameOverAnimation() {
@@ -700,9 +701,8 @@ function drawGameOverAnimation() {
         });
     } else {
         gameOverAnimation.active = false;
-        showGameOverModal(player.score);
-        updatePauseButtonText();
-    }
+           endGame();
+          }
 }
 
 // ======================== ОТРИСОВКА ========================
@@ -3489,4 +3489,5 @@ window.showSlowDownModal = showSlowDownModal;
 window.activateSlowDown = activateSlowDown;
 window.applySlowDownEffect = applySlowDownEffect;
 
+updateMusicIcon(); //иконка музыки на выкл при старте
 console.log('🔥 Тетрис Дарк загружен!');
