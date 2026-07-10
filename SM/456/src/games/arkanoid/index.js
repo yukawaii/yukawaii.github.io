@@ -331,7 +331,14 @@ playCrashSound() {
     this.moveLeft = false;
     this.moveRight = false;
   }
-
+playBounceSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.bounce) {
+      arcadeSounds.bounce();
+    }
+  } catch(e) {}
+}
   startGame() {
     if (this.gameLoop) {
       clearInterval(this.gameLoop);

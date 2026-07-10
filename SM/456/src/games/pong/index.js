@@ -439,7 +439,14 @@ if (ballBottom >= paddleTop &&
       this.startGame();
     }
   }
-
+playBounceSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.bounce) {
+      arcadeSounds.bounce();
+    }
+  } catch(e) {}
+}
   handleMenu() {
     this.closeGame();
     if (typeof window.dispatchEvent === 'function') {
