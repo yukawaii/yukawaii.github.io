@@ -1249,9 +1249,16 @@ const maxWinStreak = localStorage.getItem('sudoku_maxWinStreak');
 if (maxWinStreak) this.maxWinStreak = parseInt(maxWinStreak) || 0;
     } catch (e) {}
 
+    // Если нет VK — сразу возвращаем resolved Promise
+    if (!this.vkUserId || !this.vkInitialized) {
+        this.checkAchievements();
+        this.saveAchievements();
+        return Promise.resolve(); // <--- ДОБАВИТЬ ЭТУ СТРОКУ
+    }   
+  
     // Если есть VK Storage – загружаем оттуда и мержим
     if (this.vkUserId && this.vkInitialized) {
-   vkBridge.send('VKWebAppStorageGet', {
+  return vkBridge.send('VKWebAppStorageGet', {
     keys: [
         'achievements', 'totalWins', 'totalHints', 'totalBonuses',
         'winStreak', 'maxWinStreak', 'winsByLevel', 'noHintWins',
