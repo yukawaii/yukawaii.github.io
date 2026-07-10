@@ -202,13 +202,17 @@ saveScore(score) {
 }
 
  playMoveSound() {
-  if (!this.state.soundEnabled) return;
-  try {
-    if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();
-    }
-  } catch(e) {}
-}
+    if (!this.state.soundEnabled) return;
+    var now = Date.now();
+    if (now - this.lastSoundTime < 100) return;
+    this.lastSoundTime = now;
+    
+    try {
+      if (arcadeSounds && arcadeSounds.move) {
+        arcadeSounds.move();
+      }
+    } catch(e) {}
+  }
 
 
 // В playCrashSound:
@@ -234,11 +238,17 @@ playCrashSound() {
       e.preventDefault();
       this.moveLeft = true;
       this.moveRight = false;
+  if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
+  if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'Escape' || key === 'Esc') {
       e.preventDefault();
@@ -299,11 +309,17 @@ playCrashSound() {
     if (key === 'left') {
       this.moveLeft = (action === 'down');
       if (action === 'down') this.moveRight = false;
+     if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
     if (key === 'right') {
       this.moveRight = (action === 'down');
       if (action === 'down') this.moveLeft = false;
+      if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
   }
@@ -384,24 +400,21 @@ updateGame() {
   if (newBallX < leftPadding) {
     newBallX = leftPadding;
     newBallSpeedX = -newBallSpeedX;
-  //  this.playMoveSound();
     this.playBounceSound();
   }
   if (newBallX + BS > FW) {
     newBallX = FW - BS;
     newBallSpeedX = -newBallSpeedX;
-   // this.playMoveSound();
      this.playBounceSound();
   }
   if (newBallY < 0) {
     newBallY = 0;
     newBallSpeedY = -newBallSpeedY;
-  //  this.playMoveSound();
     this.playBounceSound();
   }
   
   // ===== ПЛАТФОРМА (ТОЧНО КАК В ПИНГ-ПОНГЕ) =====
-  var offsetY = 43;  // ← ТОТ ЖЕ СМЕЩЕНИЕ
+  var offsetY = 46;  // ← ТОТ ЖЕ СМЕЩЕНИЕ
   var paddleY = FH - PH - PB + offsetY;
   var paddleLeft = newPaddleX;
   var paddleRight = newPaddleX + PW;

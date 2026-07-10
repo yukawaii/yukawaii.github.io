@@ -5,7 +5,6 @@ import { incrementCounter } from '../../unit/achievements';
 import { showFullscreenAd } from '../../unit/yandexSdk';
 import { visibilityChangeEvent, isFocus } from '../../unit/';
 
-// ===== МЕНЯЕМ ИМПОРТ: вместо musicModule используем arcadeSounds =====
 var arcadeSounds = require('../../unit/arcadeSounds');
 
 class RacingGame extends Component {

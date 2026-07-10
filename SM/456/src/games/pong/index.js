@@ -160,13 +160,17 @@ ballSpeedY: 1.75,
   }
 
  playMoveSound() {
-  if (!this.state.soundEnabled) return;
-  try {
-    if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();
-    }
-  } catch(e) {}
-}
+    if (!this.state.soundEnabled) return;
+    var now = Date.now();
+    if (now - this.lastSoundTime < 100) return;
+    this.lastSoundTime = now;
+    
+    try {
+      if (arcadeSounds && arcadeSounds.move) {
+        arcadeSounds.move();
+      }
+    } catch(e) {}
+  }
 
 // В playCrashSound:
 playCrashSound() {
@@ -186,16 +190,23 @@ toggleSound() {
 
   handleKeyDown(e) {
     var key = e.key;
-    
+       
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
       e.preventDefault();
       this.moveLeft = true;
       this.moveRight = false;
+        
+      if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
+           if (!this.state.isPaused && !this.state.gameOver) {
+      this.playMoveSound();   // ← звук только здесь
+    }
     }
     if (key === 'Escape' || key === 'Esc') {
       e.preventDefault();
@@ -209,6 +220,7 @@ toggleSound() {
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
       e.preventDefault();
       this.moveLeft = false;
+      
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
@@ -256,11 +268,19 @@ toggleSound() {
     if (key === 'left') {
       this.moveLeft = (action === 'down');
       if (action === 'down') this.moveRight = false;
+ 
+      if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
     if (key === 'right') {
       this.moveRight = (action === 'down');
       if (action === 'down') this.moveLeft = false;
+     
+      if (action === 'down' && !this.state.isPaused && !this.state.gameOver) {
+    this.playMoveSound();
+  }
       return;
     }
   }
@@ -337,27 +357,27 @@ if (newPaddleX + PW > FW) newPaddleX = FW - PW;
 if (newBallX < leftPadding) {  // ← было 0
   newBallX = leftPadding;      // ← было 0
   newBallSpeedX = -newBallSpeedX;
- // this.playMoveSound();
-  this.playBounceSound();
+     this.playBounceSound();
+
 
 }
     // Правая стена
     if (newBallX + BS > FW) {
       newBallX = FW - BS;
       newBallSpeedX = -newBallSpeedX;
-   //   this.playMoveSound();
      this.playBounceSound();
+
     }
     // Верхняя стена
     if (newBallY < 0) {
       newBallY = 0;
       newBallSpeedY = -newBallSpeedY;
-   //   this.playMoveSound();
      this.playBounceSound();
+
     }
     
 // ===== РАКЕТКА =====
-var offsetY = 13;  // ← меняйте это значение!
+var offsetY = 46;  // ← меняйте это значение!
 var paddleY = FH - PH - PB + offsetY;
 var paddleLeft = newPaddleX;
 var paddleTop = paddleY;

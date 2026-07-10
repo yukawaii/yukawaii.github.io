@@ -187,13 +187,17 @@ class SnakeGame extends Component {
 
   // ===== ЗВУКИ =====
  playMoveSound() {
-  if (!this.state.soundEnabled) return;
-  try {
-    if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();
-    }
-  } catch(e) {}
-}
+    if (!this.state.soundEnabled) return;
+    var now = Date.now();
+    if (now - this.lastSoundTime < 100) return;
+    this.lastSoundTime = now;
+    
+    try {
+      if (arcadeSounds && arcadeSounds.move) {
+        arcadeSounds.move();
+      }
+    } catch(e) {}
+  }
 
 // В playCrashSound:
 playCrashSound() {
@@ -218,6 +222,7 @@ toggleSound() {
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
       e.preventDefault();
       dir = 'left';
+      
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
@@ -328,8 +333,7 @@ toggleSound() {
     
     if (dir && !this.state.isPaused && !this.state.gameOver) {
       this.setDirection(dir);
-     this.playMoveSound();
-    }
+         }
   }
 
   handleTouchEnd(e) {
@@ -398,7 +402,10 @@ toggleSound() {
     // Проверка еды
    if (head.x === this.state.food.x && head.y === this.state.food.y) {
   var newScore = this.state.score + 1;
-  this.playBounceSound();
+   if (!this.state.isPaused && !this.state.gameOver) {
+    this.playBounceSound();
+  }
+
   var newFood = this.generateFood(snake);
   
   // ===== НАЧИСЛЯЕМ ОЧКИ В ОБЩИЙ СЧЕТ ЗА КАЖДЫЕ 10 ЯБЛОК =====
