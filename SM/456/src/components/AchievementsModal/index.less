@@ -105,6 +105,8 @@
 }
 
 .content {
+    flex: 1;                /* ← занимает всё свободное место */
+  min-height: 50;          /* ← для корректной работы во Firefox */
   overflow-y: auto;
   padding-right: 4px;
   touch-action: pan-y;
