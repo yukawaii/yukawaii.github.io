@@ -113,7 +113,7 @@ class AchievementsModal extends Component {
         onTouchEnd={this.handleTouchEnd}
       >
         <div 
-          className={style.modal}
+          className={`${style.modal} modal`}
           onTouchStart={this.handleTouchStart}
           onTouchEnd={this.handleTouchEnd}
         >
