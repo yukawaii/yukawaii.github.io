@@ -175,10 +175,9 @@ class RacingGame extends Component {
     } catch(e) {}
   }
 
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
-
+ toggleSound() {
+  this.setState({ soundEnabled: !this.state.soundEnabled });
+}
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {
     var key = e.key;

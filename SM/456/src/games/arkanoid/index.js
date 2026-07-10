@@ -31,6 +31,7 @@ ballSpeedY: -1.75,
       fieldWidth: 320,
       fieldHeight: 300,
       lives: 3,
+      soundEnabled: true 
 
     };
 // В конструкторе:
@@ -222,9 +223,9 @@ playCrashSound() {
   } catch(e) {}
 }
 
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
+ toggleSound() {
+  this.setState({ soundEnabled: !this.state.soundEnabled });
+}
 
   handleKeyDown(e) {
     var key = e.key;

@@ -23,7 +23,8 @@ class PongGame extends Component {
       ballSpeedY: 1.75,
       hits: 0,
       gameTime: 0,
-      speed: 1
+      speed: 1,
+      soundEnabled: true 
     };
     this.moveLeft = false;
     this.moveRight = false;
@@ -179,9 +180,9 @@ playCrashSound() {
   } catch(e) {}
 }
 
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
+toggleSound() {
+  this.setState({ soundEnabled: !this.state.soundEnabled });
+}
 
   handleKeyDown(e) {
     var key = e.key;

@@ -25,7 +25,8 @@ class SnakeGame extends Component {
       gameTime: 0,
       gridSize: 20,
       cols: 18,
-      rows: 16
+      rows: 16,
+      soundEnabled: true 
     };
     this.gameLoop = null;
     this.lastSoundTime = 0;
@@ -205,9 +206,9 @@ playCrashSound() {
     }
   } catch(e) {}
 }
-  toggleSound() {
-    this.setState({ soundEnabled: !this.state.soundEnabled });
-  }
+toggleSound() {
+  this.setState({ soundEnabled: !this.state.soundEnabled });
+}
 
   // ===== УПРАВЛЕНИЕ =====
   handleKeyDown(e) {
