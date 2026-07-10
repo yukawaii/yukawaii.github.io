@@ -943,7 +943,7 @@ async initVK() {
             throw new Error('Токен не получен');
         }
     })
-    .then((userInfo) => {
+   .then(async (userInfo) => {
         if (userInfo && userInfo.id) {
             this.vkUserId = userInfo.id;
             console.log('👤 Пользователь VK:', this.vkUserId);
