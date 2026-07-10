@@ -954,7 +954,9 @@ initVK() {
             console.warn('Ошибка инициализации VK:', err);
             this.loadDiamondsLocal();
             this.loadAchievements();
-            finishLoading();
+            finishLoading();        
+              return Promise.resolve(); 
+
         });
 }
 
@@ -1084,7 +1086,7 @@ showLeaderboard() {
     })
     .catch((err) => {
         console.error('❌ Ошибка открытия таблицы лидеров:', err);
-        alert('Не удалось открыть таблицу лидеров. Попробуйте позже.');
+        this.showGlobalToast('❌ Не удалось открыть таблицу лидеров. Попробуйте позже.', true);
     });
 }
 
@@ -2650,7 +2652,7 @@ this.consecutiveSameNumber = 0;
 this.lastPlacedNumber = 0;
 this.sevenCount = 0;
 // Подгружаем свежие данные из хранилища (на случай синхронизации между вкладками)
-this.loadDiamonds();
+//this.loadDiamonds();
         this.sound.init();
         this.sound.click();
         
