@@ -4,6 +4,7 @@ import style from './index.less';
 import { i18n, lan } from '../../unit/const';
 import { syncYandexAchievements, getAchievementsList } from '../../unit/yandexSdk';
 import { getTotalScore, formatScore, loadTotalScore } from '../../unit/achievements';
+import { loadCounter } from '../../unit/achievements';
 
 class AchievementsModal extends Component {
   constructor(props) {
@@ -72,6 +73,13 @@ class AchievementsModal extends Component {
   refreshAchievements() {
   //  console.log('🔄 Обновляем достижения...');
     this.setState({ loading: true });
+ // Загружаем все счётчики из VK Storage
+  var counters = ['arcade_total_score', 'bonus_count', 'collections_count', 'scrolls_bought', 'scrolls_read'];
+  var loadPromises = counters.map(function(key) {
+    // loadCounter – функция из achievements.js, её нужно импортировать
+    return loadCounter(key);
+  });
+
     
     syncYandexAchievements()
       .then(() => {

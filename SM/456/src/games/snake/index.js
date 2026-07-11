@@ -396,7 +396,7 @@ if (target.closest('.' + style.soundBtn) ||
     
     // Проверка столкновения со стеной
     if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
-      this.saveScore(this.state.score);
+
       this.playCrashSound();
       this.setState({ gameOver: true });
       if (this.gameLoop) {
@@ -409,7 +409,7 @@ if (target.closest('.' + style.soundBtn) ||
     // Проверка столкновения с собой
     for (var i = 0; i < snake.length; i++) {
       if (snake[i].x === head.x && snake[i].y === head.y) {
-        this.saveScore(this.state.score);
+
         this.playCrashSound();
         this.setState({ gameOver: true });
         if (this.gameLoop) {
@@ -433,25 +433,7 @@ if (target.closest('.' + style.soundBtn) ||
   
   // ===== НАЧИСЛЯЕМ ОЧКИ В ОБЩИЙ СЧЕТ ЗА КАЖДЫЕ 10 ЯБЛОК =====
   if (newScore % 10 === 0) {
-    // 1 очко за 10 яблок
-    var totalScore = parseInt(localStorage.getItem('tetris_total_score'), 10) || 0;
-    var newTotal = totalScore + 1;
-    localStorage.setItem('tetris_total_score', String(newTotal));
-    
-    // Сохраняем в VK Storage
-    if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
-      vkBridge.send('VKWebAppStorageSet', {
-        key: 'tetris_total_score',
-        value: String(newTotal)
-      }).catch(function(err) {
-        console.warn('⚠️ Ошибка сохранения очков в VK Storage:', err);
-      });
-    }
-    
-    if (typeof window.dispatchEvent === 'function') {
-      window.dispatchEvent(new Event('scoreUpdated'));
-    }
-    
+     this.saveScore(1); 
    // console.log('🐍 +1 очко в общий счет (10 яблок)');
   }
   
@@ -504,9 +486,9 @@ if (target.closest('.' + style.soundBtn) ||
       clearInterval(this.gameLoop);
       this.gameLoop = null;
     }
-    if (this.state.score > 0 && !this.state.gameOver) {
+   /* if (this.state.score > 0 && !this.state.gameOver) {
       this.saveScore(this.state.score);
-    }
+    }*/
     window._isRacingActive = false;
     if (typeof window._updateKeyboard === 'function') {
       window._updateKeyboard();

@@ -485,7 +485,7 @@ updateGame() {
       if (obs.y + 20 > newCarY && obs.y < newCarY + carHeight) {
         if (newCarX + carWidth > obs.x && newCarX < obs.x + obs.width) {
           // Сохраняем очки перед game over
-          this.saveScore(newScore);
+        //  this.saveScore(newScore);
           this.playCrashSound();
           this.setState({ gameOver: true });
           if (this.gameLoop) {
@@ -501,6 +501,7 @@ updateGame() {
         newPassed++;
         if (newPassed % 50 === 0) {
           newScore++;
+           this.saveScore(1);
         }
       }
     }
@@ -522,9 +523,9 @@ updateGame() {
       this.gameLoop = null;
     }
     // Сохраняем очки при закрытии
-    if (this.state.score > 0 && !this.state.gameOver) {
+  /*  if (this.state.score > 0 && !this.state.gameOver) {
       this.saveScore(this.state.score);
-    }
+    }*/
     window._isRacingActive = false;
     if (typeof window._updateKeyboard === 'function') {
       window._updateKeyboard();
