@@ -275,7 +275,7 @@ this.achievementList = [
     { id: 'check_100',      name: '100 проверок',           desc: 'Выполнить 100 проверок',                        icon: '🐧' },
 
     // === Игровые (цифры) (5 шт) ===
-    { id: 'place_100',      name: 'Школяр',               desc: 'Поставить 100 цифр (вручную)',                  icon: '🐱' },
+    { id: 'place_100',      name: 'Школяр',               desc: 'Поставить 100 цифр',                  icon: '🐱' },
     { id: 'place_500',      name: 'Студент',               desc: 'Поставить 500 цифр',                            icon: '🐗' },
     { id: 'place_1000',     name: 'Бакалавр',              desc: 'Поставить 1000 цифр',                           icon: '🐯' },
     { id: 'place_5000',     name: 'Магистр',              desc: 'Поставить 5000 цифр',                           icon: '🐲' },
@@ -296,7 +296,7 @@ this.achievementList = [
     { id: 'no_hint_win',    name: 'Без подсказок',          desc: 'Выиграть без подсказок',                       icon: '🤯' },
     { id: 'all_checks_used',name: 'Проверено всё',          desc: 'Использовать все проверки за раунд',        icon: '📋' },
     { id: 'first_move',     name: 'Первый шаг',             desc: 'Поставить первую цифру в игре',                 icon: '👣' },
-    { id: 'one_number',     name: 'Одной цифрой',           desc: 'Поставить одну и ту же цифру 10 раз подряд',    icon: '🔟' },
+    { id: 'one_number',     name: 'Стабильность',           desc: 'Поставить одну и ту же цифру 9 раз подряд',    icon: '🔟' },
     { id: 'comeback',       name: 'Возвращение',            desc: 'Выиграть после 3 ошибок в одной игре',          icon: '🔄' },
     { id: 'lucky_7',        name: '777',     desc: 'Поставить цифру 7 в 7 разных клетках за игру',  icon: '🍀' },
     // === Дополнительные (серии, скорость, время, коллекционер) ===
@@ -535,7 +535,7 @@ checkFirstMove() {
 checkSameNumber(number) {
     if (this.lastPlacedNumber === number) {
         this.consecutiveSameNumber++;
-        if (this.consecutiveSameNumber >= 10) {
+        if (this.consecutiveSameNumber >= 9) {
             this.unlockAchievement('one_number');
         }
     } else {
