@@ -48,6 +48,7 @@ const music = {};
       };
 
       music.clear = () => { // 消除方块
+         if (window._isRacingActive) return;      
         if (!store.getState().get('music')) {
           return;
         }
@@ -55,6 +56,7 @@ const music = {};
       };
 
       music.fall = () => { // 立即下落
+         if (window._isRacingActive) return;      
         if (!store.getState().get('music')) {
           return;
         }
@@ -62,6 +64,7 @@ const music = {};
       };
 
       music.gameover = () => { // 游戏结束
+         if (window._isRacingActive) return;      
         if (!store.getState().get('music')) {
           return;
         }
@@ -69,6 +72,7 @@ const music = {};
       };
 
       music.rotate = () => { // 旋转
+         if (window._isRacingActive) return;      
         if (!store.getState().get('music')) {
           return;
         }
@@ -76,6 +80,7 @@ const music = {};
       };
 
       music.move = () => { // 移动
+         if (window._isRacingActive) return;      
         if (!store.getState().get('music')) {
           return;
         }
