@@ -70,12 +70,12 @@ handleBannerError() {
     }
 }
 
-// Планирует повтор через 15 секунд
+// Планирует повтор через 60 секунд
 scheduleBannerRetry() {
     if (this.bannerRetryTimeout) clearTimeout(this.bannerRetryTimeout);
     this.bannerRetryTimeout = setTimeout(() => {
         this.showBottomBanner();
-    }, 15000); // 15 секунд
+    }, 60000); // 60 секунд
 }
 
     // Показать рекламу за вознаграждение
