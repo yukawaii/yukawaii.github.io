@@ -164,19 +164,18 @@ document.addEventListener('keyup', this.blockTetrisEvents, true);
   }
 
   // ===== ЗВУКИ =====
-  playMoveSound() {
-     console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
-    if (!this.state.soundEnabled) return;
-    var now = Date.now();
-    if (now - this.lastSoundTime < 100) return;
-    this.lastSoundTime = now;
-    
-    try {
-      if (arcadeSounds && arcadeSounds.move) {
-        arcadeSounds.move();
-      }
-    } catch(e) {}
-  }
+playMoveSound() {
+   console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
+  if (!this.state.soundEnabled) return;
+  var now = Date.now();
+  if (now - this.lastSoundTime < 100) return;
+  this.lastSoundTime = now;
+  try {
+    if (arcadeSounds && arcadeSounds.move) {
+      arcadeSounds.move();   // ← было this.playMoveSound()
+    }
+  } catch(e) {}
+}
 
   playCrashSound() {
     if (!this.state.soundEnabled) return;

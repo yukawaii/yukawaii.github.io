@@ -45,7 +45,7 @@ this.BALL_SIZE = 12;
     this.moveRight = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
-     this._soundEnabled = true; // синхронный флаг для левоправо playmove
+
     
     this.closeGame = this.closeGame.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -138,7 +138,7 @@ this.BALL_SIZE = 12;
   }
 
   initGame() {
-     this._soundEnabled = true; 
+
     this.setState({
       isOpen: true,
       score: 0,
@@ -206,14 +206,13 @@ saveScore(score) {
 
 playMoveSound() {
    console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
-  if (!this._soundEnabled) return;
+  if (!this.state.soundEnabled) return;
   var now = Date.now();
   if (now - this.lastSoundTime < 100) return;
   this.lastSoundTime = now;
-  
   try {
     if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();   
+      arcadeSounds.move();   // ← было this.playMoveSound()
     }
   } catch(e) {}
 }
@@ -231,9 +230,8 @@ playCrashSound() {
   } catch(e) {}
 }
 
- toggleSound() {
-  this._soundEnabled = !this._soundEnabled;          // сразу меняем
-  this.setState({ soundEnabled: this._soundEnabled }); // для UI
+toggleSound() {
+  this.setState({ soundEnabled: !this.state.soundEnabled });
 }
 
 

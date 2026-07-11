@@ -188,14 +188,13 @@ class SnakeGame extends Component {
   // ===== ЗВУКИ =====
 playMoveSound() {
    console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
-  if (!this._soundEnabled) return;
+ if (!this.state.soundEnabled) return;
   var now = Date.now();
   if (now - this.lastSoundTime < 100) return;
   this.lastSoundTime = now;
-  
   try {
     if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();  
+      arcadeSounds.move();   // ← было this.playMoveSound()
     }
   } catch(e) {}
 }
@@ -211,6 +210,7 @@ playCrashSound() {
     }
   } catch(e) {}
 }
+
 toggleSound() {
   this.setState({ soundEnabled: !this.state.soundEnabled });
 }

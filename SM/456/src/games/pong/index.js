@@ -30,7 +30,7 @@ class PongGame extends Component {
     this.moveRight = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
-     this._soundEnabled = true; // синхронный флаг для левоправо playmove
+
     
     // Константы игры (должны совпадать с CSS)
     this.FIELD_WIDTH = 321;
@@ -97,7 +97,7 @@ class PongGame extends Component {
   }
 
   initGame() {
-     this._soundEnabled = true; 
+
     this.setState({
       isOpen: true,
       score: 0,
@@ -162,19 +162,18 @@ ballSpeedY: 1.75,
     }
   }
 
- playMoveSound() {
+playMoveSound() {
    console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
-    if (!this._soundEnabled) return;
-    var now = Date.now();
-    if (now - this.lastSoundTime < 100) return;
-    this.lastSoundTime = now;
-    
-    try {
-      if (arcadeSounds && arcadeSounds.move) {
-        arcadeSounds.move();
-      }
-    } catch(e) {}
-  }
+  if (!this.state.soundEnabled) return;
+  var now = Date.now();
+  if (now - this.lastSoundTime < 100) return;
+  this.lastSoundTime = now;
+  try {
+    if (arcadeSounds && arcadeSounds.move) {
+      arcadeSounds.move();   // ← было this.playMoveSound()
+    }
+  } catch(e) {}
+}
 
 // В playCrashSound:
 playCrashSound() {
@@ -189,8 +188,7 @@ playCrashSound() {
 }
 
 toggleSound() {
-  this._soundEnabled = !this._soundEnabled;
-  this.setState({ soundEnabled: this._soundEnabled });
+  this.setState({ soundEnabled: !this.state.soundEnabled });
 }
 
   handleKeyDown(e) {
