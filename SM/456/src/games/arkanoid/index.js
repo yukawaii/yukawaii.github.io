@@ -242,17 +242,17 @@ toggleSound() {
       e.preventDefault();
       this.moveLeft = true;
       this.moveRight = false;
-  if (!this.state.isPaused && !this.state.gameOver) {
+ /* if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
-  if (!this.state.isPaused && !this.state.gameOver) {
+ /* if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'Escape' || key === 'Esc') {
       e.preventDefault();
