@@ -200,18 +200,18 @@ toggleSound() {
       this.moveLeft = true;
       this.moveRight = false;
       moved = true;
-      if (!this.state.isPaused && !this.state.gameOver) {
+ /*     if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
       moved = true;
-      if (!this.state.isPaused && !this.state.gameOver) {
+  /*    if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
       e.preventDefault();
