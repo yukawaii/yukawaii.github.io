@@ -41,7 +41,28 @@ const canvas = document.getElementById('tetris');
 const context = canvas.getContext('2d');
 
 // ======================== ЦВЕТА ========================
-const colors = [null, '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
+// Киберпанк-палитра (яркие неоновые цвета)
+const CYBER_COLORS = {
+    I: '#00ffff',   // циан
+    O: '#FFE138',   // оранжевый
+    T: '#ff00ff',   // маджента
+    S: '#00ff66',   // ярко-зелёный
+    Z: '#ff0055',   // ярко-красный
+    L: '#ffaa00',   // оранжево-красный
+    J: '#0066ff',   // синий
+};
+
+const colors = [
+    null,
+    CYBER_COLORS.I,  // #00ffff
+    CYBER_COLORS.O,  // #ffaa00
+    CYBER_COLORS.T,  // #ff00ff
+    CYBER_COLORS.S,  // #00ff66
+    CYBER_COLORS.Z,  // #ff0055
+    CYBER_COLORS.L,  // #ff6600
+    CYBER_COLORS.J,  // #0066ff
+];
+//const colors = [null, '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
 
 // ======================== РАЗМЕР ПОЛЯ ========================
 function calculateOptimalArenaWidth() {
@@ -63,38 +84,6 @@ function calculateOptimalArenaWidth() {
     return 22;
 }
 
-/*function resizeGameField() {
-    const newWidth = calculateOptimalArenaWidth();
-    if (newWidth === arenaWidth) return;
-    
-    const oldArena = arena;
-    const oldWidth = arenaWidth;
-    arenaWidth = newWidth;
-    const newArena = createMatrix(arenaWidth, arenaHeight);
-    
-    const offsetX = Math.floor((arenaWidth - oldWidth) / 2);
-    for (let y = 0; y < arenaHeight; y++) {
-        if (oldArena[y]) {
-            for (let x = 0; x < oldWidth; x++) {
-                const value = oldArena[y][x];
-                if (value !== 0 && value !== 'bonus') {
-                    const newX = x + offsetX;
-                    if (newX >= 0 && newX < arenaWidth) {
-                        newArena[y][newX] = value;
-                    }
-                }
-            }
-        }
-    }
-    arena = newArena;
-    
-    if (player && player.matrix) {
-        const matrixWidth = player.matrix[0].length;
-        const maxX = arenaWidth - matrixWidth;
-        if (player.pos.x > maxX) player.pos.x = maxX;
-        if (player.pos.x < 0) player.pos.x = 0;
-    }
-}*/
 
 function updateCanvasSize() {
     const container = document.querySelector('.canvas-container');
@@ -133,13 +122,13 @@ const pieces = 'ILJOTSZ';
 
 // ======================== РЕЖИМ ТЕТРА ========================
 const tetraPieces = {
-    I: { shape: [[1, 1, 1]], color: '#00f5ff' },
-    L: { shape: [[1, 0], [1, 1]], color: '#ff8c00' },
-    J: { shape: [[0, 1], [1, 1]], color: '#4169e1' },
-    Z: { shape: [[1, 1, 0], [0, 1, 1]], color: '#ff4500' },
-    S: { shape: [[0, 1, 1], [1, 1, 0]], color: '#32cd32' },
-    O: { shape: [[1, 1], [1, 1]], color: '#ffd700' },
-    T: { shape: [[0, 1, 0], [1, 1, 1], [0, 1, 0]], color: '#9370db' }
+    I: { shape: [[1, 1, 1]], color: CYBER_COLORS.I },
+    L: { shape: [[1, 0], [1, 1]], color: CYBER_COLORS.L },
+    J: { shape: [[0, 1], [1, 1]], color: CYBER_COLORS.J },
+    Z: { shape: [[1, 1, 0], [0, 1, 1]], color: CYBER_COLORS.Z },
+    S: { shape: [[0, 1, 1], [1, 1, 0]], color: CYBER_COLORS.S },
+    O: { shape: [[1, 1], [1, 1]], color: CYBER_COLORS.O },
+    T: { shape: [[0, 1, 0], [1, 1, 1], [0, 1, 0]], color: CYBER_COLORS.T }
 };
 const tetraKeys = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
 
@@ -176,13 +165,13 @@ function rotateTetraMatrix(matrix) {
 
 // ======================== РЕЖИМ ПЕНТА ========================
 const pentaPieces = {
-    I: { shape: [[1, 1, 1, 1, 1]], color: '#00f5ff' },
-    L: { shape: [[1, 0], [1, 0], [1, 0], [1, 1]], color: '#22c55e' },
-    J: { shape: [[0, 1], [0, 1], [0, 1], [1, 1]], color: '#4169e1' },
-    Z: { shape: [[1, 1, 0], [0, 1, 0], [0, 1, 1]], color: '#ff4500' },
-    S: { shape: [[0, 1, 1], [0, 1, 0], [1, 1, 0]], color: '#32cd32' },
-    T: { shape: [[1, 1, 1], [0, 1, 0], [0, 1, 0]], color: '#9370db' },
-    P: { shape: [[1, 1], [1, 1], [1, 0]], color: '#ffd700' }
+    I: { shape: [[1, 1, 1, 1, 1]], color: CYBER_COLORS.I },
+    L: { shape: [[1, 0], [1, 0], [1, 0], [1, 1]], color: CYBER_COLORS.L },
+    J: { shape: [[0, 1], [0, 1], [0, 1], [1, 1]], color: CYBER_COLORS.J },
+    Z: { shape: [[1, 1, 0], [0, 1, 0], [0, 1, 1]], color: CYBER_COLORS.Z },
+    S: { shape: [[0, 1, 1], [0, 1, 0], [1, 1, 0]], color: CYBER_COLORS.S },
+    T: { shape: [[1, 1, 1], [0, 1, 0], [0, 1, 0]], color: CYBER_COLORS.T },
+    P: { shape: [[1, 1], [1, 1], [1, 0]], color: CYBER_COLORS.O }  // P использует цвет O
 };
 const pentaKeys = ['I', 'L', 'J', 'Z', 'S', 'T', 'P'];
 
@@ -637,8 +626,10 @@ function drawGameOverAnimation() {
                 let fillColor;
                 if (typeof value === 'string' && value.startsWith('#')) fillColor = value;
                 else fillColor = colors[value] || '#FFF';
+                
                 context.fillStyle = fillColor;
                 context.fillRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
+
                 context.strokeStyle = "rgba(0,0,0,0.3)";
                 context.strokeRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
             }
