@@ -25,26 +25,58 @@ class AdManager {
         this.bannerShown = false;
         this.lastAdTime = 0;
         this.adCooldown = 120000;
+         this.bannerRetryCount = 0;      // счётчик попыток
+    this.maxBannerRetries = 3;      // максимум попыток
+    this.bannerRetryTimeout = null; // таймер для повтора
     }
 
-    showBottomBanner() {
-        if (this.bannerShown) return;
-     //   if (typeof vkBridge !== 'undefined') {
-            const sendMethod = vkBridge.sendPromise || vkBridge.send;
-            sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
-                banner_location: 'bottom'
-            })
-            .then((data) => {
-                if (data && data.result) {
-                    console.log('Баннер успешно отображён');
-                    this.bannerShown = true;
-                }
-            })
-            .catch((error) => {
-                console.log('Ошибка при показе баннера:', error);
-            });
-       // }
+showBottomBanner() {
+    // Если уже показан или превысили лимит попыток – выходим
+    if (this.bannerShown || this.bannerRetryCount >= this.maxBannerRetries) return;
+    
+    // Если нет VK Bridge – пробуем позже (но у нас всегда есть fallback)
+    if (typeof vkBridge === 'undefined') {
+        this.scheduleBannerRetry();
+        return;
     }
+
+    const sendMethod = vkBridge.sendPromise || vkBridge.send;
+    sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
+        banner_location: 'bottom'
+    })
+    .then((data) => {
+        if (data && data.result) {
+            console.log('✅ Баннер успешно отображён');
+            this.bannerShown = true;
+            this.bannerRetryCount = 0; // сбрасываем при успехе
+        } else {
+            // Если result false – считаем как ошибку
+            this.handleBannerError();
+        }
+    })
+    .catch((error) => {
+        console.warn('❌ Ошибка при показе баннера:', error);
+        this.handleBannerError();
+    });
+}
+
+// Обработчик ошибки – увеличивает счётчик и планирует повтор
+handleBannerError() {
+    this.bannerRetryCount++;
+    if (this.bannerRetryCount < this.maxBannerRetries) {
+        this.scheduleBannerRetry();
+    } else {
+        console.warn('⚠️ Баннер не показан после', this.maxBannerRetries, 'попыток');
+    }
+}
+
+// Планирует повтор через 15 секунд
+scheduleBannerRetry() {
+    if (this.bannerRetryTimeout) clearTimeout(this.bannerRetryTimeout);
+    this.bannerRetryTimeout = setTimeout(() => {
+        this.showBottomBanner();
+    }, 15000); // 15 секунд
+}
 
     // Показать рекламу за вознаграждение
     showRewardedAd() {
