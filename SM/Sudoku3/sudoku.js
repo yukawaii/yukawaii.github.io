@@ -279,7 +279,7 @@ this.achievementList = [
     { id: 'win_100',        name: 'Победитель',              desc: 'Одержать 100 побед',                               icon: '💎' },
 
     // === Очковые (алмазы) (5 шт) ===
-    { id: 'diamonds_10',    name: 'Собиратель',             desc: 'Накопить 10 алмазов',                           icon: '👼' },
+    { id: 'diamonds_10',    name: 'Алмаз',             desc: 'Накопить 10 алмазов',                           icon: '👼' },
     { id: 'diamonds_50',    name: 'Любитель',             desc: 'Накопить 50 алмазов',                           icon: '💎' },
     { id: 'diamonds_100',   name: 'Ценитель',            desc: 'Накопить 100 алмазов',                          icon: '💎' },
     { id: 'diamonds_500',   name: 'Богач',            desc: 'Накопить 500 алмазов',                          icon: '💎' },
@@ -351,7 +351,7 @@ this.achievementList = [
 { id: 'early_bird',     name: 'Ранняя пташка',      desc: 'Получить бонус до 10 утра',          icon: '🌅' },
 { id: 'night_owl',      name: 'Ночная сова',        desc: 'Получить бонус после 23:00',         icon: '🌙' },
 { id: 'collector',      name: 'Коллекционер',       desc: 'Собрать 10 достижений',              icon: '📚' },
-{ id: 'collector_25',   name: 'СОбиратель', desc: 'Собрать 25 достижений',            icon: '📚' },
+{ id: 'collector_25',   name: 'Собиратель', desc: 'Собрать 25 достижений',            icon: '📚' },
 { id: 'collector_50',   name: 'Легенда', desc: 'Собрать 50 достижений',      icon: '📚' },
 // === Достижения за общее количество игр ===
 { id: 'games_50',   name: '50 партий',   desc: 'Сыграть 50 партий',   icon: '🎮' },
