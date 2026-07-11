@@ -282,9 +282,7 @@ this.achievementList = [
 
     // === Временные (4 шт) ===
   
-    { id: 'time_10min',     name: 'На чиле',           desc: 'Решить за 10 минут',                            icon: '⏱️' },
-    { id: 'time_20min',     name: 'Йог',         desc: 'Решить за 20 минут',                            icon: '🐌' },
-    { id: 'time_30min',     name: 'Дзэн',         desc: 'Решить за 30 минут',                            icon: '🐌' },
+    { id: 'time_10min',     name: 'На чиле',           desc: 'Решить быстрее 10 минут',                            icon: '🐌' },
 
     // === Идеальные игры (5 шт) ===
     { id: 'perfect_easy',   name: 'Сорванец',       desc: 'Пройти лёгкий ур. без ошибок',              icon: '🍦' },
@@ -2620,10 +2618,7 @@ this.checkAllChecksUsed();
 
     // Время (обычные)
     if (this.timer <= 600) this.unlockAchievement('time_10min');
-    if (this.timer <= 1200) this.unlockAchievement('time_20min');
-    if (this.timer <= 1800) this.unlockAchievement('time_30min');
-
-
+ 
     this.checkLevelAchievement(this.difficulty);
     this.checkAchievements(); // общая проверка (алмазы, бонусы, подсказки, проверки, цифры)
     this.updateTotalGameTime(this.timer); // добавляем время текущей партии
