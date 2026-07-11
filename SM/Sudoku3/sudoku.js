@@ -916,7 +916,7 @@ hideLoadingAd() {
     // ============================================================
 // Инициализация VK и получение данных пользователя
 // ============================================================
-initVK() {
+async initVK() {
     const loading = document.getElementById('loadingScreen');
     const finishLoading = () => {
         if (loading) loading.style.display = 'none';
