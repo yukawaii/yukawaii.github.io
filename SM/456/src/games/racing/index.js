@@ -89,8 +89,6 @@ blockTetrisEvents(e) {
     document.addEventListener('keyup', this.handleKeyUp);
     document.addEventListener('touchstart', this.handleTouchStart, { passive: true });
     document.addEventListener('touchend', this.handleTouchEnd, { passive: true });
-    document.addEventListener('keydown', this.blockTetrisEvents, true);
-document.addEventListener('keyup', this.blockTetrisEvents, true);
 
     if (visibilityChangeEvent) {
   document.addEventListener(visibilityChangeEvent, this.handleVisibilityChange);
