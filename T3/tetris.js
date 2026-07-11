@@ -1817,8 +1817,7 @@ function updateCollectionsProgress() {
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
             <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 560px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
-                <button onclick="closeCollections()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>
-                <h2 class="neon-title" style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
+<button onclick="closeCollections()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>                <h2 class="neon-title" style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
                 <p style="color: #64748b; font-size: 15px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
                     ${t('yourScore') || 'Ваш счёт'}: <span style="color: #34d399; font-weight: bold;">${savedScore}</span>
                 </p>
@@ -1925,15 +1924,15 @@ function renderCollectionCategory(categoryId, page) {
     
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
-            <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 30px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
-                <button onclick="closeCollectionCategory()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>
-                <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
+            <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 20px 15px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
+<button onclick="closeCollectionCategory()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>         
+       <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
                     ${category.icon} ${categoryName}
                 </h2>
                 <p style="color: #64748b; font-size: 14px; letter-spacing: 1px; margin-bottom: 18px; font-family: 'Russo One', sans-serif;">
                     ${t('collectionProgress') || 'Прогресс'}: ${unlockedCount}/${totalItems}
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px;">
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px;">
     `;
     
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
@@ -1973,7 +1972,7 @@ function renderCollectionCategory(categoryId, page) {
         }
         
         html += `
-            <div style="aspect-ratio: 3/4; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px; cursor: pointer; transition: all 0.2s; overflow: hidden;" onclick="${clickAction}">
+            <div style="aspect-ratio: 3/4; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; cursor: pointer; transition: all 0.2s; overflow: hidden;" onclick="${clickAction}">
                 ${content}
             </div>
         `;
@@ -2054,7 +2053,8 @@ function claimCollectionItem(categoryId, index, page) {
     modal.id = 'collection-claim-modal';
     modal.innerHTML = `
         <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-<button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>            <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+<button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>
+          <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('newExhibit') || 'Новый экспонат!'}</h2>
             <p style="color: #94a3b8; font-size: 16px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">${t('youGot') || 'Ты получил'}</p>
             <p style="color: #34d399; font-size: 20px; margin-bottom: 24px; font-family: 'Russo One', sans-serif; font-weight: bold;">${itemName}</p>
