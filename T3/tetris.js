@@ -1807,75 +1807,77 @@ function updateCollectionsProgress() {
     window.collectionsProgress = { unlocked, total };
 }
 
-    function openCollections() {
-        const rewardsModal = document.getElementById('rewards-center-modal');
-        if (rewardsModal) rewardsModal.style.display = 'none';
+   function openCollections() {
+    const rewardsModal = document.getElementById('rewards-center-modal');
+    if (rewardsModal) rewardsModal.style.display = 'none';
+    
+    const t = window.getText || (key => key);
+    const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
+    
+    let html = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
+            <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 560px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
+                <button onclick="closeCollections()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>
+                <h2 class="neon-title" style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
+                <p style="color: #64748b; font-size: 15px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
+                    ${t('yourScore') || 'Ваш счёт'}: <span style="color: #34d399; font-weight: bold;">${savedScore}</span>
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+    `;
+    
+    for (const [key, category] of Object.entries(COLLECTION_CATEGORIES)) {
+        const name = t(category.nameKey) || category.nameKey;
+        const isUnlocked = checkCategoryUnlocked(key);
+        const unlockedCount = isUnlocked ? getUnlockedCountInCategory(key, savedScore) : 0;
+        const total = category.total;
+        const isComplete = isUnlocked && unlockedCount >= total;
         
-        const t = window.getText || (key => key);
-        const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-        
-        let html = `
-            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
-                <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 560px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
-<button onclick="closeCollections()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>                    <p style="color: #64748b; font-size: 15px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
-                        ${t('yourScore') || 'Ваш счёт'}: <span style="color: #34d399; font-weight: bold;">${savedScore}</span>
-                    </p>
-                    <div style="display: flex; flex-direction: column; gap: 14px;">
-        `;
-        
-        for (const [key, category] of Object.entries(COLLECTION_CATEGORIES)) {
-            // 🔥 ИСПРАВЛЕНО: используем t() с правильным ключом
-            const name = t(category.nameKey) || category.nameKey;
-            const isUnlocked = checkCategoryUnlocked(key);
-            const unlockedCount = isUnlocked ? getUnlockedCountInCategory(key, savedScore) : 0;
-            const total = category.total;
-            const isComplete = isUnlocked && unlockedCount >= total;
-            
-            let buttonStyle, onClickAction, rightText;
-            if (isUnlocked) {
-                buttonStyle = `color: #fff; background: ${isComplete ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #2563eb, #1d4ed8)'}; border: none; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); cursor: pointer;`;
-                onClickAction = `onclick="openCollectionCategory('${key}')"`;
-                rightText = `
-                    <span style="font-size: 13px; color: ${isComplete ? '#86efac' : '#93c5fd'}; font-weight: normal; margin-left: auto; display: flex; align-items: center; gap: 8px;">
-                        ${unlockedCount}/${total}
-                        ${isComplete ? getCheckmarkSVG() : ''}
-                    </span>
-                `;
-            } else {
-                buttonStyle = `color: #64748b; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); cursor: default;`;
-                onClickAction = `onclick="showLockedCategory('${key}')"`;
-                rightText = `<span style="font-size: 18px; color: #475569; margin-left: auto;">🔒</span>`;
-            }
-            
-            html += `
-                <button ${onClickAction}
-                        style="width: 100%; padding: 18px 20px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; 
-                            ${buttonStyle}
-                            display: flex; align-items: center; gap: 16px; justify-content: center;
-                            border-radius: 16px; transition: all 0.2s; min-height: 64px;">
-                    <span style="font-size: 28px;">${category.icon}</span>
-                    <span style="flex: 1; text-align: left;">${name}</span>
-                    ${rightText}
-                </button>
+        let buttonStyle, onClickAction, rightText;
+        if (isUnlocked) {
+            buttonStyle = `color: #fff; background: ${isComplete ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #2563eb, #1d4ed8)'}; border: none; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); cursor: pointer;`;
+            onClickAction = `onclick="openCollectionCategory('${key}')"`;
+            rightText = `
+                <span style="font-size: 13px; color: ${isComplete ? '#86efac' : '#93c5fd'}; font-weight: normal; margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                    ${unlockedCount}/${total}
+                    ${isComplete ? getCheckmarkSVG() : ''}
+                </span>
             `;
+        } else {
+            buttonStyle = `color: #64748b; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); cursor: default;`;
+            onClickAction = `onclick="showLockedCategory('${key}')"`;
+            rightText = `<span style="font-size: 18px; color: #475569; margin-left: auto;">🔒</span>`;
         }
         
         html += `
-                    </div>
-                    <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
-<button onclick="closeCollections()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; z-index: 10; padding: 12px; line-height: 1; touch-action: manipulation; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">✕</button>                            ${t('close') || 'Закрыть'}
-                        </button>
-                    </div>
+            <button ${onClickAction}
+                    style="width: 100%; padding: 18px 20px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; 
+                        ${buttonStyle}
+                        display: flex; align-items: center; gap: 16px; justify-content: center;
+                        border-radius: 16px; transition: all 0.2s; min-height: 64px;">
+                <span style="font-size: 28px;">${category.icon}</span>
+                <span style="flex: 1; text-align: left;">${name}</span>
+                ${rightText}
+            </button>
+        `;
+    }
+    
+    html += `
+                </div>
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <button onclick="closeCollections()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
+                        ${t('close') || 'Закрыть'}
+                    </button>
                 </div>
             </div>
-        `;
-        
-        const oldModal = document.getElementById('collections-modal');
-        if (oldModal) oldModal.remove();
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        document.body.appendChild(div.firstElementChild);
-    }
+        </div>
+    `;
+    
+    const oldModal = document.getElementById('collections-modal');
+    if (oldModal) oldModal.remove();
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    document.body.appendChild(div.firstElementChild);
+}
 
 function closeCollections() {
     const modal = document.getElementById('collections-modal');
@@ -1914,9 +1916,7 @@ function renderCollectionCategory(categoryId, page) {
         return;
     }
     
-    // 🔥 ИСПРАВЛЕНО: правильное название категории
     const categoryName = t(category.nameKey) || category.nameKey;
-    
     const totalItems = category.total;
     const totalPages = Math.ceil(totalItems / COLLECTION_ITEMS_PER_PAGE);
     const unlockedCount = getUnlockedCountInCategory(categoryId, savedScore);
@@ -1926,7 +1926,9 @@ function renderCollectionCategory(categoryId, page) {
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
             <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 30px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
-<button onclick="closeCollectionCategory()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>                    ${category.icon} ${categoryName}
+                <button onclick="closeCollectionCategory()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>
+                <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
+                    ${category.icon} ${categoryName}
                 </h2>
                 <p style="color: #64748b; font-size: 14px; letter-spacing: 1px; margin-bottom: 18px; font-family: 'Russo One', sans-serif;">
                     ${t('collectionProgress') || 'Прогресс'}: ${unlockedCount}/${totalItems}
