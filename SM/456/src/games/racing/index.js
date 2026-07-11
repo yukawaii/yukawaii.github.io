@@ -213,6 +213,7 @@ toggleSound() {
       this.playMoveSound();   // ← звук только здесь
     }*/
     }
+    
     if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
       e.preventDefault();
       this.moveUp = true;
