@@ -202,6 +202,7 @@ this.sevenCount = 0;               // для достижения lucky_7
 this.noHintWins = 0;
 this.winStreak = 0;
 this.maxWinStreak = 0;
+this.totalGames = 0; // общее количество сыгранных партий
 this.winsByLevel = { easy: 0, medium: 0, hard: 0, expert: 0 };
 // Для идеальных побед
 this.perfectWins = { easy: 0, medium: 0, hard: 0, expert: 0 };
@@ -320,6 +321,16 @@ this.achievementList = [
 { id: 'collector',      name: 'Коллекционер',       desc: 'Собрать 10 достижений',              icon: '📚' },
 { id: 'collector_25',   name: 'СОбиратель', desc: 'Собрать 25 достижений',            icon: '📚' },
 { id: 'collector_50',   name: 'Легенда', desc: 'Собрать 50 достижений',      icon: '📚' },
+// === Достижения за общее количество игр ===
+{ id: 'games_50',   name: '50 партий',   desc: 'Сыграть 50 партий',   icon: '🎮' },
+{ id: 'games_200',  name: '200 партий',  desc: 'Сыграть 200 партий',  icon: '🎮' },
+{ id: 'games_500',  name: '500 партий',  desc: 'Сыграть 500 партий',  icon: '🎮' },
+
+// === Достижения за 10 побед на каждом уровне ===
+{ id: 'win_easy_10',    name: 'Лёгкий профи',    desc: '20 побед на лёгком',     icon: '🟢' },
+{ id: 'win_medium_10',  name: 'Средний профи',   desc: '20 побед на среднем',    icon: '🟠' },
+{ id: 'win_hard_10',    name: 'Сложный профи',   desc: '20 побед на сложном',    icon: '🔴' },
+{ id: 'win_expert_10',  name: 'Экспертный профи', desc: '20 побед на эксперте',  icon: '🟣' },
 ];
 
 
@@ -1231,6 +1242,8 @@ loadAchievements() {
         }
         
         // Загружаем счётчики
+        const games = localStorage.getItem('sudoku_totalGames');
+if (games) this.totalGames = parseInt(games) || 0;
 const winStreak = localStorage.getItem('sudoku_winStreak');
 if (winStreak) this.winStreak = parseInt(winStreak) || 0;
 const perfectWins = localStorage.getItem('sudoku_perfectWins');
@@ -1267,7 +1280,7 @@ if (maxWinStreak) this.maxWinStreak = parseInt(maxWinStreak) || 0;
     keys: [
         'achievements', 'totalWins', 'totalHints', 'totalBonuses',
         'winStreak', 'maxWinStreak', 'winsByLevel', 'noHintWins',
-        'perfectWins', 'totalChecks', 'totalPlaced', 'totalGameTime'
+        'perfectWins', 'totalChecks', 'totalPlaced', 'totalGameTime','totalGames'
     ]
 })
 .then((data) => {
@@ -1295,6 +1308,10 @@ if (maxWinStreak) this.maxWinStreak = parseInt(maxWinStreak) || 0;
                         const val = parseInt(item.value) || 0;
                         if (val > this.totalBonuses) this.totalBonuses = val;
                     }
+                    if (item.key === 'totalGames') {
+    const val = parseInt(item.value) || 0;
+    if (val > this.totalGames) this.totalGames = val;
+}
            // Добавляем новые:
             if (item.key === 'winStreak') {
                 const val = parseInt(item.value) || 0;
@@ -1346,7 +1363,7 @@ if("perfectWins"===item.key)try{const t=JSON.parse(item.value);for(const e in t)
 saveAchievements() {
     // Сохраняем в localStorage
     try {
-        localStorage.setItem('sudoku_achievements', JSON.stringify(this.achievements));
+                localStorage.setItem('sudoku_achievements', JSON.stringify(this.achievements));
         localStorage.setItem('sudoku_totalWins', String(this.totalWins));
         localStorage.setItem('sudoku_totalHints', String(this.totalHintsUsed));
         localStorage.setItem('sudoku_totalBonuses', String(this.totalBonuses));
@@ -1357,7 +1374,7 @@ localStorage.setItem('sudoku_noHintWins', String(this.noHintWins));
 localStorage.setItem('sudoku_perfectWins', JSON.stringify(this.perfectWins));
 localStorage.setItem('sudoku_totalChecks', String(this.totalChecks));
 localStorage.setItem('sudoku_totalPlaced', String(this.totalPlaced));
-localStorage.setItem('sudoku_totalGameTime', String(this.totalGameTime));
+localStorage.setItem('sudoku_totalGames', String(this.totalGames));
     } catch (e) {}
 
     // Сохраняем в VK Storage, если доступно
@@ -1376,6 +1393,8 @@ localStorage.setItem('sudoku_totalGameTime', String(this.totalGameTime));
             key: 'totalHints',
             value: String(this.totalHintsUsed)
         }).catch(err => console.warn('Ошибка сохранения totalHints:', err));
+        vkBridge.send('VKWebAppStorageSet', { key: 'totalGames', value: String(this.totalGames) })
+    .catch(err => console.warn('Ошибка сохранения totalGames:', err));
 
         vkBridge.send('VKWebAppStorageSet', {
             key: 'totalBonuses',
@@ -2577,6 +2596,18 @@ checkWin() {
     if (this.winStreak > this.maxWinStreak) this.maxWinStreak = this.winStreak;
     this.winsByLevel[this.difficulty] = (this.winsByLevel[this.difficulty] || 0) + 1;
 
+// Проверяем победы на уровнях (20 шт)
+if (this.winsByLevel['easy'] >= 20) this.unlockAchievement('win_easy_10');
+if (this.winsByLevel['medium'] >= 20) this.unlockAchievement('win_medium_10');
+if (this.winsByLevel['hard'] >= 20) this.unlockAchievement('win_hard_10');
+if (this.winsByLevel['expert'] >= 20) this.unlockAchievement('win_expert_10');
+
+// Проверяем общее количество игр (можно вынести в отдельную функцию checkGames)
+if (this.totalGames >= 50) this.unlockAchievement('games_50');
+if (this.totalGames >= 200) this.unlockAchievement('games_200');
+if (this.totalGames >= 500) this.unlockAchievement('games_500');
+
+
     // Проверяем серии
     this.checkStreak();
 
@@ -2639,6 +2670,7 @@ return true;
     // Старт игры
     // ============================================================
     startNewGame() {
+         this.totalGames++;
          this.hideConfetti();
 this.diamondsAwardedForCurrentGame = false;
     this.perfectGame = false;     
