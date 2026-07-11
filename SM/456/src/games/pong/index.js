@@ -189,8 +189,8 @@ playCrashSound() {
 }
 
 toggleSound() {
-  this._soundEnabled = !this._soundEnabled;          // сразу меняем
-  this.setState({ soundEnabled: this._soundEnabled }); // для UI
+  this._soundEnabled = !this._soundEnabled;
+  this.setState({ soundEnabled: this._soundEnabled });
 }
 
   handleKeyDown(e) {

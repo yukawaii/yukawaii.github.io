@@ -165,6 +165,7 @@ document.addEventListener('keyup', this.blockTetrisEvents, true);
 
   // ===== ЗВУКИ =====
   playMoveSound() {
+     console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
     if (!this.state.soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
@@ -188,7 +189,7 @@ document.addEventListener('keyup', this.blockTetrisEvents, true);
     } catch(e) {}
   }
 
- toggleSound() {
+toggleSound() {
   this.setState({ soundEnabled: !this.state.soundEnabled });
 }
   // ===== КЛАВИАТУРА =====
