@@ -944,6 +944,15 @@ function update(time = 0) {
 
 // ======================== УПРАВЛЕНИЕ ИГРОЙ ========================
 function startGame() {
+      // ===== СБРОС ЧЕРЕПАХИ =====
+    hideSlowDownIndicator();
+    isSlowDownActive = false;
+    pendingSlowDown = false;
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+
    /* const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) arenaWidth = 10;
     else {
@@ -1055,6 +1064,15 @@ async function startGameWithAudio() {
 
 function endGame() {
     if (gameOverAnimation.active) return;
+      // ===== СБРОС ЧЕРЕПАХИ =====
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+    isSlowDownActive = false;
+    pendingSlowDown = false;
+    hideSlowDownIndicator();
+    // ===========================
     if (selectedDifficulty) savePlayedDifficulty();
     isGameOver = true;
     updateRecordText();
@@ -2670,6 +2688,15 @@ function showSuccessModal(title, text) {
 //стирание рядов за рекламу
         // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
      function clearTopRows() {
+         // ===== СБРОС ЧЕРЕПАХИ =====
+    hideSlowDownIndicator();
+    isSlowDownActive = false;
+    if (slowDownTimerId) {
+        clearTimeout(slowDownTimerId);
+        slowDownTimerId = null;
+    }
+    pendingSlowDown = false;
+    // ===========================
     const rowsToClear = 7;
     // Проверяем наличие блоков в верхних рядах
     let hasBlocks = false;
@@ -2914,6 +2941,7 @@ async function handleContinueWithAd() {
     if (adShown) {
         const cleared = clearTopRows();
      if (cleared) {
+          hideSlowDownIndicator(); // удаление черепахи
     isGameOver = false;
     gameState.over = false;
     gameState.initialized = true;
