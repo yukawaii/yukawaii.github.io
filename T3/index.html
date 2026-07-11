@@ -1241,8 +1241,7 @@ div[id$="-modal"]::before {
     <!-- ЦЕНТР НАГРАД -->
     <div id="rewards-center-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; justify-content: center; align-items: center;">
         <div style="background: rgba(10, 10, 14, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 480px; border-radius: 30px; padding: 30px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
-<button onclick="closeRewardsCenter()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10; padding: 12px; line-height: 1; touch-action: manipulation; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">✕</button>            <h2 class="neon-title" style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🏆 Центр наград</h2>
-            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
+<button onclick="closeRewardsCenter()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
                 Ваш счёт: <span id="rewards-player-score" style="color: #34d399; font-weight: bold;">0</span>
             </p>
             <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -1322,8 +1321,7 @@ div[id$="-modal"]::before {
     <!-- МОДАЛКА СВИТКОВ -->
     <div id="scrolls-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.92); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 500px; border-radius: 30px; padding: 30px 25px 25px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 85vh; display: flex; flex-direction: column;">
-<button onclick="closeScrollsModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; z-index: 10; padding: 12px; line-height: 1; touch-action: manipulation; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">✕</button>            <h2 class="neon-title" style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">📜 Свитки</h2>
-            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">
+<button onclick="closeScrollsModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; z-index: 10;">✕</button>            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 16px; font-family: 'Russo One', sans-serif;">
                 Ваш счёт: <span id="scrolls-player-score" style="color: #34d399; font-weight: bold;">0</span>
             </p>
             <div id="scrolls-container" style="flex: 1; overflow-y: auto; max-height: 50vh; padding: 5px 10px;"></div>
@@ -1343,17 +1341,14 @@ div[id$="-modal"]::before {
             <div id="scroll-text-content" style="color: #e2e8f0; font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-family: 'Russo One', sans-serif; max-height: 40vh; overflow-y: auto; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 14px;">
                 Текст свитка...
             </div>
-<button onclick="closeScrollTextModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; line-height: 1; touch-action: manipulation; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">✕</button>                Прочитано
-            </button>
+<button onclick="closeScrollTextModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation;">✕</button>            </button>
         </div>
     </div>
 
     <!-- МОДАЛКА ВЫБОРА СЛОЖНОСТИ -->
     <div id="difficulty-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
         <div style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;">
-<button onclick="closeDifficultyModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; line-height: 1; touch-action: manipulation; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">✕</button>
-            <h2 class="neon-title" style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">Выбери сложность</h2>
-            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 30px; font-family: 'Russo One', sans-serif;">
+<button onclick="closeDifficultyModal()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation;">✕</button>            <p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 30px; font-family: 'Russo One', sans-serif;">
                 Режим: <span id="difficulty-mode-name" style="color: #fff;">Классика</span>
             </p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
