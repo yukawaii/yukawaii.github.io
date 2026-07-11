@@ -1996,43 +1996,6 @@ function renderCollectionCategory(categoryId, page) {
     div.innerHTML = html;
     document.body.appendChild(div.firstElementChild);
 
-    // === АДАПТИВНОЕ МАСШТАБИРОВАНИЕ ===
-    const modal = document.getElementById('collection-category-modal');
-    if (modal) {
-        const contentBlock = document.getElementById('collection-category-content');
-        if (contentBlock) {
-            // Даём время на загрузку изображений (500 мс достаточно для большинства случаев)
-            setTimeout(() => {
-                const maxHeight = window.innerHeight * 0.85;
-                const maxWidth = window.innerWidth * 0.92;
-
-                // Получаем реальные размеры контента
-                const contentHeight = contentBlock.scrollHeight;
-                const contentWidth = contentBlock.scrollWidth;
-
-                let scaleX = 1;
-                let scaleY = 1;
-
-                if (contentWidth > maxWidth) {
-                    scaleX = maxWidth / contentWidth;
-                }
-                if (contentHeight > maxHeight) {
-                    scaleY = maxHeight / contentHeight;
-                }
-
-                const scale = Math.min(scaleX, scaleY, 1); // не увеличиваем, только уменьшаем
-
-                if (scale < 1) {
-                    contentBlock.style.transform = `scale(${scale})`;
-                    contentBlock.style.transformOrigin = 'center center';
-                    // Чтобы центрировать уменьшенный блок, оборачиваем его в flex-контейнер
-                    // Уже есть flex на родителе, но можно добавить margin auto
-                    // Для этого убедимся, что родитель имеет display: flex и justify-content/align-items: center
-                    // Родитель уже имеет эти свойства.
-                }
-            }, 500);
-        }
-    }
 }
 
 function changeCollectionPage(direction) {

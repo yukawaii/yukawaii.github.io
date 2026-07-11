@@ -1097,7 +1097,19 @@ div[id$="-modal"]::before {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
+/* ===== МАСШТАБИРОВАНИЕ МОДАЛОК КОЛЛЕКЦИЙ НА ПК ===== */
+@media (min-width: 769px) {
+    #collections-modal > div {
+        transform: scale(0.9);
+        transform-origin: center center;
+        max-width: 500px !important; /* уменьшаем максимальную ширину для ПК */
+    }
+    #collection-category-modal > div {
+        transform: scale(0.85);
+        transform-origin: center center;
+        max-width: 550px !important; /* уменьшаем ширину для ПК */
+    }
+}
 </style>
 </head>
 <body oncontextmenu="return false">
