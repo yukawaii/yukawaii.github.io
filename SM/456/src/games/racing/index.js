@@ -23,13 +23,14 @@ class RacingGame extends Component {
       gameTime: 0,
       soundEnabled: true
     };
+      this._soundEnabled = true; 
     this.moveLeft = false;
     this.moveRight = false;
     this.moveUp = false;
     this.moveDown = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
-    this.blockTetrisEvents = this.blockTetrisEvents.bind(this); //перехват звуков из основы
+    //this.blockTetrisEvents = this.blockTetrisEvents.bind(this); //перехват звуков из основы
     
     this.closeGame = this.closeGame.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -48,7 +49,7 @@ class RacingGame extends Component {
 
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
-// Метод-перехватчик:
+/*// Метод-перехватчик:
 blockTetrisEvents(e) {
   // Блокируем только клавиши управления, которые использует тетрис
   const controlKeys = [
@@ -61,7 +62,7 @@ blockTetrisEvents(e) {
     e.stopImmediatePropagation(); // Не даём событиям дойти до тетриса
     e.preventDefault();
   }
-}
+} */
   componentDidMount() {
     window.addEventListener('openRacing', function() {
       window._isRacingActive = true;
@@ -163,14 +164,14 @@ blockTetrisEvents(e) {
 
   // ===== ЗВУКИ =====
 playMoveSound() {
-   console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
-  if (!this.state.soundEnabled) return;
+  console.log('playMoveSound called, soundEnabled:', this._soundEnabled);
+  if (!this._soundEnabled) return;  // ← использовать _soundEnabled
   var now = Date.now();
   if (now - this.lastSoundTime < 100) return;
   this.lastSoundTime = now;
   try {
     if (arcadeSounds && arcadeSounds.move) {
-      arcadeSounds.move();   // ← было this.playMoveSound()
+      arcadeSounds.move();
     }
   } catch(e) {}
 }
@@ -187,8 +188,9 @@ playMoveSound() {
   }
 
 toggleSound() {
-   console.log('toggleSound called, current:', this.state.soundEnabled);
-  this.setState({ soundEnabled: !this.state.soundEnabled });
+  console.log('toggleSound called, current:', this._soundEnabled);
+  this._soundEnabled = !this._soundEnabled;
+  this.setState({ soundEnabled: this._soundEnabled });
 }
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {
@@ -200,20 +202,16 @@ toggleSound() {
       this.moveLeft = true;
       this.moveRight = false;
       moved = true;
- /*     if (!this.state.isPaused && !this.state.gameOver) {
-      this.playMoveSound();   // ← звук только здесь
-    }*/
+
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
       moved = true;
-  /*    if (!this.state.isPaused && !this.state.gameOver) {
-      this.playMoveSound();   // ← звук только здесь
-    }*/
+ 
     }
-    
+
     if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
       e.preventDefault();
       this.moveUp = true;
