@@ -595,7 +595,7 @@ function startGameOverAnimation() {
     isGameStarted = false;
     gameState.paused = false;
     stopSounds();
-    if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('gameover', 0.3);
+    //if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('gameover', 0.3);
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     lastTime = 0;
     dropCounter = 0;
@@ -1071,6 +1071,8 @@ function endGame() {
     if (gameOverAnimation.active) return;
     if (selectedDifficulty) savePlayedDifficulty();
     isGameOver = true;
+    updateRecordText();
+    updateHighscoreDisplay();
     isGameStarted = false;
     gameState.over = true;
     gameState.initialized = false;
@@ -1088,7 +1090,13 @@ function endGame() {
     }
     if (typeof saveTotalProgress === 'function') {
         saveTotalProgress();
+            }
+
+             // 🟢 ОБНОВЛЯЕМ РЕКОРД НА ЭКРАНЕ СРАЗУ
+    if (typeof updateHighscoreDisplay === 'function') {
+        updateHighscoreDisplay();
     }
+    
  // ====== СОХРАНЯЕМ РЕКОРД ======
     if (typeof player !== 'undefined' && typeof saveVKScore === 'function') {
         console.log(`📊 Сохраняем рекорд: ${player.score}`);
