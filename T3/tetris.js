@@ -1909,22 +1909,23 @@ function renderCollectionCategory(categoryId, page) {
     const category = COLLECTION_CATEGORIES[categoryId];
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-    
+
     if (!checkCategoryUnlocked(categoryId)) {
         showLockedCategory(categoryId);
         return;
     }
-    
+
     const categoryName = t(category.nameKey) || category.nameKey;
     const totalItems = category.total;
     const totalPages = Math.ceil(totalItems / COLLECTION_ITEMS_PER_PAGE);
     const unlockedCount = getUnlockedCountInCategory(categoryId, savedScore);
     const startIndex = (page - 1) * COLLECTION_ITEMS_PER_PAGE;
     const endIndex = Math.min(startIndex + COLLECTION_ITEMS_PER_PAGE, totalItems);
-    
+
+    // Убираем overflow-y: auto и max-height из внутреннего блока – теперь они не нужны
     let html = `
         <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
-            <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 20px 15px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
+            <div id="collection-category-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 20px 15px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center;">
 <button onclick="closeCollectionCategory()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>         
        <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
                     ${category.icon} ${categoryName}
@@ -1934,19 +1935,16 @@ function renderCollectionCategory(categoryId, page) {
                 </p>
                 <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px;">
     `;
-    
+
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
     for (let i = startIndex + 1; i <= endIndex; i++) {
         const itemId = `${categoryId}${i}`;
         const isAvailable = i <= unlockedCount;
         const isClaimed = progress[itemId] || false;
         const imgPath = `images/${category.folder}/${i}.png`;
-        
-        let bgColor = 'rgba(30,30,40,0.5)';
-        let borderColor = 'rgba(255,255,255,0.05)';
-        let clickAction = '';
-        let content = '';
-        
+
+        let bgColor, borderColor, clickAction, content;
+
         if (isClaimed) {
             bgColor = 'rgba(52, 211, 153, 0.08)';
             borderColor = 'rgba(52, 211, 153, 0.4)';
@@ -1958,26 +1956,28 @@ function renderCollectionCategory(categoryId, page) {
             clickAction = `claimCollectionItem('${categoryId}', ${i}, ${page})`;
             content = `
                 <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 36px;">✋</span>
-                    <span style="font-size: 9px; color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t('getBonus') || 'Забрать'}</span>
+                    <span style="font-size: 28px;">✋</span>
+                    <span style="font-size: 7px; color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t('getBonus') || 'Забрать'}</span>
                 </div>
             `;
         } else {
+            bgColor = 'rgba(30,30,40,0.5)';
+            borderColor = 'rgba(255,255,255,0.05)';
             clickAction = `showLockReason('${categoryId}', ${i})`;
             content = `
                 <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 36px;">🔒</span>
+                    <span style="font-size: 28px;">🔒</span>
                 </div>
             `;
         }
-        
+
         html += `
             <div style="aspect-ratio: 3/4; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; cursor: pointer; transition: all 0.2s; overflow: hidden;" onclick="${clickAction}">
                 ${content}
             </div>
         `;
     }
-    
+
     html += `
                 </div>
                 <div style="display: flex; justify-content: center; align-items: center; gap: 25px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
@@ -1988,34 +1988,51 @@ function renderCollectionCategory(categoryId, page) {
             </div>
         </div>
     `;
-    
-  const oldModal = document.getElementById('collection-category-modal');
-if (oldModal) oldModal.remove();
-const div = document.createElement('div');
-div.innerHTML = html;
-document.body.appendChild(div.firstElementChild);
 
-// Получаем ссылку на внутренний блок модалки
-const modalElem = document.getElementById('collection-category-modal');
-if (modalElem) {
-    const innerDiv = modalElem.querySelector('div'); // внутренний div с контентом
-    if (innerDiv) {
-        // Даём браузеру отрендерить, чтобы получить реальные размеры
-        requestAnimationFrame(() => {
-            const maxHeight = window.innerHeight * 0.85;
-            const contentHeight = innerDiv.scrollHeight;
-            let scale = 1;
-            if (contentHeight > maxHeight) {
-                scale = maxHeight / contentHeight;
-                // Ограничиваем минимальный масштаб
-                if (scale < 0.5) scale = 0.5;
-                // Применяем масштаб
-                innerDiv.style.transform = `scale(${scale})`;
-                innerDiv.style.transformOrigin = 'center center';
-            }
-        });
+    const oldModal = document.getElementById('collection-category-modal');
+    if (oldModal) oldModal.remove();
+
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    document.body.appendChild(div.firstElementChild);
+
+    // === АДАПТИВНОЕ МАСШТАБИРОВАНИЕ ===
+    const modal = document.getElementById('collection-category-modal');
+    if (modal) {
+        const contentBlock = document.getElementById('collection-category-content');
+        if (contentBlock) {
+            // Даём время на загрузку изображений (500 мс достаточно для большинства случаев)
+            setTimeout(() => {
+                const maxHeight = window.innerHeight * 0.85;
+                const maxWidth = window.innerWidth * 0.92;
+
+                // Получаем реальные размеры контента
+                const contentHeight = contentBlock.scrollHeight;
+                const contentWidth = contentBlock.scrollWidth;
+
+                let scaleX = 1;
+                let scaleY = 1;
+
+                if (contentWidth > maxWidth) {
+                    scaleX = maxWidth / contentWidth;
+                }
+                if (contentHeight > maxHeight) {
+                    scaleY = maxHeight / contentHeight;
+                }
+
+                const scale = Math.min(scaleX, scaleY, 1); // не увеличиваем, только уменьшаем
+
+                if (scale < 1) {
+                    contentBlock.style.transform = `scale(${scale})`;
+                    contentBlock.style.transformOrigin = 'center center';
+                    // Чтобы центрировать уменьшенный блок, оборачиваем его в flex-контейнер
+                    // Уже есть flex на родителе, но можно добавить margin auto
+                    // Для этого убедимся, что родитель имеет display: flex и justify-content/align-items: center
+                    // Родитель уже имеет эти свойства.
+                }
+            }, 500);
+        }
     }
-}
 }
 
 function changeCollectionPage(direction) {
