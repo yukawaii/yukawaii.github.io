@@ -92,8 +92,8 @@ var productionPlugins = [
   compress: {
       warnings: false,
     //  drop_console: true,   // ← добавляем
-      dead_code: true,      // ← добавляем (опционально)
-      unused: true,         // ← добавляем (опционально)
+    //  dead_code: true,      // ← добавляем (опционально)
+     // unused: true,         // ← добавляем (опционально)
     },
     output: {
       comments: false,      // ← добавляем
