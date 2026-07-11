@@ -29,7 +29,7 @@ class AdManager {
 
     showBottomBanner() {
         if (this.bannerShown) return;
-        if (typeof vkBridge !== 'undefined') {
+     //   if (typeof vkBridge !== 'undefined') {
             const sendMethod = vkBridge.sendPromise || vkBridge.send;
             sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
                 banner_location: 'bottom'
@@ -43,7 +43,7 @@ class AdManager {
             .catch((error) => {
                 console.log('Ошибка при показе баннера:', error);
             });
-        }
+       // }
     }
 
     // Показать рекламу за вознаграждение

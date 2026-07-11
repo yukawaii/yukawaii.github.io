@@ -187,6 +187,7 @@ class SnakeGame extends Component {
 
   // ===== ЗВУКИ =====
 playMoveSound() {
+  
   if (!this._soundEnabled) return;
   var now = Date.now();
   if (now - this.lastSoundTime < 100) return;

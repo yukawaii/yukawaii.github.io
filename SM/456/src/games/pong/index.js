@@ -163,6 +163,7 @@ ballSpeedY: 1.75,
   }
 
  playMoveSound() {
+   console.log('playMoveSound called, soundEnabled:', this.state.soundEnabled);
     if (!this._soundEnabled) return;
     var now = Date.now();
     if (now - this.lastSoundTime < 100) return;
