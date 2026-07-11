@@ -292,12 +292,12 @@ toggleSound() {
   handleTouchStart(e) {
  // Игнорируем касания на кнопках управления
   const target = e.target;
-  if (target.closest('.soundBtn') || 
-      target.closest('.pauseBtn') || 
-      target.closest('.closeBtn') || 
-      target.closest('.restartBtn')) {
-    return;
-  }
+if (target.closest('.' + style.soundBtn) || 
+    target.closest('.' + style.pauseBtn) || 
+    target.closest('.' + style.closeBtn) || 
+    target.closest('.' + style.restartBtn)) {
+  return;
+}
 
     if (this.state.isPaused || this.state.gameOver) return;
     if (!this.state.isOpen) return;
@@ -390,7 +390,7 @@ if (newBallX < leftPadding) {  // ← было 0
     }
     
 // ===== РАКЕТКА =====
-var offsetY = 56;  // ← меняйте это значение!
+var offsetY = 50;  // ← меняйте это значение!
 var paddleY = FH - PH - PB + offsetY;
 var paddleLeft = newPaddleX;
 var paddleTop = paddleY;

@@ -338,12 +338,12 @@ class RacingGame extends Component {
   handleTouchStart(e) {
  // Игнорируем касания на кнопках управления
   const target = e.target;
-  if (target.closest('.soundBtn') || 
-      target.closest('.pauseBtn') || 
-      target.closest('.closeBtn') || 
-      target.closest('.restartBtn')) {
-    return;
-  }
+if (target.closest('.' + style.soundBtn) || 
+    target.closest('.' + style.pauseBtn) || 
+    target.closest('.' + style.closeBtn) || 
+    target.closest('.' + style.restartBtn)) {
+  return;
+}
 
     if (this.state.isPaused || this.state.gameOver) return;
     if (!this.state.isOpen) return;

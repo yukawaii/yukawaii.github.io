@@ -204,18 +204,18 @@ saveScore(score) {
   }
 }
 
- playMoveSound() {
-    if (!this._soundEnabled) return;
-    var now = Date.now();
-    if (now - this.lastSoundTime < 100) return;
-    this.lastSoundTime = now;
-    
-    try {
-      if (arcadeSounds && arcadeSounds.move) {
-        this.playMoveSound();
-      }
-    } catch(e) {}
-  }
+playMoveSound() {
+  if (!this._soundEnabled) return;
+  var now = Date.now();
+  if (now - this.lastSoundTime < 100) return;
+  this.lastSoundTime = now;
+  
+  try {
+    if (arcadeSounds && arcadeSounds.move) {
+      arcadeSounds.move();   
+    }
+  } catch(e) {}
+}
 
 
 // В playCrashSound:
@@ -332,12 +332,12 @@ playCrashSound() {
   handleTouchStart(e) {
   // Игнорируем касания на кнопках управления
   const target = e.target;
-  if (target.closest('.soundBtn') || 
-      target.closest('.pauseBtn') || 
-      target.closest('.closeBtn') || 
-      target.closest('.restartBtn')) {
-    return;
-  }
+ if (target.closest('.' + style.soundBtn) || 
+    target.closest('.' + style.pauseBtn) || 
+    target.closest('.' + style.closeBtn) || 
+    target.closest('.' + style.restartBtn)) {
+  return;
+}
     if (this.state.isPaused || this.state.gameOver) return;
     if (!this.state.isOpen) return;
     
