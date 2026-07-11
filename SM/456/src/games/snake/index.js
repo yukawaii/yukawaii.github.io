@@ -610,7 +610,7 @@ if (target.closest('.' + style.soundBtn) ||
           )}
           
           <div className={style.controls}>
-            <span>← → ↑ ↓ (WASD/ЦЫФВ)</span>
+            <span>← → ↑ ↓</span>
           </div>
         </div>
       </div>

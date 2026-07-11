@@ -726,7 +726,7 @@ if (allBroken && newBricks.length > 0) {
           )}
           
           <div className={style.controls}>
-            <span>← → (WASD/ЦЫФВ)</span>
+            <span>← →</span>
           </div>
         </div>
       </div>

@@ -659,7 +659,7 @@ updateGame() {
           )}
           
           <div className={style.controls}>
-            <span>← → ↑ ↓ (WASD)</span>
+            <span>← → ↑ ↓</span>
           </div>
         </div>
       </div>
