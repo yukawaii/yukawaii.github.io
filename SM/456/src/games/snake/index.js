@@ -46,6 +46,7 @@ class SnakeGame extends Component {
     this.playCrashSound = this.playCrashSound.bind(this);
     this.saveScore = this.saveScore.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+    this.playBounceSound = this.playBounceSound.bind(this);
   }
 
   componentDidMount() {
@@ -195,6 +196,14 @@ playMoveSound() {
   try {
     if (arcadeSounds && arcadeSounds.move) {
       arcadeSounds.move();   // ← было this.playMoveSound()
+    }
+  } catch(e) {}
+}
+playBounceSound() {
+  if (!this.state.soundEnabled) return;
+  try {
+    if (arcadeSounds && arcadeSounds.bounce) {
+      arcadeSounds.bounce();
     }
   } catch(e) {}
 }
@@ -351,6 +360,8 @@ if (target.closest('.' + style.soundBtn) ||
   handleTouchEnd(e) {
     // Ничего не делаем
   }
+
+
 
   // ===== ИГРОВОЙ ЦИКЛ =====
   startGame() {

@@ -23,8 +23,7 @@ class RacingGame extends Component {
       gameTime: 0,
       soundEnabled: true
     };
-      this._soundEnabled = true; 
-    this.moveLeft = false;
+      this.moveLeft = false;
     this.moveRight = false;
     this.moveUp = false;
     this.moveDown = false;
@@ -164,8 +163,8 @@ blockTetrisEvents(e) {
 
   // ===== ЗВУКИ =====
 playMoveSound() {
-  console.log('playMoveSound called, soundEnabled:', this._soundEnabled);
-  if (!this._soundEnabled) return;  // ← использовать _soundEnabled
+
+ if (!this.state.soundEnabled) return;
   var now = Date.now();
   if (now - this.lastSoundTime < 100) return;
   this.lastSoundTime = now;
@@ -188,9 +187,7 @@ playMoveSound() {
   }
 
 toggleSound() {
-  console.log('toggleSound called, current:', this._soundEnabled);
-  this._soundEnabled = !this._soundEnabled;
-  this.setState({ soundEnabled: this._soundEnabled });
+  this.setState({ soundEnabled: !this.state.soundEnabled });
 }
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {
