@@ -373,16 +373,16 @@ if (target.closest('.' + style.soundBtn) ||
       this.moveLeft = true;
       this.moveRight = false;
       moved = true;
-       if (!this.state.isPaused && !this.state.gameOver) {
+    /*   if (!this.state.isPaused && !this.state.gameOver) {
     this.playMoveSound();
-  }
+  }*/
     } else {
       this.moveRight = true;
       this.moveLeft = false;
       moved = true;
-       if (!this.state.isPaused && !this.state.gameOver) {
+  /*     if (!this.state.isPaused && !this.state.gameOver) {
     this.playMoveSound();
-  }
+  }*/
     }
     
     if (touchY < screenHeight / 3) {
