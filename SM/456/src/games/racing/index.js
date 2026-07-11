@@ -189,13 +189,14 @@ playMoveSound() {
   }
 
 toggleSound() {
+   console.log('toggleSound called, current:', this.state.soundEnabled);
   this.setState({ soundEnabled: !this.state.soundEnabled });
 }
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {
     var key = e.key;
     var moved = false;
-    
+    console.log('handleKeyDown called, key:', key, 'paused:', this.state.isPaused, 'gameOver:', this.state.gameOver);
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
       e.preventDefault();
       this.moveLeft = true;
@@ -259,7 +260,7 @@ toggleSound() {
     var key = detail.key;
     var action = detail.action;
     var moved = false;
-    
+    console.log('handleGameControl called, key:', key, 'action:', action);
     if (key === 'escape') {
       if (action === 'down') {
         this.closeGame();
