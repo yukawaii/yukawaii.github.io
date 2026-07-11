@@ -29,6 +29,7 @@ class RacingGame extends Component {
     this.moveDown = false;
     this.gameLoop = null;
     this.lastSoundTime = 0;
+    this.blockTetrisEvents = this.blockTetrisEvents.bind(this); //перехват звуков из основы
     
     this.closeGame = this.closeGame.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -47,7 +48,20 @@ class RacingGame extends Component {
 
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
-
+// Метод-перехватчик:
+blockTetrisEvents(e) {
+  // Блокируем только клавиши управления, которые использует тетрис
+  const controlKeys = [
+    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+    ' ', 'Space', 'Escape',
+    'a', 'A', 'd', 'D', 'w', 'W', 's', 'S',
+    'ф', 'Ф', 'в', 'В', 'ц', 'Ц', 'ы', 'Ы'
+  ];
+  if (controlKeys.includes(e.key) || e.key.startsWith('Arrow') || e.key === ' ' || e.key === 'Space' || e.key === 'Escape') {
+    e.stopImmediatePropagation(); // Не даём событиям дойти до тетриса
+    e.preventDefault();
+  }
+}
   componentDidMount() {
     window.addEventListener('openRacing', function() {
       window._isRacingActive = true;
@@ -75,6 +89,8 @@ class RacingGame extends Component {
     document.addEventListener('keyup', this.handleKeyUp);
     document.addEventListener('touchstart', this.handleTouchStart, { passive: true });
     document.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    document.addEventListener('keydown', this.blockTetrisEvents, true);
+document.addEventListener('keyup', this.blockTetrisEvents, true);
 
     if (visibilityChangeEvent) {
   document.addEventListener(visibilityChangeEvent, this.handleVisibilityChange);
@@ -96,8 +112,6 @@ class RacingGame extends Component {
 }
 
     window.removeEventListener('gameControl', this.handleGameControl);
-    document.removeEventListener('keydown', this.handleKeyDown);
-    document.removeEventListener('keyup', this.handleKeyUp);
     document.removeEventListener('touchstart', this.handleTouchStart);
     document.removeEventListener('touchend', this.handleTouchEnd);
   }
