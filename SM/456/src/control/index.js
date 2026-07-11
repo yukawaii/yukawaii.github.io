@@ -66,7 +66,10 @@ const keyUp = (e) => {
     var keyMap = {
       37: 'left',
       39: 'right',
-      27: 'escape'
+      27: 'escape',
+      38: 'up',      
+    40: 'down',  
+    32: 'space',  
     };
     var gameKey = keyMap[e.keyCode];
     if (gameKey) {

@@ -12,6 +12,9 @@ const down = (store) => {
       once: true,
       callback: () => {
         const state = store.getState();
+        if (window._isRacingActive) {
+  return;
+}
         if (state.get('lock')) {
           return;
         }
@@ -57,6 +60,9 @@ const down = (store) => {
 };
 
 const up = (store) => {
+  if (window._isRacingActive) {
+  return;
+}
   store.dispatch(actions.keyboard.rotate(false));
   event.up({
     key: 'rotate',

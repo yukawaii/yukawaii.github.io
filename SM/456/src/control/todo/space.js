@@ -14,6 +14,9 @@ const down = (store) => {
       if (state.get('lock')) {
         return;
       }
+      if (window._isRacingActive) {
+  return;
+}
       const cur = state.get('cur');
       if (cur !== null) { // 置底
         if (state.get('pause')) {
@@ -56,6 +59,9 @@ const down = (store) => {
 };
 
 const up = (store) => {
+  if (window._isRacingActive) {
+  return;
+}
   store.dispatch(actions.keyboard.drop(false));
   event.up({
     key: 'space',

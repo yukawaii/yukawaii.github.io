@@ -13,6 +13,9 @@ const down = (store) => {
     interval: 100,
     callback: () => {
       const state = store.getState();
+      if (window._isRacingActive) {
+  return;
+}
       if (state.get('lock')) {
         return;
       }
@@ -49,6 +52,9 @@ const down = (store) => {
 };
 
 const up = (store) => {
+  if (window._isRacingActive) {
+  return;
+}
   store.dispatch(actions.keyboard.right(false));
   event.up({
     key: 'right',

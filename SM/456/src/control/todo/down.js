@@ -13,9 +13,13 @@ const down = (store) => {
       interval: 40,
       callback: (stopDownTrigger) => {
         const state = store.getState();
+        if (window._isRacingActive) {
+  return;
+}
         if (state.get('lock')) {
           return;
         }
+        
         if (music.move) {
           music.move();
         }
@@ -74,6 +78,9 @@ const down = (store) => {
 };
 
 const up = (store) => {
+  if (window._isRacingActive) {
+  return;
+}
   store.dispatch(actions.keyboard.down(false));
   event.up({
     key: 'down',

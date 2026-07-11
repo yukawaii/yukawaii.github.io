@@ -7,6 +7,7 @@ const down = (store) => {
   if (store.getState().get('lock')) {
     return;
   }
+  
   if (store.getState().get('cur') !== null) {
     event.down({
       key: 'r',
