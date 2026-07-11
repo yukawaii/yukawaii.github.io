@@ -305,8 +305,7 @@ playCrashSound() {
         this.toggleSound();
       }
       return;
-    }
-    
+    }    
     if (key === 'pause') {
       return;
     }
