@@ -192,6 +192,7 @@ toggleSound() {
 }
 
   handleKeyDown(e) {
+     if (!this.state.isOpen) return; 
     var key = e.key;
        
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
@@ -199,17 +200,17 @@ toggleSound() {
       this.moveLeft = true;
       this.moveRight = false;
         
-      if (!this.state.isPaused && !this.state.gameOver) {
+     /* if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
       e.preventDefault();
       this.moveRight = true;
       this.moveLeft = false;
-           if (!this.state.isPaused && !this.state.gameOver) {
+    /*       if (!this.state.isPaused && !this.state.gameOver) {
       this.playMoveSound();   // ← звук только здесь
-    }
+    }*/
     }
     if (key === 'Escape' || key === 'Esc') {
       e.preventDefault();
@@ -232,6 +233,7 @@ toggleSound() {
   }
 
   handleGameControl(e) {
+      if (!this.state.isOpen) return; 
     var detail = e.detail || {};
     var key = detail.key;
     var action = detail.action;

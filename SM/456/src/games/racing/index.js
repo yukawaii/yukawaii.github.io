@@ -194,6 +194,7 @@ toggleSound() {
 }
   // ===== КЛАВИАТУРА =====
   handleKeyDown(e) {
+     if (!this.state.isOpen) return; 
     var key = e.key;
     var moved = false;
     console.log('handleKeyDown called, key:', key, 'paused:', this.state.isPaused, 'gameOver:', this.state.gameOver);
@@ -253,6 +254,7 @@ toggleSound() {
   }
 
   handleGameControl(e) {
+      if (!this.state.isOpen) return; 
     var detail = e.detail || {};
     var key = detail.key;
     var action = detail.action;

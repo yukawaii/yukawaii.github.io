@@ -236,6 +236,7 @@ toggleSound() {
 
 
   handleKeyDown(e) {
+     if (!this.state.isOpen) return; 
     var key = e.key;
     console.log('handleKeyDown called, key:', key, 'paused:', this.state.isPaused, 'gameOver:', this.state.gameOver);
     if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
@@ -274,6 +275,7 @@ toggleSound() {
   }
 
   handleGameControl(e) {
+      if (!this.state.isOpen) return; 
     var detail = e.detail || {};
     var key = detail.key;
     var action = detail.action;

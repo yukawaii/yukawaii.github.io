@@ -217,6 +217,7 @@ toggleSound() {
 
   // ===== УПРАВЛЕНИЕ =====
   handleKeyDown(e) {
+     if (!this.state.isOpen) return; 
     var key = e.key;
     var dir = null;
     
@@ -253,6 +254,7 @@ toggleSound() {
   }
 
   handleGameControl(e) {
+      if (!this.state.isOpen) return; 
     var detail = e.detail || {};
     var key = detail.key;
     var action = detail.action;
