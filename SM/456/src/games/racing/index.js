@@ -79,7 +79,7 @@ blockTetrisEvents(e) {
         isPaused: false,
         speed: 4,
         gameTime: 0,
-        soundEnabled: true
+      //  soundEnabled: true
       });
       this.startGame();
     }.bind(this));

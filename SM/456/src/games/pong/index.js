@@ -24,7 +24,7 @@ class PongGame extends Component {
       hits: 0,
       gameTime: 0,
       speed: 1,
-      soundEnabled: true 
+
     };
     this.moveLeft = false;
     this.moveRight = false;
@@ -103,7 +103,7 @@ class PongGame extends Component {
       score: 0,
       gameOver: false,
       isPaused: false,
-      soundEnabled: true,
+    //  soundEnabled: true,
 
       paddleX: (this.FIELD_WIDTH - this.PADDLE_WIDTH) / 2,
       ballX: this.FIELD_WIDTH / 2 - this.BALL_SIZE / 2,

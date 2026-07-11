@@ -30,10 +30,7 @@ ballSpeedY: -1.75,
       ballSize: 10,
       fieldWidth: 320,
       fieldHeight: 300,
-      lives: 3,
-      soundEnabled: true,
-     
-
+      lives: 3, 
     };
 // В конструкторе:
 this.PADDLE_BOTTOM = 20; // ← то же, что в пинг-понге
@@ -144,7 +141,7 @@ this.BALL_SIZE = 12;
       score: 0,
       gameOver: false,
       isPaused: false,
-      soundEnabled: true,
+    //  soundEnabled: true,
       paddleX: (this.state.fieldWidth - this.state.paddleWidth) / 2,
       ballX: this.state.fieldWidth / 2 - this.state.ballSize / 2,
       ballY: 250,

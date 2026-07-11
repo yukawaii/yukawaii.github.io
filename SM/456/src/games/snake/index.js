@@ -26,7 +26,7 @@ class SnakeGame extends Component {
       gridSize: 20,
       cols: 18,
       rows: 16,
-      soundEnabled: true 
+
     };
     this.gameLoop = null;
     this.lastSoundTime = 0;
@@ -105,7 +105,7 @@ class SnakeGame extends Component {
       score: 0,
       gameOver: false,
       isPaused: false,
-      soundEnabled: true,
+    //  soundEnabled: true,
       snake: snake,
       direction: 'right',
       nextDirection: 'right',
