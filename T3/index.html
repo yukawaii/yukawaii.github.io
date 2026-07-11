@@ -1098,36 +1098,6 @@ div[id$="-modal"]::before {
     100% { transform: rotate(360deg); }
 }
 
-/* Масштабирование модалок коллекций при уменьшении высоты окна */
-@media (max-height: 850px) {
-    #collections-modal > div,
-    #collection-category-modal > div {
-        transform: scale(0.9);
-        transform-origin: center center;
-    }
-}
-@media (max-height: 750px) {
-    #collections-modal > div,
-    #collection-category-modal > div {
-        transform: scale(0.82);
-        transform-origin: center center;
-    }
-}
-@media (max-height: 650px) {
-    #collections-modal > div,
-    #collection-category-modal > div {
-        transform: scale(0.72);
-        transform-origin: center center;
-    }
-}
-@media (max-height: 550px) {
-    #collections-modal > div,
-    #collection-category-modal > div {
-        transform: scale(0.62);
-        transform-origin: center center;
-    }
-}
-
 </style>
 </head>
 <body oncontextmenu="return false">

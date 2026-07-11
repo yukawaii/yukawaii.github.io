@@ -1989,11 +1989,33 @@ function renderCollectionCategory(categoryId, page) {
         </div>
     `;
     
-    const oldModal = document.getElementById('collection-category-modal');
-    if (oldModal) oldModal.remove();
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    document.body.appendChild(div.firstElementChild);
+  const oldModal = document.getElementById('collection-category-modal');
+if (oldModal) oldModal.remove();
+const div = document.createElement('div');
+div.innerHTML = html;
+document.body.appendChild(div.firstElementChild);
+
+// Получаем ссылку на внутренний блок модалки
+const modalElem = document.getElementById('collection-category-modal');
+if (modalElem) {
+    const innerDiv = modalElem.querySelector('div'); // внутренний div с контентом
+    if (innerDiv) {
+        // Даём браузеру отрендерить, чтобы получить реальные размеры
+        requestAnimationFrame(() => {
+            const maxHeight = window.innerHeight * 0.85;
+            const contentHeight = innerDiv.scrollHeight;
+            let scale = 1;
+            if (contentHeight > maxHeight) {
+                scale = maxHeight / contentHeight;
+                // Ограничиваем минимальный масштаб
+                if (scale < 0.5) scale = 0.5;
+                // Применяем масштаб
+                innerDiv.style.transform = `scale(${scale})`;
+                innerDiv.style.transformOrigin = 'center center';
+            }
+        });
+    }
+}
 }
 
 function changeCollectionPage(direction) {
