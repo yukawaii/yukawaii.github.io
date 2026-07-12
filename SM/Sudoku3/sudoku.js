@@ -963,16 +963,13 @@ async initVK() {
         return;
     }
 
-    // Получаем параметры запуска из URL
     const urlParams = new URLSearchParams(window.location.search);
-    // Используем параметр vk_user_id
-    const userId = urlParams.get('vk_user_id');
+    const viewerId = urlParams.get('viewer_id');  // ← правильный параметр
 
-    if (userId) {
-        this.vkUserId = parseInt(userId);
+    if (viewerId) {
+        this.vkUserId = parseInt(viewerId);
         this.vkInitialized = true;
         console.log('👤 Пользователь VK (из URL):', this.vkUserId);
-        // Загружаем данные (алмазы, достижения)
         await Promise.all([
             this.loadDiamonds(),
             this.loadAchievements()
@@ -980,13 +977,12 @@ async initVK() {
         console.log('✅ Все данные загружены');
         finishLoading();
     } else {
-        console.warn('vk_user_id не найден в URL, используем локальные данные');
+        console.warn('viewer_id не найден в URL, используем локальные данные');
         this.loadDiamondsLocal();
         this.loadAchievements();
         finishLoading();
     }
 }
-
 // ============================================================
 // Загрузка алмазов из VK Storage
 // ============================================================
