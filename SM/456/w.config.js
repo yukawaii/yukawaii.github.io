@@ -91,12 +91,12 @@ var productionPlugins = [
   new webpack.optimize.UglifyJsPlugin({
   compress: {
       warnings: false,
-    // drop_console: true,   // ← добавляем
-   // dead_code: true,      // ← добавляем (опционально)
-   //   unused: true,         // ← добавляем (опционально)
+     drop_console: true,   // ← добавляем
+    dead_code: true,      // ← добавляем (опционально)
+     unused: true,         // ← добавляем (опционально)
     },
     output: {
-   //   comments: false,      // ← добавляем
+      comments: false,      // ← добавляем
     },
     mangle: true,           // ← добавляем
   }),
