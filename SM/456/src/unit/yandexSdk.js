@@ -98,7 +98,7 @@ export var initYandexSdk = function() {
         } catch(e) {
           console.warn('Не удалось применить язык:', e);
         }
-        return getUserAccessToken();
+         return Promise.resolve(); // вместо getUserAccessToken()
       })
       .then(function() {
         if (!window.vkUserId) {
@@ -188,7 +188,7 @@ export var loadYandexHighScore = function(storeInstance) {
   
   var cloudflareScore = 0;
   var vkStorageScore = 0;
-  var leaderboardScore = 0;
+  //var leaderboardScore = 0;
   var tasksToWait = 0;
   
   // ===== ИСПРАВЛЕННЫЙ finalizeAndSync =====
@@ -199,7 +199,7 @@ export var loadYandexHighScore = function(storeInstance) {
   //  console.log(' FINALIZE_AND_SYNC vkStorageScore:', vkStorageScore);
    // console.log(' FINALIZE_AND_SYNC leaderboardScore:', leaderboardScore);
     
-    var absoluteMax = Math.max(localScore, cloudflareScore, vkStorageScore, leaderboardScore);
+    var absoluteMax = Math.max(localScore, cloudflareScore, vkStorageScore);   //убрала , leaderboardScore
   //  console.log('FINALIZE_AND_SYNC🏆 АБСОЛЮТНЫЙ МАКСИМУМ:', absoluteMax);
     
     // ✅ Проверяем текущий рекорд в store
@@ -264,7 +264,7 @@ export var loadYandexHighScore = function(storeInstance) {
     }
     
     // Таблица лидеров ВК — только если больше
-    if (platform === 'vk' && vkInitialized && userIdForVK && vkUserToken && absoluteMax > leaderboardScore) {
+    if (platform === 'vk' && vkInitialized && userIdForVK && vkUserToken && absoluteMax > 0) {  //убрала > leaderboardScore замена на 0
       vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         request_id: 'syncScore_' + Date.now(),
@@ -369,7 +369,7 @@ checkAndFinalize();
   }
   
   // Загружаем из таблицы лидеров
-  if (platform === 'vk' && vkInitialized && userIdForVK && vkUserToken) {
+ /* if (platform === 'vk' && vkInitialized && userIdForVK && vkUserToken) {
     tasksToWait++;
     vkBridge.send('VKWebAppCallAPIMethod', {
       method: 'apps.getScore',
@@ -389,7 +389,7 @@ checkAndFinalize();
       console.warn('loadYandexHighScore⚠️ Ошибка таблицы лидеров:', err);
       checkAndFinalize();
     });
-  }
+  } */
   
   if (tasksToWait === 0) {
     finalizeAndSync();
@@ -475,7 +475,7 @@ export var saveYandexScore = function(scoreValue) {
           }
           
           // 4. Таблица лидеров ВК
-          if (platform === 'vk' && bridge && vkInitialized && effectiveUserId && vkUserToken) {
+          if (platform === 'vk' && bridge && vkInitialized && effectiveUserId) {
             bridge.send('VKWebAppCallAPIMethod', {
               method: 'secure.addAppEvent',
               request_id: 'addScore_' + Date.now(),
