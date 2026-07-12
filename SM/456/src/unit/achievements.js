@@ -81,31 +81,31 @@ var ACHIEVEMENTS = [
     icon: '🎮',
     name: { ru: 'Первый шаг', en: 'First Step' },
     desc: { ru: 'Сыграть первую партию', en: 'Play your first game' },
-    check: function(state) { return state.get('points') > 0; }
+    check: function(state) { return state.get('points') > 1; }
   },
   {
     id: 2,
     key: 'score_100',
     icon: '🌟',
-    name: { ru: '100 очков', en: '100 Points' },
-    desc: { ru: 'Набрать 100 очков', en: 'Score 100 points' },
-    check: function(state) { return state.get('points') >= 100; }
+    name: { ru: '50 очков', en: '50 Points' },
+    desc: { ru: 'Набрать 50 очков за 1 раунд', en: 'Score 50 points' },
+    check: function(state) { return state.get('points') >= 50; }
   },
   {
     id: 3,
     key: 'score_500',
     icon: '⭐',
     name: { ru: '500 очков', en: '500 Points' },
-    desc: { ru: 'Набрать 500 очков', en: 'Score 500 points' },
+    desc: { ru: 'Набрать 500 очков за 12 раунд', en: 'Score 500 points' },
     check: function(state) { return state.get('points') >= 500; }
   },
   {
     id: 4,
     key: 'score_1000',
     icon: '🏆',
-    name: { ru: '1000 очков', en: '1000 Points' },
-    desc: { ru: 'Набрать 1000 очков', en: 'Score 1000 points' },
-    check: function(state) { return state.get('points') >= 1000; }
+    name: { ru: '100 очков', en: '100 Points' },
+    desc: { ru: 'Набрать 100 очков за 1 раунд', en: 'Score 100 points' },
+    check: function(state) { return state.get('points') >= 100; }
   },
   {
     id: 5,
@@ -135,9 +135,9 @@ var ACHIEVEMENTS = [
     id: 8,
     key: 'level_5',
     icon: '🚀',
-    name: { ru: 'Выше только небо', en: 'Sky\'s the limit' },
-    desc: { ru: 'Достичь 5 уровня', en: 'Reach level 5' },
-    check: function(state) { return state.get('speedRun') >= 5; }
+    name: { ru: 'Выше только небо', en: 'Sky the limit' },
+    desc: { ru: 'Достичь 3 уровня', en: 'Reach level 3' },
+    check: function(state) { return state.get('speedRun') >= 3; }
   },
   {
     id: 9,
@@ -146,7 +146,7 @@ var ACHIEVEMENTS = [
     name: { ru: 'Режим ТЕТРА', en: 'TETRA Mode' },
     desc: { ru: 'Сыграть в режиме ТЕТРА', en: 'Win in TETRA mode' },
     check: function(state) {
-      return window.currentGameMode === 'tetra' && state.get('points') > 0;
+      return window.currentGameMode === 'tetra' && state.get('points') > 2;
     }
   },
   {
@@ -156,32 +156,32 @@ var ACHIEVEMENTS = [
     name: { ru: 'Классический режим', en: 'Classic Mode' },
     desc: { ru: 'Сыграть в классическом режиме', en: 'Win in Classic mode' },
     check: function(state) {
-      return window.currentGameMode === 'classic' && state.get('points') > 0;
+      return window.currentGameMode === 'classic' && state.get('points') > 2;
     }
   },
   {
     id: 11,
     key: 'score_2000',
     icon: '💎',
-    name: { ru: '2000 очков', en: '2000 Points' },
-    desc: { ru: 'Набрать 2000 очков', en: 'Score 2000 points' },
-    check: function(state) { return state.get('points') >= 2000; }
+    name: { ru: '200 очков', en: '200 Points' },
+    desc: { ru: 'Набрать 200 очков за 1 раунд', en: 'Score 200 points in 1 raund' },
+    check: function(state) { return state.get('points') >= 200; }
   },
   {
     id: 12,
     key: 'score_5000',
     icon: '👑',
-    name: { ru: '5000 очков', en: '5000 Points' },
-    desc: { ru: 'Набрать 5000 очков', en: 'Score 5000 points' },
-    check: function(state) { return state.get('points') >= 5000; }
+    name: { ru: '300 очков', en: '300 Points' },
+    desc: { ru: 'Набрать 300 очков за 1 раунд', en: 'Score 300 points in 1 raund' },
+    check: function(state) { return state.get('points') >= 300; }
   },
   {
     id: 13,
     key: 'record_10000',
     icon: '🏆',
     name: { ru: 'Легенда', en: 'Legend' },
-    desc: { ru: 'Установить рекорд 10000 очков', en: 'Set a record of 10000 points' },
-    check: function(state) { return state.get('max') >= 10000; }
+    desc: { ru: 'Установить рекорд 5000 очков', en: 'Set a record of 5000 points' },
+    check: function(state) { return state.get('max') >= 5000; }
   },
   {
     id: 14,
@@ -196,18 +196,18 @@ var ACHIEVEMENTS = [
     key: 'level_10',
     icon: '🚀',
     name: { ru: 'Космическая скорость', en: 'Cosmic Speed' },
-    desc: { ru: 'Достичь 10 уровня', en: 'Reach level 10' },
-    check: function(state) { return state.get('speedRun') >= 10; }
+    desc: { ru: 'Достичь 6 уровня', en: 'Reach level 6' },
+    check: function(state) { return state.get('speedRun') >= 6; }
   },
   {
     id: 16,
     key: 'tetra_master',
     icon: '⭐',
     name: { ru: 'Мастер ТЕТРА', en: 'TETRA Master' },
-    desc: { ru: 'В режиме ТЕТРА набрать 1000 очков и очистить 50 линий', en: 'In TETRA mode score 1000 and clear 50 lines' },
+    desc: { ru: 'В режиме ТЕТРА набрать 150 очков и очистить 50 линий', en: 'In TETRA mode score 150 and clear 50 lines' },
     check: function(state) {
       return window.currentGameMode === 'tetra' && 
-             state.get('points') >= 1000 && 
+             state.get('points') >= 150 && 
              state.get('clearLines') >= 50;
     }
   },
@@ -216,10 +216,10 @@ var ACHIEVEMENTS = [
     key: 'classic_master',
     icon: '⭐',
     name: { ru: 'Мастер классики', en: 'Classic Master' },
-    desc: { ru: 'В классическом режиме набрать 1000 очков и очистить 50 линий', en: 'In Classic mode score 1000 and clear 50 lines' },
+    desc: { ru: 'В классическом режиме набрать 150 очков и очистить 50 линий', en: 'In Classic mode score 150 and clear 50 lines' },
     check: function(state) {
       return window.currentGameMode === 'classic' && 
-             state.get('points') >= 1000 && 
+             state.get('points') >= 150 && 
              state.get('clearLines') >= 50;
     }
   },
@@ -393,7 +393,7 @@ var ACHIEVEMENTS = [
     key: 'read_50',
     icon: '🧠',
     name: { ru: 'Эрудит', en: 'Erudite' },
-    desc: { ru: 'Прочитать 50 свитков', en: 'Read 50 scrolls' },
+    desc: { ru: 'Прочитать 70 свитков', en: 'Read 50 scrolls' },
     check: function(state) {
       var scrolls = JSON.parse(localStorage.getItem('tetris_scrolls') || '{}');
       var count = 0;
@@ -402,7 +402,7 @@ var ACHIEVEMENTS = [
           count++;
         }
       }
-      return count >= 50;
+      return count >= 70;
     }
   },
   {
