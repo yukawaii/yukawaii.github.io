@@ -963,12 +963,14 @@ async initVK() {
         return;
     }
 
-    // Получаем параметры запуска (viewer_id, platform и др.)
+    // Получаем параметры запуска через VKWebAppGetLaunchParams
     vkBridge.send('VKWebAppGetLaunchParams', {})
-        .then((data) => {
-            console.log('📥 VKWebAppGetLaunchParams ответ:', data);
-            if (data && data.viewer_id) {
-                this.vkUserId = data.viewer_id;
+        .then((response) => {
+            console.log('📥 VKWebAppGetLaunchParams ответ:', response);
+            // Данные могут быть в response.data или прямо в response
+            const data = response.data || response;
+            if (data && data.vk_user_id) {
+                this.vkUserId = data.vk_user_id;
                 this.vkInitialized = true;
                 console.log('👤 Пользователь VK (из launch params):', this.vkUserId);
                 // Загружаем данные (алмазы, достижения)
@@ -977,7 +979,7 @@ async initVK() {
                     this.loadAchievements()
                 ]);
             } else {
-                throw new Error('Не удалось получить viewer_id из launch params');
+                throw new Error('Не удалось получить vk_user_id из launch params');
             }
         })
         .then(() => {
