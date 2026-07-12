@@ -963,27 +963,34 @@ async initVK() {
         return;
     }
 
-    // Получаем viewer_id из параметров запуска
-    const urlParams = new URLSearchParams(window.location.search);
-    const viewerId = urlParams.get('viewer_id');
-    if (viewerId) {
-        this.vkUserId = parseInt(viewerId);
-        this.vkInitialized = true;
-        console.log('👤 Пользователь VK (из URL):', this.vkUserId);
-        // Загружаем данные (алмазы, достижения) – они будут из VK Storage или локальные
-        await Promise.all([
-            this.loadDiamonds(),
-            this.loadAchievements()
-        ]);
-        console.log('✅ Все данные загружены');
-        finishLoading();
-    } else {
-        // fallback – используем локальные данные
-        console.warn('viewer_id не найден в URL, используем локальные данные');
-        this.loadDiamondsLocal();
-        this.loadAchievements();
-        finishLoading();
-    }
+    // Получаем параметры запуска (viewer_id, platform и др.)
+    vkBridge.send('VKWebAppGetLaunchParams', {})
+        .then((data) => {
+            console.log('📥 VKWebAppGetLaunchParams ответ:', data);
+            if (data && data.viewer_id) {
+                this.vkUserId = data.viewer_id;
+                this.vkInitialized = true;
+                console.log('👤 Пользователь VK (из launch params):', this.vkUserId);
+                // Загружаем данные (алмазы, достижения)
+                return Promise.all([
+                    this.loadDiamonds(),
+                    this.loadAchievements()
+                ]);
+            } else {
+                throw new Error('Не удалось получить viewer_id из launch params');
+            }
+        })
+        .then(() => {
+            console.log('✅ Все данные загружены');
+            finishLoading();
+        })
+        .catch((err) => {
+            console.warn('Ошибка инициализации VK:', err);
+            // fallback – локальные данные
+            this.loadDiamondsLocal();
+            this.loadAchievements();
+            finishLoading();
+        });
 }
 
 // ============================================================
