@@ -419,59 +419,70 @@ var ACHIEVEMENTS = [
 ];
 
 // ===== ЗАГРУЗКА ДОСТИЖЕНИЙ =====
-function loadAchievements() {
-console.log('🔥 loadAchievements ВЫЗВАН!');
-  
+function loadAchievements(retries) {
+  retries = retries || 2; // число попыток
+  console.log('🔥 loadAchievements ВЫЗВАН! (попытка ' + (3 - retries) + ')');
+
   return new Promise(function(resolve) {
     var localAchievements = {};
     try {
       var saved = localStorage.getItem(ACHIEVEMENTS_STORAGE_KEY);
       if (saved) {
         localAchievements = JSON.parse(saved);
-       console.log('📀 Локальные достижения:', Object.keys(localAchievements).length);
+        console.log('📀 Локальные достижения:', Object.keys(localAchievements).length);
       }
     } catch(e) {
       console.warn('Ошибка загрузки локальных достижений:', e);
     }
-    
-    if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
-      vkBridge.send('VKWebAppStorageGet', { keys: [ACHIEVEMENTS_STORAGE_KEY] })
-        .then(function(data) {
-        console.log('💾 Ответ VK Storage (достижения):', data);
-          
-          var vkAchievements = {};
-          if (data && data.keys && data.keys.length > 0 && data.keys[0].value) {
-            try {
-              vkAchievements = JSON.parse(data.keys[0].value);
-            console.log('💾 VK Storage достижения:', Object.keys(vkAchievements).length);
-            } catch(e) {
-            console.warn('Ошибка парсинга достижений из VK:', e);
-            }
-          }
-          
-          var merged = {};
-          for (var key in localAchievements) {
-            if (localAchievements.hasOwnProperty(key)) {
-              merged[key] = localAchievements[key];
-            }
-          }
-          for (var key in vkAchievements) {
-            if (vkAchievements.hasOwnProperty(key)) {
-              merged[key] = vkAchievements[key];
-            }
-          }
-          
-          localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(merged));
-         console.log('✅ Достижения загружены:', Object.keys(merged).length);
-          resolve(merged);
-        })
-        .catch(function(err) {
-          console.warn('⚠️ Ошибка загрузки достижений из VK Storage:', err);
-          resolve(localAchievements);
-        });
-    } else {
+
+    // Если VK не инициализирован – сразу возвращаем локальные
+    if (typeof vkBridge === 'undefined' || !window.vkInitialized) {
+      console.warn('⚠️ VK Bridge не инициализирован, используем локальные данные');
       resolve(localAchievements);
+      return;
     }
+
+    vkBridge.send('VKWebAppStorageGet', { keys: [ACHIEVEMENTS_STORAGE_KEY] })
+      .then(function(data) {
+        console.log('💾 Ответ VK Storage (достижения):', data);
+        var vkAchievements = {};
+        if (data && data.keys && data.keys.length > 0 && data.keys[0].value) {
+          try {
+            vkAchievements = JSON.parse(data.keys[0].value);
+            console.log('💾 VK Storage достижения:', Object.keys(vkAchievements).length);
+          } catch(e) {
+            console.warn('Ошибка парсинга достижений из VK:', e);
+          }
+        }
+
+        // Объединяем: локальные + VK (VK дополняет)
+        var merged = {};
+        for (var key in localAchievements) {
+          if (localAchievements.hasOwnProperty(key)) {
+            merged[key] = localAchievements[key];
+          }
+        }
+        for (var key in vkAchievements) {
+          if (vkAchievements.hasOwnProperty(key)) {
+            merged[key] = vkAchievements[key];
+          }
+        }
+
+        localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(merged));
+        console.log('✅ Достижения загружены:', Object.keys(merged).length);
+        resolve(merged);
+      })
+      .catch(function(err) {
+        console.warn('⚠️ Ошибка загрузки достижений из VK Storage:', err);
+        // Если есть попытки – повторяем
+        if (retries > 0) {
+          console.log('🔄 Повторная попытка загрузки...');
+          loadAchievements(retries - 1).then(resolve);
+        } else {
+          // Если попытки кончились – возвращаем локальные
+          resolve(localAchievements);
+        }
+      });
   });
 }
 

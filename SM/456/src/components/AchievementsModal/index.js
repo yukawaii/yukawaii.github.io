@@ -70,36 +70,54 @@ class AchievementsModal extends Component {
     e.stopPropagation();
   }
 
-  refreshAchievements() {
-  //  console.log('🔄 Обновляем достижения...');
-    this.setState({ loading: true });
- // Загружаем все счётчики из VK Storage
+ refreshAchievements() {
+  console.log('🔄 Обновляем достижения...refreshAchievements');
+  this.setState({ loading: true });
+
+  // Загружаем все счётчики из VK Storage
   var counters = ['arcade_total_score', 'bonus_count', 'collections_count', 'scrolls_bought', 'scrolls_read'];
   var loadPromises = counters.map(function(key) {
-    // loadCounter – функция из achievements.js, её нужно импортировать
     return loadCounter(key);
   });
 
-    
-    syncYandexAchievements()
-      .then(() => {
-       // console.log('✅ Достижения синхронизированы');
-        const list = getAchievementsList();
-      //  console.log('📊 Список достижений:', list);
-        this.setState({ 
-          achievements: list,
-          loading: false 
-        });
-      })
-      .catch((err) => {
-      //  console.error('❌ Ошибка синхронизации:', err);
-        const list = getAchievementsList();
-        this.setState({ 
-          achievements: list,
-          loading: false 
-        });
+  Promise.all(loadPromises)
+    .then(function() {
+      return syncYandexAchievements();
+    })
+    .then(function() {
+                   // Принудительно проверить все достижения
+                        checkAchievementsNow();  
+                        
+      const list = getAchievementsList();
+      this.setState({
+        achievements: list,
+        loading: false
       });
-  }
+    }.bind(this))
+    .catch(function(err) {
+      console.error('❌ Ошибка синхронизации:', err);
+      // Попробовать ещё раз через 2 секунды
+      setTimeout(function() {
+        console.log('🔄 Повторная попытка синхронизации...');
+        syncYandexAchievements()
+          .then(function() {
+            const list = getAchievementsList();
+            this.setState({
+              achievements: list,
+              loading: false
+            });
+          }.bind(this))
+          .catch(function(err2) {
+            console.error('❌ Вторая попытка также не удалась:', err2);
+            const list = getAchievementsList();
+            this.setState({
+              achievements: list,
+              loading: false
+            });
+          }.bind(this));
+      }.bind(this), 2000);
+    }.bind(this));
+}
 
 
   render() {    
