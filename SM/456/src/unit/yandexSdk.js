@@ -71,33 +71,34 @@ export var initYandexSdk = function() {
     }
     window.vkBridge = vkBridge;
 
-    // Получаем ID пользователя из параметров URL
+    // Получаем язык из параметров URL (по умолчанию)
     var urlParams = new URLSearchParams(window.location.search);
-    var vkUserId = urlParams.get('vk_user_id');
     var vkLang = urlParams.get('vk_language') || 'ru';
-
-    if (vkUserId) {
-      window.vkUserId = vkUserId;
-      window.vkUserLang = vkLang;
-      localStorage.setItem('vk_user_id', vkUserId);
-      console.log('[VK] ID пользователя из параметров:', vkUserId);
-    }
+    window.vkUserLang = vkLang;
 
     vkBridge.send('VKWebAppInit')
       .then(function() {
         console.log('VK Bridge успешно инициализирован');
         window.vkInitialized = true;
 
-        // Если ID всё ещё нет, пробуем получить через getUserInfo
-        if (!window.vkUserId) {
-          return vkBridge.send('VKWebAppGetUserInfo');
+        // Пытаемся получить параметры запуска для языка
+        return vkBridge.send('VKWebAppGetLaunchParams');
+      })
+      .then(function(launchParams) {
+        if (launchParams && launchParams.vk_language) {
+          window.vkUserLang = launchParams.vk_language;
+          console.log('[VK] Язык из LaunchParams:', window.vkUserLang);
         }
-        return null;
+        // Затем запрашиваем данные пользователя
+        return vkBridge.send('VKWebAppGetUserInfo');
       })
       .then(function(userInfo) {
         if (userInfo && userInfo.id) {
           window.vkUserId = userInfo.id;
-          console.log('[VK] ID получен через getUserInfo:', userInfo.id);
+          console.log('[VK] ID пользователя получен через getUserInfo:', userInfo.id);
+          localStorage.setItem('vk_user_id', userInfo.id);
+        } else {
+          console.warn('[VK] Не удалось получить ID пользователя');
         }
 
         // Применяем язык
@@ -206,7 +207,7 @@ export var loadYandexHighScore = function(storeInstance) {
   
   var cloudflareScore = 0;
   var vkStorageScore = 0;
-  var leaderboardScore = 0;
+  //var leaderboardScore = 0;
   var tasksToWait = 0;
   
   // ===== ИСПРАВЛЕННЫЙ finalizeAndSync =====
@@ -344,7 +345,7 @@ checkAndFinalize();
       });
   }
   
-  // Загружаем из таблицы лидеров
+/*  // Загружаем из таблицы лидеров
   if (platform === 'vk' && vkInitialized && userIdForVK ) {
     tasksToWait++;
     vkBridge.send('VKWebAppCallAPIMethod', {
@@ -365,7 +366,7 @@ checkAndFinalize();
       console.warn('loadYandexHighScore⚠️ Ошибка таблицы лидеров:', err);
       checkAndFinalize();
     });
-  }
+  }*/
   
   if (tasksToWait === 0) {
     finalizeAndSync();

@@ -956,31 +956,54 @@ async initVK() {
         this.initAdBanner();
     };
 
-    if (typeof vkBridge === 'undefined') {
+    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
         this.loadDiamondsLocal();
         this.loadAchievements();
         finishLoading();
         return;
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const viewerId = urlParams.get('viewer_id');  // ← правильный параметр
-
-    if (viewerId) {
-        this.vkUserId = parseInt(viewerId);
-        this.vkInitialized = true;
-        console.log('👤 Пользователь VK (из URL):', this.vkUserId);
-        await Promise.all([
-            this.loadDiamonds(),
-            this.loadAchievements()
-        ]);
-        console.log('✅ Все данные загружены');
-        finishLoading();
-    } else {
-        console.warn('viewer_id не найден в URL, используем локальные данные');
-        this.loadDiamondsLocal();
-        this.loadAchievements();
-        finishLoading();
+    try {
+        // Получаем данные текущего пользователя
+        const userInfo = await vkBridge.send('VKWebAppGetUserInfo', {});
+        console.log('📥 VKWebAppGetUserInfo ответ:', userInfo);
+        
+        if (userInfo && userInfo.id) {
+            this.vkUserId = userInfo.id;
+            this.vkInitialized = true;
+            console.log('👤 Пользователь VK (из UserInfo):', this.vkUserId);
+            
+            // Загружаем данные из VK Storage
+            await Promise.all([
+                this.loadDiamonds(),
+                this.loadAchievements()
+            ]);
+            console.log('✅ Все данные загружены');
+            finishLoading();
+        } else {
+            throw new Error('Не удалось получить id пользователя');
+        }
+    } catch (err) {
+        console.warn('Ошибка получения данных пользователя:', err);
+        // fallback – попробуем получить viewer_id из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const viewerId = urlParams.get('viewer_id');
+        if (viewerId) {
+            this.vkUserId = parseInt(viewerId);
+            this.vkInitialized = true;
+            console.log('👤 Пользователь VK (из URL fallback):', this.vkUserId);
+            await Promise.all([
+                this.loadDiamonds(),
+                this.loadAchievements()
+            ]);
+            finishLoading();
+        } else {
+            // полный fallback – локальные данные
+            console.warn('Не удалось определить пользователя, используем локальные данные');
+            this.loadDiamondsLocal();
+            this.loadAchievements();
+            finishLoading();
+        }
     }
 }
 // ============================================================
