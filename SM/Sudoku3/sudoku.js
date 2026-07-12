@@ -963,36 +963,28 @@ async initVK() {
         return;
     }
 
-    // Получаем параметры запуска через VKWebAppGetLaunchParams
-    vkBridge.send('VKWebAppGetLaunchParams', {})
-        .then((response) => {
-            console.log('📥 VKWebAppGetLaunchParams ответ:', response);
-            // Данные могут быть в response.data или прямо в response
-            const data = response.data || response;
-            if (data && data.vk_user_id) {
-                this.vkUserId = data.vk_user_id;
-                this.vkInitialized = true;
-                console.log('👤 Пользователь VK (из launch params):', this.vkUserId);
-                // Загружаем данные (алмазы, достижения)
-                return Promise.all([
-                    this.loadDiamonds(),
-                    this.loadAchievements()
-                ]);
-            } else {
-                throw new Error('Не удалось получить vk_user_id из launch params');
-            }
-        })
-        .then(() => {
-            console.log('✅ Все данные загружены');
-            finishLoading();
-        })
-        .catch((err) => {
-            console.warn('Ошибка инициализации VK:', err);
-            // fallback – локальные данные
-            this.loadDiamondsLocal();
-            this.loadAchievements();
-            finishLoading();
-        });
+    // Получаем параметры запуска из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    // Используем параметр vk_user_id
+    const userId = urlParams.get('vk_user_id');
+
+    if (userId) {
+        this.vkUserId = parseInt(userId);
+        this.vkInitialized = true;
+        console.log('👤 Пользователь VK (из URL):', this.vkUserId);
+        // Загружаем данные (алмазы, достижения)
+        await Promise.all([
+            this.loadDiamonds(),
+            this.loadAchievements()
+        ]);
+        console.log('✅ Все данные загружены');
+        finishLoading();
+    } else {
+        console.warn('vk_user_id не найден в URL, используем локальные данные');
+        this.loadDiamondsLocal();
+        this.loadAchievements();
+        finishLoading();
+    }
 }
 
 // ============================================================
