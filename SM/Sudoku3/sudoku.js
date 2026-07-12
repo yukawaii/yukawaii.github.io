@@ -1159,11 +1159,11 @@ syncLeaderboard() {
             activity_id: 2,
             value: this.currentDiamonds,
             v: '5.131',
-            access_token: 'jsQlTSHEiXcTe3UyBBnY'
+            access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
 
         }
     })
-    
+
     .then((result) => {
         console.log('📥 Ответ secure.addAppEvent:', result);
         console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);

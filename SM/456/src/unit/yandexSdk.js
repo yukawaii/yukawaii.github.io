@@ -452,7 +452,7 @@ export var saveYandexScore = function(scoreValue) {
           }*/
           
           // 4. Таблица лидеров ВК
-          if (platform === 'vk' && bridge && vkInitialized && effectiveUserId) {
+      if (platform === 'vk' && bridge && vkInitialized && effectiveUserId) {
             bridge.send('VKWebAppCallAPIMethod', {
               method: 'secure.addAppEvent',
               request_id: 'addScore_' + Date.now(),
