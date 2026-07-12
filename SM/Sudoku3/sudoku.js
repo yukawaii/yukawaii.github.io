@@ -1163,6 +1163,7 @@ syncLeaderboard() {
 
         }
     })
+    
     .then((result) => {
         console.log('📥 Ответ secure.addAppEvent:', result);
         console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
