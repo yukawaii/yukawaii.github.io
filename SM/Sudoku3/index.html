@@ -2407,9 +2407,11 @@ body.theme-pastel .hint-check-text {
 <script>
 // Инициализация VK Bridge, если он доступен
 if (typeof vkBridge !== 'undefined' && vkBridge.send) {
-    vkBridge.send('VKWebAppInit').catch(function(e) {
-        console.warn('VK init error:', e);
-    });
+   vkBridge.send('VKWebAppInit').then(() => {
+    console.log('✅ VKWebAppInit успешно выполнен, мост инициализирован из индекс');
+}).catch(e => {
+    console.warn('❌ VKWebAppInit ошибка:', e);
+});
 }
     // Отладка размеров для CSS
     console.log('Ширина:', window.innerWidth);
