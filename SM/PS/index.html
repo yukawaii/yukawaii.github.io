@@ -234,7 +234,6 @@ let isGameActive = false;      // Флаг: игрок находится в и�
 let loadingOverlay = null;
 // ===== ЕЖЕДНЕВНЫЙ БОНУС =====
 
-let bonusStars = parseInt(localStorage.getItem('bonusStars')) || 0;
 let lastBonusDate = localStorage.getItem('lastBonusDate') || null;
 
 // Проверяем, можно ли получить бонус сегодня
@@ -280,33 +279,33 @@ function hideLoadingBonusModal() {
 function claimBonus(amount) {
     if (amount <= 0) return;
 
-    // Увеличиваем бонусные звёзды
-    bonusStars += amount;
-    localStorage.setItem('bonusStars', bonusStars);
+    // 1. Увеличиваем общее количество звёзд напрямую
+    totalStars += amount;
+    localStorage.setItem('totalStars', String(totalStars));
 
-    // Обновляем дату последнего получения
+    // 2. Обновляем дату последнего получения бонуса
     const today = new Date().toDateString();
     lastBonusDate = today;
     localStorage.setItem('lastBonusDate', today);
 
-    // Синхронизируем дату с VK Storage
+    // 3. Синхронизируем дату с VK Storage
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('wordgame_bonusDate_v2', today);
     }
 
-    // Обновляем общее количество звёзд (пересчитывает и добавляет бонусные)
-    updateTotalStars();
+    // 4. Обновляем интерфейс (звёзды в меню, галактики, свитки)
+    updateTotalStars(); // теперь она просто обновляет отображение
 
-    // Синхронизируем все данные с VK (включая звёзды)
+    // 5. Синхронизируем все данные с VK (включая обновлённые totalStars)
     if (typeof syncAllDataToVK === 'function') {
         syncAllDataToVK();
     }
 
-    // Показываем модалку результата
+    // 6. Показываем модалку результата
     showBonusResult(amount);
 
-    // Возобновляем игру
-   resumeGame();
+    // 7. Возобновляем игру
+    resumeGame();
 }
 
 // Показать результат бонуса
@@ -3196,12 +3195,9 @@ function updateTotalStars() {
     for (let key in stars) {
         newTotal += stars[key].totalStars;
     }
-     // ✅ Добавляем бонусные звёзды
-    const bonusStarsLocal = parseInt(localStorage.getItem('bonusStars')) || 0;
-    newTotal += bonusStarsLocal;
-
+    // ✅ Бонусные звёзды уже включены в totalStars, ничего не добавляем
     totalStars = newTotal;
-    console.log(`✨ Всего звёзд: ${totalStars}`);
+    console.log(`✨ Всего звёзд (из уровней): ${totalStars}`);
     
     // Сохраняем в localStorage для таблицы лидеров
     localStorage.setItem('totalStars', totalStars);
