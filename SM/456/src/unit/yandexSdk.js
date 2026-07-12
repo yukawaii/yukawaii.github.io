@@ -552,10 +552,10 @@ export var saveYandexScore = function(scoreValue) {
 
 // ===== ЛИДЕРБОРД =====
 export var fetchYandexLeaderboard = function() {
-  console.log('🔥 fetchYandexLeaderboard вызван!'); // для диагностики
   return new Promise(function(resolve) {
     var platform = getPlatform();
     if (platform === 'ok') {
+   //   console.log('[ОК] Предлагаем оценить приложение fetchYandexLeaderboard');
       var title = "Оцените игру!";
       var text = "Если вам нравится ТЕТРА, поставьте оценку в магазине приложений. Это поможет нам стать лучше!";
       if (typeof i18n !== 'undefined' && i18n.rateGame && i18n.rateGame[lan]) {
@@ -566,35 +566,17 @@ export var fetchYandexLeaderboard = function() {
       resolve({ status: 'success' });
       return;
     }
-    if (!window.vkInitialized && !vkInitialized) {
-      console.warn('⚠️ VK не инициализирован, лидерборд недоступен');
+    if (!vkInitialized) {
       resolve({ status: 'offline' });
       return;
     }
-
-    // Используем bridge из window или глобальный
-    var bridge = window.vkBridge || vkBridge;
-    if (!bridge) {
-      console.error('❌ VK Bridge не найден');
-      resolve({ status: 'error', error: 'Bridge not found' });
-      return;
-    }
-
     var currentMaxScore = store.getState().get('max') || 0;
-    console.log('📊 Текущий рекорд для лидерборда:', currentMaxScore);
-
-    bridge.send('VKWebAppShowLeaderBoardBox', {
-      user_result: currentMaxScore,
-      global: 1
-    })
-    .then(function() {
-      console.log('✅ Лидерборд успешно открыт');
-      resolve({ status: 'success' });
-    })
-    .catch(function(error) {
-      console.error('❌ Ошибка открытия лидерборда:', error);
-      resolve({ status: 'error', error: error });
-    });
+    vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: currentMaxScore, global: 1 })
+      .then(function() { resolve({ status: 'success' }); })
+      .catch(function(error) {
+        console.error('fetchYandexLeaderboard Ошибка открытия лидерборда:', error);
+        resolve({ status: 'error', error: error });
+      });
   });
 };
 
