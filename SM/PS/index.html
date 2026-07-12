@@ -3779,9 +3779,10 @@ function loadAllDataFromVK() {
         loadFromVKStorage('wordgame_completed_expert'),
         loadFromVKStorage('wordgame_unlocked_levels_v2'),
         loadFromVKStorage('wordgame_theme_v2'),
-        loadFromVKStorage('wordgame_total_stars_v2')
+        loadFromVKStorage('wordgame_total_stars_v2'),
+        loadFromVKStorage('wordgame_bonusDate_v2')  // 👈 НОВЫЙ КЛЮЧ
     ])
-    .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData]) => {
+    .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData, bonusDateData]) => {
         let loaded = false;
         
         // ====== ТЕМА ======
@@ -3827,9 +3828,20 @@ function loadAllDataFromVK() {
             loaded = true;
         }
 
-
-
-        
+        // ====== ДАТА БОНУСА ======
+        if (bonusDateData) {
+            const localDate = localStorage.getItem('lastBonusDate');
+            // Если локальной даты нет или VK-дата новее (сравниваем строки в формате "Tue Jul 12 2026")
+            if (!localDate || bonusDateData > localDate) {
+                localStorage.setItem('lastBonusDate', bonusDateData);
+                // Обновляем глобальную переменную, если она объявлена
+                if (typeof lastBonusDate !== 'undefined') {
+                    lastBonusDate = bonusDateData;
+                }
+                loaded = true;
+                console.log('✅ Дата бонуса обновлена из VK:', bonusDateData);
+            }
+        }
         
         if (loaded) {
             console.log('✅ Данные из VK Storage загружены');
