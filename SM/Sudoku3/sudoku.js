@@ -1122,8 +1122,7 @@ updateDiamondUI() {
 // Открытие таблицы лидеров
 // ============================================================
 showLeaderboard() {
-       this.sound.click();
-        this.syncLeaderboard();
+          this.syncLeaderboard();
       // Передаём текущее количество алмазов как результат пользователя
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: this.currentDiamonds,
