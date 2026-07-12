@@ -861,7 +861,7 @@ const blankMatrix = (() => {
   return List(matrix);
 })();
 
-const clearPoints = [2, 3, 4, 5];
+const clearPoints = [1, 2, 3, 4];
 
 const StorageKey = 'REACT_TETRIS';
 

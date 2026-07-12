@@ -710,34 +710,20 @@ function loadTotalScore() {
   });
 }
 
-function saveTotalScore(newPoints) {
- // console.log('🔥 saveTotalScore ВЫЗВАН!', newPoints);
+export function saveTotalScore(newPoints) {
+  // Всегда сохраняем новое значение (без проверки на "больше")
+  localStorage.setItem(TOTAL_SCORE_KEY, String(newPoints));
   
-  var currentTotal = parseInt(localStorage.getItem(TOTAL_SCORE_KEY), 10) || 0;
-  
-  if (newPoints > currentTotal) {
-   // console.log('📊 Обновляем общий счет:', currentTotal, '→', newPoints);
-    localStorage.setItem(TOTAL_SCORE_KEY, String(newPoints));
-    
-    if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
-      vkBridge.send('VKWebAppStorageSet', {
-        key: TOTAL_SCORE_KEY,
-        value: String(newPoints)
-      })
-      .then(function() {
-      //  console.log('✅ Общий счет сохранен в VK Storage:', newPoints);
-      })
-      .catch(function(err) {
-        console.warn('⚠️ Ошибка сохранения общего счета:', err);
-      });
-    }
-    
-    return true;
+  if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
+    vkBridge.send('VKWebAppStorageSet', {
+      key: TOTAL_SCORE_KEY,
+      value: String(newPoints)
+    }).catch(function(err) {
+      console.warn('⚠️ Ошибка сохранения общего счета:', err);
+    });
   }
-  
-  return false;
+  return true;
 }
-
 function formatScore(number) {
   if (number === 0) return '0';
   

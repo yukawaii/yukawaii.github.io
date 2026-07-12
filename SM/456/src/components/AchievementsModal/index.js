@@ -5,7 +5,6 @@ import { i18n, lan } from '../../unit/const';
 import { syncYandexAchievements, getAchievementsList } from '../../unit/yandexSdk';
 import { getTotalScore, formatScore, loadTotalScore } from '../../unit/achievements';
 import { loadCounter } from '../../unit/achievements';
-import { checkAchievementsNow } from '../unit/yandexSdk';
 
 class AchievementsModal extends Component {
   constructor(props) {
@@ -86,9 +85,7 @@ class AchievementsModal extends Component {
       return syncYandexAchievements();
     })
     .then(function() {
-                   // Принудительно проверить все достижения
-                        checkAchievementsNow();  
-                        
+                                     
       const list = getAchievementsList();
       this.setState({
         achievements: list,

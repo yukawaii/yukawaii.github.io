@@ -77,8 +77,8 @@ const states = {
       music.start();
     }
     const state = store.getState();
-  // НЕ обнуляем общий счет, он накапливается
-  // states.dispatchPoints(0); - оставляем как есть
+  //  обнуляем общий счет, он накапливается
+   states.dispatchPoints(0);
     store.dispatch(actions.speedRun(state.get('speedStart')));
     const startLines = state.get('startLines');
     const startMatrix = getStartMatrix(startLines);
@@ -130,9 +130,9 @@ const states = {
       stopDownTrigger();
     }
     // 1 очко + бонус за уровень
-const speedBonus = store.getState().get('speedRun') - 1;
+/*const speedBonus = store.getState().get('speedRun') - 1;
 const addPoints = store.getState().get('points') + 1 + speedBonus;
-states.dispatchPoints(addPoints);
+states.dispatchPoints(addPoints);*/
     if (isClear(matrix)) {
       if (music.clear) {
         music.clear();
@@ -205,7 +205,14 @@ pause: (isPause, fromMenu = false) => {
     store.dispatch(actions.clearLines(clearLines)); 
     const addPoints = store.getState().get('points') +
       clearPoints[lines.length - 1]; 
-    states.dispatchPoints(addPoints);
+   // states.dispatchPoints(addPoints);
+   // const earned = clearPoints[lines.length - 1];
+
+   const earned = clearPoints[lines.length - 1];
+const currentPoints = store.getState().get('points') || 0;
+const newPoints = currentPoints + earned;
+  states.dispatchPoints(newPoints);  // ← передаём новое общее количество очков
+  
     const speedAdd = Math.floor(clearLines / eachLines); 
     let speedNow = state.get('speedStart') + speedAdd;
     speedNow = speedNow > 6 ? 6 : speedNow;
@@ -252,22 +259,28 @@ pause: (isPause, fromMenu = false) => {
     store.dispatch(actions.reset(false));
     store.dispatch(actions.lock(false));
     store.dispatch(actions.clearLines(0));
-  },
- dispatchPoints: (point) => { 
-    store.dispatch(actions.points(point));
-    if (point > 0 && point > store.getState().get('max')) {
-      store.dispatch(actions.max(point)); 
-    }
-    // Сохраняем общий счет (суммируем все очки за всё время)
-  var currentPoints = store.getState().get('points') || 0;
+     store.dispatch(actions.points(0)); 
+      },
+
+dispatchPoints: (point) => {
+  const currentPoints = store.getState().get('points') || 0;
+  const earned = point - currentPoints;
+  if (earned <= 0) return;
+  
+  store.dispatch(actions.points(point));
+  
+  if (point > store.getState().get('max')) {
+    store.dispatch(actions.max(point));
+  }
+  
   var totalScore = parseInt(localStorage.getItem('tetris_total_score'), 10) || 0;
-  var newTotal = totalScore + currentPoints;
+  var newTotal = totalScore + earned;
   saveTotalScore(newTotal);
   
-    // Проверяем достижения при изменении очков
   setTimeout(function() {
     checkAchievementsNow();
   }, 100);
 },
+
 };
 export default states;
