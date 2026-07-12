@@ -31,6 +31,22 @@
 </script>
 </head>
 <body>
+
+<!-- ЗАГРУЗОЧНЫЙ ЭКРАН -->
+<div id="loadingScreen" style=" position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999999; color: white; font-family: 'Segoe UI', sans-serif; transition: opacity 0.5s ease;
+">
+ <div style=" width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid #ffa54d; border-radius: 50%; animation: spin 1s linear infinite; "></div>
+    <p style="margin-top: 24px; font-size: 1.2rem; letter-spacing: 2px; opacity: 0.8;">
+        Загрузка галактики...
+    </p>
+</div>
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
  <div class="space-nebula"></div>
     <div class="space-nebula-pink"></div>
 <div class="game-container">
@@ -47,7 +63,10 @@
     
     <!-- Подзаголовок -->
     <p style="color:#6B5B4E;font-size:clamp(1rem, 3vh, 1rem);margin:clamp(2px, 0.5vh, 10px) 0;flex-shrink:0;line-height:1.2;">Космическое приключение ✨</p>
-    
+    <!-- ⭐ НОВАЯ СТРОКА: отображение звёзд -->
+<div style="color:var(--text-primary); font-size:1.2rem; font-weight:bold; margin: 2px 0;">
+    ⭐<span id="menuStars">0</span>
+</div>
     <!-- Кнопки -->
     <div style="display:flex;flex-direction:column;gap:clamp(10px, 2.5vh, 20px);width:100%;max-width:min(280px, 75vw);flex-shrink:0;">
     <button id="menuStartBtn" style="background:#517a2f;color:white;border:none;padding:clamp(10px, 2.5vh, 18px) 30px;border-radius:60px;font-size:clamp(1.5rem, 4.5vh, 2.8rem);font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #2e4a1a;width:100%;transition:0.05s linear;display:flex;flex-direction:column;align-items:center;gap:0px;line-height:1.2;">
@@ -62,8 +81,10 @@
     <div style="display:flex;gap:clamp(12px, 3vh, 30px);justify-content:center;flex-shrink:0;padding-top:clamp(5px, 1vh, 15px);">
         <button id="menuThemeBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:12px;border-radius:50%;font-size:1.5rem;cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:50px;height:50px;display:flex;align-items:center;justify-content:center;">🎨</button>
         <button id="menuInviteBtn" style="background:#4a6fa5;color:white;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #2a4a7a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">👥</button>
-        <button id="menuGalaxyBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">⭐</button>
+        <button id="menuGalaxyBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">💫</button>
         <button id="menuScrollsBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">📜</button>
+                <button id="menuBonusBtn" style="background:#ffa54d;color:#2d2b1a;border:none;padding:0;border-radius:50%;font-size:clamp(1.5rem, 4vh, 2.5rem);cursor:pointer;box-shadow:0 3px 0 #8b5a2a;width:clamp(50px, 9vh, 70px);height:clamp(50px, 9vh, 70px);display:flex;align-items:center;justify-content:center;transition:0.05s linear;">🎁</button>
+
     </div>
 </div>
 
@@ -75,7 +96,7 @@
             </div>
            <button id="rulesBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">❓</button>
 <button id="levelSelectBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">📋</button>
-<button id="galaxyBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">⭐</button>
+<button id="galaxyBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">💫</button>
 <button id="menuBackBtn" style="background: #ffa54d; color: #2d2b1a; font-size: 0.7rem; padding: 0; border-radius: 50%; box-shadow: 0 2px 0 #8b5a2a; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;">🏠</button>
        
         </div>
@@ -98,6 +119,61 @@
                     <button id="nextLevelBtn" class="next-btn" disabled style="opacity: 0.5; cursor: not-allowed;">➡️ Следующий уровень</button>
         </div>
         <div id="infoMessage" class="msg-area">✨ Нажимай на буквы по порядку (рядом) — собирай слово! ✨</div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА ВЫБОРА БОНУСА ===== -->
+<div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:25000; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content" style="background:var(--bg-card); border-radius:48px; padding:30px 25px; max-width:360px; width:90%; text-align:center; border:2px solid var(--accent-color);">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
+        <h2 style="color:var(--text-primary); font-size:1.6rem; margin:0 0 8px;">Ежедневный бонус</h2>
+        <p style="color:var(--text-secondary); font-size:0.95rem; margin:0 0 20px; line-height:1.4;">
+            Заходи каждый день и получай звёзды!<br>
+            <span style="font-size:0.85rem; opacity:0.8;">Посмотри рекламу и получи усиленный бонус.</span>
+        </p>
+        <div style="display:flex; gap:20px; justify-content:center; margin-bottom:15px;">
+            <button id="dailyBonus5" class="bonus-btn" style="background:var(--btn-primary); color:white; border:none; border-radius:50%; width:80px; height:80px; font-size:2.5rem; box-shadow:0 4px 0 var(--btn-primary-shadow); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
+                <span>🎁</span>
+                <span style="font-size:0.8rem; font-weight:bold;">+5</span>
+            </button>
+            <button id="dailyBonus10" class="bonus-btn" style="background:var(--accent-color); color:white; border:none; border-radius:50%; width:80px; height:80px; font-size:2.5rem; box-shadow:0 4px 0 #8b5a2a; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;">
+                <span>📺</span>
+                <span style="font-size:0.8rem; font-weight:bold;">+10</span>
+            </button>
+        </div>
+        <button id="dailyBonusCancel" style="background:var(--btn-secondary); color:white; border:none; padding:10px 25px; border-radius:40px; font-size:1rem; cursor:pointer; box-shadow:0 3px 0 #5a3a1a;">❌ Отмена</button>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ===== -->
+<div id="dailyBonusLoadingModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:25001; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content" style="background:var(--bg-card); border-radius:48px; padding:30px 25px; max-width:340px; width:90%; text-align:center; border:2px solid var(--accent-color);">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span>
+        <h2 style="color:var(--text-primary); font-size:1.4rem; margin:0 0 8px;">Загрузка рекламы...</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem; margin:0;">Пожалуйста, подождите</p>
+        <div style="margin-top:20px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+            <div style="width:30%; height:100%; background:linear-gradient(90deg, var(--accent-color), #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА "БОНУС УЖЕ ПОЛУЧЕН" ===== -->
+<div id="dailyBonusUnavailableModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:25002; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content" style="background:var(--bg-card); border-radius:48px; padding:30px 25px; max-width:340px; width:90%; text-align:center; border:2px solid var(--accent-color);">
+        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">❌</span>
+        <h2 style="color:var(--text-primary); font-size:1.4rem; margin:0 0 8px;">Бонус уже получен</h2>
+        <p style="color:var(--text-secondary); font-size:0.95rem; margin:0 0 20px;">Вы уже получили ежедневный бонус сегодня. Возвращайтесь завтра!</p>
+        <button id="dailyBonusUnavailableOk" style="background:var(--btn-primary); color:white; border:none; padding:10px 25px; border-radius:40px; font-size:1rem; cursor:pointer; box-shadow:0 3px 0 var(--btn-primary-shadow);">Ок</button>
+    </div>
+</div>
+
+<!-- ===== МОДАЛКА РЕЗУЛЬТАТА ПОЛУЧЕНИЯ БОНУСА ===== -->
+<div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:25003; justify-content:center; align-items:center; padding:20px;">
+    <div class="bonus-modal-content" style="background:var(--bg-card); border-radius:48px; padding:30px 25px; max-width:340px; width:90%; text-align:center; border:2px solid var(--accent-color);">
+        <span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span>
+        <h2 style="color:var(--text-primary); font-size:1.6rem; margin:0 0 8px;">Успех!</h2>
+        <p id="bonusResultAmount" style="color:var(--text-secondary); font-size:1.4rem; margin:0 0 20px; font-weight:bold;">⭐ +0</p>
+        <button id="bonusResultOk" style="background:var(--btn-primary); color:white; border:none; padding:10px 25px; border-radius:40px; font-size:1rem; cursor:pointer; box-shadow:0 3px 0 var(--btn-primary-shadow);">Ок</button>
     </div>
 </div>
 
@@ -131,6 +207,166 @@ let wordColorsMap = new Map();
 let currentLevelNum = null;
 // ===== ОВЕРЛЕЙ ЗАГРУЗКИ РЕКЛАМЫ =====
 let loadingOverlay = null;
+// ===== ЕЖЕДНЕВНЫЙ БОНУС =====
+
+let bonusStars = parseInt(localStorage.getItem('bonusStars')) || 0;
+let lastBonusDate = localStorage.getItem('lastBonusDate') || null;
+
+// Проверяем, можно ли получить бонус сегодня
+function canClaimDailyBonus() {
+    if (!lastBonusDate) return true;
+    const today = new Date().toDateString();
+    return lastBonusDate !== today;
+}
+
+// Показываем модалку выбора бонуса
+function showDailyBonusModal() {
+    // Если бонус уже получен сегодня – показываем модалку "уже получен"
+    if (!canClaimDailyBonus()) {
+        document.getElementById('dailyBonusUnavailableModal').style.display = 'flex';
+        return;
+    }
+    // Иначе показываем выбор
+    document.getElementById('dailyBonusModal').style.display = 'flex';
+    // Приостанавливаем игру (если игра активна)
+    if (typeof pauseGame === 'function') pauseGame();
+}
+
+// Закрыть модалку по id
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+    // Возобновляем игру
+    if (typeof resumeGame === 'function') resumeGame();
+}
+
+// Показать модалку загрузки рекламы
+function showLoadingBonusModal() {
+    document.getElementById('dailyBonusLoadingModal').style.display = 'flex';
+}
+
+// Скрыть модалку загрузки рекламы
+function hideLoadingBonusModal() {
+    document.getElementById('dailyBonusLoadingModal').style.display = 'none';
+}
+
+// Начисление бонуса
+function claimBonus(amount) {
+    if (amount <= 0) return;
+
+    // Увеличиваем бонусные звёзды
+    bonusStars += amount;
+    localStorage.setItem('bonusStars', bonusStars);
+
+    // Обновляем дату последнего получения
+    const today = new Date().toDateString();
+    lastBonusDate = today;
+    localStorage.setItem('lastBonusDate', today);
+
+    // Синхронизируем дату с VK Storage
+    if (typeof saveToVKStorage === 'function') {
+        saveToVKStorage('wordgame_bonusDate_v2', today);
+    }
+
+    // Обновляем общее количество звёзд (пересчитывает и добавляет бонусные)
+    updateTotalStars();
+
+    // Синхронизируем все данные с VK (включая звёзды)
+    if (typeof syncAllDataToVK === 'function') {
+        syncAllDataToVK();
+    }
+
+    // Показываем модалку результата
+    showBonusResult(amount);
+
+    // Возобновляем игру
+    if (typeof resumeGame === 'function') resumeGame();
+}
+
+// Показать результат бонуса
+function showBonusResult(amount) {
+    document.getElementById('bonusResultAmount').textContent = `⭐ +${amount}`;
+    document.getElementById('bonusResultModal').style.display = 'flex';
+}
+
+// ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
+
+// Кнопка бонуса в меню
+document.getElementById('menuBonusBtn').addEventListener('click', showDailyBonusModal);
+
+// Кнопка +5 (обычный бонус)
+document.getElementById('dailyBonus5').addEventListener('click', function() {
+    closeModal('dailyBonusModal');
+    // Сразу начисляем бонус
+    claimBonus(5);
+});
+
+// Кнопка +10 (усиленный бонус с рекламой)
+document.getElementById('dailyBonus10').addEventListener('click', function() {
+    closeModal('dailyBonusModal');
+    // Показываем загрузку
+    showLoadingBonusModal();
+
+    // Вызываем показ рекламы
+    if (typeof showRewardedAd === 'function') {
+        showRewardedAd(
+            function() {
+                // Успешный просмотр – начисляем 10 звёзд
+                hideLoadingBonusModal();
+                claimBonus(10);
+            },
+            function(error) {
+                // Реклама не показана – убираем загрузку, показываем сообщение
+                hideLoadingBonusModal();
+                // Можно показать модалку "Реклама недоступна" (уже есть в коде)
+                if (typeof showAdUnavailableModal === 'function') {
+                    showAdUnavailableModal();
+                } else {
+                    alert('Реклама временно недоступна, попробуйте позже.');
+                }
+                // Возобновляем игру
+                if (typeof resumeGame === 'function') resumeGame();
+            }
+        );
+    } else {
+        // Если реклама не поддерживается – запасной вариант
+        hideLoadingBonusModal();
+        alert('Функция рекламы недоступна. Получите обычный бонус.');
+        // Можно предложить обычный бонус или просто закрыть
+        if (typeof resumeGame === 'function') resumeGame();
+    }
+});
+
+// Отмена в модалке выбора
+document.getElementById('dailyBonusCancel').addEventListener('click', function() {
+    closeModal('dailyBonusModal');
+});
+
+// Кнопка "Ок" в модалке "бонус уже получен"
+document.getElementById('dailyBonusUnavailableOk').addEventListener('click', function() {
+    closeModal('dailyBonusUnavailableModal');
+});
+
+// Кнопка "Ок" в модалке результата
+document.getElementById('bonusResultOk').addEventListener('click', function() {
+    closeModal('bonusResultModal');
+});
+
+// Закрытие модалок по клику на фон
+document.querySelectorAll('.bonus-modal-content').forEach(function(content) {
+    const parent = content.closest('div[id$="Modal"]');
+    if (parent) {
+        parent.addEventListener('click', function(e) {
+            if (e.target === this) {
+                // Закрываем только если это не модалка выбора (там два варианта)
+                if (this.id !== 'dailyBonusModal' && this.id !== 'bonusResultModal' && this.id !== 'dailyBonusUnavailableModal') {
+                    closeModal(this.id);
+                }
+                // Для модалки выбора не закрываем по фону, чтобы случайно не потерять выбор
+            }
+        });
+    }
+});
 
 function showLoadingOverlay() {
     // Если оверлей уже есть - не создаём новый
@@ -1949,7 +2185,7 @@ nextLevelBtn.addEventListener('click', function() {
     }
 });
 
-    // инициализация аудио и первого меню
+    /* инициализация аудио и первого меню
 function init() {
     document.body.addEventListener('click', () => {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -1972,6 +2208,67 @@ function init() {
     // ✅ ЗАГРУЖАЕМ ДАННЫЕ ИЗ VK (асинхронно)
     loadAllDataFromVK();    
     // ✅ ФОНОВАЯ ЗАГРУЗКА ГАЛАКТИК И СВИТКОВ (чуть позже)
+    setTimeout(loadGalaxyAndScrollsFromVK, 2000);
+}
+*/
+
+async function init() {
+    // Показываем загрузочный экран (он уже виден по умолчанию)
+    // Активируем аудио-контекст по клику
+    document.body.addEventListener('click', () => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }, { once: true });
+
+    // Загружаем сохранённую сложность
+    currentDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
+
+    // Загружаем общее количество звёзд из localStorage (временно)
+    const savedStars = localStorage.getItem('totalStars');
+    if (savedStars) totalStars = parseInt(savedStars);
+    else updateTotalStars();
+
+    // Добавляем класс меню на body
+    document.body.classList.add('menu-mode');
+
+    // Скрываем игровые элементы (они скрыты по умолчанию)
+    // Показываем меню? пока нет, сначала синхронизация
+
+    // ✅ ГЛАВНОЕ: ЖДЁМ ЗАГРУЗКУ ДАННЫХ ИЗ VK
+    try {
+        document.getElementById('loadingStatus').textContent = 'Синхронизация с ВК...';
+        await loadAllDataFromVK();  // ждём завершения
+        console.log('✅ Все данные загружены и применены');
+    } catch (e) {
+        console.warn('⚠️ Ошибка синхронизации, но продолжаем:', e);
+    }
+
+    // После синхронизации обновляем интерфейс
+    // 1) Обновляем отображение звёзд в меню (добавим элемент позже)
+    const menuStars = document.getElementById('menuStars');
+    if (menuStars) menuStars.textContent = totalStars || 0;
+
+    // 2) Обновляем подзаголовок кнопки "Начать"
+    updateStartButtonSubtitle();
+
+    // 3) Обновляем тему (если загрузилась из VK)
+    const theme = localStorage.getItem('theme') || 'dark';
+    setTheme(theme);
+
+    // 4) Синхронизируем свитки со звёздами (если изменилось)
+    syncScrollsWithStars();
+
+    // 5) Показываем главное меню
+    document.getElementById('startMenu').style.display = 'flex';
+    document.body.classList.add('menu-mode'); // уже есть
+
+    // ✅ Скрываем загрузочный экран с плавным исчезновением
+    const loading = document.getElementById('loadingScreen');
+    loading.style.opacity = '0';
+    setTimeout(() => {
+        loading.style.display = 'none';
+    }, 500);
+
+    // Фоновая загрузка галактик и свитков (уже есть, но можно оставить)
     setTimeout(loadGalaxyAndScrollsFromVK, 2000);
 }
 
@@ -2167,25 +2464,25 @@ function showWelcomeStory() {
                 icon: "🌌",
                 title: "Галактика в опасности!",
                 text: "Звёзды меркнут, созвездия исчезают... Тёмная энергия поглощает космос!",
-                button: "🌠 Что случилось?"
+                button: "🌠Что случилось?"
             },
             {
                 icon: "🔍",
                 title: "Потерянные слова",
                 text: "Древние руны-слова, хранившие баланс, рассыпались по всей вселенной. Без них галактика погибнет!",
-                button: "📖 Как помочь?"
+                button: "📖Как помочь?"
             },
             {
                 icon: "✨",
                 title: "Твоя миссия",
                 text: "Каждый день находи спрятанные слова в филвордах. Каждое найденное слово возвращает звезду на небо!",
-                button: "⭐ Что я получу?"
+                button: "⭐Что я получу?"
             },
             {
                 icon: "🏆",
                 title: "Спаси галактику!",
                 text: "Собирай слова ежедневно, восстанавливай созвездия и становись Хранителем Вселенной! 🌟",
-                button: "🚀 Спасти галактику!"
+                button: "🚀Спасти галактику!"
             }
         ];
         
@@ -2438,7 +2735,7 @@ function showGalaxyMap() {
         modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+contentDiv.style.cssText = 'margin-bottom: 10px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
 contentDiv.className = 'galaxy-scroll';  // ← ДОБАВЬТЕ ЭТУ СТРОКУ        
         let galaxiesHtml = `
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
@@ -2697,7 +2994,7 @@ function showGalaxyMap() {
         modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         
         const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'margin-bottom: 90px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
+        contentDiv.style.cssText = 'margin-bottom: 10px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
         contentDiv.className = 'galaxy-scroll';
         
         let galaxiesHtml = `
@@ -2832,11 +3129,19 @@ function updateTotalStars() {
     for (let key in stars) {
         newTotal += stars[key].totalStars;
     }
+     // ✅ Добавляем бонусные звёзды
+    const bonusStarsLocal = parseInt(localStorage.getItem('bonusStars')) || 0;
+    newTotal += bonusStarsLocal;
+
     totalStars = newTotal;
     console.log(`✨ Всего звёзд: ${totalStars}`);
     
     // Сохраняем в localStorage для таблицы лидеров
     localStorage.setItem('totalStars', totalStars);
+
+    // Обновляем меню, если оно видно
+    const menuStars = document.getElementById('menuStars');
+    if (menuStars) menuStars.textContent = totalStars;
     
     // Обновляем иконку звезды
     const galaxyBtn = document.getElementById('galaxyBtn');
@@ -3091,7 +3396,7 @@ contentDiv.innerHTML = `
     <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:20px;margin:10px 0;">
         <p style="color:var(--text-primary, #2c3e2b);font-size:1.1rem;line-height:1.5;margin:0;font-style:italic;">${scroll.text}</p>
     </div>
-    <button id="closeScrollDetail" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐ Прочитано!</button>
+    <button id="closeScrollDetail" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐Прочитано!</button>
 `;
     
     modalDiv.appendChild(contentDiv);
@@ -3271,7 +3576,7 @@ function setTheme(themeName) {
             'teal': '💚',
             'sun': '☀️'
         };
-        themeBtn.textContent = icons[themeName] || '🌌';
+        themeBtn.textContent = icons[themeName] || '🎨';
     }
 }
 
@@ -3521,6 +3826,10 @@ function loadAllDataFromVK() {
             loadUnlockedLevelsFromVK(unlockedLevelsData);
             loaded = true;
         }
+
+
+
+        
         
         if (loaded) {
             console.log('✅ Данные из VK Storage загружены');
