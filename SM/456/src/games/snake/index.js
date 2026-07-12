@@ -593,7 +593,7 @@ if (target.closest('.' + style.soundBtn) ||
           {this.state.gameOver && (
             <div className={style.gameOver}>
               <div className={style.gameOverText}>💥Игра окончена!</div>
-              <div className={style.finalScore}>Еда: {this.state.score}</div>
+              <div className={style.finalScore}>🍎:{this.state.score}</div>
               <button 
                 className={style.restartBtn} 
                 onClick={this.restartGame}

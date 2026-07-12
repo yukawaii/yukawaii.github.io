@@ -592,7 +592,7 @@ updateGame() {
           </button>
           
           <div className={style.scoreDisplay}>
-            <span>Очки: {this.state.score}</span>
+           <span>🚧:{this.state.obstaclesPassed}</span>
             <span className={style.speedDisplay}>⚡ {speedDisplay}</span>
             <button 
               className={style.pauseBtn}

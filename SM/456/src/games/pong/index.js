@@ -540,7 +540,7 @@ playBounceSound() {
           </button>
           
           <div className={style.scoreDisplay}>
-            <span>Ударов: {this.state.hits}</span>
+            <span>🏓:{this.state.hits}</span>
             <span className={style.speedDisplay}>⚡ {speedDisplay}</span>
             <button 
               className={style.pauseBtn}

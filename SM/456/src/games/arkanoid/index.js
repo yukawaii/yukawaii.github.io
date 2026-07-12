@@ -647,7 +647,7 @@ if (allBroken && newBricks.length > 0) {
           </button>
           
           <div className={style.scoreDisplay}>
-            <span>🧱 {this.state.score}</span>
+            <span>🧱{this.state.score}</span>
             <span className={style.livesDisplay}>{hearts}</span>
             <span className={style.speedDisplay}>⚡ {speedDisplay}</span>
             <button 
