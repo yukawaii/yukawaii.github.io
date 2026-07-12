@@ -391,7 +391,7 @@ if (newBallX < leftPadding) {  // ← было 0
     }
     
 // ===== РАКЕТКА =====
-var offsetY = 50;  // ← меняйте это значение!
+var offsetY = 48;  // ← меняйте это значение!
 var paddleY = FH - PH - PB + offsetY;
 var paddleLeft = newPaddleX;
 var paddleTop = paddleY;
