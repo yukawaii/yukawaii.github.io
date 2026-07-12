@@ -78,7 +78,7 @@ var ACHIEVEMENTS = [
   {
     id: 1,
     key: 'first_game',
-    icon: '🎮',
+    icon: '🐣',
     name: { ru: 'Первый шаг', en: 'First Step' },
     desc: { ru: 'Сыграть первую партию', en: 'Play your first game' },
     check: function(state) { return state.get('points') > 1; }
@@ -86,7 +86,7 @@ var ACHIEVEMENTS = [
   {
     id: 2,
     key: 'score_100',
-    icon: '🌟',
+    icon: '🐌',
     name: { ru: '50 очков', en: '50 Points' },
     desc: { ru: 'Набрать 50 очков за 1 раунд', en: 'Score 50 points' },
     check: function(state) { return state.get('points') >= 50; }
@@ -94,7 +94,7 @@ var ACHIEVEMENTS = [
   {
     id: 3,
     key: 'score_500',
-    icon: '⭐',
+    icon: '🐎',
     name: { ru: 'Эксперт', en: 'Expert' },
     desc: { ru: 'Набрать 150 очков за 1 раунд', en: 'Score 150 points' },
     check: function(state) { return state.get('points') >= 150; }
@@ -102,7 +102,7 @@ var ACHIEVEMENTS = [
   {
     id: 4,
     key: 'score_1000',
-    icon: '🏆',
+    icon: '💫',
     name: { ru: 'Мастер', en: 'Master' },
     desc: { ru: 'Набрать 100 очков за 1 раунд', en: 'Score 100 points' },
     check: function(state) { return state.get('points') >= 100; }
@@ -118,7 +118,7 @@ var ACHIEVEMENTS = [
   {
     id: 6,
     key: 'clear_50',
-    icon: '✨',
+    icon: '🌌',
     name: { ru: 'Профи', en: 'Pro' },
     desc: { ru: 'Очистить 50 линий', en: 'Clear 50 lines' },
     check: function(state) { return state.get('clearLines') >= 50; }
@@ -162,7 +162,7 @@ var ACHIEVEMENTS = [
   {
     id: 11,
     key: 'score_2000',
-    icon: '💎',
+    icon: '🏛️',
     name: { ru: 'Архитектор', en: 'Architect' },
     desc: { ru: 'Набрать 200 очков за 1 раунд', en: 'Score 200 points in 1 raund' },
     check: function(state) { return state.get('points') >= 200; }
@@ -296,7 +296,7 @@ var ACHIEVEMENTS = [
   {
     id: 23,
     key: 'collect_50',
-    icon: '🏛️',
+    icon: '🎨',
     name: { ru: 'Коллекционер', en: 'Collector' },
     desc: { ru: 'Купить 50 экспонатов в коллекциях', en: 'Buy 50 collection items' },
     check: function(state) {

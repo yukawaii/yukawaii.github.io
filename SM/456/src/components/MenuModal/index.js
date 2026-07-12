@@ -351,7 +351,7 @@ handleHelp(e) {
       this.handleCollections(e);
     }.bind(this)}
   >
-    <span>🖼️</span>
+    <span>🎨</span>
   </div>
   <div 
     className={style.iconButton + ' ' + style.yellow}

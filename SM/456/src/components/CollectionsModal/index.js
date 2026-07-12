@@ -98,7 +98,7 @@ class CollectionsModal extends Component {
       >
         <div className={style.modal}>
           <div className={style.header}>
-            <span className={style.title}>🖼️ {title}</span>
+            <span className={style.title}>🎨{title}</span>
            <button 
   className={style.closeBtn} 
   onClick={this.closeModal}

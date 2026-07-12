@@ -190,7 +190,7 @@ if (result.error === 'not_enough_points') {
           <div className={style.header}>
             <span className={style.title}>
               {config.icon} {title}
-              <span className={style.score}>⭐ {formattedScore}</span>
+              <span className={style.score}>⭐{formattedScore}</span>
             </span>
   <button 
   className={style.closeBtn} 
@@ -236,7 +236,7 @@ if (result.error === 'not_enough_points') {
       src={'/SM/456/src/images/' + config.path + '/' + index + '.png'} 
       alt={index}
       className={style.itemImage}
-      onError={(e) => { e.target.src = ''; e.target.alt = '🖼️'; }}
+      onError={(e) => { e.target.src = ''; e.target.alt = '🎨'; }}
     />
     <div className={style.itemOverlay}>
       <span>👁️</span>
