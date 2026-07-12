@@ -1117,6 +1117,8 @@ updateDiamondUI() {
 // Открытие таблицы лидеров
 // ============================================================
 showLeaderboard() {
+       this.sound.click();
+        this.syncLeaderboard();
       // Передаём текущее количество алмазов как результат пользователя
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: this.currentDiamonds,
@@ -1144,53 +1146,27 @@ syncLeaderboard() {
         return;
     }
 
-    console.log(`📤 Запрос текущего рекорда для пользователя ${this.vkUserId}`);
+    console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
     vkBridge.send('VKWebAppCallAPIMethod', {
-        method: 'apps.getScore',
+        method: 'secure.addAppEvent',
         params: {
             user_id: this.vkUserId,
+            activity_id: 2,
+            value: this.currentDiamonds,
             v: '5.131',
-            access_token: this.vkUserToken
-        }
-    })
-    .then((data) => {
-        console.log('📥 Ответ apps.getScore:', data);
-        let currentScore = parseInt(data.response) || 0;
-        console.log(`🏅 Текущий рекорд в VK: ${currentScore}, локальный: ${this.currentDiamonds}`);
-        
-        if (this.currentDiamonds > currentScore) {
-            console.log(`📤 Обновляем рекорд: отправляем secure.addAppEvent с value=${this.currentDiamonds}`);
-            return vkBridge.send('VKWebAppCallAPIMethod', {
-                method: 'secure.addAppEvent',
-                params: {
-                    user_id: this.vkUserId,
-                    activity_id: 2,
-                    value: this.currentDiamonds,
-                    v: '5.131',
-                    access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
-                }
-            });
-        } else {
-            console.log('⏩ Текущий рекорд не ниже локального, обновление не требуется.');
-            return Promise.resolve(null);
+            access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
         }
     })
     .then((result) => {
-        if (result) {
-            console.log('📥 Ответ secure.addAppEvent:', result);
-            console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
-        } else {
-            console.log('⏩ Обновление не выполнялось или ответ пуст.');
-        }
+        console.log('📥 Ответ secure.addAppEvent:', result);
+        console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
-        // Дополнительно можно вывести детали ошибки
-        if (err && err.data) {
-            console.error('Детали ошибки:', err.data);
-        }
+        if (err && err.data) console.error('Детали:', err.data);
     });
 }
+
     // ============================================================
     // Социальные функции
     // ============================================================
