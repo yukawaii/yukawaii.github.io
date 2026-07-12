@@ -584,8 +584,8 @@ playBounceSound() {
           
           {this.state.gameOver && (
             <div className={style.gameOver}>
-              <div className={style.gameOverText}>💥 Игра окончена!</div>
-              <div className={style.finalScore}>Ударов: {this.state.hits}</div>
+              <div className={style.gameOverText}>💥Игра окончена!</div>
+              <div className={style.finalScore}>Удары: {this.state.hits}</div>
               <button 
                 className={style.restartBtn} 
                 onClick={this.restartGame}

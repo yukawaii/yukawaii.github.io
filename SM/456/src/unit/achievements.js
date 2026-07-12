@@ -420,7 +420,7 @@ var ACHIEVEMENTS = [
 
 // ===== ЗАГРУЗКА ДОСТИЖЕНИЙ =====
 function loadAchievements() {
-  //console.log('🔥 loadAchievements ВЫЗВАН!');
+console.log('🔥 loadAchievements ВЫЗВАН!');
   
   return new Promise(function(resolve) {
     var localAchievements = {};
@@ -428,7 +428,7 @@ function loadAchievements() {
       var saved = localStorage.getItem(ACHIEVEMENTS_STORAGE_KEY);
       if (saved) {
         localAchievements = JSON.parse(saved);
-      //  console.log('📀 Локальные достижения:', Object.keys(localAchievements).length);
+       console.log('📀 Локальные достижения:', Object.keys(localAchievements).length);
       }
     } catch(e) {
       console.warn('Ошибка загрузки локальных достижений:', e);
@@ -437,15 +437,15 @@ function loadAchievements() {
     if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
       vkBridge.send('VKWebAppStorageGet', { keys: [ACHIEVEMENTS_STORAGE_KEY] })
         .then(function(data) {
-       //   console.log('💾 Ответ VK Storage (достижения):', data);
+        console.log('💾 Ответ VK Storage (достижения):', data);
           
           var vkAchievements = {};
           if (data && data.keys && data.keys.length > 0 && data.keys[0].value) {
             try {
               vkAchievements = JSON.parse(data.keys[0].value);
-          //    console.log('💾 VK Storage достижения:', Object.keys(vkAchievements).length);
+            console.log('💾 VK Storage достижения:', Object.keys(vkAchievements).length);
             } catch(e) {
-           //   console.warn('Ошибка парсинга достижений из VK:', e);
+            console.warn('Ошибка парсинга достижений из VK:', e);
             }
           }
           
@@ -462,7 +462,7 @@ function loadAchievements() {
           }
           
           localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(merged));
-        //  console.log('✅ Достижения загружены:', Object.keys(merged).length);
+         console.log('✅ Достижения загружены:', Object.keys(merged).length);
           resolve(merged);
         })
         .catch(function(err) {
@@ -477,13 +477,13 @@ function loadAchievements() {
 
 // ===== СОХРАНЕНИЕ ДОСТИЖЕНИЙ =====
 function saveAchievements(achievements) {
- // console.log('🔥 saveAchievements ВЫЗВАН!');
+ console.log('🔥 saveAchievements ВЫЗВАН!');
   
   try {
     localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(achievements));
-   // console.log('📀 Достижения сохранены локально:', Object.keys(achievements).length);
+   console.log('📀 Достижения сохранены локально:', Object.keys(achievements).length);
   } catch(e) {
-   // console.warn('Ошибка сохранения локальных достижений:', e);
+   console.warn('Ошибка сохранения локальных достижений:', e);
   }
   
   if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
@@ -492,10 +492,10 @@ function saveAchievements(achievements) {
       value: JSON.stringify(achievements)
     })
     .then(function() {
-    // console.log('✅ Достижения сохранены в VK Storage');
+    console.log('✅ Достижения сохранены в VK Storage');
     })
     .catch(function(err) {
-    //  console.warn('⚠️ Ошибка сохранения достижений в VK Storage:', err);
+     console.warn('⚠️ Ошибка сохранения достижений в VK Storage:', err);
     });
   }
 }
