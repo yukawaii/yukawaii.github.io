@@ -894,7 +894,7 @@ const transform = (function () {
   return trans.filter((e) => body.style[e] !== undefined)[0];
 }());
 
-const eachLines = 30;
+const eachLines = 50;
 
 const getParam = (param) => {
   const r = new RegExp(`\\?(?:.+&)?${param}=(.*?)(?:&.*)?$`);

@@ -95,15 +95,15 @@ var ACHIEVEMENTS = [
     id: 3,
     key: 'score_500',
     icon: '⭐',
-    name: { ru: '500 очков', en: '500 Points' },
-    desc: { ru: 'Набрать 500 очков за 12 раунд', en: 'Score 500 points' },
-    check: function(state) { return state.get('points') >= 500; }
+    name: { ru: 'Эксперт', en: 'Expert' },
+    desc: { ru: 'Набрать 150 очков за 1 раунд', en: 'Score 150 points' },
+    check: function(state) { return state.get('points') >= 150; }
   },
   {
     id: 4,
     key: 'score_1000',
     icon: '🏆',
-    name: { ru: '100 очков', en: '100 Points' },
+    name: { ru: 'Мастер', en: 'Master' },
     desc: { ru: 'Набрать 100 очков за 1 раунд', en: 'Score 100 points' },
     check: function(state) { return state.get('points') >= 100; }
   },
@@ -163,7 +163,7 @@ var ACHIEVEMENTS = [
     id: 11,
     key: 'score_2000',
     icon: '💎',
-    name: { ru: '200 очков', en: '200 Points' },
+    name: { ru: 'Архитектор', en: 'Architect' },
     desc: { ru: 'Набрать 200 очков за 1 раунд', en: 'Score 200 points in 1 raund' },
     check: function(state) { return state.get('points') >= 200; }
   },
@@ -171,17 +171,17 @@ var ACHIEVEMENTS = [
     id: 12,
     key: 'score_5000',
     icon: '👑',
-    name: { ru: '300 очков', en: '300 Points' },
-    desc: { ru: 'Набрать 300 очков за 1 раунд', en: 'Score 300 points in 1 raund' },
-    check: function(state) { return state.get('points') >= 300; }
+    name: { ru: 'Профи', en: 'Professional' },
+    desc: { ru: 'Установить рекорд 250 очков', en: 'Set a record of 250 points' },
+    check: function(state) { return state.get('points') >= 250; }
   },
   {
     id: 13,
     key: 'record_10000',
     icon: '🏆',
     name: { ru: 'Легенда', en: 'Legend' },
-    desc: { ru: 'Установить рекорд 5000 очков', en: 'Set a record of 5000 points' },
-    check: function(state) { return state.get('max') >= 5000; }
+    desc: { ru: 'Установить рекорд 350 очков', en: 'Set a record of 350 points' },
+    check: function(state) { return state.get('max') >= 350; }
   },
   {
     id: 14,
@@ -195,7 +195,7 @@ var ACHIEVEMENTS = [
     id: 15,
     key: 'level_10',
     icon: '🚀',
-    name: { ru: 'Космическая скорость', en: 'Cosmic Speed' },
+    name: { ru: 'Ракета', en: 'Rocket' },
     desc: { ru: 'Достичь 6 уровня', en: 'Reach level 6' },
     check: function(state) { return state.get('speedRun') >= 6; }
   },
