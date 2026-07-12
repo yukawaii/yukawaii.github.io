@@ -46,7 +46,7 @@ showBottomBanner() {
     })
     .then((data) => {
         if (data && data.result) {
-            console.log('✅ Баннер успешно отображён');
+         //   console.log('✅ Баннер успешно отображён');
             this.bannerShown = true;
             this.bannerRetryCount = 0; // сбрасываем при успехе
         } else {
@@ -80,11 +80,11 @@ scheduleBannerRetry() {
 
     // Показать рекламу за вознаграждение
     showRewardedAd() {
-        console.log('showRewardedAd вызван');
+     //   console.log('showRewardedAd вызван');
         
         return new Promise((resolve) => {
             const timeoutId = setTimeout(() => {
-                console.log('⏰ Таймаут показа рекламы (10 сек)');
+              //  console.log('⏰ Таймаут показа рекламы (40 сек)');
                 resolve(false);
             }, 40000);
             
@@ -103,28 +103,28 @@ scheduleBannerRetry() {
             })
             .then((result) => {
                 clearTimeout(timeoutId);
-                console.log('VKWebAppShowNativeAds результат:', result);
+              //  console.log('VKWebAppShowNativeAds результат:', result);
                 
                 // ВАЖНО: Проверяем разные варианты успешного показа
                 // В VK Bridge успешный показ рекламы может возвращаться по-разному
                 if (result) {
                     // Если есть поле result и оно true
                     if (result.result === true) {
-                        console.log('✅ Реклама успешно показана (result: true)');
+                     //   console.log('✅ Реклама успешно показана (result: true)');
                         resolve(true);
                         return;
                     }
                     
                     // Если есть поле success
                     if (result.success === true) {
-                        console.log('✅ Реклама успешно показана (success: true)');
+                    //    console.log('✅ Реклама успешно показана (success: true)');
                         resolve(true);
                         return;
                     }
                     
                     // Если есть поле status и оно 'success'
                     if (result.status === 'success') {
-                        console.log('✅ Реклама успешно показана (status: success)');
+                       // console.log('✅ Реклама успешно показана (status: success)');
                         resolve(true);
                         return;
                     }
@@ -611,17 +611,17 @@ setupVKBridge() {
                 this.sound.ctx.resume();
             }
         } else if (e.type === 'VKWebAppShowBannerAdResult') {
-            if (e.data && e.data.result) {
-                console.log('Баннер показан успешно');
-            }
+          //  if (e.data && e.data.result) {
+              //  console.log('Баннер показан успешно');
+           // }
         }
         // 👇 ДОБАВЛЯЕМ ОБРАБОТКУ РЕКЛАМЫ ЗА ВОЗНАГРАЖДЕНИЕ
         else if (e.type === 'VKWebAppShowNativeAdsResult') {
-            console.log('VKWebAppShowNativeAdsResult:', e.data);
+          //  console.log('VKWebAppShowNativeAdsResult:', e.data);
             // Здесь можно обработать результат показа рекламы
-            if (e.data && e.data.result === true) {
-                console.log('✅ Реклама за вознаграждение успешно показана');
-            }
+          //  if (e.data && e.data.result === true) {
+               // console.log('✅ Реклама за вознаграждение успешно показана');
+          //  }
         }
     });
 }
@@ -637,7 +637,7 @@ setupVKBridge() {
 // Модалка "Реклама недоступна"
 // ============================================================
 showNoAdModal(callback) {
-    console.log('showNoAdModal вызван');
+ //   console.log('showNoAdModal вызван');
     
     // Создаём overlay
     const overlay = document.createElement('div');
@@ -701,7 +701,7 @@ showNoAdModal(callback) {
         if (overlay.parentNode) {
             document.body.removeChild(overlay);
         }
-        console.log('Нажата кнопка "Ок" в модалке "Реклама недоступна"');
+      //  console.log('Нажата кнопка "Ок" в модалке "Реклама недоступна"');
         callback(true);
     });
     
@@ -711,7 +711,7 @@ showNoAdModal(callback) {
             if (overlay.parentNode) {
                 document.body.removeChild(overlay);
             }
-            console.log('Закрытие модалки "Реклама недоступна" по клику вне');
+         //   console.log('Закрытие модалки "Реклама недоступна" по клику вне');
             callback(false);
         }
     });
@@ -721,7 +721,7 @@ showNoAdModal(callback) {
 // Модалка для получения дополнительных подсказок
 // ============================================================
 showHintAdModal() {
-    console.log('showHintAdModal вызван');
+  //  console.log('showHintAdModal вызван');
     return new Promise((resolve) => {
         const modal = document.getElementById('hintAdModal');
         
@@ -745,7 +745,7 @@ showHintAdModal() {
             modal.style.display = 'none';
               setTimeout(() => {
             this.resumeTimer();
-            console.log('Модалка закрыта с результатом:', result);
+          //  console.log('Модалка закрыта с результатом:', result);
             resolve(result);
                 }, 500);
         };
@@ -763,7 +763,7 @@ showHintAdModal() {
         
    newConfirmBtn.addEventListener('pointerdown', async (e) => {
             this.sound.click();
-            console.log('Нажата кнопка "Получить"');
+         //   console.log('Нажата кнопка "Получить"');
             
             // Меняем текст на кнопке, чтобы показать загрузку
             const btn = document.getElementById('hintAdConfirm');
@@ -774,7 +774,7 @@ showHintAdModal() {
             try {
                 // Показываем рекламу
                 const adShown = await this.adManager.showRewardedAd();
-                console.log('Результат показа рекламы в модалке:', adShown);
+              //  console.log('Результат показа рекламы в модалке:', adShown);
                 
                 // Восстанавливаем кнопку
                 btn.textContent = originalText;
@@ -782,7 +782,7 @@ showHintAdModal() {
                 
                 // ✅ Если реклама показана — даём 3 подсказки
                 if (adShown === true) {
-                    console.log('✅ Реклама успешно показана, даём 3 подсказки!');
+                 //   console.log('✅ Реклама успешно показана, даём 3 подсказки!');
                     this.maxHints += 3;
                     const remaining = this.maxHints - this.hintsUsed;
                     this.messageEl.textContent = `🎉 +3 подсказки! Осталось: ${remaining}`;
@@ -966,19 +966,19 @@ async initVK() {
     try {
         // Получаем данные текущего пользователя
         const userInfo = await vkBridge.send('VKWebAppGetUserInfo', {});
-        console.log('📥 VKWebAppGetUserInfo ответ:', userInfo);
+     //   console.log('📥 VKWebAppGetUserInfo ответ:', userInfo);
         
         if (userInfo && userInfo.id) {
             this.vkUserId = userInfo.id;
             this.vkInitialized = true;
-            console.log('👤 Пользователь VK (из UserInfo):', this.vkUserId);
+        //    console.log('👤 Пользователь VK (из UserInfo):', this.vkUserId);
             
             // Загружаем данные из VK Storage
             await Promise.all([
                 this.loadDiamonds(),
                 this.loadAchievements()
             ]);
-            console.log('✅ Все данные загружены');
+          //  console.log('✅ Все данные загружены');
             finishLoading();
         } else {
             throw new Error('Не удалось получить id пользователя');
@@ -991,7 +991,7 @@ async initVK() {
         if (viewerId) {
             this.vkUserId = parseInt(viewerId);
             this.vkInitialized = true;
-            console.log('👤 Пользователь VK (из URL fallback):', this.vkUserId);
+          //  console.log('👤 Пользователь VK (из URL fallback):', this.vkUserId);
             await Promise.all([
                 this.loadDiamonds(),
                 this.loadAchievements()
@@ -1011,7 +1011,7 @@ async initVK() {
 // ============================================================
 // В классе SudokuGame
 loadDiamonds() {
-     console.log('🔵 loadDiamonds() вызван');
+ //    console.log('🔵 loadDiamonds() вызван');
       // 1. Всегда загружаем локальные данные
     this.loadDiamondsLocal();
 
@@ -1019,7 +1019,7 @@ loadDiamonds() {
         this.loadDiamondsLocal();
         return Promise.resolve();
     }
-     console.log('✅ loadDiamonds: отправляем запрос в VK Storage вытягиваем из стораджа алмазы и дату');
+   //  console.log('✅ loadDiamonds: отправляем запрос в VK Storage вытягиваем из стораджа алмазы и дату');
     return vkBridge.send('VKWebAppStorageGet', { keys: ['diamonds', 'bonusDate'] })
    
         .then((data) => {
@@ -1037,7 +1037,7 @@ loadDiamonds() {
                         }
                         // если локальная дата новее – она уже в this.lastBonusDate
                     }
-                    console.log('📦 loadDiamonds: получены данные из VK Storage:', data);
+                 //   console.log('📦 loadDiamonds: получены данные из VK Storage:', data);
                 });
             }
             // Если локальная дата есть, а в VK её нет – она уже сохранена в this.lastBonusDate
@@ -1087,7 +1087,7 @@ saveDiamonds() {
             value: String(this.currentDiamonds)
         })
         .then(() => {
-            console.log('💎 Алмазы сохранены в VK Storage');
+          //  console.log('💎 Алмазы сохранены в VK Storage');
         })
         .catch((err) => {
             console.warn('Ошибка сохранения в VK Storage:', err);
@@ -1130,7 +1130,7 @@ showLeaderboard() {
         global: 1
     })
     .then(() => {
-        console.log('📊 Таблица лидеров открыта');
+      //  console.log('📊 Таблица лидеров открыта');
     })
     .catch((err) => {
         console.error('❌ Ошибка открытия таблицы лидеров:', err);
@@ -1143,11 +1143,11 @@ showLeaderboard() {
 // ============================================================
 syncLeaderboard() {
     if (!this.vkInitialized || !this.vkUserId) {
-        console.log('⏳ Нет данных для синхронизации лидерборда');
+       // console.log('⏳ Нет данных для синхронизации лидерборда');
         return;
     }
     if (this.currentDiamonds <= 0) {
-        console.log('⏳ Нет алмазов для синхронизации (currentDiamonds <= 0)');
+     //   console.log('⏳ Нет алмазов для синхронизации (currentDiamonds <= 0)');
         return;
     }
 
@@ -1165,8 +1165,8 @@ syncLeaderboard() {
     })
 
     .then((result) => {
-        console.log('📥 Ответ secure.addAppEvent:', result);
-        console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+     //   console.log('📥 Ответ secure.addAppEvent:', result);
+      //  console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
@@ -1258,7 +1258,7 @@ updateTotalGameTime(seconds) {
 // Загрузка достижений из VK Storage и localStorage (с merge)
 // ============================================================
 loadAchievements() {
-     console.log('🔵 loadAchievements() вызван');
+  //   console.log('🔵 loadAchievements() вызван');
     // Сначала загружаем из localStorage
     try {
         const local = localStorage.getItem('sudoku_achievements');
@@ -2200,7 +2200,7 @@ if (this.difficulty === 'easy') {
 // Обновленная подсказка с модалкой для доп. подсказок
 // ============================================================
 async giveHint() {
-    console.log('giveHint вызван');
+   // console.log('giveHint вызван');
     if (this.isFinished) return;
     
     if (this.maxHints === undefined || this.maxHints === 0) {
@@ -2215,12 +2215,12 @@ async giveHint() {
     this.updateHintButton();
 
     if (this.hintsUsed >= this.maxHints) {
-        console.log('Подсказки кончились. Использовано:', this.hintsUsed, 'Максимум:', this.maxHints);
+      //  console.log('Подсказки кончились. Использовано:', this.hintsUsed, 'Максимум:', this.maxHints);
         this.messageEl.textContent = '💡 Подсказки закончились!';
         this.sound.error();
         
         const result = await this.showHintAdModal();
-        console.log('Результат модалки:', result);
+     //   console.log('Результат модалки:', result);
         
         if (result === true) {
             const remaining = this.maxHints - this.hintsUsed;
@@ -2297,7 +2297,7 @@ pauseTimer() {
         clearInterval(this.timerInterval);
         this.timerInterval = null;
         this.isRunning = false;
-        console.log('⏸️ Таймер на паузе');
+    //    console.log('⏸️ Таймер на паузе');
     }
 }
 
@@ -2308,7 +2308,7 @@ resumeTimer() {
             this.timer++;
             this.updateTimer();
         }, 1000);
-        console.log('▶️ Таймер возобновлён');
+     //   console.log('▶️ Таймер возобновлён');
     }
 }
 
@@ -2498,7 +2498,7 @@ async solveAll() {
 // Модалка для получения дополнительных проверок
 // ============================================================
 showCheckAdModal() {
-    console.log('showCheckAdModal вызван');
+   // console.log('showCheckAdModal вызван');
     return new Promise((resolve) => {
         const modal = document.getElementById('checkAdModal');
         if (!modal) {
@@ -2521,7 +2521,7 @@ showCheckAdModal() {
             modal.style.display = 'none';
              setTimeout(() => {
             this.resumeTimer();
-            console.log('Модалка проверок закрыта с результатом:', result);
+         //   console.log('Модалка проверок закрыта с результатом:', result);
             resolve(result);
                 }, 500);
         };
@@ -2539,7 +2539,7 @@ showCheckAdModal() {
 
         newConfirmBtn.addEventListener('pointerdown', async (e) => {
             this.sound.click();
-            console.log('Нажата кнопка "Получить проверки"');
+           // console.log('Нажата кнопка "Получить проверки"');
 
             const btn = document.getElementById('checkAdConfirm');
             const originalText = btn.textContent;
@@ -2548,7 +2548,7 @@ showCheckAdModal() {
 
             try {
                 const adShown = await this.adManager.showRewardedAd();
-                console.log('Результат показа рекламы (проверки):', adShown);
+           //     console.log('Результат показа рекламы (проверки):', adShown);
 
                 btn.textContent = originalText;
                 btn.disabled = false;
