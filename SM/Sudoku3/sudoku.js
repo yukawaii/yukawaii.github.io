@@ -18,7 +18,7 @@ const vkBridge = window.vkBridge || {
 // ============================================================
 let vkInitialized = false;
 let vkUserId = null;
-let vkUserToken = null;
+//let vkUserToken = null;
 
 class AdManager {
     constructor() {
@@ -253,7 +253,6 @@ this.lastBonusDate = null;         // дата последнего получе
 this.diamondsAwardedForCurrentGame = false; // флаг, чтобы не начислять дважды за одну победу
 this.vkInitialized = false;
 this.vkUserId = null;
-this.vkUserToken = null;
 
         // DOM элементы
         this.menuScreen = document.getElementById('menuScreen');
@@ -964,41 +963,27 @@ async initVK() {
         return;
     }
 
-    vkBridge.send('VKWebAppGetAuthToken', { app_id: 51399364, scope: '' })
-        .then((data) => {
-            if (data && data.access_token) {
-                this.vkUserToken = data.access_token;
-                this.vkInitialized = true; // <-- УСТАНАВЛИВАЕМ ДО ВЫЗОВА loadDiamonds
-                return vkBridge.send('VKWebAppGetUserInfo', {});
-            } else {
-                throw new Error('Токен не получен');
-            }
-        })
-        .then((userInfo) => {
-            if (userInfo && userInfo.id) {
-                this.vkUserId = userInfo.id;
-                console.log('👤 Пользователь VK:', this.vkUserId);
-                // ТОЛЬКО ЗДЕСЬ вызываем загрузку данных
-                return Promise.all([
-                    this.loadDiamonds(),
-                    this.loadAchievements()
-                ]);
-            } else {
-                throw new Error('Не удалось получить ID пользователя');
-            }
-        })
-        .then(() => {
-            console.log('✅ Все данные загружены');
-            finishLoading();
-        })
-        .catch((err) => {
-            console.warn('Ошибка инициализации VK:', err);
-            this.loadDiamondsLocal();
-            this.loadAchievements();
-            finishLoading();        
-              return Promise.resolve(); 
-
-        });
+    // Получаем viewer_id из параметров запуска
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewerId = urlParams.get('viewer_id');
+    if (viewerId) {
+        this.vkUserId = parseInt(viewerId);
+        this.vkInitialized = true;
+        console.log('👤 Пользователь VK (из URL):', this.vkUserId);
+        // Загружаем данные (алмазы, достижения) – они будут из VK Storage или локальные
+        await Promise.all([
+            this.loadDiamonds(),
+            this.loadAchievements()
+        ]);
+        console.log('✅ Все данные загружены');
+        finishLoading();
+    } else {
+        // fallback – используем локальные данные
+        console.warn('viewer_id не найден в URL, используем локальные данные');
+        this.loadDiamondsLocal();
+        this.loadAchievements();
+        finishLoading();
+    }
 }
 
 // ============================================================
@@ -1137,7 +1122,7 @@ showLeaderboard() {
 // Синхронизация рекорда с таблицей лидеров (через secure.addAppEvent)
 // ============================================================
 syncLeaderboard() {
-    if (!this.vkInitialized || !this.vkUserId || !this.vkUserToken) {
+    if (!this.vkInitialized || !this.vkUserId) {
         console.log('⏳ Нет данных для синхронизации лидерборда');
         return;
     }
