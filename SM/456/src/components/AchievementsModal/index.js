@@ -5,6 +5,7 @@ import { i18n, lan } from '../../unit/const';
 import { syncYandexAchievements, getAchievementsList } from '../../unit/yandexSdk';
 import { getTotalScore, formatScore, loadTotalScore } from '../../unit/achievements';
 import { loadCounter } from '../../unit/achievements';
+import { checkAchievementsNow } from '../unit/yandexSdk';
 
 class AchievementsModal extends Component {
   constructor(props) {
