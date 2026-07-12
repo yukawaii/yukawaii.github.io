@@ -1139,9 +1139,12 @@ syncLeaderboard() {
         console.log('⏳ Нет данных для синхронизации лидерборда');
         return;
     }
-    if (this.currentDiamonds <= 0) return;
+    if (this.currentDiamonds <= 0) {
+        console.log('⏳ Нет алмазов для синхронизации (currentDiamonds <= 0)');
+        return;
+    }
 
-    // Получаем текущий рекорд пользователя
+    console.log(`📤 Запрос текущего рекорда для пользователя ${this.vkUserId}`);
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'apps.getScore',
         params: {
@@ -1151,28 +1154,41 @@ syncLeaderboard() {
         }
     })
     .then((data) => {
+        console.log('📥 Ответ apps.getScore:', data);
         let currentScore = parseInt(data.response) || 0;
+        console.log(`🏅 Текущий рекорд в VK: ${currentScore}, локальный: ${this.currentDiamonds}`);
+        
         if (this.currentDiamonds > currentScore) {
-            // Обновляем рекорд
+            console.log(`📤 Обновляем рекорд: отправляем secure.addAppEvent с value=${this.currentDiamonds}`);
             return vkBridge.send('VKWebAppCallAPIMethod', {
                 method: 'secure.addAppEvent',
                 params: {
                     user_id: this.vkUserId,
-                    activity_id: 2,   // 2 – очки (алмазы)
+                    activity_id: 2,
                     value: this.currentDiamonds,
                     v: '5.131',
                     access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
                 }
             });
         } else {
-            return Promise.resolve();
+            console.log('⏩ Текущий рекорд не ниже локального, обновление не требуется.');
+            return Promise.resolve(null);
         }
     })
-    .then(() => {
-        console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+    .then((result) => {
+        if (result) {
+            console.log('📥 Ответ secure.addAppEvent:', result);
+            console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+        } else {
+            console.log('⏩ Обновление не выполнялось или ответ пуст.');
+        }
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
+        // Дополнительно можно вывести детали ошибки
+        if (err && err.data) {
+            console.error('Детали ошибки:', err.data);
+        }
     });
 }
     // ============================================================
