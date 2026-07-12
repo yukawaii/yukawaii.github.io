@@ -182,9 +182,31 @@
 if (typeof vkBridge !== 'undefined') {
     vkBridge.send('VKWebAppInit', {})
         .then(() => {
-            console.log('✅ VK Bridge инициализирован');
+                        console.log('✅ VK Bridge инициализирован');
             // ✅ СРАЗУ ПОСЛЕ ИНИЦИАЛИЗАЦИИ ЗАГРУЖАЕМ ДАННЫЕ
             loadAllDataFromVK();
+            // Подписка на события VK Bridge (сворачивание/восстановление)
+                                                vkBridge.subscribe(function(event) {
+                                                    const { type } = event.detail;
+                                                    
+                                                    switch(type) {
+                                                        case 'VKWebAppViewHide':
+                                                            // Игра свёрнута — ставим на паузу
+                                                            console.log('📱 Приложение свёрнуто (VKWebAppViewHide)');
+                                                            pauseGame();
+                                                            break;
+                                                            
+                                                        case 'VKWebAppViewRestore':
+                                                            // Игра восстановлена — снимаем паузу
+                                                            console.log('📱 Приложение восстановлено (VKWebAppViewRestore)');
+                                                            resumeGame();
+                                                            break;
+                                                            
+                                                        default:
+                                                            // Игнорируем другие события
+                                                            break;
+                                                    }
+                                                });
         })
         .catch(e => console.warn('❌ Ошибка VK Bridge:', e));
 }
@@ -205,6 +227,9 @@ let wordColorsMap = new Map();
     let currentLevelId = 1; 
     let currentCategoryId = null;
 let currentLevelNum = null;
+// ===== СОСТОЯНИЕ ПАУЗЫ =====
+let isPaused = false;          // Флаг: игра на паузе или нет
+let isGameActive = false;      // Флаг: игрок находится в игровом процессе (не в меню)
 // ===== ОВЕРЛЕЙ ЗАГРУЗКИ РЕКЛАМЫ =====
 let loadingOverlay = null;
 // ===== ЕЖЕДНЕВНЫЙ БОНУС =====
@@ -224,12 +249,13 @@ function showDailyBonusModal() {
     // Если бонус уже получен сегодня – показываем модалку "уже получен"
     if (!canClaimDailyBonus()) {
         document.getElementById('dailyBonusUnavailableModal').style.display = 'flex';
+          pauseGame();  
         return;
     }
     // Иначе показываем выбор
     document.getElementById('dailyBonusModal').style.display = 'flex';
     // Приостанавливаем игру (если игра активна)
-    if (typeof pauseGame === 'function') pauseGame();
+     pauseGame();  
 }
 
 // Закрыть модалку по id
@@ -237,7 +263,7 @@ function closeModal(id) {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
     // Возобновляем игру
-    if (typeof resumeGame === 'function') resumeGame();
+     resumeGame(); 
 }
 
 // Показать модалку загрузки рекламы
@@ -280,7 +306,7 @@ function claimBonus(amount) {
     showBonusResult(amount);
 
     // Возобновляем игру
-    if (typeof resumeGame === 'function') resumeGame();
+   resumeGame();
 }
 
 // Показать результат бонуса
@@ -288,6 +314,41 @@ function showBonusResult(amount) {
     document.getElementById('bonusResultAmount').textContent = `⭐ +${amount}`;
     document.getElementById('bonusResultModal').style.display = 'flex';
 }
+
+// ===== УПРАВЛЕНИЕ ПАУЗОЙ =====
+
+function pauseGame() {
+    if (isPaused) return;          // Уже на паузе — ничего не делаем
+    isPaused = true;
+    console.log('⏸️ Игра на паузе');
+
+    // Останавливаем звуки (если audioCtx существует)
+    if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'running') {
+        audioCtx.suspend();
+    }
+
+    // Можно добавить визуальный индикатор паузы (опционально)
+    // Например, показать затемнение или иконку
+}
+
+function resumeGame() {
+    if (!isPaused) return;         // Не на паузе — ничего не делаем
+    isPaused = false;
+    console.log('▶️ Игра возобновлена');
+
+    // Восстанавливаем звуки
+    if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    // Убираем визуальный индикатор паузы (если добавляли)
+}
+
+// Проверка — можно ли кликать по клеткам
+function isGameInteractive() {
+    return !isPaused && isGameActive;
+}
+
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
 
@@ -325,7 +386,7 @@ document.getElementById('dailyBonus10').addEventListener('click', function() {
                     alert('Реклама временно недоступна, попробуйте позже.');
                 }
                 // Возобновляем игру
-                if (typeof resumeGame === 'function') resumeGame();
+               resumeGame();
             }
         );
     } else {
@@ -976,6 +1037,7 @@ function playSuccessSound() {
 
 // Кнопка возврата в меню
 document.getElementById('menuBackBtn').addEventListener('click', function() {
+     isGameActive = false; 
     // Возвращаемся в меню
     document.getElementById('startMenu').style.display = 'flex';
     document.getElementById('gridContainer').style.display = 'none';
@@ -1602,7 +1664,7 @@ function selectLevel(btn, levelData) {
 
 function startGameWithDifficulty(levelId, difficulty) {
     console.log('🚀 startGameWithDifficulty вызван с levelId:', levelId, 'difficulty:', difficulty);
-    
+    isGameActive = true;
     wordColorsMap.clear();
    // colorIndex = 0;
     
@@ -1959,6 +2021,11 @@ function checkLShapeOrder(chain, correctCoords) {
 }
 // Обработка клика по клетке
 function onCellClick(row, col) {
+ // Если игра на паузе или не активна — игнорируем клик
+    if (isPaused || !isGameActive) {
+        return;
+    }
+
     playTapSound();
 
     // Если нет активной цепочки — начинаем новую с этой клетки
@@ -4270,6 +4337,7 @@ function resetWordsVisibility() {
 // Переопределяем loadLevelById, чтобы скрывать слова при загрузке уровня
 const originalLoadLevelById2 = loadLevelById;
 loadLevelById = function(levelId, difficulty = 'easy') {
+    isGameActive = true;
     // Вызываем оригинальную функцию
     originalLoadLevelById2(levelId, difficulty);
     // Скрываем список слов
@@ -4421,6 +4489,19 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
     };
 }
 //конец разблокировки уровней
+
+// Обработчик потери/возврата фокуса для браузерной версии
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Вкладка скрыта — пауза
+        console.log('🌐 Вкладка скрыта (visibilitychange)');
+        pauseGame();
+    } else {
+        // Вкладка активна — возобновляем
+        console.log('🌐 Вкладка активна (visibilitychange)');
+        resumeGame();
+    }
+});
 
     init();
   
