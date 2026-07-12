@@ -1154,7 +1154,7 @@ syncLeaderboard() {
     vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
-            client_secret: jsQlTSHEiXcTe3UyBBnY,
+            client_secret: 'jsQlTSHEiXcTe3UyBBnY',
             user_id: this.vkUserId,
             activity_id: 2,
             value: this.currentDiamonds,
