@@ -44,7 +44,7 @@ const down = (store) => {
         states.auto(remain);
       } else {
         let speed = state.get('speedStart');
-        speed = speed - 1 < 1 ? 6 : speed - 1;
+        speed = speed - 1 < 1 ? 10 : speed - 1;
         store.dispatch(actions.speedStart(speed));
       }
     },

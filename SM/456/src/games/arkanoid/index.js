@@ -543,7 +543,7 @@ if (allBroken && newBricks.length > 0) {
     }
     
     // Ограничение скорости
-    var maxSpeed = 6 + newSpeed;
+    var maxSpeed = 10 + newSpeed;
     if (newBallSpeedX > maxSpeed) newBallSpeedX = maxSpeed;
     if (newBallSpeedX < -maxSpeed) newBallSpeedX = -maxSpeed;
     if (newBallSpeedY > maxSpeed) newBallSpeedY = maxSpeed;

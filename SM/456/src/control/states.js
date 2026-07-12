@@ -215,7 +215,7 @@ const newPoints = currentPoints + earned;
   
     const speedAdd = Math.floor(clearLines / eachLines); 
     let speedNow = state.get('speedStart') + speedAdd;
-    speedNow = speedNow > 6 ? 6 : speedNow;
+    speedNow = speedNow > 10 ? 10 : speedNow;
     store.dispatch(actions.speedRun(speedNow));
    setTimeout(function() {
     checkAchievementsNow();
