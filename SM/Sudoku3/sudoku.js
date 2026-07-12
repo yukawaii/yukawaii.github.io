@@ -1125,6 +1125,7 @@ showLeaderboard() {
           this.syncLeaderboard();
       // Передаём текущее количество алмазов как результат пользователя
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
+        app_id: 51399364,
         user_result: this.currentDiamonds,
         global: 1
     })

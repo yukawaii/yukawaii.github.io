@@ -1,5 +1,5 @@
 
-var score,id,token, name1;
+var score,id, name1;
 
 function getid(){
     vkBridge.send('VKWebAppGetUserInfo')
