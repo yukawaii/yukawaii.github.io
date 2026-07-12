@@ -651,7 +651,7 @@ updateGame() {
           {this.state.gameOver && (
             <div className={style.gameOver}>
               <div className={style.gameOverText}>💥Игра окончена!</div>
-              <div className={style.finalScore}>Счёт: {this.state.score}</div>
+              <div className={style.finalScore}>Счёт:{this.state.obstaclesPassed}</div>
               <button 
                 className={style.restartBtn} 
                 onClick={this.restartGame}
