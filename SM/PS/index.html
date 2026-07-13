@@ -546,8 +546,8 @@ function saveCompletedLevel(levelId, difficulty) {
         localStorage.setItem(key, JSON.stringify(completed));
         console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
 
-        // ✅ Начисляем звёзды за уровень (например, 1 звёзд)
-        const starsForLevel = 1;
+        // ✅ Начисляем звёзды за уровень (например, 5 звёзд)
+        const starsForLevel = 5;
         totalStars += starsForLevel;
         localStorage.setItem('totalStars', String(totalStars));
 
@@ -2543,7 +2543,7 @@ function showConfetti() {
             return clearInterval(interval);
         }
 
-        const particleCount = 20 * (timeLeft / duration);
+        const particleCount = 10 * (timeLeft / duration);
         
         // Конфетти с двух сторон
         confetti({
