@@ -20,6 +20,7 @@ import {
   initYandexSdk,
   showBannerAd,        
 } from './unit/yandexSdk';
+import { syncYandexAchievements } from './unit/yandexSdk';
 
 //console.log('🔥 index.js ЗАГРУЖЕН!');
 
@@ -47,7 +48,10 @@ if (typeof vkBridge !== 'undefined') {
     } else {
     //  console.log('✅ Рекорд синхронизирован:', currentMax);
     }
-    
+    // После загрузки рекорда
+syncYandexAchievements().then(function() {
+  console.log('✅ Достижения синхронизированы при старте');
+});
     // ✅ Потом подписываемся на изменения
     subscribeRecord(store);
     
