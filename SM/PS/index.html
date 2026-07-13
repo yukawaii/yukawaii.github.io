@@ -2307,7 +2307,7 @@ async function init() {
 
     // ✅ ГЛАВНОЕ: ЖДЁМ ЗАГРУЗКУ ДАННЫХ ИЗ VK
     try {
-        document.getElementById('loadingStatus').textContent = 'Синхронизация с ВК...';
+        document.getElementById('loadingStatus').textContent = 'Синхронизация с космосом...';
         await loadAllDataFromVK();  // ждём завершения
         console.log('✅ Все данные загружены и применены');
     } catch (e) {

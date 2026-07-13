@@ -2056,48 +2056,83 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 var repairErrorModal = document.getElementById('repairErrorModal');
                 var isGoingToMenu = false;
 
-        // Сохранение в VK Storage
-       function saveToVKStorage(key, value) {
-                if (typeof vkBridge === 'undefined') {
-                    return Promise.resolve();
-                }
-                // ★★★ Всегда сохраняем как строку JSON ★★★
-                var stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-                return vkBridge.send('VKWebAppStorageSet', {
-                    key: key,
-                    value: stringValue
-                })
-                .then(() => {
-                    console.log(`✅ Сохранено в VK Storage: ${key}`, value);
-                })
-                .catch((error) => {
-                    console.warn(`❌ Ошибка сохранения ${key}:`, error);
-                });
-            }
+ // ============================================================
+//  1. OK STORAGE СИНХРОНИЗАЦИЯ (ЗАМЕНА VK STORAGE)
+// ============================================================
 
-        // Загрузка из VK Storage
-        function loadFromVKStorage(key) {
-            if (typeof vkBridge === 'undefined') {
-                return Promise.resolve(null);
+// Ключи для OK Storage (оставьте те же имена, что были)
+
+// Сохранение в OK Storage через VKWebAppCallAPIMethod
+function saveToVKStorage(key, value) {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve();
+    }
+    var stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+    return vkBridge.send('VKWebAppCallAPIMethod', {
+        method: 'storage.set',
+        params: {
+            key: key,
+            value: stringValue
+        },
+        use_local: true
+    })
+    .then(function(result) {
+        console.log('✅ Сохранено в OK Storage: ' + key, value);
+    })
+    .catch(function(error) {
+        console.warn('❌ Ошибка сохранения ' + key + ':', error);
+    });
+}
+
+// Загрузка из OK Storage через VKWebAppCallAPIMethod
+function loadFromVKStorage(key) {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve(null);
+    }
+    return vkBridge.send('VKWebAppCallAPIMethod', {
+        method: 'storage.get',
+        params: {
+            keys: [key]
+        },
+        use_local: true
+    })
+    .then(function(result) {
+        if (result && result.data && result.data[key] !== undefined) {
+            var value = result.data[key];
+            try {
+                return JSON.parse(value);
+            } catch {
+                return value;
             }
-            return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
-                .then((data) => {
-                    if (data && data.keys && data.keys.length > 0) {
-                        const value = data.keys[0].value;
-                        try {
-                            return JSON.parse(value);
-                        } catch {
-                            return value;
-                        }
-                    }
-                    return null;
-                })
-                .catch((error) => {
-                    console.warn(`❌ Ошибка загрузки ${key}:`, error);
-                    return null;
-                });
         }
+        return null;
+    })
+    .catch(function(error) {
+        console.warn('❌ Ошибка загрузки ' + key + ':', error);
+        return null;
+    });
+}
 
+// (Опционально) Получить все ключи – пригодится для отладки
+function okStorageGetAll() {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve(null);
+    }
+    return vkBridge.send('VKWebAppCallAPIMethod', {
+        method: 'storage.getAll',
+        params: {
+            scope: 'CUSTOM' // данные конкретного пользователя
+        },
+        use_local: true
+    })
+    .then(function(result) {
+        return result.data || null;
+    })
+    .catch(function(error) {
+        console.warn('❌ Ошибка получения всех ключей:', error);
+        return null;
+    });
+}
         // ===== ПОЛУЧЕНИЕ ТЕКУЩИХ ДАННЫХ =====
         function getCurrentGameData() {
             return {
@@ -3632,15 +3667,15 @@ function showCountdownNotification(text) {
             document.body.appendChild(overlay);
         }
   
-        function inviteFriends() {
-            if (typeof vkBridge !== 'undefined') {
-                vkBridge.send("VKWebAppShowInviteBox", {})
-                    .then(data => console.log('Приглашение отправлено', data))
-                    .catch(err => console.warn('Ошибка приглашения:', err));
-            } else {
-                alert('Пригласить друзей (работает только в VK)');
-            }
-        }
+     function inviteFriends() {
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send("VKWebAppShowInviteBox", { message: "Присоединяйся к игре Батискаф в западне!" })
+            .then(data => console.log('Приглашение отправлено', data))
+            .catch(err => console.warn('Ошибка приглашения:', err));
+    } else {
+        alert('Пригласить друзей (работает только в VK/OK)');
+    }
+}
 
         // ============================================================
         //  10. ФОНОВЫЕ ЭФФЕКТЫ - БЕЗ ИЗМЕНЕНИЙ
