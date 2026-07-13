@@ -261,7 +261,7 @@ var ACHIEVEMENTS = [
     key: 'play_all_arcades',
     icon: '🎮',
     name: { ru: 'Игроман', en: 'Gamer' },
-    desc: { ru: 'Сыграть во все доступные аркады', en: 'Play all available arcades' },
+    desc: { ru: 'В каждой аркаде получить по 1 звезде', en: 'Get 1 star in each arcade' },
     check: function(state) {
       var played = JSON.parse(localStorage.getItem('arcades_played') || '{}');
       var allArcades = ['racing', 'snake', 'pong', 'arkanoid'];

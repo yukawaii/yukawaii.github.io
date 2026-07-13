@@ -71,6 +71,7 @@ class AchievementsModal extends Component {
   }
 
  refreshAchievements() {
+  
   console.log('🔄 Обновляем достижения...refreshAchievements');
   this.setState({ loading: true });
 
