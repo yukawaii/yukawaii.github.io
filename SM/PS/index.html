@@ -545,8 +545,19 @@ function saveCompletedLevel(levelId, difficulty) {
         completed.push(levelId);
         localStorage.setItem(key, JSON.stringify(completed));
         console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
-    // ✅ Обновляем интерфейс (без пересчёта!)
+
+        // ✅ Начисляем звёзды за уровень (например, 1 звёзд)
+        const starsForLevel = 1;
+        totalStars += starsForLevel;
+        localStorage.setItem('totalStars', String(totalStars));
+
+        // ✅ Обновляем интерфейс без пересчёта
         updateStarsDisplay();
+
+        // ✅ Синхронизируем с VK (включая totalStars и completed)
+        if (typeof syncAllDataToVK === 'function') {
+            syncAllDataToVK();
+        }
     }
 }
 
@@ -2532,7 +2543,7 @@ function showConfetti() {
             return clearInterval(interval);
         }
 
-        const particleCount = 50 * (timeLeft / duration);
+        const particleCount = 20 * (timeLeft / duration);
         
         // Конфетти с двух сторон
         confetti({
@@ -3261,7 +3272,7 @@ function getTotalStars() {
 
 // Создаём живые звёзды на фоне
 function createLivingStars() {
-    const starCount = 80;
+    const starCount = 20;
     const container = document.body;
     
     // Цвета для звёзд
