@@ -2314,3 +2314,136 @@ div[style*="position:fixed"] {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(400%); }
 }
+
+/* Адаптация ВСЕХ модалок для ландшафта */
+/* Максимальная адаптация всех модалок и отдельно категорий в ландшафте */
+@media (max-width: 900px) and (orientation: landscape) {
+    /* ===== ОБЩИЕ ПРАВИЛА ДЛЯ ВСЕХ МОДАЛОК ===== */
+    .modal-window {
+        padding: 8px !important;
+        align-items: center !important;
+    }
+
+    .modal-window .galaxy-scroll,
+    .modal-window .modal-content-inner,
+    .modal-window [style*="border-radius:48px"] {
+        padding: 8px 10px !important;
+        max-width: 96vw !important;
+        max-height: 92vh !important;
+        border-radius: 32px !important;
+    }
+
+    .modal-window h3,
+    .modal-window h2 {
+        font-size: 1rem !important;
+        margin: 0 0 4px !important;
+    }
+
+    .modal-window .diff-main-buttons {
+        gap: 4px !important;
+        margin-bottom: 6px !important;
+    }
+    .modal-window .diff-lang-buttons {
+        gap: 6px !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* Обычные кнопки */
+    .modal-window button:not([style*="border-radius:50%"]) {
+        font-size: 0.7rem !important;
+        padding: 4px 10px !important;
+        border-radius: 30px !important;
+    }
+
+    /* Кнопки выбора категории и уровней (круглые) */
+    .modal-window .cat-select-btn,
+    #levelsGrid button {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.9rem !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        border-radius: 50% !important;
+    }
+    #levelsGrid {
+        gap: 4px !important;
+        padding: 4px !important;
+        max-height: 200px !important;
+    }
+
+    /* Языковые кнопки (EN, FR, JP) */
+    .lang-select-btn {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.55rem !important;
+    }
+
+    /* Модалка бонуса */
+    .bonus-modal-content {
+        padding: 10px 12px !important;
+    }
+    .bonus-modal-content h2 {
+        font-size: 1.1rem !important;
+        margin: 0 0 4px !important;
+    }
+    .bonus-modal-content p {
+        font-size: 0.75rem !important;
+        margin: 2px 0 !important;
+    }
+    .bonus-btn {
+        width: 55px !important;
+        height: 55px !important;
+        font-size: 1rem !important;
+    }
+    .bonus-btn span {
+        font-size: 0.7rem !important;
+    }
+
+    /* Сюжетные модалки */
+    .story-modal-content {
+        padding: 12px 15px !important;
+    }
+    .story-modal-content h3 {
+        font-size: 1.2rem !important;
+    }
+    .story-modal-content p {
+        font-size: 0.8rem !important;
+        margin: 4px 0 !important;
+    }
+    .story-modal-content button {
+        padding: 6px 18px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* Закрывающие крестики */
+    .modal-window [style*="font-size:1.8rem"] {
+        font-size: 1.2rem !important;
+        width: 28px !important;
+        height: 28px !important;
+    }
+
+    /* ===== ОТДЕЛЬНО ДЛЯ МОДАЛКИ ВЫБОРА КАТЕГОРИЙ ===== */
+    #diffCategoryModal .cat-select-btn {
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        min-height: 45px !important;
+        flex-shrink: 0 !important;
+        font-size: 1.2rem !important;
+    }
+    #diffCategoryModal .cat-select-btn span {
+        font-size: 1.2rem !important;
+    }
+    #diffCategoryModal .galaxy-scroll {
+        padding: 12px 10px !important;
+    }
+    #diffCategoryModal h3 {
+        font-size: 1.1rem !important;
+        margin: 0 0 8px !important;
+    }
+    #diffCategoryModal #closeCatDiffModal {
+        padding: 6px 16px !important;
+        font-size: 0.8rem !important;
+        margin-top: 6px !important;
+    }
+}

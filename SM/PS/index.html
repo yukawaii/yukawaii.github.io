@@ -1493,10 +1493,13 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
     const MAX_RETRIES = 50;
     const theme = LEVELS_DATA[themeIndex % LEVELS_DATA.length];
     const gridSizeVal = theme.size;
-    
-    const enableLShape = difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert';
-    const enableSnake = difficulty === 'hard' || difficulty === 'expert';
-    const enableDiagonal = difficulty === 'hard' || difficulty === 'expert';
+
+    const isAdvanced = difficulty === 'hard' || difficulty === 'expert' 
+                || difficulty === 'english' || difficulty === 'french' || difficulty === 'japanese';
+
+const enableLShape = difficulty === 'medium' || isAdvanced;
+const enableSnake  = isAdvanced;
+const enableDiagonal = isAdvanced;
     
     let wordsToPlace = [...customWords];
     // Сортируем по убыванию длины (самые длинные первыми)
@@ -1602,14 +1605,23 @@ function generateLevel(themeIndex, customWords, retryCount = 0, difficulty = 'ea
         }
     }
     
-    // Заполняем пустые клетки
+   /* // Заполняем пустые клетки
     for (let i = 0; i < gridSizeVal; i++) {
         for (let j = 0; j < gridSizeVal; j++) {
             if (tempGrid[i][j] === null) {
                 tempGrid[i][j] = RUS_LETTERS[Math.floor(Math.random() * RUS_LETTERS.length)];
             }
         }
+    }*/
+    // Заполняем пустые клетки
+const alphabet = getAlphabetForDifficulty(difficulty);
+for (let i = 0; i < gridSizeVal; i++) {
+    for (let j = 0; j < gridSizeVal; j++) {
+        if (tempGrid[i][j] === null) {
+            tempGrid[i][j] = alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
     }
+}
     
     // ФИНАЛЬНАЯ ПРОВЕРКА: все ли слова на месте
     for (let word of wordsToPlace) {
@@ -2699,7 +2711,7 @@ function showWelcomeStory() {
 //================конец приветственного сюжета
 function getGalaxyStars() {
     const stars = {};
-    const difficulties = ['easy', 'medium', 'hard', 'expert'];
+    const difficulties = ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'];
     
     difficulties.forEach(diff => {
         const completedLevels = getCompletedLevels(diff);
@@ -2731,32 +2743,79 @@ function getGalaxyStars() {
 
 function showDifficultyModal() {
     const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
+    modalDiv.className = 'modal-window';
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    contentDiv.className = 'galaxy-scroll';
+  contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:90vh;overflow-y:auto;';
+contentDiv.className = 'galaxy-scroll diff-modal-content';
+    
     let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
-html += `<div style="display:flex;flex-direction:column;gap:12px;">`;
-DIFFICULTIES.forEach(diff => {
-html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 20px;border-radius:40px;font-size:1rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);max-width:280px;width:80%;margin:0 auto;">${diff.label}</button>`;});
-html += `</div><button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`;
+    
+    // Основные сложности (большие кнопки)
+    html += `<div class="diff-main-buttons" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">`;
+    const mainDifficulties = DIFFICULTIES.filter(d => !['english','french','japanese'].includes(d.id));
+    mainDifficulties.forEach(diff => {
+        html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 20px;border-radius:40px;font-size:0.8rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);max-width:280px;width:70%;margin:0 auto;">${diff.label}</button>`;
+    });
+    html += `</div>`;
 
+   
+ // --- Языковые сложности (круглые кнопки с флагами) ---
+html += `<div class="diff-lang-buttons"  style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px;">`;
+const langDifficulties = DIFFICULTIES.filter(d => ['english','french','japanese'].includes(d.id));
+langDifficulties.forEach(diff => {
+    let style = 'border:none;border-radius:50%;width:55px;height:55px;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;display:flex;align-items:center;justify-content:center;font-weight:bold!important;font-size:0.8rem;color:#333;';
+    let bg = '';
+    if (diff.id === 'english') {
+        // Флаг Англии (белый фон + красный крест)
+        bg = 'background: white !important; background-image: linear-gradient(to right, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%), linear-gradient(to bottom, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%) !important;';
+        style += 'color: #C8102E;';
+    } else if (diff.id === 'french') {
+        // Франция (синий-белый-красный)
+        bg = 'background: linear-gradient(to right, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%) !important;';
+        style += 'color: #0055A4;';
+    } else if (diff.id === 'japanese') {
+        // Япония (белый фон + красный круг)
+        bg = 'background: radial-gradient(circle at center, #BC002D 35%, #FFFFFF 35%) !important;';
+        style += 'color: #BC002D;';
+    }
+    const label = diff.id === 'english' ? 'EN' : (diff.id === 'french' ? 'FR' : 'JP');
+    html += `<button class="lang-select-btn" data-diff="${diff.id}" style="${style} ${bg}">${label}</button>`;
+});
+html += `</div>`;
+
+
+
+
+
+  
+    
+    html += `<button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:10px;">Закрыть</button>`;
+    
     contentDiv.innerHTML = html;
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     
+    // Обработчики для основных кнопок (как было)
     document.querySelectorAll('.diff-select-btn').forEach(btn => {
         btn.onclick = () => {
             const diff = btn.getAttribute('data-diff');
             modalDiv.remove();
-                    // ✅ Обновляем подзаголовок у кнопки "Начать"
-        localStorage.setItem('lastDifficulty', diff);
-        updateStartButtonSubtitle();
-            // Показываем сюжет для выбранной сложности
+            localStorage.setItem('lastDifficulty', diff);
+            updateStartButtonSubtitle();
             showDifficultyStory(diff);
-            
+        };
+    });
+    
+    // Обработчики для языковых кнопок
+    document.querySelectorAll('.lang-select-btn').forEach(btn => {
+        btn.onclick = () => {
+            const diff = btn.getAttribute('data-diff');
+            modalDiv.remove();
+            localStorage.setItem('lastDifficulty', diff);
+            updateStartButtonSubtitle();
+            showDifficultyStory(diff); // можно использовать ту же функцию
         };
     });
     
@@ -2817,183 +2876,13 @@ function showDifficultyStory(difficulty) {
 }
 
 
-// Модальное окно галактик
-function showGalaxyMap() {
-    try {
-        const stars = getGalaxyStars();
-        
-        // Собираем все категории со всех сложностей
-        const allCategories = [];
-        ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
-            const categories = getCategoriesForDifficulty(diff);
-            categories.forEach(cat => {
-                const uniqueKey = `${cat.id}_${diff}`;
-                const exists = allCategories.some(item => item.uniqueKey === uniqueKey);
-                if (!exists) {
-                    allCategories.push({
-                        ...cat,
-                        difficulty: diff,
-                        uniqueKey: uniqueKey
-                    });
-                }
-            });
-        });
-        
-        // Сортируем: сначала по сложности, потом по id
-        const diffOrder = { easy: 0, medium: 1, hard: 2, expert: 3 };
-        allCategories.sort((a, b) => {
-            if (diffOrder[a.difficulty] !== diffOrder[b.difficulty]) {
-                return diffOrder[a.difficulty] - diffOrder[b.difficulty];
-            }
-            return a.id - b.id;
-        });
-        
-        // ===== ПАГИНАЦИЯ =====
-        const totalPages = Math.ceil(allCategories.length / GALAXIES_PER_PAGE);
-        if (currentGalaxyPage >= totalPages) currentGalaxyPage = totalPages - 1;
-        if (currentGalaxyPage < 0) currentGalaxyPage = 0;
-        
-        const startIdx = currentGalaxyPage * GALAXIES_PER_PAGE;
-        const endIdx = Math.min(startIdx + GALAXIES_PER_PAGE, allCategories.length);
-        const pageCategories = allCategories.slice(startIdx, endIdx);
-        
-        const modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-window';
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-        
-        const contentDiv = document.createElement('div');
-contentDiv.style.cssText = 'margin-bottom: 10px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-contentDiv.className = 'galaxy-scroll';  // ← ДОБАВЬТЕ ЭТУ СТРОКУ        
-        let galaxiesHtml = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-                <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
-                <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-            </div>
-        `;
-        
-        pageCategories.forEach(cat => {
-            let totalStars = 0;
-            let maxStars = 0;
-            let completedLevels = 0;
-            let totalLevels = 0;
-            
-            ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
-                const key = `${cat.id}_${diff}`;
-                if (stars[key]) {
-                    totalStars += stars[key].totalStars;
-                    maxStars += stars[key].maxStars;
-                    completedLevels += stars[key].completedLevels;
-                    totalLevels += stars[key].totalLevels;
-                }
-            });
-            
-            const percent = maxStars > 0 ? (totalStars / maxStars) * 100 : 0;
-            
-            const diffIcon = {
-                easy: '🟢',
-                medium: '🟠',
-                hard: '🔴',
-                expert: '🟣'
-            }[cat.difficulty] || '';
-            
-            galaxiesHtml += `
-                <div class="galaxy-item" data-cat-id="${cat.id}" data-diff="${cat.difficulty}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};margin-bottom:8px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <span style="font-size:2rem;">${cat.icon}</span>
-                            <div style="text-align:left;">
-                                <div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${diffIcon} ${cat.title}</div>
-                                <div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div>
-                                <div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div>
-                            </div>
-                        </div>
-                        <div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div>
-                    </div>
-                    <div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
-                        <div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        // ===== КНОПКИ ПАГИНАЦИИ =====
-        galaxiesHtml += `
-            <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
-                <button id="galaxyPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === 0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button>
-                <span style="color:#6B5B4E;font-size:0.9rem;">${currentGalaxyPage + 1} / ${totalPages}</span>
-                <button id="galaxyNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button>
-            </div>
-            <button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>
-        `;
-        
-        contentDiv.innerHTML = galaxiesHtml;
-        modalDiv.appendChild(contentDiv);
-        document.body.appendChild(modalDiv);
-        
-        // Обработчики для галактик
-        document.querySelectorAll('.galaxy-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const catId = parseInt(item.getAttribute('data-cat-id'));
-                const diff = item.getAttribute('data-diff');
-                modalDiv.remove();
-                showGalaxyDetails(catId, diff);
-            });
-        });
-        
-        // ===== ПАГИНАЦИЯ: НАЗАД =====
-        const prevBtn = document.getElementById('galaxyPrevPage');
-        if (prevBtn) {
-            prevBtn.onclick = () => {
-                if (currentGalaxyPage > 0) {
-                    currentGalaxyPage--;
-                    modalDiv.remove();
-                    showGalaxyMap();
-                }
-            };
-        }
-        
-        // ===== ПАГИНАЦИЯ: ВПЕРЁД =====
-        const nextBtn = document.getElementById('galaxyNextPage');
-        if (nextBtn) {
-            nextBtn.onclick = () => {
-                if (currentGalaxyPage < totalPages - 1) {
-                    currentGalaxyPage++;
-                    modalDiv.remove();
-                    showGalaxyMap();
-                }
-            };
-        }
-        
-        const closeBtn = document.getElementById('closeGalaxyBtn');
-        if (closeBtn) {
-            closeBtn.onclick = (e) => {
-                e.stopPropagation();
-                modalDiv.remove();
-            };
-        }
-        
-        const crossBtn = document.getElementById('closeGalaxyCross');
-        if (crossBtn) {
-            crossBtn.onclick = (e) => {
-                e.stopPropagation();
-                modalDiv.remove();
-            };
-        }
-        
-        modalDiv.onclick = (e) => { 
-            if (e.target === modalDiv) modalDiv.remove(); 
-        };
-        
-    } catch (e) {
-        console.error('❌ Ошибка в showGalaxyMap:', e);
-    }
-}
+
+
 // ===== ПОКАЗ ДЕТАЛЕЙ ГАЛАКТИКИ =====
 function showGalaxyDetails(categoryId, difficulty) {
     // Находим категорию
     let category = null;
-    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+    ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => { 
         const found = getCategoriesForDifficulty(diff).find(c => c.id === categoryId);
         if (found) category = found;
     });
@@ -3091,7 +2980,7 @@ function showGalaxyMap() {
         // Собираем все категории со всех сложностей и группируем по названию
         const categoriesMap = new Map();
         
-        ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+      ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => {
             const categories = getCategoriesForDifficulty(diff);
             categories.forEach(cat => {
                 // Ключ группировки - название категории
@@ -3917,9 +3806,12 @@ function loadAllDataFromVK() {
         loadFromVKStorage('wordgame_unlocked_levels_v2'),
         loadFromVKStorage('wordgame_theme_v2'),
         loadFromVKStorage('wordgame_total_stars_v2'),
-        loadFromVKStorage('wordgame_bonusDate_v2')  // 👈 НОВЫЙ КЛЮЧ
+        loadFromVKStorage('wordgame_bonusDate_v2'),          // 👈 НОВЫЙ КЛЮЧ
+        loadFromVKStorage('wordgame_completed_english'),
+loadFromVKStorage('wordgame_completed_french'),
+loadFromVKStorage('wordgame_completed_japanese')
     ])
-    .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData, bonusDateData]) => {
+    .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData, bonusDateData, englishData, frenchData, japaneseData]) => {
         let loaded = false;
         
         // ====== ТЕМА ======
@@ -3942,8 +3834,16 @@ function loadAllDataFromVK() {
         }
         
         // ====== ПРОЙДЕННЫЕ УРОВНИ ======
-        const diffKeys = ['easy', 'medium', 'hard', 'expert'];
-        const diffDataMap = { easy: easyData, medium: mediumData, hard: hardData, expert: expertData };
+       const diffKeys = ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'];
+const diffDataMap = { 
+    easy: easyData, 
+    medium: mediumData, 
+    hard: hardData, 
+    expert: expertData,
+    english: englishData,    // нужно добавить в Promise.all
+    french: frenchData,
+    japanese: japaneseData
+};
         
         diffKeys.forEach(diff => {
             const vkData = diffDataMap[diff];
@@ -4066,6 +3966,9 @@ function syncAllDataToVK() {
     const completedMedium = getCompletedLevels('medium');
     const completedHard = getCompletedLevels('hard');
     const completedExpert = getCompletedLevels('expert');
+    const completedEnglish = getCompletedLevels('english');
+const completedFrench = getCompletedLevels('french');
+const completedJapanese = getCompletedLevels('japanese');
     const stars = getGalaxyStars();
     const scrolls = getUnlockedScrolls();
    // const total = updateTotalStars();
@@ -4073,7 +3976,7 @@ function syncAllDataToVK() {
     const theme = currentTheme || localStorage.getItem('theme') || 'dark';
     
     const allUnlocked = {};
-    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+   ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => {
         const categories = getCategoriesForDifficulty(diff);
         categories.forEach(cat => {
             const key = `unlocked_levels_${cat.id}_${diff}`;
@@ -4093,7 +3996,10 @@ function syncAllDataToVK() {
         saveToVKStorage('wordgame_completed_medium', completedMedium),
         saveToVKStorage('wordgame_completed_hard', completedHard),
         saveToVKStorage('wordgame_completed_expert', completedExpert),
-        saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked)
+        saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked),
+        saveToVKStorage('wordgame_completed_english', completedEnglish),
+saveToVKStorage('wordgame_completed_french', completedFrench),
+saveToVKStorage('wordgame_completed_japanese', completedJapanese)
     ]).then(() => {
         console.log('✅ Полная синхронизация завершена');
     }).catch(e => console.warn('⚠️ Ошибка синхронизации:', e));
@@ -4461,7 +4367,7 @@ function syncUnlockedLevelsToVK() {
     
     // Собираем все разблокировки
     const allUnlocked = {};
-    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+    ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => { 
         const categories = getCategoriesForDifficulty(diff);
         categories.forEach(cat => {
             const key = `unlocked_levels_${cat.id}_${diff}`;
@@ -4536,11 +4442,11 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
     
     document.getElementById('unlockWatchBtn').onclick = function() {
         modalDiv.remove();
-        console.log(`🔄 Клик по "Посмотреть", разблокируем уровень ${levelNum}...`);
+      //  console.log(`🔄 Клик по "Посмотреть", разблокируем уровень ${levelNum}...`);
         
         showRewardedAd(
             function() {
-                console.log(`✅ Реклама показана, разблокируем уровень ${levelNum}`);
+            //    console.log(`✅ Реклама показана, разблокируем уровень ${levelNum}`);
                 unlockLevel(categoryId, difficulty, levelNum);
                 if (onSuccess) onSuccess();
                 showMessage(`🔓 Уровень ${levelNum} разблокирован!`, 2000);
@@ -4566,12 +4472,9 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
 // Обработчик потери/возврата фокуса для браузерной версии
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-        // Вкладка скрыта — пауза
-        console.log('🌐 Вкладка скрыта (visibilitychange)');
         pauseGame();
     } else {
         // Вкладка активна — возобновляем
-        console.log('🌐 Вкладка активна (visibilitychange)');
         resumeGame();
     }
 });
