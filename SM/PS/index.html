@@ -3005,20 +3005,29 @@ function showGalaxyDetails(categoryId, difficulty) {
     
     const stars = getGalaxyStars();
     
-    let totalStars = 0;
-    let maxStars = 0;
-    let completedLevels = 0;
-    let totalLevels = 0;
-    
-    ['easy', 'medium', 'hard', 'expert'].forEach(diff => {
-        const key = `${categoryId}_${diff}`;
+   let totalStars = 0;
+let maxStars = 0;
+let completedLevels = 0;
+let totalLevels = 0;
+
+// Получаем название и иконку выбранной категории
+const categoryTitle = category.title;
+const categoryIcon = category.icon;
+
+// Проходим по всем сложностям и ищем категорию с таким же названием и иконкой
+['easy', 'medium', 'hard', 'expert'].forEach(diff => {
+    const categories = getCategoriesForDifficulty(diff);
+    const matchedCat = categories.find(c => c.title === categoryTitle && c.icon === categoryIcon);
+    if (matchedCat) {
+        const key = `${matchedCat.id}_${diff}`;
         if (stars[key]) {
             totalStars += stars[key].totalStars;
             maxStars += stars[key].maxStars;
             completedLevels += stars[key].completedLevels;
             totalLevels += stars[key].totalLevels;
         }
-    });
+    }
+});
     
     const starData = { totalStars, maxStars, completedLevels, totalLevels };
     
@@ -3072,6 +3081,9 @@ function showGalaxyDetails(categoryId, difficulty) {
         }
     };
 }
+
+
+
 function showGalaxyMap() {
     try {
         const stars = getGalaxyStars();
