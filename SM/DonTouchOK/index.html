@@ -2057,35 +2057,147 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 var isGoingToMenu = false;
 
  // ============================================================
-//  1. OK STORAGE СИНХРОНИЗАЦИЯ (ЗАМЕНА VK STORAGE)
+//  ОПРЕДЕЛЕНИЕ ПЛАТФОРМЫ
 // ============================================================
 
-// Ключи для OK Storage (оставьте те же имена, что были)
+let currentPlatform = 'vk'; // 'vk' или 'ok'
 
-// Сохранение в OK Storage через VKWebAppCallAPIMethod
+function detectPlatform() {
+    // Способ 1: через параметры запуска (рекомендуемый)
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.send('VKWebAppGetLaunchParams')
+            .then(function(params) {
+                if (params && params.vk_platform) {
+                    // Если в vk_platform есть "_ok" — это Одноклассники
+                    if (params.vk_platform.indexOf('_ok') !== -1) {
+                        currentPlatform = 'ok';
+                    } else {
+                        currentPlatform = 'vk';
+                    }
+                }
+                // Дополнительная проверка по vk_client
+                if (params && params.vk_client === 'ok') {
+                    currentPlatform = 'ok';
+                }
+                console.log('🔍 Платформа определена:', currentPlatform);
+            })
+            .catch(function() {
+                // Если не удалось получить параметры — пробуем через URL
+                detectPlatformFromURL();
+            });
+    } else {
+        detectPlatformFromURL();
+    }
+}
+
+function detectPlatformFromURL() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var vkPlatform = urlParams.get('vk_platform');
+    if (vkPlatform && vkPlatform.indexOf('_ok') !== -1) {
+        currentPlatform = 'ok';
+    } else {
+        // Проверяем referrer
+        if (document.referrer && document.referrer.indexOf('ok.ru') !== -1) {
+            currentPlatform = 'ok';
+        }
+    }
+    console.log('🔍 Платформа определена (из URL):', currentPlatform);
+}
+// ============================================================
+//  УНИВЕРСАЛЬНОЕ ХРАНИЛИЩЕ (VK + OK)
+// ============================================================
+
+const STORAGE_KEYS = {
+    GAME_DATA: 'bathyscaphe_game_data_v1',
+    ACHIEVEMENTS: 'bathyscaphe_achievements_v1',
+    COUNTERS: 'bathyscaphe_counters_v1'
+};
+
+// ---- Сохранение в текущее хранилище ----
+function saveToCurrentPlatform(key, value) {
+    var stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+    
+    if (currentPlatform === 'ok') {
+        // Одноклассники: через VKWebAppCallAPIMethod
+        return saveToOKStorage(key, stringValue);
+    } else {
+        // ВКонтакте: через VKWebAppStorageSet
+        return saveToVKStorage(key, stringValue);
+    }
+}
+
+// ---- Загрузка из текущего хранилища ----
+function loadFromCurrentPlatform(key) {
+    if (currentPlatform === 'ok') {
+        return loadFromOKStorage(key);
+    } else {
+        return loadFromVKStorage(key);
+    }
+}
+
+// ---- Сохранение в VK Storage (ВКонтакте) ----
 function saveToVKStorage(key, value) {
     if (typeof vkBridge === 'undefined') {
         return Promise.resolve();
     }
-    var stringValue = typeof value === 'string' ? value : JSON.stringify(value);
+    return vkBridge.send('VKWebAppStorageSet', {
+        key: key,
+        value: value
+    })
+    .then(function() {
+        console.log('✅ Сохранено в VK Storage:', key);
+    })
+    .catch(function(error) {
+        console.warn('❌ Ошибка сохранения в VK Storage:', error);
+    });
+}
+
+// ---- Загрузка из VK Storage (ВКонтакте) ----
+function loadFromVKStorage(key) {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve(null);
+    }
+    return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
+        .then(function(data) {
+            if (data && data.keys && data.keys.length > 0) {
+                var value = data.keys[0].value;
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return value;
+                }
+            }
+            return null;
+        })
+        .catch(function(error) {
+            console.warn('❌ Ошибка загрузки из VK Storage:', error);
+            return null;
+        });
+}
+
+// ---- Сохранение в OK Storage (Одноклассники) ----
+function saveToOKStorage(key, value) {
+    if (typeof vkBridge === 'undefined') {
+        return Promise.resolve();
+    }
     return vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'storage.set',
         params: {
             key: key,
-            value: stringValue
+            value: value
         },
         use_local: true
     })
-    .then(function(result) {
-        console.log('✅ Сохранено в OK Storage: ' + key, value);
+    .then(function() {
+        console.log('✅ Сохранено в OK Storage:', key);
     })
     .catch(function(error) {
-        console.warn('❌ Ошибка сохранения ' + key + ':', error);
+        console.warn('❌ Ошибка сохранения в OK Storage:', error);
     });
 }
 
-// Загрузка из OK Storage через VKWebAppCallAPIMethod
-function loadFromVKStorage(key) {
+// ---- Загрузка из OK Storage (Одноклассники) ----
+function loadFromOKStorage(key) {
     if (typeof vkBridge === 'undefined') {
         return Promise.resolve(null);
     }
@@ -2108,31 +2220,235 @@ function loadFromVKStorage(key) {
         return null;
     })
     .catch(function(error) {
-        console.warn('❌ Ошибка загрузки ' + key + ':', error);
+        console.warn('❌ Ошибка загрузки из OK Storage:', error);
         return null;
     });
 }
 
-// (Опционально) Получить все ключи – пригодится для отладки
-function okStorageGetAll() {
-    if (typeof vkBridge === 'undefined') {
-        return Promise.resolve(null);
-    }
-    return vkBridge.send('VKWebAppCallAPIMethod', {
-        method: 'storage.getAll',
-        params: {
-            scope: 'CUSTOM' // данные конкретного пользователя
-        },
-        use_local: true
-    })
-    .then(function(result) {
-        return result.data || null;
-    })
-    .catch(function(error) {
-        console.warn('❌ Ошибка получения всех ключей:', error);
-        return null;
-    });
+// ============================================================
+//  СИНХРОНИЗАЦИЯ МЕЖДУ ПЛАТФОРМАМИ
+// ============================================================
+
+// ---- Загрузка данных с кросс-платформенной синхронизацией ----
+function loadAllDataWithSync() {
+    console.log('🔄 Загрузка данных с кросс-платформенной синхронизацией...');
+    
+    // 1. Пытаемся загрузить из текущего хранилища
+    return loadFromCurrentPlatform(STORAGE_KEYS.GAME_DATA)
+        .then(function(currentData) {
+            // 2. Если данных нет — пробуем загрузить из другого хранилища
+            if (!currentData || !currentData.level) {
+                console.log('ℹ️ В текущем хранилище данных нет, пробуем другое...');
+                return loadFromOtherPlatform(STORAGE_KEYS.GAME_DATA);
+            }
+            return currentData;
+        })
+        .then(function(bestData) {
+            if (bestData && bestData.level) {
+                console.log('✅ Загружены данные: уровень', bestData.level);
+                applyGameData(bestData);
+                // Сохраняем в текущее хранилище (чтобы синхронизировать)
+                saveToCurrentPlatform(STORAGE_KEYS.GAME_DATA, bestData);
+            } else {
+                console.log('ℹ️ Данных нет ни на одной платформе');
+            }
+            
+            // Загружаем достижения и счётчики аналогично
+            return Promise.all([
+                loadWithFallback(STORAGE_KEYS.ACHIEVEMENTS),
+                loadWithFallback(STORAGE_KEYS.COUNTERS)
+            ]);
+        })
+        .then(function([achievements, counters]) {
+            if (achievements) {
+                applyAchievements(achievements);
+            }
+            if (counters) {
+                applyCounters(counters);
+            }
+            updateContinueButton();
+            updateMainMenuUI();
+        })
+        .catch(function(error) {
+            console.warn('⚠️ Ошибка синхронизации:', error);
+        });
 }
+
+// ---- Загрузка с fallback на другую платформу ----
+function loadWithFallback(key) {
+    return loadFromCurrentPlatform(key)
+        .then(function(data) {
+            if (data) return data;
+            return loadFromOtherPlatform(key);
+        });
+}
+
+// ---- Загрузка из хранилища другой платформы ----
+function loadFromOtherPlatform(key) {
+    if (currentPlatform === 'ok') {
+        // Мы в ОК — пробуем загрузить из VK Storage
+        return loadFromVKStorage(key);
+    } else {
+        // Мы в ВК — пробуем загрузить из OK Storage
+        return loadFromOKStorage(key);
+    }
+}
+
+// ---- Применение данных игры ----
+function applyGameData(data) {
+    if (data.level !== undefined && data.level > (level || 0)) {
+        level = data.level;
+        score = data.score || 0;
+        shields = data.shields || 0;
+        x = data.playerX || 140;
+        y = data.playerY || 160;
+        
+        // Обновляем UI
+        if (scoresEl) scoresEl.innerHTML = score;
+        if (levelDisplay) levelDisplay.textContent = level;
+        if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
+        
+        // Сохраняем локально
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        
+        console.log('📥 Применены данные: уровень', level);
+    }
+}
+
+// ---- Применение достижений ----
+function applyAchievements(data) {
+    if (data && typeof data === 'object') {
+        var changed = false;
+        for (var key in data) {
+            if (!unlockedAchievements[key]) {
+                unlockedAchievements[key] = data[key];
+                changed = true;
+            }
+        }
+        if (changed) {
+            saveAchievements(unlockedAchievements);
+            console.log('🏆 Достижения обновлены');
+        }
+    }
+}
+
+// ---- Применение счётчиков ----
+function applyCounters(data) {
+    if (data && typeof data === 'object') {
+        if (data.jellyfishDeflected !== undefined) jellyfishDeflected = Math.max(jellyfishDeflected || 0, data.jellyfishDeflected);
+        if (data.jellyfishHits !== undefined) jellyfishHits = Math.max(jellyfishHits || 0, data.jellyfishHits);
+        if (data.deathCount !== undefined) deathCount = Math.max(deathCount || 0, data.deathCount);
+        if (data.speedBoostCount !== undefined) speedBoostCount = Math.max(speedBoostCount || 0, data.speedBoostCount);
+        if (data.slowMotionCount !== undefined) slowMotionCount = Math.max(slowMotionCount || 0, data.slowMotionCount);
+        if (data.magnetCount !== undefined) magnetCount = Math.max(magnetCount || 0, data.magnetCount);
+        console.log('📊 Счётчики обновлены');
+    }
+}
+
+// ============================================================
+//  СОХРАНЕНИЕ В ОБА ХРАНИЛИЩА
+// ============================================================
+
+function saveToAllStorages() {
+    var gameData = {
+        level: level,
+        score: score,
+        shields: shields,
+        playerX: x,
+        playerY: y
+    };
+    
+    var achievements = unlockedAchievements || {};
+    var counters = {
+        jellyfishDeflected: jellyfishDeflected || 0,
+        jellyfishHits: jellyfishHits || 0,
+        deathCount: deathCount || 0,
+        speedBoostCount: speedBoostCount || 0,
+        slowMotionCount: slowMotionCount || 0,
+        magnetCount: magnetCount || 0
+    };
+    
+    // Сохраняем в текущее хранилище
+    saveToCurrentPlatform(STORAGE_KEYS.GAME_DATA, gameData);
+    saveToCurrentPlatform(STORAGE_KEYS.ACHIEVEMENTS, achievements);
+    saveToCurrentPlatform(STORAGE_KEYS.COUNTERS, counters);
+    
+    // Сохраняем в другое хранилище (для синхронизации)
+    if (currentPlatform === 'ok') {
+        saveToVKStorage(STORAGE_KEYS.GAME_DATA, JSON.stringify(gameData));
+        saveToVKStorage(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+        saveToVKStorage(STORAGE_KEYS.COUNTERS, JSON.stringify(counters));
+    } else {
+        saveToOKStorage(STORAGE_KEYS.GAME_DATA, JSON.stringify(gameData));
+        saveToOKStorage(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+        saveToOKStorage(STORAGE_KEYS.COUNTERS, JSON.stringify(counters));
+    }
+    
+    console.log('💾 Данные сохранены в оба хранилища');
+}
+
+// ---- Переопределяем checkAndSaveLevel для использования saveToAllStorages ----
+var originalCheckAndSaveLevel = window.checkAndSaveLevel;
+window.checkAndSaveLevel = function() {
+    if (level % 3 === 0 && level > 0) {
+        localStorage.setItem('bathyscaphe_max_level', level);
+        maxSavedLevel = level;
+        saveToAllStorages();
+        showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
+        updateContinueButton();
+    }
+};
+
+// ============================================================
+//  ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+
+// Вызываем после инициализации VK Bridge
+function initCrossPlatform() {
+    // Определяем платформу
+    detectPlatform();
+    
+    // Загружаем данные с синхронизацией
+    setTimeout(function() {
+        loadAllDataWithSync();
+    }, 500);
+    
+    // Настраиваем авто-сохранение
+    setupAutoSave();
+}
+
+function setupAutoSave() {
+    // Сохранение при сворачивании
+    if (typeof vkBridge !== 'undefined') {
+        vkBridge.subscribe(function(e) {
+            if (e.detail.type === 'VKWebAppViewHide') {
+                console.log('📱 Приложение свернуто — сохранение...');
+                setTimeout(saveToAllStorages, 300);
+            }
+        });
+    }
+    
+    // Сохранение при потере видимости
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            console.log('📱 Страница скрыта — сохранение...');
+            setTimeout(saveToAllStorages, 300);
+        }
+    });
+    
+    // Периодическое сохранение (каждые 30 секунд)
+    setInterval(function() {
+        if (gameActive) {
+            saveToAllStorages();
+        }
+    }, 30000);
+}
+
+// Вызываем initCrossPlatform после VKWebAppInit
+
+
+
         // ===== ПОЛУЧЕНИЕ ТЕКУЩИХ ДАННЫХ =====
         function getCurrentGameData() {
             return {
@@ -2222,7 +2538,8 @@ function okStorageGetAll() {
         // ===== ПОЛНАЯ СИНХРОНИЗАЦИЯ =====
         function syncAllDataToVK() {
             console.log('🔄 Синхронизация данных с VK Storage...');
-            
+             saveToAllStorages(); // ← теперь все вызовы syncAllDataToVK будут сохранять в оба хранилища
+
             const gameData = getCurrentGameData();
             const achievements = getCurrentAchievements();
             const counters = getCurrentCounters();
@@ -2447,10 +2764,13 @@ function okStorageGetAll() {
     });
 
    vkBridge.send('VKWebAppInit')
-    .then(() => {
+       .then(() => {
         console.log('✅ VK Bridge инициализирован');
         showBannerAd();
-        
+
+           // ★★★ ДОБАВЬТЕ ЭТУ СТРОКУ ★★★
+        initCrossPlatform();
+    
         console.log('🔄 НЕМЕДЛЕННАЯ ЗАГРУЗКА ДАННЫХ ИЗ VK STORAGE...');
         
         // Загружаем данные игры из VK
@@ -2689,7 +3009,7 @@ function okStorageGetAll() {
         // Сохраняем локально
         localStorage.setItem('bathyscaphe_max_level', level);
         maxSavedLevel = level;
-        
+       
         // Сохраняем ВСЕ данные
         var gameData = {
             level: level,
@@ -5421,6 +5741,7 @@ function showCountdownNotification(text) {
         function saveAchievements(data) {
             try {
                 localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(data));
+
                 // Сохраняем в VK Storage
                 saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, data);
             } catch (e) {
