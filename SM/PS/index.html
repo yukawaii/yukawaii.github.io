@@ -1060,8 +1060,8 @@ function playSuccessSound() {
 // Кнопка возврата в меню
 document.getElementById('menuBackBtn').addEventListener('click', function() {
      isGameActive = false; 
-     // ✅ Обновляем звёзды перед показом меню
-    updateTotalStars();
+      // ✅ Обновляем интерфейс, не пересчитывая
+    updateStarsDisplay();  // ← вместо updateTotalStars()
 
     // Возвращаемся в меню
     document.getElementById('startMenu').style.display = 'flex';
@@ -2320,7 +2320,8 @@ async function init() {
     // Загружаем общее количество звёзд из localStorage (временно)
     const savedStars = localStorage.getItem('totalStars');
     if (savedStars) totalStars = parseInt(savedStars);
-    else updateTotalStars();
+   //else updateTotalStars();
+   else totalStars = 0;
 
     // Добавляем класс меню на body
     document.body.classList.add('menu-mode');
@@ -3990,7 +3991,8 @@ function loadGalaxyAndScrollsFromVK() {
                     }
                 }
                 if (merged) {
-                    updateTotalStars();
+                    // ✅ Не пересчитываем, а просто обновляем интерфейс
+    updateStarsDisplay();
                     console.log('✅ Галактика обновлена (фоновая загрузка)');
                 }
             } catch(e) {
@@ -4022,7 +4024,8 @@ function syncAllDataToVK() {
     const completedExpert = getCompletedLevels('expert');
     const stars = getGalaxyStars();
     const scrolls = getUnlockedScrolls();
-    const total = updateTotalStars();
+   // const total = updateTotalStars();
+     const total = totalStars;  // ← вместо updateTotalStars()
     const theme = currentTheme || localStorage.getItem('theme') || 'dark';
     
     const allUnlocked = {};
