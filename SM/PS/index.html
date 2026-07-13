@@ -2316,10 +2316,11 @@ function init() {
 */
 
 async function init() {
-   // 1. Показываем загрузочный экран (он уже виден по умолчанию, но убедимся)
+    // 1. Показываем загрузочный экран
     const loadingScreen = document.getElementById('loadingScreen');
     loadingScreen.style.display = 'flex';
     loadingScreen.style.opacity = '1';
+
     // Активируем аудио-контекст по клику
     document.body.addEventListener('click', () => {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -2328,17 +2329,53 @@ async function init() {
     // Загружаем сохранённую сложность
     currentDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
 
-    // Загружаем общее количество звёзд из localStorage (временно)
+    // Загружаем общее количество звёзд из localStorage
     const savedStars = localStorage.getItem('totalStars');
-    if (savedStars) totalStars = parseInt(savedStars);
-   //else updateTotalStars();
-   else totalStars = 0;
+    totalStars = savedStars ? parseInt(savedStars) : 0;
 
     // Добавляем класс меню на body
     document.body.classList.add('menu-mode');
 
-    // Скрываем игровые элементы (они скрыты по умолчанию)
-    // Показываем меню? пока нет, сначала синхронизация
+    // Флаг, чтобы избежать двойного выполнения
+    let loadingFinished = false;
+    let loadingTimeout;
+
+    // Функция, которая завершает загрузку и показывает меню
+    function finishLoading() {
+        if (loadingFinished) return;
+        loadingFinished = true;
+        clearTimeout(loadingTimeout);
+
+        // Обновляем интерфейс
+        const menuStars = document.getElementById('menuStars');
+        if (menuStars) menuStars.textContent = totalStars || 0;
+        updateStartButtonSubtitle();
+
+        const theme = localStorage.getItem('theme') || 'dark';
+        setTheme(theme);
+        syncScrollsWithStars();
+
+        // Показываем главное меню
+        document.getElementById('startMenu').style.display = 'flex';
+        document.body.classList.add('menu-mode');
+
+        // Скрываем загрузочный экран с плавным исчезновением
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+
+        // Фоновая загрузка галактик и свитков (не блокирует)
+        setTimeout(loadGalaxyAndScrollsFromVK, 2000);
+    }
+
+    // ⏰ Таймаут на 60 секунд – если синхронизация не завершилась, показываем меню
+    loadingTimeout = setTimeout(() => {
+        if (!loadingFinished) {
+            console.log('⏰ Таймаут загрузки (60 сек). Показываем меню без полной синхронизации.');
+            finishLoading();
+        }
+    }, 60000);
 
     // ✅ ГЛАВНОЕ: ЖДЁМ ЗАГРУЗКУ ДАННЫХ ИЗ VK
     try {
@@ -2349,36 +2386,9 @@ async function init() {
         console.warn('⚠️ Ошибка синхронизации, но продолжаем:', e);
     }
 
-    // После синхронизации обновляем интерфейс
-    // 1) Обновляем отображение звёзд в меню (добавим элемент позже)
-    const menuStars = document.getElementById('menuStars');
-    if (menuStars) menuStars.textContent = totalStars || 0;
-
-    // 2) Обновляем подзаголовок кнопки "Начать"
-    updateStartButtonSubtitle();
-
-    // 3) Обновляем тему (если загрузилась из VK)
-    const theme = localStorage.getItem('theme') || 'dark';
-    setTheme(theme);
-
-    // 4) Синхронизируем свитки со звёздами (если изменилось)
-    syncScrollsWithStars();
-
-    // 5) Показываем главное меню
-    document.getElementById('startMenu').style.display = 'flex';
-    document.body.classList.add('menu-mode'); // уже есть
-
-    // ✅ Скрываем загрузочный экран с плавным исчезновением
-    const loading = document.getElementById('loadingScreen');
-    loading.style.opacity = '0';
-    setTimeout(() => {
-        loading.style.display = 'none';
-    }, 500);
-
-    // Фоновая загрузка галактик и свитков (уже есть, но можно оставить)
-    setTimeout(loadGalaxyAndScrollsFromVK, 2000);
+    // Если синхронизация завершилась (или упала с ошибкой), завершаем загрузку
+    finishLoading();
 }
-
 // Кнопка "Начать"
 document.getElementById('menuStartBtn').addEventListener('click', function() {
     // Убираем класс меню
