@@ -1040,6 +1040,9 @@ function playSuccessSound() {
 // Кнопка возврата в меню
 document.getElementById('menuBackBtn').addEventListener('click', function() {
      isGameActive = false; 
+     // ✅ Обновляем звёзды перед показом меню
+    updateTotalStars();
+
     // Возвращаемся в меню
     document.getElementById('startMenu').style.display = 'flex';
     document.getElementById('gridContainer').style.display = 'none';
