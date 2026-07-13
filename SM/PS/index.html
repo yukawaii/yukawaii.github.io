@@ -3341,7 +3341,7 @@ function isScrollUnlocked(scrollId) {
 // Рассчитать, сколько свитков должно быть открыто по звёздам
 function calculateUnlockedScrolls() {
     const stars = totalStars || parseInt(localStorage.getItem('totalStars') || 0);
-    return Math.min(Math.floor(stars / 100), WISDOM_SCROLLS.length);
+    return Math.min(Math.floor(stars / 50), WISDOM_SCROLLS.length);
 }
 
 // Синхронизировать открытые свитки со звёздами
@@ -3386,7 +3386,7 @@ function showScrollsModal() {
     contentDiv.className = 'galaxy-scroll';
     const unlockedCount = getUnlockedScrolls().length;
     const totalStars = parseInt(localStorage.getItem('totalStars') || 0);
-    const nextStarThreshold = Math.ceil((unlockedCount + 1) * 100);
+    const nextStarThreshold = Math.ceil((unlockedCount + 1) * 50);
     const totalPages = Math.ceil(WISDOM_SCROLLS.length / SCROLLS_PER_PAGE);
     
     if (currentScrollPage >= totalPages) currentScrollPage = totalPages - 1;
