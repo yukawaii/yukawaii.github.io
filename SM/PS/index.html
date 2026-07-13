@@ -795,7 +795,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy', isUpdate = fal
         modalDiv = document.querySelector('.modal-window[data-category="' + categoryId + '"]');
         if (modalDiv) {
             isExistingModal = true;
-            contentDiv = modalDiv.querySelector('.modal-content-inner');
+            contentDiv = modalDiv.querySelector('modal-content-inner galaxy-scroll');
             grid = document.getElementById('levelsGrid');
         }
     }
@@ -3017,6 +3017,7 @@ function showGalaxyDetails(categoryId, difficulty) {
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     
     const contentDiv = document.createElement('div');
+    contentDiv.className = 'galaxy-scroll'; 
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;max-height:80vh;overflow-y:auto;';
     
     // Генерация звёзд

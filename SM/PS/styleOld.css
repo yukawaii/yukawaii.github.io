@@ -1882,6 +1882,50 @@ div[style*="position:fixed"] {
 
 /* ===== КАСТОМНЫЙ СКРОЛЛ ДЛЯ МОДАЛОК ===== */
 
+/* Для всех прокручиваемых блоков внутри модалок */
+.modal-window [style*="overflow-y:auto"],
+.modal-window [style*="overflow:auto"],
+.modal-window .modal-content-inner,
+.modal-window .galaxy-scroll {
+    scrollbar-width: thin !important;
+    scrollbar-color: var(--accent-color, #ffa54d) rgba(255,255,255,0.05) !important;
+}
+
+/* Для WebKit (Chrome, Safari, Edge) */
+.modal-window [style*="overflow-y:auto"]::-webkit-scrollbar,
+.modal-window [style*="overflow:auto"]::-webkit-scrollbar,
+.modal-window .modal-content-inner::-webkit-scrollbar,
+.modal-window .galaxy-scroll::-webkit-scrollbar {
+    width: 6px !important;
+    border-radius: 10px !important;
+}
+
+.modal-window [style*="overflow-y:auto"]::-webkit-scrollbar-track,
+.modal-window [style*="overflow:auto"]::-webkit-scrollbar-track,
+.modal-window .modal-content-inner::-webkit-scrollbar-track,
+.modal-window .galaxy-scroll::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05) !important;
+    border-radius: 10px !important;
+}
+
+.modal-window [style*="overflow-y:auto"]::-webkit-scrollbar-thumb,
+.modal-window [style*="overflow:auto"]::-webkit-scrollbar-thumb,
+.modal-window .modal-content-inner::-webkit-scrollbar-thumb,
+.modal-window .galaxy-scroll::-webkit-scrollbar-thumb {
+    background: var(--accent-color, #ffa54d) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 20px rgba(255,165,77,0.3), inset 0 0 10px rgba(255,255,255,0.1) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.modal-window [style*="overflow-y:auto"]::-webkit-scrollbar-thumb:hover,
+.modal-window [style*="overflow:auto"]::-webkit-scrollbar-thumb:hover,
+.modal-window .modal-content-inner::-webkit-scrollbar-thumb:hover,
+.modal-window .galaxy-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color-light, #e6953a) !important;
+    box-shadow: 0 0 30px rgba(255,165,77,0.5), inset 0 0 15px rgba(255,255,255,0.2) !important;
+}
+
 /* Базовые стили скролла для всех модалок */
 .modal-window .galaxy-scroll,
 .modal-window div[style*="max-height:80vh;overflow-y:auto;"],
