@@ -362,6 +362,8 @@ document.getElementById('dailyBonus5').addEventListener('click', function() {
     closeModal('dailyBonusModal');
     // Сразу начисляем бонус
     claimBonus(5);
+        // Обновляем отображение
+    updateStarsDisplay();
 });
 
 // Кнопка +10 (усиленный бонус с рекламой)
@@ -377,6 +379,8 @@ document.getElementById('dailyBonus10').addEventListener('click', function() {
                 // Успешный просмотр – начисляем 10 звёзд
                 hideLoadingBonusModal();
                 claimBonus(10);
+                    // Обновляем отображение
+    updateStarsDisplay();
             },
             function(error) {
                 // Реклама не показана – убираем загрузку, показываем сообщение
