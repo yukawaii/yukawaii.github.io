@@ -2528,9 +2528,19 @@ contentDiv.innerHTML = `
 }
    // Функция для запуска конфетти
 function showConfetti() {
-    const duration = 3000; // 3 секунды
+    // Определяем тип устройства по ширине экрана
+    const isMobile = window.innerWidth < 768;
+    const multiplier = isMobile ? 5 : 20; // на телефонах в 2 раза меньше частиц
+
+    const duration = 2000; // 3 секунды
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000, colors: ['#FFD700', '#FFA54D', '#6B9C3F', '#FF6B6B', '#4ECDC4'] };
+    const defaults = {
+        startVelocity: 30,
+        spread: 360,
+        ticks: 60,
+        zIndex: 10000,
+        colors: ['#FFD700', '#FFA54D', '#6B9C3F', '#FF6B6B', '#4ECDC4']
+    };
 
     function randomInRange(min, max) {
         return Math.random() * (max - min) + min;
@@ -2543,9 +2553,10 @@ function showConfetti() {
             return clearInterval(interval);
         }
 
-        const particleCount = 10 * (timeLeft / duration);
-        
-        // Конфетти с двух сторон
+        // Количество частиц зависит от multiplier
+        const particleCount = multiplier * (timeLeft / duration);
+
+        // Два потока конфетти (слева и справа)
         confetti({
             ...defaults,
             particleCount: Math.floor(particleCount),
@@ -2557,8 +2568,7 @@ function showConfetti() {
             origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
         });
     }, 250);
-} 
-
+}
 // Показ сюжетного окна (первый раз - полная история, потом - короткое напоминание)
 function showWelcomeStory() {
     const hasSeenFullStory = localStorage.getItem('hasSeenFullStory');
@@ -3272,7 +3282,7 @@ function getTotalStars() {
 
 // Создаём живые звёзды на фоне
 function createLivingStars() {
-    const starCount = 10;
+  const starCount = window.innerWidth < 768 ? 5 : 20;
     const container = document.body;
     
     // Цвета для звёзд
