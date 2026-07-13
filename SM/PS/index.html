@@ -297,7 +297,8 @@ function claimBonus(amount) {
     }
 
     // 4. Обновляем интерфейс (звёзды в меню, галактики, свитки)
-    updateTotalStars(); // теперь она просто обновляет отображение
+     // 4. ✅ ОБНОВЛЯЕМ ИНТЕРФЕЙС (без пересчёта!)
+    updateStarsDisplay(); // ← вместо updateTotalStars()
 
     // 5. Синхронизируем все данные с VK (включая обновлённые totalStars)
     if (typeof syncAllDataToVK === 'function') {
@@ -351,6 +352,20 @@ function isGameInteractive() {
     return !isPaused && isGameActive;
 }
 
+// Обновление интерфейса звёзд без пересчёта (использует текущее значение totalStars)
+function updateStarsDisplay() {
+    const menuStars = document.getElementById('menuStars');
+    if (menuStars) menuStars.textContent = totalStars || 0;
+
+    const galaxyBtn = document.getElementById('galaxyBtn');
+    if (galaxyBtn) {
+        galaxyBtn.setAttribute('data-stars', totalStars || 0);
+        galaxyBtn.title = `✨ ${totalStars || 0} звёзд`;
+    }
+
+    // Синхронизируем свитки (зависят от общего количества звёзд)
+    syncScrollsWithStars();
+}
 
 // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
 
@@ -530,7 +545,8 @@ function saveCompletedLevel(levelId, difficulty) {
         completed.push(levelId);
         localStorage.setItem(key, JSON.stringify(completed));
         console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
-        updateTotalStars();
+    // ✅ Обновляем интерфейс (без пересчёта!)
+        updateStarsDisplay();
     }
 }
 
@@ -3922,7 +3938,8 @@ function loadAllDataFromVK() {
         if (loaded) {
             console.log('✅ Данные из VK Storage загружены');
             // Обновляем UI
-            updateTotalStars();
+        // ✅ Обновляем интерфейс без пересчёта (totalStars уже обновлён)
+    updateStarsDisplay();
             const galaxyBtn = document.getElementById('galaxyBtn');
             if (galaxyBtn) {
                 galaxyBtn.setAttribute('data-stars', totalStars || 0);
