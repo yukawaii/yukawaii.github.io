@@ -1154,7 +1154,20 @@ syncLeaderboard() {
         return Promise.resolve();
     }
 
+    // Дополнительная защита от частых повторов при ошибке
+    const lastAttempt = parseInt(localStorage.getItem('sudoku_lastLeaderboardAttempt') || '0');
+    const now = Date.now();
+    const cooldown = 5 * 60 * 1000; // 5 минут
+    if (lastAttempt && (now - lastAttempt) < cooldown) {
+        console.log(`⏳ Повторная попытка через ${Math.round((cooldown - (now - lastAttempt)) / 1000)} сек`);
+        return Promise.resolve();
+    }
+
     console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
+    
+    // Запоминаем время попытки (даже если ошибка)
+    localStorage.setItem('sudoku_lastLeaderboardAttempt', String(now));
+
     return vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
@@ -1168,13 +1181,13 @@ syncLeaderboard() {
     })
     .then(() => {
         console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+        // Сохраняем ТОЛЬКО при успехе
+        localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
+        localStorage.removeItem('sudoku_lastLeaderboardAttempt'); // очищаем время
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
-    })
-    .finally(() => {
-        // Сохраняем рекорд в любом случае, чтобы не спамить запросами
-        localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
+        // Не сохраняем lastSent – даём шанс повторить позже
     });
 }
 

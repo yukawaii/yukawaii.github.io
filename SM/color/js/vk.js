@@ -320,23 +320,26 @@ function initVKUser() {
 function syncLeaderboard(score) {
     if (!vkUserId) {
         console.warn('⚠️ Нет user_id, синхронизация невозможна');
-        // Попробуем инициализировать
-        initVKUser().then(() => {
-            if (vkUserId) syncLeaderboard(score);
+        return initVKUser().then(() => {
+            if (vkUserId) return syncLeaderboard(score);
+            return Promise.resolve();
         });
-        return;
     }
-    
-    const lastSent = parseInt(localStorage.getItem('vkLastSentScore') || '0');
+
+    const lastSent = parseInt(localStorage.getItem('coloring_lastSentScore') || '0');
     if (score <= lastSent) {
         console.log('⏩ Рекорд не изменился, синхронизация не требуется');
-        return;
+        return Promise.resolve();
     }
-    
+
     const bridge = getVKBridge();
-    if (!bridge) return;
-    
-    bridge.send('VKWebAppCallAPIMethod', {
+    if (!bridge) {
+        // Не сохраняем рекорд, чтобы позже попробовать снова при наличии VK
+        return Promise.resolve();
+    }
+
+    console.log(`📤 Отправка рекорда ${score} для пользователя ${vkUserId}`);
+    return bridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
             client_secret: VK_CLIENT_SECRET,
@@ -347,12 +350,14 @@ function syncLeaderboard(score) {
             access_token: VK_ACCESS_TOKEN
         }
     })
-    .then((result) => {
+    .then(() => {
         console.log('🏆 Рекорд синхронизирован:', score);
-        localStorage.setItem('vkLastSentScore', String(score));
+        // ✅ Сохраняем только после успешной отправки
+        localStorage.setItem('coloring_lastSentScore', String(score));
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
+        // ❌ Не сохраняем рекорд, чтобы можно было повторить попытку позже
     });
 }
 
