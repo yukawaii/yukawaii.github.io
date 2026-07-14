@@ -21,6 +21,13 @@ function initVKBridge() {
         .then((data) => {
         isVKInitialized = true;
         console.log('✅ VK Bridge инициализирован:', data);
+
+         initVKUserData().then(() => {
+                // После получения данных синхронизируем рекорд при старте
+                if (window.appState) {
+                    syncLeaderboard(window.appState.totalPoints);
+                }
+            });
         
         // Загружаем данные из VK Storage
         if (typeof loadAppStateFromVK === 'function') {
@@ -283,5 +290,110 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
         setTimeout(initVK, 300);
     });
 }
+// ===== ПЕРЕМЕННЫЕ ДЛЯ ЛИДЕРБОРДА =====
+let vkUserId = null;
 
+// ===== ФИКСИРОВАННЫЕ ДАННЫЕ ДЛЯ VK API =====
+// ⚠️ ЗАМЕНИТЕ НА СВОИ ЗНАЧЕНИЯ ИЗ НАСТРОЕК ПРИЛОЖЕНИЯ VK
+const VK_APP_ID = 54678489;                     // ID вашего приложения
+const VK_CLIENT_SECRET = 'WKSPyYFeeLu0KQdi5bQB'; // Секретный ключ
+const VK_ACCESS_TOKEN = 'db3b39f4db3b39f4db3b39f470d8796a2dddb3bdb3b39f4b16d18e684cea8b82e7816dc'; // Service token
+
+// ===== ПОЛУЧЕНИЕ USER_ID =====
+function initVKUser() {
+    const bridge = getVKBridge();
+    if (!bridge) return Promise.reject('VK Bridge not available');
+    
+    return bridge.send('VKWebAppGetUserInfo')
+        .then((userInfo) => {
+            vkUserId = userInfo.id;
+            console.log('👤 VK User ID:', vkUserId);
+            return vkUserId;
+        })
+        .catch((err) => {
+            console.warn('⚠️ Не удалось получить user_id:', err);
+            return null;
+        });
+}
+
+// ===== СИНХРОНИЗАЦИЯ РЕКОРДА (только если рекорд увеличился) =====
+function syncLeaderboard(score) {
+    if (!vkUserId) {
+        console.warn('⚠️ Нет user_id, синхронизация невозможна');
+        // Попробуем инициализировать
+        initVKUser().then(() => {
+            if (vkUserId) syncLeaderboard(score);
+        });
+        return;
+    }
+    
+    const lastSent = parseInt(localStorage.getItem('vkLastSentScore') || '0');
+    if (score <= lastSent) {
+        console.log('⏩ Рекорд не изменился, синхронизация не требуется');
+        return;
+    }
+    
+    const bridge = getVKBridge();
+    if (!bridge) return;
+    
+    bridge.send('VKWebAppCallAPIMethod', {
+        method: 'secure.addAppEvent',
+        params: {
+            client_secret: VK_CLIENT_SECRET,
+            user_id: vkUserId,
+            activity_id: 2,
+            value: score,
+            v: '5.131',
+            access_token: VK_ACCESS_TOKEN
+        }
+    })
+    .then((result) => {
+        console.log('🏆 Рекорд синхронизирован:', score);
+        localStorage.setItem('vkLastSentScore', String(score));
+    })
+    .catch((err) => {
+        console.error('❌ Ошибка синхронизации лидерборда:', err);
+    });
+}
+
+// ===== ОТКРЫТИЕ ТАБЛИЦЫ ЛИДЕРОВ =====
+function showLeaderboard() {
+    const bridge = getVKBridge();
+    if (!bridge) {
+        showToast('❌ Нет соединения');
+        return;
+    }
+    
+    const currentScore = appState ? appState.totalPoints : 0;
+    // Сначала синхронизируем текущий рекорд
+    syncLeaderboard(currentScore);
+    
+    bridge.send('VKWebAppShowLeaderBoardBox', {
+        app_id: VK_APP_ID,
+        user_result: currentScore,
+        global: 1
+    })
+    .then(() => {
+        console.log('📊 Таблица лидеров открыта');
+    })
+    .catch((err) => {
+        console.error('❌ Ошибка открытия таблицы лидеров:', err);
+        showToast('❌ Не удалось открыть таблицу лидеров. Попробуйте позже.');
+    });
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ ПРИ СТАРТЕ =====
+// Вызываем в initVKBridge после успешной инициализации
+function initLeaderboard() {
+    initVKUser().then(() => {
+        if (vkUserId && window.appState) {
+            syncLeaderboard(window.appState.totalPoints);
+        }
+    });
+}
+
+// Экспорт
+window.initLeaderboard = initLeaderboard;
+window.syncLeaderboard = syncLeaderboard;
+window.showLeaderboard = showLeaderboard;
 console.log('📱 VK модуль загружен!');

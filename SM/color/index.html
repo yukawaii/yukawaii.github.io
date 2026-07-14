@@ -40,15 +40,17 @@
         </div>
 
         <!-- Категории -->
-        <div class="main-menu">
-            <button class="btn-neon" onclick="openCategory('easy')">🌟 Лёгкие</button>
-            <button class="btn-neon" onclick="openCategory('cosmos')">🌌 Космос</button>
-            <button class="btn-neon" onclick="openCategory('animals')">🐾 Животные</button>
-            <button class="btn-neon" onclick="openCategory('anime')">🎌 Аниме</button>
-            <button class="btn-neon" onclick="openCategory('plants')">🌿 Растения</button>
-            <button class="btn-neon" onclick="openCategory('doodles')">✏️ Дудлс</button>
-            <button class="btn-neon" onclick="openCategory('mandala')">🌀 Мандала</button>
-        </div>
+<div class="main-menu category-grid">
+    <button class="category-btn" onclick="openCategory('easy')" title="Лёгкие">🌟</button>
+    <button class="category-btn" onclick="openCategory('cosmos')" title="Космос">🌌</button>
+    <button class="category-btn" onclick="openCategory('animals')" title="Животные">🐾</button>
+    <button class="category-btn" onclick="openCategory('people')" title="Люди">👤</button>
+    <button class="category-btn" onclick="openCategory('plants')" title="Растения">🌿</button>
+    <button class="category-btn" onclick="openCategory('food')" title="Еда">🍕</button>
+    <button class="category-btn" onclick="openCategory('items')" title="Предметы">📦</button>
+    <button class="category-btn" onclick="openCategory('doodles')" title="Дудлс">✏️</button>
+    <button class="category-btn" onclick="openCategory('mandala')" title="Мандала">🌀</button>
+</div>
 
         <!-- Кнопки действий -->
         <div class="action-buttons">
@@ -61,7 +63,9 @@
             <button class="btn-circle" onclick="openGamesModal()" title="Другие игры">🎮</button>
             <button class="btn-circle" onclick="inviteFriends()" title="Пригласить друзей">👥</button>
             <button class="btn-circle" onclick="openScrollsModal()" title="Свитки">📜</button>
+             <button class="btn-circle" onclick="showLeaderboard()" title="Таблица лидеров">🏆</button>
                 <button class="btn-circle" onclick="openDailyBonusModal()" title="Ежедневный бонус">🎁</button>
+
         </div>
 
     </div>

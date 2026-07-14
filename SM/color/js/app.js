@@ -4,16 +4,69 @@ const SCROLLS_PER_PAGE = 5; // сколько свитков на страниц
 let currentScrollPage = 1;
 
 const CATEGORIES = {
-    easy: { name: '🌟 Лёгкие', folder: 'easy', count: 30 }, // 30 картинок для начала
-    cosmos: { name: '🌌 Космос', folder: 'cosmos', count: 50 },
-    animals: { name: '🐾 Животные', folder: 'animals', count: 50 },
-    anime: { name: '🎌 Аниме', folder: 'anime', count: 50 },
-    plants: { name: '🌿 Растения', folder: 'plants', count: 50 },
-    doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 50 },
-    mandala: { name: '🌀 Мандала', folder: 'mandala', count: 50 }
+    easy: { name: '🌟 Лёгкие', folder: 'easy', count: 30, hasSubcategories: false },
+    cosmos: { name: '🌌 Космос', folder: 'cosmos', count: 50, hasSubcategories: false },
+    animals: {
+        name: '🐾 Животные',
+        folder: 'animals',
+        count: 100, // общее количество (сумма подкатегорий)
+        hasSubcategories: true,
+        subcategories: {
+            easy: { name: 'Легче', folder: 'animals/easy', count: 50 },
+            hard: { name: 'Сложнее', folder: 'animals/hard', count: 50 }
+        }
+    },
+    people: {
+        name: '👤 Люди',  // вместо 'Аниме'
+        folder: 'people',
+        count: 100,
+        hasSubcategories: true,
+        subcategories: {
+            easy: { name: 'Легче', folder: 'people/easy', count: 50 },
+            hard: { name: 'Сложнее', folder: 'people/hard', count: 50 }
+        }
+    },
+    plants: {
+        name: '🌿 Растения',
+        folder: 'plants',
+        count: 100,
+        hasSubcategories: true,
+        subcategories: {
+            easy: { name: 'Легче', folder: 'plants/easy', count: 50 },
+            hard: { name: 'Сложнее', folder: 'plants/hard', count: 50 }
+        }
+    },
+    food: {
+        name: '🍕 Еда',
+        folder: 'food',
+        count: 100,
+        hasSubcategories: true,
+        subcategories: {
+            easy: { name: 'Легче', folder: 'food/easy', count: 50 },
+            hard: { name: 'Сложнее', folder: 'food/hard', count: 50 }
+        }
+    },
+    items: {
+        name: '📦 Предметы',
+        folder: 'items',
+        count: 100,
+        hasSubcategories: true,
+        subcategories: {
+            easy: { name: 'Легче', folder: 'items/easy', count: 50 },
+            hard: { name: 'Сложнее', folder: 'items/hard', count: 50 }
+        }
+    },
+    doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 50, hasSubcategories: false },
+    mandala: { name: '🌀 Мандала', folder: 'mandala', count: 50, hasSubcategories: false }
 };
 
 const COLORS = ['#ffffff', '#f0e6ff', '#c8b8ff', '#ffd6e8', '#b8d4ff', '#ffd700'];
+
+let currentSubcategory = {}; // { categoryKey: 'easy' или 'hard' }
+
+
+
+
 
 let appState = {
     totalPoints: 0,
@@ -149,16 +202,42 @@ function addPoints(points) {
     updateStats();
     saveState();
     checkAchievements();
+    // Синхронизация рекорда с VK
+    if (typeof syncLeaderboard === 'function') {
+        syncLeaderboard(appState.totalPoints);
+    }
 }
 
 function markAsColored(category, index) {
-    const key = `${category}-${index}`;
-    if (!appState.coloredImages.some(item => `${item.category}-${item.index}` === key)) {
-        appState.coloredImages.push({ category, index });
+    const cat = CATEGORIES[category];
+    let subKey = null;
+    if (cat.hasSubcategories) {
+        subKey = currentSubcategory[category] || 'easy';
+    }
+    const key = subKey ? `${category}-${subKey}-${index}` : `${category}-${index}`;
+    if (!appState.coloredImages.some(item => `${item.category}-${item.subcategory || ''}-${item.index}` === key)) {
+        appState.coloredImages.push({ 
+            category, 
+            subcategory: subKey, 
+            index 
+        });
         saveState();
         updateStats();
         if (appState.currentCategory) renderLevels(appState.currentCategory);
     }
+}
+
+function isColored(category, index) {
+    const cat = CATEGORIES[category];
+    let subKey = null;
+    if (cat.hasSubcategories) {
+        subKey = currentSubcategory[category] || 'easy';
+    }
+    const key = subKey ? `${category}-${subKey}-${index}` : `${category}-${index}`;
+    return appState.coloredImages.some(item => {
+        const itemKey = item.subcategory ? `${item.category}-${item.subcategory}-${item.index}` : `${item.category}-${item.index}`;
+        return itemKey === key;
+    });
 }
 
 function isColored(category, index) {
@@ -211,7 +290,19 @@ function closeCategory() {
 function renderLevels(categoryKey) {
     const grid = document.getElementById('levelGrid');
     const category = CATEGORIES[categoryKey];
-    const totalLevels = category.count;
+    
+    // Определяем, какую подкатегорию показывать
+    let currentCat = category;
+    let subKey = null;
+    if (category.hasSubcategories) {
+        if (!currentSubcategory[categoryKey]) {
+            currentSubcategory[categoryKey] = 'easy'; // по умолчанию 'easy'
+        }
+        subKey = currentSubcategory[categoryKey];
+        currentCat = category.subcategories[subKey];
+    }
+    
+    const totalLevels = currentCat.count;
     const totalPages = Math.ceil(totalLevels / LEVELS_PER_PAGE);
     
     document.getElementById('pageInfo').textContent = `${currentPage + 1} / ${totalPages}`;
@@ -226,13 +317,50 @@ function renderLevels(categoryKey) {
     
     grid.innerHTML = '';
     
+    // ===== КНОПКИ ПЕРЕКЛЮЧЕНИЯ ПОДКАТЕГОРИЙ =====
+    if (category.hasSubcategories) {
+        const subHeader = document.createElement('div');
+        subHeader.style.cssText = 'display:flex;justify-content:center;gap:12px;margin-bottom:12px;grid-column:1/-1;';
+        
+        const subKeys = Object.keys(category.subcategories);
+        subKeys.forEach(key => {
+            const btn = document.createElement('button');
+            btn.textContent = category.subcategories[key].name;
+            btn.className = 'btn-subcategory';
+            btn.style.cssText = `
+                padding: 6px 16px;
+                border-radius: 20px;
+                border: 2px solid ${currentSubcategory[categoryKey] === key ? '#a855f7' : 'rgba(255,255,255,0.15)'};
+                background: ${currentSubcategory[categoryKey] === key ? 'rgba(168,85,247,0.25)' : 'transparent'};
+                color: ${currentSubcategory[categoryKey] === key ? '#f0eaff' : 'var(--text-secondary)'};
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 14px;
+                font-weight: ${currentSubcategory[categoryKey] === key ? '600' : '400'};
+            `;
+            btn.onclick = function() {
+                currentSubcategory[categoryKey] = key;
+                currentPage = 0;
+                renderLevels(categoryKey);
+            };
+            subHeader.appendChild(btn);
+        });
+        grid.appendChild(subHeader);
+    }
+    // ===== КОНЕЦ =====
+    
     let completed = 0;
     let total = 0;
     
+    // Используем правильный путь для картинок
+    const folderPath = currentCat.folder;
+    
     for (let i = 0; i < totalLevels; i++) {
         const levelNum = i + 1;
+        // Для подкатегорий используем составной ключ
+        const storageKey = category.hasSubcategories ? `${categoryKey}-${subKey}-${levelNum}` : `${categoryKey}-${levelNum}`;
         const isUnlocked = isLevelUnlocked(categoryKey, i);
-        const isCompleted = isColored(categoryKey, levelNum);
+        const isCompleted = isColored(categoryKey, levelNum); // isColored теперь работает с подкатегориями
         
         if (isCompleted) completed++;
         total++;
@@ -253,7 +381,9 @@ function renderLevels(categoryKey) {
                 });
             } else {
                 btn.addEventListener('click', function() {
-                    openColoring(categoryKey, levelNum);
+                    // Передаём путь к картинке
+                    const imgPath = `images/${folderPath}/${levelNum}.jpg`;
+                    openColoring(categoryKey, levelNum, imgPath);
                     closeCategory();
                 });
                 if (isCompleted) {
@@ -446,18 +576,27 @@ function watchAdForBrushUnlock() {
 }
 
 // ===== РАСКРАСКА =====
-function openColoring(categoryKey, index) {
+function openColoring(categoryKey, index, imagePath) {
     appState.currentImage = { category: categoryKey, index };
     const wrapper = document.getElementById('coloringCanvasWrapper');
     wrapper.innerHTML = '';
 
-    const path = `images/${CATEGORIES[categoryKey].folder}/${index}.jpg`;
+    // Если путь не передан - определяем сами
+    let path = imagePath;
+    if (!path) {
+        const category = CATEGORIES[categoryKey];
+        let currentCat = category;
+        if (category.hasSubcategories) {
+            const subKey = currentSubcategory[categoryKey] || 'easy';
+            currentCat = category.subcategories[subKey];
+        }
+        path = `images/${currentCat.folder}/${index}.jpg`;
+    }
 
- // Запрещаем скролл на body при открытии раскраски
+    // Запрещаем скролл на body при открытии раскраски
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
-
 
     const coloringBook = document.createElement('jl-coloringbook');
     coloringBook.setAttribute('autoinit', '1');
@@ -527,7 +666,7 @@ function openColoring(categoryKey, index) {
                 }
             }
         } catch(e) {}
-    }, 2000); 
+    }, 2000);
 }
 
 function closeColoring() {
@@ -993,10 +1132,10 @@ function openDailyBonusModal() {
     let html = '';
     if (canClaim) {
         html = `
-            <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px;">Получите бонусные звёзды!</p>
+            <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px;">Посмотрите рекламу, чтобы получить усиленный бонус, или возьмите обычный!</p>    
             <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                <button class="btn-neon" onclick="claimDailyBonus('normal')" style="min-width:120px;">⭐ +5</button>
-                <button class="btn-neon" onclick="claimDailyBonus('rewarded')" style="min-width:120px;background:linear-gradient(135deg,#f59e0b,#d97706);border-color:#f59e0b;">🎬 +10 (реклама)</button>
+                <button class="btn-neon" onclick="claimDailyBonus('normal')" style="min-width:100px;">⭐+5</button>
+                <button class="btn-neon" onclick="claimDailyBonus('rewarded')" style="min-width:100px;background:linear-gradient(135deg,#f59e0b,#d97706);border-color:#f59e0b;">📺+10</button>
             </div>
         `;
     } else {

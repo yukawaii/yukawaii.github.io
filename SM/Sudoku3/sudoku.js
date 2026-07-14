@@ -1122,15 +1122,10 @@ updateDiamondUI() {
 // Открытие таблицы лидеров
 // ============================================================
 showLeaderboard() {
-          this.syncLeaderboard();
-      // Передаём текущее количество алмазов как результат пользователя
+    this.syncLeaderboard(); // не ждём
     vkBridge.send('VKWebAppShowLeaderBoardBox', {
-        app_id: 51399364,
         user_result: this.currentDiamonds,
         global: 1
-    })
-    .then(() => {
-      //  console.log('📊 Таблица лидеров открыта');
     })
     .catch((err) => {
         console.error('❌ Ошибка открытия таблицы лидеров:', err);
@@ -1143,16 +1138,20 @@ showLeaderboard() {
 // ============================================================
 syncLeaderboard() {
     if (!this.vkInitialized || !this.vkUserId) {
-       // console.log('⏳ Нет данных для синхронизации лидерборда');
-        return;
+        return Promise.resolve();
     }
     if (this.currentDiamonds <= 0) {
-     //   console.log('⏳ Нет алмазов для синхронизации (currentDiamonds <= 0)');
-        return;
+        return Promise.resolve();
+    }
+
+    const lastSent = parseInt(localStorage.getItem('sudoku_lastSentScore') || '0');
+    if (this.currentDiamonds <= lastSent) {
+        console.log('⏩ Рекорд не изменился, синхронизация не требуется');
+        return Promise.resolve();
     }
 
     console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
-    vkBridge.send('VKWebAppCallAPIMethod', {
+    return vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
             client_secret: 'jsQlTSHEiXcTe3UyBBnY',
@@ -1161,12 +1160,11 @@ syncLeaderboard() {
             value: this.currentDiamonds,
             v: '5.131',
             access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
-
         }
     })
     .then((result) => {
-     //   console.log('📥 Ответ secure.addAppEvent:', result);
-      //  console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+        console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
+        localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
