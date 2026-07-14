@@ -42,6 +42,9 @@ showBottomBanner() {
         return;
     }
 
+    // Блокируем повторные вызовы сразу, до отправки запроса
+    this.bannerPending = true;
+
     const sendMethod = vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, 'VKWebAppShowBannerAd', {
         banner_location: 'bottom'
@@ -56,11 +59,14 @@ showBottomBanner() {
                 this.bannerRetryTimeout = null;
             }
         } else {
+            // Если result false – считаем как ошибку
+            this.bannerPending = false; // снимаем блокировку перед обработкой ошибки
             this.handleBannerError();
         }
     })
     .catch((error) => {
         console.warn('❌ Ошибка при показе баннера:', error);
+        this.bannerPending = false; // снимаем блокировку перед обработкой ошибки
         this.handleBannerError();
     });
 }
