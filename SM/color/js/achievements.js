@@ -193,7 +193,17 @@ function renderCollections() {
     container.innerHTML = '';
     let total = 0, colored = 0;
 
-      const emojis = { cosmos: '🌌', animals: '🐾', anime: '🎌', plants: '🌿', doodles: '✏️', mandala: '🌀', easy: '🌟' };
+     const emojis = {
+        cosmos: '🌌',
+        animals: '🐾',
+        people: '💁‍♀️',
+        plants: '🌸',
+        food: '🍰',
+        items: '👜',
+        doodles: '🧶',
+        mandala: '🧘',
+        easy: '🐣'
+    };
 
     for (const key in CATEGORIES) {
         const cat = CATEGORIES[key];

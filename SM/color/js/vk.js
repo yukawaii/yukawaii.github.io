@@ -71,7 +71,7 @@ function inviteFriends() {
         if (navigator.share) {
             navigator.share({
                 title: '🎨 Раскраска',
-                text: 'Присоединяйся! Раскрашивай картинки и зарабатывай очки! 🎨✨',
+                text: 'Присоединяйся! Раскрашивай картинки и зарабатывай звёзды! 🎨✨',
                 url: window.location.href
             }).catch(() => {});
         } else {

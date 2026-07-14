@@ -1302,3 +1302,21 @@ input, textarea {
         font-size: 20px;
     }
 }
+/* Скролл для модалки коллекций/прогресса */
+#collectionsList {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+#collectionsList::-webkit-scrollbar {
+    width: 4px;
+}
+#collectionsList::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
+#collectionsList::-webkit-scrollbar-thumb {
+    background: var(--border-neon, #a855f7);
+    border-radius: 4px;
+}
