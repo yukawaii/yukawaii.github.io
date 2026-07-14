@@ -176,7 +176,7 @@ function saveState() {
     } catch(e) {}
 }
 
-function loadState() {
+async function loadState() {
     try {
         const saved = localStorage.getItem('coloringAppState');
         if (saved) {
@@ -185,15 +185,19 @@ function loadState() {
             appState.coloredImages = parsed.coloredImages || [];
             appState.unlockedAchievements = parsed.unlockedAchievements || [];
         }
-        // После загрузки из localStorage загружаем из VK (если доступен)
         if (typeof loadAppStateFromVK === 'function') {
-            loadAppStateFromVK().then(() => {
-                updateStats();
-                if (currentCategory) renderLevels(currentCategory);
-            });
+            await loadAppStateFromVK();
         }
         updateStats();
+        if (currentCategory) renderLevels(currentCategory);
     } catch(e) {}
+}
+function hideSplash() {
+    const splash = document.getElementById('splashScreen');
+    if (splash) {
+        splash.style.display = 'none';
+        console.log('✅ Экран загрузки скрыт');
+    }
 }
 
 
@@ -770,7 +774,7 @@ document.addEventListener('contextmenu', function(e) {
     return false;
 });
 
-// ===== ЗАПУСК =====
+/*// ===== ЗАПУСК =====
 document.addEventListener('DOMContentLoaded', function() {
     // Инициализация фона, тем, состояния
     createCosmicBackground();
@@ -838,8 +842,53 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDailyBonusData(); // ← добавить
     initThemeButtons();
     console.log('🎨 Раскраска загружена!');
+});  */
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Синхронная инициализация
+    createCosmicBackground();
+    loadTheme();
+    loadUnlockedState();
+    loadBrushesState();
+    loadDailyBonusData();
+    initThemeButtons();
+    
+    // Асинхронный запуск
+    initializeApp();
 });
 
+async function initializeApp() {
+    const splash = document.getElementById('splashScreen');
+    if (splash) splash.style.display = 'flex';
+    
+    // Таймер на 60 секунд
+    const timeoutId = setTimeout(() => {
+        console.log('⏱️ Таймаут 60 сек, скрываем загрузку');
+        hideSplash();
+    }, 60000);
+    
+    try {
+        await loadState(); // ждём синхронизацию VK
+        
+        if (typeof initVK === 'function') {
+            await initVK();
+        }
+        
+        if (typeof syncLeaderboard === 'function' && appState) {
+            syncLeaderboard(appState.totalPoints);
+        }
+        
+        // Если таймер ещё не сработал – скрываем загрузку
+        if (splash && splash.style.display !== 'none') {
+            hideSplash();
+        }
+    } catch (error) {
+        console.warn('⚠️ Ошибка инициализации:', error);
+        hideSplash();
+    } finally {
+        clearTimeout(timeoutId);
+    }
+}
 // ===== КИСТИ: КОНФИГУРАЦИЯ =====
 const BRUSHES_CONFIG = {
     simple: { id: 'simple', name: 'Простая', icon: '🖊️', defaultUnlocked: true },

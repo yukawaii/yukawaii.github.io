@@ -29,16 +29,7 @@ function initVKBridge() {
                 }
             });
         
-        // Загружаем данные из VK Storage
-        if (typeof loadAppStateFromVK === 'function') {
-            loadAppStateFromVK().then(() => {
-                // Обновляем UI после загрузки
-                if (typeof updateStats === 'function') updateStats();
-                if (typeof renderLevels === 'function' && currentCategory) renderLevels(currentCategory);
-                console.log('✅ Данные синхронизированы с VK');
-            });
-        }
-        
+    
         setTimeout(showBanner, 500);
         return data;
     })
@@ -282,14 +273,15 @@ function loadBrushesFromVK() {
     });
 }
 
-// ===== ЗАПУСК ИНИЦИАЛИЗАЦИИ =====
+/*/ ===== ЗАПУСК ИНИЦИАЛИЗАЦИИ =====
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setTimeout(initVK, 300);
 } else {
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(initVK, 300);
     });
-}
+}*/
+
 // ===== ПЕРЕМЕННЫЕ ДЛЯ ЛИДЕРБОРДА =====
 let vkUserId = null;
 

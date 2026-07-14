@@ -1149,25 +1149,35 @@ syncLeaderboard() {
     if (this.currentDiamonds <= 0) return Promise.resolve();
 
     const lastSent = parseInt(localStorage.getItem('sudoku_lastSentScore') || '0');
-    if (this.currentDiamonds <= lastSent) {
+    const lastSentTimestamp = parseInt(localStorage.getItem('sudoku_lastSentTimestamp') || '0');
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000;
+
+    // Если рекорд улучшен – отправляем
+    let shouldSend = this.currentDiamonds > lastSent;
+
+    // Если рекорд не улучшен, но прошло больше часа с последней успешной отправки – отправляем (страховка)
+    if (!shouldSend && lastSentTimestamp && (now - lastSentTimestamp) > oneHour) {
+        shouldSend = true;
+        console.log('🔄 Прошёл час, повторная отправка текущего рекорда', this.currentDiamonds);
+    }
+
+    if (!shouldSend) {
         console.log('⏩ Рекорд не изменился, синхронизация не требуется');
         return Promise.resolve();
     }
 
-    // Дополнительная защита от частых повторов при ошибке
+    // Защита от спама при ошибках (кулдаун 30 секунд)
     const lastAttempt = parseInt(localStorage.getItem('sudoku_lastLeaderboardAttempt') || '0');
-    const now = Date.now();
-    const cooldown = 30 * 1000; // 30 секунд
+    const cooldown = 30 * 1000;
     if (lastAttempt && (now - lastAttempt) < cooldown) {
         console.log(`⏳ Повторная попытка через ${Math.round((cooldown - (now - lastAttempt)) / 1000)} сек`);
         return Promise.resolve();
     }
 
-    console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
-    
-    // Запоминаем время попытки (даже если ошибка)
     localStorage.setItem('sudoku_lastLeaderboardAttempt', String(now));
 
+    console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
     return vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
@@ -1181,13 +1191,13 @@ syncLeaderboard() {
     })
     .then(() => {
         console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
-        // Сохраняем ТОЛЬКО при успехе
         localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
-        localStorage.removeItem('sudoku_lastLeaderboardAttempt'); // очищаем время
+        localStorage.setItem('sudoku_lastSentTimestamp', String(now));
+        localStorage.removeItem('sudoku_lastLeaderboardAttempt');
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
-        // Не сохраняем lastSent – даём шанс повторить позже
+        // Не сохраняем lastSent, чтобы дать шанс повторить
     });
 }
 
