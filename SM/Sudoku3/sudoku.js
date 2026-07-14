@@ -1157,7 +1157,7 @@ syncLeaderboard() {
     // Дополнительная защита от частых повторов при ошибке
     const lastAttempt = parseInt(localStorage.getItem('sudoku_lastLeaderboardAttempt') || '0');
     const now = Date.now();
-    const cooldown = 5 * 60 * 1000; // 5 минут
+    const cooldown = 30 * 1000; // 30 секунд
     if (lastAttempt && (now - lastAttempt) < cooldown) {
         console.log(`⏳ Повторная попытка через ${Math.round((cooldown - (now - lastAttempt)) / 1000)} сек`);
         return Promise.resolve();
