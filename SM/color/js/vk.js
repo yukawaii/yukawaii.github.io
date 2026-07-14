@@ -19,16 +19,26 @@ function initVKBridge() {
 
     return bridge.send('VKWebAppInit')
         .then((data) => {
-            isVKInitialized = true;
-            console.log('✅ VK Bridge инициализирован:', data);
-            // СРАЗУ ПОКАЗЫВАЕМ БАННЕР ПОСЛЕ ИНИЦИАЛИЗАЦИИ
-            setTimeout(showBanner, 500);
-            return data;
-        })
-        .catch((error) => {
-            console.error('❌ Ошибка инициализации VK Bridge:', error);
-            throw error;
-        });
+        isVKInitialized = true;
+        console.log('✅ VK Bridge инициализирован:', data);
+        
+        // Загружаем данные из VK Storage
+        if (typeof loadAppStateFromVK === 'function') {
+            loadAppStateFromVK().then(() => {
+                // Обновляем UI после загрузки
+                if (typeof updateStats === 'function') updateStats();
+                if (typeof renderLevels === 'function' && currentCategory) renderLevels(currentCategory);
+                console.log('✅ Данные синхронизированы с VK');
+            });
+        }
+        
+        setTimeout(showBanner, 500);
+        return data;
+    })
+    .catch((error) => {
+        console.error('❌ Ошибка инициализации VK Bridge:', error);
+        throw error;
+    });
 }
 
 // ===== ПРОВЕРКА СТАТУСА VK =====
@@ -75,59 +85,6 @@ function inviteFriends() {
         });
 }
 
-// ===== ПОДЕЛИТЬСЯ =====
-function shareApp() {
-    console.log('📤 Поделиться...');
-
-    const bridge = getVKBridge();
-    if (!bridge) {
-        if (navigator.share) {
-            navigator.share({
-                title: '🎨 Раскраска',
-                text: 'Раскрашивай картинки и зарабатывай очки! 🎨✨',
-                url: window.location.href
-            }).catch(() => {});
-        } else {
-            alert('Поделиться можно через VK');
-        }
-        return;
-    }
-
-    bridge.send('VKWebAppShowShareBox', {
-        link: window.location.href
-    })
-    .then((data) => {
-        console.log('✅ Поделились:', data);
-        if (data.result) {
-            showToast('📤 Ссылка отправлена!');
-        }
-    })
-    .catch((error) => {
-        console.error('❌ Ошибка при шеринге:', error);
-    });
-}
-
-// ===== ДОБАВИТЬ В ИЗБРАННОЕ =====
-function addToFavorites() {
-    console.log('⭐ Добавление в избранное...');
-
-    const bridge = getVKBridge();
-    if (!bridge) {
-        alert('Добавьте страницу в закладки браузера');
-        return;
-    }
-
-    bridge.send('VKWebAppAddToFavorites', {})
-        .then((data) => {
-            console.log('✅ Добавлено в избранное:', data);
-            if (data.result) {
-                showToast('⭐ Добавлено в избранное!');
-            }
-        })
-        .catch((error) => {
-            console.error('❌ Ошибка добавления в избранное:', error);
-        });
-}
 
 // ===== ПОКАЗАТЬ РЕКЛАМНЫЙ БАННЕР =====
 function showBanner() {

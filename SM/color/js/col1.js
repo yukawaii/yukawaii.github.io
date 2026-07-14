@@ -12,6 +12,15 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         this.zoomLevel = 1;
         this.zoomMin = 0.5;
         this.zoomMax = 3;
+  this.panMode = false;          // ← добавить
+    this.panDragging = false;      // ← добавить
+    this.panStartX = 0;            // ← добавить
+    this.panStartY = 0;            // ← добавить
+    this.panX = 0;                 // ← добавить
+    this.panY = 0;                 // ← добавить // ← режим перетаскивания
+    this.panBaseX = 0;
+this.panBaseY = 0;
+ this.lastNonEraserColor = 0; //ластик
 
     }
 
@@ -164,10 +173,35 @@ customElements.define('jl-coloringbook', class extends HTMLElement
                 .tools .clearButton:hover { background: #ef4444 !important; }
                 .tools .saveButton { border-color: #22c55e !important; }
                 .tools .saveButton:hover { background: #22c55e !important; }
-                .tools .paletteToggle { border-color: #ec4899 !important; }
-                .tools .paletteToggle:hover { background: #ec4899 !important; }
-                .tools .paletteToggle.active { background: #ec4899 !important; color: #fff !important; }
-                
+                               
+/* Стили для кнопки палитры (paletteToggle) */
+.paletteToggle {
+    border-color: #ec4899 !important;
+}
+.paletteToggle:focus,
+.paletteToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.paletteToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.paletteToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #f0eaff !important;
+}
+.paletteToggle.active {
+    background: #ec4899 !important;
+    color: #fff !important;
+    border-color: #ec4899 !important;
+}
+.paletteToggle.active:hover {
+    background: #ec4899 !important;
+    color: #fff !important;
+}
+
                                .palette {
                     display: flex !important;
                     flex-wrap: wrap !important;
@@ -283,17 +317,33 @@ customElements.define('jl-coloringbook', class extends HTMLElement
                     z-index: 2000;
                     pointer-events: none;
                 }
-                .zoomToggle {
+             /* Стили для кнопки лупы (zoomToggle) */
+.zoomToggle {
     border-color: #3b82f6 !important;
 }
-.zoomToggle:hover {
-    background: #3b82f6 !important;
+.zoomToggle:focus,
+.zoomToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.zoomToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.zoomToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #f0eaff !important;
 }
 .zoomToggle.active {
     background: #3b82f6 !important;
     color: #fff !important;
+    border-color: #3b82f6 !important;
 }
-
+.zoomToggle.active:hover {
+    background: #3b82f6 !important;
+    color: #fff !important;
+}
 .zoomContainer {
     display: inline-block;
     margin-left: 4px;
@@ -333,6 +383,34 @@ customElements.define('jl-coloringbook', class extends HTMLElement
 .zoom-btn:active {
     transform: scale(0.95) !important;
 }
+
+/* Стили для кнопки "Рука" (panToggle) */
+.panToggle {
+    border-color: #3b82f6 !important;
+}
+.panToggle:focus,
+.panToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.panToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.panToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important; /* Не меняем фон при наведении в неактивном состоянии */
+    color: #f0eaff !important;
+}
+.panToggle.active {
+    background: #3b82f6 !important;
+    color: #fff !important;
+    border-color: #3b82f6 !important;
+}
+.panToggle.active:hover {
+    background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */
+    color: #fff !important;
+}
             </style>
         `).appendTo(this.shadowRoot);
         
@@ -357,6 +435,7 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         <button class="zoom-btn" id="zoomInBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
         <button class="zoom-btn" id="zoomOutBtn"><i class="material-icons" style="font-size:18px;">zoom_out</i></button>
         <button class="zoom-btn" id="zoomResetBtn"><i class="material-icons" style="font-size:18px;">center_focus_strong</i></button>
+        <button class="panToggle button" id="panToggleBtn"><i class="material-icons" style="font-size:18px;">pan_tool</i></button>
         <span class="zoom-level" id="zoomLevel">100%</span>
     </div>
 </div>
@@ -380,6 +459,8 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         this.sizer.val(15);
         this.wrapper = jQuery('.wrapper', this.shadowRoot);
         this.canvasContainer = jQuery('#canvasContainer', this.shadowRoot);
+this.canvasContainer.css('will-change', 'transform');
+
         this.zoomIndicator = jQuery('#zoomIndicator', this.shadowRoot);
         
         this.generatePalette();
@@ -396,11 +477,27 @@ customElements.define('jl-coloringbook', class extends HTMLElement
     const container = jQuery('.zoomContainer', me.shadowRoot);
     container.toggle();
     jQuery(this).toggleClass('active');
+       btn.blur();
 });
         jQuery('#zoomInBtn', this.shadowRoot).on('click', function() { me.zoomIn(); });
         jQuery('#zoomOutBtn', this.shadowRoot).on('click', function() { me.zoomOut(); });
         jQuery('#zoomResetBtn', this.shadowRoot).on('click', function() { me.zoomReset(); });
-
+jQuery('#panToggleBtn', this.shadowRoot).on('click', function() {
+    me.panMode = !me.panMode;
+    const btn = jQuery(this);
+    btn.blur(); // снимаем фокус с кнопки
+    if (me.panMode) {
+        btn.addClass('active');
+        me.wrapper.css('cursor', 'grab');
+        me.activeCanvas.css('cursor', 'grab');
+        me.showToast('✋ Режим перемещения');
+    } else {
+        btn.removeClass('active');
+        me.setCursor();
+        me.activeCanvas.css('cursor', 'default');
+        me.showToast('🖌️ Режим рисования');
+    }
+});
         
        jQuery(this.wrapper).on('wheel', function(e) {
     e.preventDefault();
@@ -415,8 +512,14 @@ customElements.define('jl-coloringbook', class extends HTMLElement
             const container = jQuery('.paletteContainer', me.shadowRoot);
             container.slideToggle(200);
             jQuery(this).toggleClass('active');
+              btn.blur();
         });
     }
+
+
+
+
+
 
  generatePalette()
 {
@@ -447,19 +550,50 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         className='';
         if (i==(this.paletteColors.length-1)) className="eraser";
         
-        let colorDiv;
+                   let colorDiv;
         if (className === 'eraser') {
-            // Ластик с иконкой
-            colorDiv = jQuery(`<div class="paletteColor ${className} color${i}" style="background-color:${value};display:flex;align-items:center;justify-content:center;font-size:14px;color:#ff4444;"><i class="material-icons" style="font-size:14px;">erase</i></div>`).data('color',i);
+            // Ластик – используем эмодзи вместо иконки
+            colorDiv = jQuery(`<div class="paletteColor ${className} color${i}" style="background-color:${value};display:flex;align-items:center;justify-content:center;font-size:18px;color:#ff4444;">🧹</div>`).data('color',i);
         } else {
             colorDiv = jQuery(`<div class="paletteColor ${className} color${i}" style="background-color:${value};"><i class="material-icons"></i></div>`).data('color',i);
         }
         
+        // Обработчик клика с учётом ластика
         colorDiv.on('click', function(){
-            me.color = jQuery(this).data('color');
-            me.setCursor();
-            jQuery(this).parent().children().removeClass('selected');
-            jQuery(this).addClass('selected');
+            const clickedColor = jQuery(this).data('color');
+            const isEraser = jQuery(this).hasClass('eraser');
+            
+            if (isEraser) {
+                // Если ластик уже выбран, переключаемся на предыдущий цвет
+                if (me.color === clickedColor) {
+                    // Возвращаемся к последнему не-ластику, если он есть, иначе к первому цвету (0)
+                    let prevColor = me.lastNonEraserColor !== undefined ? me.lastNonEraserColor : 0;
+                    // Убедимся, что prevColor не ластик (на случай, если lastNonEraserColor = индекс ластика)
+                    if (prevColor === me.paletteColors.length - 1) {
+                        prevColor = 0;
+                    }
+                    me.color = prevColor;
+                    me.setCursor();
+                    jQuery(this).parent().children().removeClass('selected');
+                    jQuery(`.paletteColor.color${me.color}`, me.shadowRoot).addClass('selected');
+                    // Не обновляем lastNonEraserColor, так как мы переключились на цвет
+                } else {
+                    // Выбираем ластик, запоминаем текущий цвет как предыдущий
+                    me.lastNonEraserColor = me.color;
+                    me.color = clickedColor;
+                    me.setCursor();
+                    jQuery(this).parent().children().removeClass('selected');
+                    jQuery(this).addClass('selected');
+                }
+            } else {
+                // Обычный цвет
+                me.color = clickedColor;
+                me.setCursor();
+                jQuery(this).parent().children().removeClass('selected');
+                jQuery(this).addClass('selected');
+                // Запоминаем как последний не-ластик
+                me.lastNonEraserColor = clickedColor;
+            }
         }).appendTo(palette);
         i++;
     }
@@ -507,7 +641,7 @@ customElements.define('jl-coloringbook', class extends HTMLElement
                         });
                     }
                 });
-                me.showToast('👆 Нажмите на цвет, чтобы удалить его');
+                me.showToast('👆 Нажмите на цвет, чтобы удалить его из палитры');
             } else {
                 jQuery(this).css({
                     'background': 'rgba(255,0,0,0.12)',
@@ -565,6 +699,7 @@ customElements.define('jl-coloringbook', class extends HTMLElement
 }
 
 
+
     drawImageNav()
     {
         this.images=[];
@@ -606,7 +741,7 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         let me = this;
         jQuery(this).attr('src',this.img.attr('src'));
         
-        this.canvasContainer.empty().append(this.img);
+        this.canvasContainer.empty().append(this.img); 
         
         this.canvas = jQuery(`<canvas class="canvas"/>`).appendTo(this.canvasContainer);
         this.activeCanvas = jQuery(`<canvas class="activeCanvas"/>`).appendTo(this.canvasContainer);
@@ -629,14 +764,60 @@ customElements.define('jl-coloringbook', class extends HTMLElement
             }
         });
         
-        this.activeCanvas.on('mousedown', function(e) {me.mouseDown(e);})
-            .on('mouseup', function(e) {me.mouseUp(e);})
-            .on('mousemove', function(e) {me.mouseMove(e);})
-            .on('click', function(e) {me.handleCanvasClick(e);})
-            .on('touchstart', function(e) {return me.touchStart(e);})
-            .on('touchend', function(e) {return me.touchEnd(e);})
-            .on('touchmove', function(e) {return me.touchMove(e);})
-            .on('touchcancel', function(e) {me.dragging = false;});
+        this.activeCanvas.on('mousedown', function(e) {
+    if (me.panMode) {
+        me.panStart(e);
+        return;
+    }
+    me.mouseDown(e);
+})
+.on('mouseup', function(e) {
+    if (me.panMode) {
+        me.panEnd(e);
+        return;
+    }
+    me.mouseUp(e);
+})
+.on('mousemove', function(e) {
+    if (me.panMode) {
+        me.panMove(e);
+        return;
+    }
+    me.mouseMove(e);
+})
+.on('click', function(e) {
+    if (me.panMode) return; // в режиме панорамирования клик не нужен
+    me.handleCanvasClick(e);
+})
+.on('touchstart', function(e) {
+    if (me.panMode) {
+        me.panStart(e.originalEvent);
+        return;
+    }
+    return me.touchStart(e);
+})
+.on('touchend', function(e) {
+    if (me.panMode) {
+        me.panEnd(e.originalEvent);
+        return;
+    }
+    return me.touchEnd(e);
+})
+.on('touchmove', function(e) {
+    if (me.panMode) {
+        me.panMove(e.originalEvent);
+        return;
+    }
+    return me.touchMove(e);
+})
+.on('touchcancel', function(e) {
+    if (me.panMode) {
+        me.panDragging = false;
+        return;
+    }
+    me.dragging = false;
+});
+
     }
 
     getCanvasCoords(e) {
@@ -682,7 +863,12 @@ customElements.define('jl-coloringbook', class extends HTMLElement
 }
 
 touchStart(oe)
-{           
+{   
+     if (this.panMode) {
+        this.panStart(oe.originalEvent);
+        return;
+    }
+    
     // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
     if (this.eyedropperMode) {
         // Не создаем путь в режиме пипетки
@@ -696,7 +882,10 @@ touchStart(oe)
 }
 
    touchEnd(oe)
-{
+{  if (this.panMode) {
+        this.panEnd(oe.originalEvent);
+        return;
+    }
     // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
     if (this.eyedropperMode) {
         this.dragging = false;
@@ -709,7 +898,10 @@ touchStart(oe)
 }
 
   touchMove(oe)
-{   
+{    if (this.panMode) {
+        this.panMove(oe.originalEvent);
+        return;
+    }
     // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
     if (this.eyedropperMode) {
         return;
@@ -1292,20 +1484,23 @@ if (brushType === 'sparkle' && path[0].c != (this.paletteColors.length-1)) {
         this.applyZoom();
     }
     
-    zoomReset() {
-        this.zoomLevel = 1;
-        this.applyZoom();
-    }
+zoomReset() {
+    this.zoomLevel = 1;
+    this.panX = 0;
+    this.panY = 0;
+    this.applyZoom();
+}
     
-    applyZoom() {
-        const percent = Math.round(this.zoomLevel * 100);
-        this.canvasContainer.css({
-            'transform': `scale(${this.zoomLevel})`,
-            'transform-origin': '0 0'
-        });
-        this.zoomIndicator.text(percent + '%');
-        jQuery('#zoomLevel', this.shadowRoot).text(percent + '%');
-    }
+applyZoom() {
+      this.canvasContainer.css('will-change', 'transform');
+    const percent = Math.round(this.zoomLevel * 100);
+    this.canvasContainer.css({
+        'transform': `translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`,
+        'transform-origin': '0 0'
+    });
+    this.zoomIndicator.text(percent + '%');
+    jQuery('#zoomLevel', this.shadowRoot).text(percent + '%');
+}
 
     sizeCanvas() {
         this.canvas.attr('height', this.img[0].naturalHeight);
@@ -1890,6 +2085,17 @@ openAdvancedPicker()
     const hexInput = modal.find('.hexInput');
     const nativePicker = modal.find('.nativePicker');
 
+    // ===== ДОБАВЛЯЕМ ФУНКЦИЮ ПРЕОБРАЗОВАНИЯ HEX В RGB =====
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+    // ===== КОНЕЦ =====
+
     // Обновить цвет
     function updateColor(h, s, l) {
         currentColor = hslToHex(h, s, l);
@@ -2044,82 +2250,91 @@ openAdvancedPicker()
         });
     });
 
-   // Кнопка "Выбрать" - выбирает цвет и закрывает палитру
-modal.find('.pickerSelect').on('click', function() {
-    // Проверяем, есть ли уже такой цвет в палитре (кроме ластика)
-    let colorExists = false;
-    let existingIndex = -1;
-    for (let i = 0; i < me.paletteColors.length - 1; i++) {
-        if (me.paletteColors[i] === currentColor) {
-            colorExists = true;
-            existingIndex = i;
-            break;
+    // ===== ОБНОВЛЁННЫЕ ОБРАБОТЧИКИ =====
+    // Кнопка "Выбрать" - выбирает цвет и закрывает палитру
+    modal.find('.pickerSelect').on('click', function() {
+        const rgb = hexToRgb(currentColor);
+        if (!rgb) {
+            me.showToast('⚠️ Некорректный цвет');
+            return;
         }
-    }
-    
-    if (!colorExists) {
-        // Добавляем цвет перед ластиком
-        const colorIndex = me.paletteColors.length - 1;
-        me.paletteColors.splice(colorIndex, 0, currentColor);
-        existingIndex = colorIndex;
-    }
-    
-    // Обновляем отображение палитры
-    me.generatePalette();
-    
-    // Выбираем цвет
-    me.color = existingIndex;
-    jQuery('.paletteColor', me.shadowRoot).removeClass('selected');
-    jQuery(`.paletteColor.color${existingIndex}`, me.shadowRoot).addClass('selected');
-    me.setCursor();
-    
-    // Закрываем модалку
-    modal.remove();
-    me.showToast('✅ Цвет выбран!');
-});
-
-// Кнопка "Добавить" - добавляет цвет в палитру, НЕ закрывает окно
-modal.find('.pickerAdd').on('click', function() {
-    // Проверяем, есть ли уже такой цвет в палитре (кроме ластика)
-    let colorExists = false;
-    for (let i = 0; i < me.paletteColors.length - 1; i++) {
-        if (me.paletteColors[i] === currentColor) {
-            colorExists = true;
-            break;
+        const rgbaColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`;
+        
+        let colorExists = false;
+        let existingIndex = -1;
+        for (let i = 0; i < me.paletteColors.length - 1; i++) {
+            if (me.paletteColors[i] === rgbaColor) {
+                colorExists = true;
+                existingIndex = i;
+                break;
+            }
         }
-    }
-    
-    if (!colorExists) {
-        const colorIndex = me.paletteColors.length - 1;
-        me.paletteColors.splice(colorIndex, 0, currentColor);
+        
+        if (!colorExists) {
+            const colorIndex = me.paletteColors.length - 1;
+            me.paletteColors.splice(colorIndex, 0, rgbaColor);
+            existingIndex = colorIndex;
+        }
+        
         me.generatePalette();
-        me.showToast('✅ Цвет добавлен в палитру!');
-            } else {
-        me.showToast('⚠️ Этот цвет уже есть в палитре!');
-    }
-});  
-// Закрытие по кнопке ✖
-modal.find('.pickerClose').on('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    modal.remove();
-});
-
-// Закрытие по клику на фон
-modal.on('click', function(e) {
-    if (e.target === this) {
+        me.color = existingIndex;
+        jQuery('.paletteColor', me.shadowRoot).removeClass('selected');
+        jQuery(`.paletteColor.color${existingIndex}`, me.shadowRoot).addClass('selected');
+        me.setCursor();
         modal.remove();
-    }
-});
+        me.showToast('✅ Цвет выбран!');
+    });
 
-// Закрытие по клавише ESC
-$(document).on('keydown', function(e) {
-    if (e.key === 'Escape' || e.key === 'Esc') {
-        if (modal.is(':visible')) {
+    // Кнопка "Добавить" - добавляет цвет в палитру, НЕ закрывает окно
+    modal.find('.pickerAdd').on('click', function() {
+        const rgb = hexToRgb(currentColor);
+        if (!rgb) {
+            me.showToast('⚠️ Некорректный цвет');
+            return;
+        }
+        const rgbaColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`;
+        
+        let colorExists = false;
+        for (let i = 0; i < me.paletteColors.length - 1; i++) {
+            if (me.paletteColors[i] === rgbaColor) {
+                colorExists = true;
+                break;
+            }
+        }
+        
+        if (!colorExists) {
+            const colorIndex = me.paletteColors.length - 1;
+            me.paletteColors.splice(colorIndex, 0, rgbaColor);
+            me.generatePalette();
+            me.showToast('✅ Цвет добавлен в палитру!');
+        } else {
+            me.showToast('⚠️ Этот цвет уже есть в палитре!');
+        }
+    });
+    // ===== КОНЕЦ =====
+
+    // Закрытие по кнопке ✖
+    modal.find('.pickerClose').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.remove();
+    });
+
+    // Закрытие по клику на фон
+    modal.on('click', function(e) {
+        if (e.target === this) {
             modal.remove();
         }
-    }
-});
+    });
+
+    // Закрытие по клавише ESC
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            if (modal.is(':visible')) {
+                modal.remove();
+            }
+        }
+    });
 
     // Добавляем анимацию
     jQuery('<style>@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }</style>').appendTo('head');
@@ -2286,29 +2501,29 @@ toggleBrushMenu()
         animation: fadeIn 0.2s ease;
     ">`).appendTo(this.shadowRoot);
 
-    brushes.forEach(brush => {
-        // ===== ПРОВЕРКА РАЗБЛОКИРОВАНА ЛИ КИСТЬ =====
-        let isUnlocked = brush.defaultUnlocked || false;
-        // Проверяем глобальное состояние, если функция доступна
-        if (typeof isBrushUnlocked !== 'undefined') {
-            isUnlocked = isBrushUnlocked(brush.id);
-        }
-        // ===== КОНЕЦ ПРОВЕРКИ =====
-        
-        const isActive = this.brushType === brush.id;
-        const btn = jQuery(`<div class="brushOption" style="
-            padding: 8px 6px;
-            border-radius: 10px;
-            cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
-            text-align: center;
-            transition: all 0.2s ease;
-            background: ${isActive ? 'rgba(168, 85, 247, 0.25)' : 'transparent'};
-            border: 2px solid ${isActive ? '#a855f7' : 'transparent'};
-            opacity: ${isUnlocked ? 1 : 0.4};
-            ${!isUnlocked ? 'filter: grayscale(0.5);' : ''}
-        ">`)
-        .data('brush', brush.id)
-        .appendTo(menu);
+brushes.forEach(brush => {
+    // ===== ПРОВЕРКА РАЗБЛОКИРОВАНА ЛИ КИСТЬ =====
+    let isUnlocked = brush.defaultUnlocked || false;
+    // Проверяем глобальное состояние, если функция доступна
+    if (typeof isBrushUnlocked !== 'undefined') {
+        isUnlocked = isBrushUnlocked(brush.id);
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    const isActive = this.brushType === brush.id;
+    const btn = jQuery(`<div class="brushOption" style="
+        padding: 8px 6px;
+        border-radius: 10px;
+        cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
+        text-align: center;
+        transition: all 0.2s ease;
+        background: ${isActive ? 'rgba(168, 85, 247, 0.25)' : 'transparent'};
+        border: 2px solid ${isActive ? '#a855f7' : 'transparent'};
+        opacity: ${isUnlocked ? 1 : 0.4};
+        ${!isUnlocked ? 'filter: grayscale(0.5);' : ''}
+    ">`)
+    .data('brush', brush.id)
+    .appendTo(menu);
         
         // Если кисть заблокирована - добавляем замок
         const lockIcon = !isUnlocked ? '🔒' : '';
@@ -2316,29 +2531,31 @@ toggleBrushMenu()
         jQuery(`<div style="font-size: 20px;">${brush.icon} ${lockIcon}</div>`).appendTo(btn);
         jQuery(`<div style="font-size: 10px; color: #f0eaff; margin-top: 2px;">${brush.name}</div>`).appendTo(btn);
 
-        btn.on('click', function() {
-            const brushId = jQuery(this).data('brush');
-            
-            // ===== ПРОВЕРЯЕМ РАЗБЛОКИРОВКУ =====
-            let isUnlocked = brush.defaultUnlocked || false;
-            if (typeof isBrushUnlocked !== 'undefined') {
-                isUnlocked = isBrushUnlocked(brushId);
-            }
-            
-            if (!isUnlocked) {
-                // Показываем модалку открытия кисти
-                if (typeof showBrushUnlockModal === 'function') {
-                    showBrushUnlockModal(brushId);
-                } else {
-                    me.showToast('🔒 Кисть заблокирована! Откройте через рекламу.');
-                }
-                return;
-            }
-            // ===== КОНЕЦ =====
-            
-            me.brushType = brushId;
-            me.setCursor();
-            me.showToast(`🖌️ Кисть: ${brush.name}`);
+       btn.on('click', function() {
+    const brushId = jQuery(this).data('brush');
+    
+    // ===== ПРОВЕРЯЕМ РАЗБЛОКИРОВКУ =====
+    let isUnlocked = brush.defaultUnlocked || false;
+    if (typeof isBrushUnlocked !== 'undefined') {
+        isUnlocked = isBrushUnlocked(brushId);
+    }
+    
+    if (!isUnlocked) {
+        // Показываем модалку открытия кисти
+        if (typeof showBrushUnlockModal === 'function') {
+            showBrushUnlockModal(brushId);
+        } else if (typeof me.showBrushUnlockModal === 'function') {
+            me.showBrushUnlockModal(brushId);
+        } else {
+            me.showToast('🔒 Кисть заблокирована! Откройте через рекламу.');
+        }
+        return;
+    }
+    // ===== КОНЕЦ =====
+    
+    me.brushType = brushId;
+    me.setCursor();
+    me.showToast(`🖌️ Кисть: ${brush.name}`);
             
             menu.find('.brushOption').css({
                 'background': 'transparent',
@@ -2376,5 +2593,65 @@ toggleBrushMenu()
         $(document).on('click', closeMenu);
     }, 100);
 }
+
+panStart(e) {
+      if (e.touches && e.touches.length > 1) {
+        return; // два пальца – не панорамируем
+    }
+    this.panDragging = true;
+    const rect = this.canvasContainer[0].getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    this.panStartX = clientX - rect.left;
+    this.panStartY = clientY - rect.top;
+    // Сохраняем текущие значения panX и panY как базовые
+    this.panBaseX = this.panX;
+    this.panBaseY = this.panY;
+    this.wrapper.css('cursor', 'grabbing');
+    this.activeCanvas.css('cursor', 'grabbing');
+}
+
+panMove(e) {
+    if (!this.panDragging) return;
+    if (e.touches && e.touches.length > 1) {
+        return; // два пальца – не панорамируем
+    }
+    const rect = this.canvasContainer[0].getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const dx = x - this.panStartX;
+    const dy = y - this.panStartY;
+    // Применяем смещение относительно базовых значений
+    this.panX = this.panBaseX + dx;
+    this.panY = this.panBaseY + dy;
+    this.applyZoom();
+}
+
+panEnd(e) {
+    this.panDragging = false;
+    this.wrapper.css('cursor', 'grab');
+    this.activeCanvas.css('cursor', 'grab');
+}
+
 
 });

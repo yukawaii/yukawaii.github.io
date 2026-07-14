@@ -1,4 +1,7 @@
 // ===== РАСКРАСКА: ОСНОВНАЯ ЛОГИКА =====
+// ===== ПАГИНАЦИЯ СВИТКОВ =====
+const SCROLLS_PER_PAGE = 5; // сколько свитков на странице
+let currentScrollPage = 1;
 
 const CATEGORIES = {
     easy: { name: '🌟 Лёгкие', folder: 'easy', count: 30 }, // 30 картинок для начала
@@ -101,6 +104,20 @@ function loadTheme() {
 }
 
 // ===== ЗАГРУЗКА/СОХРАНЕНИЕ =====
+function saveState() {
+    try {
+        localStorage.setItem('coloringAppState', JSON.stringify({
+            totalPoints: appState.totalPoints,
+            coloredImages: appState.coloredImages,
+            unlockedAchievements: appState.unlockedAchievements
+        }));
+        saveUnlockedState();
+        saveBrushesState();
+        // VK синхронизация
+        if (typeof saveAppStateToVK === 'function') saveAppStateToVK();
+    } catch(e) {}
+}
+
 function loadState() {
     try {
         const saved = localStorage.getItem('coloringAppState');
@@ -110,19 +127,17 @@ function loadState() {
             appState.coloredImages = parsed.coloredImages || [];
             appState.unlockedAchievements = parsed.unlockedAchievements || [];
         }
+        // После загрузки из localStorage загружаем из VK (если доступен)
+        if (typeof loadAppStateFromVK === 'function') {
+            loadAppStateFromVK().then(() => {
+                updateStats();
+                if (currentCategory) renderLevels(currentCategory);
+            });
+        }
+        updateStats();
     } catch(e) {}
-    updateStats();
 }
 
-function saveState() {
-    try {
-        localStorage.setItem('coloringAppState', JSON.stringify({
-            totalPoints: appState.totalPoints,
-            coloredImages: appState.coloredImages,
-            unlockedAchievements: appState.unlockedAchievements
-        }));
-    } catch(e) {}
-}
 
 function updateStats() {
     document.getElementById('totalPoints').textContent = appState.totalPoints;
@@ -590,27 +605,39 @@ function initThemeButtons() {
     });
 }
 
+// ===== МОДАЛКА "ДРУГИЕ ИГРЫ" =====
+function openGamesModal() {
+    const modal = document.getElementById('gamesModal');
+    if (modal) modal.classList.add('show');
+}
+
+function closeGamesModal() {
+    const modal = document.getElementById('gamesModal');
+    if (modal) modal.classList.remove('show');
+}
+
+// Чтобы точно быть уверенным, можно продублировать через window:
+window.openGamesModal = openGamesModal;
+window.closeGamesModal = closeGamesModal;
+
 // ===== ЗАПРЕТ КОНТЕКСТНОГО МЕНЮ И СВАЙПОВ =====
+// Запрет контекстного меню на всей странице (глобально)
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// ===== ЗАПУСК =====
 document.addEventListener('DOMContentLoaded', function() {
-    // ... существующий код ...
-    
-    // ===== ДОБАВЬТЕ ЭТОТ КОД =====
-    // Запрет контекстного меню на всей странице
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        return false;
-    });
-    
-    // В DOMContentLoaded добавьте:
-document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация фона, тем, состояния
     createCosmicBackground();
     loadTheme();
     loadState();
     loadUnlockedState();
-    loadBrushesState(); // ← ДОБАВЬТЕ
+    loadBrushesState(); 
     initThemeButtons();
     console.log('🎨 Раскраска загружена!');
-});
+    
     // Запрет свайпов (pull-to-refresh)
     document.addEventListener('touchmove', function(e) {
         // Проверяем, не является ли элемент скроллируемым
@@ -656,7 +683,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('🚫 Контекстное меню и свайпы отключены');
+
+    
 });
+document.addEventListener('DOMContentLoaded', function() {
+    createCosmicBackground();
+    loadTheme();
+    loadState();
+    loadUnlockedState();
+    loadBrushesState();
+    loadDailyBonusData(); // ← добавить
+    initThemeButtons();
+    console.log('🎨 Раскраска загружена!');
+});
+
 // ===== КИСТИ: КОНФИГУРАЦИЯ =====
 const BRUSHES_CONFIG = {
     simple: { id: 'simple', name: 'Простая', icon: '🖊️', defaultUnlocked: true },
@@ -681,6 +721,15 @@ function loadBrushesState() {
             // Проверяем, не истекло ли время
             const now = Date.now();
             for (const [id, data] of Object.entries(brushesState)) {
+                // Если кисть по умолчанию всегда открыта
+                if (BRUSHES_CONFIG[id] && BRUSHES_CONFIG[id].defaultUnlocked) {
+                    brushesState[id] = {
+                        unlocked: true,
+                        expiresAt: null
+                    };
+                    continue;
+                }
+                // Проверяем срок действия для остальных
                 if (data.unlocked && data.expiresAt && data.expiresAt < now) {
                     data.unlocked = false;
                     data.expiresAt = null;
@@ -696,7 +745,9 @@ function loadBrushesState() {
             }
         }
         saveBrushesState();
-    } catch(e) {}
+    } catch(e) {
+        console.warn('⚠️ Ошибка загрузки состояния кистей:', e);
+    }
 }
 
 function saveBrushesState() {
@@ -706,6 +757,11 @@ function saveBrushesState() {
 }
 
 function isBrushUnlocked(brushId) {
+    // Сначала проверяем, есть ли кисть в конфиге с defaultUnlocked
+    if (BRUSHES_CONFIG[brushId] && BRUSHES_CONFIG[brushId].defaultUnlocked) {
+        return true; // Всегда открыта
+    }
+    
     const state = brushesState[brushId];
     if (!state) return false;
     
@@ -738,13 +794,301 @@ function unlockBrushFor24Hours(brushId) {
     saveBrushesToVK();
 }
 
+// ===== СИНХРОНИЗАЦИЯ С VK STORAGE =====
+function saveAppStateToVK() {
+    const bridge = getVKBridge ? getVKBridge() : null;
+    if (!bridge) return;
 
-// ===== ЗАПУСК =====
-document.addEventListener('DOMContentLoaded', function() {
-    createCosmicBackground();
-    loadTheme();
-    loadState();
-    loadUnlockedState();
-    initThemeButtons();
-    console.log('🎨 Раскраска загружена!');
-});
+    const data = {
+        totalPoints: appState.totalPoints,
+        coloredImages: appState.coloredImages,
+        unlockedAchievements: appState.unlockedAchievements,
+        unlockedLevels: unlockedLevels,
+        brushesState: brushesState,
+        scrollsProgress: getScrollsProgress ? getScrollsProgress() : {},
+            dailyBonusData: dailyBonusData     
+    };
+    bridge.send('VKWebAppStorageSet', {
+        key: 'coloringAppData',
+        value: JSON.stringify(data)
+    }).catch(e => console.warn('VK save error:', e));
+}
+
+function loadAppStateFromVK() {
+    const bridge = getVKBridge ? getVKBridge() : null;
+    if (!bridge) return Promise.resolve();
+
+    return bridge.send('VKWebAppStorageGet', { keys: ['coloringAppData'] })
+        .then(result => {
+            if (result && result.keys && result.keys.length > 0) {
+                const value = result.keys[0].value;
+                if (value) {
+                    try {
+                        const data = JSON.parse(value);
+                        // Обновляем appState
+                        if (data.totalPoints !== undefined) appState.totalPoints = data.totalPoints;
+                        if (data.coloredImages) appState.coloredImages = data.coloredImages;
+                        if (data.unlockedAchievements) appState.unlockedAchievements = data.unlockedAchievements;
+                        if (data.unlockedLevels) unlockedLevels = data.unlockedLevels;
+                        if (data.brushesState) brushesState = data.brushesState;
+                        if (data.scrollsProgress) {
+                            localStorage.setItem('coloringScrollsProgress', JSON.stringify(data.scrollsProgress));
+                        }
+                        if (data.dailyBonusData) {
+                            dailyBonusData = data.dailyBonusData;
+                            localStorage.setItem('dailyBonusData', JSON.stringify(dailyBonusData));
+                        }
+                        // Обновляем UI
+                        updateStats();
+                        if (currentCategory) renderLevels(currentCategory);
+                        return data;
+                    } catch(e) {}
+                }
+            }
+            return null;
+        })
+        .catch(e => {
+            console.warn('VK load error:', e);
+            return null;
+        });
+}
+// ===== МОДАЛКА СВИТКОВ =====
+function openScrollsModal() {
+    currentScrollPage = 1;
+    document.getElementById('scrollsModal').classList.add('show');
+    renderScrolls();
+}
+
+function closeScrollsModal() {
+    document.getElementById('scrollsModal').classList.remove('show');
+}
+// ===== МОДАЛКА ТЕКСТА СВИТКА =====
+function openScrollTextModal(scrollId) {
+    const modal = document.getElementById('scrollTextModal');
+    const title = document.getElementById('scrollTextTitle');
+    const content = document.getElementById('scrollTextContent');
+    if (!modal || !title || !content) return;
+    
+    title.textContent = `📜 Свиток ${scrollId}`;
+    content.textContent = getScrollText(scrollId);
+    modal.classList.add('show');
+}
+
+function closeScrollTextModal() {
+    document.getElementById('scrollTextModal').classList.remove('show');
+}
+function renderScrolls() {
+    const container = document.getElementById('scrollsList');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const progress = getScrollsProgress();
+    const total = getScrollsCount();
+    const totalPages = Math.ceil(total / SCROLLS_PER_PAGE);
+    
+    const startIndex = (currentScrollPage - 1) * SCROLLS_PER_PAGE;
+    const endIndex = Math.min(startIndex + SCROLLS_PER_PAGE, total);
+    
+    for (let i = startIndex + 1; i <= endIndex; i++) {
+        const unlocked = progress[i] === true;
+        const div = document.createElement('div');
+        div.className = 'scroll-item';
+        div.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer;';
+        
+        const textSpan = document.createElement('span');
+        textSpan.textContent = `📜 Свиток ${i}`;
+        textSpan.style.color = unlocked ? 'var(--text-primary)' : 'var(--text-secondary)';
+        textSpan.style.fontSize = '15px';
+        
+        const statusSpan = document.createElement('span');
+        if (unlocked) {
+            statusSpan.textContent = '✅';
+            statusSpan.style.fontSize = '20px';
+        } else {
+            statusSpan.innerHTML = '🔒 10⭐';
+            statusSpan.style.cursor = 'pointer';
+            statusSpan.style.fontSize = '16px';
+            statusSpan.style.color = '#fbbf24';
+            statusSpan.onclick = function(e) {
+                e.stopPropagation();
+                const result = buyScroll(i);
+                if (result.success) {
+                    renderScrolls();
+                    updateStats();
+                    showToast('✅ Свиток куплен!');
+                } else {
+                    showToast(result.message);
+                }
+            };
+        }
+        div.appendChild(textSpan);
+        div.appendChild(statusSpan);
+        div.onclick = function() {
+            if (unlocked) {
+                openScrollTextModal(i);
+            }
+        };
+        container.appendChild(div);
+    }
+    
+    // Обновляем информацию о странице
+    const pageInfo = document.getElementById('scrollsPageInfo');
+    if (pageInfo) {
+        pageInfo.textContent = `${currentScrollPage} / ${totalPages}`;
+    }
+    
+    // Обновляем состояние кнопок пагинации
+    const prevBtn = document.getElementById('scrollsPrevPage');
+    const nextBtn = document.getElementById('scrollsNextPage');
+    if (prevBtn) prevBtn.disabled = currentScrollPage <= 1;
+    if (nextBtn) nextBtn.disabled = currentScrollPage >= totalPages;
+}
+
+function prevScrollPage() {
+    if (currentScrollPage > 1) {
+        currentScrollPage--;
+        renderScrolls();
+    }
+}
+
+function nextScrollPage() {
+    const total = getScrollsCount();
+    const totalPages = Math.ceil(total / SCROLLS_PER_PAGE);
+    if (currentScrollPage < totalPages) {
+        currentScrollPage++;
+        renderScrolls();
+    }
+}
+// ===== ЕЖЕДНЕВНЫЙ БОНУС =====
+let dailyBonusData = {
+    lastClaimDate: null // строка 'YYYY-MM-DD'
+};
+
+function loadDailyBonusData() {
+    try {
+        const saved = localStorage.getItem('dailyBonusData');
+        if (saved) {
+            dailyBonusData = JSON.parse(saved);
+        }
+    } catch(e) {}
+}
+
+function saveDailyBonusData() {
+    localStorage.setItem('dailyBonusData', JSON.stringify(dailyBonusData));
+    // VK синхронизация будет через saveAppStateToVK
+}
+
+function getDailyBonusStatus() {
+    const today = new Date().toISOString().slice(0,10);
+    const canClaim = dailyBonusData.lastClaimDate !== today;
+    return { canClaim, lastClaimDate: dailyBonusData.lastClaimDate };
+}
+
+function openDailyBonusModal() {
+    const modal = document.getElementById('dailyBonusModal');
+    const body = document.getElementById('dailyBonusBody');
+    if (!modal || !body) return;
+    
+    const { canClaim } = getDailyBonusStatus();
+    let html = '';
+    if (canClaim) {
+        html = `
+            <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px;">Получите бонусные звёзды!</p>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn-neon" onclick="claimDailyBonus('normal')" style="min-width:120px;">⭐ +5</button>
+                <button class="btn-neon" onclick="claimDailyBonus('rewarded')" style="min-width:120px;background:linear-gradient(135deg,#f59e0b,#d97706);border-color:#f59e0b;">🎬 +10 (реклама)</button>
+            </div>
+        `;
+    } else {
+        html = `
+            <p style="font-size:16px;color:var(--text-secondary);margin-bottom:20px;">✅ Бонус уже получен сегодня!</p>
+            <p style="font-size:14px;color:var(--text-secondary);opacity:0.7;">Возвращайтесь завтра за новым бонусом.</p>
+            <button class="btn-neon" onclick="closeDailyBonusModal()" style="margin-top:16px;">Закрыть</button>
+        `;
+    }
+    body.innerHTML = html;
+    modal.classList.add('show');
+}
+
+function closeDailyBonusModal() {
+    document.getElementById('dailyBonusModal').classList.remove('show');
+}
+
+function claimDailyBonus(type) {
+    const { canClaim } = getDailyBonusStatus();
+    if (!canClaim) {
+        showToast('⚠️ Бонус уже получен сегодня');
+        closeDailyBonusModal();
+        return;
+    }
+    
+    if (type === 'normal') {
+        appState.totalPoints += 5;
+        updateStats();
+        saveState();
+        dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
+        saveDailyBonusData();
+        showToast('🎉 Получено +5 звёзд!');
+        closeDailyBonusModal();
+    } else if (type === 'rewarded') {
+        // Запускаем рекламу
+        window._pendingDailyBonus = true;
+        watchAdForDailyBonus();
+    }
+}
+
+function watchAdForDailyBonus() {
+    const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
+    
+    // Если нет VK Bridge – даём бонус без рекламы (для тестов)
+    if (!bridge) {
+        showToast('🎉 Получено +10 звёзд! (режим теста)');
+        dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
+        saveDailyBonusData();
+        appState.totalPoints += 10;
+        updateStats();
+        saveState();
+        closeDailyBonusModal();
+        return;
+    }
+    
+    // Показываем загрузку
+    document.getElementById('adLoadingModal').classList.add('show');
+    
+    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+        .then(function(data) {
+            if (data && data.result) {
+                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+            } else {
+                document.getElementById('adLoadingModal').classList.remove('show');
+                showAdError();
+                return Promise.reject('Ad not available');
+            }
+        })
+        .then(function(adResult) {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            // Если реклама показана или не показана – даём бонус
+            showToast('🎉 Получено +10 звёзд!');
+            dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
+            saveDailyBonusData();
+            appState.totalPoints += 10;
+            updateStats();
+            saveState();
+            closeDailyBonusModal();
+        })
+        .catch(function(error) {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            showAdError();
+            // Даём бонус даже при ошибке (но можно не давать – решайте)
+            // showToast('⚠️ Ошибка рекламы, попробуйте позже');
+            console.warn('Ошибка рекламы:', error);
+        });
+}
+
+window.prevScrollPage = prevScrollPage;
+window.nextScrollPage = nextScrollPage;
+window.renderScrolls = renderScrolls;
+window.openDailyBonusModal = openDailyBonusModal;
+window.closeDailyBonusModal = closeDailyBonusModal;
+window.claimDailyBonus = claimDailyBonus;
+window.watchAdForDailyBonus = watchAdForDailyBonus;
