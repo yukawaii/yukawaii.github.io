@@ -28,13 +28,15 @@ class AdManager {
          this.bannerRetryCount = 0;      // счётчик попыток
     this.maxBannerRetries = 3;      // максимум попыток
     this.bannerRetryTimeout = null; // таймер для повтора
+    this.bannerPending = false;
     }
 
 showBottomBanner() {
-    // Если уже показан или превысили лимит попыток – выходим
-    if (this.bannerShown || this.bannerRetryCount >= this.maxBannerRetries) return;
-    
-    // Если нет VK Bridge – пробуем позже (но у нас всегда есть fallback)
+    // Если уже показан, превышен лимит или ожидается повтор – выходим
+    if (this.bannerShown || this.bannerRetryCount >= this.maxBannerRetries || this.bannerPending) {
+        return;
+    }
+
     if (typeof vkBridge === 'undefined') {
         this.scheduleBannerRetry();
         return;
@@ -46,11 +48,14 @@ showBottomBanner() {
     })
     .then((data) => {
         if (data && data.result) {
-         //   console.log('✅ Баннер успешно отображён');
             this.bannerShown = true;
-            this.bannerRetryCount = 0; // сбрасываем при успехе
+            this.bannerRetryCount = 0;
+            this.bannerPending = false;
+            if (this.bannerRetryTimeout) {
+                clearTimeout(this.bannerRetryTimeout);
+                this.bannerRetryTimeout = null;
+            }
         } else {
-            // Если result false – считаем как ошибку
             this.handleBannerError();
         }
     })
@@ -67,13 +72,16 @@ handleBannerError() {
         this.scheduleBannerRetry();
     } else {
         console.warn('⚠️ Баннер не показан после', this.maxBannerRetries, 'попыток');
+        this.bannerPending = false;
     }
 }
 
-// Планирует повтор через 60 секунд
 scheduleBannerRetry() {
     if (this.bannerRetryTimeout) clearTimeout(this.bannerRetryTimeout);
+    this.bannerPending = true;
     this.bannerRetryTimeout = setTimeout(() => {
+        this.bannerPending = false;
+        this.bannerRetryTimeout = null;
         this.showBottomBanner();
     }, 60000); // 60 секунд
 }
