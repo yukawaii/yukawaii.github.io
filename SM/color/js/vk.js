@@ -22,7 +22,7 @@ function initVKBridge() {
         isVKInitialized = true;
         console.log('✅ VK Bridge инициализирован:', data);
 
-         initVKUserData().then(() => {
+       initVKUser().then(() => {
                 // После получения данных синхронизируем рекорд при старте
                 if (window.appState) {
                     syncLeaderboard(window.appState.totalPoints);
