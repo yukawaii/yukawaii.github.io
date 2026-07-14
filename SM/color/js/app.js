@@ -95,7 +95,12 @@ function createCosmicBackground() {
     bg.id = 'cosmic-bg';
     document.body.prepend(bg);
 
-    for (let i = 0; i < 80; i++) {
+    // Определяем мобильное устройство по ширине экрана
+    const isMobile = window.innerWidth < 768;
+    const starCount = isMobile ? 10 : 30;
+    const meteorCount = isMobile ? 1 : 3;
+
+    for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
         const size = Math.random() * 3 + 1;
@@ -112,7 +117,7 @@ function createCosmicBackground() {
     }
 
     const meteorColors = ['#a855f7', '#ec4899', '#3b82f6', '#f59e0b', '#10b981'];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < meteorCount; i++) {
         const meteor = document.createElement('div');
         meteor.className = 'meteor';
         const color = meteorColors[Math.floor(Math.random() * meteorColors.length)];
