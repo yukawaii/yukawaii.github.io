@@ -1137,12 +1137,8 @@ showLeaderboard() {
 // Синхронизация рекорда с таблицей лидеров (через secure.addAppEvent)
 // ============================================================
 syncLeaderboard() {
-    if (!this.vkInitialized || !this.vkUserId) {
-        return Promise.resolve();
-    }
-    if (this.currentDiamonds <= 0) {
-        return Promise.resolve();
-    }
+    if (!this.vkInitialized || !this.vkUserId) return Promise.resolve();
+    if (this.currentDiamonds <= 0) return Promise.resolve();
 
     const lastSent = parseInt(localStorage.getItem('sudoku_lastSentScore') || '0');
     if (this.currentDiamonds <= lastSent) {
@@ -1162,13 +1158,15 @@ syncLeaderboard() {
             access_token: 'b59b7666b59b7666b59b7666bcb68b3ca2bb59bb59b7666d76fa8fa06cdc580a759b821'
         }
     })
-    .then((result) => {
+    .then(() => {
         console.log('🏆 Таблица лидеров обновлена до', this.currentDiamonds);
-        localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
     })
     .catch((err) => {
         console.error('❌ Ошибка синхронизации лидерборда:', err);
-        if (err && err.data) console.error('Детали:', err.data);
+    })
+    .finally(() => {
+        // Сохраняем рекорд в любом случае, чтобы не спамить запросами
+        localStorage.setItem('sudoku_lastSentScore', String(this.currentDiamonds));
     });
 }
 
