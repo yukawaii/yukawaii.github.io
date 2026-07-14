@@ -260,14 +260,14 @@ function saveUnlockedState() {
     } catch(e) {}
 }
 
-function isLevelUnlocked(category, levelIndex) {
+function isLevelUnlocked(category, levelIndex, subKey) {
     if (levelIndex < UNLOCK_COUNT) return true;
-    const key = `${category}-${levelIndex}`;
+    const key = subKey ? `${category}-${subKey}-${levelIndex}` : `${category}-${levelIndex}`;
     return unlockedLevels[key] === true;
 }
 
-function unlockLevel(category, levelIndex) {
-    const key = `${category}-${levelIndex}`;
+function unlockLevel(category, levelIndex, subKey) {
+    const key = subKey ? `${category}-${subKey}-${levelIndex}` : `${category}-${levelIndex}`;
     unlockedLevels[key] = true;
     saveUnlockedState();
 }
@@ -359,7 +359,7 @@ function renderLevels(categoryKey) {
         const levelNum = i + 1;
         // Для подкатегорий используем составной ключ
         const storageKey = category.hasSubcategories ? `${categoryKey}-${subKey}-${levelNum}` : `${categoryKey}-${levelNum}`;
-        const isUnlocked = isLevelUnlocked(categoryKey, i);
+        const isUnlocked = isLevelUnlocked(categoryKey, i, subKey);
         const isCompleted = isColored(categoryKey, levelNum); // isColored теперь работает с подкатегориями
         
         if (isCompleted) completed++;
@@ -377,7 +377,7 @@ function renderLevels(categoryKey) {
             if (!isUnlocked) {
                 btn.classList.add('locked');
                 btn.addEventListener('click', function() {
-                    openUnlockModal(categoryKey, i);
+                    openUnlockModal(categoryKey, i, subKey);
                 });
             } else {
                 btn.addEventListener('click', function() {
@@ -412,8 +412,8 @@ function changePage(delta) {
 }
 
 // ===== МОДАЛКА ОТКРЫТИЯ УРОВНЯ =====
-function openUnlockModal(categoryKey, levelIndex) {
-    pendingUnlockLevel = { category: categoryKey, index: levelIndex };
+function openUnlockModal(categoryKey, levelIndex, subKey) {
+    pendingUnlockLevel = { category: categoryKey, index: levelIndex, subKey: subKey };
     document.getElementById('unlockModal').classList.add('show');
 }
 
@@ -507,12 +507,11 @@ function watchAdForUnlock() {
 
 function unlockAndOpenLevel() {
     if (!pendingUnlockLevel) return;
-    const { category, index } = pendingUnlockLevel;
-    unlockLevel(category, index);
+    const { category, index, subKey } = pendingUnlockLevel;
+    unlockLevel(category, index, subKey);
     pendingUnlockLevel = null;
-    
     renderLevels(category);
-    showToast('🔓 Уровень открыт!');
+    showToast('🎉Уровень открыт!');
 }
 
 function showAdError() {
