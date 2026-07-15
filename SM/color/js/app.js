@@ -53,7 +53,7 @@ const CATEGORIES = {
         hasSubcategories: true,
         subcategories: {
             easy: { name: 'Легче', folder: 'items/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'items/hard', count: 21 }
+            hard: { name: 'Сложнее', folder: 'items/hard', count: 50 }
         }
     },
     doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 54, hasSubcategories: false },
