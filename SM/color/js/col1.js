@@ -2648,6 +2648,7 @@ panStart(e) {
         return; // два пальца – не панорамируем
     }
     this.panDragging = true;
+    this._panFramePending = false;
     const rect = this.canvasContainer[0].getBoundingClientRect();
     let clientX, clientY;
     if (e.touches && e.touches.length > 0) {
@@ -2671,9 +2672,8 @@ panStart(e) {
 
 panMove(e) {
     if (!this.panDragging) return;
-    if (e.touches && e.touches.length > 1) {
-        return; // два пальца – не панорамируем
-    }
+    if (e.touches && e.touches.length > 1) return;
+
     const rect = this.canvasContainer[0].getBoundingClientRect();
     let clientX, clientY;
     if (e.touches && e.touches.length > 0) {
@@ -2686,18 +2686,33 @@ panMove(e) {
         clientX = e.clientX;
         clientY = e.clientY;
     }
+
     const x = clientX - rect.left;
     const y = clientY - rect.top;
     const dx = x - this.panStartX;
     const dy = y - this.panStartY;
-    // Применяем смещение относительно базовых значений
-    this.panX = this.panBaseX + dx;
-    this.panY = this.panBaseY + dy;
-    this.applyZoom();
+
+    // Игнорируем микро-смещения (менее 0.5px), чтобы избежать дрожания
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return;
+
+    this.panX += dx;
+    this.panY += dy;
+    this.panStartX = x;
+    this.panStartY = y;
+
+    // Откладываем применение трансформации до следующего кадра анимации
+    if (!this._panFramePending) {
+        this._panFramePending = true;
+        requestAnimationFrame(() => {
+            this._panFramePending = false;
+            this.applyZoom();
+        });
+    }
 }
 
 panEnd(e) {
     this.panDragging = false;
+    this._panFramePending = false;
     this.wrapper.css('cursor', 'grab');
     this.activeCanvas.css('cursor', 'grab');
 }
