@@ -12,7 +12,7 @@ const CATEGORIES = {
         count: 100, // общее количество (сумма подкатегорий)
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'animals/easy', count: 55 },
+            easy: { name: 'Легче', folder: 'animals/easy', count: 56 },
             hard: { name: 'Сложнее', folder: 'animals/hard', count: 90 }
         }
     },
@@ -57,7 +57,7 @@ const CATEGORIES = {
         }
     },
     doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 54, hasSubcategories: false },
-    mandala: { name: '🌀 Мандала', folder: 'mandala', count: 50, hasSubcategories: false }
+    mandala: { name: '🌀 Мандала', folder: 'mandala', count: 51, hasSubcategories: false }
 };
 
 const COLORS = ['#ffffff', '#f0e6ff', '#c8b8ff', '#ffd6e8', '#b8d4ff', '#ffd700'];
