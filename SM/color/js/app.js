@@ -12,7 +12,7 @@ const CATEGORIES = {
         count: 100, // общее количество (сумма подкатегорий)
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'animals/easy', count: 16 },
+            easy: { name: 'Легче', folder: 'animals/easy', count: 55 },
             hard: { name: 'Сложнее', folder: 'animals/hard', count: 90 }
         }
     },
@@ -33,7 +33,7 @@ const CATEGORIES = {
         hasSubcategories: true,
         subcategories: {
             easy: { name: 'Легче', folder: 'plants/easy', count: 31 },
-            hard: { name: 'Сложнее', folder: 'plants/hard', count: 50 }
+            hard: { name: 'Сложнее', folder: 'plants/hard', count: 24 }
         }
     },
     food: {
@@ -630,7 +630,7 @@ function openColoring(categoryKey, index, imagePath) {
         const percent = e.detail.percent;
         document.getElementById('progressPercent').textContent = percent;
         
-        if (percent >= 80 && !pointsEarned) {
+        if (percent >= 70 && !pointsEarned) {
             pointsEarned = true;
             const points = 1;
             document.getElementById('coloringPoints').textContent = points;
@@ -656,7 +656,7 @@ function openColoring(categoryKey, index, imagePath) {
                 const percent = result.percent;
                 document.getElementById('progressPercent').textContent = percent;
                 
-                if (percent >= 80 && !pointsEarned) {
+                if (percent >= 70 && !pointsEarned) {
                     pointsEarned = true;
                     const points = 1;
                     document.getElementById('coloringPoints').textContent = points;
@@ -665,7 +665,7 @@ function openColoring(categoryKey, index, imagePath) {
                     showToast(`🎉 +${points} очко за раскраску!`);
                 }
                 
-                if (percent >= 100) {
+                if (percent >= 70) {
                     showToast('✅ Картинка полностью раскрашена!');
                     if (window._progressInterval) {
                         clearInterval(window._progressInterval);
