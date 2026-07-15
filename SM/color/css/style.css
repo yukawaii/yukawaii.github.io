@@ -1589,3 +1589,30 @@ input, textarea {
         font-size: 15px;
     }
 }
+/* Модалка раскраски — на весь экран, без ограничений */
+.modal-large {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.modal-large .modal-body {
+    max-height: 100vh !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+.modal-large .coloring-toolbar {
+    padding: 8px 12px;
+    height: 48px; /* или оставить auto */
+}
+.modal-large #coloringCanvasWrapper {
+    height: calc(100vh - 50px); /* вычтите высоту тулбара (если он 50px) */
+    width: 100%;
+}
