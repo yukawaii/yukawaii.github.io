@@ -568,6 +568,7 @@ function watchAdForBrushUnlock() {
             // Разблокируем кисть на 24 часа
             if (typeof unlockBrushFor24Hours === 'function') {
                 unlockBrushFor24Hours(brushId);
+                window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
             }
             window._pendingBrushUnlock = null;
             window._pendingBrushUnlockFromColoring = false;
@@ -583,6 +584,7 @@ function watchAdForBrushUnlock() {
             document.getElementById('adLoadingModal').classList.remove('show');
             if (typeof unlockBrushFor24Hours === 'function') {
                 unlockBrushFor24Hours(brushId);
+                window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
             }
             window._pendingBrushUnlock = null;
             window._pendingBrushUnlockFromColoring = false;
@@ -980,18 +982,19 @@ function isBrushUnlocked(brushId) {
 
 function unlockBrushFor24Hours(brushId) {
     const now = Date.now();
-    const expiresAt = now + (24 * 60 * 60 * 1000); // 24 часа в миллисекундах
-    
+    const expiresAt = now + (24 * 60 * 60 * 1000);
+
     if (!brushesState[brushId]) {
         brushesState[brushId] = { unlocked: false, expiresAt: null };
     }
-    
+
     brushesState[brushId].unlocked = true;
     brushesState[brushId].expiresAt = expiresAt;
     saveBrushesState();
-    
-    // Сохраняем в VK Storage для синхронизации
-    saveBrushesToVK();
+    // Сохраняем в VK Storage через общую функцию
+    if (typeof saveAppStateToVK === 'function') {
+        saveAppStateToVK();
+    }
 }
 
 // ===== СИНХРОНИЗАЦИЯ С VK STORAGE =====

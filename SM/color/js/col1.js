@@ -9,6 +9,18 @@ customElements.define('jl-coloringbook', class extends HTMLElement
         this.eyedropperMode = false;  
          this.deleteColorMode = false;  // =====удаление из палитры =====
          this.brushType = 'simple'; 
+         let me = this;
+window.addEventListener('brushUnlocked', function(e) {
+    if (e.detail && e.detail.brushId) {
+        // Закрываем меню кистей, если оно открыто
+        const menu = me.shadowRoot.querySelector('.brushMenu');
+        if (menu) {
+            jQuery(menu).remove();
+            jQuery('.brushSelectorButton', me.shadowRoot).removeClass('active');
+        }
+        me.showToast('✅ Кисть разблокирована! Откройте меню кистей заново.');
+    }
+});
         this.zoomLevel = 1;
         this.zoomMin = 0.5;
         this.zoomMax = 3;
