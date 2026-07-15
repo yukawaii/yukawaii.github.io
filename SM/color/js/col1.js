@@ -763,6 +763,15 @@ jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
 
         this.img.off('load').on('load', function() {
             me.sizeCanvas();
+            // При изменении размера окна пересчитываем масштаб
+if (!window._coloringResizeHandler) {
+    window._coloringResizeHandler = function() {
+        if (me.img && me.img[0]) {
+            me.fitToScreen();
+        }
+    };
+    window.addEventListener('resize', window._coloringResizeHandler);
+}
             let x = window.localStorage.getItem('v2:'+jQuery(this).attr('src'));
             if (x){
                 me.paths=JSON.parse(x);
@@ -1514,13 +1523,41 @@ applyZoom() {
     jQuery('#zoomLevel', this.shadowRoot).text(percent + '%');
 }
 
-    sizeCanvas() {
-        this.canvas.attr('height', this.img[0].naturalHeight);
-        this.canvas.attr('width', this.img[0].naturalWidth);
-        this.activeCanvas.attr('height', this.img[0].naturalHeight);
-        this.activeCanvas.attr('width', this.img[0].naturalWidth);
+sizeCanvas() {
+    const naturalWidth = this.img[0].naturalWidth;
+    const naturalHeight = this.img[0].naturalHeight;
+    this.canvas.attr('height', naturalHeight);
+    this.canvas.attr('width', naturalWidth);
+    this.activeCanvas.attr('height', naturalHeight);
+    this.activeCanvas.attr('width', naturalWidth);
+    // Вместо zoomReset() вызываем fitToScreen()
+    this.fitToScreen();
+}
+fitToScreen() {
+    const container = this.canvasContainer[0];
+    const wrapper = container.parentElement; // .canvasWrapper
+    if (!wrapper) {
         this.zoomReset();
+        return;
     }
+    const containerWidth = wrapper.clientWidth;
+    const containerHeight = wrapper.clientHeight;
+    const imgWidth = this.img[0].naturalWidth;
+    const imgHeight = this.img[0].naturalHeight;
+    if (containerWidth === 0 || containerHeight === 0 || imgWidth === 0 || imgHeight === 0) {
+        this.zoomReset();
+        return;
+    }
+    const scaleX = containerWidth / imgWidth;
+    const scaleY = containerHeight / imgHeight;
+    let scale = Math.min(scaleX, scaleY);
+    scale = Math.min(scale, 1); // не больше 100%
+    scale = Math.max(scale, 0.1);
+    this.zoomLevel = scale;
+    this.panX = 0;
+    this.panY = 0;
+    this.applyZoom();
+}
 
     updateSize() {
         this.setCursor();
