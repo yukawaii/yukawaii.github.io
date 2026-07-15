@@ -2692,7 +2692,7 @@ panMove(e) {
     const dx = x - this.panStartX;
     const dy = y - this.panStartY;
 
-    // Игнорируем микро-смещения (менее 0.5px), чтобы избежать дрожания
+    // Игнорируем микро-смещения
     if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return;
 
     this.panX += dx;
@@ -2700,7 +2700,7 @@ panMove(e) {
     this.panStartX = x;
     this.panStartY = y;
 
-    // Откладываем применение трансформации до следующего кадра анимации
+    // Откладываем применение трансформации до следующего кадра
     if (!this._panFramePending) {
         this._panFramePending = true;
         requestAnimationFrame(() => {
