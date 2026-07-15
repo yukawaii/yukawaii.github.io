@@ -4,7 +4,7 @@ const SCROLLS_PER_PAGE = 5; // сколько свитков на страниц
 let currentScrollPage = 1;
 
 const CATEGORIES = {
-    easy: { name: '🌟 Лёгкие', folder: 'easy', count: 30, hasSubcategories: false },
+    easy: { name: '🌟 Лёгкие', folder: 'easy', count: 35, hasSubcategories: false },
     cosmos: { name: '🌌 Космос', folder: 'cosmos', count: 50, hasSubcategories: false },
     animals: {
         name: '🐾 Животные',
@@ -22,8 +22,8 @@ const CATEGORIES = {
         count: 100,
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'people/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'people/hard', count: 50 }
+            easy: { name: 'Легче', folder: 'people/easy', count: 41 },
+            hard: { name: 'Сложнее', folder: 'people/hard', count: 70 }
         }
     },
     plants: {
@@ -53,7 +53,7 @@ const CATEGORIES = {
         hasSubcategories: true,
         subcategories: {
             easy: { name: 'Легче', folder: 'items/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'items/hard', count: 50 }
+            hard: { name: 'Сложнее', folder: 'items/hard', count: 21 }
         }
     },
     doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 50, hasSubcategories: false },
