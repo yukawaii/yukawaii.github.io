@@ -56,7 +56,7 @@ const CATEGORIES = {
             hard: { name: 'Сложнее', folder: 'items/hard', count: 21 }
         }
     },
-    doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 50, hasSubcategories: false },
+    doodles: { name: '✏️ Дудлс', folder: 'doodles', count: 54, hasSubcategories: false },
     mandala: { name: '🌀 Мандала', folder: 'mandala', count: 50, hasSubcategories: false }
 };
 
