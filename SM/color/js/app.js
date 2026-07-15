@@ -5,7 +5,7 @@ let currentScrollPage = 1;
 
 const CATEGORIES = {
     easy: { name: '🌟 Лёгкие', folder: 'easy', count: 35, hasSubcategories: false },
-    cosmos: { name: '🌌 Космос', folder: 'cosmos', count: 50, hasSubcategories: false },
+    cosmos: { name: '🌌 Космос', folder: 'cosmos', count: 27, hasSubcategories: false },
     animals: {
         name: '🐾 Животные',
         folder: 'animals',
@@ -42,8 +42,8 @@ const CATEGORIES = {
         count: 100,
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'food/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'food/hard', count: 50 }
+            easy: { name: 'Легче', folder: 'food/easy', count: 16 },
+            hard: { name: 'Сложнее', folder: 'food/hard', count: 20 }
         }
     },
     items: {
