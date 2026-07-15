@@ -13,7 +13,7 @@ const CATEGORIES = {
         hasSubcategories: true,
         subcategories: {
             easy: { name: 'Легче', folder: 'animals/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'animals/hard', count: 50 }
+            hard: { name: 'Сложнее', folder: 'animals/hard', count: 96 }
         }
     },
     people: {
