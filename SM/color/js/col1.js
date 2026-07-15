@@ -473,11 +473,12 @@ this.canvasContainer.css('will-change', 'transform');
         jQuery('.clearButton', this.shadowRoot).on('click', function(){me.paths=[];localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths));me.refresh();});
         jQuery('.saveButton', this.shadowRoot).on('click', function() {me.save()});
         
-        jQuery('#zoomToggleBtn', this.shadowRoot).on('click', function() {
+jQuery('#zoomToggleBtn', this.shadowRoot).on('click', function() {
     const container = jQuery('.zoomContainer', me.shadowRoot);
     container.toggle();
-    jQuery(this).toggleClass('active');
-       btn.blur();
+    const btn = jQuery(this);
+    btn.toggleClass('active');
+    btn.blur();
 });
         jQuery('#zoomInBtn', this.shadowRoot).on('click', function() { me.zoomIn(); });
         jQuery('#zoomOutBtn', this.shadowRoot).on('click', function() { me.zoomOut(); });
@@ -508,17 +509,16 @@ jQuery('#panToggleBtn', this.shadowRoot).on('click', function() {
         me.zoomOut();
     }
 });    
-        jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
-            const container = jQuery('.paletteContainer', me.shadowRoot);
-            container.slideToggle(200);
-            jQuery(this).toggleClass('active');
-              btn.blur();
-        });
+jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
+    const container = jQuery('.paletteContainer', me.shadowRoot);
+    container.slideToggle(200);
+    const btn = jQuery(this);
+    btn.toggleClass('active');
+    btn.blur();
+});
+
+
     }
-
-
-
-
 
 
  generatePalette()
