@@ -450,10 +450,15 @@ function preloadRewardAd() {
     });
 }
 
+
+
 function watchAdForUnlock() {
     if (!pendingUnlockLevel) return;
+
+    // Сохраняем данные до очистки
+    const unlockData = pendingUnlockLevel;
     
-    closeUnlockModal();
+    closeUnlockModal(); // закрываем модалку (pendingUnlockLevel обнулится, но у нас есть копия)
     document.getElementById('adLoadingModal').classList.add('show');
     
     if (adLoadingTimer) clearTimeout(adLoadingTimer);
@@ -488,9 +493,9 @@ function watchAdForUnlock() {
             document.getElementById('adLoadingModal').classList.remove('show');
             if (adResult && adResult.result) {
                 console.log('✅ Реклама просмотрена');
-                unlockAndOpenLevel();
+                unlockAndOpenLevelWithData(unlockData);
             } else {
-                unlockAndOpenLevel();
+                unlockAndOpenLevelWithData(unlockData);
             }
         })
         .catch(function(error) {
@@ -509,18 +514,21 @@ function watchAdForUnlock() {
                 adLoadingTimer = null;
             }
             document.getElementById('adLoadingModal').classList.remove('show');
-            unlockAndOpenLevel();
+            unlockAndOpenLevelWithData(unlockData);
         }, 1500);
     }
 }
 
-function unlockAndOpenLevel() {
-    if (!pendingUnlockLevel) return;
-    const { category, index, subKey } = pendingUnlockLevel;
+// Новая функция для разблокировки с переданными данными
+function unlockAndOpenLevelWithData(data) {
+    if (!data) {
+        console.warn('⚠️ Нет данных для разблокировки');
+        return;
+    }
+    const { category, index, subKey } = data;
     unlockLevel(category, index, subKey);
-    pendingUnlockLevel = null;
     renderLevels(category);
-    showToast('🎉Уровень открыт!');
+    showToast('🎉 Уровень открыт!');
 }
 
 function showAdError() {
