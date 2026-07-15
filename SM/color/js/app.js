@@ -12,8 +12,8 @@ const CATEGORIES = {
         count: 100, // общее количество (сумма подкатегорий)
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'animals/easy', count: 50 },
-            hard: { name: 'Сложнее', folder: 'animals/hard', count: 96 }
+            easy: { name: 'Легче', folder: 'animals/easy', count: 16 },
+            hard: { name: 'Сложнее', folder: 'animals/hard', count: 90 }
         }
     },
     people: {
@@ -32,7 +32,7 @@ const CATEGORIES = {
         count: 100,
         hasSubcategories: true,
         subcategories: {
-            easy: { name: 'Легче', folder: 'plants/easy', count: 50 },
+            easy: { name: 'Легче', folder: 'plants/easy', count: 31 },
             hard: { name: 'Сложнее', folder: 'plants/hard', count: 50 }
         }
     },
