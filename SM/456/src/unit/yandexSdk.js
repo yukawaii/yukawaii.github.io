@@ -25,6 +25,8 @@ var vkUserId = null;
 var vkUserToken = null;
 var vkUserLang = null;
 var ysdkInstance = null;
+// Добавляем переменную для хранения времени последнего показа
+var lastAdShowTime = 0;
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 export var setYsdk = function(ysdk) { ysdkInstance = ysdk; console.log('SDK готов'); };
@@ -606,12 +608,27 @@ export var fetchYandexLeaderboard = function() {
 };
 
 // ===== РЕКЛАМА =====
+
+
 export var showFullscreenAd = function(onAdCloseCallback) {
   if (typeof onAdCloseCallback === 'undefined') onAdCloseCallback = null;
+  
+  // Проверяем, прошло ли 30 секунд с последнего показа
+  var currentTime = Date.now();
+  if (lastAdShowTime !== 0 && currentTime - lastAdShowTime < 30000) {
+    console.log('⏳ Реклама запрошена слишком рано. Прошло меньше 30 секунд.');
+    if (onAdCloseCallback) onAdCloseCallback();
+    return;
+  }
+  
   if (!vkInitialized) {
     if (onAdCloseCallback) onAdCloseCallback();
     return;
   }
+  
+  // Запоминаем время показа
+  lastAdShowTime = currentTime;
+  
   vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'interstitial' })
     .then(function(data) {
       if (data.result && onAdCloseCallback) onAdCloseCallback();
