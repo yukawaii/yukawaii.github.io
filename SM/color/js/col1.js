@@ -423,6 +423,42 @@ this.panBaseY = 0;
     background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */
     color: #fff !important;
 }
+
+
+
+
+/* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
+@media (min-width: 1000px) {
+    .canvasWrapper {
+        flex: 1;              /* занимает всё свободное место */
+        min-height: 0;        /* разрешаем сжиматься */
+        overflow: hidden;
+    }
+
+    .canvasContainer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Отменяем растяжение картинки и канвасов по ширине */
+    .canvasBackgroundImage,
+    .canvas,
+    .activeCanvas {
+        width: auto !important;
+        height: 100% !important; /* или auto, но тогда нужно следить за пропорциями */
+        /* лучше оставить width: auto, а height: 100% — тогда картинка будет по высоте,
+           а ширина подстроится, но может исказиться. Чтобы сохранить пропорции,
+           используем object-fit: contain для фона, но для canvas это сложнее.
+           Поэтому оставляем как есть — fitToScreen() сам подстроит масштаб. */
+    }
+
+    /* Убедимся, что картинка не вылезает за пределы */
+    .canvasWrapper {
+        position: relative;
+    }
+}
+
             </style>
         `).appendTo(this.shadowRoot);
         
