@@ -296,14 +296,20 @@ function initVKUser() {
     const bridge = getVKBridge();
     if (!bridge) return Promise.reject('VK Bridge not available');
     
-    return bridge.send('VKWebAppGetUserInfo')
-        .then((userInfo) => {
-            vkUserId = userInfo.id;
-            console.log('👤 VK User ID:', vkUserId);
-            return vkUserId;
+    return bridge.send('VKWebAppGetLaunchParams')
+        .then((data) => {
+            // В data приходит объект с vk_user_id, vk_app_id и др.
+            if (data && data.vk_user_id) {
+                vkUserId = data.vk_user_id;
+                console.log('👤 VK User ID (из launch params):', vkUserId);
+                return vkUserId;
+            } else {
+                console.warn('⚠️ vk_user_id не найден в launch params');
+                return null;
+            }
         })
         .catch((err) => {
-            console.warn('⚠️ Не удалось получить user_id:', err);
+            console.warn('⚠️ Ошибка получения launch params:', err);
             return null;
         });
 }

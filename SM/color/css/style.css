@@ -1616,3 +1616,36 @@ input, textarea {
     height: calc(100vh - 50px); /* вычтите высоту тулбара (если он 50px) */
     width: 100%;
 }
+
+/* Заставляем wrapper и canvasWrapper растягиваться */
+#coloringCanvasWrapper jl-coloringbook .wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    width: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvasWrapper {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvasContainer {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#coloringCanvasWrapper jl-coloringbook .canvas,
+#coloringCanvasWrapper jl-coloringbook .activeCanvas {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}

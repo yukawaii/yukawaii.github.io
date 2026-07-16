@@ -762,16 +762,16 @@ jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
         this.activeCtx = this.activeCanvas[0].getContext('2d');
 
         this.img.off('load').on('load', function() {
-            me.sizeCanvas();
-            // При изменении размера окна пересчитываем масштаб
-if (!window._coloringResizeHandler) {
-    window._coloringResizeHandler = function() {
+            // Пересчёт при изменении размера окна
+if (!me._resizeBound) {
+    me._resizeBound = true;
+    window.addEventListener('resize', function() {
         if (me.img && me.img[0]) {
             me.fitToScreen();
         }
-    };
-    window.addEventListener('resize', window._coloringResizeHandler);
+    });
 }
+
             let x = window.localStorage.getItem('v2:'+jQuery(this).attr('src'));
             if (x){
                 me.paths=JSON.parse(x);
@@ -1530,26 +1530,32 @@ sizeCanvas() {
     this.canvas.attr('width', naturalWidth);
     this.activeCanvas.attr('height', naturalHeight);
     this.activeCanvas.attr('width', naturalWidth);
-    // Вместо zoomReset() вызываем fitToScreen()
+    // Вычисляем масштаб, чтобы картинка помещалась
     this.fitToScreen();
+    // Дополнительный пересчёт после рендеринга
+    setTimeout(() => this.fitToScreen(), 100);
 }
 fitToScreen() {
-    const container = this.canvasContainer[0];
-    const wrapper = container.parentElement; // .canvasWrapper
+    const wrapper = this.wrapper[0];
     if (!wrapper) {
         this.zoomReset();
         return;
     }
-    const containerWidth = wrapper.clientWidth;
-    const containerHeight = wrapper.clientHeight;
+    // Вычитаем высоту тулбара и навигации
+    const toolbar = wrapper.querySelector('.toolbar');
+    const imageNav = wrapper.querySelector('.imageNav');
+    let toolbarHeight = toolbar ? toolbar.offsetHeight : 0;
+    let navHeight = imageNav ? imageNav.offsetHeight : 0;
+    const availableHeight = wrapper.clientHeight - toolbarHeight - navHeight;
+    const availableWidth = wrapper.clientWidth;
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
-    if (containerWidth === 0 || containerHeight === 0 || imgWidth === 0 || imgHeight === 0) {
+    if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
         this.zoomReset();
         return;
     }
-    const scaleX = containerWidth / imgWidth;
-    const scaleY = containerHeight / imgHeight;
+    const scaleX = availableWidth / imgWidth;
+    const scaleY = availableHeight / imgHeight;
     let scale = Math.min(scaleX, scaleY);
     scale = Math.min(scale, 1); // не больше 100%
     scale = Math.max(scale, 0.1);
