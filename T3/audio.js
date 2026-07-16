@@ -278,7 +278,12 @@ _playMusicInternal(trackName, volume) {
             this.playMusic(this.currentMusicTrack);
         }
     }
-    
+    setMuted(muted) {
+    this.muted = muted;
+    if (this.sfxGain) {
+        this.sfxGain.gain.value = muted ? 0 : 0.3;
+    }
+}
     
     // Возобновление контекста после жеста пользователя
     resumeContext() {

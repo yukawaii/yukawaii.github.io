@@ -1296,8 +1296,16 @@ function stopSounds() {
 function toggleSound() {
     if (typeof gameAudio === 'undefined') return;
     soundMuted = !soundMuted;
-    gameAudio.setMuted(soundMuted);
-    updateSoundIcon(); // обязательно обновляем иконку
+    if (typeof gameAudio.setMuted === 'function') {
+        gameAudio.setMuted(soundMuted);
+    } else {
+        // fallback – напрямую управляем громкостью
+        if (gameAudio.sfxGain) {
+            gameAudio.sfxGain.gain.value = soundMuted ? 0 : 0.3;
+        }
+        gameAudio.muted = soundMuted;
+    }
+    updateSoundIcon();
 }
 
 function toggleMusic() {
