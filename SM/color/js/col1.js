@@ -428,7 +428,7 @@ this.panBaseY = 0;
 
 
 /* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
-@media (min-width: 1000px) {
+@media (min-width: 1024px) {
     .canvasWrapper {
         flex: 1;              /* занимает всё свободное место */
         min-height: 0;        /* разрешаем сжиматься */
