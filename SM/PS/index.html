@@ -4236,7 +4236,7 @@ function showRewardedAd(onSuccess, onFail) {
             console.log('⏰ Таймаут! Реклама не отвечает');
             onFail('Реклама временно недоступна');
         }
-    }, 10000);
+    }, 60000);
     
     console.log('📺 Проверяем готовность рекламы...');
     vkBridge.send('VKWebAppCheckNativeAds', {
