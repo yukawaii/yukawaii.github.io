@@ -15,6 +15,7 @@ let slowDownInterval = null;
 let isSlowDownActive = false;
 let comboDisplayTimer = null;
 let dailyBonusClaimedToday = false; 
+let lastInterstitialAdTime = 0; // время последнего показа межэкранной рекламы
 //для звкков
 let pendingSlowDown = false;
 let slowDownTimerId = null;
@@ -1296,7 +1297,7 @@ function toggleSound() {
     if (typeof gameAudio === 'undefined') return;
     soundMuted = !soundMuted;
     gameAudio.setMuted(soundMuted);
-    updateSoundIcon();
+    updateSoundIcon(); // обязательно обновляем иконку
 }
 
 function toggleMusic() {
@@ -2796,10 +2797,25 @@ function showRewardedAdForContinue() {
     });
 }
 
-function showVKFullscreenAd() {vkBridge.send('VKWebAppShowNativeAds', {  ad_format: 'interstitial' /* Тип рекламы */
-  })  .then( (data) => {     if (data.result) {      // Реклама была показана
-    } else {      // Ошибка  
-          }  })  .catch((error) => { console.log(error); });}
+function showVKFullscreenAd() {
+    const now = Date.now();
+    // Если прошло меньше 35 секунд – не показываем
+    if (now - lastInterstitialAdTime < 35000) {
+        console.log('⏳ Межэкранная реклама: прошло менее 30 секунд, пропускаем');
+        return;
+    }
+    if (typeof vkBridge === 'undefined') return;
+    vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'interstitial' })
+        .then((data) => {
+            if (data.result) {
+                lastInterstitialAdTime = now; // запоминаем время успешного показа
+                console.log('✅ Межэкранная реклама показана');
+            }
+        })
+        .catch((error) => {
+            console.warn('⚠️ Ошибка показа межэкранной рекламы:', error);
+        });
+}
 
 
 
@@ -3511,5 +3527,6 @@ window.showSlowDownModal = showSlowDownModal;
 window.activateSlowDown = activateSlowDown;
 window.applySlowDownEffect = applySlowDownEffect;
 
-updateMusicIcon(); //иконка музыки на выкл при старте
+updateSoundIcon();
+updateMusicIcon();
 console.log('🔥 Тетрис Дарк загружен!');

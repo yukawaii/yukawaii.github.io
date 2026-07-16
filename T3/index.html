@@ -1110,6 +1110,29 @@ div[id$="-modal"]::before {
         max-width: 550px !important; /* уменьшаем ширину для ПК */
     }
 }
+
+/* Адаптация под «островок» на iPhone */
+@supports (padding: max(0px)) {
+    .game-wrapper {
+        padding-top: max(20px, env(safe-area-inset-top, 20px));
+        padding-left: max(20px, env(safe-area-inset-left, 20px));
+        padding-right: max(20px, env(safe-area-inset-right, 20px));
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    }
+    /* Для мобильной версии (вертикальные телефоны) */
+    @media (max-width: 768px) and (orientation: portrait) {
+        .game-wrapper {
+            padding-top: max(5px, env(safe-area-inset-top, 5px));
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-bottom: 2px;
+        }
+        /* дополнительный отступ для верхней панели с рекордом */
+        #yandex-highscore-top {
+            margin-top: max(0px, env(safe-area-inset-top, 0px));
+        }
+    }
+}
 </style>
 </head>
 <body oncontextmenu="return false">
