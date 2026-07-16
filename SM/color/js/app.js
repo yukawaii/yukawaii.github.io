@@ -633,6 +633,12 @@ function openColoring(categoryKey, index, imagePath) {
     document.getElementById('progressPercent').textContent = '0';
 
     document.getElementById('coloringModal').classList.add('show');
+    // Принудительный пересчёт масштаба после рендеринга
+setTimeout(() => {
+    if (coloringBook.fitToScreen) {
+        coloringBook.fitToScreen();
+    }
+}, 50);
 
     let pointsEarned = false;
     

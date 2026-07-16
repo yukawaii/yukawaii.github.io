@@ -1543,20 +1543,17 @@ sizeCanvas() {
     // Дополнительный пересчёт после рендеринга
     setTimeout(() => this.fitToScreen(), 100);
 }
+
 fitToScreen() {
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
         return;
     }
-    // Берем размеры родительского контейнера (canvasWrapper)
-    const wrapper = container.parentElement;
-    if (!wrapper) {
-        this.zoomReset();
-        return;
-    }
-    const availableWidth = wrapper.clientWidth;
-    const availableHeight = wrapper.clientHeight;
+    // Используем getBoundingClientRect для точных размеров
+    const rect = container.getBoundingClientRect();
+    const availableWidth = rect.width;
+    const availableHeight = rect.height;
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
     if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {

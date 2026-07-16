@@ -1613,7 +1613,8 @@ input, textarea {
     height: 48px; /* или оставить auto */
 }
 .modal-large #coloringCanvasWrapper {
-    height: calc(100vh - 50px); /* вычтите высоту тулбара (если он 50px) */
+   /* height: calc(100vh - 50px);  вычтите высоту тулбара (если он 50px) */
+    height: 100%;
     width: 100%;
 }
 
