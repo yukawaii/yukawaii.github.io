@@ -2877,16 +2877,7 @@ function renderGalaxyModal() {
     const scrollsCount = progress.unlockedScrolls?.length || 0;
     const milestone = progress.currentMilestone || 0;
     const maxScrolls = SCROLLS.length;
-    
-    let starsHtml = '';
-    const displayStars = Math.min(totalStars, 9);
-    for (let i = 0; i < displayStars; i++) {
-        starsHtml += '⭐';
-    }
-    if (totalStars === 0) {
-        starsHtml = '💫 (пока нет)';
-    }
-    
+            
     const progressPercent = totalWords > 0 ? (totalWords % 50) / 50 * 100 : 0;
     const lastBonus = progress.lastDailyBonus;
     const today = new Date().toDateString();
@@ -2921,10 +2912,8 @@ function renderGalaxyModal() {
     
     body.innerHTML = `
         <div class="galaxy-modal">
-            <h2>🌌 Галактика</h2>
-            
-            <div class="galaxy-stars">${starsHtml}</div>
-            <div class="galaxy-total-stars">
+            <h2>🌌 Галактика</h2>            
+               <div class="galaxy-total-stars">
                 ⭐ Всего звёзд: <strong>${totalStars}</strong>
             </div>
             
