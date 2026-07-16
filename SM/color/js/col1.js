@@ -1545,6 +1545,7 @@ sizeCanvas() {
 }
 
 fitToScreen() {
+    console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
