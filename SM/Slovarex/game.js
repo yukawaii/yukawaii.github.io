@@ -2971,31 +2971,35 @@ function closeBonusModal() {
     if (modal) modal.classList.remove('show');
 }
 
+// ====== ЕЖЕДНЕВНЫЙ БОНУС (с рекламой) ======
 function claimDailyBonus() {
     const progress = getGalaxyProgress();
     const today = new Date().toDateString();
-    
+
     // Проверяем, не получал ли уже сегодня
     if (progress.lastDailyBonus === today) {
         showToast('✅ Бонус уже получен сегодня!');
         closeBonusModal();
         return;
     }
-    
-    // Начисляем бонус
-    progress.totalWords += 5;
-    progress.lastDailyBonus = today;
-    saveGalaxyProgress(progress);
-    
-    // Показываем уведомление
-    showToast('🎁 +5 слов к прогрессу!');
-    playSound('levelup');
-    
-    // Закрываем модалку бонуса
-    closeBonusModal();
-    
-    // Обновляем модалку галактики
-    renderGalaxyModal();
+
+    // Показываем рекламу за вознаграждение
+    showRewardedAd().then((success) => {
+        if (success) {
+            // Реклама просмотрена – начисляем бонус
+            progress.totalWords += 5;
+            progress.lastDailyBonus = today;
+            saveGalaxyProgress(progress);
+
+            showToast('🎁 +5 слов к прогрессу!');
+            playSound('levelup');
+            closeBonusModal();
+            renderGalaxyModal(); // обновляем содержимое модалки галактики
+        } else {
+            // Реклама не показана – бонус не выдаём
+            showToast('❌ Реклама недоступна. Попробуйте позже.', true);
+        }
+    });
 }
 
 // Закрытие модалки бонуса по клику вне
