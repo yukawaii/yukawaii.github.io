@@ -1226,7 +1226,7 @@ function initGame() {
             setTimeout(() => {
                 console.warn('⏰ Таймаут загрузки из VK Storage, используем локальные данные');
                 resolve([null, null]);
-            }, 3000);
+            }, 13000);
         });
         
         Promise.race([loadPromise, timeoutPromise])
@@ -2975,8 +2975,9 @@ function claimDailyBonus() {
     // Показываем рекламу за вознаграждение
     showRewardedAd().then((success) => {
         if (success) {
-            // Реклама просмотрена – начисляем бонус
+            // Реклама просмотрена – начисляем бонус 5 слов в галактиках и 5 алмазов
             progress.totalWords += 5;
+            addToTotalScore(5); 
             progress.lastDailyBonus = today;
             saveGalaxyProgress(progress);
 
