@@ -4229,14 +4229,18 @@ function showRewardedAd(onSuccess, onFail) {
     showLoadingOverlay();
     
     let isFinished = false;
+    let adStarted = false; // флаг: началась ли реклама (получен ответ от show)
+    
+    // ⏰ Таймаут увеличен до 120 секунд
     const timeoutId = setTimeout(function() {
         if (!isFinished) {
             isFinished = true;
             hideLoadingOverlay();
             console.log('⏰ Таймаут! Реклама не отвечает');
+            // Если реклама не началась, сообщаем об ошибке
             onFail('Реклама временно недоступна');
         }
-    }, 60000);
+    }, 120000); // 120 секунд
     
     console.log('📺 Проверяем готовность рекламы...');
     vkBridge.send('VKWebAppCheckNativeAds', {
@@ -4264,7 +4268,7 @@ function showRewardedAd(onSuccess, onFail) {
         
         if (showData && showData.result === true) {
             adPreloaded = false;
-            onSuccess();
+            onSuccess(); // ✅ реклама показана – даём бонус
         } else {
             console.log('ℹ️ Реклама не показана (result: false)');
             onFail('Реклама не показана');
