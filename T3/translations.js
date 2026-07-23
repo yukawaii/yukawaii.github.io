@@ -91,7 +91,7 @@ const translations = {
         getBonus: 'Получить!',
         alreadyClaimed: 'Уже получено!',
         dailyBonusAlreadyClaimed: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
-        dailyBonusText: 'Получить +10 очков?',
+        dailyBonusText: 'Получите бонус 10 очков или усиленный бонус за просмотр рекламы.',
         bonusClaimed: '🎉 Бонус получен!',
         bonusClaimedText: '+10 очков! Возвращайся завтра за новым бонусом.',
                 collectAllPrevious: 'Соберите все',

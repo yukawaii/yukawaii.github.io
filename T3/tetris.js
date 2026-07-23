@@ -350,12 +350,12 @@ function showBonusNotification(bonus) {
         pointer-events: none;
     `;
     notification.innerHTML = `
-        <span style="font-size: 32px;">${bonus.symbol}</span>
+        <span ">${bonus.symbol}</span>
         <div>
-            <span style="color: #fff; font-size: 20px; text-transform: uppercase;">${bonusText}</span>
-            <span style="color: ${bonus.color}; font-size: 14px; display: block;">${bonus.label}</span>
+            <span style="color: #fff; text-transform: uppercase;">${bonusText}</span>
+            <span style="color: ${bonus.color}; display: block;">${bonus.label}</span>
         </div>
-        <span style="color: ${bonus.color}; font-size: 24px; font-weight: bold;">+${bonus.points}</span>
+        <span style="color: ${bonus.color}; font-weight: bold;">+${bonus.points}</span>
     `;
     document.body.appendChild(notification);
     requestAnimationFrame(() => {
@@ -840,8 +840,9 @@ function drawGame() {
     const t = window.getText || (key => key);
     context.fillStyle = '#111';
     context.fillRect(0, 0, canvasWidth, topPanelHeight);
-    const titleFontSize = isMobile ? Math.min(12, canvasWidth / 25) : Math.min(22, canvasWidth / 20);
-    const valueFontSize = isMobile ? Math.min(18, canvasWidth / 16) : Math.min(36, canvasWidth / 12);
+   const isUltraSmall = window.innerWidth <= 280 || window.innerHeight <= 280;
+const titleFontSize = isUltraSmall ? Math.min(8, canvasWidth / 30) : (isMobile ? Math.min(12, canvasWidth / 25) : Math.min(22, canvasWidth / 20));
+const valueFontSize = isUltraSmall ? Math.min(12, canvasWidth / 20) : (isMobile ? Math.min(18, canvasWidth / 16) : Math.min(36, canvasWidth / 12));
     
     context.textAlign = "center";
     context.fillStyle = '#888';
@@ -1405,7 +1406,7 @@ function showGameOverModal(score) {
                 // Создаём новую кнопку "Продолжить за рекламу"
                 const continueBtn = document.createElement('button');
                 continueBtn.style.cssText = `
-                    width: 100%; padding: 14px; font-size: 16px;
+                    width: 100%; 
                     font-family: 'Russo One', sans-serif; text-transform: uppercase;
                     letter-spacing: 2px; color: #fff;
                     background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -1423,7 +1424,7 @@ function showGameOverModal(score) {
                 if (newGameBtn) {
                     // Изменяем стиль кнопки "Новая игра"
                     newGameBtn.style.cssText = `
-                        width: 100%; padding: 14px; font-size: 16px;
+                        width: 100%;
                         font-family: 'Russo One', sans-serif; text-transform: uppercase;
                         letter-spacing: 2px; color: #fff;
                         background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -1436,7 +1437,7 @@ function showGameOverModal(score) {
                 if (menuBtn) {
                     // Изменяем стиль кнопки "В меню"
                     menuBtn.style.cssText = `
-                        width: 100%; padding: 14px; font-size: 16px;
+                        width: 100%;
                         font-family: 'Russo One', sans-serif; text-transform: uppercase;
                         letter-spacing: 2px; color: #94a3b8;
                         background: rgba(255,255,255,0.03);
@@ -1816,21 +1817,23 @@ function updateCollectionsProgress() {
     window.collectionsProgress = { unlocked, total };
 }
 
-   function openCollections() {
+function openCollections() {
     const rewardsModal = document.getElementById('rewards-center-modal');
     if (rewardsModal) rewardsModal.style.display = 'none';
     
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
     
-    let html = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
-            <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 560px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto;">
-<button onclick="closeCollections()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>                <h2 class="neon-title" style="color: #34d399; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">🖼️ ${t('collections') || 'Коллекции'}</h2>
-                <p style="color: #64748b; font-size: 15px; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif;">
+let html = `
+<div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
+<div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); border-radius: 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto; padding: 20px 15px;">
+
+<button class="modal-close-btn" onclick="closeCollections()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; font-size: 28px;">✕</button>           
+     <h2 class="neon-title" style="color: #34d399; text-transform: uppercase; letter-spacing: 2px; font-family: 'Russo One', sans-serif; font-size: clamp(18px, 5vw, 28px);">🖼️ ${t('collections') || 'Коллекции'}</h2>
+                <p style="color: #64748b; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif; font-size: clamp(12px, 2.5vw, 16px);">
                     ${t('yourScore') || 'Ваш счёт'}: <span style="color: #34d399; font-weight: bold;">${savedScore}</span>
                 </p>
-                <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
     `;
     
     for (const [key, category] of Object.entries(COLLECTION_CATEGORIES)) {
@@ -1845,7 +1848,7 @@ function updateCollectionsProgress() {
             buttonStyle = `color: #fff; background: ${isComplete ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #2563eb, #1d4ed8)'}; border: none; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); cursor: pointer;`;
             onClickAction = `onclick="openCollectionCategory('${key}')"`;
             rightText = `
-                <span style="font-size: 13px; color: ${isComplete ? '#86efac' : '#93c5fd'}; font-weight: normal; margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                <span style="color: ${isComplete ? '#86efac' : '#93c5fd'}; font-weight: normal; margin-left: auto; display: flex; align-items: center; gap: 4px; font-size: clamp(12px, 2vw, 16px);">
                     ${unlockedCount}/${total}
                     ${isComplete ? getCheckmarkSVG() : ''}
                 </span>
@@ -1853,32 +1856,21 @@ function updateCollectionsProgress() {
         } else {
             buttonStyle = `color: #64748b; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); cursor: default;`;
             onClickAction = `onclick="showLockedCategory('${key}')"`;
-            rightText = `<span style="font-size: 18px; color: #475569; margin-left: auto;">🔒</span>`;
+            rightText = `<span style="font-size: clamp(18px, 4vw, 24px); color: #475569; margin-left: auto;">🔒</span>`;
         }
         
         html += `
             <button ${onClickAction}
-                    style="width: 100%; padding: 18px 20px; font-size: 18px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; 
+                    style="width: 100%; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; 
                         ${buttonStyle}
-                        display: flex; align-items: center; gap: 16px; justify-content: center;
-                        border-radius: 16px; transition: all 0.2s; min-height: 64px;">
-                <span style="font-size: 28px;">${category.icon}</span>
+                        display: flex; align-items: center; gap: 12px; justify-content: center;
+                        border-radius: 16px; transition: all 0.2s; min-height: 56px; padding: 10px 16px; font-size: clamp(12px, 2.5vw, 18px);">
+                <span style="font-size: clamp(20px, 5vw, 32px);">${category.icon}</span>
                 <span style="flex: 1; text-align: left;">${name}</span>
                 ${rightText}
             </button>
         `;
     }
-    
-    html += `
-                </div>
-                <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
-                    <button onclick="closeCollections()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                        ${t('close') || 'Закрыть'}
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
     
     const oldModal = document.getElementById('collections-modal');
     if (oldModal) oldModal.remove();
@@ -1931,18 +1923,18 @@ function renderCollectionCategory(categoryId, page) {
     const startIndex = (page - 1) * COLLECTION_ITEMS_PER_PAGE;
     const endIndex = Math.min(startIndex + COLLECTION_ITEMS_PER_PAGE, totalItems);
 
-    // Убираем overflow-y: auto и max-height из внутреннего блока – теперь они не нужны
-    let html = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
-            <div id="collection-category-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 92%; max-width: 650px; border-radius: 30px; padding: 20px 15px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center;">
-<button onclick="closeCollectionCategory()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>         
-       <h2 style="color: #34d399; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
+let html = `
+<div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
+<div id="collection-category-content" class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); border-radius: 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto; padding: 15px 10px;">
+
+<button class="modal-close-btn"  onclick="closeCollectionCategory()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>         
+       <h2 style="color: #34d399; font-size: clamp(20px, 5vw, 26px); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
                     ${category.icon} ${categoryName}
                 </h2>
-                <p style="color: #64748b; font-size: 14px; letter-spacing: 1px; margin-bottom: 18px; font-family: 'Russo One', sans-serif;">
+                <p style="color: #64748b; font-size: clamp(12px, 2.5vw, 14px); letter-spacing: 1px; margin-bottom: 18px; font-family: 'Russo One', sans-serif;">
                     ${t('collectionProgress') || 'Прогресс'}: ${unlockedCount}/${totalItems}
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px;">
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px;">
     `;
 
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
@@ -1965,8 +1957,8 @@ function renderCollectionCategory(categoryId, page) {
             clickAction = `claimCollectionItem('${categoryId}', ${i}, ${page})`;
             content = `
                 <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 28px;">✋</span>
-                    <span style="font-size: 7px; color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t('getBonus') || 'Забрать'}</span>
+                    <span style="font-size: clamp(22px, 5vw, 28px);">✋</span>
+                    <span style="font-size: clamp(6px, 1.5vw, 8px); color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t('getBonus') || 'Забрать'}</span>
                 </div>
             `;
         } else {
@@ -1975,7 +1967,7 @@ function renderCollectionCategory(categoryId, page) {
             clickAction = `showLockReason('${categoryId}', ${i})`;
             content = `
                 <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: 28px;">🔒</span>
+                    <span style="font-size: clamp(22px, 5vw, 28px);">🔒</span>
                 </div>
             `;
         }
@@ -1989,9 +1981,9 @@ function renderCollectionCategory(categoryId, page) {
 
     html += `
                 </div>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 25px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+                <div style="display: flex; justify-content: center; align-items: center; gap: 25px; border-top: none !important;">
                     <button onclick="changeCollectionPage(-1)" style="width: 44px; height: 44px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 20px; transition: all 0.2s; font-family: 'Russo One', sans-serif;">◀</button>
-                    <span style="color: #64748b; font-size: 15px; font-family: 'Russo One', sans-serif;">${page} / ${totalPages}</span>
+                    <span style="color: #64748b; font-size: clamp(12px, 2.5vw, 15px); font-family: 'Russo One', sans-serif;">${page} / ${totalPages}</span>
                     <button onclick="changeCollectionPage(1)" style="width: 44px; height: 44px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 20px; transition: all 0.2s; font-family: 'Russo One', sans-serif;">▶</button>
                 </div>
             </div>
@@ -2004,7 +1996,6 @@ function renderCollectionCategory(categoryId, page) {
     const div = document.createElement('div');
     div.innerHTML = html;
     document.body.appendChild(div.firstElementChild);
-
 }
 
 function changeCollectionPage(direction) {
@@ -2063,8 +2054,8 @@ function claimCollectionItem(categoryId, index, page) {
     modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100006; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
     modal.id = 'collection-claim-modal';
     modal.innerHTML = `
-        <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-<button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+<button class="modal-close-btn" onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>
           <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('newExhibit') || 'Новый экспонат!'}</h2>
             <p style="color: #94a3b8; font-size: 16px; margin-bottom: 8px; font-family: 'Russo One', sans-serif;">${t('youGot') || 'Ты получил'}</p>
@@ -2106,15 +2097,55 @@ function openFullImage(imgPath, index, categoryId) {
     const category = COLLECTION_CATEGORIES[categoryId];
     const t = window.getText || (key => key);
     const modal = document.createElement('div');
-    modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10003; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);`;
-    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-    modal.innerHTML = `
-        <div style="position: relative; max-width: 80%; max-height: 80%;">
-            <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>
-            <img src="${imgPath}" alt="${t(category.nameKey)} ${index}" style="max-width: 100%; max-height: 80vh; border-radius: 16px; box-shadow: 0 0 60px rgba(0,0,0,0.8);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect width=%22300%22 height=%22400%22 fill=%22%231a1a2e%22/%3E%3Ctext x=%22150%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%2364748b%22 font-family=%22sans-serif%22 font-size=%2220%22%3ENo image%3C/text%3E%3C/svg%3E'">
-            <p style="color: #94a3b8; text-align: center; margin-top: 12px; font-family: 'Russo One', sans-serif; font-size: 14px; text-shadow: 0 0 20px rgba(0,0,0,0.8);">${t(category.nameKey)} ${index}</p>
-        </div>
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10003;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(10px);
     `;
+    
+    // Затемняющий слой для фона
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 0;
+    `;
+    modal.appendChild(overlay);
+    
+    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+    
+modal.innerHTML = `
+    <div class="full-image-modal" style="
+        background: #1a1a2e; 
+        border: 2px solid rgba(52, 211, 153, 0.3); 
+        border-radius: 30px; 
+        padding: 25px 20px 20px; 
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        animation: modalPopIn 0.3s ease;
+        position: relative;
+    ">
+        <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>
+        <img src="${imgPath}" alt="${t(category.nameKey)} ${index}" style="max-width: 100%; max-height: 80%; border-radius: 16px; object-fit: contain;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22%3E%3Crect width=%22300%22 height=%22400%22 fill=%22%231a1a2e%22/%3E%3Ctext x=%22150%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%2364748b%22 font-family=%22sans-serif%22 font-size=%2220%22%3ENo image%3C/text%3E%3C/svg%3E'">
+        <p style="color: #e2e8f0; text-align: center; margin-top: 12px; font-family: 'Russo One', sans-serif; font-size: 14px; flex-shrink: 0;">${t(category.nameKey)} ${index}</p>
+    </div>
+`;
+    
     document.body.appendChild(modal);
 }
 
@@ -2144,14 +2175,26 @@ function showLockReason(categoryId, index) {
 
 function showSimpleModal(title, text, icon = 'info') {
     const modal = document.createElement('div');
-    modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100005; display: flex; justify-content: center; align-items: center;`;
-    modal.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('1.jpg') no-repeat center center fixed; background-size: cover; z-index: -1;"><div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1;"></div></div>
-        <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-<button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation;">✕</button>            <div style="font-size: 48px; margin-bottom: 16px;">${icon === 'info' ? 'ℹ️' : icon === 'success' ? '✅' : icon === 'warning' ? '⚠️' : '❌'}</div>
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+            z-index: 100005;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(15px);
+    `;
+    modal.innerHTML += `
+        <div class="modal-content" style="border: 2px solid rgba(52, 211, 153, 0.3); max-width: 400px; padding: 35px 30px;">
+            <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
+            <div style="font-size: 48px; margin-bottom: 16px;">${icon === 'info' ? 'ℹ️' : icon === 'success' ? '✅' : icon === 'warning' ? '⚠️' : '❌'}</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
             <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
-            <button onclick="this.parentElement.parentElement.remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s;">${window.getText('ok') || 'OK'}</button>
+            <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${window.getText('ok') || 'OK'}</button>
         </div>
     `;
     document.body.appendChild(modal);
@@ -2241,6 +2284,7 @@ function renderScrolls() {
     const container = document.getElementById('scrolls-container');
     const scoreEl = document.getElementById('scrolls-player-score');
     const pageInfo = document.getElementById('scrolls-page-info');
+
     if (!container) return;
     const currentScore = player ? player.score : 0;
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
@@ -2274,7 +2318,8 @@ function renderScrolls() {
             action = `openScrollTextModal(${i})`;
         }
         const scrollItem = document.createElement('div');
-        scrollItem.style.cssText = `display: flex; justify-content: space-between; align-items: center; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; ${boxShadow} ${animation}`;
+        scrollItem.className = 'scroll-item';  
+        scrollItem.style.cssText = `display: flex; justify-content: space-between; align-items: center; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px;   cursor: pointer; transition: all 0.2s; ${boxShadow} ${animation}`;
         scrollItem.onclick = () => { if (isClaimed) openScrollTextModal(i); else if (isAvailable) claimScroll(i); else openScrollTextModal(i); };
         scrollItem.onmouseover = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.5)' : isAvailable ? 'rgba(255, 215, 0, 0.5)' : 'rgba(255, 255, 255, 0.15)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.08)' : isAvailable ? 'rgba(255, 215, 0, 0.12)' : 'rgba(255, 255, 255, 0.04)'; };
         scrollItem.onmouseout = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.2)' : isAvailable ? 'rgba(255, 215, 0, 0.3)' : 'rgba(255, 255, 255, 0.05)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.05)' : isAvailable ? 'rgba(255, 215, 0, 0.08)' : 'rgba(255, 255, 255, 0.02)'; };
@@ -2325,27 +2370,36 @@ function openScrollTextModal(scrollId) {
     const isAvailable = isScrollUnlocked(scrollId, totalScore);
     const isClaimed = progress[scrollId] || false;
     if (isAvailable && !isClaimed) { claimScroll(scrollId); return; }
-    if (!isAvailable) {
-        const t = window.getText || (key => key);
-        const neededPoints = scrollId <= 50 ? scrollId * 100 : 5000 + (scrollId - 50) * 300;
-        const modal = document.createElement('div');
-        modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100001; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.65); z-index: -1;`;
-        modal.appendChild(overlay);
-        modal.innerHTML += `
-            <div style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(239, 68, 68, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
-                <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
-                <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('scrollLockedTitle')}</h2>
-                <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px; font-family: 'Russo One', sans-serif; line-height: 1.6;">${t('scrollLockedText')}</p>
-                <p style="color: #fcd34d; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">💡 ${t('needPoints') || 'Нужно'}: ${neededPoints} ${t('points') || 'очков'}</p>
-                <button onclick="this.parentElement.parentElement.remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s;">${t('ok')}</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        return;
-    }
+if (!isAvailable) {
+    const t = window.getText || (key => key);
+    const neededPoints = scrollId <= 50 ? scrollId * 100 : 5000 + (scrollId - 50) * 300;
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100001;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(15px);
+    `;
+    modal.innerHTML += `
+        <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: 35px 30px;">
+            <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
+            <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+            <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('scrollLockedTitle')}</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px; font-family: 'Russo One', sans-serif; line-height: 1.6;">${t('scrollLockedText')}</p>
+            <p style="color: #fcd34d; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">💡 ${t('needPoints') || 'Нужно'}: ${neededPoints} ${t('points') || 'очков'}</p>
+            <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${t('ok')}</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    return;
+}
     const modal = document.getElementById('scroll-text-modal');
     const titleEl = document.getElementById('scroll-text-title');
     const contentEl = document.getElementById('scroll-text-content');
@@ -2373,7 +2427,7 @@ function openRewardsCenter() {
     });
     const modal = document.getElementById('rewards-center-modal');
     if (!modal) return;
-    modal.style.cssText = `display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; z-index: 99999 !important; justify-content: center !important; align-items: center !important; overflow: auto !important; padding: 20px !important; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
+    modal.style.cssText = `display: flex; position: fixed ; top: 0 ; left: 0; width: 100% ; height: 100% ; z-index: 99999 !important; justify-content: center ; align-items: center ; overflow: auto ; padding: 20px ; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
     const scoreEl = document.getElementById('rewards-player-score');
     if (scoreEl) {
         const totalScore = parseInt(localStorage.getItem('totalScore') || '0');
@@ -2454,7 +2508,7 @@ function updateDailyBonusStatus() {
         statusEl.style.display = 'inline-flex';
         statusEl.style.alignItems = 'center';
     } else {
-        statusEl.textContent = '+10 очков';
+        statusEl.textContent = '';
         statusEl.style.color = '#fcd34d';
         statusEl.style.fontSize = '12px';
     }
@@ -2465,7 +2519,6 @@ function openDailyBonus() {
     // Обновляем статус перед открытием
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     
-    // Если бонус уже получен — показываем сообщение и выходим
     if (dailyBonusClaimedToday) {
         showCustomModal({
             title: '✅ Уже получено!',
@@ -2476,7 +2529,6 @@ function openDailyBonus() {
         return;
     }
     
-    // Создаём модалку с кнопками
     const t = window.getText || (key => key);
     const oldModal = document.getElementById('daily-bonus-modal');
     if (oldModal) oldModal.remove();
@@ -2493,43 +2545,33 @@ function openDailyBonus() {
         display: flex;
         justify-content: center;
         align-items: center;
+        background: url('1.jpg') no-repeat center center fixed;
+        background-size: cover;
     `;
     
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: -1;
-    `;
-    modal.appendChild(overlay);
-    
-    modal.innerHTML += `
-        <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-            <button onclick="this.closest('#daily-bonus-modal').remove()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; font-family: 'Russo One', sans-serif;">✕</button>
-            <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
-                ${t('dailyBonus') || 'Ежедневный бонус'}
-            </h2>
-            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
-                ${t('dailyBonusText') || 'Получить +10 очков?'}
-            </p>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-                <button onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1; min-width: 80px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                    ${t('cancel') || 'Отмена'}
-                </button>
-                <button onclick="claimDailyBonus()" style="flex: 1; min-width: 100px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
-                    ✅ +10
-                </button>
-                <button onclick="claimEnhancedDailyBonus()" style="flex: 1; min-width: 120px; padding: 14px; font-size: 14px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                    🎁 +25 за рекламу
-                </button>
-            </div>
+modal.innerHTML += `
+    <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <button class="modal-close-btn" onclick="this.closest('#daily-bonus-modal').remove()">✕</button>
+        <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
+        <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+            ${t('dailyBonus') || 'Ежедневный бонус'}
+        </h2>
+        <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
+            ${t('dailyBonusText') || 'Получить +10 очков?'}
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">       
+            <button class="modal-action-btn" onclick="claimDailyBonus()" style="flex: 1 1 auto; min-width: 100px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
+                🎁+10
+            </button>
+            <button class="modal-action-btn" onclick="claimEnhancedDailyBonus()" style="flex: 1 1 auto; min-width: 120px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
+                📺+25
+            </button>
+                 <button class="modal-action-btn" onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1 1 auto; min-width: 80px; padding: 12px 14px; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
+                ${t('cancel') || 'Отмена'}
+            </button>
         </div>
-    `;
+    </div>
+`;
     
     document.body.appendChild(modal);
 }
@@ -2678,13 +2720,13 @@ function showSuccessModal(title, text) {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.6);
         z-index: -1;
     `;
     modal.appendChild(overlay);
     
     modal.innerHTML += `
-        <div style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
             <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
@@ -2846,7 +2888,7 @@ function showLoadingAdModal() {
         -webkit-backdrop-filter: blur(15px);
     `;
     modal.innerHTML = `
-        <div style="text-align: center; color: #fff;">
+        <div class="modal-content" style="text-align: center; color: #fff;">
             <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s ease-in-out infinite;">📺</div>
             <h2 style="color: #34d399; font-size: 24px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
                 Загрузка рекламы...
@@ -2912,13 +2954,13 @@ function closeLoadingAdModal() {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.7);
+                background: rgba(0, 0, 0, 0.6);
                 z-index: -1;
             `;
             modal.appendChild(overlay);
             
             modal.innerHTML += `
-                <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+                <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
                     <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
                     <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
                         Продолжить эту игру!
@@ -3035,7 +3077,7 @@ function showContinueConfirmationModal() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             z-index: -1;
         `;
         modal.appendChild(overlay);
@@ -3137,13 +3179,13 @@ function showSlowDownModal() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.6);
         z-index: -1;
     `;
     modal.appendChild(overlay);
     
     modal.innerHTML += `
-        <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>
             <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
                 Замедлить?
