@@ -562,14 +562,12 @@ function showCustomModal({ title, text, type = 'info', button = 'OK', timer = nu
     const icons = {
         success: '✅',
         error: '❌',
-        info: 'ℹ️',
-        warning: '⚠️'
+             warning: '⚠️'
     };
     
     modal.innerHTML += `
         <div  class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid ${type === 'success' ? 'rgba(34, 197, 94, 0.4)' : type === 'error' ? 'rgba(239, 68, 68, 0.4)' : type === 'warning' ? 'rgba(245, 158, 11, 0.4)' : 'rgba(52, 211, 153, 0.3)'}; width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-            <div>${icons[type] || 'ℹ️'}</div>
-            <h2 style="color: ${type === 'success' ? '#34d399' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#34d399'};  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
+                     <h2 style="color: ${type === 'success' ? '#34d399' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#34d399'};  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
                 ${title}
             </h2>
             <p style="color: #94a3b8;  font-family: 'Russo One', sans-serif; line-height: 1.6;">

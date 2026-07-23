@@ -704,8 +704,9 @@ function drawGame() {
     const canvasHeight = canvas.height;
     if (canvasWidth <= 0 || canvasHeight <= 0) return;
     
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const topPanelHeight = isMobile ? 42 : 80;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isUltraSmall = window.innerWidth <= 280 || window.innerHeight <= 280;
+const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80);
     const gameAreaHeight = Math.max(50, canvasHeight - topPanelHeight);
     
     const FIGURE_SCALE = 1.8;
@@ -836,35 +837,42 @@ function drawGame() {
         }
     }
     
-    // Статистика
-    const t = window.getText || (key => key);
-    context.fillStyle = '#111';
-    context.fillRect(0, 0, canvasWidth, topPanelHeight);
-   const isUltraSmall = window.innerWidth <= 280 || window.innerHeight <= 280;
-const titleFontSize = isUltraSmall ? Math.min(8, canvasWidth / 30) : (isMobile ? Math.min(12, canvasWidth / 25) : Math.min(22, canvasWidth / 20));
-const valueFontSize = isUltraSmall ? Math.min(12, canvasWidth / 20) : (isMobile ? Math.min(18, canvasWidth / 16) : Math.min(36, canvasWidth / 12));
-    
-    context.textAlign = "center";
-    context.fillStyle = '#888';
-    context.font = `${titleFontSize}px Russo One`;
-    context.fillText(t('score'), canvasWidth * 0.12, isMobile ? 16 : 30);
-    context.fillStyle = '#fff';
-    context.font = `${valueFontSize}px Russo One`;
-    context.fillText(player ? player.score : 0, canvasWidth * 0.12, isMobile ? 36 : 65);
-    
-    context.fillStyle = '#888';
-    context.font = `${titleFontSize * 0.8}px Russo One`;
-    context.fillText(t('lines'), canvasWidth * 0.32, isMobile ? 16 : 30);
-    context.fillStyle = '#fff';
-    context.font = `${valueFontSize}px Russo One`;
-    context.fillText(player ? player.lines : 0, canvasWidth * 0.32, isMobile ? 36 : 65);
-    
-    context.fillStyle = '#888';
-    context.font = `${titleFontSize * 0.8}px Russo One`;
-    context.fillText(t('level'), canvasWidth * 0.52, isMobile ? 16 : 30);
-    context.fillStyle = '#fff';
-    context.font = `${valueFontSize}px Russo One`;
-    context.fillText(player ? player.level : 1, canvasWidth * 0.52, isMobile ? 36 : 65);
+// Статистика
+const t = window.getText || (key => key);
+context.fillStyle = '#111';
+context.fillRect(0, 0, canvasWidth, topPanelHeight);
+
+const titleFontSize = isUltraSmall 
+    ? Math.min(5, canvasWidth / 40) 
+    : (isMobile ? Math.min(12, canvasWidth / 25) : Math.min(22, canvasWidth / 20));
+const valueFontSize = isUltraSmall 
+    ? Math.min(7, canvasWidth / 25) 
+    : (isMobile ? Math.min(18, canvasWidth / 16) : Math.min(36, canvasWidth / 12));
+
+const textYTitle = isUltraSmall ? 10 : (isMobile ? 16 : 30);
+const textYValue = isUltraSmall ? 22 : (isMobile ? 36 : 65);
+
+context.textAlign = "center";
+context.fillStyle = '#888';
+context.font = `${titleFontSize}px Russo One`;
+context.fillText(t('score'), canvasWidth * 0.12, textYTitle);
+context.fillStyle = '#fff';
+context.font = `${valueFontSize}px Russo One`;
+context.fillText(player ? player.score : 0, canvasWidth * 0.12, textYValue);
+
+context.fillStyle = '#888';
+context.font = `${titleFontSize * 0.8}px Russo One`;
+context.fillText(t('lines'), canvasWidth * 0.32, textYTitle);
+context.fillStyle = '#fff';
+context.font = `${valueFontSize}px Russo One`;
+context.fillText(player ? player.lines : 0, canvasWidth * 0.32, textYValue);
+
+context.fillStyle = '#888';
+context.font = `${titleFontSize * 0.8}px Russo One`;
+context.fillText(t('level'), canvasWidth * 0.52, textYTitle);
+context.fillStyle = '#fff';
+context.font = `${valueFontSize}px Russo One`;
+context.fillText(player ? player.level : 1, canvasWidth * 0.52, textYValue);
     
     // Следующая фигура
     if (player && player.nextMatrix) {
@@ -2188,15 +2196,14 @@ function showSimpleModal(title, text, icon = 'info') {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(15px);
     `;
-    modal.innerHTML += `
-        <div class="modal-content" style="border: 2px solid rgba(52, 211, 153, 0.3); max-width: 400px; padding: 35px 30px;">
-            <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
-            <div style="font-size: 48px; margin-bottom: 16px;">${icon === 'info' ? 'ℹ️' : icon === 'success' ? '✅' : icon === 'warning' ? '⚠️' : '❌'}</div>
-            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
-            <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${window.getText('ok') || 'OK'}</button>
-        </div>
-    `;
+modal.innerHTML += `
+    <div class="modal-content" style="border: 2px solid rgba(52, 211, 153, 0.3); max-width: 400px; padding: 35px 30px;">
+        <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
+        <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
+        <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
+        <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${window.getText('ok') || 'OK'}</button>
+    </div>
+`;
     document.body.appendChild(modal);
 }
 
@@ -2281,6 +2288,7 @@ function getScrollText(id) {
 }
 
 function renderScrolls() {
+    console.log('renderScrolls вызван, currentScrollPage:', currentScrollPage);
     const container = document.getElementById('scrolls-container');
     const scoreEl = document.getElementById('scrolls-player-score');
     const pageInfo = document.getElementById('scrolls-page-info');
@@ -2291,11 +2299,19 @@ function renderScrolls() {
     const playerScore = Math.max(currentScore, savedScore);
     const progress = getScrollsProgress();
     if (scoreEl) scoreEl.textContent = formatScore(playerScore);
+
+    const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
+    // Убеждаемся, что текущая страница не выходит за пределы
+    if (currentScrollPage > totalPages) currentScrollPage = totalPages;
+    if (currentScrollPage < 1) currentScrollPage = 1;
+
     const startIndex = (currentScrollPage - 1) * SCROLLS_PER_PAGE;
     const endIndex = Math.min(startIndex + SCROLLS_PER_PAGE, TOTAL_SCROLLS);
     container.innerHTML = '';
+
     let scrollText = window.getText ? window.getText('scroll') : 'Свиток';
     if (scrollText === 'scroll') scrollText = 'Свиток';
+
     for (let i = startIndex + 1; i <= endIndex; i++) {
         const isAvailable = isScrollUnlocked(i, playerScore);
         const isClaimed = progress[i] || false;
@@ -2319,15 +2335,34 @@ function renderScrolls() {
         }
         const scrollItem = document.createElement('div');
         scrollItem.className = 'scroll-item';  
-        scrollItem.style.cssText = `display: flex; justify-content: space-between; align-items: center; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px;   cursor: pointer; transition: all 0.2s; ${boxShadow} ${animation}`;
+        scrollItem.style.cssText = `display: flex; justify-content: space-between; align-items: center; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; cursor: pointer; transition: all 0.2s; ${boxShadow} ${animation}`;
         scrollItem.onclick = () => { if (isClaimed) openScrollTextModal(i); else if (isAvailable) claimScroll(i); else openScrollTextModal(i); };
         scrollItem.onmouseover = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.5)' : isAvailable ? 'rgba(255, 215, 0, 0.5)' : 'rgba(255, 255, 255, 0.15)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.08)' : isAvailable ? 'rgba(255, 215, 0, 0.12)' : 'rgba(255, 255, 255, 0.04)'; };
         scrollItem.onmouseout = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.2)' : isAvailable ? 'rgba(255, 215, 0, 0.3)' : 'rgba(255, 255, 255, 0.05)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.05)' : isAvailable ? 'rgba(255, 215, 0, 0.08)' : 'rgba(255, 255, 255, 0.02)'; };
         scrollItem.innerHTML = `<span style="color: ${isClaimed ? '#e2e8f0' : isAvailable ? '#fcd34d' : '#64748b'}; font-family: 'Russo One', sans-serif; font-size: 15px;">${scrollText} ${i}${isAvailable && !isClaimed ? ' <span style="font-size: 11px; color: #fcd34d;">✨</span>' : ''}</span><span style="font-size: 22px; transition: all 0.3s; display: flex; align-items: center;">${icon}</span>`;
         container.appendChild(scrollItem);
     }
+
+    // Обновляем номер страницы
+   const pageSpan = document.querySelector('#scrolls-modal .pagination-page');
+if (pageSpan) {
+    pageSpan.textContent = `${currentScrollPage} / ${totalPages}`;
+}
+}
+
+function nextScrollPage() {
     const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
-    if (pageInfo) pageInfo.textContent = `${currentScrollPage} / ${totalPages}`;
+    if (currentScrollPage < totalPages) {
+        currentScrollPage++;
+        renderScrolls();
+    }
+}
+
+function prevScrollPage() {
+    if (currentScrollPage > 1) {
+        currentScrollPage--;
+        renderScrolls();
+    }
 }
 
 function getCheckmarkSVG() {
@@ -2339,14 +2374,7 @@ function getCheckmarkSVG() {
     </span>`;
 }
 
-function nextScrollPage() {
-    const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
-    if (currentScrollPage < totalPages) { currentScrollPage++; renderScrolls(); }
-}
 
-function prevScrollPage() {
-    if (currentScrollPage > 1) { currentScrollPage--; renderScrolls(); }
-}
 
 function openScrollsModal() {
     if (typeof loadTotalProgress === 'function') loadTotalProgress();
@@ -2390,7 +2418,7 @@ if (!isAvailable) {
     modal.innerHTML += `
         <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: 35px 30px;">
             <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
-            <div style="font-size: 48px; margin-bottom: 16px;">🔒</div>
+            <!-- Убрали строку с замком -->
             <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('scrollLockedTitle')}</h2>
             <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px; font-family: 'Russo One', sans-serif; line-height: 1.6;">${t('scrollLockedText')}</p>
             <p style="color: #fcd34d; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">💡 ${t('needPoints') || 'Нужно'}: ${neededPoints} ${t('points') || 'очков'}</p>
