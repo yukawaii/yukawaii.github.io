@@ -5493,6 +5493,24 @@ window.showMainMenuWhenReady = showMainMenuWhenReady;
 window.syncGameData = syncGameData;
 window.saveGameDataToCloud = saveGameDataToCloud;
 window.getLocalGameData = getLocalGameData;
+// уже есть
+window.showCustomModal = showCustomModal;
+window.showCustomConfirmModal = showCustomConfirmModal;
+window.closeCustomModal = closeCustomModal;
+window.closeCustomConfirmModal = closeCustomConfirmModal;
 
+// добавляем недостающие
+window.loginYandex = loginYandex;
+window.showYandexLeaderboard = showYandexLeaderboard;
+window.closeLeaderboardModal = closeLeaderboardModal;
+
+window.syncGameData = syncGameData;
+window.saveGameDataToCloud = saveGameDataToCloud;
+window.getLocalGameData = getLocalGameData;
+window.showMainMenuWhenReady = showMainMenuWhenReady;
+window.notifyGameplayStart = notifyGameplayStart;
+window.notifyGameplayStop = notifyGameplayStop;
+window.getText = getText;
+window.updateInterfaceLanguage = updateInterfaceLanguage;
 // Запускаем
 initYandexSDK();

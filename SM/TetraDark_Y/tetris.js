@@ -4055,7 +4055,7 @@ window.closeScrollTextModal = closeScrollTextModal;
 window.prevScrollPage = prevScrollPage;
 window.nextScrollPage = nextScrollPage;
 window.renderScrolls = renderScrolls;
-window.countUnlockedScrolls = countUnlockedScrolls;
+
 
 // Меню
 window.selectMode = selectMode;
@@ -4097,6 +4097,23 @@ window.openCollections = openCollections;
 window.closeCollections = closeCollections;
 window.claimCollectionItem = claimCollectionItem;
 // Экспортируем в глобальную область
+window.updateCollectionsProgress = updateCollectionsProgress;
+window.countUnlockedCollections = countUnlockedCollections;
+window.claimDailyBonus = claimDailyBonus;
+window.claimDailyBonusRewarded = claimDailyBonusRewarded;
+window.showLoadingScreen = showLoadingScreen;
+window.hideLoadingScreen = hideLoadingScreen;
+
+
+// добавляем недостающие
+window.selectMode = selectMode;
+window.selectDifficulty = selectDifficulty;
+window.closeDifficultyModal = closeDifficultyModal;
+window.returnToMenu = returnToMenu;
+window.togglePauseResume = togglePauseResume;
+window.startGameWithAudio = startGameWithAudio;
+window.closeGameOverModal = closeGameOverModal;
+window.closeGameOverModalAndMenu = closeGameOverModalAndMenu;
 window.updateCollectionsProgress = updateCollectionsProgress;
 window.countUnlockedCollections = countUnlockedCollections;
 window.claimDailyBonus = claimDailyBonus;
