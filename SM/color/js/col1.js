@@ -1581,13 +1581,11 @@ sizeCanvas() {
 }
 
 fitToScreen() {
-    console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
         return;
     }
-    // Используем getBoundingClientRect для точных размеров
     const rect = container.getBoundingClientRect();
     const availableWidth = rect.width;
     const availableHeight = rect.height;
@@ -1597,11 +1595,26 @@ fitToScreen() {
         this.zoomReset();
         return;
     }
-    const scaleX = availableWidth / imgWidth;
-    const scaleY = availableHeight / imgHeight;
-    let scale = Math.min(scaleX, scaleY);
-    scale = Math.min(scale, 1);
-    scale = Math.max(scale, 0.1);
+
+    // Определяем, мобильное ли устройство (ширина < 1024px или есть touch)
+    const isMobile = window.innerWidth < 1024 || ('ontouchstart' in window);
+
+    let scale;
+    if (isMobile) {
+        // На телефонах и планшетах — вписываем по ширине (как было)
+        scale = availableWidth / imgWidth;
+        scale = Math.min(scale, 1);  // не увеличиваем сверх 1
+    } else {
+        // На ПК — вписываем по высоте, чтобы картинка была видна целиком
+        scale = availableHeight / imgHeight;
+        // Если при этом ширина вылезает за пределы — уменьшаем по ширине
+        if (scale * imgWidth > availableWidth) {
+            scale = availableWidth / imgWidth;
+        }
+        scale = Math.min(scale, 1);  // не увеличиваем сверх 1
+    }
+
+    scale = Math.max(scale, 0.1); // минимальный масштаб
     this.zoomLevel = scale;
     this.panX = 0;
     this.panY = 0;
