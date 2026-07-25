@@ -1569,34 +1569,54 @@ fitToScreen() {
         return;
     }
 
-    // Получаем реальные размеры изображения
+    // Получаем размеры контейнера
+    const rect = container.getBoundingClientRect();
+    let availableWidth = rect.width;
+    let availableHeight = rect.height;
+
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
-    if (!imgWidth || !imgHeight) {
+    if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
         this.zoomReset();
         return;
     }
 
-    // Используем размеры окна (iframe), так как контейнер может быть растянут
-    const winWidth = window.innerWidth;
+    // КОРРЕКЦИЯ: если контейнер выше окна, используем высоту окна
     const winHeight = window.innerHeight;
+    const winWidth = window.innerWidth;
+    if (availableHeight > winHeight) {
+        availableHeight = winHeight;
+    }
+    if (availableWidth > winWidth) {
+        availableWidth = winWidth;
+    }
 
-    // Определяем, мобильное ли устройство (ширина < 1024 или touch)
+    // Вычитаем высоту тулбара (если он есть и не учтён)
+    const toolbar = this.shadowRoot.querySelector('.toolbar');
+    let toolbarHeight = 0;
+    if (toolbar) {
+        toolbarHeight = toolbar.getBoundingClientRect().height;
+        availableHeight -= toolbarHeight;
+    }
+
+    // Дополнительно вычитаем небольшие отступы (для надёжности)
+    availableHeight -= 4;
+
+    // Определяем мобильное устройство
     const isMobile = window.innerWidth < 1024 || ('ontouchstart' in window);
 
     let scale;
     if (isMobile) {
-        // На телефонах – масштабируем по ширине, как раньше
-        scale = winWidth / imgWidth;
-        scale = Math.min(scale, 1); // не увеличиваем
+        // На телефонах – по ширине
+        scale = availableWidth / imgWidth;
+        scale = Math.min(scale, 1);
     } else {
-        // На ПК – масштабируем по высоте, чтобы картинка была видна целиком
-        scale = winHeight / imgHeight;
-        // Если при этом ширина вылезает – уменьшаем по ширине
-        if (scale * imgWidth > winWidth) {
-            scale = winWidth / imgWidth;
+        // На ПК – по высоте, с учётом ширины
+        scale = availableHeight / imgHeight;
+        if (scale * imgWidth > availableWidth) {
+            scale = availableWidth / imgWidth;
         }
-        scale = Math.min(scale, 1); // не увеличиваем сверх 1
+        scale = Math.min(scale, 1);
     }
 
     scale = Math.max(scale, 0.1);
@@ -1606,7 +1626,7 @@ fitToScreen() {
     this.applyZoom();
 
     // Отладка (можно убрать)
-    console.log('📐 fitToScreen: scale =', scale, 'window:', winWidth, winHeight, 'img:', imgWidth, imgHeight);
+    console.log('📐 fitToScreen: scale=', scale, 'availableWidth=', availableWidth, 'availableHeight=', availableHeight, 'toolbarHeight=', toolbarHeight, 'img:', imgWidth, imgHeight);
 }
 
     updateSize() {
