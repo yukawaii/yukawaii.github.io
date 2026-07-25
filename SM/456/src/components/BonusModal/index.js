@@ -11,9 +11,9 @@ class BonusModal extends Component {
     this.state = {
       isOpen: false,
       step: 'menu', // 'menu' | 'loading' | 'success' | 'error'
-      timer: 10,
-      bonusAvailable: true,   // доступен ли бонус сегодня
-      errorMessage: ''        // сообщение об ошибке
+      timer: 60,
+      bonusAvailable: true,
+      errorMessage: ''
     };
     this.closeModal = this.closeModal.bind(this);
     this.handleGetBonus = this.handleGetBonus.bind(this);
@@ -33,7 +33,7 @@ class BonusModal extends Component {
       this.setState({
         isOpen: true,
         step: 'menu',
-        timer: 10,
+        timer: 60,
         bonusAvailable: true,
         errorMessage: ''
       });
@@ -54,9 +54,8 @@ class BonusModal extends Component {
     }
   }
 
-  // === Работа с датой ===
   getTodayDate() {
-    return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    return new Date().toISOString().slice(0, 10);
   }
 
   checkBonusAvailable() {
@@ -108,7 +107,6 @@ class BonusModal extends Component {
     }
   }
 
-  // === Остальные методы ===
   closeModal(e) {
     if (e) {
       e.preventDefault();
@@ -118,7 +116,7 @@ class BonusModal extends Component {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
-    this.setState({ isOpen: false, step: 'menu', timer: 10 });
+    this.setState({ isOpen: false, step: 'menu', timer: 60 });
   }
 
   handleTouchStart(e) {
@@ -138,9 +136,9 @@ class BonusModal extends Component {
       return;
     }
 
-    this.setState({ step: 'loading', timer: 10 });
+    this.setState({ step: 'loading', timer: 60 });
     
-    var timer = 10;
+    var timer = 60;
     this.timerInterval = setInterval(function() {
       timer--;
       this.setState({ timer: timer });
