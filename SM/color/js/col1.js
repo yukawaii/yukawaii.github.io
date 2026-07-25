@@ -1630,30 +1630,20 @@ fitToScreen() {
     const availableHeight = rect.height;
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
+    
+    // ===== ОТЛАДКА =====
+    console.log('📐 fitToScreen:');
+    console.log('  availableWidth:', availableWidth);
+    console.log('  availableHeight:', availableHeight);
+    console.log('  imgWidth:', imgWidth);
+    console.log('  imgHeight:', imgHeight);
+    // ===== КОНЕЦ ОТЛАДКИ =====
+    
     if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
         this.zoomReset();
         return;
     }
-
-    const isDesktop = window.innerWidth >= 1024 && !('ontouchstart' in window);
-    let scale;
-    if (isDesktop) {
-        // На ПК — вписываем по высоте (с учётом ширины)
-        scale = availableHeight / imgHeight;
-        if (scale * imgWidth > availableWidth) {
-            scale = availableWidth / imgWidth;
-        }
-        scale = Math.min(scale, 1);
-    } else {
-        // На мобильных — по ширине
-        scale = availableWidth / imgWidth;
-        scale = Math.min(scale, 1);
-    }
-    scale = Math.max(scale, 0.1);
-    this.zoomLevel = scale;
-    this.panX = 0;
-    this.panY = 0;
-    this.applyZoom();
+    // ... остальной код
 }
 
     updateSize() {
