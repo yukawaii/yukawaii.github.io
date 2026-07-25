@@ -1620,30 +1620,38 @@ sizeCanvas() {
 }
 
 fitToScreen() {
-    const container = this.canvasContainer[0];
-    if (!container) {
-        this.zoomReset();
-        return;
-    }
-    const rect = container.getBoundingClientRect();
-    const availableWidth = rect.width;
-    const availableHeight = rect.height;
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
-    
-    // ===== ОТЛАДКА =====
-    console.log('📐 fitToScreen:');
-    console.log('  availableWidth:', availableWidth);
-    console.log('  availableHeight:', availableHeight);
-    console.log('  imgWidth:', imgWidth);
-    console.log('  imgHeight:', imgHeight);
-    // ===== КОНЕЦ ОТЛАДКИ =====
-    
-    if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
+    if (!imgWidth || !imgHeight) {
         this.zoomReset();
         return;
     }
-    // ... остальной код
+
+    // Получаем размеры окна (или iframe)
+    const winWidth = window.innerWidth;
+    const winHeight = window.innerHeight;
+
+    // Определяем мобильное устройство
+    const isMobile = window.innerWidth < 1024 || ('ontouchstart' in window);
+
+    let scale;
+    if (isMobile) {
+        scale = winWidth / imgWidth;
+        scale = Math.min(scale, 1);
+    } else {
+        // На ПК — вписываем по высоте, но с учётом ширины
+        scale = winHeight / imgHeight;
+        if (scale * imgWidth > winWidth) {
+            scale = winWidth / imgWidth;
+        }
+        scale = Math.min(scale, 1);
+    }
+
+    scale = Math.max(scale, 0.1);
+    this.zoomLevel = scale;
+    this.panX = 0;
+    this.panY = 0;
+    this.applyZoom();
 }
 
     updateSize() {
