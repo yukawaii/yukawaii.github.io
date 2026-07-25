@@ -1057,6 +1057,14 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         height: 26px !important;
         min-height: 26px !important;
     }
+    #main-menu-modal .bottom-icons button {
+    width: 50px !important;
+    height: 50px !important;
+}
+#main-menu-modal .bottom-icons button svg {
+    width: 28px !important;
+    height: 28px !important;
+}
 }
 /* Центрируем заголовки и текст внутри модалки (если сбилось) */
 #main-menu-modal .modal-content h1,#main-menu-modal .modal-content p{ text-align: center; width: 100%}
@@ -1447,7 +1455,10 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         font-size: 12px !important;
         min-height: 15px !important;
     }
-}
+#main-menu-modal .bottom-icons button {
+    width: 40px !important;
+    height: 40px !important;
+}}
 
 /* ========== ЛАНДШАФТ: ОЧЕНЬ НИЗКИЕ ЭКРАНЫ  ========== */
 @media (orientation: landscape) and (max-height: 400px) {
@@ -1785,7 +1796,10 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         height: 28px !important;
         font-size: 10px !important;
     }
-
+#main-menu-modal .bottom-icons button {
+    width: 40px !important;
+    height: 40px !important;
+}
 }
 
 /* ===== ФИКС ВИДИМОСТИ КНОПКИ ЛИДЕРОВ В ЛАНДШАФТЕ ===== */
@@ -1894,7 +1908,6 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         justify-content: center !important;
         gap: 4px !important;
     }
-
     #rewards-center-modal .modal-content > div:last-child button {
         flex: 0 0 calc(50% - 2px) !important;  /* две кнопки в ряд */
         max-width: calc(50% - 2px) !important;
@@ -1903,18 +1916,15 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         min-height: 20px !important;
         border-radius: 8px !important;
     }
-
     /* Третья кнопка (Коллекции) – занимает всю ширину */
     #rewards-center-modal .modal-content > div:last-child button:last-child {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
-
     /* Уменьшаем иконки внутри кнопок */
     #rewards-center-modal .modal-content > div:last-child button span:first-child {
         font-size: 10px !important;
     }
-
     /* Прогресс (0/100, 0/200) – делаем ещё мельче */
     #rewards-center-modal .modal-content > div:last-child button span:last-child {
         font-size: 8px !important;
@@ -1926,7 +1936,6 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         padding: 2px 4px !important;
         gap: 1px !important;
     }
-
     /* Контейнер с заголовком и прогрессом – уменьшаем шрифт */
     #collection-category-modal .modal-content > div:first-of-type {
         margin-bottom: 1px !important;
@@ -2169,7 +2178,14 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
 
   #yandex-highscore-side{ margin: 1px 0 !important; padding: 0 !important;}
  .modal-content >div[style*="font-size: 48px"]{ font-size: 10px !important; margin-bottom: 2px !important}
+    #main-menu-modal .bottom-icons button {
+    width: 26px !important;
+    height: 26px !important;
 }
+    #main-menu-modal .bottom-icons button svg {
+    width: 22px !important;
+    height: 22px !important;
+}}
   
 @media (orientation: portrait) and (max-width: 250px) {
     /* ===== ОБЩИЕ ПРАВИЛА ДЛЯ ВСЕХ МОДАЛОК ===== */
@@ -2255,25 +2271,22 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
     border-radius: 8px !important;
 }
 
-/* Контейнер с текстом – увеличиваем высоту и отступы */
-#scroll-text-modal .modal-content #scroll-text-content {
-    max-height: 90vh !important;    /* почти весь экран */
-    padding: 2px !important;        /* больше воздуха вокруг текста */
-    font-size: 10px !important;     /* читаемый размер */
-    line-height: 1.4 !important;
-}
+
  #scrolls-modal .modal-content h2{ font-size: 12px !important; margin: 0 !important;}
  #scrolls-modal .modal-content p{ font-size: 10px !important; margin: 0 !important;}
     #scrolls-container {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 2px !important;
-        max-height: 70vh !important;
-        padding: 2px !important;
+     max-height: 100vh !important;
+    height: 100% !important;
+    padding: 2px 4px !important;
+    gap: 2px !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
         overflow-y: auto !important;
     }
     #scrolls-container > div {
-        padding: 2px 4px !important;
+        padding: 2px 2px !important;
         font-size: 10px !important;
         min-height: 16px !important;
         margin-bottom: 0 !important;
@@ -2288,13 +2301,54 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
  #scrolls-modal .modal-content >div:last-child{ padding-top: 2px !important; margin-top: 2px !important; gap: 4px !important; border-top: 1px solid rgba(255,255,255,0.05) !important;}
 
     /* ===== ТЕКСТ СВИТКА ===== */
- #scroll-text-modal .modal-content h2{ font-size: 14px !important; margin-bottom: 2px !important;}
- #scroll-text-modal .modal-content #scroll-text-content{ font-size: 12px !important; padding: 4px !important; max-height: 50vh !important; line-height: 1.2 !important;}
-    #scroll-text-modal .modal-content button {
-        font-size: 10px !important;
-        padding: 2px 6px !important;
-        min-height: 18px !important;
-    }
+/* ===== МОДАЛКА ТЕКСТА СВИТКА – ВЫСОКАЯ (90vh) С ПРОКРУТКОЙ ТЕКСТА ===== */
+#scroll-text-modal .modal-content {
+    height: 90vh !important;        /* занимает 90% экрана */
+    max-height: 90vh !important;
+    padding: 4px 6px !important;
+    gap: 2px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;    /* убираем скролл у модалки */
+}
+
+/* Заголовок – компактно */
+#scroll-text-modal .modal-content h2 {
+    font-size: 12px !important;
+    margin: 2px 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Текст – занимает всё свободное место, скроллится */
+#scroll-text-modal .modal-content #scroll-text-content {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+}
+
+/* Кнопка "Прочитано" – внизу */
+#scroll-text-modal .modal-content button {
+    flex-shrink: 0 !important;
+    width: 100% !important;
+    padding: 4px !important;
+    font-size: 8px !important;
+    min-height: 20px !important;
+    margin-top: 4px !important;
+}
+
+/* Крестик – в правом верхнем углу */
+#scroll-text-modal .modal-content .close-btn {
+    position: absolute !important;
+    top: 2px !important;
+    right: 4px !important;
+    font-size: 14px !important;
+    padding: 2px !important;
+}
 
     /* ===== ВЫБОР СЛОЖНОСТИ ===== */
  #difficulty-modal .modal-content h2{ font-size: 14px !important; margin-bottom: 2px !important;}
@@ -2387,6 +2441,14 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
         font-size: 10px !important;
         border-width: 1px !important;
     }
+    #main-menu-modal .bottom-icons button {
+    width: 26px !important;
+    height: 26px !important;
+}
+    #main-menu-modal .bottom-icons button svg {
+    width: 22px !important;
+    height: 22px !important;
+}
  .action-label{ font-size: 5px !important;}
  .instructions{ display: none !important;}
     .canvas-container {

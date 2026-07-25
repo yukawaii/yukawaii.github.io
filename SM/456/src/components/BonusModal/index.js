@@ -11,7 +11,9 @@ class BonusModal extends Component {
     this.state = {
       isOpen: false,
       step: 'menu', // 'menu' | 'loading' | 'success' | 'error'
-      timer: 10
+      timer: 10,
+      bonusAvailable: true,   // доступен ли бонус сегодня
+      errorMessage: ''        // сообщение об ошибке
     };
     this.closeModal = this.closeModal.bind(this);
     this.handleGetBonus = this.handleGetBonus.bind(this);
@@ -19,6 +21,10 @@ class BonusModal extends Component {
     this.handleOk = this.handleOk.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.loadBonusDate = this.loadBonusDate.bind(this);
+    this.saveBonusDate = this.saveBonusDate.bind(this);
+    this.checkBonusAvailable = this.checkBonusAvailable.bind(this);
+    this.getTodayDate = this.getTodayDate.bind(this);
     this.timerInterval = null;
   }
 
@@ -27,8 +33,11 @@ class BonusModal extends Component {
       this.setState({
         isOpen: true,
         step: 'menu',
-        timer: 10
+        timer: 10,
+        bonusAvailable: true,
+        errorMessage: ''
       });
+      this.loadBonusDate();
     }.bind(this));
     
     document.addEventListener('keydown', function(e) {
@@ -45,6 +54,61 @@ class BonusModal extends Component {
     }
   }
 
+  // === Работа с датой ===
+  getTodayDate() {
+    return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  }
+
+  checkBonusAvailable() {
+    var today = this.getTodayDate();
+    var stored = localStorage.getItem('bonus_last_date');
+    return (stored !== today);
+  }
+
+  loadBonusDate() {
+    var self = this;
+    var today = this.getTodayDate();
+    var localDate = localStorage.getItem('bonus_last_date');
+    var available = (localDate !== today);
+    
+    this.setState({ bonusAvailable: available });
+
+    if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
+      vkBridge.send('VKWebAppStorageGet', { keys: ['bonus_last_date'] })
+        .then(function(data) {
+          var vkDate = null;
+          if (data && data.keys && data.keys.length > 0 && data.keys[0].value) {
+            vkDate = data.keys[0].value;
+            localStorage.setItem('bonus_last_date', vkDate);
+          }
+          var finalAvailable = true;
+          if (vkDate) {
+            finalAvailable = (vkDate !== today);
+          } else {
+            finalAvailable = (localDate !== today);
+          }
+          self.setState({ bonusAvailable: finalAvailable });
+        })
+        .catch(function(err) {
+          console.warn('Ошибка загрузки даты бонуса из VK:', err);
+        });
+    }
+  }
+
+  saveBonusDate() {
+    var today = this.getTodayDate();
+    localStorage.setItem('bonus_last_date', today);
+    if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
+      vkBridge.send('VKWebAppStorageSet', {
+        key: 'bonus_last_date',
+        value: today
+      }).catch(function(err) {
+        console.warn('Ошибка сохранения даты бонуса в VK:', err);
+      });
+    }
+  }
+
+  // === Остальные методы ===
   closeModal(e) {
     if (e) {
       e.preventDefault();
@@ -66,61 +130,56 @@ class BonusModal extends Component {
   }
 
   handleGetBonus() {
-   // console.log('🎬 Начинаем показ рекламы за вознаграждение');
-    
-    // Переходим в состояние загрузки
+    if (!this.checkBonusAvailable()) {
+      this.setState({
+        step: 'error',
+        errorMessage: 'Бонус уже получен сегодня'
+      });
+      return;
+    }
+
     this.setState({ step: 'loading', timer: 10 });
     
-    // Запускаем таймер на 10 секунд
     var timer = 10;
     this.timerInterval = setInterval(function() {
       timer--;
       this.setState({ timer: timer });
-      
       if (timer <= 0) {
         clearInterval(this.timerInterval);
         this.timerInterval = null;
-        // Если реклама не загрузилась за 10 секунд - ошибка
-        this.setState({ step: 'error' });
+        this.setState({ step: 'error', errorMessage: 'Реклама не загрузилась' });
       }
     }.bind(this), 1000);
     
-    // Пытаемся показать рекламу
     showRewardedAd()
       .then(function(success) {
-        // Останавливаем таймер
         if (this.timerInterval) {
           clearInterval(this.timerInterval);
           this.timerInterval = null;
         }
-        
         if (success) {
-          // Реклама просмотрена успешно - начисляем бонус
           this.giveBonus();
         } else {
-          // Реклама не просмотрена
-          this.setState({ step: 'error' });
+          this.setState({ step: 'error', errorMessage: 'Реклама не просмотрена до конца' });
         }
       }.bind(this))
       .catch(function(err) {
-        // Ошибка
         if (this.timerInterval) {
           clearInterval(this.timerInterval);
           this.timerInterval = null;
         }
         console.error('❌ Ошибка показа рекламы:', err);
-        this.setState({ step: 'error' });
+        this.setState({ step: 'error', errorMessage: 'Ошибка показа рекламы' });
       }.bind(this));
   }
 
   giveBonus() {
-    // Начисляем 10 очков
     var currentTotal = parseInt(localStorage.getItem('tetris_total_score'), 10) || 0;
     var newTotal = currentTotal + 10;
     localStorage.setItem('tetris_total_score', String(newTotal));
-     // ===== СЧЕТЧИК БОНУСОВ С СИНХРОНИЗАЦИЕЙ =====
-  incrementCounter('bonus_count', 1);    
-    // Сохраняем в VK Storage общие очки
+    
+    incrementCounter('bonus_count', 1);
+    
     if (typeof vkBridge !== 'undefined' && window.vkInitialized) {
       vkBridge.send('VKWebAppStorageSet', {
         key: 'tetris_total_score',
@@ -130,12 +189,11 @@ class BonusModal extends Component {
       });
     }
     
-    // Отправляем событие обновления счета
     if (typeof window.dispatchEvent === 'function') {
       window.dispatchEvent(new Event('scoreUpdated'));
     }
     
-   // console.log('✅ Бонус +10 очков! Всего:', newTotal);
+    this.saveBonusDate();
     this.setState({ step: 'success' });
   }
 
@@ -151,6 +209,10 @@ class BonusModal extends Component {
     if (!this.state.isOpen) return null;
 
     var title = i18n.bonus ? i18n.bonus[lan] : 'Бонус';
+    var isAvailable = this.state.bonusAvailable;
+    var descriptionText = isAvailable 
+      ? '+10 очков!<br />Посмотрите рекламу, чтобы получить бонусные очки.'
+      : 'Вы уже получили бонус сегодня.<br />Возвращайтесь завтра!';
 
     return (
       <div 
@@ -176,10 +238,7 @@ class BonusModal extends Component {
               <div>
                 <div className={style.icon}>🎁</div>
                 <div className={style.titleText}>{title}</div>
-                <div className={style.description}>
-                  +10 очков!<br />
-                  Посмотрите рекламу, чтобы получить бонусные очки.
-                </div>
+                <div className={style.description} dangerouslySetInnerHTML={{ __html: descriptionText }} />
                 <div className={style.buttons}>
                   <button 
                     className={style.cancelBtn}
@@ -195,6 +254,7 @@ class BonusModal extends Component {
                   <button 
                     className={style.getBtn}
                     onClick={this.handleGetBonus}
+                    disabled={!isAvailable}
                     onTouchStart={function(e) { e.stopPropagation(); }}
                     onTouchEnd={function(e) { 
                       e.stopPropagation(); 
@@ -246,7 +306,7 @@ class BonusModal extends Component {
                 <div className={style.icon}>😔</div>
                 <div className={style.titleText}>Реклама недоступна</div>
                 <div className={style.description}>
-                  Попробуйте позже
+                  {this.state.errorMessage || 'Попробуйте позже'}
                 </div>
                 <div className={style.buttons}>
                   <button 

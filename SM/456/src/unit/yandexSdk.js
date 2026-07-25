@@ -837,8 +837,6 @@ export var showPlatformAd = showFullscreenAd;
 
 // ===== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ =====
 export var showRewardedAd = function() {
- // console.log('🔥 showRewardedAd ВЫЗВАН!');
-  
   return new Promise(function(resolve) {
     if (typeof vkBridge === 'undefined') {
       console.log("ℹ️ VK Bridge не найден");
@@ -852,14 +850,20 @@ export var showRewardedAd = function() {
       return;
     }
     
-    var sendMethod = vkBridge.sendPromise || vkBridge.send;
-    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+    // 官方文档：ad_format: 'reward'[reference:1]
+    vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
       .then(function(data) {
-     //   console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
-        resolve(true);
+        // data.result === true 表示成功[reference:2]
+        if (data && data.result === true) {
+          console.log('✅ Реклама за вознаграждение успешно показана');
+          resolve(true);
+        } else {
+          console.log('⚠️ Реклама не была показана');
+          resolve(false);
+        }
       })
-      .catch(function(e) {
-        console.log("❌ Ошибка или реклама не досмотрена:", e);
+      .catch(function(error) {
+        console.error('❌ Ошибка при показе рекламы:', error);
         resolve(false);
       });
   });
