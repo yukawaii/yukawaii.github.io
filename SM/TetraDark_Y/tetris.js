@@ -18,11 +18,11 @@ let currentCollectionPage = 1;
 let currentCollectionCategory = null;
 const COLLECTION_ITEMS_PER_PAGE = 15;
 const CATEGORY_ORDER = ['blocks', 'animals', 'plants', 'space'];
-//console.log('=== Проверка глобальных функций ===');
-//console.log('typeof notifyGameplayStart:', typeof notifyGameplayStart);
-//console.log('typeof window.notifyGameplayStart:', typeof window.notifyGameplayStart);
-//console.log('typeof loginYandex:', typeof loginYandex);
-//console.log('typeof showYandexLeaderboard:', typeof showYandexLeaderboard);
+console.log('=== Проверка глобальных функций ===');
+console.log('typeof notifyGameplayStart:', typeof notifyGameplayStart);
+console.log('typeof window.notifyGameplayStart:', typeof window.notifyGameplayStart);
+console.log('typeof loginYandex:', typeof loginYandex);
+console.log('typeof showYandexLeaderboard:', typeof showYandexLeaderboard);
 
 // Увеличиваем количество клеток в ширь
 function calculateOptimalArenaWidth() {

@@ -2191,7 +2191,16 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
     /* ===== ОБЩИЕ ПРАВИЛА ДЛЯ ВСЕХ МОДАЛОК ===== */
  .modal-content{ padding: 4px 4px !important; gap: 2px !important; border-radius: 10px !important; max-height: 98vh !important;}
   .modal-overlay{ padding: 2px !important;}
- .modal-content .close-btn{ font-size: 14px !important; top: 2px !important; right: 4px !important; padding: 2px !important;}
+ .modal-content .close-btn {
+    position: absolute !important;
+    top: 2px !important;
+    right: 4px !important;
+    left: auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    font-size: 14px !important;
+    padding: 2px !important;
+}
  .modal-content h1, .modal-content h2, .modal-content h3{ font-size: 10px !important; margin-bottom: 1px !important; letter-spacing: 0.5px !important;}
  .modal-content p{ font-size: 10px !important; margin-bottom: 1px !important; line-height: 1.2 !important;}
     .modal-content button:not(.icon-btn):not(.pagination-btn) {
@@ -2459,8 +2468,9 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
     border-radius: 8px !important;
     box-sizing: border-box !important;
 }
-.modal-overlay{ padding: 1px !important}
-
+#scroll-text-modal .modal-content .close-btn {
+    width: auto !important;
+}
 }
 </style>
 <script src="./App.js"></script><script src="audio.js"></script><script src="scrolls.js"></script> 
@@ -2780,9 +2790,7 @@ div[style*="position: fixed"][style*="z-index: 999"]::before {
 <div id="scroll-text-modal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
         <!-- Крестик закрытия -->
-        <button onclick="closeScrollTextModal()" class="close-btn" style="position: absolute;  background: none; border: none; color: #64748b; cursor: pointer; font-family: 'Russo One', sans-serif;">
-            ✕
-        </button>
+        <button class="close-btn" onclick="closeScrollTextModal()"  style="position: absolute;  right: 20px; top: 15px; background: none; border: none; color: #64748b; cursor: pointer; font-family: 'Russo One', sans-serif;"> ✕ </button>
         
         <h2 id="scroll-text-title" style="color: #34d399; width: 100%; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-family: 'Russo One', sans-serif;">Свиток 1</h2>
         

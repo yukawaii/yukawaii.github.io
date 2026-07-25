@@ -4956,7 +4956,7 @@ function closeCustomConfirmModal() {
 // ========== НОВАЯ ФУНКЦИЯ ДЛЯ ПОКАЗА МЕНЮ ==========
 function showMainMenuWhenReady() {
     console.log('🟢 Игра готова, показываем меню и сообщаем платформе');
-
+ensureLeaderboardModal();
     // 1. Скрываем экран загрузки
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
@@ -5295,14 +5295,59 @@ function updateRecordText(text) {    const topEl = document.getElementById('yand
 }
 
 // ========== ТАБЛИЦА ЛИДЕРОВ ==========
+function ensureLeaderboardModal() {
+    if (!document.getElementById('leaderboard-modal')) {
+        const modal = document.createElement('div');
+        modal.id = 'leaderboard-modal';
+        modal.className = 'modal-overlay';
+        modal.style.display = 'none';
+        modal.style.zIndex = '1000000';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 400px;">
+                <h3 data-i18n="leaderboardTitle">Таблица лидеров</h3>
+                <div id="leaderboard-entries">
+                    <div id="leaderboard-loading" data-i18n="loading">Загрузка...</div>
+                    <div id="leaderboard-error" data-i18n="leaderboardLocalError">Лидерборды недоступны локально</div>
+                </div>
+                <button onclick="closeLeaderboardModal()" data-i18n="close">Закрыть</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+}
 function showYandexLeaderboard() {
+    console.log('вызвана showYandexLeaderboard');
     if (typeof pauseGame === 'function' && window.isGameStarted && !window.isGameOver) {
-        pauseGame();    }
-    const modal = document.getElementById('leaderboard-modal');    const container = document.getElementById('leaderboard-entries');
-    if (modal) modal.style.display = 'flex';
-  const t = window.getText || (key => key);
-if (container) container.innerHTML = `<div style="text-align: center; color: #64748b;">${t('leaderboardLoading')}</div>`;
-    if (!ysdkGame) {       if (container) container.innerHTML = `<div style="text-align: center; color: #ef4444;">${t('leaderboardLocalError')}</div>`;
+        pauseGame();
+    }
+
+    let modal = document.getElementById('leaderboard-modal');
+    if (!modal) {
+        ensureLeaderboardModal();
+        modal = document.getElementById('leaderboard-modal');
+    }
+
+    if (!modal) {
+        console.error('Модалка лидеров не найдена');
+        return;
+    }
+
+    // 🔥 ПЕРЕМЕЩАЕМ В КОНЕЦ BODY, ЧТОБЫ БЫТЬ ПОВЕРХ ВСЕХ
+    document.body.appendChild(modal);
+    // 🔥 УСТАНАВЛИВАЕМ ВЫСОКИЙ Z-INDEX
+    modal.style.zIndex = '1000000';
+    modal.style.display = 'flex';
+
+    const container = document.getElementById('leaderboard-entries');
+    const t = window.getText || (key => key);
+    if (container) {
+        container.innerHTML = `<div style="text-align: center; color: #64748b;">${t('leaderboardLoading')}</div>`;
+    }
+
+    if (!ysdkGame) {
+        if (container) {
+            container.innerHTML = `<div style="text-align: center; color: #ef4444;">${t('leaderboardLocalError')}</div>`;
+        }
         return;
     }
 
