@@ -84,434 +84,365 @@ this.panBaseY = 0;
         } catch(err) {}
     }
     
-    drawTemplate()
-    {
-        jQuery(this).on('click', function(e) {e.preventDefault; e.stopPropagation()})
-        jQuery(`
-            <style>
-                @font-face {
-                    font-family: 'Material Icons';
-                    font-style: normal;
-                    font-weight: 400;
-                    src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
-                }
-                .material-icons {
-                    font-family: 'Material Icons';
-                    font-weight: normal;
-                    font-style: normal;
-                    font-size: 18px;
-                    line-height: 1;
-                    letter-spacing: normal;
-                    text-transform: none;
-                    display: inline-block;
-                    white-space: nowrap;
-                    word-wrap: normal;
-                    direction: ltr;
-                }
-                .wrapper { 
-                    width:100%; 
-                    -webkit-touch-callout: none; 
-                    -webkit-user-select: none; 
-                    -khtml-user-select: none; 
-                    -moz-user-select: none; 
-                    -ms-user-select: none; 
-                    user-select: none;
-                    position: relative;
-                    overflow: hidden;
-                    touch-action: none;
-                }
-                
-                .imageNav img {
-                    box-sizing:border-box;
-                    border:3px solid transparent;
-                    width:12%; min-width:75px; max-width:150px;
-                    margin:4px;
-                }
-                .imageNav img.selected {
-                    border: 3px solid green; 
-                }
-                .toolbar {
-                    z-index:100000;
-                    position: sticky;
-                    position: -webkit-sticky; 
-                    top: 0;
-                    background-color: rgba(200,200,200,.1);
-                    padding: 4px 0;
-                }
-                .tools {
-                    display:flex;
-                    justify-content:flex-start;
-                    flex-wrap:wrap;
-                    max-width:100%;
-                    gap: 4px;
-                    align-items: center;
-                }
-                .sizerTool {
-                    cursor:inherit;
-                    align-self:flex-start;
-                    width:64px;
-                }
-                .spacer {
-                    flex-basis:0;
-                    flex-grow:1;
-                }
-                .tools > * {margin:2px}
+  drawTemplate()
+{
+    jQuery(this).on('click', function(e) {e.preventDefault; e.stopPropagation()})
+    jQuery(`
+        <style>
+            @font-face {
+                font-family: 'Material Icons';
+                font-style: normal;
+                font-weight: 400;
+                src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
+            }
+            .material-icons {
+                font-family: 'Material Icons';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 18px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+            }
+            .wrapper { 
+                width:100%; 
+                -webkit-touch-callout: none; 
+                -webkit-user-select: none; 
+                -khtml-user-select: none; 
+                -moz-user-select: none; 
+                -ms-user-select: none; 
+                user-select: none;
+                position: relative;
+                overflow: hidden;
+                touch-action: none;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .imageNav img {
+                box-sizing:border-box;
+                border:3px solid transparent;
+                width:12%; min-width:75px; max-width:150px;
+                margin:4px;
+            }
+            .imageNav img.selected {
+                border: 3px solid green; 
+            }
+            .toolbar {
+                z-index:100000;
+                position: sticky;
+                position: -webkit-sticky; 
+                top: 0;
+                background-color: rgba(200,200,200,.1);
+                padding: 4px 0;
+                flex-shrink: 0;
+            }
+            .tools {
+                display:flex;
+                justify-content:flex-start;
+                flex-wrap:wrap;
+                max-width:100%;
+                gap: 4px;
+                align-items: center;
+            }
+            .sizerTool {
+                cursor:inherit;
+                align-self:flex-start;
+                width:64px;
+            }
+            .spacer {
+                flex-basis:0;
+                flex-grow:1;
+            }
+            .tools > * {margin:2px}
 
-                .tools .button {
-                    background: rgba(168, 85, 247, 0.15) !important;
-                    border: 2px solid #a855f7 !important;
-                    border-radius: 8px !important;
-                    color: #f0eaff !important;
-                    padding: 4px 8px !important;
-                    cursor: pointer !important;
-                    transition: all 0.3s ease !important;
-                    font-size: 14px !important;
-                    display: inline-flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;
-                }
-                .tools .button:hover {
-                    background: #a855f7 !important;
-                    color: #ffffff !important;
-                    box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;
-                }
-                .tools .button:active {
-                    transform: scale(0.95) !important;
-                }
-                .tools .undoButton { border-color: #f59e0b !important; }
-                .tools .undoButton:hover { background: #f59e0b !important; }
-                .tools .clearButton { border-color: #ef4444 !important; }
-                .tools .clearButton:hover { background: #ef4444 !important; }
-                .tools .saveButton { border-color: #22c55e !important; }
-                .tools .saveButton:hover { background: #22c55e !important; }
-                               
-/* Стили для кнопки палитры (paletteToggle) */
-.paletteToggle {
-    border-color: #ec4899 !important;
-}
-.paletteToggle:focus,
-.paletteToggle:active {
-    outline: none !important;
-    box-shadow: none !important;
-}
-.paletteToggle:not(.active) {
-    background: rgba(168, 85, 247, 0.15) !important;
-    border-color: #a855f7 !important;
-    color: #f0eaff !important;
-}
-.paletteToggle:not(.active):hover {
-    background: rgba(168, 85, 247, 0.15) !important;
-    color: #f0eaff !important;
-}
-.paletteToggle.active {
-    background: #ec4899 !important;
-    color: #fff !important;
-    border-color: #ec4899 !important;
-}
-.paletteToggle.active:hover {
-    background: #ec4899 !important;
-    color: #fff !important;
-}
+            .tools .button {
+                background: rgba(168, 85, 247, 0.15) !important;
+                border: 2px solid #a855f7 !important;
+                border-radius: 8px !important;
+                color: #f0eaff !important;
+                padding: 4px 8px !important;
+                cursor: pointer !important;
+                transition: all 0.3s ease !important;
+                font-size: 14px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;
+            }
+            .tools .button:hover {
+                background: #a855f7 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;
+            }
+            .tools .button:active {
+                transform: scale(0.95) !important;
+            }
+            .tools .undoButton { border-color: #f59e0b !important; }
+            .tools .undoButton:hover { background: #f59e0b !important; }
+            .tools .clearButton { border-color: #ef4444 !important; }
+            .tools .clearButton:hover { background: #ef4444 !important; }
+            .tools .saveButton { border-color: #22c55e !important; }
+            .tools .saveButton:hover { background: #22c55e !important; }
+                           
+            .paletteToggle {
+                border-color: #ec4899 !important;
+            }
+            .paletteToggle:focus,
+            .paletteToggle:active {
+                outline: none !important;
+                box-shadow: none !important;
+            }
+            .paletteToggle:not(.active) {
+                background: rgba(168, 85, 247, 0.15) !important;
+                border-color: #a855f7 !important;
+                color: #f0eaff !important;
+            }
+            .paletteToggle:not(.active):hover {
+                background: rgba(168, 85, 247, 0.15) !important;
+                color: #f0eaff !important;
+            }
+            .paletteToggle.active {
+                background: #ec4899 !important;
+                color: #fff !important;
+                border-color: #ec4899 !important;
+            }
+            .paletteToggle.active:hover {
+                background: #ec4899 !important;
+                color: #fff !important;
+            }
 
-                               .palette {
-                    display: flex !important;
-                    flex-wrap: wrap !important;
-                    gap: 4px !important;
-                    padding: 4px 0 !important;
-                    align-items: center !important;
-                }
-                .palette .tool-btn {
-                    width: 28px !important;
-                    height: 28px !important;
-                    border-radius: 50% !important;
-                    border: 2px solid rgba(255, 255, 255, 0.15) !important;
-                    background: rgba(168, 85, 247, 0.15) !important;
-                    color: #f0eaff !important;
-                    padding: 0 !important;
-                    cursor: pointer !important;
-                    transition: all 0.2s ease !important;
-                    display: inline-flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    font-size: 0 !important;
-                    line-height: 0 !important;
-                    flex-shrink: 0 !important;
-                }
-                .palette .tool-btn i {
-                    font-size: 16px !important;
-                    line-height: 1 !important;
-                }
-                .palette .tool-btn:hover {
-                    transform: scale(1.15) !important;
-                    border-color: #a855f7 !important;
-                }
-                .palette .tool-btn.active {
-                    border-color: #a855f7 !important;
-                    transform: scale(1.2) !important;
-                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
-                }
-                .paletteColor {
-                    width: 28px !important;
-                    height: 28px !important;
-                    border-radius: 50% !important;
-                    border: 2px solid rgba(255, 255, 255, 0.15) !important;
-                    cursor: pointer !important;
-                    transition: all 0.2s ease !important;
-                    display: inline-block !important;
-                    flex-shrink: 0 !important;
-                }
-                .paletteColor:hover {
-                    transform: scale(1.15) !important;
-                    border-color: #a855f7 !important;
-                }
-                .paletteColor.selected {
-                    border-color: #a855f7 !important;
-                    transform: scale(1.2) !important;
-                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
-                }
-                .paletteColor.eraser {
-    background: transparent !important;
-    border-color: #efb944 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 16px !important;
-    color: #ecef44 !important;
-    font-weight: bold !important;
-}
-                
-                .canvasWrapper {
-                    display:inline-block;
-                    position:relative;
-                    width:100%;
-                    overflow: hidden;
-                    touch-action: none;
-                }
-                
-                .canvasContainer {
-                    position: relative;
-                    transform-origin: 0 0;
-                    transition: none;
-                    touch-action: none;
-                }
-                
-                .canvas {
-                    z-index:1000;
-                    position:absolute;
-                    top:0;left:0;
-                    width:100%;
-                    touch-action: none;
-                }
-                .activeCanvas {
-                    z-index:1001;
-                    position:absolute;
-                    top:0;left:0;
-                    width:100%;
-                    touch-action: none;
-                }
-                .canvasBackgroundImage {
-                    width:100%;
-                    display: block;
-                    pointer-events: none;
-                    touch-action: none;
-                }
-                
-                .zoom-indicator {
-                    position: absolute;
-                    bottom: 10px;
-                    right: 10px;
-                    background: rgba(0,0,0,0.6);
-                    color: white;
-                    padding: 4px 10px;
-                    border-radius: 12px;
-                    font-size: 12px;
-                    z-index: 2000;
-                    pointer-events: none;
-                }
-             /* Стили для кнопки лупы (zoomToggle) */
-.zoomToggle {
-    border-color: #3b82f6 !important;
-}
-.zoomToggle:focus,
-.zoomToggle:active {
-    outline: none !important;
-    box-shadow: none !important;
-}
-.zoomToggle:not(.active) {
-    background: rgba(168, 85, 247, 0.15) !important;
-    border-color: #a855f7 !important;
-    color: #f0eaff !important;
-}
-.zoomToggle:not(.active):hover {
-    background: rgba(168, 85, 247, 0.15) !important;
-    color: #f0eaff !important;
-}
-.zoomToggle.active {
-    background: #3b82f6 !important;
-    color: #fff !important;
-    border-color: #3b82f6 !important;
-}
-.zoomToggle.active:hover {
-    background: #3b82f6 !important;
-    color: #fff !important;
-}
-.zoomContainer {
-    display: inline-block;
-    margin-left: 4px;
-}
-
-.zoomTools {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    background: rgba(0,0,0,0.3);
-    padding: 4px 8px;
-    border-radius: 8px;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.zoom-btn {
-    background: rgba(59, 130, 246, 0.15) !important;
-    border: 2px solid #3b82f6 !important;
-    border-radius: 8px !important;
-    color: #f0eaff !important;
-    width: 32px !important;
-    height: 32px !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    font-size: 18px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-}
-.zoom-btn:hover {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.3) !important;
-}
-.zoom-btn:active {
-    transform: scale(0.95) !important;
-}
-
-/* Стили для кнопки "Рука" (panToggle) */
-.panToggle {
-    border-color: #3b82f6 !important;
-}
-.panToggle:focus,
-.panToggle:active {
-    outline: none !important;
-    box-shadow: none !important;
-}
-.panToggle:not(.active) {
-    background: rgba(168, 85, 247, 0.15) !important;
-    border-color: #a855f7 !important;
-    color: #f0eaff !important;
-}
-.panToggle:not(.active):hover {
-    background: rgba(168, 85, 247, 0.15) !important; /* Не меняем фон при наведении в неактивном состоянии */
-    color: #f0eaff !important;
-}
-.panToggle.active {
-    background: #3b82f6 !important;
-    color: #fff !important;
-    border-color: #3b82f6 !important;
-}
-.panToggle.active:hover {
-    background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */
-    color: #fff !important;
-}
-
-/* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
-@media (min-width: 1024px) {
-    .canvasWrapper {
-        flex: 1;              /* занимает всё свободное место */
-        min-height: 0;        /* разрешаем сжиматься */
-        overflow: hidden;
+            .palette {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                padding: 4px 0 !important;
+                align-items: center !important;
+            }
+            .palette .tool-btn {
+                width: 28px !important;
+                height: 28px !important;
+                border-radius: 50% !important;
+                border: 2px solid rgba(255, 255, 255, 0.15) !important;
+                background: rgba(168, 85, 247, 0.15) !important;
+                color: #f0eaff !important;
+                padding: 0 !important;
+                cursor: pointer !important;
+                transition: all 0.2s ease !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 0 !important;
+                line-height: 0 !important;
+                flex-shrink: 0 !important;
+            }
+            .palette .tool-btn i {
+                font-size: 16px !important;
+                line-height: 1 !important;
+            }
+            .palette .tool-btn:hover {
+                transform: scale(1.15) !important;
+                border-color: #a855f7 !important;
+            }
+            .palette .tool-btn.active {
+                border-color: #a855f7 !important;
+                transform: scale(1.2) !important;
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+            }
+            .paletteColor {
+                width: 28px !important;
+                height: 28px !important;
+                border-radius: 50% !important;
+                border: 2px solid rgba(255, 255, 255, 0.15) !important;
+                cursor: pointer !important;
+                transition: all 0.2s ease !important;
+                display: inline-block !important;
+                flex-shrink: 0 !important;
+            }
+            .paletteColor:hover {
+                transform: scale(1.15) !important;
+                border-color: #a855f7 !important;
+            }
+            .paletteColor.selected {
+                border-color: #a855f7 !important;
+                transform: scale(1.2) !important;
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+            }
+            .paletteColor.eraser {
+                background: transparent !important;
+                border-color: #efb944 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 16px !important;
+                color: #ecef44 !important;
+                font-weight: bold !important;
+            }
+            
+            .canvasWrapper {
+                flex: 1;
+                min-height: 0;
+                position: relative;
+                overflow: hidden;
+                touch-action: none;
+            }
+            
+            .canvasContainer {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transform-origin: 0 0;
+                transition: none;
+                touch-action: none;
+                overflow: hidden;
+            }
+            
+            .canvas {
+                z-index:1000;
+                position:absolute;
+                top:0;left:0;
+                touch-action: none;
+                /* width не задаём – будет установлен атрибутами */
+            }
+            .activeCanvas {
+                z-index:1001;
+                position:absolute;
+                top:0;left:0;
+                touch-action: none;
+            }
+            .canvasBackgroundImage {
+                display: block;
+                pointer-events: none;
+                touch-action: none;
+                /* width не задаём – будет натуральный размер */
+            }
+            
+            .zoom-indicator {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                background: rgba(0,0,0,0.6);
+                color: white;
+                padding: 4px 10px;
+                border-radius: 12px;
+                font-size: 12px;
+                z-index: 2000;
+                pointer-events: none;
+            }
+            
+            .zoomToggle {
+                border-color: #3b82f6 !important;
+            }
+            .zoomToggle:focus,
+            .zoomToggle:active {
+                outline: none !important;
+                box-shadow: none !important;
+            }
+            .zoomToggle:not(.active) {
+                background: rgba(168, 85, 247, 0.15) !important;
+                border-color: #a855f7 !important;
+                color: #f0eaff !important;
+            }
+            .zoomToggle:not(.active):hover {
+                background: rgba(168, 85, 247, 0.15) !important;
+                color: #f0eaff !important;
+            }
+            .zoomToggle.active {
+                background: #3b82f6 !important;
+                color: #fff !important;
+                border-color: #3b82f6 !important;
+            }
+            .zoomToggle.active:hover {
+                background: #3b82f6 !important;
+                color: #fff !important;
+            }
+            .zoomContainer {
+                display: inline-block;
+                margin-left: 4px;
+            }
+            .zoomTools {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+                background: rgba(0,0,0,0.3);
+                padding: 4px 8px;
+                border-radius: 8px;
+                border: 1px solid rgba(59, 130, 246, 0.3);
+            }
+            .zoom-btn {
+                background: rgba(59, 130, 246, 0.15) !important;
+                border: 2px solid #3b82f6 !important;
+                border-radius: 8px !important;
+                color: #f0eaff !important;
+                width: 32px !important;
+                height: 32px !important;
+                cursor: pointer !important;
+                transition: all 0.3s ease !important;
+                font-size: 18px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 0 !important;
+                line-height: 1 !important;
+            }
+            .zoom-btn:hover {
+                background: #3b82f6 !important;
+                color: #ffffff !important;
+                box-shadow: 0 0 25px rgba(59, 130, 246, 0.3) !important;
+            }
+            .zoom-btn:active {
+                transform: scale(0.95) !important;
+            }
+            .panToggle {
+                border-color: #3b82f6 !important;
+            }
+            .panToggle:focus,
+            .panToggle:active {
+                outline: none !important;
+                box-shadow: none !important;
+            }
+            .panToggle:not(.active) {
+                background: rgba(168, 85, 247, 0.15) !important;
+                border-color: #a855f7 !important;
+                color: #f0eaff !important;
+            }
+            .panToggle:not(.active):hover {
+                background: rgba(168, 85, 247, 0.15) !important;
+                color: #f0eaff !important;
+            }
+            .panToggle.active {
+                background: #3b82f6 !important;
+                color: #fff !important;
+                border-color: #3b82f6 !important;
+            }
+            .panToggle.active:hover {
+                background: #3b82f6 !important;
+                color: #fff !important;
+            }
+        </style>
+    `).appendTo(this.shadowRoot);
+    
+    if (jQuery(this).attr('css')) {
+        jQuery(`<link href="${jQuery(this).attr('css')}" rel="stylesheet" type="text/css" />`).appendTo(this.shadowRoot);
     }
-
-    .canvasContainer {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-
-    /* Отменяем растяжение картинки и канвасов по ширине */
-    .canvasBackgroundImage,
-    .canvas,
-    .activeCanvas {
-        width: auto !important;
-        height: 100% !important; /* или auto, но тогда нужно следить за пропорциями */
-        /* лучше оставить width: auto, а height: 100% — тогда картинка будет по высоте,
-           а ширина подстроится, но может исказиться. Чтобы сохранить пропорции,
-           используем object-fit: contain для фона, но для canvas это сложнее.
-           Поэтому оставляем как есть — fitToScreen() сам подстроит масштаб. */
-    }
-
-    /* Убедимся, что картинка не вылезает за пределы */
-    .canvasWrapper {
-        position: relative;
-    }
-
-}
-    @media (min-width: 1024px) {
-    .wrapper {
-        height: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-    }
-    .toolbar {
-        flex-shrink: 0 !important;
-    }
-    .canvasWrapper {
-        flex: 1 1 auto !important;
-        min-height: 0 !important;
-        height: 100% !important;
-        overflow: hidden !important;
-        display: block !important;
-    }
-    .canvasContainer {
-        width: 100% !important;
-        height: 100% !important;
-        overflow: hidden !important;
-        position: relative !important;
-    }
-    .canvasBackgroundImage,
-    .canvas,
-    .activeCanvas {
-        width: auto !important;
-        height: auto !important;
-        max-width: 100% !important;
-        max-height: 100% !important;
-        display: block !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-    }
-}
-
-            </style>
-        `).appendTo(this.shadowRoot);
-        
-        if (jQuery(this).attr('css')) {
-            jQuery(`<link href="${jQuery(this).attr('css')}" rel="stylesheet" type="text/css" />`).appendTo(this.shadowRoot);
-        }
-        
-        jQuery(`
-            <div class="wrapper">
-                <div class="imageNav"></div>
-                <div class="toolbar">
-                    <div class="tools">
-                        <input class="sizerTool input" type="range" min="1" max="${jQuery(this).attr('maxbrushsize') || 32}">
-                        
-                        <button class="undoButton button"><i class="material-icons">undo</i></button>
-                        <button class="clearButton button"><i class="material-icons">clear</i></button>
-                        <button class="saveButton button"><i class="material-icons">save</i></button>
-                        
-                       <button class="zoomToggle button" id="zoomToggleBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
+    
+    jQuery(`
+        <div class="wrapper">
+            <div class="imageNav"></div>
+            <div class="toolbar">
+                <div class="tools">
+                    <input class="sizerTool input" type="range" min="1" max="${jQuery(this).attr('maxbrushsize') || 32}">
+                    
+                    <button class="undoButton button"><i class="material-icons">undo</i></button>
+                    <button class="clearButton button"><i class="material-icons">clear</i></button>
+                    <button class="saveButton button"><i class="material-icons">save</i></button>
+                    
+                   <button class="zoomToggle button" id="zoomToggleBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
 <div class="zoomContainer" style="display:none;">
     <div class="zoomTools">
         <button class="zoom-btn" id="zoomInBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
@@ -521,90 +452,102 @@ this.panBaseY = 0;
         <span class="zoom-level" id="zoomLevel">100%</span>
     </div>
 </div>
-                        
-                        <div class="spacer"></div>
-                        <button class="paletteToggle button"><i class="material-icons">palette</i></button>
-                    </div>
-                    <div class="paletteContainer" style="display:none;">
-                        <div class="palette"></div>
-                    </div>
+                    
+                    <div class="spacer"></div>
+                    <button class="paletteToggle button"><i class="material-icons">palette</i></button>
                 </div>
-                <div class="canvasWrapper">
-                    <div class="canvasContainer" id="canvasContainer">
-                    </div>
-                    <div class="zoom-indicator" id="zoomIndicator">100%</div>
+                <div class="paletteContainer" style="display:none;">
+                    <div class="palette"></div>
                 </div>
             </div>
-        `).appendTo(this.shadowRoot);
-        
-        this.sizer = jQuery('.sizerTool', this.shadowRoot);
-        this.sizer.val(15);
-        this.wrapper = jQuery('.wrapper', this.shadowRoot);
-this.wrapper.css('height', '100%');
-this.wrapper.css('display', 'flex');
-this.wrapper.css('flex-direction', 'column');
-
-        this.canvasContainer = jQuery('#canvasContainer', this.shadowRoot);
-this.canvasContainer.css('will-change', 'transform');
-
-        this.zoomIndicator = jQuery('#zoomIndicator', this.shadowRoot);
-        
-        this.generatePalette();
-        this.drawImageNav();
-        
-        let me = this;
-        
-        jQuery('.sizerTool', this.shadowRoot).on('input', function(){me.updateSize()});
-        jQuery('.undoButton', this.shadowRoot).on('click', function(){me.paths.pop(); localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths)); me.refresh();});
-        jQuery('.clearButton', this.shadowRoot).on('click', function(){me.paths=[];localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths));me.refresh();});
-        jQuery('.saveButton', this.shadowRoot).on('click', function() {me.save()});
-        
-jQuery('#zoomToggleBtn', this.shadowRoot).on('click', function() {
-    const container = jQuery('.zoomContainer', me.shadowRoot);
-    container.toggle();
-    const btn = jQuery(this);
-    btn.toggleClass('active');
-    btn.blur();
-});
-        jQuery('#zoomInBtn', this.shadowRoot).on('click', function() { me.zoomIn(); });
-        jQuery('#zoomOutBtn', this.shadowRoot).on('click', function() { me.zoomOut(); });
-        jQuery('#zoomResetBtn', this.shadowRoot).on('click', function() { me.zoomReset(); });
-jQuery('#panToggleBtn', this.shadowRoot).on('click', function() {
-    me.panMode = !me.panMode;
-    const btn = jQuery(this);
-    btn.blur(); // снимаем фокус с кнопки
-    if (me.panMode) {
-        btn.addClass('active');
-        me.wrapper.css('cursor', 'grab');
-        me.activeCanvas.css('cursor', 'grab');
-        me.showToast('✋ Режим перемещения');
-    } else {
-        btn.removeClass('active');
-        me.setCursor();
-        me.activeCanvas.css('cursor', 'default');
-        me.showToast('🖌️ Режим рисования');
-    }
-});
-        
-       jQuery(this.wrapper).on('wheel', function(e) {
-    e.preventDefault();
-    var delta = Math.max(-1, Math.min(1, e.originalEvent.deltaY || e.originalEvent.wheelDelta || 0));
-    if (delta < 0) {
-        me.zoomIn();
-    } else if (delta > 0) {
-        me.zoomOut();
-    }
-});    
-jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
-    const container = jQuery('.paletteContainer', me.shadowRoot);
-    container.slideToggle(200);
-    const btn = jQuery(this);
-    btn.toggleClass('active');
-    btn.blur();
-});
-
-
-    }
+            <div class="canvasWrapper">
+                <div class="canvasContainer" id="canvasContainer">
+                </div>
+                <div class="zoom-indicator" id="zoomIndicator">100%</div>
+            </div>
+        </div>
+    `).appendTo(this.shadowRoot);
+    
+    this.sizer = jQuery('.sizerTool', this.shadowRoot);
+    this.sizer.val(15);
+    this.wrapper = jQuery('.wrapper', this.shadowRoot);
+    // Стили уже заданы в CSS, но продублируем для надёжности
+    this.wrapper.css('height', '100%');
+    this.wrapper.css('display', 'flex');
+    this.wrapper.css('flex-direction', 'column');
+    this.wrapper.css('overflow', 'hidden');
+    
+    this.canvasContainer = jQuery('#canvasContainer', this.shadowRoot);
+    this.canvasContainer.css('will-change', 'transform');
+    // Принудительно задаём размеры, чтобы контейнер точно занимал всё место
+    this.canvasContainer.css('width', '100%');
+    this.canvasContainer.css('height', '100%');
+    this.canvasContainer.css('overflow', 'hidden');
+    this.canvasContainer.css('position', 'relative');
+    
+    // Также для canvasWrapper
+    const canvasWrapper = jQuery('.canvasWrapper', this.shadowRoot);
+    canvasWrapper.css('flex', '1');
+    canvasWrapper.css('min-height', '0');
+    canvasWrapper.css('overflow', 'hidden');
+    canvasWrapper.css('position', 'relative');
+    
+    this.zoomIndicator = jQuery('#zoomIndicator', this.shadowRoot);
+    
+    this.generatePalette();
+    this.drawImageNav();
+    
+    let me = this;
+    
+    jQuery('.sizerTool', this.shadowRoot).on('input', function(){me.updateSize()});
+    jQuery('.undoButton', this.shadowRoot).on('click', function(){me.paths.pop(); localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths)); me.refresh();});
+    jQuery('.clearButton', this.shadowRoot).on('click', function(){me.paths=[];localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths));me.refresh();});
+    jQuery('.saveButton', this.shadowRoot).on('click', function() {me.save()});
+    
+    jQuery('#zoomToggleBtn', this.shadowRoot).on('click', function() {
+        const container = jQuery('.zoomContainer', me.shadowRoot);
+        container.toggle();
+        const btn = jQuery(this);
+        btn.toggleClass('active');
+        btn.blur();
+    });
+    jQuery('#zoomInBtn', this.shadowRoot).on('click', function() { me.zoomIn(); });
+    jQuery('#zoomOutBtn', this.shadowRoot).on('click', function() { me.zoomOut(); });
+    jQuery('#zoomResetBtn', this.shadowRoot).on('click', function() { me.zoomReset(); });
+    jQuery('#panToggleBtn', this.shadowRoot).on('click', function() {
+        me.panMode = !me.panMode;
+        const btn = jQuery(this);
+        btn.blur();
+        if (me.panMode) {
+            btn.addClass('active');
+            me.wrapper.css('cursor', 'grab');
+            me.activeCanvas.css('cursor', 'grab');
+            me.showToast('✋ Режим перемещения');
+        } else {
+            btn.removeClass('active');
+            me.setCursor();
+            me.activeCanvas.css('cursor', 'default');
+            me.showToast('🖌️ Режим рисования');
+        }
+    });
+    
+    jQuery(this.wrapper).on('wheel', function(e) {
+        e.preventDefault();
+        var delta = Math.max(-1, Math.min(1, e.originalEvent.deltaY || e.originalEvent.wheelDelta || 0));
+        if (delta < 0) {
+            me.zoomIn();
+        } else if (delta > 0) {
+            me.zoomOut();
+        }
+    });    
+    jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
+        const container = jQuery('.paletteContainer', me.shadowRoot);
+        container.slideToggle(200);
+        const btn = jQuery(this);
+        btn.toggleClass('active');
+        btn.blur();
+    });
+}
 
 
  generatePalette()
@@ -1620,6 +1563,13 @@ sizeCanvas() {
 }
 
 fitToScreen() {
+    const container = this.canvasContainer[0];
+    if (!container) {
+        this.zoomReset();
+        return;
+    }
+
+    // Получаем реальные размеры изображения
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
     if (!imgWidth || !imgHeight) {
@@ -1627,24 +1577,26 @@ fitToScreen() {
         return;
     }
 
-    // Получаем размеры окна (или iframe)
+    // Используем размеры окна (iframe), так как контейнер может быть растянут
     const winWidth = window.innerWidth;
     const winHeight = window.innerHeight;
 
-    // Определяем мобильное устройство
+    // Определяем, мобильное ли устройство (ширина < 1024 или touch)
     const isMobile = window.innerWidth < 1024 || ('ontouchstart' in window);
 
     let scale;
     if (isMobile) {
+        // На телефонах – масштабируем по ширине, как раньше
         scale = winWidth / imgWidth;
-        scale = Math.min(scale, 1);
+        scale = Math.min(scale, 1); // не увеличиваем
     } else {
-        // На ПК — вписываем по высоте, но с учётом ширины
+        // На ПК – масштабируем по высоте, чтобы картинка была видна целиком
         scale = winHeight / imgHeight;
+        // Если при этом ширина вылезает – уменьшаем по ширине
         if (scale * imgWidth > winWidth) {
             scale = winWidth / imgWidth;
         }
-        scale = Math.min(scale, 1);
+        scale = Math.min(scale, 1); // не увеличиваем сверх 1
     }
 
     scale = Math.max(scale, 0.1);
@@ -1652,6 +1604,9 @@ fitToScreen() {
     this.panX = 0;
     this.panY = 0;
     this.applyZoom();
+
+    // Отладка (можно убрать)
+    console.log('📐 fitToScreen: scale =', scale, 'window:', winWidth, winHeight, 'img:', imgWidth, imgHeight);
 }
 
     updateSize() {
