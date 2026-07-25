@@ -424,9 +424,6 @@ this.panBaseY = 0;
     color: #fff !important;
 }
 
-
-
-
 /* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
 @media (min-width: 1024px) {
     .canvasWrapper {
@@ -456,6 +453,43 @@ this.panBaseY = 0;
     /* Убедимся, что картинка не вылезает за пределы */
     .canvasWrapper {
         position: relative;
+    }
+
+}
+    @media (min-width: 1024px) {
+    .wrapper {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+    .toolbar {
+        flex-shrink: 0 !important;
+    }
+    .canvasWrapper {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        display: block !important;
+    }
+    .canvasContainer {
+        width: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        position: relative !important;
+    }
+    .canvasBackgroundImage,
+    .canvas,
+    .activeCanvas {
+        width: auto !important;
+        height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        display: block !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
     }
 }
 
@@ -827,7 +861,12 @@ if (!me._resizeBound) {
             if (!me.color) {
                 jQuery('.paletteColor.color3', me.shadowRoot).trigger('click');
             }
-        });
+        
+            me.fitToScreen();
+    setTimeout(() => me.fitToScreen(), 300);
+
+
+});
         
         this.activeCanvas.on('mousedown', function(e) {
     if (me.panMode) {
@@ -1596,25 +1635,21 @@ fitToScreen() {
         return;
     }
 
-    // Определяем, мобильное ли устройство (ширина < 1024px или есть touch)
-    const isMobile = window.innerWidth < 1024 || ('ontouchstart' in window);
-
+    const isDesktop = window.innerWidth >= 1024 && !('ontouchstart' in window);
     let scale;
-    if (isMobile) {
-        // На телефонах и планшетах — вписываем по ширине (как было)
-        scale = availableWidth / imgWidth;
-        scale = Math.min(scale, 1);  // не увеличиваем сверх 1
-    } else {
-        // На ПК — вписываем по высоте, чтобы картинка была видна целиком
+    if (isDesktop) {
+        // На ПК — вписываем по высоте (с учётом ширины)
         scale = availableHeight / imgHeight;
-        // Если при этом ширина вылезает за пределы — уменьшаем по ширине
         if (scale * imgWidth > availableWidth) {
             scale = availableWidth / imgWidth;
         }
-        scale = Math.min(scale, 1);  // не увеличиваем сверх 1
+        scale = Math.min(scale, 1);
+    } else {
+        // На мобильных — по ширине
+        scale = availableWidth / imgWidth;
+        scale = Math.min(scale, 1);
     }
-
-    scale = Math.max(scale, 0.1); // минимальный масштаб
+    scale = Math.max(scale, 0.1);
     this.zoomLevel = scale;
     this.panX = 0;
     this.panY = 0;
