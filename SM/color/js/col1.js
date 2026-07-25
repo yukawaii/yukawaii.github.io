@@ -84,108 +84,108 @@ this.panBaseY = 0;
         } catch(err) {}
     }
     
-drawTemplate()
-{
-    jQuery(this).on('click', function(e) {e.preventDefault; e.stopPropagation()})
-    jQuery(`
-        <style>
-            @font-face {
-                font-family: 'Material Icons';
-                font-style: normal;
-                font-weight: 400;
-                src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
-            }
-            .material-icons {
-                font-family: 'Material Icons';
-                font-weight: normal;
-                font-style: normal;
-                font-size: 18px;
-                line-height: 1;
-                letter-spacing: normal;
-                text-transform: none;
-                display: inline-block;
-                white-space: nowrap;
-                word-wrap: normal;
-                direction: ltr;
-            }
-            .wrapper { 
-                width:100%; 
-                -webkit-touch-callout: none; 
-                -webkit-user-select: none; 
-                -khtml-user-select: none; 
-                -moz-user-select: none; 
-                -ms-user-select: none; 
-                user-select: none;
-                position: relative;
-                overflow: hidden;
-                touch-action: none;
-            }
-            
-            .imageNav img {
-                box-sizing:border-box;
-                border:3px solid transparent;
-                width:12%; min-width:75px; max-width:150px;
-                margin:4px;
-            }
-            .imageNav img.selected {
-                border: 3px solid green; 
-            }
-            .toolbar {
-                z-index:100000;
-                position: sticky;
-                position: -webkit-sticky; 
-                top: 0;
-                background-color: rgba(200,200,200,.1);
-                padding: 4px 0;
-            }
-            .tools {
-                display:flex;
-                justify-content:flex-start;
-                flex-wrap:wrap;
-                max-width:100%;
-                gap: 4px;
-                align-items: center;
-            }
-            .sizerTool {
-                cursor:inherit;
-                align-self:flex-start;
-                width:64px;
-            }
-            .spacer {
-                flex-basis:0;
-                flex-grow:1;
-            }
-            .tools > * {margin:2px}
+    drawTemplate()
+    {
+        jQuery(this).on('click', function(e) {e.preventDefault; e.stopPropagation()})
+        jQuery(`
+            <style>
+                @font-face {
+                    font-family: 'Material Icons';
+                    font-style: normal;
+                    font-weight: 400;
+                    src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
+                }
+                .material-icons {
+                    font-family: 'Material Icons';
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 18px;
+                    line-height: 1;
+                    letter-spacing: normal;
+                    text-transform: none;
+                    display: inline-block;
+                    white-space: nowrap;
+                    word-wrap: normal;
+                    direction: ltr;
+                }
+                .wrapper { 
+                    width:100%; 
+                    -webkit-touch-callout: none; 
+                    -webkit-user-select: none; 
+                    -khtml-user-select: none; 
+                    -moz-user-select: none; 
+                    -ms-user-select: none; 
+                    user-select: none;
+                    position: relative;
+                    overflow: hidden;
+                    touch-action: none;
+                }
+                
+                .imageNav img {
+                    box-sizing:border-box;
+                    border:3px solid transparent;
+                    width:12%; min-width:75px; max-width:150px;
+                    margin:4px;
+                }
+                .imageNav img.selected {
+                    border: 3px solid green; 
+                }
+                .toolbar {
+                    z-index:100000;
+                    position: sticky;
+                    position: -webkit-sticky; 
+                    top: 0;
+                    background-color: rgba(200,200,200,.1);
+                    padding: 4px 0;
+                }
+                .tools {
+                    display:flex;
+                    justify-content:flex-start;
+                    flex-wrap:wrap;
+                    max-width:100%;
+                    gap: 4px;
+                    align-items: center;
+                }
+                .sizerTool {
+                    cursor:inherit;
+                    align-self:flex-start;
+                    width:64px;
+                }
+                .spacer {
+                    flex-basis:0;
+                    flex-grow:1;
+                }
+                .tools > * {margin:2px}
 
-            .tools .button {
-                background: rgba(168, 85, 247, 0.15) !important;
-                border: 2px solid #a855f7 !important;
-                border-radius: 8px !important;
-                color: #f0eaff !important;
-                padding: 4px 8px !important;
-                cursor: pointer !important;
-                transition: all 0.3s ease !important;
-                font-size: 14px !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;
-            }
-            .tools .button:hover {
-                background: #a855f7 !important;
-                color: #ffffff !important;
-                box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;
-            }
-            .tools .button:active {
-                transform: scale(0.95) !important;
-            }
-            .tools .undoButton { border-color: #f59e0b !important; }
-            .tools .undoButton:hover { background: #f59e0b !important; }
-            .tools .clearButton { border-color: #ef4444 !important; }
-            .tools .clearButton:hover { background: #ef4444 !important; }
-            .tools .saveButton { border-color: #22c55e !important; }
-            .tools .saveButton:hover { background: #22c55e !important; }
-                           
+                .tools .button {
+                    background: rgba(168, 85, 247, 0.15) !important;
+                    border: 2px solid #a855f7 !important;
+                    border-radius: 8px !important;
+                    color: #f0eaff !important;
+                    padding: 4px 8px !important;
+                    cursor: pointer !important;
+                    transition: all 0.3s ease !important;
+                    font-size: 14px !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;
+                }
+                .tools .button:hover {
+                    background: #a855f7 !important;
+                    color: #ffffff !important;
+                    box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;
+                }
+                .tools .button:active {
+                    transform: scale(0.95) !important;
+                }
+                .tools .undoButton { border-color: #f59e0b !important; }
+                .tools .undoButton:hover { background: #f59e0b !important; }
+                .tools .clearButton { border-color: #ef4444 !important; }
+                .tools .clearButton:hover { background: #ef4444 !important; }
+                .tools .saveButton { border-color: #22c55e !important; }
+                .tools .saveButton:hover { background: #22c55e !important; }
+                               
 /* Стили для кнопки палитры (paletteToggle) */
 .paletteToggle {
     border-color: #ec4899 !important;
@@ -423,6 +423,42 @@ drawTemplate()
     background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */
     color: #fff !important;
 }
+
+
+
+
+/* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
+@media (min-width: 1024px) {
+    .canvasWrapper {
+        flex: 1;              /* занимает всё свободное место */
+        min-height: 0;        /* разрешаем сжиматься */
+        overflow: hidden;
+    }
+
+    .canvasContainer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Отменяем растяжение картинки и канвасов по ширине */
+    .canvasBackgroundImage,
+    .canvas,
+    .activeCanvas {
+        width: auto !important;
+        height: 100% !important; /* или auto, но тогда нужно следить за пропорциями */
+        /* лучше оставить width: auto, а height: 100% — тогда картинка будет по высоте,
+           а ширина подстроится, но может исказиться. Чтобы сохранить пропорции,
+           используем object-fit: contain для фона, но для canvas это сложнее.
+           Поэтому оставляем как есть — fitToScreen() сам подстроит масштаб. */
+    }
+
+    /* Убедимся, что картинка не вылезает за пределы */
+    .canvasWrapper {
+        position: relative;
+    }
+}
+
             </style>
         `).appendTo(this.shadowRoot);
         
@@ -791,12 +827,7 @@ if (!me._resizeBound) {
             if (!me.color) {
                 jQuery('.paletteColor.color3', me.shadowRoot).trigger('click');
             }
-        
-            me.fitToScreen();
-    setTimeout(() => me.fitToScreen(), 300);
-
-
-});
+        });
         
         this.activeCanvas.on('mousedown', function(e) {
     if (me.panMode) {
@@ -1550,11 +1581,13 @@ sizeCanvas() {
 }
 
 fitToScreen() {
+    console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
         return;
     }
+    // Используем getBoundingClientRect для точных размеров
     const rect = container.getBoundingClientRect();
     const availableWidth = rect.width;
     const availableHeight = rect.height;
