@@ -301,7 +301,7 @@ html, body {
     box-shadow: 0 0 60px var(--glow-color);
     max-width: 700px;
     width: 100%;
-    max-height: 98vh;
+       max-height: 90dvh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -1135,9 +1135,13 @@ jl-coloringbook canvas {
 .canvasContainer {
     position: relative;
     transform-origin: 0 0;
-    touch-action: none;
+   /* touch-action: none;*/
 }
-
+@media (max-width: 768px) {
+    .app-container {
+        padding-bottom: 60px; /* для рекламного банера */
+    }
+}
 .zoom-indicator {
     position: absolute;
     bottom: 10px;
@@ -1235,13 +1239,30 @@ jl-coloringbook canvas {
 }
 /* Запрет скролла на всей странице */
 html, body {
-    touch-action: none;
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: auto;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
     height: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overscroll-behavior: none;
+    overflow: hidden; /* оставляем, но не fixed */
+    touch-action: auto; /* разрешаем касания */
+    -webkit-user-select: none;
+    user-select: none;
+}
+.app-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+button, .btn-neon, .btn-circle, .category-btn, .level-btn, .modal-close, .btn-pagination, .theme-btn {
+    touch-action: manipulation; /* разрешает касания, но предотвращает зумирование */
 }
 
 /* Разрешаем скролл только внутри модалок */
@@ -1649,4 +1670,57 @@ input, textarea {
     left: 0 !important;
     width: 100% !important;
     height: 100% !important;
+}
+/* Экстремально низкие экраны (высота < 500px) и узкие */
+@media (max-height: 500px), (max-width: 360px) {
+    .app-container {
+        padding: 8px 10px;
+    }
+    .glass-card {
+        padding: 10px 12px;
+    }
+    .app-title {
+        font-size: 18px;
+    }
+    .app-subtitle {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    .user-stats {
+        gap: 10px;
+        padding: 6px;
+    }
+    .stat-item {
+        font-size: 12px;
+    }
+    .stat-value {
+        font-size: 18px;
+    }
+    .category-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+    .category-grid {
+        gap: 8px;
+        margin: 8px 0;
+    }
+    .btn-neon {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    .vk-actions {
+        gap: 6px;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+    .vk-actions .btn-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+    .action-buttons .btn-neon {
+        font-size: 11px;
+        padding: 4px 10px;
+    }
 }
