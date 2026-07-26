@@ -447,47 +447,20 @@
         .hidden { display: none !important; }
         .fade-transition { transition: opacity 0.3s ease; }
         ::-webkit-scrollbar { display: none; }
-
-        /* ===== СВЕТЛАЯ ТЕМА ТОЛЬКО ДЛЯ ИГРОВОГО ПОЛЯ ===== */
-/*#scene-game {
-    background: #fff5f5; 
-}
-
 #game-board {
-    background: #fff0f0 !important;
-    border: 2px solid rgba(232, 131, 131, 0.15) !important;
-    box-shadow: 0 8px 40px rgba(232, 131, 131, 0.15) !important;
+    position: relative;
 }
-
-
-.game-topbar {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid rgba(232, 131, 131, 0.1) !important;
+#game-board canvas {
+    position: relative;
+    z-index: 1;
 }
-.game-topbar .tb-item {
-    color: #a86a6a !important;
+#confetti-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    z-index: 100 !important;
+    overflow: visible !important;
 }
-.game-topbar .tb-item .tb-value {
-    color: #d96c6c !important;
-}
-.game-topbar .tb-btn {
-    border: 1px solid rgba(232, 131, 131, 0.15) !important;
-    background: rgba(255, 255, 255, 0.5) !important;
-    color: #a86a6a !important;
-}
-
-
-.game-overlay {
-    background: rgba(255, 240, 240, 0.85) !important;
-}
-.game-overlay .overlay-title {
-    color: #d96c6c !important;
-}
-.game-overlay .overlay-text {
-    color: #a86a6a !important;
-}
-.game-overlay .overlay-btn {
-    background: linear-gradient(135deg, #f5a0a0, #e88383) !important;
-    color: #fff !important;
-}*/

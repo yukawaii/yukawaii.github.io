@@ -333,15 +333,19 @@ const Game = {
             const { row, col } = cell;
             const target = this.board[row]?.[col];
             let canMerge = false;
-            if (target && this.dragStart) {
-                const item1 = this.dragStart.item;
-                if (target.type === item1.type && target.level === item1.level) {
-                    const typeIndex = item1.typeIndex;
-                    if (this.canMergeToLevel(typeIndex, item1.level)) {
-                        canMerge = true;
-                    }
-                }
-            }
+                                        if (target && this.dragStart) {
+                                            const item1 = this.dragStart.item;
+                                            // Проверяем, что target находится по соседству (строка и столбец отличаются не более чем на 1)
+                                            const dr = Math.abs(row - this.dragStart.row);
+                                            const dc = Math.abs(col - this.dragStart.col);
+                                            const isAdjacent = (dr <= 1 && dc <= 1) && !(dr === 0 && dc === 0);
+                                            if (isAdjacent && target.type === item1.type && target.level === item1.level) {
+                                                const typeIndex = item1.typeIndex;
+                                                if (this.canMergeToLevel(typeIndex, item1.level)) {
+                                                    canMerge = true;
+                                                }
+                                            }
+                                        }
 
             if (canMerge) {
                 this.dragTarget = { row, col, item: target };
@@ -351,32 +355,39 @@ const Game = {
         };
 
         // --- Обработка окончания перетаскивания ---
-        const onEnd = (e) => {
-            e.preventDefault();
-            if (!this.isDragging) return;
-            this.isDragging = false;
-            canvas.style.cursor = 'grab';
+const onEnd = (e) => {
+    e.preventDefault();
+    if (!this.isDragging) return;
+    this.isDragging = false;
+    canvas.style.cursor = 'grab';
 
-            if (this.dragTarget && this.dragStart) {
-                const { row: r1, col: c1 } = this.dragStart;
-                const { row: r2, col: c2 } = this.dragTarget;
-                if (r1 !== r2 || c1 !== c2) {
-                    this.combineItems(r1, c1, r2, c2);
-                } else {
-                    // Если цели нет – возвращаем предмет на место
-                    this.board[r1][c1] = this.dragStart.item;
-                }
+    if (this.dragTarget && this.dragStart) {
+        const { row: r1, col: c1 } = this.dragStart;
+        const { row: r2, col: c2 } = this.dragTarget;
+        if (r1 !== r2 || c1 !== c2) {
+            // Проверка на соседство (по прямой или диагонали)
+            const rowDiff = Math.abs(r1 - r2);
+            const colDiff = Math.abs(c1 - c2);
+            const isAdjacent = (rowDiff <= 1 && colDiff <= 1) && !(rowDiff === 0 && colDiff === 0);
+            if (isAdjacent) {
+                this.combineItems(r1, c1, r2, c2);
             } else {
-                // Возвращаем предмет на исходную клетку
-                if (this.dragStart) {
-                    this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
-                }
+                // Не соседние – возвращаем предмет на место
+                this.board[r1][c1] = this.dragStart.item;
             }
+        } else {
+            this.board[r1][c1] = this.dragStart.item;
+        }
+    } else {
+        if (this.dragStart) {
+            this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
+        }
+    }
 
-            this.dragStart = null;
-            this.dragTarget = null;
-            this.selectedItem = null;
-        };
+    this.dragStart = null;
+    this.dragTarget = null;
+    this.selectedItem = null;
+};
 
         canvas.addEventListener('mousedown', onStart);
         canvas.addEventListener('mousemove', onMove);
@@ -414,109 +425,109 @@ const Game = {
     },
 
     // ---------- АНИМАЦИИ (tsParticles + пульсация) ----------
-    spawnConfetti(row, col) {
-        if (this.particlesRunning) return;
-        this.particlesRunning = true;
+spawnConfetti(row, col) {
+    if (this.particlesRunning) return;
+    this.particlesRunning = true;
 
-        const boardEl = document.getElementById('game-board');
-        const rect = boardEl.getBoundingClientRect();
-        const x = rect.left + col * this.cellWidth + this.cellWidth / 2;
-        const y = rect.top + row * this.cellHeight + this.cellHeight / 2;
+    const colors = ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ffe066', '#ff6b6b', '#ff85a2'];
+    const count = 40;
+    const particles = [];
 
-        const container = document.createElement('div');
-        container.id = 'confetti-container';
-        container.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 15;
-            overflow: visible;
-        `;
-        boardEl.appendChild(container);
+    // Центр клетки (в пикселях canvas)
+    const cx = col * this.cellWidth + this.cellWidth / 2;
+    const cy = row * this.cellHeight + this.cellHeight / 2;
 
-        tsParticles.load(container, {
-            fpsLimit: 60,
-            particles: {
-                number: {
-                    value: 30,
-                    density: { enable: false },
-                },
-                color: {
-                    value: ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ffe066', '#ff6b6b'],
-                },
-                shape: {
-                    type: ['circle', 'square', 'triangle'],
-                },
-                opacity: {
-                    value: { min: 0.3, max: 0.9 },
-                    animation: { enable: true, speed: 0.5, startValue: 'random' },
-                },
-                size: {
-                    value: { min: 3, max: 8 },
-                    animation: { enable: true, speed: 2, startValue: 'random' },
-                },
-                move: {
-                    enable: true,
-                    speed: { min: 2, max: 6 },
-                    direction: 'none',
-                    random: true,
-                    straight: false,
-                    outModes: { default: 'out' },
-                    gravity: { enable: true, acceleration: 0.3 },
-                },
-                life: {
-                    duration: { value: 1.2 },
-                    count: 1,
-                },
-            },
-            emitters: {
-                position: { x: 50, y: 50 },
-                size: { width: 0, height: 0 },
-                rate: { quantity: 30, delay: 0 },
-                life: { duration: 0.1, count: 1 },
-            },
-        }).then((container) => {
-            this.particlesContainer = container;
-            setTimeout(() => {
-                if (this.particlesContainer) {
-                    this.particlesContainer.destroy();
-                    this.particlesContainer = null;
-                }
-                if (container.parentNode) {
-                    container.parentNode.removeChild(container);
-                }
-                this.particlesRunning = false;
-                // Убираем пульсацию с объединённого предмета
-                this.pulseItems = this.pulseItems.filter(p => !(p.row === row && p.col === col));
-            }, 1500);
+    for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1 + Math.random() * 4;
+        const size = 3 + Math.random() * 5;
+        particles.push({
+            x: cx,
+            y: cy,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1,
+            size: size,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 1,
+            decay: 0.006 + Math.random() * 0.012,
+            gravity: 0.05,
         });
-    },
+    }
+
+    // Анимация конфетти
+    const animateConfetti = () => {
+        if (particles.length === 0) {
+            this.particlesRunning = false;
+            this.pulseItems = this.pulseItems.filter(p => !(p.row === row && p.col === col));
+            return;
+        }
+        // Обновляем частицы
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.life -= p.decay;
+            p.size *= 0.99;
+            if (p.life <= 0 || p.size < 0.2) {
+                particles.splice(i, 1);
+            }
+        }
+        // Рисуем частицы поверх всего
+        const ctx = this.ctx;
+        ctx.save();
+        for (const p of particles) {
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 4;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+        // Продолжаем, пока есть частицы
+        requestAnimationFrame(animateConfetti);
+    };
+
+    animateConfetti();
+},
 
     // Добавляем пульсацию для предмета
-    addPulse(row, col) {
-        const existing = this.pulseItems.find(p => p.row === row && p.col === col);
-        if (existing) return;
-        this.pulseItems.push({
-            row,
-            col,
-            progress: 0,
-            speed: 0.03 + Math.random() * 0.02,
-        });
-    },
+addPulse(row, col) {
+    const existing = this.pulseItems.find(p => p.row === row && p.col === col);
+    if (existing) return;
+    this.pulseItems.push({
+        row,
+        col,
+        progress: 0,
+        speed: 0.04,
+        direction: 1,  // 1 = увеличение, -1 = уменьшение
+        maxScale: 1.2, // заметное увеличение
+    });
+},
 
-    updatePulses() {
-        for (const p of this.pulseItems) {
-            p.progress += p.speed;
-            if (p.progress > 1) p.progress = 0;
+ updatePulses() {
+    for (let i = this.pulseItems.length - 1; i >= 0; i--) {
+        const p = this.pulseItems[i];
+        p.progress += p.speed * p.direction;
+        
+        if (p.direction === 1 && p.progress >= 1) {
+            p.direction = -1;
+            p.progress = 1;
+        } else if (p.direction === -1 && p.progress <= 0) {
+            // Анимация завершена - удаляем
+            this.pulseItems.splice(i, 1);
+            continue;
         }
-        this.pulseItems = this.pulseItems.filter(p => {
-            const item = this.board[p.row]?.[p.col];
-            return item !== null && item !== undefined;
-        });
-    },
+        
+        // Проверяем, существует ли ещё предмет
+        const item = this.board[p.row]?.[p.col];
+        if (!item) {
+            this.pulseItems.splice(i, 1);
+        }
+    }
+},
 
     // ---------- ЦИКЛ ОТРИСОВКИ ----------
     animateLoop() {
@@ -531,64 +542,92 @@ const Game = {
     drawAll() {
         if (!this.ctx) return;
         this.drawBoard();
+// Золотое свечение для dragTarget (под предметом, без пульсации, слабое)
+if (this.dragTarget) {
+    const { row, col } = this.dragTarget;
+    const cw = this.cellWidth;
+    const ch = this.cellHeight;
+    const x = col * cw + cw / 2;
+    const y = row * ch + ch / 2;
+    const radius = Math.min(cw, ch) * 0.45;
+    this.ctx.save();
+    // Свечение РИСУЕМ ПОД ПРЕДМЕТОМ - рисуем до отрисовки предмета
+    // Но в drawAll порядок: drawBoard() рисует предметы, потом этот блок.
+    // Чтобы свечение было ПОД предметом, его нужно рисовать ДО drawBoard().
+    // Проще всего перенести этот блок в начало drawAll, перед drawBoard().
+    const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, radius);
+    gradient.addColorStop(0, 'rgba(255, 215, 0, 0.15)');  // слабое золото
+    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+    this.ctx.fillStyle = gradient;
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+    this.ctx.fill();
+    this.ctx.restore();
+}
+
+
         this.drawDragGhost(this.dragMouseX, this.dragMouseY);
         this.drawPulseEffects();
-        // Добавляем пульсацию для hover-клетки (без зажатия)
-        if (this.hoverCell && !this.isDragging) {
-            const { row, col } = this.hoverCell;
-            const item = this.board[row]?.[col];
-            if (item) {
-                // Рисуем пульсирующий ореол вокруг клетки
-                this.drawHoverPulse(row, col);
-            }
-        }
-    },
 
-    drawHoverPulse(row, col) {
-        const ctx = this.ctx;
+
+
+        // Добавляем пульсацию для hover-клетки (без зажатия)
+if (this.hoverCell && !this.isDragging) {
+    const { row, col } = this.hoverCell;
+    // Проверяем, нет ли уже пульсации от объединения в этой клетке
+    const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
+    if (!hasPulse) {
+        const item = this.board[row]?.[col];
+        if (item) {
+        // Вместо рисования ореола – рисуем предмет с малой пульсацией
         const cw = this.cellWidth;
         const ch = this.cellHeight;
         const x = col * cw + cw / 2;
         const y = row * ch + ch / 2;
         const time = Date.now() / 1000;
-        const radius = Math.min(cw, ch) * 0.4 + Math.sin(time * 3) * 4;
-        ctx.save();
-        ctx.shadowColor = '#ffb07c';
-        ctx.shadowBlur = 20;
-        ctx.strokeStyle = `rgba(255, 176, 124, ${0.5 + 0.2 * Math.sin(time * 2)})`;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
+        const scale = 0.95 + 0.05 * Math.sin(time * 3);
+        const size = Math.min(cw, ch) * 0.7 * scale;
+        const img = this.getSpriteImage(item);
+        if (img) {
+            this.ctx.save();
+            this.ctx.translate(x, y);
+            this.ctx.scale(scale, scale);
+            this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
+            this.ctx.shadowBlur = 10;
+            this.ctx.drawImage(img, -size/2, -size/2, size, size);
+            this.ctx.restore();
+        }
+    }
+}}
     },
 
     drawPulseEffects() {
-        if (this.pulseItems.length === 0 || !this.ctx) return;
-        const ctx = this.ctx;
-        const cw = this.cellWidth;
-        const ch = this.cellHeight;
+    if (this.pulseItems.length === 0 || !this.ctx) return;
+    const ctx = this.ctx;
+    const cw = this.cellWidth;
+    const ch = this.cellHeight;
 
-        for (const p of this.pulseItems) {
-            const x = p.col * cw + cw / 2;
-            const y = p.row * ch + ch / 2;
-            const scale = 0.85 + 0.15 * Math.sin(p.progress * Math.PI * 2);
-            const size = Math.min(cw, ch) * 0.7 * scale;
+    for (const p of this.pulseItems) {
+        const x = p.col * cw + cw / 2;
+        const y = p.row * ch + ch / 2;
+        // progress: 0->1 (увеличение), 1->0 (уменьшение)
+        const scale = 1 + (p.maxScale - 1) * Math.sin(p.progress * Math.PI);
+        const size = Math.min(cw, ch) * 0.7 * scale;
 
-            const item = this.board[p.row]?.[p.col];
-            if (!item) continue;
-            const img = this.getSpriteImage(item);
-            if (!img) continue;
+        const item = this.board[p.row]?.[p.col];
+        if (!item) continue;
+        const img = this.getSpriteImage(item);
+        if (!img) continue;
 
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.scale(scale, scale);
-            ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
-            ctx.shadowBlur = 15;
-            ctx.drawImage(img, -size/2, -size/2, size, size);
-            ctx.restore();
-        }
-    },
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
+        ctx.shadowBlur = 15;
+        ctx.drawImage(img, -size/2, -size/2, size, size);
+        ctx.restore();
+    }
+},
 
     // ---------- ПРИЗРАК (без прозрачности) ----------
     drawDragGhost(mx, my) {
@@ -737,8 +776,10 @@ gradient.addColorStop(1, '#e6cccc');
                     ctx.fillRect(x + 2, y + 2, cw - 4, ch - 4);
                 }
 
-                const item = this.board[r]?.[c];
-                if (item) {
+          const item = this.board[r]?.[c];
+const isPulsing = this.pulseItems.some(p => p.row === r && p.col === c);
+const isHovering = this.hoverCell && !this.isDragging && this.hoverCell.row === r && this.hoverCell.col === c;
+if (item && !isPulsing && !isHovering) {
                     const size = Math.min(cw, ch) * 0.7;
                     const offsetX = (cw - size) / 2;
                     const offsetY = (ch - size) / 2;
