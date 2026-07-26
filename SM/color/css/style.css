@@ -1778,4 +1778,28 @@ input, textarea {
         padding: 8px 6px;
     }
 }
+/* Гарантируем, что все интерактивные элементы получают события */
+.glass-card,
+.glass-card *,
+.btn-neon,
+.category-btn,
+.btn-circle,
+.theme-btn,
+.btn-small {
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+}
 
+/* Убираем блокировку скролла, которая мешает касаниям */
+.app-container {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 100dvh;
+}
+
+/* Запрещаем скролл всей страницы через body */
+html, body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    height: 100%;
+}

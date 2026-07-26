@@ -1321,7 +1321,30 @@ function watchAdForDailyBonus() {
             showAdError();
         });
 }
-
+// ===== ПРИНУДИТЕЛЬНАЯ ОБРАБОТКА КАСАНИЙ =====
+(function fixTouchEvents() {
+    // Собираем все кнопки с onclick
+    const elements = document.querySelectorAll('[onclick]');
+    elements.forEach(el => {
+        const handler = el.getAttribute('onclick');
+        // Удаляем старый атрибут, чтобы не было конфликтов
+        el.removeAttribute('onclick');
+        
+        // Создаём функцию-обёртку
+        const fn = new Function('event', handler);
+        
+        // Основной обработчик – touchstart (срабатывает мгновенно)
+        el.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // предотвращаем дублирование
+            fn.call(this, e);
+        }, { passive: false });
+        
+        // Запасной – click (для мыши и некоторых браузеров)
+        el.addEventListener('click', function(e) {
+            fn.call(this, e);
+        });
+    });
+})();
 window.prevScrollPage = prevScrollPage;
 window.nextScrollPage = nextScrollPage;
 window.renderScrolls = renderScrolls;
