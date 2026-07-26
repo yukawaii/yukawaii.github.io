@@ -294,7 +294,7 @@ const VK_ACCESS_TOKEN = 'db3b39f4db3b39f4db3b39f470d8796a2dddb3bdb3b39f4b16d18e6
 // ===== ПОЛУЧЕНИЕ USER_ID =====
 function initVKUser() {
     const bridge = getVKBridge();
-    if (!bridge) return Promise.reject('VK Bridge not available');
+    if (!bridge) return Promise.resolve(null); // не reject, а resolve с null
     
     return bridge.send('VKWebAppGetLaunchParams')
         .then((data) => {
@@ -388,11 +388,16 @@ function showLeaderboard() {
 // ===== ИНИЦИАЛИЗАЦИЯ ПРИ СТАРТЕ =====
 // Вызываем в initVKBridge после успешной инициализации
 function initLeaderboard() {
-    initVKUser().then(() => {
-        if (vkUserId && window.appState) {
-            syncLeaderboard(window.appState.totalPoints);
-        }
-    });
+    initVKUser()
+        .then((userId) => {
+            if (userId && window.appState) {
+                syncLeaderboard(window.appState.totalPoints);
+            }
+        })
+        .catch((err) => {
+            // Игнорируем ошибку
+            console.warn('⚠️ Ошибка инициализации лидерборда:', err);
+        });
 }
 
 // Экспорт

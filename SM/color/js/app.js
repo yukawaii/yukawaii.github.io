@@ -433,6 +433,7 @@ function closeUnlockModal() {
 
 // ===== РЕКЛАМА =====
 function preloadRewardAd() {
+        if (typeof vkBridge === 'undefined') return;
     const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
     if (!bridge) {
         console.warn('⚠️ VK Bridge не доступен для предзагрузки рекламы');

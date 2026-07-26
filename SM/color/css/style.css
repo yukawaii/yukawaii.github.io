@@ -288,9 +288,11 @@ html, body {
     align-items: center;
     padding: 8px;
     overflow: hidden;
+     pointer-events: none;
 }
 
 .modal.show {
+     pointer-events: auto;
     display: flex;
 }
 
@@ -305,8 +307,15 @@ html, body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    
 }
-
+.modal .modal-content {
+    pointer-events: auto;
+}
+/* Чтобы фон не блокировал клики, когда модалка скрыта */
+.modal:not(.show) {
+    pointer-events: none;
+}
 .modal-large {
     max-width: 700px;
 }
@@ -1135,8 +1144,21 @@ jl-coloringbook canvas {
 .canvasContainer {
     position: relative;
     transform-origin: 0 0;
-   /* touch-action: none;*/
+  
 }
+/* Запрет жестов только на элементах, где нужно */
+.canvasWrapper,
+.canvasContainer,
+.canvas,
+.activeCanvas,
+#coloringCanvasWrapper,
+jl-coloringbook .wrapper,
+jl-coloringbook canvas,
+jl-coloringbook .canvasWrapper,
+jl-coloringbook .canvasContainer {
+    touch-action: none;
+}
+
 @media (max-width: 768px) {
     .app-container {
         padding-bottom: 60px; /* для рекламного банера */
@@ -1248,6 +1270,9 @@ html, body {
     touch-action: auto; /* разрешаем касания */
     -webkit-user-select: none;
     user-select: none;
+    -webkit-overflow-scrolling: auto;
+     position: fixed;
+    width: 100%;
 }
 .app-container {
     max-width: 650px;
@@ -1672,29 +1697,25 @@ input, textarea {
     height: 100% !important;
 }
 /* Экстремально низкие экраны (высота < 500px) и узкие */
-@media (max-height: 500px), (max-width: 360px) {
-    .app-container {
-        padding: 8px 10px;
-    }
-    .glass-card {
-        padding: 10px 12px;
-    }
+/* Очень низкие экраны (менее 400px по высоте) — уменьшаем всё */
+@media (max-height: 420px) {
     .app-title {
-        font-size: 18px;
+        font-size: 1.4rem;
     }
     .app-subtitle {
-        font-size: 12px;
+        font-size: 0.8rem;
         margin-bottom: 6px;
     }
     .user-stats {
         gap: 10px;
-        padding: 6px;
+        padding: 6px 10px;
+        margin-bottom: 8px;
     }
     .stat-item {
         font-size: 12px;
     }
     .stat-value {
-        font-size: 18px;
+        font-size: 16px;
     }
     .category-btn {
         width: 44px;
@@ -1702,25 +1723,62 @@ input, textarea {
         font-size: 18px;
     }
     .category-grid {
-        gap: 8px;
-        margin: 8px 0;
-    }
-    .btn-neon {
-        font-size: 12px;
-        padding: 6px 12px;
+        gap: 6px;
+        margin: 6px 0;
     }
     .vk-actions {
         gap: 6px;
-        margin-top: 8px;
-        padding-top: 8px;
+        margin-top: 6px;
+        padding-top: 6px;
     }
-    .vk-actions .btn-circle {
-        width: 36px;
-        height: 36px;
+    .btn-circle {
+        width: 34px;
+        height: 34px;
         font-size: 16px;
+    }
+    .glass-card {
+        padding: 12px 10px;
     }
     .action-buttons .btn-neon {
         font-size: 11px;
+        padding: 4px 8px;
+    }
+    .main-menu .btn-neon {
+        font-size: 12px;
+        padding: 6px 4px;
+    }
+    .theme-picker {
+        margin: 6px 0;
+        gap: 6px;
+    }
+    .theme-btn {
+        font-size: 12px;
         padding: 4px 10px;
+    }
+}
+
+/* Ещё более низкие (менее 320px) */
+@media (max-height: 320px) {
+    .app-title {
+        font-size: 1.2rem;
+    }
+    .category-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+    .btn-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    .user-stats .stat-item {
+        font-size: 10px;
+    }
+    .stat-value {
+        font-size: 13px;
+    }
+    .glass-card {
+        padding: 8px 6px;
     }
 }
