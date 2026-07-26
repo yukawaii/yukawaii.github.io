@@ -1,5 +1,5 @@
 // ============================================================
-//  GAME  — основная логика с гибкой настройкой сцен
+//  GAME  — с анимациями GSAP, светлой темой, точным позиционированием
 // ============================================================
 const Game = {
     rows: 9,
@@ -22,6 +22,10 @@ const Game = {
     isDragging: false,
     dragMouseX: 0,
     dragMouseY: 0,
+    dragOffsetX: 0,
+    dragOffsetY: 0,
+    scaleX: 1,
+    scaleY: 1,
 
     cellWidth: 0,
     cellHeight: 0,
@@ -30,12 +34,15 @@ const Game = {
     canvas: null,
     ctx: null,
 
+      // ---- НАСТРОЙКА ИМЁН ФАЙЛОВ ----
+    imageNames: [
+      'kartoha', 'perec', 'petrushka', 'shetka', 
+    ],
+
     itemTypes: [
-        '🥔', '🌶️', '🌿', '🧹', 
+         '🥔', '🌶️', '🌿', '🧹', 
     ],
-    englishNames: [
-        'kartoha', 'perec', 'petrushka', 'shetka', 
-    ],
+
     maxLevels: [],
     spriteMap: {},
     spritesLoaded: false,
@@ -53,20 +60,29 @@ const Game = {
     onTimerUpdate: null,
     onGameOver: null,
 
+    // --- Анимационные данные ---
+    pulseData: null,
+    particles: [],
+    floatingTexts: [],
+    particleAnimations: [],
+    textAnimations: [],
+
     // ---------- ЗАГРУЗКА СПРАЙТОВ ----------
     loadSprites(callback) {
         if (this.spritesLoaded) { callback && callback(); return; }
         const types = this.itemTypes;
         let totalAttempts = 0;
+        let anyLoaded = false;
 
         const checkLevel = (typeIndex, level) => {
-            const name = this.englishNames[typeIndex] || typeIndex;
+            const name = this.imageNames[typeIndex] || typeIndex;
             const path = `images/level${level}/${name}.png`;
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = () => {
                 const key = level + '_' + typeIndex;
                 this.spriteMap[key] = img;
+                anyLoaded = true;
                 checkLevel(typeIndex, level + 1);
             };
             img.onerror = () => {
@@ -74,7 +90,11 @@ const Game = {
                 totalAttempts++;
                 if (totalAttempts === types.length) {
                     this.spritesLoaded = true;
-                    console.log('[Game] Спрайты загружены, maxLevels:', this.maxLevels);
+                    if (!anyLoaded) {
+                        console.warn('[Game] Ни одно изображение не загрузилось. Проверьте пути и CORS.');
+                    } else {
+                        console.log('[Game] Спрайты загружены, maxLevels:', this.maxLevels);
+                    }
                     callback && callback();
                 }
             };
@@ -100,13 +120,12 @@ const Game = {
         return this.spriteMap[key] || null;
     },
 
-    // ---------- ОБНОВЛЕНИЕ КОНФИГА СЦЕНЫ ----------
     updateSceneConfig(newConfig) {
         Object.assign(this.sceneConfig, newConfig);
         this.init(this.rows, this.cols);
     },
 
-    // ---------- ИНИЦИАЛИЗАЦИЯ ИГРЫ ----------
+    // ---------- ИНИЦИАЛИЗАЦИЯ ----------
     init(rows, cols) {
         this.rows = rows || (this.isMobile ? this.mobileRows : 9);
         this.cols = cols || (this.isMobile ? this.mobileCols : 9);
@@ -121,6 +140,18 @@ const Game = {
         this.dragTarget = null;
         this.isDragging = false;
         this.board = [];
+
+        // Убиваем все старые анимации GSAP
+        if (this.pulseData && this.pulseData.timeline) {
+            this.pulseData.timeline.kill();
+        }
+        this.pulseData = null;
+        this.particles = [];
+        this.floatingTexts = [];
+        this.particleAnimations.forEach(anim => anim.kill());
+        this.particleAnimations = [];
+        this.textAnimations.forEach(anim => anim.kill());
+        this.textAnimations = [];
 
         const available = this.sceneConfig.availableTypes;
         const typeIndices = available || this.itemTypes.map((_, i) => i);
@@ -179,6 +210,7 @@ const Game = {
             this.score = prog.score || 0;
             this.level = prog.level || 1;
             this.updateUI();
+            this.animateLoop();
         });
     },
 
@@ -196,6 +228,10 @@ const Game = {
         canvas.height = size;
         canvas.style.width = size + 'px';
         canvas.style.height = size + 'px';
+
+        // Коэффициенты масштабирования (на случай, если CSS-размер отличается от canvas.width)
+        this.scaleX = canvas.width / rect.width;
+        this.scaleY = canvas.height / rect.height;
 
         this.boardSize = size;
         this.cellWidth = size / this.cols;
@@ -218,10 +254,10 @@ const Game = {
                 clientX = e.clientX;
                 clientY = e.clientY;
             }
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
+            // Применяем масштабирование, чтобы координаты соответствовали пикселям canvas
+            const x = (clientX - rect.left) * this.scaleX;
+            const y = (clientY - rect.top) * this.scaleY;
+            return { x, y };
         };
 
         const getCell = (x, y) => {
@@ -243,6 +279,11 @@ const Game = {
             const item = this.board[row]?.[col];
             if (!item) return;
 
+            const centerX = col * this.cellWidth + this.cellWidth / 2;
+            const centerY = row * this.cellHeight + this.cellHeight / 2;
+            this.dragOffsetX = pos.x - centerX;
+            this.dragOffsetY = pos.y - centerY;
+
             this.isDragging = true;
             this.dragStart = { row, col, item };
             this.selectedItem = { row, col, item };
@@ -250,7 +291,6 @@ const Game = {
             this.dragMouseY = pos.y;
             canvas.style.cursor = 'grabbing';
             this.drawBoard();
-            this.highlightCell(row, col);
             this.drawDragGhost(pos.x, pos.y);
         };
 
@@ -264,23 +304,39 @@ const Game = {
             const cell = getCell(pos.x, pos.y);
             if (!cell) {
                 this.dragTarget = null;
+                if (this.pulseData && this.pulseData.timeline) {
+                    this.pulseData.timeline.kill();
+                    this.pulseData = null;
+                }
                 this.drawBoard();
-                this.highlightCell(this.dragStart.row, this.dragStart.col);
                 this.drawDragGhost(pos.x, pos.y);
                 return;
             }
             const { row, col } = cell;
             const target = this.board[row]?.[col];
-            if (target && target.type === this.dragStart?.item?.type && target.level === this.dragStart?.item?.level) {
+            let canMerge = false;
+            if (target && this.dragStart) {
+                const item1 = this.dragStart.item;
+                if (target.type === item1.type && target.level === item1.level) {
+                    const typeIndex = item1.typeIndex;
+                    if (this.canMergeToLevel(typeIndex, item1.level)) {
+                        canMerge = true;
+                    }
+                }
+            }
+
+            if (canMerge) {
                 this.dragTarget = { row, col, item: target };
+                this.startPulse(row, col);
                 this.drawBoard();
-                this.highlightCell(row, col);
-                this.highlightCell(this.dragStart.row, this.dragStart.col);
                 this.drawDragGhost(pos.x, pos.y);
             } else {
                 this.dragTarget = null;
+                if (this.pulseData && this.pulseData.timeline) {
+                    this.pulseData.timeline.kill();
+                    this.pulseData = null;
+                }
                 this.drawBoard();
-                this.highlightCell(this.dragStart.row, this.dragStart.col);
                 this.drawDragGhost(pos.x, pos.y);
             }
         };
@@ -302,6 +358,10 @@ const Game = {
             this.dragStart = null;
             this.dragTarget = null;
             this.selectedItem = null;
+            if (this.pulseData && this.pulseData.timeline) {
+                this.pulseData.timeline.kill();
+                this.pulseData = null;
+            }
             this.drawBoard();
         };
 
@@ -340,28 +400,125 @@ const Game = {
         canvas.style.cursor = 'grab';
     },
 
-    highlightCell(row, col) {
-        if (!this.ctx) return;
-        const x = col * this.cellWidth;
-        const y = row * this.cellHeight;
-        this.ctx.save();
-        this.ctx.shadowColor = '#ffb07c';
-        this.ctx.shadowBlur = 20;
-        this.ctx.fillStyle = 'rgba(255, 176, 124, 0.35)';
-        this.ctx.fillRect(x + 2, y + 2, this.cellWidth - 4, this.cellHeight - 4);
-        this.ctx.restore();
+    // ---------- АНИМАЦИИ GSAP ----------
+    startPulse(row, col) {
+        if (this.pulseData && this.pulseData.row === row && this.pulseData.col === col) {
+            return;
+        }
+        if (this.pulseData && this.pulseData.timeline) {
+            this.pulseData.timeline.kill();
+            this.pulseData = null;
+        }
+
+        const maxRadius = Math.min(this.cellWidth, this.cellHeight) * 0.6;
+        const data = { radius: 10, alpha: 0.8 };
+        this.pulseData = { row, col, data };
+
+        const tl = gsap.timeline({ paused: false, repeat: -1, yoyo: true });
+        tl.to(data, {
+            radius: maxRadius,
+            alpha: 0.2,
+            duration: 0.8,
+            ease: "sine.inOut",
+        });
+        this.pulseData.timeline = tl;
     },
 
+    spawnParticles(row, col) {
+        const x = col * this.cellWidth + this.cellWidth / 2;
+        const y = row * this.cellHeight + this.cellHeight / 2;
+        const colors = ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ff4d4d'];
+        const count = 25;
+        for (let i = 0; i < count; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2 + Math.random() * 5;
+            const size = 4 + Math.random() * 10;
+            const particle = {
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 1.5,
+                size: size,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                alpha: 1,
+            };
+            this.particles.push(particle);
+            // Анимация через GSAP
+            const anim = gsap.to(particle, {
+                x: x + particle.vx * 30,
+                y: y + particle.vy * 30,
+                size: 0,
+                alpha: 0,
+                duration: 0.8 + Math.random() * 0.5,
+                ease: "power2.out",
+                onComplete: () => {
+                    const idx = this.particles.indexOf(particle);
+                    if (idx > -1) this.particles.splice(idx, 1);
+                }
+            });
+            this.particleAnimations.push(anim);
+        }
+    },
+
+    // ---------- ЦИКЛ ОТРИСОВКИ ----------
+    animateLoop() {
+        const loop = () => {
+            this.drawEffects();
+            requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+    },
+
+    drawEffects() {
+        if (!this.ctx) return;
+        const ctx = this.ctx;
+        const cw = this.cellWidth;
+        const ch = this.cellHeight;
+
+        // Пульсация
+        if (this.pulseData) {
+            const { row, col, data } = this.pulseData;
+            const x = col * cw + cw / 2;
+            const y = row * ch + ch / 2;
+            ctx.save();
+            ctx.shadowColor = '#ffb07c';
+            ctx.shadowBlur = 30;
+            ctx.beginPath();
+            ctx.arc(x, y, data.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 176, 124, ${data.alpha * 0.3})`;
+            ctx.fill();
+            ctx.strokeStyle = `rgba(255, 176, 124, ${data.alpha * 0.8})`;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Частицы
+        if (this.particles.length > 0) {
+            ctx.save();
+            for (const p of this.particles) {
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+    },
+
+    // ---------- ПРИЗРАК ----------
     drawDragGhost(mx, my) {
         if (!this.ctx || !this.dragStart) return;
         const item = this.dragStart.item;
         if (!item) return;
         const size = Math.min(this.cellWidth, this.cellHeight) * 0.7;
-        const x = mx - size/2;
-        const y = my - size/2;
+        // Центр предмета смещён относительно курсора на dragOffset
+        const x = mx - size/2 - this.dragOffsetX;
+        const y = my - size/2 - this.dragOffsetY;
 
         this.ctx.save();
-        this.ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        this.ctx.shadowColor = 'rgba(0,0,0,0.15)';
         this.ctx.shadowBlur = 20;
         this.ctx.globalAlpha = 0.9;
 
@@ -372,9 +529,9 @@ const Game = {
             this.ctx.font = size + 'px sans-serif';
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
-            this.ctx.fillStyle = '#ffffff';
+            this.ctx.fillStyle = '#d96c6c';
             this.ctx.shadowBlur = 20;
-            this.ctx.fillText(item.type, mx, my + 2);
+            this.ctx.fillText(item.type, mx - this.dragOffsetX, my - this.dragOffsetY + 2);
         }
         this.ctx.restore();
     },
@@ -396,10 +553,7 @@ const Game = {
 
         const typeIndex = item1.typeIndex;
         const currentLevel = item1.level;
-
-        if (!this.canMergeToLevel(typeIndex, currentLevel)) {
-            return;
-        }
+        if (!this.canMergeToLevel(typeIndex, currentLevel)) return;
 
         const newLevel = currentLevel + 1;
         this.board[r1][c1] = {
@@ -423,6 +577,7 @@ const Game = {
 
         AudioManager.play('combine');
 
+        this.spawnParticles(r1, c1);
         this.updateUI();
         this.checkWin();
         this.drawBoard();
@@ -430,8 +585,7 @@ const Game = {
     },
 
     checkWin() {
-        let emptyCount = 0;
-        let total = 0;
+        let emptyCount = 0, total = 0;
         for (let r = 1; r < this.rows - 1; r++) {
             for (let c = 1; c < this.cols - 1; c++) {
                 total++;
@@ -456,17 +610,22 @@ const Game = {
         if (!this.ctx) return;
         const x = col * this.cellWidth + this.cellWidth / 2;
         const y = row * this.cellHeight - 10;
-        this.ctx.save();
-        this.ctx.font = 'bold ' + (Math.min(this.cellWidth, this.cellHeight) * 0.35) + 'px sans-serif';
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'bottom';
-        this.ctx.shadowColor = 'rgba(0,0,0,0.6)';
-        this.ctx.shadowBlur = 12;
-        this.ctx.fillStyle = '#ffd4b8';
-        this.ctx.fillText(text, x, y);
-        this.ctx.restore();
+        const data = { alpha: 1, yOffset: 0, text, x, y };
+        this.floatingTexts.push(data);
+        const anim = gsap.to(data, {
+            alpha: 0,
+            yOffset: -30,
+            duration: 0.8,
+            ease: "power2.out",
+            onComplete: () => {
+                const idx = this.floatingTexts.indexOf(data);
+                if (idx > -1) this.floatingTexts.splice(idx, 1);
+            }
+        });
+        this.textAnimations.push(anim);
     },
 
+    // ---------- ОТРИСОВКА ДОСКИ ----------
     drawBoard() {
         const ctx = this.ctx;
         if (!ctx) return;
@@ -477,12 +636,12 @@ const Game = {
         ctx.clearRect(0, 0, w, w);
 
         const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
-        gradient.addColorStop(0, '#3d264f');
-        gradient.addColorStop(1, '#1a1225');
+        gradient.addColorStop(0, '#fff5f5');
+        gradient.addColorStop(1, '#ffd6d6');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, w, w);
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+        ctx.strokeStyle = 'rgba(200, 150, 150, 0.15)';
         ctx.lineWidth = 1;
         for (let i = 0; i <= this.cols; i++) {
             ctx.beginPath();
@@ -499,12 +658,10 @@ const Game = {
 
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
-                const x = c * cw;
-                const y = r * ch;
+                const x = c * cw, y = r * ch;
                 const isBorder = r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1;
-
                 if (!isBorder) {
-                    const shade = (r + c) % 2 === 0 ? 'rgba(255,212,184,0.08)' : 'rgba(255,212,184,0.04)';
+                    const shade = (r + c) % 2 === 0 ? 'rgba(255,240,240,0.6)' : 'rgba(255,220,220,0.3)';
                     ctx.fillStyle = shade;
                     ctx.fillRect(x + 2, y + 2, cw - 4, ch - 4);
                 }
@@ -515,35 +672,24 @@ const Game = {
                     const offsetX = (cw - size) / 2;
                     const offsetY = (ch - size) / 2;
                     const img = this.getSpriteImage(item);
-
                     ctx.save();
                     if (img) {
-                        ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                        ctx.shadowColor = 'rgba(200, 150, 150, 0.1)';
                         ctx.shadowBlur = 8;
                         ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
                     } else {
                         ctx.font = size + 'px sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
-                        ctx.fillStyle = '#ffffff';
-                        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                        ctx.shadowBlur = 6;
-                        ctx.fillText(item.type, x + cw/2, y + ch/2 + 2);
-                    }
-
-                    if (item.level > 1) {
-                        ctx.font = (Math.min(cw, ch) * 0.18) + 'px sans-serif';
-                        ctx.fillStyle = '#ffdd99';
+                        ctx.fillStyle = '#d96c6c';
+                        ctx.shadowColor = 'rgba(0,0,0,0.05)';
                         ctx.shadowBlur = 4;
-                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                        ctx.textAlign = 'right';
-                        ctx.textBaseline = 'bottom';
-                        ctx.fillText('x' + item.level, x + cw - 4, y + ch - 4);
+                        ctx.fillText(item.type, x + cw/2, y + ch/2 + 2);
                     }
                     ctx.restore();
                 } else if (!isBorder) {
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                    ctx.strokeStyle = 'rgba(200, 150, 150, 0.1)';
                     ctx.lineWidth = 1;
                     const cx = x + cw/2, cy = y + ch/2;
                     const d = Math.min(cw, ch) * 0.15;
@@ -558,11 +704,17 @@ const Game = {
             }
         }
 
-        if (this.dragStart && this.selectedItem) {
-            this.highlightCell(this.dragStart.row, this.dragStart.col);
-        }
-        if (this.dragTarget) {
-            this.highlightCell(this.dragTarget.row, this.dragTarget.col);
+        for (const ft of this.floatingTexts) {
+            ctx.save();
+            ctx.globalAlpha = ft.alpha;
+            ctx.font = 'bold ' + (Math.min(this.cellWidth, this.cellHeight) * 0.35) + 'px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.shadowColor = 'rgba(0,0,0,0.1)';
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = '#d96c6c';
+            ctx.fillText(ft.text, ft.x, ft.y + ft.yOffset);
+            ctx.restore();
         }
     },
 
