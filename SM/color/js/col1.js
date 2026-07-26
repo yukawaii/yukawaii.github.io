@@ -1581,33 +1581,60 @@ sizeCanvas() {
 }
 
 fitToScreen() {
-    console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
         return;
     }
-    // Используем getBoundingClientRect для точных размеров
-    const rect = container.getBoundingClientRect();
-    const availableWidth = rect.width;
-    const availableHeight = rect.height;
+
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
-    if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
+    if (imgWidth === 0 || imgHeight === 0) {
         this.zoomReset();
         return;
     }
+
+    // Определяем, ПК ли это (ширина экрана >= 1024px)
+    const isDesktop = window.innerWidth >= 1024;
+
+    let availableWidth, availableHeight;
+
+    if (isDesktop) {
+        // На ПК — используем реальные размеры окна (iframe)
+        availableWidth = window.innerWidth;
+        availableHeight = window.innerHeight;
+
+        // Вычитаем высоту тулбара (если он есть)
+        const toolbar = this.shadowRoot.querySelector('.toolbar');
+        if (toolbar) {
+            const toolbarHeight = toolbar.getBoundingClientRect().height;
+            availableHeight -= toolbarHeight;
+        }
+        // Небольшой запас на отступы
+        availableHeight -= 10;
+        availableWidth -= 10;
+    } else {
+        // На мобильных — используем размеры контейнера (как было)
+        const rect = container.getBoundingClientRect();
+        availableWidth = rect.width;
+        availableHeight = rect.height;
+        if (availableWidth === 0 || availableHeight === 0) {
+            this.zoomReset();
+            return;
+        }
+    }
+
     const scaleX = availableWidth / imgWidth;
     const scaleY = availableHeight / imgHeight;
     let scale = Math.min(scaleX, scaleY);
-    scale = Math.min(scale, 1);
+    scale = Math.min(scale, 1); // не увеличиваем сверх 1
     scale = Math.max(scale, 0.1);
+
     this.zoomLevel = scale;
     this.panX = 0;
     this.panY = 0;
     this.applyZoom();
 }
-
     updateSize() {
         this.setCursor();
     }
