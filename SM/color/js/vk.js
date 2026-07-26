@@ -22,12 +22,13 @@ function initVKBridge() {
         isVKInitialized = true;
         console.log('✅ VK Bridge инициализирован:', data);
 
-       initVKUser().then(() => {
-                // После получения данных синхронизируем рекорд при старте
-                if (window.appState) {
-                    syncLeaderboard(window.appState.totalPoints);
-                }
-            });
+      initVKUser().then(() => {
+    if (window.appState) {
+        syncLeaderboard(window.appState.totalPoints);
+    }
+}).catch((err) => {
+    console.warn('⚠️ Не удалось получить user_id, лидерборд недоступен:', err);
+});
         
     
         setTimeout(showBanner, 500);

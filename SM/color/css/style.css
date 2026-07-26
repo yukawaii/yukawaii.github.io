@@ -103,6 +103,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* блокируем скролл всей страницы */
 }
 
 .glass-card {
@@ -1261,18 +1262,12 @@ jl-coloringbook .canvasContainer {
 }
 /* Запрет скролла на всей странице */
 html, body {
-    height: 100%;
-    min-height: 100dvh;
     margin: 0;
     padding: 0;
-    overscroll-behavior: none;
-    overflow: hidden; /* оставляем, но не fixed */
-    touch-action: auto; /* разрешаем касания */
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-overflow-scrolling: auto;
-     position: fixed;
     width: 100%;
+    min-height: 100vh;
+    overscroll-behavior: none;
+    background: var(--bg-primary);
 }
 .app-container {
     max-width: 650px;
@@ -1287,7 +1282,8 @@ html, body {
     box-sizing: border-box;
 }
 button, .btn-neon, .btn-circle, .category-btn, .level-btn, .modal-close, .btn-pagination, .theme-btn {
-    touch-action: manipulation; /* разрешает касания, но предотвращает зумирование */
+    cursor: pointer;
+    touch-action: manipulation;
 }
 
 /* Разрешаем скролл только внутри модалок */
@@ -1782,3 +1778,4 @@ input, textarea {
         padding: 8px 6px;
     }
 }
+

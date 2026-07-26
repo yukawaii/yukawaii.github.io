@@ -842,9 +842,13 @@ async function initializeApp() {
     try {
         await loadState(); // ждём синхронизацию VK
         
-        if (typeof initVK === 'function') {
-            await initVK();
-        }
+     if (typeof initVK === 'function') {
+    try {
+        await initVK();
+    } catch (e) {
+        console.warn('⚠️ VK инициализация не удалась, работаем офлайн:', e);
+    }
+}
         
         if (typeof syncLeaderboard === 'function' && appState) {
             syncLeaderboard(appState.totalPoints);
