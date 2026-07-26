@@ -429,11 +429,11 @@ this.panBaseY = 0;
 
 /* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
 @media (min-width: 1024px) {
-    .canvasWrapper {
+    /*.canvasWrapper {
         flex: 1;              /* занимает всё свободное место */
         min-height: 0;        /* разрешаем сжиматься */
         overflow: hidden;
-    }
+    }*/
 
     .canvasContainer {
         width: 100%;
@@ -506,9 +506,16 @@ this.panBaseY = 0;
         this.sizer = jQuery('.sizerTool', this.shadowRoot);
         this.sizer.val(15);
         this.wrapper = jQuery('.wrapper', this.shadowRoot);
+
 this.wrapper.css('height', '100%');
 this.wrapper.css('display', 'flex');
 this.wrapper.css('flex-direction', 'column');
+
+// Растягиваем canvasWrapper
+const canvasWrapper = jQuery('.canvasWrapper', this.shadowRoot);
+canvasWrapper.css('flex', '1');
+canvasWrapper.css('min-height', '0');
+canvasWrapper.css('overflow', 'hidden');
 
         this.canvasContainer = jQuery('#canvasContainer', this.shadowRoot);
 this.canvasContainer.css('will-change', 'transform');
@@ -1583,16 +1590,18 @@ sizeCanvas() {
 
 
 fitToScreen() {
-    console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
     if (!container) {
         this.zoomReset();
         return;
     }
-    // Используем getBoundingClientRect для точных размеров
-    const rect = container.getBoundingClientRect();
-    const availableWidth = rect.width;
-    const availableHeight = rect.height;
+    const wrapper = container.parentElement; // .canvasWrapper
+    if (!wrapper) {
+        this.zoomReset();
+        return;
+    }
+    const availableWidth = wrapper.clientWidth;
+    const availableHeight = wrapper.clientHeight;
     const imgWidth = this.img[0].naturalWidth;
     const imgHeight = this.img[0].naturalHeight;
     if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
