@@ -169,11 +169,10 @@ init(rows, cols) {
         this.particlesContainer = null;
     }
 
-    // Определяем центральные 2x2 клетки (они будут разблокированы)
+    // 6 открытых клеток – центральные 2 строки, 3 столбца
     const centerRowStart = Math.floor((this.rows - 2) / 2);
-    const centerColStart = Math.floor((this.cols - 2) / 2);
+    const centerColStart = Math.floor((this.cols - 3) / 2);
 
-    // Доступные типы
     const available = this.sceneConfig.availableTypes;
     const typeIndices = available || this.itemTypes.map((_, i) => i);
     const typeNames = typeIndices.map(i => this.itemTypes[i]);
@@ -188,7 +187,6 @@ init(rows, cols) {
             }
         }
     }
-    // Перемешиваем
     for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -200,9 +198,8 @@ init(rows, cols) {
         for (let c = 0; c < this.cols; c++) {
             const type = pool[idx++] || '🍀';
             const typeIndex = this.itemTypes.indexOf(type);
-            // Все предметы создаются с уровнем 1 (пока)
             const isUnlocked = (r >= centerRowStart && r < centerRowStart + 2 &&
-                               c >= centerColStart && c < centerColStart + 2);
+                               c >= centerColStart && c < centerColStart + 3);
             this.board[r][c] = {
                 type: type,
                 typeIndex: typeIndex >= 0 ? typeIndex : 0,
@@ -210,7 +207,7 @@ init(rows, cols) {
                 merged: false,
                 row: r,
                 col: c,
-                locked: !isUnlocked, // все кроме центра – заблокированы
+                locked: !isUnlocked,
             };
         }
     }
@@ -349,21 +346,20 @@ init(rows, cols) {
                 return;
             }
             const { row, col } = cell;
-            const target = this.board[row]?.[col];
-            let canMerge = false;
-                                        if (target && this.dragStart) {
-                                            const item1 = this.dragStart.item;
-                                            // Проверяем, что target находится по соседству (строка и столбец отличаются не более чем на 1)
-                                            const dr = Math.abs(row - this.dragStart.row);
-                                            const dc = Math.abs(col - this.dragStart.col);
-                                            const isAdjacent = (dr <= 1 && dc <= 1) && !(dr === 0 && dc === 0);
-                                            if (isAdjacent && target.type === item1.type && target.level === item1.level) {
-                                                const typeIndex = item1.typeIndex;
-                                                if (this.canMergeToLevel(typeIndex, item1.level)) {
-                                                    canMerge = true;
-                                                }
-                                            }
-                                        }
+        const target = this.board[row]?.[col];
+let canMerge = false;
+if (target && this.dragStart) {
+    const item1 = this.dragStart.item;
+    if (target.locked) {
+        // Заблокированная клетка – разрешаем, финальная проверка будет в onEnd
+        canMerge = true;
+    } else if (target.type === item1.type && target.level === item1.level) {
+        const typeIndex = item1.typeIndex;
+        if (this.canMergeToLevel(typeIndex, item1.level)) {
+            canMerge = true;
+        }
+    }
+}
 
             if (canMerge) {
                 this.dragTarget = { row, col, item: target };
@@ -379,73 +375,55 @@ const onEnd = (e) => {
     this.isDragging = false;
     canvas.style.cursor = 'grab';
 
- if (this.dragTarget && this.dragStart) {
+if (this.dragTarget && this.dragStart) {
     const { row: r1, col: c1 } = this.dragStart;
     const { row: r2, col: c2 } = this.dragTarget;
     if (r1 !== r2 || c1 !== c2) {
         const targetCell = this.board[r2]?.[c2];
         const sourceItem = this.dragStart.item;
-        // Проверяем, что целевая клетка существует и либо открыта, либо заблокирована
+        
+        // Если целевая клетка существует
         if (targetCell) {
-            // Если клетка заблокирована, разрешаем только если она по соседству с какой-либо открытой клеткой
             let canMerge = false;
-           if (targetCell.locked) {
-    // Проверяем, есть ли рядом открытая клетка
-    let canMerge = false;
-    for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-            if (dr === 0 && dc === 0) continue;
-            const nr = r2 + dr, nc = c2 + dc;
-            if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
-                const neighbor = this.board[nr]?.[nc];
-                if (neighbor && !neighbor.locked && neighbor.type) {
+            
+            // Если клетка открыта – проверяем совместимость предметов
+            if (!targetCell.locked) {
+                if (targetCell.type === sourceItem.type && targetCell.level === sourceItem.level) {
                     canMerge = true;
-                    break;
                 }
-            }
-        }
-        if (canMerge) break;
-    }
-    // Также разрешаем, если исходная клетка (откуда тащим) открыта и соседняя
-    if (!canMerge) {
-        const sourceNeighbor = this.board[r1]?.[c1];
-        if (sourceNeighbor && !sourceNeighbor.locked) {
-            const rowDiff = Math.abs(r1 - r2);
-            const colDiff = Math.abs(c1 - c2);
-            if ((rowDiff <= 1 && colDiff <= 1) && !(rowDiff === 0 && colDiff === 0)) {
-                canMerge = true;
-            }
-        }
-    }
-    if (canMerge) {
-        this.combineItems(r1, c1, r2, c2);
-    } else {
-        this.board[r1][c1] = this.dragStart.item;
-    }
-} else {
-                // Клетка открыта – всегда можно объединить (если совместимы)
-                canMerge = true;
+            } else {
+                // Клетка заблокирована – проверяем, есть ли рядом открытая клетка
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        if (dr === 0 && dc === 0) continue;
+                        const nr = r2 + dr, nc = c2 + dc;
+                        if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
+                            const neighbor = this.board[nr]?.[nc];
+                            // Сосед существует, не заблокирован и имеет предмет
+                            if (neighbor && !neighbor.locked && neighbor.type) {
+                                canMerge = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (canMerge) break;
+                }
+                // Дополнительно: разрешаем, если исходная клетка открыта (она уже открыта, если мы оттуда взяли)
+                // но это уже покрывается циклом, так как исходная клетка – соседняя
             }
 
             if (canMerge) {
-                // Проверяем совместимость предметов
-                const targetItem = targetCell.locked ? null : targetCell;
-                if (targetItem && targetItem.type === sourceItem.type && targetItem.level === sourceItem.level) {
-                    // Выполняем объединение, но теперь передаём целевой объект
-                    this.combineItems(r1, c1, r2, c2);
-                } else {
-                    // Несовместимы – возвращаем предмет на место
-                    this.board[r1][c1] = this.dragStart.item;
-                }
+                this.combineItems(r1, c1, r2, c2);
             } else {
-                // Нельзя объединить с заблокированной (не рядом с открытой)
+                // Нельзя – возвращаем предмет
                 this.board[r1][c1] = this.dragStart.item;
             }
         } else {
-            // Целевая клетка не существует – возвращаем
+            // Целевая клетка не существует
             this.board[r1][c1] = this.dragStart.item;
         }
     } else {
+        // Перетащили на ту же клетку – возвращаем
         this.board[r1][c1] = this.dragStart.item;
     }
 } else {
@@ -609,65 +587,40 @@ addPulse(row, col) {
         requestAnimationFrame(loop);
     },
 
-    drawAll() {
-        if (!this.ctx) return;
-        this.drawBoard();
-// Золотое свечение для dragTarget (под предметом, без пульсации, слабое)
-if (this.dragTarget) {
-    const { row, col } = this.dragTarget;
-    const cw = this.cellWidth;
-    const ch = this.cellHeight;
-    const x = col * cw + cw / 2;
-    const y = row * ch + ch / 2;
-    const radius = Math.min(cw, ch) * 0.45;
-    this.ctx.save();
-    // Свечение РИСУЕМ ПОД ПРЕДМЕТОМ - рисуем до отрисовки предмета
-    // Но в drawAll порядок: drawBoard() рисует предметы, потом этот блок.
-    // Чтобы свечение было ПОД предметом, его нужно рисовать ДО drawBoard().
-    // Проще всего перенести этот блок в начало drawAll, перед drawBoard().
-    const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, 'rgba(255, 215, 0, 0.15)');  // слабое золото
-    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
-    this.ctx.fillStyle = gradient;
-    this.ctx.beginPath();
-    this.ctx.arc(x, y, radius, 0, Math.PI * 2);
-    this.ctx.fill();
-    this.ctx.restore();
-}
+  drawAll() {
+    if (!this.ctx) return;
+    this.drawBoard();
+    this.drawDragGhost(this.dragMouseX, this.dragMouseY);
+    this.drawPulseEffects();
 
-
-        this.drawDragGhost(this.dragMouseX, this.dragMouseY);
-        this.drawPulseEffects();
-
-// Пульсация при наведении (без зажатия) ТОЛЬКО если клетка не locked и можно объединить
-if (this.hoverCell && !this.isDragging) {
-    const { row, col } = this.hoverCell;
-    const cell = this.board[row]?.[col];
-    if (cell && !cell.locked && cell.type && this.canMergeToLevel(cell.typeIndex, cell.level)) {
-        const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
-        if (!hasPulse) {
-            // Рисуем пульсацию предмета с малой амплитудой
-            const cw = this.cellWidth;
-            const ch = this.cellHeight;
-            const x = col * cw + cw / 2;
-            const y = row * ch + ch / 2;
-            const time = Date.now() / 1000;
-            const scale = 0.95 + 0.05 * Math.sin(time * 3);
-            const size = Math.min(cw, ch) * 0.85 * scale;
-            const img = this.getSpriteImage(cell);
-            if (img) {
-                this.ctx.save();
-                this.ctx.translate(x, y);
-                this.ctx.scale(scale, scale);
-                this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
-                this.ctx.shadowBlur = 10;
-                this.ctx.drawImage(img, -size/2, -size/2, size, size);
-                this.ctx.restore();
+    // Пульсация при наведении (без зажатия) – только для открытых клеток с возможностью объединения
+    if (this.hoverCell && !this.isDragging) {
+        const { row, col } = this.hoverCell;
+        const cell = this.board[row]?.[col];
+        if (cell && !cell.locked && cell.type && this.canMergeToLevel(cell.typeIndex, cell.level)) {
+            const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
+            if (!hasPulse) {
+                const cw = this.cellWidth;
+                const ch = this.cellHeight;
+                const x = col * cw + cw / 2;
+                const y = row * ch + ch / 2;
+                const time = Date.now() / 1000;
+                const scale = 0.95 + 0.05 * Math.sin(time * 3);
+                const size = Math.min(cw, ch) * 0.85 * scale;
+                const img = this.getSpriteImage(cell);
+                if (img) {
+                    this.ctx.save();
+                    this.ctx.translate(x, y);
+                    this.ctx.scale(scale, scale);
+                    this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.drawImage(img, -size/2, -size/2, size, size);
+                    this.ctx.restore();
+                }
             }
         }
     }
-}
-    },
+},
 
     drawPulseEffects() {
     if (this.pulseItems.length === 0 || !this.ctx) return;
@@ -733,49 +686,45 @@ if (this.hoverCell && !this.isDragging) {
     },
 
 combineItems(r1, c1, r2, c2) {
-    const item1 = this.dragStart ? this.dragStart.item : this.board[r1]?.[c1];
+    const sourceItem = this.dragStart ? this.dragStart.item : this.board[r1]?.[c1];
     const targetCell = this.board[r2]?.[c2];
-    if (!item1) return;
+    if (!sourceItem) return;
 
-    // --- СЛУЧАЙ 1: Целевая клетка ЗАБЛОКИРОВАНА ---
+    // Если целевая клетка заблокирована
     if (targetCell && targetCell.locked) {
         // Проверяем, можно ли повысить уровень
-        const newLevel = item1.level + 1;
-        if (newLevel > this.maxLevels[item1.typeIndex]) {
-            // Нельзя – возвращаем предмет на место
-            this.board[r1][c1] = item1;
+        const newLevel = sourceItem.level + 1;
+        if (newLevel > this.maxLevels[sourceItem.typeIndex]) {
+            // Нельзя – возвращаем
+            this.board[r1][c1] = sourceItem;
             this.dragStart = null;
             this.dragTarget = null;
             return;
         }
         // Создаём предмет следующего уровня в целевой клетке
         this.board[r2][c2] = {
-            type: item1.type,
-            typeIndex: item1.typeIndex,
+            type: sourceItem.type,
+            typeIndex: sourceItem.typeIndex,
             level: newLevel,
             merged: true,
             row: r2,
             col: c2,
             locked: false, // разблокируем
         };
-        this.board[r1][c1] = null; // очищаем исходную
+        this.board[r1][c1] = null;
 
-        // Начисляем очки (как за объединение)
+        // Начисляем очки
         const points = 10 * newLevel;
         this.score += points;
         Storage.updateHighest(this.score);
-
         const prog = Storage.getProgress();
         prog.score = this.score;
         prog.totalCombines = (prog.totalCombines || 0) + 1;
         Storage.saveProgress(prog);
 
         AudioManager.play('combine');
-
-        // Анимации
         this.spawnConfetti(r2, c2);
         this.addPulse(r2, c2);
-
         this.updateUI();
         this.checkWin();
 
@@ -784,23 +733,21 @@ combineItems(r1, c1, r2, c2) {
         return;
     }
 
-    // --- СЛУЧАЙ 2: Обычное объединение двух предметов ---
-    const item2 = targetCell;
-    if (!item2) {
-        // Если клетка пустая (не заблокирована, но нет предмета) – просто возвращаем
-        this.board[r1][c1] = item1;
+    // Обычное объединение двух открытых предметов (код остаётся как раньше)
+    const targetItem = targetCell;
+    if (!targetItem) {
+        this.board[r1][c1] = sourceItem;
         this.dragStart = null;
         this.dragTarget = null;
         return;
     }
-    if (item1.type !== item2.type) return;
-    if (item1.level !== item2.level) return;
+    if (sourceItem.type !== targetItem.type) return;
+    if (sourceItem.level !== targetItem.level) return;
 
-    const typeIndex = item1.typeIndex;
-    const currentLevel = item1.level;
+    const typeIndex = sourceItem.typeIndex;
+    const currentLevel = sourceItem.level;
     if (!this.canMergeToLevel(typeIndex, currentLevel)) {
-        // Нельзя повысить – возвращаем
-        this.board[r1][c1] = item1;
+        this.board[r1][c1] = sourceItem;
         this.dragStart = null;
         this.dragTarget = null;
         return;
@@ -808,7 +755,7 @@ combineItems(r1, c1, r2, c2) {
 
     const newLevel = currentLevel + 1;
     this.board[r2][c2] = {
-        type: item1.type,
+        type: sourceItem.type,
         typeIndex: typeIndex,
         level: newLevel,
         merged: true,
@@ -821,17 +768,14 @@ combineItems(r1, c1, r2, c2) {
     const points = 10 * newLevel;
     this.score += points;
     Storage.updateHighest(this.score);
-
     const prog = Storage.getProgress();
     prog.score = this.score;
     prog.totalCombines = (prog.totalCombines || 0) + 1;
     Storage.saveProgress(prog);
 
     AudioManager.play('combine');
-
     this.spawnConfetti(r2, c2);
     this.addPulse(r2, c2);
-
     this.updateUI();
     this.checkWin();
 
@@ -871,10 +815,10 @@ drawBoard() {
 
     ctx.clearRect(0, 0, w, w);
 
-    // Фон доски
+    // Фон доски – тёмно-голубой
     const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
-    gradient.addColorStop(0, '#fff5f5');
-    gradient.addColorStop(1, '#ffd6d6');
+    gradient.addColorStop(0, '#2c3e50');
+    gradient.addColorStop(1, '#1a252f');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, w, w);
 
@@ -884,95 +828,72 @@ drawBoard() {
             const x = c * cw;
             const y = r * ch;
             const cell = this.board[r][c];
-            if (!cell) continue;
+            const isLocked = cell && cell.locked === true;
 
-            const isLocked = cell.locked === true;
-            const isCorner = (r === 0 || r === this.rows - 1) && (c === 0 || c === this.cols - 1);
-            const cellRadius = isCorner ? Math.min(cw, ch) * 0.15 : radius;
+            // Цвет клетки: тёмно-голубой, шахматка
+            const baseColor = (r + c) % 2 === 0 ? '#2c3e50' : '#34495e';
+            const lockedColor = (r + c) % 2 === 0 ? '#1f2e3a' : '#283a47';
+            const fillColor = isLocked ? lockedColor : baseColor;
 
-            // Фон клетки
-            let shade;
-            if (isLocked) {
-                shade = (r + c) % 2 === 0 ? 'rgba(180, 170, 170, 0.7)' : 'rgba(160, 150, 150, 0.5)';
-            } else {
-                shade = (r + c) % 2 === 0 ? 'rgba(255,240,240,0.6)' : 'rgba(255,220,220,0.3)';
-            }
+            // Рисуем скруглённую клетку
             ctx.save();
             ctx.beginPath();
-            ctx.moveTo(x + cellRadius, y);
-            ctx.arcTo(x + cw, y, x + cw, y + ch, cellRadius);
-            ctx.arcTo(x + cw, y + ch, x, y + ch, cellRadius);
-            ctx.arcTo(x, y + ch, x, y, cellRadius);
-            ctx.arcTo(x, y, x + cw, y, cellRadius);
+            ctx.moveTo(x + radius, y);
+            ctx.arcTo(x + cw, y, x + cw, y + ch, radius);
+            ctx.arcTo(x + cw, y + ch, x, y + ch, radius);
+            ctx.arcTo(x, y + ch, x, y, radius);
+            ctx.arcTo(x, y, x + cw, y, radius);
             ctx.closePath();
-            ctx.fillStyle = shade;
+            ctx.fillStyle = fillColor;
             ctx.fill();
+            ctx.restore();
 
-            // Проверяем, есть ли активная пульсация (объединения или наведения)
+            // Проверяем, пульсирует ли клетка или подсвечена hover
             const isPulsing = this.pulseItems.some(p => p.row === r && p.col === c);
-            const canHoverPulse = this.canMergeToLevel(cell.typeIndex, cell.level);
-            const isHovering = this.hoverCell && !this.isDragging && this.hoverCell.row === r && this.hoverCell.col === c && canHoverPulse;
+            const isHovering = this.hoverCell && !this.isDragging &&
+                               this.hoverCell.row === r && this.hoverCell.col === c &&
+                               !isLocked && cell && this.canMergeToLevel(cell.typeIndex, cell.level);
 
-            // Рисуем предмет, если нет активной пульсации
-            if (!isPulsing && !isHovering) {
+            // Рисуем предмет, если он есть и не пульсирует и не hover
+            if (cell && !isPulsing && !isHovering) {
                 const size = Math.min(cw, ch) * 0.85;
                 const offsetX = (cw - size) / 2;
                 const offsetY = (ch - size) / 2;
                 const img = this.getSpriteImage(cell);
                 ctx.save();
                 if (isLocked) {
-                    ctx.globalAlpha = 0.5; // бледнее для заблокированных
+                    ctx.globalAlpha = 0.4; // бледно для заблокированных
                 }
                 if (img) {
-                    ctx.shadowColor = 'rgba(200, 150, 150, 0.1)';
-                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 10;
                     ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
                 } else {
                     ctx.font = size + 'px sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#d96c6c';
-                    ctx.shadowColor = 'rgba(0,0,0,0.05)';
-                    ctx.shadowBlur = 4;
+                    ctx.fillStyle = isLocked ? '#aaa' : '#fff';
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 6;
                     ctx.fillText(cell.type, x + cw/2, y + ch/2 + 2);
                 }
                 ctx.restore();
             }
 
-            // Если клетка заблокирована – рисуем паутинку поверх (всегда, даже если пульсация)
+            // Паутинка для заблокированных (поверх предмета)
             if (isLocked && this.webImage) {
                 ctx.save();
                 const webSize = Math.min(cw, ch) * 0.8;
                 const webOffsetX = (cw - webSize) / 2;
                 const webOffsetY = (ch - webSize) / 2;
-                ctx.globalAlpha = 0.7;
+                ctx.globalAlpha = 0.5;
                 ctx.drawImage(this.webImage, x + webOffsetX, y + webOffsetY, webSize, webSize);
                 ctx.restore();
-            }
-
-            ctx.restore();
+            }            
         }
     }
 
-    // Сетка
-    ctx.save();
-    ctx.strokeStyle = 'rgba(200, 150, 150, 0.15)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= this.cols; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * cw, 0);
-        ctx.lineTo(i * cw, this.boardSize);
-        ctx.stroke();
-    }
-    for (let i = 0; i <= this.rows; i++) {
-        ctx.beginPath();
-        ctx.moveTo(0, i * ch);
-        ctx.lineTo(this.boardSize, i * ch);
-        ctx.stroke();
-    }
-    ctx.restore();
-
-    // Золотое свечение для dragTarget (только если клетка доступна)
+    // Золотое свечение для dragTarget (под предметами)
     if (this.dragTarget) {
         const { row, col } = this.dragTarget;
         const targetCell = this.board[row]?.[col];
@@ -981,14 +902,14 @@ drawBoard() {
             if (!targetCell.locked) {
                 showGlow = true;
             } else {
-                // Заблокированная – проверяем, есть ли рядом открытая клетка
+                // Заблокированная – свечение только если рядом есть открытая клетка
                 for (let dr = -1; dr <= 1; dr++) {
                     for (let dc = -1; dc <= 1; dc++) {
                         if (dr === 0 && dc === 0) continue;
                         const nr = row + dr, nc = col + dc;
                         if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
                             const neighbor = this.board[nr]?.[nc];
-                            if (neighbor && !neighbor.locked && neighbor.type) {
+                            if (neighbor && !neighbor.locked) {
                                 showGlow = true;
                                 break;
                             }
@@ -1013,7 +934,20 @@ drawBoard() {
             ctx.restore();
         }
     }
-},
+// Внешняя обводка поля (после всех клеток)
+ctx.save();
+ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+ctx.lineWidth = 2;
+const boardRadius = Math.min(this.cellWidth, this.cellHeight) * 0.15;
+ctx.beginPath();
+ctx.moveTo(boardRadius, 0);
+ctx.arcTo(w, 0, w, w, boardRadius);
+ctx.arcTo(w, w, 0, w, boardRadius);
+ctx.arcTo(0, w, 0, 0, boardRadius);
+ctx.arcTo(0, 0, w, 0, boardRadius);
+ctx.closePath();
+ctx.stroke();
+ctx.restore();},
 
     // ---------- ТАЙМЕР И UI ----------
     startTimer() {
