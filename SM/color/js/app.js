@@ -746,6 +746,21 @@ document.addEventListener('contextmenu', function(e) {
     return false;
 });
 
+document.addEventListener('touchmove', function(e) {
+    const target = e.target;
+    // Если касание на кнопке или кликабельном элементе — ничего не блокируем
+    if (target.closest && target.closest('button, .btn-neon, .btn-circle, .category-btn, .level-btn, [onclick]')) {
+        return true; // разрешаем стандартное поведение
+    }
+
+    const isScrollable = target.closest && target.closest('.modal-content, #achievementsList, #collectionsList, .level-grid');
+    if (isScrollable) {
+        // ... (оставляем как было)
+        return true;
+    }
+    e.preventDefault();
+    return false;
+}, { passive: false });
 /*// ===== ЗАПУСК =====
 document.addEventListener('DOMContentLoaded', function() {
     // Инициализация фона, тем, состояния
