@@ -447,20 +447,3 @@
         .hidden { display: none !important; }
         .fade-transition { transition: opacity 0.3s ease; }
         ::-webkit-scrollbar { display: none; }
-#game-board {
-    position: relative;
-}
-#game-board canvas {
-    position: relative;
-    z-index: 1;
-}
-#confetti-container {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none !important;
-    z-index: 100 !important;
-    overflow: visible !important;
-}

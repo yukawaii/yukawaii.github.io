@@ -36,12 +36,9 @@ const Game = {
 
     // --- hover (без зажатия) ---
     hoverCell: null,         // { row, col }
+    webImage: null,
 
-    // --- tsParticles ---
-    particlesContainer: null,
-    particlesRunning: false,
-
-   // ---- НАСТРОЙКА ИМЁН ФАЙЛОВ ----
+     // ---- НАСТРОЙКА ИМЁН ФАЙЛОВ ----
     imageNames: [
       'kartoha', 'perec', 'petrushka', 'shetka', 
     ],
@@ -72,27 +69,29 @@ const Game = {
     pulseItems: [],         // [{ row, col, progress, speed }] – для пульсации
 
     // ---------- ЗАГРУЗКА СПРАЙТОВ ----------
-    loadSprites(callback) {
-        if (this.spritesLoaded) { callback && callback(); return; }
-        const types = this.itemTypes;
-        let totalAttempts = 0;
-        let anyLoaded = false;
+ loadSprites(callback) {
+    if (this.spritesLoaded) { callback && callback(); return; }
+    const types = this.itemTypes;
+    let totalAttempts = 0;
+    let anyLoaded = false;
 
-        const checkLevel = (typeIndex, level) => {
-            const name = this.imageNames[typeIndex] || typeIndex;
-            const path = `images/level${level}/${name}.png`;
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => {
-                const key = level + '_' + typeIndex;
-                this.spriteMap[key] = img;
-                anyLoaded = true;
-                checkLevel(typeIndex, level + 1);
-            };
-            img.onerror = () => {
-                this.maxLevels[typeIndex] = level - 1;
-                totalAttempts++;
-                if (totalAttempts === types.length) {
+    const checkLevel = (typeIndex, level) => {
+        const name = this.imageNames[typeIndex] || typeIndex;
+        const path = `images/level${level}/${name}.png`;
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            const key = level + '_' + typeIndex;
+            this.spriteMap[key] = img;
+            anyLoaded = true;
+            checkLevel(typeIndex, level + 1);
+        };
+        img.onerror = () => {
+            this.maxLevels[typeIndex] = level - 1;
+            totalAttempts++;
+            if (totalAttempts === types.length) {
+                // Все типы проверены, теперь загружаем паутинку
+                this.loadWebImage(() => {
                     this.spritesLoaded = true;
                     if (!anyLoaded) {
                         console.warn('[Game] Ни одно изображение не загрузилось. Проверьте пути и CORS.');
@@ -100,24 +99,42 @@ const Game = {
                         console.log('[Game] Спрайты загружены, maxLevels:', this.maxLevels);
                     }
                     callback && callback();
-                }
-            };
-            img.src = path;
+                });
+            }
         };
+        img.src = path;
+    };
 
-        this.maxLevels = new Array(types.length).fill(0);
-        types.forEach((_, idx) => {
-            checkLevel(idx, 1);
-        });
+    this.maxLevels = new Array(types.length).fill(0);
+    types.forEach((_, idx) => {
+        checkLevel(idx, 1);
+    });
 
-        setTimeout(() => {
-            if (!this.spritesLoaded) {
-                console.warn('[Game] Таймаут загрузки спрайтов, используем эмодзи');
+    // Таймаут на случай, если ни один файл не загрузится
+    setTimeout(() => {
+        if (!this.spritesLoaded) {
+            console.warn('[Game] Таймаут загрузки спрайтов, используем эмодзи');
+            this.loadWebImage(() => {
                 this.spritesLoaded = true;
                 callback && callback();
-            }
-        }, 5000);
-    },
+            });
+        }
+    }, 5000);
+},
+
+loadWebImage(callback) {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+        this.webImage = img;
+        callback && callback();
+    };
+    img.onerror = () => {
+        console.warn('[Game] Не удалось загрузить web.png, паутинка не будет отображаться');
+        callback && callback();
+    };
+    img.src = 'images/web.png';
+},
 
     getSpriteImage(item) {
         const key = (item.level || 1) + '_' + (item.typeIndex || 0);
@@ -130,112 +147,112 @@ const Game = {
     },
 
     // ---------- ИНИЦИАЛИЗАЦИЯ ----------
-    init(rows, cols) {
-        this.rows = rows || (this.isMobile ? this.mobileRows : 9);
-        this.cols = cols || (this.isMobile ? this.mobileCols : 9);
-        this.score = 0;
-        this.level = 1;
-        this.timer = 120;
-        this.isRunning = false;
-        this.isPaused = false;
-        this.isGameOver = false;
-        this.selectedItem = null;
-        this.dragStart = null;
-        this.dragTarget = null;
-        this.isDragging = false;
-        this.board = [];
-        this.hoverCell = null;
-        this.pulseItems = [];
-        this.particlesRunning = false;
-        if (this.particlesContainer) {
-            this.particlesContainer.destroy();
-            this.particlesContainer = null;
-        }
+init(rows, cols) {
+    this.rows = rows || (this.isMobile ? this.mobileRows : 9);
+    this.cols = cols || (this.isMobile ? this.mobileCols : 9);
+    this.score = 0;
+    this.level = 1;
+    this.timer = 120;
+    this.isRunning = false;
+    this.isPaused = false;
+    this.isGameOver = false;
+    this.selectedItem = null;
+    this.dragStart = null;
+    this.dragTarget = null;
+    this.isDragging = false;
+    this.board = [];
+    this.hoverCell = null;
+    this.pulseItems = [];
+    this.particlesRunning = false;
+    if (this.particlesContainer) {
+        this.particlesContainer.destroy();
+        this.particlesContainer = null;
+    }
 
-        const available = this.sceneConfig.availableTypes;
-        const typeIndices = available || this.itemTypes.map((_, i) => i);
-        const typeNames = typeIndices.map(i => this.itemTypes[i]);
+    // Определяем центральные 2x2 клетки (они будут разблокированы)
+    const centerRowStart = Math.floor((this.rows - 2) / 2);
+    const centerColStart = Math.floor((this.cols - 2) / 2);
 
-        const totalCells = (this.rows - 2) * (this.cols - 2);
-        let pool = [];
-        while (pool.length < totalCells) {
-            for (let t of typeNames) {
-                if (pool.length < totalCells) {
-                    pool.push(t);
-                    pool.push(t);
-                }
+    // Доступные типы
+    const available = this.sceneConfig.availableTypes;
+    const typeIndices = available || this.itemTypes.map((_, i) => i);
+    const typeNames = typeIndices.map(i => this.itemTypes[i]);
+
+    const totalCells = this.rows * this.cols;
+    let pool = [];
+    while (pool.length < totalCells) {
+        for (let t of typeNames) {
+            if (pool.length < totalCells) {
+                pool.push(t);
+                pool.push(t);
             }
         }
-        for (let i = pool.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    // Перемешиваем
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    let idx = 0;
+    for (let r = 0; r < this.rows; r++) {
+        this.board[r] = [];
+        for (let c = 0; c < this.cols; c++) {
+            const type = pool[idx++] || '🍀';
+            const typeIndex = this.itemTypes.indexOf(type);
+            // Все предметы создаются с уровнем 1 (пока)
+            const isUnlocked = (r >= centerRowStart && r < centerRowStart + 2 &&
+                               c >= centerColStart && c < centerColStart + 2);
+            this.board[r][c] = {
+                type: type,
+                typeIndex: typeIndex >= 0 ? typeIndex : 0,
+                level: 1,
+                merged: false,
+                row: r,
+                col: c,
+                locked: !isUnlocked, // все кроме центра – заблокированы
+            };
         }
+    }
 
-        let idx = 0;
-        const maxSpawn = this.sceneConfig.maxSpawnLevel || 1;
-        for (let r = 0; r < this.rows; r++) {
-            this.board[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                const isBorder = r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1;
-                if (isBorder) {
-                    this.board[r][c] = null;
-                } else {
-                    const type = pool[idx++] || '🍀';
-                    const typeIndex = this.itemTypes.indexOf(type);
-                    const maxLevelForType = this.maxLevels[typeIndex] || 1;
-                    const level = Math.min(
-                        Math.floor(Math.random() * maxSpawn) + 1,
-                        maxLevelForType
-                    );
-                    this.board[r][c] = {
-                        type: type,
-                        typeIndex: typeIndex >= 0 ? typeIndex : 0,
-                        level: level,
-                        merged: false,
-                        row: r,
-                        col: c,
-                    };
-                }
-            }
-        }
+    this.loadSprites(() => {
+        this.initCanvas();
+        this.startTimer();
+        this.isRunning = true;
 
-        this.loadSprites(() => {
-            this.initCanvas();
-            this.startTimer();
-            this.isRunning = true;
-
-            const prog = Storage.getProgress();
-            this.score = prog.score || 0;
-            this.level = prog.level || 1;
-            this.updateUI();
-            this.animateLoop();
-        });
-    },
+        const prog = Storage.getProgress();
+        this.score = prog.score || 0;
+        this.level = prog.level || 1;
+        this.updateUI();
+        this.animateLoop();
+    });
+},
 
     // ---------- КАНВАС И СОБЫТИЯ ----------
-    initCanvas() {
-        const container = document.getElementById('game-board');
-        const canvas = document.getElementById('game-canvas');
-        if (!canvas) return;
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
+  initCanvas() {
+    const container = document.getElementById('game-board');
+    const canvas = document.getElementById('game-canvas');
+    if (!canvas) return;
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
 
-        const rect = container.getBoundingClientRect();
-        const size = Math.min(rect.width, rect.height);
-        canvas.width = size;
-        canvas.height = size;
-        canvas.style.width = size + 'px';
-        canvas.style.height = size + 'px';
+    const rect = container.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height);
+    canvas.width = size;
+    canvas.height = size;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
 
-        this.scaleX = canvas.width / rect.width;
-        this.scaleY = canvas.height / rect.height;
+    this.scaleX = canvas.width / rect.width;
+    this.scaleY = canvas.height / rect.height;
 
-        this.boardSize = size;
-        this.cellWidth = size / this.cols;
-        this.cellHeight = size / this.rows;
+    this.boardSize = size;
+    // Теперь клетки квадратные, так как rows == cols (или почти)
+    this.cellWidth = size / this.cols;
+    this.cellHeight = size / this.rows;
 
-        this.bindEvents();
-    },
+    this.bindEvents();
+},
 
     bindEvents() {
         const canvas = this.canvas;
@@ -290,15 +307,16 @@ const Game = {
         }, { passive: true });
 
         // --- Обработка начала перетаскивания ---
-        const onStart = (e) => {
-            e.preventDefault();
-            if (this.isPaused || this.isGameOver || !this.isRunning) return;
-            const pos = getPos(e);
-            const cell = getCell(pos.x, pos.y);
-            if (!cell) return;
-            const { row, col } = cell;
-            const item = this.board[row]?.[col];
-            if (!item) return;
+       const onStart = (e) => {
+    e.preventDefault();
+    if (this.isPaused || this.isGameOver || !this.isRunning) return;
+    const pos = getPos(e);
+    const cell = getCell(pos.x, pos.y);
+    if (!cell) return;
+    const { row, col } = cell;
+    const item = this.board[row]?.[col];
+    // Нельзя поднимать предмет из заблокированной клетки
+    if (!item || item.locked) return;
 
             // Запоминаем предмет и удаляем его с доски
             this.dragStart = { row, col, item };
@@ -361,28 +379,80 @@ const onEnd = (e) => {
     this.isDragging = false;
     canvas.style.cursor = 'grab';
 
-    if (this.dragTarget && this.dragStart) {
-        const { row: r1, col: c1 } = this.dragStart;
-        const { row: r2, col: c2 } = this.dragTarget;
-        if (r1 !== r2 || c1 !== c2) {
-            // Проверка на соседство (по прямой или диагонали)
+ if (this.dragTarget && this.dragStart) {
+    const { row: r1, col: c1 } = this.dragStart;
+    const { row: r2, col: c2 } = this.dragTarget;
+    if (r1 !== r2 || c1 !== c2) {
+        const targetCell = this.board[r2]?.[c2];
+        const sourceItem = this.dragStart.item;
+        // Проверяем, что целевая клетка существует и либо открыта, либо заблокирована
+        if (targetCell) {
+            // Если клетка заблокирована, разрешаем только если она по соседству с какой-либо открытой клеткой
+            let canMerge = false;
+           if (targetCell.locked) {
+    // Проверяем, есть ли рядом открытая клетка
+    let canMerge = false;
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            const nr = r2 + dr, nc = c2 + dc;
+            if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
+                const neighbor = this.board[nr]?.[nc];
+                if (neighbor && !neighbor.locked && neighbor.type) {
+                    canMerge = true;
+                    break;
+                }
+            }
+        }
+        if (canMerge) break;
+    }
+    // Также разрешаем, если исходная клетка (откуда тащим) открыта и соседняя
+    if (!canMerge) {
+        const sourceNeighbor = this.board[r1]?.[c1];
+        if (sourceNeighbor && !sourceNeighbor.locked) {
             const rowDiff = Math.abs(r1 - r2);
             const colDiff = Math.abs(c1 - c2);
-            const isAdjacent = (rowDiff <= 1 && colDiff <= 1) && !(rowDiff === 0 && colDiff === 0);
-            if (isAdjacent) {
-                this.combineItems(r1, c1, r2, c2);
+            if ((rowDiff <= 1 && colDiff <= 1) && !(rowDiff === 0 && colDiff === 0)) {
+                canMerge = true;
+            }
+        }
+    }
+    if (canMerge) {
+        this.combineItems(r1, c1, r2, c2);
+    } else {
+        this.board[r1][c1] = this.dragStart.item;
+    }
+} else {
+                // Клетка открыта – всегда можно объединить (если совместимы)
+                canMerge = true;
+            }
+
+            if (canMerge) {
+                // Проверяем совместимость предметов
+                const targetItem = targetCell.locked ? null : targetCell;
+                if (targetItem && targetItem.type === sourceItem.type && targetItem.level === sourceItem.level) {
+                    // Выполняем объединение, но теперь передаём целевой объект
+                    this.combineItems(r1, c1, r2, c2);
+                } else {
+                    // Несовместимы – возвращаем предмет на место
+                    this.board[r1][c1] = this.dragStart.item;
+                }
             } else {
-                // Не соседние – возвращаем предмет на место
+                // Нельзя объединить с заблокированной (не рядом с открытой)
                 this.board[r1][c1] = this.dragStart.item;
             }
         } else {
+            // Целевая клетка не существует – возвращаем
             this.board[r1][c1] = this.dragStart.item;
         }
     } else {
-        if (this.dragStart) {
-            this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
-        }
+        this.board[r1][c1] = this.dragStart.item;
     }
+} else {
+    if (this.dragStart) {
+        this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
+    }
+}
 
     this.dragStart = null;
     this.dragTarget = null;
@@ -429,7 +499,7 @@ spawnConfetti(row, col) {
     if (this.particlesRunning) return;
     this.particlesRunning = true;
 
-    const colors = ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ffe066', '#ff6b6b', '#ff85a2'];
+    const colors = ['#ffb07c', '#90d1fd', '#4f8d08', '#fa9be2', '#ffaa66', '#ffe066', '#79f87f', '#695ff5'];
     const count = 40;
     const particles = [];
 
@@ -569,36 +639,34 @@ if (this.dragTarget) {
         this.drawDragGhost(this.dragMouseX, this.dragMouseY);
         this.drawPulseEffects();
 
-
-
-        // Добавляем пульсацию для hover-клетки (без зажатия)
+// Пульсация при наведении (без зажатия) ТОЛЬКО если клетка не locked и можно объединить
 if (this.hoverCell && !this.isDragging) {
     const { row, col } = this.hoverCell;
-    // Проверяем, нет ли уже пульсации от объединения в этой клетке
-    const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
-    if (!hasPulse) {
-        const item = this.board[row]?.[col];
-        if (item) {
-        // Вместо рисования ореола – рисуем предмет с малой пульсацией
-        const cw = this.cellWidth;
-        const ch = this.cellHeight;
-        const x = col * cw + cw / 2;
-        const y = row * ch + ch / 2;
-        const time = Date.now() / 1000;
-        const scale = 0.95 + 0.05 * Math.sin(time * 3);
-        const size = Math.min(cw, ch) * 0.7 * scale;
-        const img = this.getSpriteImage(item);
-        if (img) {
-            this.ctx.save();
-            this.ctx.translate(x, y);
-            this.ctx.scale(scale, scale);
-            this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
-            this.ctx.shadowBlur = 10;
-            this.ctx.drawImage(img, -size/2, -size/2, size, size);
-            this.ctx.restore();
+    const cell = this.board[row]?.[col];
+    if (cell && !cell.locked && cell.type && this.canMergeToLevel(cell.typeIndex, cell.level)) {
+        const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
+        if (!hasPulse) {
+            // Рисуем пульсацию предмета с малой амплитудой
+            const cw = this.cellWidth;
+            const ch = this.cellHeight;
+            const x = col * cw + cw / 2;
+            const y = row * ch + ch / 2;
+            const time = Date.now() / 1000;
+            const scale = 0.95 + 0.05 * Math.sin(time * 3);
+            const size = Math.min(cw, ch) * 0.85 * scale;
+            const img = this.getSpriteImage(cell);
+            if (img) {
+                this.ctx.save();
+                this.ctx.translate(x, y);
+                this.ctx.scale(scale, scale);
+                this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
+                this.ctx.shadowBlur = 10;
+                this.ctx.drawImage(img, -size/2, -size/2, size, size);
+                this.ctx.restore();
+            }
         }
     }
-}}
+}
     },
 
     drawPulseEffects() {
@@ -611,8 +679,8 @@ if (this.hoverCell && !this.isDragging) {
         const x = p.col * cw + cw / 2;
         const y = p.row * ch + ch / 2;
         // progress: 0->1 (увеличение), 1->0 (уменьшение)
-        const scale = 1 + (p.maxScale - 1) * Math.sin(p.progress * Math.PI);
-        const size = Math.min(cw, ch) * 0.7 * scale;
+       const scale = 1 + (p.maxScale - 1) * Math.sin(p.progress * Math.PI);
+        const size = Math.min(cw, ch) * 0.85 * scale;
 
         const item = this.board[p.row]?.[p.col];
         if (!item) continue;
@@ -664,30 +732,35 @@ if (this.hoverCell && !this.isDragging) {
         return nextLevel <= maxMerge && nextLevel <= realMax;
     },
 
-    combineItems(r1, c1, r2, c2) {
-        const item1 = this.dragStart ? this.dragStart.item : this.board[r1]?.[c1];
-        const item2 = this.board[r2]?.[c2];
-        if (!item1 || !item2) return;
-        if (item1.type !== item2.type) return;
-        if (item1.level !== item2.level) return;
+combineItems(r1, c1, r2, c2) {
+    const item1 = this.dragStart ? this.dragStart.item : this.board[r1]?.[c1];
+    const targetCell = this.board[r2]?.[c2];
+    if (!item1) return;
 
-        const typeIndex = item1.typeIndex;
-        const currentLevel = item1.level;
-        if (!this.canMergeToLevel(typeIndex, currentLevel)) return;
-
-        const newLevel = currentLevel + 1;
-        // Новый предмет ставим ВО ВТОРУЮ клетку (куда принесли)
+    // --- СЛУЧАЙ 1: Целевая клетка ЗАБЛОКИРОВАНА ---
+    if (targetCell && targetCell.locked) {
+        // Проверяем, можно ли повысить уровень
+        const newLevel = item1.level + 1;
+        if (newLevel > this.maxLevels[item1.typeIndex]) {
+            // Нельзя – возвращаем предмет на место
+            this.board[r1][c1] = item1;
+            this.dragStart = null;
+            this.dragTarget = null;
+            return;
+        }
+        // Создаём предмет следующего уровня в целевой клетке
         this.board[r2][c2] = {
             type: item1.type,
-            typeIndex: typeIndex,
+            typeIndex: item1.typeIndex,
             level: newLevel,
             merged: true,
             row: r2,
             col: c2,
+            locked: false, // разблокируем
         };
-        // Первую клетку очищаем (она уже очищена в onStart, но на всякий случай)
-        this.board[r1][c1] = null;
+        this.board[r1][c1] = null; // очищаем исходную
 
+        // Начисляем очки (как за объединение)
         const points = 10 * newLevel;
         this.score += points;
         Storage.updateHighest(this.score);
@@ -699,19 +772,72 @@ if (this.hoverCell && !this.isDragging) {
 
         AudioManager.play('combine');
 
-        // --- АНИМАЦИИ ---
-        // Конфетти на целевой клетке (r2, c2)
+        // Анимации
         this.spawnConfetti(r2, c2);
-        // Пульсация объединённого предмета
         this.addPulse(r2, c2);
 
         this.updateUI();
         this.checkWin();
 
-        // Обнуляем dragStart, чтобы не возвращать предмет
         this.dragStart = null;
         this.dragTarget = null;
-    },
+        return;
+    }
+
+    // --- СЛУЧАЙ 2: Обычное объединение двух предметов ---
+    const item2 = targetCell;
+    if (!item2) {
+        // Если клетка пустая (не заблокирована, но нет предмета) – просто возвращаем
+        this.board[r1][c1] = item1;
+        this.dragStart = null;
+        this.dragTarget = null;
+        return;
+    }
+    if (item1.type !== item2.type) return;
+    if (item1.level !== item2.level) return;
+
+    const typeIndex = item1.typeIndex;
+    const currentLevel = item1.level;
+    if (!this.canMergeToLevel(typeIndex, currentLevel)) {
+        // Нельзя повысить – возвращаем
+        this.board[r1][c1] = item1;
+        this.dragStart = null;
+        this.dragTarget = null;
+        return;
+    }
+
+    const newLevel = currentLevel + 1;
+    this.board[r2][c2] = {
+        type: item1.type,
+        typeIndex: typeIndex,
+        level: newLevel,
+        merged: true,
+        row: r2,
+        col: c2,
+        locked: false,
+    };
+    this.board[r1][c1] = null;
+
+    const points = 10 * newLevel;
+    this.score += points;
+    Storage.updateHighest(this.score);
+
+    const prog = Storage.getProgress();
+    prog.score = this.score;
+    prog.totalCombines = (prog.totalCombines || 0) + 1;
+    Storage.saveProgress(prog);
+
+    AudioManager.play('combine');
+
+    this.spawnConfetti(r2, c2);
+    this.addPulse(r2, c2);
+
+    this.updateUI();
+    this.checkWin();
+
+    this.dragStart = null;
+    this.dragTarget = null;
+},
 
     checkWin() {
         let emptyCount = 0, total = 0;
@@ -736,86 +862,158 @@ if (this.hoverCell && !this.isDragging) {
     },
 
     // ---------- ОТРИСОВКА ДОСКИ ----------
-    drawBoard() {
-        const ctx = this.ctx;
-        if (!ctx) return;
-        const w = this.boardSize;
-        const cw = this.cellWidth;
-        const ch = this.cellHeight;
+drawBoard() {
+    const ctx = this.ctx;
+    if (!ctx) return;
+    const w = this.boardSize;
+    const cw = this.cellWidth;
+    const ch = this.cellHeight;
 
-        ctx.clearRect(0, 0, w, w);
+    ctx.clearRect(0, 0, w, w);
 
-        const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
-       gradient.addColorStop(0, '#f5e6e6');
-gradient.addColorStop(1, '#e6cccc');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, w, w);
+    // Фон доски
+    const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
+    gradient.addColorStop(0, '#fff5f5');
+    gradient.addColorStop(1, '#ffd6d6');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, w, w);
 
-        ctx.strokeStyle = 'rgba(200, 150, 150, 0.15)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i <= this.cols; i++) {
+    const radius = Math.min(cw, ch) * 0.08;
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            const x = c * cw;
+            const y = r * ch;
+            const cell = this.board[r][c];
+            if (!cell) continue;
+
+            const isLocked = cell.locked === true;
+            const isCorner = (r === 0 || r === this.rows - 1) && (c === 0 || c === this.cols - 1);
+            const cellRadius = isCorner ? Math.min(cw, ch) * 0.15 : radius;
+
+            // Фон клетки
+            let shade;
+            if (isLocked) {
+                shade = (r + c) % 2 === 0 ? 'rgba(180, 170, 170, 0.7)' : 'rgba(160, 150, 150, 0.5)';
+            } else {
+                shade = (r + c) % 2 === 0 ? 'rgba(255,240,240,0.6)' : 'rgba(255,220,220,0.3)';
+            }
+            ctx.save();
             ctx.beginPath();
-            ctx.moveTo(i * cw, 0);
-            ctx.lineTo(i * cw, w);
-            ctx.stroke();
-        }
-        for (let i = 0; i <= this.rows; i++) {
-            ctx.beginPath();
-            ctx.moveTo(0, i * ch);
-            ctx.lineTo(w, i * ch);
-            ctx.stroke();
-        }
+            ctx.moveTo(x + cellRadius, y);
+            ctx.arcTo(x + cw, y, x + cw, y + ch, cellRadius);
+            ctx.arcTo(x + cw, y + ch, x, y + ch, cellRadius);
+            ctx.arcTo(x, y + ch, x, y, cellRadius);
+            ctx.arcTo(x, y, x + cw, y, cellRadius);
+            ctx.closePath();
+            ctx.fillStyle = shade;
+            ctx.fill();
 
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                const x = c * cw, y = r * ch;
-                const isBorder = r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1;
-                if (!isBorder) {
-                   const shade = (r + c) % 2 === 0 ? 'rgba(230,210,210,0.6)' : 'rgba(210,190,190,0.4)';
-                    ctx.fillStyle = shade;
-                    ctx.fillRect(x + 2, y + 2, cw - 4, ch - 4);
+            // Проверяем, есть ли активная пульсация (объединения или наведения)
+            const isPulsing = this.pulseItems.some(p => p.row === r && p.col === c);
+            const canHoverPulse = this.canMergeToLevel(cell.typeIndex, cell.level);
+            const isHovering = this.hoverCell && !this.isDragging && this.hoverCell.row === r && this.hoverCell.col === c && canHoverPulse;
+
+            // Рисуем предмет, если нет активной пульсации
+            if (!isPulsing && !isHovering) {
+                const size = Math.min(cw, ch) * 0.85;
+                const offsetX = (cw - size) / 2;
+                const offsetY = (ch - size) / 2;
+                const img = this.getSpriteImage(cell);
+                ctx.save();
+                if (isLocked) {
+                    ctx.globalAlpha = 0.5; // бледнее для заблокированных
                 }
+                if (img) {
+                    ctx.shadowColor = 'rgba(200, 150, 150, 0.1)';
+                    ctx.shadowBlur = 8;
+                    ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
+                } else {
+                    ctx.font = size + 'px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#d96c6c';
+                    ctx.shadowColor = 'rgba(0,0,0,0.05)';
+                    ctx.shadowBlur = 4;
+                    ctx.fillText(cell.type, x + cw/2, y + ch/2 + 2);
+                }
+                ctx.restore();
+            }
 
-          const item = this.board[r]?.[c];
-const isPulsing = this.pulseItems.some(p => p.row === r && p.col === c);
-const isHovering = this.hoverCell && !this.isDragging && this.hoverCell.row === r && this.hoverCell.col === c;
-if (item && !isPulsing && !isHovering) {
-                    const size = Math.min(cw, ch) * 0.7;
-                    const offsetX = (cw - size) / 2;
-                    const offsetY = (ch - size) / 2;
-                    const img = this.getSpriteImage(item);
-                    ctx.save();
-                    if (img) {
-                        ctx.shadowColor = 'rgba(200, 150, 150, 0.1)';
-                        ctx.shadowBlur = 8;
-                        ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
-                    } else {
-                        ctx.font = size + 'px sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillStyle = '#d96c6c';
-                        ctx.shadowColor = 'rgba(0,0,0,0.05)';
-                        ctx.shadowBlur = 4;
-                        ctx.fillText(item.type, x + cw/2, y + ch/2 + 2);
+            // Если клетка заблокирована – рисуем паутинку поверх (всегда, даже если пульсация)
+            if (isLocked && this.webImage) {
+                ctx.save();
+                const webSize = Math.min(cw, ch) * 0.8;
+                const webOffsetX = (cw - webSize) / 2;
+                const webOffsetY = (ch - webSize) / 2;
+                ctx.globalAlpha = 0.7;
+                ctx.drawImage(this.webImage, x + webOffsetX, y + webOffsetY, webSize, webSize);
+                ctx.restore();
+            }
+
+            ctx.restore();
+        }
+    }
+
+    // Сетка
+    ctx.save();
+    ctx.strokeStyle = 'rgba(200, 150, 150, 0.15)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= this.cols; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * cw, 0);
+        ctx.lineTo(i * cw, this.boardSize);
+        ctx.stroke();
+    }
+    for (let i = 0; i <= this.rows; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * ch);
+        ctx.lineTo(this.boardSize, i * ch);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // Золотое свечение для dragTarget (только если клетка доступна)
+    if (this.dragTarget) {
+        const { row, col } = this.dragTarget;
+        const targetCell = this.board[row]?.[col];
+        let showGlow = false;
+        if (targetCell) {
+            if (!targetCell.locked) {
+                showGlow = true;
+            } else {
+                // Заблокированная – проверяем, есть ли рядом открытая клетка
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        if (dr === 0 && dc === 0) continue;
+                        const nr = row + dr, nc = col + dc;
+                        if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
+                            const neighbor = this.board[nr]?.[nc];
+                            if (neighbor && !neighbor.locked && neighbor.type) {
+                                showGlow = true;
+                                break;
+                            }
+                        }
                     }
-                    ctx.restore();
-                } else if (!isBorder) {
-                    ctx.save();
-                    ctx.strokeStyle = 'rgba(200, 150, 150, 0.1)';
-                    ctx.lineWidth = 1;
-                    const cx = x + cw/2, cy = y + ch/2;
-                    const d = Math.min(cw, ch) * 0.15;
-                    ctx.beginPath();
-                    ctx.moveTo(cx - d, cy - d);
-                    ctx.lineTo(cx + d, cy + d);
-                    ctx.moveTo(cx + d, cy - d);
-                    ctx.lineTo(cx - d, cy + d);
-                    ctx.stroke();
-                    ctx.restore();
+                    if (showGlow) break;
                 }
             }
         }
-    },
+        if (showGlow) {
+            const x = col * cw + cw / 2;
+            const y = row * ch + ch / 2;
+            const radius = Math.min(cw, ch) * 0.45;
+            ctx.save();
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+            grad.addColorStop(0, 'rgba(255, 215, 0, 0.15)');
+            grad.addColorStop(1, 'rgba(255, 215, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+},
 
     // ---------- ТАЙМЕР И UI ----------
     startTimer() {
