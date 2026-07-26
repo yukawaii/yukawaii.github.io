@@ -10,7 +10,9 @@ html, body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     background: #0a0a1a;
     color: #f0eaff;
-    overflow-x: hidden;
+     overflow: hidden;
+    overscroll-behavior: none;
+    height: 100%;
 }
 
 /* --- ПЕРЕМЕННЫЕ ТЕМ (должны быть в начале) --- */
@@ -103,7 +105,13 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* блокируем скролл всей страницы */
+    /* overflow: hidden;  ← удалить или заменить */
+    overflow: visible;
+    pointer-events: auto;
+}
+
+.glass-card {
+    pointer-events: auto;
 }
 
 .glass-card {
@@ -1260,15 +1268,7 @@ jl-coloringbook .canvasContainer {
     background: rgba(168, 85, 247, 0.08);
     border: 1px solid rgba(168, 85, 247, 0.15);
 }
-/* Запрет скролла на всей странице */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    overscroll-behavior: none;
-    background: var(--bg-primary);
-}
+
 .app-container {
     max-width: 650px;
     margin: 0 auto;

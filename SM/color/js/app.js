@@ -829,6 +829,28 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
 
+// Принудительная обработка касаний для всех элементов с onclick
+document.addEventListener('touchstart', function(e) {
+    const target = e.target.closest('[onclick]');
+    if (target) {
+        // Сохраняем обработчик, чтобы не дублировать
+        if (!target._touchHandled) {
+            target._touchHandled = true;
+            const handler = target.getAttribute('onclick');
+            if (handler) {
+                // Выполняем функцию
+                try {
+                    eval(handler);
+                } catch(err) {}
+                e.preventDefault(); // предотвращаем повторный click
+            }
+            setTimeout(() => {
+                target._touchHandled = false;
+            }, 300);
+        }
+    }
+}, { passive: false });
+
 async function initializeApp() {
     const splash = document.getElementById('splashScreen');
     if (splash) splash.style.display = 'flex';
