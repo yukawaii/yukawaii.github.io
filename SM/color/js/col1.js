@@ -1581,6 +1581,7 @@ sizeCanvas() {
     setTimeout(() => this.fitToScreen(), 100);
 }
 
+
 fitToScreen() {
     console.log(availableWidth, availableHeight, imgWidth, imgHeight, scale)
     const container = this.canvasContainer[0];
