@@ -454,69 +454,33 @@ function preloadRewardAd() {
 
 function watchAdForUnlock() {
     if (!pendingUnlockLevel) return;
-
-    // Сохраняем данные до очистки
     const unlockData = pendingUnlockLevel;
-    
-    closeUnlockModal(); // закрываем модалку (pendingUnlockLevel обнулится, но у нас есть копия)
+    closeUnlockModal();
     document.getElementById('adLoadingModal').classList.add('show');
-    
-    if (adLoadingTimer) clearTimeout(adLoadingTimer);
-    adLoadingTimer = setTimeout(function() {
+
+    // Если VK Bridge нет – разблокируем без рекламы (тест)
+    if (typeof vkBridge === 'undefined' || !navigator.onLine) {
         document.getElementById('adLoadingModal').classList.remove('show');
-        showAdError();
-    }, 10000);
-    
-    const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
-    
-    if (bridge) {
-        bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(function(data) {
-            if (adLoadingTimer) {
-                clearTimeout(adLoadingTimer);
-                adLoadingTimer = null;
-            }
-            
-            if (data && data.result) {
-                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-            } else {
-                document.getElementById('adLoadingModal').classList.remove('show');
-                showAdError();
-                return Promise.reject('Ad not available');
-            }
-        })
-        .then(function(adResult) {
-            if (adLoadingTimer) {
-                clearTimeout(adLoadingTimer);
-                adLoadingTimer = null;
-            }
+        unlockAndOpenLevelWithData(unlockData);
+        return;
+    }
+
+    showRewardedAd()
+        .then((success) => {
             document.getElementById('adLoadingModal').classList.remove('show');
-            if (adResult && adResult.result) {
+            if (success) {
                 console.log('✅ Реклама просмотрена');
                 unlockAndOpenLevelWithData(unlockData);
             } else {
-                unlockAndOpenLevelWithData(unlockData);
+                // Реклама не досмотрена или ошибка
+                showAdError();
             }
         })
-        .catch(function(error) {
-            if (adLoadingTimer) {
-                clearTimeout(adLoadingTimer);
-                adLoadingTimer = null;
-            }
-            console.warn('⚠️ Ошибка показа рекламы:', error);
+        .catch((error) => {
             document.getElementById('adLoadingModal').classList.remove('show');
+            console.warn('⚠️ Ошибка показа рекламы для уровня:', error);
             showAdError();
         });
-    } else {
-        setTimeout(function() {
-            if (adLoadingTimer) {
-                clearTimeout(adLoadingTimer);
-                adLoadingTimer = null;
-            }
-            document.getElementById('adLoadingModal').classList.remove('show');
-            unlockAndOpenLevelWithData(unlockData);
-        }, 1500);
-    }
 }
 
 // Новая функция для разблокировки с переданными данными
@@ -546,51 +510,42 @@ function closeAdErrorModal() {
 function watchAdForBrushUnlock() {
     const brushId = window._pendingBrushUnlock;
     if (!brushId) return;
-    
     closeUnlockModal();
     document.getElementById('adLoadingModal').classList.add('show');
-    
-    const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
-    
-    if (bridge) {
-        bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(function(data) {
-            if (data && data.result) {
-                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+
+    // Если VK Bridge нет – разблокируем без рекламы (тест)
+    if (typeof vkBridge === 'undefined' || !navigator.onLine) {
+        document.getElementById('adLoadingModal').classList.remove('show');
+        if (typeof unlockBrushFor24Hours === 'function') {
+            unlockBrushFor24Hours(brushId);
+            window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
+        }
+        window._pendingBrushUnlock = null;
+        window._pendingBrushUnlockFromColoring = false;
+        showToast(`✅ Кисть открыта на 24 часа! (тест)`);
+        return;
+    }
+
+    showRewardedAd()
+        .then((success) => {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            if (success) {
+                if (typeof unlockBrushFor24Hours === 'function') {
+                    unlockBrushFor24Hours(brushId);
+                    window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
+                }
+                window._pendingBrushUnlock = null;
+                window._pendingBrushUnlockFromColoring = false;
+                showToast(`✅ Кисть открыта на 24 часа!`);
             } else {
-                document.getElementById('adLoadingModal').classList.remove('show');
                 showAdError();
-                return Promise.reject('Ad not available');
             }
         })
-        .then(function(adResult) {
+        .catch((error) => {
             document.getElementById('adLoadingModal').classList.remove('show');
-            // Разблокируем кисть на 24 часа
-            if (typeof unlockBrushFor24Hours === 'function') {
-                unlockBrushFor24Hours(brushId);
-                window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
-            }
-            window._pendingBrushUnlock = null;
-            window._pendingBrushUnlockFromColoring = false;
-            showToast(`✅ Кисть открыта на 24 часа!`);
-        })
-        .catch(function(error) {
-            document.getElementById('adLoadingModal').classList.remove('show');
+            console.warn('⚠️ Ошибка показа рекламы для кисти:', error);
             showAdError();
         });
-    } else {
-        // Если VK нет - для тестирования
-        setTimeout(function() {
-            document.getElementById('adLoadingModal').classList.remove('show');
-            if (typeof unlockBrushFor24Hours === 'function') {
-                unlockBrushFor24Hours(brushId);
-                window.dispatchEvent(new CustomEvent('brushUnlocked', { detail: { brushId } }));
-            }
-            window._pendingBrushUnlock = null;
-            window._pendingBrushUnlockFromColoring = false;
-            showToast(`✅ Кисть открыта на 24 часа!`);
-        }, 1500);
-    }
 }
 
 // ===== РАСКРАСКА =====
@@ -1246,11 +1201,66 @@ function claimDailyBonus(type) {
     }
 }
 
+// ===== ОБЩАЯ ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ ЗА ВОЗНАГРАЖДЕНИЕ =====
+function showRewardedAd() {
+    return new Promise((resolve, reject) => {
+        const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
+        if (!bridge) {
+            reject('VK Bridge not available');
+            return;
+        }
+        if (!navigator.onLine) {
+            reject('No internet connection');
+            return;
+        }
+        // Показываем оверлей загрузки
+        const loadingModal = document.getElementById('adLoadingModal');
+        if (loadingModal) loadingModal.classList.add('show');
+        
+        let resolved = false;
+        const timeoutId = setTimeout(() => {
+            if (!resolved) {
+                resolved = true;
+                if (loadingModal) loadingModal.classList.remove('show');
+                reject('Ad timeout');
+            }
+        }, 120000); // 120 секунд
+
+        bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+            .then((checkData) => {
+                if (resolved) return;
+                if (!checkData || !checkData.result) {
+                    if (loadingModal) loadingModal.classList.remove('show');
+                    reject('Ad not available');
+                    return;
+                }
+                // Показываем рекламу
+                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+            })
+            .then((showData) => {
+                if (resolved) return;
+                resolved = true;
+                clearTimeout(timeoutId);
+                if (loadingModal) loadingModal.classList.remove('show');
+                // Считаем успехом, если showData.result === true
+                if (showData && showData.result === true) {
+                    resolve(true);
+                } else {
+                    reject('Ad not completed');
+                }
+            })
+            .catch((error) => {
+                if (resolved) return;
+                resolved = true;
+                clearTimeout(timeoutId);
+                if (loadingModal) loadingModal.classList.remove('show');
+                reject(error);
+            });
+    });
+}
+
 function watchAdForDailyBonus() {
-    const bridge = typeof vkBridge !== 'undefined' ? vkBridge : window.vkBridge;
-    
-    // Если нет VK Bridge – даём бонус без рекламы (для тестов)
-    if (!bridge) {
+    if (typeof vkBridge === 'undefined' || !navigator.onLine) {
         showToast('🎉 Получено +10 звёзд! (режим теста)');
         dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
         saveDailyBonusData();
@@ -1260,37 +1270,28 @@ function watchAdForDailyBonus() {
         closeDailyBonusModal();
         return;
     }
-    
-    // Показываем загрузку
+
     document.getElementById('adLoadingModal').classList.add('show');
-    
-    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(function(data) {
-            if (data && data.result) {
-                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+
+    showRewardedAd()
+        .then((success) => {
+            document.getElementById('adLoadingModal').classList.remove('show');
+            if (success) {
+                showToast('🎉 Получено +10 звёзд!');
+                dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
+                saveDailyBonusData();
+                appState.totalPoints += 10;
+                updateStats();
+                saveState();
+                closeDailyBonusModal();
             } else {
-                document.getElementById('adLoadingModal').classList.remove('show');
                 showAdError();
-                return Promise.reject('Ad not available');
             }
         })
-        .then(function(adResult) {
+        .catch((error) => {
             document.getElementById('adLoadingModal').classList.remove('show');
-            // Если реклама показана или не показана – даём бонус
-            showToast('🎉 Получено +10 звёзд!');
-            dailyBonusData.lastClaimDate = new Date().toISOString().slice(0,10);
-            saveDailyBonusData();
-            appState.totalPoints += 10;
-            updateStats();
-            saveState();
-            closeDailyBonusModal();
-        })
-        .catch(function(error) {
-            document.getElementById('adLoadingModal').classList.remove('show');
+            console.warn('⚠️ Ошибка рекламы бонуса:', error);
             showAdError();
-            // Даём бонус даже при ошибке (но можно не давать – решайте)
-            // showToast('⚠️ Ошибка рекламы, попробуйте позже');
-            console.warn('Ошибка рекламы:', error);
         });
 }
 
