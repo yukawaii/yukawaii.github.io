@@ -802,6 +802,7 @@ jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
         this.activeCtx = this.activeCanvas[0].getContext('2d');
 
         this.img.off('load').on('load', function() {
+               me.sizeCanvas(); 
             // Пересчёт при изменении размера окна
 if (!me._resizeBound) {
     me._resizeBound = true;
