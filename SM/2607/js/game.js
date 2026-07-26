@@ -9,6 +9,7 @@ const Game = {
     isMobile: false,
 
     board: [],
+    itemAnimations: [],
     score: 0,
     level: 1,
     timer: 120,
@@ -164,14 +165,15 @@ init(rows, cols) {
     this.hoverCell = null;
     this.pulseItems = [];
     this.particlesRunning = false;
+    this.itemAnimations = [];
     if (this.particlesContainer) {
         this.particlesContainer.destroy();
         this.particlesContainer = null;
     }
 
-    // 6 открытых клеток – центральные 2 строки, 3 столбца
-    const centerRowStart = Math.floor((this.rows - 2) / 2);
-    const centerColStart = Math.floor((this.cols - 3) / 2);
+    // 9 открытых клеток – центральные 3 строки, 3 столбца
+const centerRowStart = Math.floor((this.rows - 3) / 2);
+const centerColStart = Math.floor((this.cols - 3) / 2);
 
     const available = this.sceneConfig.availableTypes;
     const typeIndices = available || this.itemTypes.map((_, i) => i);
@@ -198,8 +200,8 @@ init(rows, cols) {
         for (let c = 0; c < this.cols; c++) {
             const type = pool[idx++] || '🍀';
             const typeIndex = this.itemTypes.indexOf(type);
-            const isUnlocked = (r >= centerRowStart && r < centerRowStart + 2 &&
-                               c >= centerColStart && c < centerColStart + 3);
+          const isUnlocked = (r >= centerRowStart && r < centerRowStart + 3 &&
+                   c >= centerColStart && c < centerColStart + 3);
             this.board[r][c] = {
                 type: type,
                 typeIndex: typeIndex >= 0 ? typeIndex : 0,
@@ -251,107 +253,111 @@ init(rows, cols) {
     this.bindEvents();
 },
 
-    bindEvents() {
-        const canvas = this.canvas;
-        if (!canvas) return;
+  bindEvents() {
+    const canvas = this.canvas;
+    if (!canvas) return;
 
-        const getPos = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            let clientX, clientY;
-            if (e.touches) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            }
-            return {
-                x: (clientX - rect.left) * this.scaleX,
-                y: (clientY - rect.top) * this.scaleY
-            };
+    // --- Вспомогательные функции ---
+    const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        let clientX, clientY;
+        if (e.touches) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        return {
+            x: (clientX - rect.left) * this.scaleX,
+            y: (clientY - rect.top) * this.scaleY
         };
+    };
 
-        const getCell = (x, y) => {
-            const col = Math.floor(x / this.cellWidth);
-            const row = Math.floor(y / this.cellHeight);
-            if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
-                return { row, col };
-            }
-            return null;
-        };
+    const getCell = (x, y) => {
+        const col = Math.floor(x / this.cellWidth);
+        const row = Math.floor(y / this.cellHeight);
+        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
+            return { row, col };
+        }
+        return null;
+    };
 
-        // --- Обработка движения мыши/пальца (без нажатия) ---
-        const onMouseMove = (e) => {
-            if (this.isDragging) return; // при перетаскивании обрабатываем в onMove
-            const pos = getPos(e);
-            const cell = getCell(pos.x, pos.y);
-            if (cell) {
-                this.hoverCell = cell;
-            } else {
+    // --- Переменные для отслеживания перетаскивания ---
+    let startX = 0, startY = 0;
+    let startRow = -1, startCol = -1;
+    let startItem = null;
+    let isDragging = false;
+    let processingEnd = false;
+    const DRAG_THRESHOLD = 8; // пикселей
+
+    // --- Обработка движения мыши (без нажатия) ---
+    const onMouseMove = (e) => {
+        if (this.isDragging) return;
+        const pos = getPos(e);
+        const cell = getCell(pos.x, pos.y);
+        this.hoverCell = cell || null;
+    };
+    canvas.addEventListener('mousemove', onMouseMove);
+
+    // --- Начало нажатия ---
+    const onStart = (e) => {
+        e.preventDefault();
+        if (this.isPaused || this.isGameOver || !this.isRunning) return;
+        const pos = getPos(e);
+        const cell = getCell(pos.x, pos.y);
+        if (!cell) return;
+        const { row, col } = cell;
+        const item = this.board[row]?.[col];
+        if (!item || item.locked) return;
+
+        // Сохраняем начальные данные, НЕ удаляем предмет
+        startX = pos.x;
+        startY = pos.y;
+        startRow = row;
+        startCol = col;
+        startItem = item;
+        isDragging = false;
+        canvas.style.cursor = 'grabbing';
+    };
+
+    // --- Движение во время нажатия ---
+    const onMove = (e) => {
+        e.preventDefault();
+        if (this.isPaused || this.isGameOver) return;
+        const pos = getPos(e);
+        this.dragMouseX = pos.x;
+        this.dragMouseY = pos.y;
+
+        if (startItem && !isDragging) {
+            // Проверяем, превышено ли пороговое расстояние
+            const dx = pos.x - startX;
+            const dy = pos.y - startY;
+            if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+                // Начинаем перетаскивание
+                isDragging = true;
+                this.isDragging = true;
+                this.dragStart = { row: startRow, col: startCol, item: startItem };
+                // Удаляем предмет с доски
+                this.board[startRow][startCol] = null;
+                this.dragOffsetX = startX - (startCol * this.cellWidth + this.cellWidth / 2);
+                this.dragOffsetY = startY - (startRow * this.cellHeight + this.cellHeight / 2);
+                this.selectedItem = { row: startRow, col: startCol, item: startItem };
                 this.hoverCell = null;
             }
-        };
+        }
 
-        canvas.addEventListener('mousemove', onMouseMove);
-        canvas.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            if (!touch) return;
-            const me = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-            });
-            canvas.dispatchEvent(me);
-        }, { passive: true });
-
-        // --- Обработка начала перетаскивания ---
-       const onStart = (e) => {
-    e.preventDefault();
-    if (this.isPaused || this.isGameOver || !this.isRunning) return;
-    const pos = getPos(e);
-    const cell = getCell(pos.x, pos.y);
-    if (!cell) return;
-    const { row, col } = cell;
-    const item = this.board[row]?.[col];
-    // Нельзя поднимать предмет из заблокированной клетки
-    if (!item || item.locked) return;
-
-            // Запоминаем предмет и удаляем его с доски
-            this.dragStart = { row, col, item };
-            this.board[row][col] = null; // очищаем исходную клетку
-
-            const centerX = col * this.cellWidth + this.cellWidth / 2;
-            const centerY = row * this.cellHeight + this.cellHeight / 2;
-            this.dragOffsetX = pos.x - centerX;
-            this.dragOffsetY = pos.y - centerY;
-
-            this.isDragging = true;
-            this.selectedItem = { row, col, item };
-            this.dragMouseX = pos.x;
-            this.dragMouseY = pos.y;
-            canvas.style.cursor = 'grabbing';
-            this.hoverCell = null;
-        };
-
-        // --- Обработка движения при перетаскивании ---
-        const onMove = (e) => {
-            e.preventDefault();
-            if (!this.isDragging || this.isPaused || this.isGameOver) return;
-            const pos = getPos(e);
-            this.dragMouseX = pos.x;
-            this.dragMouseY = pos.y;
-
+        if (this.isDragging) {
+            // Обработка drag – определяем цель
             const cell = getCell(pos.x, pos.y);
-            if (!cell) {
-                this.dragTarget = null;
-                return;
-            }
-            const { row, col } = cell;
-        const target = this.board[row]?.[col];
-let canMerge = false;
-if (target && this.dragStart) {
+            if (cell) {
+                const { row, col } = cell;
+                const target = this.board[row]?.[col];
+                let canMerge = false;
+               if (target && this.dragStart && this.dragStart.item) {
     const item1 = this.dragStart.item;
+    // Разрешаем любую клетку (заблокированную или с подходящим предметом)
     if (target.locked) {
-        // Заблокированная клетка – разрешаем, финальная проверка будет в onEnd
         canMerge = true;
     } else if (target.type === item1.type && target.level === item1.level) {
         const typeIndex = item1.typeIndex;
@@ -360,117 +366,188 @@ if (target && this.dragStart) {
         }
     }
 }
-
-            if (canMerge) {
-                this.dragTarget = { row, col, item: target };
+                this.dragTarget = canMerge ? { row, col, item: target } : null;
             } else {
                 this.dragTarget = null;
             }
-        };
+        }
+    };
 
-        // --- Обработка окончания перетаскивания ---
-const onEnd = (e) => {
+    // --- Конец нажатия ---
+  const onEnd = (e) => {
     e.preventDefault();
-    if (!this.isDragging) return;
-    this.isDragging = false;
-    canvas.style.cursor = 'grab';
 
-if (this.dragTarget && this.dragStart) {
-    const { row: r1, col: c1 } = this.dragStart;
-    const { row: r2, col: c2 } = this.dragTarget;
-    if (r1 !== r2 || c1 !== c2) {
-        const targetCell = this.board[r2]?.[c2];
-        const sourceItem = this.dragStart.item;
-        
-        // Если целевая клетка существует
-        if (targetCell) {
-            let canMerge = false;
-            
-            // Если клетка открыта – проверяем совместимость предметов
-            if (!targetCell.locked) {
-                if (targetCell.type === sourceItem.type && targetCell.level === sourceItem.level) {
-                    canMerge = true;
-                }
-            } else {
-                // Клетка заблокирована – проверяем, есть ли рядом открытая клетка
-                for (let dr = -1; dr <= 1; dr++) {
-                    for (let dc = -1; dc <= 1; dc++) {
-                        if (dr === 0 && dc === 0) continue;
-                        const nr = r2 + dr, nc = c2 + dc;
-                        if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
-                            const neighbor = this.board[nr]?.[nc];
-                            // Сосед существует, не заблокирован и имеет предмет
-                            if (neighbor && !neighbor.locked && neighbor.type) {
-                                canMerge = true;
-                                break;
+    if (!isDragging && startItem) {
+        // Это был клик (без перетаскивания)
+        this.handleClick(startRow, startCol);
+        // Принудительно сбрасываем все состояния перетаскивания
+        this.dragStart = null;
+        this.dragTarget = null;
+        this.selectedItem = null;
+        this.isDragging = false;
+        canvas.style.cursor = 'grab';
+    } else if (isDragging) {
+        // Завершаем перетаскивание
+        if (this.dragTarget && this.dragStart) {
+            const { row: r1, col: c1 } = this.dragStart;
+            const { row: r2, col: c2 } = this.dragTarget;
+            if (r1 !== r2 || c1 !== c2) {
+                const targetCell = this.board[r2]?.[c2];
+                const sourceItem = this.dragStart.item;
+                if (targetCell) {
+                    let canMerge = false;
+                    if (!targetCell.locked) {
+                        if (targetCell.type === sourceItem.type && targetCell.level === sourceItem.level) {
+                            canMerge = true;
+                        }
+                    } else {
+                        // Заблокированная – проверяем соседство с открытой
+                        for (let dr = -1; dr <= 1; dr++) {
+                            for (let dc = -1; dc <= 1; dc++) {
+                                if (dr === 0 && dc === 0) continue;
+                                const nr = r2 + dr, nc = c2 + dc;
+                                if (nr >= 0 && nr < this.rows && nc >= 0 && nc < this.cols) {
+                                    const neighbor = this.board[nr]?.[nc];
+                                    // Убрали проверку neighbor.type – достаточно, чтобы клетка была не заблокирована
+                                    if (neighbor && !neighbor.locked) {
+                                        canMerge = true;
+                                        break;
+                                    }
+                                }
                             }
+                            if (canMerge) break;
                         }
                     }
-                    if (canMerge) break;
+                    if (canMerge) {
+                        this.combineItems(r1, c1, r2, c2);
+                    } else {
+                        // Возвращаем предмет
+                        this.board[r1][c1] = sourceItem;
+                    }
+                } else {
+                    this.board[r1][c1] = sourceItem;
                 }
-                // Дополнительно: разрешаем, если исходная клетка открыта (она уже открыта, если мы оттуда взяли)
-                // но это уже покрывается циклом, так как исходная клетка – соседняя
-            }
-
-            if (canMerge) {
-                this.combineItems(r1, c1, r2, c2);
             } else {
-                // Нельзя – возвращаем предмет
                 this.board[r1][c1] = this.dragStart.item;
             }
         } else {
-            // Целевая клетка не существует
-            this.board[r1][c1] = this.dragStart.item;
+            if (this.dragStart) {
+                this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
+            }
         }
-    } else {
-        // Перетащили на ту же клетку – возвращаем
-        this.board[r1][c1] = this.dragStart.item;
+        // Сброс состояний перетаскивания
+        this.dragStart = null;
+        this.dragTarget = null;
+        this.selectedItem = null;
+        this.isDragging = false;
+        canvas.style.cursor = 'grab';
     }
-} else {
-    if (this.dragStart) {
-        this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
-    }
-}
 
-    this.dragStart = null;
-    this.dragTarget = null;
-    this.selectedItem = null;
+    // Сброс временных переменных (всегда)
+    startItem = null;
+    startRow = -1;
+    startCol = -1;
+    isDragging = false;
+
+    // Дополнительная страховка: сбросить hoverCell, чтобы не мешал
+    this.hoverCell = null;
 };
 
-        canvas.addEventListener('mousedown', onStart);
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseup', onEnd);
-        canvas.addEventListener('mouseleave', (e) => {
-            if (this.isDragging) onEnd(e);
+    canvas.addEventListener('mousedown', onStart);
+    canvas.addEventListener('mousemove', onMove);
+    canvas.addEventListener('mouseup', onEnd);
+    canvas.addEventListener('mouseleave', (e) => {
+        if (this.isDragging) onEnd(e);
+    });
+
+    // --- Touch события ---
+    canvas.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        const me = new MouseEvent('mousedown', {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
         });
+        canvas.dispatchEvent(me);
+    }, { passive: false });
 
-        canvas.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            if (!touch) return;
-            const me = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-            });
-            canvas.dispatchEvent(me);
-        }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        const me = new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+        });
+        canvas.dispatchEvent(me);
+    }, { passive: false });
 
-        canvas.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            if (!touch) return;
-            const me = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY,
-            });
-            canvas.dispatchEvent(me);
-        }, { passive: false });
+    canvas.addEventListener('touchend', (e) => {
+        const me = new MouseEvent('mouseup', {});
+        canvas.dispatchEvent(me);
+    }, { passive: false });
 
-        canvas.addEventListener('touchend', (e) => {
-            const me = new MouseEvent('mouseup', {});
-            canvas.dispatchEvent(me);
-        }, { passive: false });
+    canvas.style.cursor = 'grab';
+},
+handleClick(row, col) {
+      // Принудительно сбрасываем любые остатки перетаскивания
+    this.dragStart = null;
+    this.dragTarget = null;
+    this.isDragging = false;
+    const cell = this.board[row]?.[col];
+    if (!cell || cell.locked) return;
+    const level = cell.level;
+    if (level < 3) return;
 
-        canvas.style.cursor = 'grab';
-    },
+    // Определяем диапазон уровней для выпадения
+    let minLevel, maxLevel;
+    if (level === 3) { minLevel = 1; maxLevel = 2; }
+    else if (level === 4) { minLevel = 2; maxLevel = 3; }
+    else if (level >= 5) { minLevel = 3; maxLevel = 4; }
+    else return;
+
+    // Ищем свободные клетки
+    const freeCells = [];
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            if (!this.board[r]?.[c]) {
+                freeCells.push({ row: r, col: c });
+            }
+        }
+    }
+    if (freeCells.length === 0) return;
+
+    // Сортируем по расстоянию от исходной клетки
+    freeCells.sort((a, b) => {
+        const distA = Math.abs(a.row - row) + Math.abs(a.col - col);
+        const distB = Math.abs(b.row - row) + Math.abs(b.col - col);
+        return distA - distB;
+    });
+
+    const target = freeCells[0];
+    const newLevel = minLevel + Math.floor(Math.random() * (maxLevel - minLevel + 1));
+    const newItem = {
+        type: cell.type,
+        typeIndex: cell.typeIndex,
+        level: newLevel,
+        merged: false,
+        row: target.row,
+        col: target.col,
+        locked: false,
+    };
+
+    // Добавляем предмет на доску
+    this.board[target.row][target.col] = newItem;
+
+    // Анимация появления (уменьшенный в центре исходной клетки, затем увеличение и перемещение)
+    this.addItemAnimation(row, col, target.row, target.col, newItem);
+
+    // Лёгкая пульсация исходного предмета
+    this.addPulse(row, col, 0.3, 1.3);
+    // Конфетти на целевой клетке
+    this.spawnConfetti(target.row, target.col);
+
+    this.updateUI();
+},
 
     // ---------- АНИМАЦИИ (tsParticles + пульсация) ----------
 spawnConfetti(row, col) {
@@ -541,17 +618,38 @@ spawnConfetti(row, col) {
     animateConfetti();
 },
 
+addItemAnimation(fromRow, fromCol, toRow, toCol, item) {
+    const startX = fromCol * this.cellWidth + this.cellWidth / 2;
+    const startY = fromRow * this.cellHeight + this.cellHeight / 2;
+    const endX = toCol * this.cellWidth + this.cellWidth / 2;
+    const endY = toRow * this.cellHeight + this.cellHeight / 2;
+    this.itemAnimations.push({
+        startX, startY,
+        endX, endY,
+        progress: 0,
+        speed: 0.02, // скорость анимации
+        item: item,
+        scale: 0.01, // начальный масштаб
+        targetScale: 0.85, // конечный масштаб (размер предмета)
+        alpha: 1,
+        done: false,
+    });
+},
+
+
     // Добавляем пульсацию для предмета
-addPulse(row, col) {
+addPulse(row, col, duration = 0.3, maxScale = 1.2) {
     const existing = this.pulseItems.find(p => p.row === row && p.col === col);
     if (existing) return;
+    // Скорость зависит от длительности (чем короче, тем быстрее)
+    const speed = 1 / (duration * 25); // примерная эмпирика
     this.pulseItems.push({
         row,
         col,
         progress: 0,
-        speed: 0.04,
-        direction: 1,  // 1 = увеличение, -1 = уменьшение
-        maxScale: 1.2, // заметное увеличение
+        speed: speed,
+        direction: 1,
+        maxScale: maxScale,
     });
 },
 
@@ -577,19 +675,68 @@ addPulse(row, col) {
     }
 },
 
+updateItemAnimations() {
+    for (let i = this.itemAnimations.length - 1; i >= 0; i--) {
+        const anim = this.itemAnimations[i];
+        anim.progress += anim.speed;
+        if (anim.progress >= 1) {
+            anim.progress = 1;
+            // Удаляем из массива
+            this.itemAnimations.splice(i, 1);
+            // После завершения можно добавить пульсацию на целевой клетке
+            this.addPulse(anim.item.row, anim.item.col, 0.3, 1.1);
+        }
+    }
+},
+
     // ---------- ЦИКЛ ОТРИСОВКИ ----------
     animateLoop() {
-        const loop = () => {
-            this.updatePulses();
-            this.drawAll();
-            requestAnimationFrame(loop);
-        };
+    const loop = () => {
+        this.updatePulses();
+        // Обновляем анимации предметов
+        for (let i = this.itemAnimations.length - 1; i >= 0; i--) {
+            const anim = this.itemAnimations[i];
+            anim.progress += anim.speed;
+            if (anim.progress >= 1) {
+                anim.progress = 1;
+                anim.done = true;
+                this.itemAnimations.splice(i, 1);
+                // После завершения анимации можно добавить пульсацию на целевой клетке
+                this.addPulse(anim.item.row, anim.item.col, 0.5, 1.1);
+            }
+        }
+           this.updateItemAnimations(); 
+        this.drawAll();
         requestAnimationFrame(loop);
-    },
+    };
+    requestAnimationFrame(loop);
+},
 
   drawAll() {
     if (!this.ctx) return;
     this.drawBoard();
+
+    // Рисуем анимации предметов
+for (const anim of this.itemAnimations) {
+    const progress = anim.progress;
+    // Интерполяция позиции
+    const x = anim.startX + (anim.endX - anim.startX) * progress;
+    const y = anim.startY + (anim.endY - anim.startY) * progress;
+    // Масштаб: от 0.01 до 0.85
+    const scale = 0.01 + (anim.targetScale - 0.01) * progress;
+    const size = Math.min(this.cellWidth, this.cellHeight) * scale;
+    const img = this.getSpriteImage(anim.item);
+    if (img) {
+        this.ctx.save();
+        this.ctx.translate(x, y);
+        this.ctx.scale(scale / anim.targetScale * 0.85, scale / anim.targetScale * 0.85);
+        this.ctx.shadowColor = 'rgba(255, 255, 255, 0.1)';
+        this.ctx.shadowBlur = 10;
+        this.ctx.drawImage(img, -size/2, -size/2, size, size);
+        this.ctx.restore();
+    }
+}
+
     this.drawDragGhost(this.dragMouseX, this.dragMouseY);
     this.drawPulseEffects();
 
@@ -724,7 +871,7 @@ combineItems(r1, c1, r2, c2) {
 
         AudioManager.play('combine');
         this.spawnConfetti(r2, c2);
-        this.addPulse(r2, c2);
+       this.addPulse(r2, c2, 0.8, 1.2);
         this.updateUI();
         this.checkWin();
 
@@ -813,14 +960,11 @@ drawBoard() {
     const cw = this.cellWidth;
     const ch = this.cellHeight;
 
-    ctx.clearRect(0, 0, w, w);
+   ctx.clearRect(0, 0, w, w);
 
-    // Фон доски – тёмно-голубой
-    const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
-    gradient.addColorStop(0, '#2c3e50');
-    gradient.addColorStop(1, '#1a252f');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, w, w);
+// Заливка фона цветом тёмной клетки
+ctx.fillStyle = '#7fb8e6';
+ctx.fillRect(0, 0, w, w);
 
     const radius = Math.min(cw, ch) * 0.08;
     for (let r = 0; r < this.rows; r++) {
@@ -831,8 +975,9 @@ drawBoard() {
             const isLocked = cell && cell.locked === true;
 
             // Цвет клетки: тёмно-голубой, шахматка
-            const baseColor = (r + c) % 2 === 0 ? '#2c3e50' : '#34495e';
-            const lockedColor = (r + c) % 2 === 0 ? '#1f2e3a' : '#283a47';
+        // Цвет клетки: светло-голубой, шахматка
+const baseColor = (r + c) % 2 === 0 ? '#99c9ff' : '#acd2ff';
+const lockedColor = (r + c) % 2 === 0 ? '#7fb8e6' : '#8fc2f0';
             const fillColor = isLocked ? lockedColor : baseColor;
 
             // Рисуем скруглённую клетку
