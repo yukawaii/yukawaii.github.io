@@ -1,5 +1,5 @@
 // ============================================================
-//  GAME  — с анимациями GSAP, светлой темой, точным позиционированием
+//  GAME  — с tsParticles, пульсацией, без багов
 // ============================================================
 const Game = {
     rows: 9,
@@ -17,7 +17,7 @@ const Game = {
     isRunning: false,
     isGameOver: false,
     selectedItem: null,
-    dragStart: null,
+    dragStart: null,         // { row, col, item } – исходный предмет
     dragTarget: null,
     isDragging: false,
     dragMouseX: 0,
@@ -34,7 +34,14 @@ const Game = {
     canvas: null,
     ctx: null,
 
-      // ---- НАСТРОЙКА ИМЁН ФАЙЛОВ ----
+    // --- hover (без зажатия) ---
+    hoverCell: null,         // { row, col }
+
+    // --- tsParticles ---
+    particlesContainer: null,
+    particlesRunning: false,
+
+   // ---- НАСТРОЙКА ИМЁН ФАЙЛОВ ----
     imageNames: [
       'kartoha', 'perec', 'petrushka', 'shetka', 
     ],
@@ -42,6 +49,7 @@ const Game = {
     itemTypes: [
          '🥔', '🌶️', '🌿', '🧹', 
     ],
+
 
     maxLevels: [],
     spriteMap: {},
@@ -60,12 +68,8 @@ const Game = {
     onTimerUpdate: null,
     onGameOver: null,
 
-    // --- Анимационные данные ---
-    pulseData: null,
-    particles: [],
-    floatingTexts: [],
-    particleAnimations: [],
-    textAnimations: [],
+    // --- АНИМАЦИОННЫЕ ДАННЫЕ ---
+    pulseItems: [],         // [{ row, col, progress, speed }] – для пульсации
 
     // ---------- ЗАГРУЗКА СПРАЙТОВ ----------
     loadSprites(callback) {
@@ -140,18 +144,13 @@ const Game = {
         this.dragTarget = null;
         this.isDragging = false;
         this.board = [];
-
-        // Убиваем все старые анимации GSAP
-        if (this.pulseData && this.pulseData.timeline) {
-            this.pulseData.timeline.kill();
+        this.hoverCell = null;
+        this.pulseItems = [];
+        this.particlesRunning = false;
+        if (this.particlesContainer) {
+            this.particlesContainer.destroy();
+            this.particlesContainer = null;
         }
-        this.pulseData = null;
-        this.particles = [];
-        this.floatingTexts = [];
-        this.particleAnimations.forEach(anim => anim.kill());
-        this.particleAnimations = [];
-        this.textAnimations.forEach(anim => anim.kill());
-        this.textAnimations = [];
 
         const available = this.sceneConfig.availableTypes;
         const typeIndices = available || this.itemTypes.map((_, i) => i);
@@ -202,7 +201,6 @@ const Game = {
 
         this.loadSprites(() => {
             this.initCanvas();
-            this.drawBoard();
             this.startTimer();
             this.isRunning = true;
 
@@ -229,7 +227,6 @@ const Game = {
         canvas.style.width = size + 'px';
         canvas.style.height = size + 'px';
 
-        // Коэффициенты масштабирования (на случай, если CSS-размер отличается от canvas.width)
         this.scaleX = canvas.width / rect.width;
         this.scaleY = canvas.height / rect.height;
 
@@ -254,10 +251,10 @@ const Game = {
                 clientX = e.clientX;
                 clientY = e.clientY;
             }
-            // Применяем масштабирование, чтобы координаты соответствовали пикселям canvas
-            const x = (clientX - rect.left) * this.scaleX;
-            const y = (clientY - rect.top) * this.scaleY;
-            return { x, y };
+            return {
+                x: (clientX - rect.left) * this.scaleX,
+                y: (clientY - rect.top) * this.scaleY
+            };
         };
 
         const getCell = (x, y) => {
@@ -269,6 +266,30 @@ const Game = {
             return null;
         };
 
+        // --- Обработка движения мыши/пальца (без нажатия) ---
+        const onMouseMove = (e) => {
+            if (this.isDragging) return; // при перетаскивании обрабатываем в onMove
+            const pos = getPos(e);
+            const cell = getCell(pos.x, pos.y);
+            if (cell) {
+                this.hoverCell = cell;
+            } else {
+                this.hoverCell = null;
+            }
+        };
+
+        canvas.addEventListener('mousemove', onMouseMove);
+        canvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            if (!touch) return;
+            const me = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            canvas.dispatchEvent(me);
+        }, { passive: true });
+
+        // --- Обработка начала перетаскивания ---
         const onStart = (e) => {
             e.preventDefault();
             if (this.isPaused || this.isGameOver || !this.isRunning) return;
@@ -279,21 +300,24 @@ const Game = {
             const item = this.board[row]?.[col];
             if (!item) return;
 
+            // Запоминаем предмет и удаляем его с доски
+            this.dragStart = { row, col, item };
+            this.board[row][col] = null; // очищаем исходную клетку
+
             const centerX = col * this.cellWidth + this.cellWidth / 2;
             const centerY = row * this.cellHeight + this.cellHeight / 2;
             this.dragOffsetX = pos.x - centerX;
             this.dragOffsetY = pos.y - centerY;
 
             this.isDragging = true;
-            this.dragStart = { row, col, item };
             this.selectedItem = { row, col, item };
             this.dragMouseX = pos.x;
             this.dragMouseY = pos.y;
             canvas.style.cursor = 'grabbing';
-            this.drawBoard();
-            this.drawDragGhost(pos.x, pos.y);
+            this.hoverCell = null;
         };
 
+        // --- Обработка движения при перетаскивании ---
         const onMove = (e) => {
             e.preventDefault();
             if (!this.isDragging || this.isPaused || this.isGameOver) return;
@@ -304,12 +328,6 @@ const Game = {
             const cell = getCell(pos.x, pos.y);
             if (!cell) {
                 this.dragTarget = null;
-                if (this.pulseData && this.pulseData.timeline) {
-                    this.pulseData.timeline.kill();
-                    this.pulseData = null;
-                }
-                this.drawBoard();
-                this.drawDragGhost(pos.x, pos.y);
                 return;
             }
             const { row, col } = cell;
@@ -327,20 +345,12 @@ const Game = {
 
             if (canMerge) {
                 this.dragTarget = { row, col, item: target };
-                this.startPulse(row, col);
-                this.drawBoard();
-                this.drawDragGhost(pos.x, pos.y);
             } else {
                 this.dragTarget = null;
-                if (this.pulseData && this.pulseData.timeline) {
-                    this.pulseData.timeline.kill();
-                    this.pulseData = null;
-                }
-                this.drawBoard();
-                this.drawDragGhost(pos.x, pos.y);
             }
         };
 
+        // --- Обработка окончания перетаскивания ---
         const onEnd = (e) => {
             e.preventDefault();
             if (!this.isDragging) return;
@@ -352,17 +362,20 @@ const Game = {
                 const { row: r2, col: c2 } = this.dragTarget;
                 if (r1 !== r2 || c1 !== c2) {
                     this.combineItems(r1, c1, r2, c2);
+                } else {
+                    // Если цели нет – возвращаем предмет на место
+                    this.board[r1][c1] = this.dragStart.item;
+                }
+            } else {
+                // Возвращаем предмет на исходную клетку
+                if (this.dragStart) {
+                    this.board[this.dragStart.row][this.dragStart.col] = this.dragStart.item;
                 }
             }
 
             this.dragStart = null;
             this.dragTarget = null;
             this.selectedItem = null;
-            if (this.pulseData && this.pulseData.timeline) {
-                this.pulseData.timeline.kill();
-                this.pulseData = null;
-            }
-            this.drawBoard();
         };
 
         canvas.addEventListener('mousedown', onStart);
@@ -400,127 +413,196 @@ const Game = {
         canvas.style.cursor = 'grab';
     },
 
-    // ---------- АНИМАЦИИ GSAP ----------
-    startPulse(row, col) {
-        if (this.pulseData && this.pulseData.row === row && this.pulseData.col === col) {
-            return;
-        }
-        if (this.pulseData && this.pulseData.timeline) {
-            this.pulseData.timeline.kill();
-            this.pulseData = null;
-        }
+    // ---------- АНИМАЦИИ (tsParticles + пульсация) ----------
+    spawnConfetti(row, col) {
+        if (this.particlesRunning) return;
+        this.particlesRunning = true;
 
-        const maxRadius = Math.min(this.cellWidth, this.cellHeight) * 0.6;
-        const data = { radius: 10, alpha: 0.8 };
-        this.pulseData = { row, col, data };
+        const boardEl = document.getElementById('game-board');
+        const rect = boardEl.getBoundingClientRect();
+        const x = rect.left + col * this.cellWidth + this.cellWidth / 2;
+        const y = rect.top + row * this.cellHeight + this.cellHeight / 2;
 
-        const tl = gsap.timeline({ paused: false, repeat: -1, yoyo: true });
-        tl.to(data, {
-            radius: maxRadius,
-            alpha: 0.2,
-            duration: 0.8,
-            ease: "sine.inOut",
+        const container = document.createElement('div');
+        container.id = 'confetti-container';
+        container.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 15;
+            overflow: visible;
+        `;
+        boardEl.appendChild(container);
+
+        tsParticles.load(container, {
+            fpsLimit: 60,
+            particles: {
+                number: {
+                    value: 30,
+                    density: { enable: false },
+                },
+                color: {
+                    value: ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ffe066', '#ff6b6b'],
+                },
+                shape: {
+                    type: ['circle', 'square', 'triangle'],
+                },
+                opacity: {
+                    value: { min: 0.3, max: 0.9 },
+                    animation: { enable: true, speed: 0.5, startValue: 'random' },
+                },
+                size: {
+                    value: { min: 3, max: 8 },
+                    animation: { enable: true, speed: 2, startValue: 'random' },
+                },
+                move: {
+                    enable: true,
+                    speed: { min: 2, max: 6 },
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    outModes: { default: 'out' },
+                    gravity: { enable: true, acceleration: 0.3 },
+                },
+                life: {
+                    duration: { value: 1.2 },
+                    count: 1,
+                },
+            },
+            emitters: {
+                position: { x: 50, y: 50 },
+                size: { width: 0, height: 0 },
+                rate: { quantity: 30, delay: 0 },
+                life: { duration: 0.1, count: 1 },
+            },
+        }).then((container) => {
+            this.particlesContainer = container;
+            setTimeout(() => {
+                if (this.particlesContainer) {
+                    this.particlesContainer.destroy();
+                    this.particlesContainer = null;
+                }
+                if (container.parentNode) {
+                    container.parentNode.removeChild(container);
+                }
+                this.particlesRunning = false;
+                // Убираем пульсацию с объединённого предмета
+                this.pulseItems = this.pulseItems.filter(p => !(p.row === row && p.col === col));
+            }, 1500);
         });
-        this.pulseData.timeline = tl;
     },
 
-    spawnParticles(row, col) {
-        const x = col * this.cellWidth + this.cellWidth / 2;
-        const y = row * this.cellHeight + this.cellHeight / 2;
-        const colors = ['#ffb07c', '#ff8a5c', '#ffd4b8', '#ff6b35', '#ffaa66', '#ff4d4d'];
-        const count = 25;
-        for (let i = 0; i < count; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const speed = 2 + Math.random() * 5;
-            const size = 4 + Math.random() * 10;
-            const particle = {
-                x: x,
-                y: y,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed - 1.5,
-                size: size,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                alpha: 1,
-            };
-            this.particles.push(particle);
-            // Анимация через GSAP
-            const anim = gsap.to(particle, {
-                x: x + particle.vx * 30,
-                y: y + particle.vy * 30,
-                size: 0,
-                alpha: 0,
-                duration: 0.8 + Math.random() * 0.5,
-                ease: "power2.out",
-                onComplete: () => {
-                    const idx = this.particles.indexOf(particle);
-                    if (idx > -1) this.particles.splice(idx, 1);
-                }
-            });
-            this.particleAnimations.push(anim);
+    // Добавляем пульсацию для предмета
+    addPulse(row, col) {
+        const existing = this.pulseItems.find(p => p.row === row && p.col === col);
+        if (existing) return;
+        this.pulseItems.push({
+            row,
+            col,
+            progress: 0,
+            speed: 0.03 + Math.random() * 0.02,
+        });
+    },
+
+    updatePulses() {
+        for (const p of this.pulseItems) {
+            p.progress += p.speed;
+            if (p.progress > 1) p.progress = 0;
         }
+        this.pulseItems = this.pulseItems.filter(p => {
+            const item = this.board[p.row]?.[p.col];
+            return item !== null && item !== undefined;
+        });
     },
 
     // ---------- ЦИКЛ ОТРИСОВКИ ----------
     animateLoop() {
         const loop = () => {
-            this.drawEffects();
+            this.updatePulses();
+            this.drawAll();
             requestAnimationFrame(loop);
         };
         requestAnimationFrame(loop);
     },
 
-    drawEffects() {
+    drawAll() {
         if (!this.ctx) return;
+        this.drawBoard();
+        this.drawDragGhost(this.dragMouseX, this.dragMouseY);
+        this.drawPulseEffects();
+        // Добавляем пульсацию для hover-клетки (без зажатия)
+        if (this.hoverCell && !this.isDragging) {
+            const { row, col } = this.hoverCell;
+            const item = this.board[row]?.[col];
+            if (item) {
+                // Рисуем пульсирующий ореол вокруг клетки
+                this.drawHoverPulse(row, col);
+            }
+        }
+    },
+
+    drawHoverPulse(row, col) {
+        const ctx = this.ctx;
+        const cw = this.cellWidth;
+        const ch = this.cellHeight;
+        const x = col * cw + cw / 2;
+        const y = row * ch + ch / 2;
+        const time = Date.now() / 1000;
+        const radius = Math.min(cw, ch) * 0.4 + Math.sin(time * 3) * 4;
+        ctx.save();
+        ctx.shadowColor = '#ffb07c';
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = `rgba(255, 176, 124, ${0.5 + 0.2 * Math.sin(time * 2)})`;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    },
+
+    drawPulseEffects() {
+        if (this.pulseItems.length === 0 || !this.ctx) return;
         const ctx = this.ctx;
         const cw = this.cellWidth;
         const ch = this.cellHeight;
 
-        // Пульсация
-        if (this.pulseData) {
-            const { row, col, data } = this.pulseData;
-            const x = col * cw + cw / 2;
-            const y = row * ch + ch / 2;
-            ctx.save();
-            ctx.shadowColor = '#ffb07c';
-            ctx.shadowBlur = 30;
-            ctx.beginPath();
-            ctx.arc(x, y, data.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 176, 124, ${data.alpha * 0.3})`;
-            ctx.fill();
-            ctx.strokeStyle = `rgba(255, 176, 124, ${data.alpha * 0.8})`;
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            ctx.restore();
-        }
+        for (const p of this.pulseItems) {
+            const x = p.col * cw + cw / 2;
+            const y = p.row * ch + ch / 2;
+            const scale = 0.85 + 0.15 * Math.sin(p.progress * Math.PI * 2);
+            const size = Math.min(cw, ch) * 0.7 * scale;
 
-        // Частицы
-        if (this.particles.length > 0) {
+            const item = this.board[p.row]?.[p.col];
+            if (!item) continue;
+            const img = this.getSpriteImage(item);
+            if (!img) continue;
+
             ctx.save();
-            for (const p of this.particles) {
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
+            ctx.shadowBlur = 15;
+            ctx.drawImage(img, -size/2, -size/2, size, size);
             ctx.restore();
         }
     },
 
-    // ---------- ПРИЗРАК ----------
+    // ---------- ПРИЗРАК (без прозрачности) ----------
     drawDragGhost(mx, my) {
-        if (!this.ctx || !this.dragStart) return;
+        if (!this.isDragging || !this.dragStart || !this.ctx) return;
         const item = this.dragStart.item;
         if (!item) return;
         const size = Math.min(this.cellWidth, this.cellHeight) * 0.7;
-        // Центр предмета смещён относительно курсора на dragOffset
         const x = mx - size/2 - this.dragOffsetX;
         const y = my - size/2 - this.dragOffsetY;
 
         this.ctx.save();
-        this.ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        this.ctx.shadowColor = 'rgba(0,0,0,0.1)';
         this.ctx.shadowBlur = 20;
-        this.ctx.globalAlpha = 0.9;
+        // Убрана прозрачность (globalAlpha = 1 по умолчанию)
 
         const img = this.getSpriteImage(item);
         if (img) {
@@ -530,7 +612,6 @@ const Game = {
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
             this.ctx.fillStyle = '#d96c6c';
-            this.ctx.shadowBlur = 20;
             this.ctx.fillText(item.type, mx - this.dragOffsetX, my - this.dragOffsetY + 2);
         }
         this.ctx.restore();
@@ -545,7 +626,7 @@ const Game = {
     },
 
     combineItems(r1, c1, r2, c2) {
-        const item1 = this.board[r1]?.[c1];
+        const item1 = this.dragStart ? this.dragStart.item : this.board[r1]?.[c1];
         const item2 = this.board[r2]?.[c2];
         if (!item1 || !item2) return;
         if (item1.type !== item2.type) return;
@@ -556,15 +637,17 @@ const Game = {
         if (!this.canMergeToLevel(typeIndex, currentLevel)) return;
 
         const newLevel = currentLevel + 1;
-        this.board[r1][c1] = {
+        // Новый предмет ставим ВО ВТОРУЮ клетку (куда принесли)
+        this.board[r2][c2] = {
             type: item1.type,
             typeIndex: typeIndex,
             level: newLevel,
             merged: true,
-            row: r1,
-            col: c1,
+            row: r2,
+            col: c2,
         };
-        this.board[r2][c2] = null;
+        // Первую клетку очищаем (она уже очищена в onStart, но на всякий случай)
+        this.board[r1][c1] = null;
 
         const points = 10 * newLevel;
         this.score += points;
@@ -577,11 +660,18 @@ const Game = {
 
         AudioManager.play('combine');
 
-        this.spawnParticles(r1, c1);
+        // --- АНИМАЦИИ ---
+        // Конфетти на целевой клетке (r2, c2)
+        this.spawnConfetti(r2, c2);
+        // Пульсация объединённого предмета
+        this.addPulse(r2, c2);
+
         this.updateUI();
         this.checkWin();
-        this.drawBoard();
-        this.showFloatingText(r1, c1, '✨ ' + getText('game_combine', 'Combined!'));
+
+        // Обнуляем dragStart, чтобы не возвращать предмет
+        this.dragStart = null;
+        this.dragTarget = null;
     },
 
     checkWin() {
@@ -606,25 +696,6 @@ const Game = {
         }
     },
 
-    showFloatingText(row, col, text) {
-        if (!this.ctx) return;
-        const x = col * this.cellWidth + this.cellWidth / 2;
-        const y = row * this.cellHeight - 10;
-        const data = { alpha: 1, yOffset: 0, text, x, y };
-        this.floatingTexts.push(data);
-        const anim = gsap.to(data, {
-            alpha: 0,
-            yOffset: -30,
-            duration: 0.8,
-            ease: "power2.out",
-            onComplete: () => {
-                const idx = this.floatingTexts.indexOf(data);
-                if (idx > -1) this.floatingTexts.splice(idx, 1);
-            }
-        });
-        this.textAnimations.push(anim);
-    },
-
     // ---------- ОТРИСОВКА ДОСКИ ----------
     drawBoard() {
         const ctx = this.ctx;
@@ -636,8 +707,8 @@ const Game = {
         ctx.clearRect(0, 0, w, w);
 
         const gradient = ctx.createRadialGradient(w/2, w/2, 0, w/2, w/2, w*0.7);
-        gradient.addColorStop(0, '#fff5f5');
-        gradient.addColorStop(1, '#ffd6d6');
+       gradient.addColorStop(0, '#f5e6e6');
+gradient.addColorStop(1, '#e6cccc');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, w, w);
 
@@ -661,7 +732,7 @@ const Game = {
                 const x = c * cw, y = r * ch;
                 const isBorder = r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1;
                 if (!isBorder) {
-                    const shade = (r + c) % 2 === 0 ? 'rgba(255,240,240,0.6)' : 'rgba(255,220,220,0.3)';
+                   const shade = (r + c) % 2 === 0 ? 'rgba(230,210,210,0.6)' : 'rgba(210,190,190,0.4)';
                     ctx.fillStyle = shade;
                     ctx.fillRect(x + 2, y + 2, cw - 4, ch - 4);
                 }
@@ -703,19 +774,6 @@ const Game = {
                 }
             }
         }
-
-        for (const ft of this.floatingTexts) {
-            ctx.save();
-            ctx.globalAlpha = ft.alpha;
-            ctx.font = 'bold ' + (Math.min(this.cellWidth, this.cellHeight) * 0.35) + 'px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
-            ctx.shadowColor = 'rgba(0,0,0,0.1)';
-            ctx.shadowBlur = 8;
-            ctx.fillStyle = '#d96c6c';
-            ctx.fillText(ft.text, ft.x, ft.y + ft.yOffset);
-            ctx.restore();
-        }
     },
 
     // ---------- ТАЙМЕР И UI ----------
@@ -739,28 +797,22 @@ const Game = {
         const levelEl = document.getElementById('game-level');
         const timerEl = document.getElementById('game-timer');
         const menuScore = document.getElementById('menu-score-display');
-
         if (scoreEl) scoreEl.textContent = this.score;
         if (levelEl) levelEl.textContent = this.level;
         if (timerEl) timerEl.textContent = Math.max(0, this.timer);
         if (menuScore) menuScore.textContent = '⭐ ' + this.score;
-
         if (this.onScoreUpdate) this.onScoreUpdate(this.score);
         if (this.onLevelUpdate) this.onLevelUpdate(this.level);
         if (this.onTimerUpdate) this.onTimerUpdate(this.timer);
     },
 
     showOverlay(type) {
-        const overlay = type === 'pause' ?
-            document.getElementById('overlay-pause') :
-            document.getElementById('overlay-gameover');
+        const overlay = type === 'pause' ? document.getElementById('overlay-pause') : document.getElementById('overlay-gameover');
         if (overlay) overlay.classList.add('active');
     },
 
     hideOverlay(type) {
-        const overlay = type === 'pause' ?
-            document.getElementById('overlay-pause') :
-            document.getElementById('overlay-gameover');
+        const overlay = type === 'pause' ? document.getElementById('overlay-pause') : document.getElementById('overlay-gameover');
         if (overlay) overlay.classList.remove('active');
     },
 
@@ -773,7 +825,6 @@ const Game = {
             this.hideOverlay('pause');
             this.startTimer();
         }
-        this.drawBoard();
         return this.isPaused;
     },
 
@@ -803,7 +854,8 @@ const Game = {
     },
 
     resize() {
-        this.initCanvas();
-        this.drawBoard();
+        if (this.canvas) {
+            this.initCanvas();
+        }
     }
 };
