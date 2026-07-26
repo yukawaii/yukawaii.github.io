@@ -10,6 +10,58 @@
     <!-- ПРАВИЛЬНЫЙ ПУТЬ К coloring.js -->
    <!--  <script src="js/coloring.js"></script> -->
      <script src="js/col1.js"></script>
+     <script>
+    (function() {
+        // Перехватываем конструктор AudioContext
+        const OriginalAudioContext = window.AudioContext || window.webkitAudioContext;
+        if (OriginalAudioContext) {
+            // Заменяем на пустышку, которая ничего не делает
+            const DummyAudioContext = function() {
+                console.warn('🎧 AudioContext заблокирован (звук отключён)');
+                // Возвращаем объект с минимальными методами, чтобы не вызывать ошибок
+                return {
+                    // все методы – пустышки
+                    resume: () => Promise.resolve(),
+                    suspend: () => Promise.resolve(),
+                    close: () => Promise.resolve(),
+                    createGain: () => ({ connect: () => {} }),
+                    createOscillator: () => ({ 
+                        connect: () => {},
+                        start: () => {},
+                        stop: () => {},
+                        type: 'sine',
+                        frequency: { value: 0 },
+                    }),
+                    createBufferSource: () => ({
+                        connect: () => {},
+                        start: () => {},
+                        stop: () => {},
+                        buffer: null,
+                    }),
+                    // ... и так далее, если потребуется
+                };
+            };
+            // Заменяем глобальные конструкторы
+            window.AudioContext = DummyAudioContext;
+            window.webkitAudioContext = DummyAudioContext;
+        }
+
+        // Также перехватываем создание HTMLAudioElement (если кто-то использует new Audio())
+        const OriginalAudio = window.Audio;
+        if (OriginalAudio) {
+            window.Audio = function(src) {
+                console.warn('🎧 HTMLAudioElement заблокирован (звук отключён)');
+                // Возвращаем заглушку, чтобы избежать ошибок
+                const dummy = document.createElement('audio');
+                // Можно отключить все методы
+                dummy.play = () => Promise.resolve();
+                dummy.pause = () => {};
+                dummy.load = () => {};
+                return dummy;
+            };
+        }
+    })();
+</script>
 </head>
 <body oncontextmenu="return false">
 
