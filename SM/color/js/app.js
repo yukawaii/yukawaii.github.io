@@ -574,7 +574,7 @@ function openColoring(categoryKey, index, imagePath) {
 
     const coloringBook = document.createElement('jl-coloringbook');
     coloringBook.setAttribute('autoinit', '1');
-    coloringBook.setAttribute('css', 'customizedTheme.css');
+    coloringBook.setAttribute('css');
     coloringBook.setAttribute('maxbrushsize', '32');
     coloringBook.style.width = '100%';
     coloringBook.style.display = 'block';
