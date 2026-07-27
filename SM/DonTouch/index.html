@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <title>Батискаф в западне!</title>
-    <style>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script><script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script><title>Батискаф в западне!</title><style>
 
-/* Блокировка скролла для всех элементов */
 * {
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
@@ -5649,10 +5643,10 @@ function closeShieldAdModal() {
     }
 }
 
-// Возобновить игру после получения щитов
+
 function resumeGameAfterShield() {
     if (!gameActive) {
-        // Если игра не активна, активируем её
+  
         gameActive = true;
     }
     
@@ -5668,12 +5662,12 @@ function resumeGameAfterShield() {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
     
-    // Запускаем движение, если оно было
+
     if (iint) {
         setTimeout(iint, t);
     }
     
-    // Возобновляем фоновые эффекты, если они были остановлены
+
     if (gameActive) {
         startBackgroundEffects();
     }
@@ -5681,25 +5675,20 @@ function resumeGameAfterShield() {
     playButtonSound();
     console.log('▶️ Игра возобновлена после получения щитов');
 }
-                // Получить щиты через рекламу
-// Получить щиты через рекламу
-// Получить щиты через рекламу
+               
 function getShieldsViaAd() {
-    // НЕ ЗАКРЫВАЕМ модалку с предложением - просто скрываем её, но НЕ снимаем паузу!
+
     if (shieldAdModal) {
         shieldAdModal.classList.remove('active');
     }
-    // Пауза уже поставлена в openShieldAdModal(), НЕ снимаем её!
-    
-    // Показываем модалку загрузки
+  
     if (shieldAdLoadingModal) {
         shieldAdLoadingModal.classList.add('active');
     }
     
-    // Флаг для отслеживания, была ли показана реклама
+
     var adShown = false;
-    
-    // Таймаут на случай, если реклама зависла (60 секунд)
+  
     var adTimeout = setTimeout(function() {
         if (!adShown) {
             console.log('⏰ Таймаут загрузки рекламы (10 сек)');
