@@ -5,22 +5,18 @@
           <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- Для корректной работы в iframe ВК -->
 <meta name="format-detection" content="telephone=no">
-<!-- ====== ПРИМЕНЯЕМ ТЕМУ ДО ЗАГРУЗКИ СТРАНИЦЫ ====== -->
 <script>
     (function() {
         const THEME_KEY = 'wordgame_theme';
         const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        
         const themeColors = {
             light: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             dark: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
             blue: 'linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%)',
             green: 'linear-gradient(135deg, #43a047 0%, #1b5e20 100%)'
         };
-        
         const style = document.createElement('style');
         style.id = 'themePreloadStyle';
         style.textContent = `
@@ -37,14 +33,11 @@
         document.head.appendChild(style);
     })();
 </script>
-<!-- ==================================================== -->
 <script>
     (function() {
         const THEME_KEY = 'wordgame_theme';
         const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
-        
         document.documentElement.setAttribute('data-theme', savedTheme);
-        
         const themeColors = {
             light: {
                 card: 'rgba(255, 255, 255, 0.98)',
@@ -71,9 +64,7 @@
                 border: '#c5e0c5'
             }
         };
-        
         const colors = themeColors[savedTheme] || themeColors.light;
-        
         const style = document.createElement('style');
         style.id = 'themeMenuStyle'; // ← добавляем id
         style.textContent = `
@@ -114,7 +105,6 @@
   window.vkBridge = vkBridge; 
 </script>
 <style>
-
     /* Сброс отступов для iframe ВК */
     body {
         margin: 0 !important;
@@ -129,7 +119,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
  <script src = "./App.js"></script>
 </head>
-
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -140,12 +129,9 @@
         }
     });
 </script>
-    <!-- ====== ЧАСТИЦЫ ФОНА ====== -->
 <div class="particles-container" id="particlesContainer"></div>
-    <!-- ====== НАЧАЛЬНЫЙ ЭКРАН ====== -->
 <div id="startScreen" class="start-screen">
     <div class="start-screen__content">
-        <!-- Логотип -->
         <div class="start-screen__logo">
             <div class="start-screen__icon">🧩</div>
             <h1 class="start-screen__title">Словарекс</h1>
@@ -154,7 +140,6 @@
 <div class="start-screen__total-score" id="totalScoreDisplay">
     💎 0
 </div>
-        <!-- Основные кнопки -->
         <div class="start-screen__buttons">
             <button class="start-screen__btn start-screen__btn--play" id="startPlayBtn">
                 🚀 Начать игру
@@ -163,8 +148,6 @@
                 📖 Как играть
             </button>
         </div>
-
-        <!-- Нижняя панель -->
         <div class="start-screen__bottom">
             <button class="start-screen__icon-btn" id="startThemeBtn" title="Сменить тему">  🎨            </button>
             <button class="start-screen__icon-btn" id="startAchievementsBtn" title="Достижения">  🏆</button>
@@ -172,23 +155,18 @@
             <button class="start-screen__icon-btn" id="startShareBtn" title="Пригласить друзей">  📤       </button>
             <button class="start-screen__icon-btn" id="startSoundBtn" title="Звук">       🔊            </button>
         </div>
-
         <div class="start-screen__footer">
             <span>Сложи слово — прокачай мозг!</span>
         </div>
     </div>
 </div>
-<!-- ====== МОДАЛКА ГАЛАКТИКИ ====== -->
 <div id="galaxyModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--galaxy">
         <button class="modal-overlay__close" id="galaxyModalClose">✕</button>
         <div id="galaxyModalBody">
-            <!-- Содержимое будет генерироваться JS -->
         </div>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА ЕЖЕДНЕВНОГО БОНУСА ====== -->
 <div id="bonusModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--bonus">
         <h2>🎁 Ежедневный бонус!</h2>
@@ -211,20 +189,16 @@
         </div>
     </div>
 </div>
-<!-- ====== МОДАЛКА СПИСКА СВИТКОВ ====== -->
 <div id="scrollsModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--scrolls">
         <button class="modal-overlay__close" id="scrollsModalClose">✕</button>
         <h2>📜 Свитки мудрости</h2>
         <div class="scrolls-grid" id="scrollsGrid">
-            <!-- Список свитков будет сгенерирован JS -->
         </div>
         <div id="scrollsPagination"></div>
         <button class="modal-overlay__start-btn" id="scrollsModalBtn">✨ Закрыть</button>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА ТЕКСТА СВИТКА ====== -->
 <div id="scrollTextModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--scroll-text">
         <button class="modal-overlay__close" id="scrollTextModalClose">✕</button>
@@ -236,7 +210,6 @@
         </div>
     </div>
 </div>
-<!-- ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПЕРЕЗАПУСКА ====== -->
 <div id="restartModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--restart">
         <h2>🔄 Начать заново?</h2>
@@ -253,7 +226,6 @@
         </div>
     </div>
 </div>
-<!-- ====== МОДАЛКА "КАК ИГРАТЬ" ====== -->
 <div id="rulesModal" class="modal-overlay">
     <div class="modal-overlay__content">
         <button class="modal-overlay__close" id="rulesModalClose">✕</button>
@@ -315,13 +287,10 @@
                     <p>Каждые 5 звёзд открывают древний свиток Мудрости. Собери все 400 свитков и стань Хранителем Мудрости!</p>
                 </div>
             </div>
-
-            
         </div>
         <button class="modal-overlay__start-btn" id="rulesModalStartBtn">🚀 Начать играть</button>
     </div>
 </div>
-                                            <!-- ====== МОДАЛКА ВЫБОРА ТЕМЫ ====== -->
                                             <div id="themeModal" class="modal-overlay">
                                                 <div class="modal-overlay__content modal-overlay__content--theme">
                                                     <button class="modal-overlay__close" id="themeModalClose">✕</button>
@@ -353,9 +322,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-   
    <div class="game-container" style="display:none;">
-        <!-- Хедер -->
         <div class="game-header">
             <div class="stats">
                 <div class="stat-card stat-level">
@@ -374,37 +341,26 @@
             <div class="action-buttons">
                 <button class="action-btn" id="hintBtn" title="Подсказка">💡 <span id="hintCount">5</span></button>
                 <button class="action-btn" id="soundBtn" title="Звук">🔊</button>
-             <!--     <button class="action-btn" id="leaderboardBtn" title="Таблица лидеров">🏆</button>-->
                     <button class="action-btn" id="shareBtn" title="Пригласить">📤</button>
                 <button class="action-btn" id="restartBtn" title="Начать заново">🔄</button>
                     <button class="action-btn" id="menuBtn" title="В меню">🏠</button> 
             </div>
         </div>
-
-        <!-- Основное слово -->
         <div class="base-word-section">
             <div class="base-word-label">📖 Базовое слово</div>
             <div class="base-word" id="baseWord">ЗАГРУЗКА</div>
         </div>
-
-        <!-- Буквы (плитки) -->
         <div class="letters-grid" id="lettersGrid"></div>
-
-        <!-- Текущее составляемое слово -->
         <div class="current-word-section">
             <div class="current-word-label">✍️ Ваше слово</div>
             <div class="current-word" id="currentWord">
                 <span class="placeholder">Нажмите на буквы...</span>
             </div>
         </div>
-
-        <!-- Панель управления -->
         <div class="control-panel">
        <button class="control-btn" id="submitBtn">✅ Отправить</button><button class="control-btn" id="backspaceBtn">⌫ Удалить</button><button class="control-btn" id="clearBtn">🗑️ Очистить</button><button class="control-btn" id="shuffleBtn">🎲 Перемешать</button>
         </div>
-<!-- ПРАВАЯ КОЛОНКА (ПК) -->
 <div class="right-column">
-    <!-- Прогресс-бар -->
     <div class="progress-section">
         <div class="progress-label">
             <span>📊 Прогресс уровня</span>
@@ -414,8 +370,6 @@
             <div class="progress-fill" id="progressFill"></div>
         </div>
     </div>
-
-    <!-- Найденные слова -->
     <div class="found-section">
         <div class="found-header">
             <span>🏆 Найденные слова</span>
@@ -425,13 +379,9 @@
             <div class="empty-message">Слова появятся здесь...</div>
         </div>
     </div>
-
-    <!-- Кнопка след. уровня -->
     <button class="next-level-btn" id="nextLevelBtn" disabled>🔒 Следующий уровень</button>
 </div>
-        
     </div>
-<!-- ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ВЫХОДА В МЕНЮ ====== -->
 <div id="exitModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--exit">
         <h2>🏠 Выйти в меню?</h2>
@@ -448,7 +398,6 @@
         </div>
     </div>
 </div>
-    <!-- Модалка завершения -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <h2>🎉 Уровень пройден!</h2>
@@ -459,11 +408,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Тост-уведомления -->
     <div class="toast" id="toast"></div>
-
-    <!-- ====== МОДАЛКА ДОСТИЖЕНИЯ ====== -->
 <div id="achievementModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--achievement">
         <div class="achievement-popup">
@@ -475,8 +420,6 @@
         </div>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА ПОДСКАЗОК С РЕКЛАМОЙ ====== -->
 <div id="hintAdModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--hint-ad">
         <h2>💡 Подсказки кончились!</h2>
@@ -493,15 +436,12 @@
         </div>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА ЗАВЕРШЕНИЯ ИГРЫ (ВРЕМЯ ВЫШЛО) ====== -->
 <div id="gameOverModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--gameover">
         <div class="gameover-icon">⏰</div>
         <h2>Время вышло!</h2>
         <p class="gameover-text">Игра окончена. Но впереди ещё много интересных слов!</p>
         <div class="gameover-stats" id="gameoverStats">
-            <!-- Статистика будет заполняться JS -->
         </div>
         <div class="gameover-buttons">
             <button class="gameover-btn gameover-btn--menu" onclick="gameOverToMenu()">
@@ -516,19 +456,15 @@
         </div>
     </div>
 </div>
-
-<!-- ====== МОДАЛКА СПИСКА ДОСТИЖЕНИЙ ====== -->
 <div id="achievementsModal" class="modal-overlay">
     <div class="modal-overlay__content modal-overlay__content--achievements">
         <button class="modal-overlay__close" id="achievementsModalClose">✕</button>
         <h2>🏆 Достижения</h2>
         <div class="achievements-grid" id="achievementsGrid">
-            <!-- Список достижений будет сгенерирован JS -->
         </div>
         <button class="modal-overlay__start-btn" id="achievementsModalBtn">📊 Закрыть</button>
     </div>
 </div>
-
 <script>
     // Проверяем, доступен ли VK Bridge
     (function() {
@@ -536,7 +472,6 @@
             console.log('ℹ️ VK Bridge не найден');
             return;
         }
-        
         console.log('✅ VK Bridge найден');
     })();
 </script>
