@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://rekindle.ink/sitemap.xml
