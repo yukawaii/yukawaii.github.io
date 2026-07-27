@@ -2,7 +2,6 @@
 <html>
 <head>
  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"><script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script><script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script><title>Батискаф в западне!</title><style>
-
 * {
     -webkit-touch-callout: none !important;
     -webkit-user-select: none !important;
@@ -29,7 +28,6 @@ html, body {
 #gameblock, #mainMenu, #gameContainer {
     touch-action: none !important;
 }
-
 /* Разрешаем касания для кнопок и элементов управления */
 button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-btn.play, .menu-btn.continue, .menu-btn.howto {
     touch-action: manipulation !important;
@@ -37,7 +35,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     -webkit-user-select: none !important;
     user-select: none !important;
 }
-
 /* Разрешаем скролл только для модалок */
 .modal-overlay.active {
     touch-action: auto !important;
@@ -48,12 +45,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     max-height: 90vh !important;
     -webkit-overflow-scrolling: touch !important;
 }
-
 /* Разрешаем скролл для списков внутри модалок */
 #achievementsList, .modal-content ul, .modal-content .achievement-item {
     touch-action: auto !important;
 }
-
 /* Блокировка выделения текста */
 ::selection {
     background: transparent !important;
@@ -61,107 +56,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 ::-moz-selection {
     background: transparent !important;
 }
-
-/* Скрываем скроллбар */
 ::-webkit-scrollbar {
     width: 0 !important;
     height: 0 !important;
 }
-        /* ===== ВСЕ ВАШИ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ ===== */
-        body {
-              background: #1a1a2e url(./background3.jpg) no-repeat center fixed;
-            background-size: cover;
-            margin: 0;
-            padding: 10px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            font-family: Arial, sans-serif;
-            box-sizing: border-box;
-            padding-top: 5px;
-
-        }
-
-        #mainMenu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 16px;
-            min-width: 280px;
-            max-width: 90%;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 10px;
-        }
-
-        #mainMenu h1 {
-            color: #fff;
-            font-size: 28px;
-            margin: 0 0 10px 0;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-            text-align: center;
-            font-weight: 700;
-        }
-
-        #mainMenu .subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .menu-btn {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #fff;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            box-sizing: border-box;
-        }
-
-        .menu-btn:active {
-            transform: scale(0.96);
-        }
-
-        .menu-btn.play {
-            background: linear-gradient(135deg, #43b581, #2d8f5e);
-        }
-        .menu-btn.play:hover {
-            background: linear-gradient(135deg, #4fcb91, #329e68);
-        }
-
-        .menu-btn.continue {
-            background: linear-gradient(135deg, #4fc3f7, #0288d1);
-        }
-        .menu-btn.continue:hover {
-            background: linear-gradient(135deg, #6dd0f8, #039be5);
-        }
-
-        .menu-btn.howto {
-            background: linear-gradient(135deg, #faa61a, #d4880f);
-        }
-        .menu-btn.howto:hover {
-            background: linear-gradient(135deg, #fbb43a, #e09618);
-        }
-
-        .menu-btn.invite {
-            background: linear-gradient(135deg, #7289da, #5a6fc9);
-        }
-        .menu-btn.invite:hover {
-            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
-        }
-
+     body{ background: #1a1a2e url(./background3.jpg) no-repeat center fixed; background-size: cover; margin: 0; padding: 10px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; font-family: Arial, sans-serif; box-sizing: border-box; padding-top: 5px;} #mainMenu{ display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px; background: rgba(0, 0, 0, 0.7); border-radius: 16px; min-width: 280px; max-width: 90%; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); margin-top: 10px;} #mainMenu h1{ color: #fff; font-size: 28px; margin: 0 0 10px 0; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8); text-align: center; font-weight: 700;} #mainMenu .subtitle{ color: rgba(255, 255, 255, 0.7); font-size: 14px; margin-bottom: 10px; text-align: center;} .menu-btn{ width: 100%; padding: 14px 20px; font-size: 18px; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); box-sizing: border-box;} .menu-btn:active{ transform: scale(0.96);} .menu-btn.play{ background: linear-gradient(135deg, #43b581, #2d8f5e);} .menu-btn.play:hover{ background: linear-gradient(135deg, #4fcb91, #329e68);} .menu-btn.continue{ background: linear-gradient(135deg, #4fc3f7, #0288d1);} .menu-btn.continue:hover{ background: linear-gradient(135deg, #6dd0f8, #039be5);} .menu-btn.howto{ background: linear-gradient(135deg, #faa61a, #d4880f);} .menu-btn.howto:hover{ background: linear-gradient(135deg, #fbb43a, #e09618);} .menu-btn.invite{ background: linear-gradient(135deg, #7289da, #5a6fc9);} .menu-btn.invite:hover{ background: linear-gradient(135deg, #8a9ee8, #6a80d4);}
         /* ===== КНОПКА ПОЧИНКИ В МОДАЛКЕ ПРОИГРЫША ===== */
                 .modal-btn.repair {
                     background: linear-gradient(135deg, #4fc3f7, #0288d1);
@@ -173,124 +72,13 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 .modal-btn.repair:active {
                     transform: scale(0.96);
                 }
-
         .menu-btn.games {
             background: linear-gradient(135deg, #9b59b6, #7d3c98);
         }
         .menu-btn.games:hover {
             background: linear-gradient(135deg, #af6fc9, #8e4fa8);
         }
-
-        #gameContainer {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 340px;
-            margin-top: -5px;
-        }
-
-        #gameInfo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 4px 8px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 10px;
-            margin-bottom: 6px;
-            color: #fff;
-            font-size: 14px;
-            font-weight: bold;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #gameInfo .level-info {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        #gameInfo .level-info .level-num {
-            color: #faa61a;
-            font-size: 18px;
-        }
-
-        #gameInfo .shield-info {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        #gameInfo .shield-info .shield-icon {
-            font-size: 20px;
-        }
-
-        #topBar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 6px;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        #topBar .btn-small {
-            padding: 8px 14px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.2s;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #topBar .btn-small:active {
-            transform: scale(0.92);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        #topBar .btn-small .label {
-            font-size: 12px;
-            margin-left: 4px;
-        }
-
-        #topBar .btn-small.icon-only .label {
-            display: none;
-        }
-
-        .game-wrapper {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 16px;
-            padding: 6px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #gameblock {      
-            width: 85vw;
-            max-width: 300px;
-            height: 85vw;
-            max-height: 370px;
-            display: inline-block;
-            background: linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%);
-            position: relative;
-            border: 1px solid black;
-            overflow: hidden;
-            border-radius: 8px;
-            touch-action: none;
-            transition: background 5s ease;
-        }
+        #gameContainer{ display: none; flex-direction: column; align-items: center; width: 100%; max-width: 340px; margin-top: -5px;} #gameInfo{ display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 4px 8px; background: rgba(0, 0, 0, 0.6); border-radius: 10px; margin-bottom: 6px; color: #fff; font-size: 14px; font-weight: bold; backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.1);} #gameInfo .level-info{ display: flex; align-items: center; gap: 6px;} #gameInfo .level-info .level-num{ color: #faa61a; font-size: 18px;} #gameInfo .shield-info{ display: flex; align-items: center; gap: 4px;} #gameInfo .shield-info .shield-icon{ font-size: 20px;} #topBar{ display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 6px; gap: 8px; flex-wrap: wrap;} #topBar .btn-small{ padding: 8px 14px; font-size: 18px; border: none; border-radius: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; cursor: pointer; backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.15); transition: all 0.2s; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center;} #topBar .btn-small:active{ transform: scale(0.92); background: rgba(255, 255, 255, 0.2);} #topBar .btn-small .label{ font-size: 12px; margin-left: 4px;} #topBar .btn-small.icon-only .label{ display: none;} .game-wrapper{ background: rgba(0, 0, 0, 0.5); border-radius: 16px; padding: 6px; backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.1);} #gameblock{ width: 85vw; max-width: 300px; height: 85vw; max-height: 370px; display: inline-block; background: linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%); position: relative; border: 1px solid black; overflow: hidden; border-radius: 8px; touch-action: none; transition: background 5s ease;}
                         /* ===== АНИМАЦИЯ ЗАГРУЗКИ РЕКЛАМЫ ===== */
                         @keyframes loadingBar {
                             0% { transform: translateX(-100%); }
@@ -301,14 +89,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
     color: #ff6b6b;
     text-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
 }
-
 #repairErrorModal .modal-content .modal-buttons .modal-btn.primary {
     background: linear-gradient(135deg, #43b581, #2d8f5e);
 }
 #repairErrorModal .modal-content .modal-buttons .modal-btn.primary:hover {
     background: linear-gradient(135deg, #4fcb91, #329e68);
 }
-
         /* ===== СТЕНА С ШИПАМИ ===== */
         #wallDecor {
             position: absolute;
@@ -320,14 +106,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             pointer-events: none;
             overflow: hidden;
         }
-
         .wall-spikes {
             display: flex;
             justify-content: space-around;
             width: 100%;
             height: 100%;
         }
-
         .spike {
             width: 20px;
             height: 100%;
@@ -335,7 +119,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             position: relative;
         }
-
         .spike::after {
             content: '☠';
             position: absolute;
@@ -346,7 +129,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             color: #8B0000;
             opacity: 0.7;
         }
-
         .vine {
             position: absolute;
             bottom: 0;
@@ -366,7 +148,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             opacity: 0.5;
             animation: vineWave 3s ease-in-out infinite;
         }
-
         .vine::before {
             content: '🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱';
             position: absolute;
@@ -378,117 +159,16 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             white-space: nowrap;
             animation: vineScroll 8s linear infinite;
         }
-
         @keyframes vineScroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-
         @keyframes vineWave {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-3px); }
         }
-
-        /* ===== БАТИСКАФ (игрок) ===== */
-        #player {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            z-index: 10;
-            transition: width 0.3s, height 0.3s, transform 0.3s;
-            filter: drop-shadow(0 0 10px rgba(255, 200, 50, 0.4));
-        }
-
-        .bathyscaphe {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .bathyscaphe .body {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 75%;
-            background: radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300);
-            border-radius: 50% 50% 45% 45%;
-            border: 2px solid #ff8844;
-            box-shadow: inset -10px -10px 30px rgba(150, 30, 0, 0.5), inset 10px 10px 30px rgba(255, 150, 80, 0.3);
-        }
-
-        .bathyscaphe .window {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30%;
-            height: 30%;
-            background: radial-gradient(circle at 35% 35%, #66ccff, #1a6699);
-            border-radius: 50%;
-            border: 2px solid #ffcc66;
-            box-shadow: inset -3px -3px 10px rgba(0, 50, 100, 0.5), 0 0 20px rgba(100, 200, 255, 0.3);
-        }
-
-        .bathyscaphe .window::after {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 20%;
-            width: 30%;
-            height: 25%;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            transform: rotate(-30deg);
-        }
-
-        .bathyscaphe .propeller {
-            position: absolute;
-            bottom: -8%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20%;
-            height: 15%;
-            background: #888;
-            border-radius: 30% 30% 10% 10%;
-            border: 1px solid #666;
-        }
-
-        .bathyscaphe .propeller::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10%;
-            height: 40%;
-            background: #999;
-            border-radius: 0 0 50% 50%;
-        }
-
-        .bathyscaphe .light {
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 12%;
-            height: 12%;
-            background: radial-gradient(circle, #ffff88, #ffcc00);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 255, 100, 0.6);
-            animation: lightPulse 1.5s ease-in-out infinite alternate;
-        }
-
-        .bathyscaphe .light-right {
-            left: auto;
-            right: 10%;
-        }
-
-        @keyframes lightPulse {
-            0% { opacity: 0.6; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1.2); }
-        }
-
+      
+        #player{ width: 40px; height: 40px; position: absolute; z-index: 10; transition: width 0.3s, height 0.3s, transform 0.3s; filter: drop-shadow(0 0 10px rgba(255, 200, 50, 0.4));} .bathyscaphe{ width: 100%; height: 100%; position: relative;} .bathyscaphe .body{ position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 75%; background: radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300); border-radius: 50% 50% 45% 45%; border: 2px solid #ff8844; box-shadow: inset -10px -10px 30px rgba(150, 30, 0, 0.5), inset 10px 10px 30px rgba(255, 150, 80, 0.3);} .bathyscaphe .window{ position: absolute; top: 25%; left: 50%; transform: translateX(-50%); width: 30%; height: 30%; background: radial-gradient(circle at 35% 35%, #66ccff, #1a6699); border-radius: 50%; border: 2px solid #ffcc66; box-shadow: inset -3px -3px 10px rgba(0, 50, 100, 0.5), 0 0 20px rgba(100, 200, 255, 0.3);} .bathyscaphe .window::after{ content: ''; position: absolute; top: 15%; left: 20%; width: 30%; height: 25%; background: rgba(255, 255, 255, 0.4); border-radius: 50%; transform: rotate(-30deg);} .bathyscaphe .propeller{ position: absolute; bottom: -8%; left: 50%; transform: translateX(-50%); width: 20%; height: 15%; background: #888; border-radius: 30% 30% 10% 10%; border: 1px solid #666;} .bathyscaphe .propeller::after{ content: ''; position: absolute; bottom: -30%; left: 50%; transform: translateX(-50%); width: 10%; height: 40%; background: #999; border-radius: 0 0 50% 50%;} .bathyscaphe .light{ position: absolute; top: 10%; left: 10%; width: 12%; height: 12%; background: radial-gradient(circle, #ffff88, #ffcc00); border-radius: 50%; box-shadow: 0 0 20px rgba(255, 255, 100, 0.6); animation: lightPulse 1.5s ease-in-out infinite alternate;} .bathyscaphe .light-right{ left: auto; right: 10%;} @keyframes lightPulse{ 0%{ opacity: 0.6; transform: scale(0.9);} 100%{ opacity: 1; transform: scale(1.2);}}
         /* ===== ПУЗЫРЬКИ (след) ===== */
         .bubble {
             position: absolute;
@@ -498,12 +178,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             z-index: 3;
             animation: bubbleRise 2s ease-out forwards;
         }
-
         @keyframes bubbleRise {
             0% { transform: translateY(0) scale(1); opacity: 0.8; }
             100% { transform: translateY(-60px) scale(0.3); opacity: 0; }
         }
-
         /* ===== РАКУШКА ===== */
         #block {
             width: 28px;
@@ -513,14 +191,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             transition: all 0.3s;
             filter: drop-shadow(0 0 15px rgba(255, 200, 150, 0.5));
         }
-
         .shell {
             width: 100%;
             height: 100%;
             position: relative;
             animation: shellFloat 2s ease-in-out infinite;
         }
-
         .shell .spiral {
             position: absolute;
             width: 100%;
@@ -530,7 +206,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             border: 2px solid #c08860;
             box-shadow: inset -5px -5px 20px rgba(120, 60, 30, 0.4), inset 5px 5px 20px rgba(255, 220, 180, 0.3);
         }
-
         .shell .spiral::before {
             content: '';
             position: absolute;
@@ -543,7 +218,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             border: 1px solid #c08860;
             box-shadow: inset -3px -3px 10px rgba(100, 50, 20, 0.3);
         }
-
         .shell .spiral::after {
             content: '';
             position: absolute;
@@ -555,34 +229,13 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             border-radius: 50%;
             border: 1px solid #c08860;
         }
-
-        .shell .shine {
-            position: absolute;
-            top: 10%;
-            left: 15%;
-            width: 30%;
-            height: 20%;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: rotate(-30deg);
-        }
-
-        .shell .shine2 {
-            top: auto;
-            bottom: 15%;
-            left: 55%;
-            width: 20%;
-            height: 15%;
-            transform: rotate(20deg);
-        }
-
+        .shell .shine{ position: absolute; top: 10%; left: 15%; width: 30%; height: 20%; background: rgba(255, 255, 255, 0.3); border-radius: 50%; transform: rotate(-30deg);} .shell .shine2{ top: auto; bottom: 15%; left: 55%; width: 20%; height: 15%; transform: rotate(20deg);}
         @keyframes shellFloat {
             0% { transform: translateY(0) rotate(-5deg); }
             50% { transform: translateY(-6px) rotate(5deg); }
             100% { transform: translateY(0) rotate(-5deg); }
         }
-
-        /* ===== ЗВЕЗДА ===== */
+       
         #block2 {
             display: none;
             position: absolute;
@@ -594,12 +247,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             pointer-events: none;
             animation: starAppear 0.5s ease-out;
         }
-
         @keyframes starAppear {
             0% { transform: scale(0) rotate(180deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-
         .star-icon {
             font-size: 32px;
             line-height: 32px;
@@ -607,13 +258,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2);
             animation: starTwinkle 0.6s ease-in-out infinite alternate;
         }
-
         @keyframes starTwinkle {
             0% { transform: scale(0.8) rotate(0deg); opacity: 0.7; }
             50% { transform: scale(1.3) rotate(20deg); opacity: 1; }
             100% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; }
         }
-
         /* ===== МЕДУЗА ===== */
         .jellyfish {
             position: absolute;
@@ -623,12 +272,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             pointer-events: none;
             opacity: 0.8;
         }
-
         @keyframes jellyfishFloat {
             0%, 100% { transform: translateY(0) rotate(-5deg); }
             50% { transform: translateY(-20px) rotate(5deg); }
         }
-
         /* ===== ЩИТ ===== */
         #shieldItem {
             display: none;
@@ -638,12 +285,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             animation: shieldPulse 1s ease-in-out infinite alternate;
             pointer-events: none;
         }
-
         @keyframes shieldPulse {
             0% { transform: scale(0.9); opacity: 0.7; }
             100% { transform: scale(1.2); opacity: 1; }
         }
-
         /* ===== ВЗРЫВ ===== */
         .explosion {
             position: absolute;
@@ -652,62 +297,23 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             font-size: 40px;
             animation: explosionAnim 0.6s ease-out forwards;
         }
-
         @keyframes explosionAnim {
             0% { transform: scale(0.5); opacity: 1; }
             100% { transform: scale(2); opacity: 0; }
         }
-
-        /* ===== УРОВЕНЬ - ВИЗУАЛЬНЫЙ ЭФФЕКТ ===== */
-        .level-up-effect {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 30;
-            font-size: 42px;
-            font-weight: bold;
-            color: #faa61a;
-            text-shadow: 0 0 30px rgba(255, 200, 50, 0.8), 0 0 60px rgba(255, 200, 50, 0.4);
-            animation: levelUpAnim 1.5s ease-out forwards;
-            pointer-events: none;
-        }
-
+           .level-up-effect{ position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 30; font-size: 42px; font-weight: bold; color: #faa61a; text-shadow: 0 0 30px rgba(255, 200, 50, 0.8), 0 0 60px rgba(255, 200, 50, 0.4); animation: levelUpAnim 1.5s ease-out forwards; pointer-events: none;}
         @keyframes levelUpAnim {
             0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
             30% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
             70% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
             100% { transform: translate(-50%, -70%) scale(1); opacity: 0; }
         }
-
-        /* ===== СЧЁТЧИК ПУЛЬСАЦИЯ ===== */
-        #scores {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: white;
-            font-size: 25px;
-            font-weight: bold;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-            z-index: 15;
-            padding: 8px 12px;
-            box-sizing: border-box;
-            text-align: left;
-            pointer-events: none;
-            transition: transform 0.1s;
-        }
-
-        #scores.pulse {
-            animation: scorePulse 0.3s ease;
-        }
-
+           #scores{ width: 100%; position: absolute; top: 0; left: 0; color: white; font-size: 25px; font-weight: bold; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9); z-index: 15; padding: 8px 12px; box-sizing: border-box; text-align: left; pointer-events: none; transition: transform 0.1s;} #scores.pulse{ animation: scorePulse 0.3s ease;}
         @keyframes scorePulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.3); color: #faa61a; }
             100% { transform: scale(1); }
         }
-
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -721,45 +327,7 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             height: 12vw;
             max-height: 50px;
         }
-        .btn {
-            width: 72px;
-            height: 50px;
-            background: rgba(0, 0, 50, 0.85);
-            color: white;
-            border: 2px solid royalblue;
-            border-radius: 12px;
-            font-size: 20px;
-            cursor: pointer;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-            backdrop-filter: blur(4px);
-            transition: all 0.15s;
-        }
-
-        .btn:active {
-            transform: scale(0.92);
-            background: rgba(30, 60, 180, 0.9);
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            transform: none;
-        }
-
-        #pausa {
-            width: 50px;
-            height: 50px;
-            background: rgba(0, 0, 50, 0.85);
-            border: 2px solid royalblue;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-        }
-
+        .btn{ width: 72px; height: 50px; background: rgba(0, 0, 50, 0.85); color: white; border: 2px solid royalblue; border-radius: 12px; font-size: 20px; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; backdrop-filter: blur(4px); transition: all 0.15s;} .btn:active{ transform: scale(0.92); background: rgba(30, 60, 180, 0.9);} .btn:disabled{ opacity: 0.4; transform: none;} #pausa{ width: 50px; height: 50px; background: rgba(0, 0, 50, 0.85); border: 2px solid royalblue; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; touch-action: manipulation;}
         /* ===== РЫБКИ ===== */
         .fish {
             position: absolute;
@@ -769,7 +337,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             pointer-events: none;
             opacity: 0.5;
         }
-
         @keyframes fishSwim {
             0% { transform: translateX(-30px) scaleX(1); }
             49% { transform: translateX(330px) scaleX(1); }
@@ -777,225 +344,19 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             99% { transform: translateX(-30px) scaleX(-1); }
             100% { transform: translateX(-30px) scaleX(1); }
         }
-
-        /* ===== ВОДОРОСЛИ ===== */
-        .seaweed {
-            position: absolute;
-            bottom: 0;
-            z-index: 1;
-            font-size: 24px;
-            animation: seaweedWave 3s ease-in-out infinite;
-            pointer-events: none;
-            opacity: 0.4;
-        }
-
+      
+        .seaweed{ position: absolute; bottom: 0; z-index: 1; font-size: 24px; animation: seaweedWave 3s ease-in-out infinite; pointer-events: none; opacity: 0.4;}
         @keyframes seaweedWave {
             0%, 100% { transform: rotate(-5deg); }
             50% { transform: rotate(5deg); }
         }
-
-        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
-        .modal-overlay {
-            display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.85);
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-                z-index: 1000;
-                justify-content: center;
-                align-items: center;
-                padding: 20px;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-               display: flex !important;
-    opacity: 1 !important;
-        }
-/* Убираем белый прямоугольник при загрузке */
-.modal-overlay .modal-content {
-    background: rgba(20, 60, 100, 0.92);
-    border-radius: 20px;
-    padding: 30px 24px;
-    max-width: 380px;
-    width: 100%;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-    text-align: center;
-    transform: scale(0.95);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-}
-
-.modal-overlay.active .modal-content {
-    transform: scale(1);
-    opacity: 1;
-}
-
-/* Специально для модалки "Как играть" */
-#howToModal .modal-content {
-    background: rgba(20, 60, 100, 0.95);
-}
-
-#howToModal .modal-content ul {
-    text-align: left;
-    padding: 0;
-    list-style: none;
-    margin: 10px 0;
-}
-
-#howToModal .modal-content ul li {
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 15px;
-}
-
-#howToModal .modal-content ul li:last-child {
-    border-bottom: none;
-}
-
-/* Убираем мерцание при открытии */
-.modal-overlay:not(.active) {
-    pointer-events: none;
-}
-
-/* Для модалки достижений */
-#achievementsModal .modal-content {
-    background: linear-gradient(145deg, rgba(20, 60, 100, 0.95), rgba(10, 40, 70, 0.98));
-    border: 2px solid rgba(100, 200, 255, 0.25);
-    max-width: 600px;
-}
-
-        .modal-content h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 16px;
-        }
-
-        .modal-content h2.warning {
-            color: #faa61a;
-        }
-
-        .modal-content h2.danger {
-            color: #ff6b6b;
-        }
-
-        .modal-content p {
-            text-align: center;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 16px;
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .modal-content .score-text {
-            font-size: 28px;
-            font-weight: bold;
-            color: #faa61a;
-            margin: 8px 0 16px 0;
-        }
-
-        .modal-content ul {
-            padding-left: 0;
-            list-style: none;
-            text-align: left;
-            line-height: 1.8;
-        }
-
-        .modal-content li {
-            margin-bottom: 8px;
-            padding: 4px 0;
-        }
-
-        .modal-content .game-link {
-            display: block;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .modal-content .game-link:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateX(4px);
-        }
-
-        .modal-content .game-link:active {
-            transform: scale(0.96);
-        }
-
-        .modal-content .game-link .emoji {
-            margin-right: 10px;
-        }
-
-        .modal-btn {
-            display: inline-block;
-            padding: 12px 30px;
-            margin: 4px 6px;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 120px;
-        }
-
-        .modal-btn:active {
-            transform: scale(0.96);
-        }
-
-        .modal-btn.primary {
-            background: linear-gradient(135deg, #43b581, #2d8f5e);
-        }
-        .modal-btn.primary:hover {
-            background: linear-gradient(135deg, #4fcb91, #329e68);
-        }
-
-        .modal-btn.secondary {
-            background: linear-gradient(135deg, #7289da, #5a6fc9);
-        }
-        .modal-btn.secondary:hover {
-            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
-        }
-
-        .modal-btn.danger {
-            background: linear-gradient(135deg, #ff6b6b, #e04848);
-        }
-        .modal-btn.danger:hover {
-            background: linear-gradient(135deg, #ff8080, #e85a5a);
-        }
-
-        .modal-btn.close-btn {
-            background: linear-gradient(135deg, #7289da, #5a6fc9);
-            width: 100%;
-            padding: 12px;
-            margin-top: 16px;
-        }
-
-        .modal-btn.close-btn:hover {
-            background: linear-gradient(135deg, #8a9ee8, #6a80d4);
-        }
-
-        .modal-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
+          .modal-overlay{ display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease} .modal-overlay.active{ display: flex !important; opacity: 1 !important}
+.modal-overlay .modal-content{ background: rgba(20, 60, 100, 0.92); border-radius: 20px; padding: 30px 24px; max-width: 380px; width: 100%; color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); text-align: center; transform: scale(0.95); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0}
+.modal-overlay.active .modal-content{ transform: scale(1); opacity: 1}
+#howToModal .modal-content{ background: rgba(20, 60, 100, 0.95);}
+#howToModal .modal-content ul{ text-align: left; padding: 0; list-style: none; margin: 10px 0;}
+#howToModal .modal-content ul li{ padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 15px;}
+#howToModal .modal-content ul li:last-child{ border-bottom: none;} .modal-overlay:not(.active){ pointer-events: none;} #achievementsModal .modal-content{ background: linear-gradient(145deg, rgba(20, 60, 100, 0.95), rgba(10, 40, 70, 0.98)); border: 2px solid rgba(100, 200, 255, 0.25); max-width: 600px;} .modal-content h2{ text-align: center; margin-top: 0; margin-bottom: 16px;} .modal-content h2.warning{ color: #faa61a;} .modal-content h2.danger{ color: #ff6b6b;} .modal-content p{ text-align: center; font-size: 16px; line-height: 1.6; margin-bottom: 16px; color: rgba(255, 255, 255, 0.85);} .modal-content .score-text{ font-size: 28px; font-weight: bold; color: #faa61a; margin: 8px 0 16px 0;} .modal-content ul{ padding-left: 0; list-style: none; text-align: left; line-height: 1.8;} .modal-content li{ margin-bottom: 8px; padding: 4px 0;} .modal-content .game-link{ display: block; padding: 12px 16px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; color: #fff; text-decoration: none; font-weight: bold; transition: all 0.2s; border: 1px solid rgba(255, 255, 255, 0.05);} .modal-content .game-link:hover{ background: rgba(255, 255, 255, 0.15); transform: translateX(4px);} .modal-content .game-link:active{ transform: scale(0.96);} .modal-content .game-link .emoji{ margin-right: 10px;} .modal-btn{ display: inline-block; padding: 12px 30px; margin: 4px 6px; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; min-width: 120px;} .modal-btn:active{ transform: scale(0.96);} .modal-btn.primary{ background: linear-gradient(135deg, #43b581, #2d8f5e);} .modal-btn.primary:hover{ background: linear-gradient(135deg, #4fcb91, #329e68);} .modal-btn.secondary{ background: linear-gradient(135deg, #7289da, #5a6fc9);} .modal-btn.secondary:hover{ background: linear-gradient(135deg, #8a9ee8, #6a80d4);} .modal-btn.danger{ background: linear-gradient(135deg, #ff6b6b, #e04848);} .modal-btn.danger:hover{ background: linear-gradient(135deg, #ff8080, #e85a5a);} .modal-btn.close-btn{ background: linear-gradient(135deg, #7289da, #5a6fc9); width: 100%; padding: 12px; margin-top: 16px;} .modal-btn.close-btn:hover{ background: linear-gradient(135deg, #8a9ee8, #6a80d4);} .modal-buttons{ display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px;}
         /* ===== АДАПТИВ ===== */
         @media (max-width: 400px) {
             #gameblock {
@@ -1060,7 +421,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 font-size: 15px;
             }
         }
-
         @media (max-width: 320px) {
             #gameblock {
                 width: 250px;
@@ -1092,100 +452,33 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 height: 18px;
             }
         }
-
-        /* ===== КОНТЕЙНЕР ВОЛН ===== */
-        .waves-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .wave {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            pointer-events: none;
-        }
-
-        .wave svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .wave1 {
-            top: 5%;
-            height: 30px;
-            animation: waveMove1 7s ease-in-out infinite;
-        }
-
-        .wave2 {
-            top: 20%;
-            height: 35px;
-            animation: waveMove2 9s ease-in-out infinite;
-        }
-
-        .wave3 {
-            top: 40%;
-            height: 40px;
-            animation: waveMove3 8s ease-in-out infinite;
-        }
-
-        .wave4 {
-            top: 60%;
-            height: 45px;
-            animation: waveMove4 10s ease-in-out infinite;
-        }
-
+        .waves-container{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden;} .wave{ position: absolute; left: 0; width: 100%; pointer-events: none;} .wave svg{ width: 100%; height: 100%; display: block;} .wave1{ top: 5%; height: 30px; animation: waveMove1 7s ease-in-out infinite;} .wave2{ top: 20%; height: 35px; animation: waveMove2 9s ease-in-out infinite;} .wave3{ top: 40%; height: 40px; animation: waveMove3 8s ease-in-out infinite;} .wave4{ top: 60%; height: 45px; animation: waveMove4 10s ease-in-out infinite;}
         @keyframes waveMove1 {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(1.3); }
         }
-
         @keyframes waveMove2 {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.7); }
         }
-
         @keyframes waveMove3 {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(1.4); }
         }
-
         @keyframes waveMove4 {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.6); }
         }
-
-        /* ===== СВЕТЯЩИЕСЯ ЧАСТИЦЫ ===== */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,200,50,0.2));
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 2;
-            box-shadow: 0 0 10px rgba(255,215,0,0.5);
-            animation: particleFloat 3s ease-in-out infinite;
-        }
-
+          .particle{ position: absolute; width: 4px; height: 4px; background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,200,50,0.2)); border-radius: 50%; pointer-events: none; z-index: 2; box-shadow: 0 0 10px rgba(255,215,0,0.5); animation: particleFloat 3s ease-in-out infinite;}
         @keyframes particleFloat {
             0% { transform: translateY(0) scale(1); opacity: 0.8; }
             50% { transform: translateY(-60px) scale(1.3); opacity: 1; }
             100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
         }
-
         @keyframes magnetPulse {
             0% { transform: scale(0.9); opacity: 0.7; }
             100% { transform: scale(1.2); opacity: 1; }
         }
-
         @keyframes achievementAnim {
             0% { transform: translate(-50%, -50%) scale(0.3) rotate(-10deg); opacity: 0; }
             20% { transform: translate(-50%, -50%) scale(1.2) rotate(3deg); opacity: 1; }
@@ -1194,8 +487,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             80% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
             100% { transform: translate(-50%, -60%) scale(1) rotate(0deg); opacity: 0; }
         }
-
-        /* ===== ГОЛУБЫЕ ЧАСТИЦЫ ===== */
         .particle-blue {
             position: absolute;
             width: 3px;
@@ -1207,14 +498,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             box-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
             animation: particleFloatBlue 3s ease-in-out infinite;
         }
-
         @keyframes particleFloatBlue {
             0% { transform: translateY(0) scale(1); opacity: 0.8; }
             50% { transform: translateY(-50px) scale(1.3); opacity: 1; }
             100% { transform: translateY(-100px) scale(0.3); opacity: 0; }
         }
-
-        /* ===== УВЕДОМЛЕНИЕ О СОХРАНЕНИИ ===== */
         @keyframes saveAnim {
             0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
             20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
@@ -1222,56 +510,8 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
             100% { transform: translate(-50%, -60%) scale(1); opacity: 0; }
         }
-        /* ===== КРУГЛЫЕ КНОПКИ-ИКОНКИ В МЕНЮ ===== */
-        .menu-btn-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            border: none;
-            font-size: 26px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            background: linear-gradient(135deg, #7289da, #5a6fc9);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .menu-btn-icon:active {
-            transform: scale(0.92);
-        }
-        /* Пригласить друзей - светлый голубой */
-        .menu-btn-icon.invite {
-            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
-        }
-
-        .menu-btn-icon.invite:hover {
-            background: linear-gradient(135deg, #a6e0fa, #6dd0f8);
-        }
-
-        /* Другие игры - средний голубой */
-        .menu-btn-icon.games {
-            background: linear-gradient(135deg, #4fc3f7, #0288d1);
-        }
-
-        .menu-btn-icon.games:hover {
-            background: linear-gradient(135deg, #6dd0f8, #039be5);
-        }
-
-        /* Достижения - тёмный голубой (как вы хотели) */
-        .menu-btn-icon.achievements {
-            background: linear-gradient(135deg, #0288d1, #01579b);
-        }
-
-        .menu-btn-icon.achievements:hover {
-            background: linear-gradient(135deg, #039be5, #0277bd);
-        }
-
+           .menu-btn-icon{ width: 56px; height: 56px; border-radius: 50%; border: none; font-size: 26px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; color: #fff; background: linear-gradient(135deg, #7289da, #5a6fc9); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); touch-action: manipulation; user-select: none; -webkit-user-select: none;} .menu-btn-icon:active{ transform: scale(0.92);}
+        .menu-btn-icon.invite{ background: linear-gradient(135deg, #81d4fa, #4fc3f7);} .menu-btn-icon.invite:hover{ background: linear-gradient(135deg, #a6e0fa, #6dd0f8);} .menu-btn-icon.games{ background: linear-gradient(135deg, #4fc3f7, #0288d1);} .menu-btn-icon.games:hover{ background: linear-gradient(135deg, #6dd0f8, #039be5);} .menu-btn-icon.achievements{ background: linear-gradient(135deg, #0288d1, #01579b);} .menu-btn-icon.achievements:hover{ background: linear-gradient(135deg, #039be5, #0277bd);}
         @media (max-width: 400px) {
             .menu-btn-icon {
                 width: 48px;
@@ -1279,7 +519,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 font-size: 22px;
             }
         }
-
         @media (max-width: 320px) {
             .menu-btn-icon {
                 width: 42px;
@@ -1302,7 +541,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             position: relative;
             backdrop-filter: blur(10px);
         }
-
         #achievementsModal .modal-content::before {
             content: '';
             position: absolute;
@@ -1313,109 +551,88 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             background: linear-gradient(90deg, transparent, rgba(100, 200, 255, 0.5), transparent);
             border-radius: 50%;
         }
-
         #achievementsModal .modal-content h2 {
             color: #7ec8e3;
             text-shadow: 0 0 30px rgba(100, 200, 255, 0.2);
         }
-
         /* Кнопка закрытия */
         #achievementsModal .close-x {
             color: rgba(150, 220, 255, 0.4);
         }
-
         #achievementsModal .close-x:hover {
             color: #7ec8e3;
         }
-
         /* Статистика */
         #achievementsList .stats-header {
             background: rgba(50, 150, 200, 0.12);
             border: 1px solid rgba(100, 200, 255, 0.12);
         }
-
         #achievementsList .stats-header span:first-child {
             color: #7ec8e3;
         }
-
         #achievementsList .stats-header span:last-child {
             color: rgba(150, 220, 255, 0.5);
         }
-
         /* Заголовки категорий */
         #achievementsList .category-header {
             color: #7ec8e3;
             border-bottom: 1px solid rgba(100, 200, 255, 0.12);
             text-shadow: 0 0 20px rgba(100, 200, 255, 0.1);
         }
-
         /* Элементы достижений */
         #achievementsList .achievement-item {
             background: rgba(50, 150, 200, 0.06);
             border: 1px solid rgba(100, 200, 255, 0.06);
         }
-
         #achievementsList .achievement-item.unlocked {
             background: rgba(50, 200, 255, 0.08);
             border: 1px solid rgba(100, 200, 255, 0.15);
             box-shadow: 0 0 20px rgba(50, 200, 255, 0.05);
         }
-
         #achievementsList .achievement-item.unlocked:hover {
             background: rgba(50, 200, 255, 0.15) !important;
             border-color: rgba(100, 200, 255, 0.3) !important;
             box-shadow: 0 0 30px rgba(50, 200, 255, 0.1);
         }
-
         #achievementsList .achievement-item.locked {
             background: rgba(30, 80, 120, 0.08);
             border: 1px solid rgba(100, 200, 255, 0.04);
         }
-
         #achievementsList .achievement-item.locked:hover {
             background: rgba(50, 150, 200, 0.1) !important;
             border-color: rgba(100, 200, 255, 0.1) !important;
         }
-
         /* Названия */
         #achievementsList .achievement-item .info .name {
             color: #b0dcee;
         }
-
         #achievementsList .achievement-item.unlocked .info .name {
             color: #5ddfb0;
             text-shadow: 0 0 20px rgba(93, 223, 176, 0.15);
         }
-
-
         /* Статус */
         #achievementsList .achievement-item .status {
             color: rgba(150, 220, 255, 0.3);
         }
-
         /* Скролл */
         #achievementsList::-webkit-scrollbar-thumb {
             background: rgba(100, 200, 255, 0.2);
             border-radius: 10px;
         }
-
         #achievementsList::-webkit-scrollbar-thumb:hover {
             background: rgba(100, 200, 255, 0.35);
         }
-
         /* Кнопка "Закрыть" */
         #achievementsModal .modal-btn.close-btn {
             background: linear-gradient(135deg, rgba(50, 150, 200, 0.3), rgba(30, 100, 150, 0.3));
             border: 1px solid rgba(100, 200, 255, 0.15);
             color: #7ec8e3;
         }
-
         #achievementsModal .modal-btn.close-btn:hover {
             background: linear-gradient(135deg, rgba(50, 200, 255, 0.25), rgba(30, 150, 200, 0.25));
             border-color: rgba(100, 200, 255, 0.3);
             box-shadow: 0 0 30px rgba(50, 200, 255, 0.1);
         }
-
         /* Для больших экранов */
         @media (min-width: 768px) {
             #achievementsModal .modal-content {
@@ -1423,14 +640,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 padding: 24px 24px 20px;
             }
         }
-
         @media (min-width: 1200px) {
             #achievementsModal .modal-content {
                 width: 720px;
                 padding: 28px 28px 24px;
             }
         }
-
         /* Для мобильных */
         @media (max-width: 480px) {
             #achievementsModal .modal-content {
@@ -1442,12 +657,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
         }
         /* ===== КОМПАКТНАЯ МОДАЛКА ДОСТИЖЕНИЙ ===== */
-
         #achievementsModal .modal-content h2 {
             font-size: 18px;
             margin-bottom: 10px;
         }
-
         #achievementsList {
             max-height: 380px;
             overflow-y: auto;
@@ -1455,24 +668,19 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             scrollbar-width: thin;
             scrollbar-color: rgba(255,215,0,0.2) transparent;
         }
-
         #achievementsList::-webkit-scrollbar {
             width: 3px;
         }
-
         #achievementsList::-webkit-scrollbar-track {
             background: transparent;
         }
-
         #achievementsList::-webkit-scrollbar-thumb {
             background: rgba(255,215,0,0.25);
             border-radius: 10px;
         }
-
         #achievementsList::-webkit-scrollbar-thumb:hover {
             background: rgba(255,215,0,0.4);
         }
-
         /* Стили для элементов достижений в компактном виде */
         #achievementsList .achievement-item {
             display: flex;
@@ -1484,41 +692,34 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             transition: all 0.2s ease;
             cursor: default;
         }
-
         #achievementsList .achievement-item.unlocked {
             background: rgba(16, 185, 129, 0.08);
             border: 1px solid rgba(16, 185, 129, 0.15);
         }
-
         #achievementsList .achievement-item.locked {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.04);
             opacity: 0.5;
         }
-
         #achievementsList .achievement-item .icon {
             font-size: 18px;
             flex-shrink: 0;
             line-height: 1;
         }
-
         #achievementsList .achievement-item .info {
             flex: 1;
             min-width: 0;
             overflow: hidden; 
         }
-
         #achievementsList .achievement-item .info .name {
             font-size: 14px;
             font-weight: 600;
             line-height: 1.2;
             color: #6faeff;
         }
-
         #achievementsList .achievement-item.unlocked .info .name {
             color: #10b981;
         }
-
         #achievementsList .achievement-item .info .desc {
             font-size: 14px;
             color: rgba(161, 255, 247, 0.45);
@@ -1528,13 +729,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-
         #achievementsList .achievement-item .status {
             font-size: 14px;
             flex-shrink: 0;
         }
-
         #achievementsList .category-header {
             grid-column: 1 / -1;
             font-weight: 700;
@@ -1545,7 +743,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             margin-top: 2px;
             letter-spacing: 0.3px;
         }
-
         #achievementsList .stats-header {
             grid-column: 1 / -1;
             text-align: center;
@@ -1555,19 +752,16 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             margin-bottom: 4px;
             border: 1px solid rgba(255,215,0,0.08);
         }
-
         #achievementsList .stats-header span:first-child {
             color: #faa61a;
             font-weight: bold;
             font-size: 14px;
         }
-
         #achievementsList .stats-header span:last-child {
             color: rgba(255,255,255,0.4);
             font-size: 11px;
             margin-left: 6px;
         }
-
         /* Адаптив для маленьких экранов */
         @media (max-width: 480px) {
             #achievementsModal .modal-content {
@@ -1575,12 +769,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 padding: 16px 12px;
                 margin: 10px;
             }
-            
             #achievementsList {
                 grid-template-columns: 1fr !important;
                 max-height: 340px;
             }
-            
             #achievementsList .achievement-item .info .desc {
                 white-space: normal;
             }
@@ -1592,25 +784,20 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 font-size: 12px;
             }
         }
-
         @media (max-width: 380px) {
             #achievementsModal .modal-content {
                 padding: 12px 10px;
             }
-            
             #achievementsList .achievement-item {
                 padding: 5px 6px;
                 min-height: 34px;
             }
-            
             #achievementsList .achievement-item .icon {
                 font-size: 16px;
             }
-            
             #achievementsList .achievement-item .info .name {
                 font-size: 12px;
             }
-            
             #achievementsList .achievement-item .info .desc {
                 font-size: 12px;
             }
@@ -1629,7 +816,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             transition: all 0.3s ease;
             line-height: 1;
         }
-
         #achievementsModal .close-x:hover {
             color: #7ec8e3;
             transform: rotate(90deg);
@@ -1648,12 +834,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             overflow: hidden;
             background: rgba(0, 20, 50, 0.3);
         }
-
         #bubbleOverlay.active {
             display: block;
             pointer-events: all;
         }
-
         .bubble-overlay {
             position: absolute;
             bottom: -80px;
@@ -1664,7 +848,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             animation: bubbleRiseOverlay linear forwards;
             pointer-events: none;
         }
-
         @keyframes bubbleRiseOverlay {
             0% {
                 transform: translateY(0) scale(0.6);
@@ -1683,7 +866,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 opacity: 0;
             }
         }
-
         .bubble-overlay-small {
             position: absolute;
             bottom: -40px;
@@ -1693,7 +875,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             animation: bubbleRiseOverlaySmall linear forwards;
             pointer-events: none;
         }
-
         @keyframes bubbleRiseOverlaySmall {
             0% {
                 transform: translateY(0) scale(0.5);
@@ -1708,7 +889,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 opacity: 0;
             }
         }
-
         .bubble-overlay-big {
             position: absolute;
             bottom: -120px;
@@ -1719,7 +899,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             animation: bubbleRiseOverlayBig linear forwards;
             pointer-events: none;
         }
-
         @keyframes bubbleRiseOverlayBig {
             0% {
                 transform: translateY(0) scale(0.7);
@@ -1734,7 +913,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 opacity: 0;
             }
         }
-
         #mainMenu {
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -1742,7 +920,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
 #mainMenu.loaded {
     opacity: 1;
 }
-
     </style>
 </head>
 <body>
@@ -1820,7 +997,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             <button class="btn-small icon-only" onclick="inviteFriends()">👥</button>
             <button class="btn-small icon-only" onclick="showGamesModal()">🎮</button>
         </div>
-
         <div id="gameInfo">
             <div class="level-info">
                 <span>📊 Уровень</span>
@@ -1831,7 +1007,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 <span id="shieldCount">0</span>
             </div>
         </div>
-
         <div class="game-wrapper">
             <div id="gameblock">
                 <!-- ФОНОВЫЕ РЫБКИ -->
@@ -1839,7 +1014,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 <div class="fish" style="top:35%; animation-duration:18s; animation-delay:-3s; font-size:20px;">🐠</div>
                 <div class="fish" style="top:55%; animation-duration:16s; animation-delay:-6s; font-size:14px;">🐡</div>
                 <div class="fish" style="top:75%; animation-duration:20s; animation-delay:-9s; font-size:18px;">🐋</div>
-
                 <!-- ВОДОРОСЛИ -->
                 <div class="seaweed" style="left:5%; animation-delay:0s;">🌿</div>
                 <div class="seaweed" style="left:15%; animation-delay:0.5s; font-size:30px;">🌿</div>
@@ -1847,7 +1021,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 <div class="seaweed" style="left:75%; animation-delay:0.3s; font-size:28px;">🌿</div>
                 <div class="seaweed" style="left:85%; animation-delay:0.8s; font-size:22px;">🌱</div>
                 <div class="seaweed" style="left:92%; animation-delay:1.2s; font-size:26px;">🌿</div>
-
                 <!-- ВОЛНЫ -->
                 <div class="waves-container">
                     <div class="wave wave1">
@@ -1875,7 +1048,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         </svg>
                     </div>
                 </div>
-
                 <!-- СТЕНА С ШИПАМИ И ЛИАНАМИ -->
                 <div id="wallDecor">
                     <div class="wall-spikes">
@@ -1897,7 +1069,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     </div>
                     <div class="vine"></div>
                 </div>
-
                 <!-- БАТИСКАФ -->
                 <div id="player">
                     <div class="bathyscaphe">
@@ -1908,7 +1079,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         <div class="propeller"></div>
                     </div>
                 </div>
-
                 <!-- РАКУШКА -->
                 <div id="block">
                     <div class="shell">
@@ -1918,19 +1088,15 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         </div>
                     </div>
                 </div>
-
                 <!-- ЗВЕЗДА -->
                 <div id="block2">
                     <span class="star-icon">⭐</span>
                 </div>
-
                 <!-- ЩИТ -->
                 <div id="shieldItem">🛡️</div>
-
                 <div id="scores">0</div>
             </div>
         </div>
-
         <div class="controls">
             <button class="btn" id="u" ontouchstart="up()" onmousedown="up()">↑↑</button>
             <button class="btn" id="l" ontouchstart="left()" onmousedown="left()">←</button>
@@ -1970,7 +1136,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         </div>
     </div>
 </div>
-
 <!-- ===== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ===== -->
 <div id="shieldAdLoadingModal" class="modal-overlay">
     <div class="modal-content" style="max-width: 300px; padding: 30px 24px;">
@@ -2033,14 +1198,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         // ============================================================
         //  1. VK STORAGE СИНХРОНИЗАЦИЯ (ДОБАВЛЕНА)
         // ============================================================
-        
         // Ключи для VK Storage
         const VK_STORAGE_KEYS = {
             GAME_DATA: 'bathyscaphe_game_data_v1',
             ACHIEVEMENTS: 'bathyscaphe_achievements_v1',
             COUNTERS: 'bathyscaphe_counters_v1'
         };
-            
         //для щитов и починки за рекламу 
                  var shieldPopupPaused = false;
                 var shieldAdLoadingModal = document.getElementById('shieldAdLoadingModal');
@@ -2049,7 +1212,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 var repairModal = document.getElementById('repairModal');
                 var repairErrorModal = document.getElementById('repairErrorModal');
                 var isGoingToMenu = false;
-
         // Сохранение в VK Storage
        function saveToVKStorage(key, value) {
                 if (typeof vkBridge === 'undefined') {
@@ -2068,7 +1230,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     console.warn(`❌ Ошибка сохранения ${key}:`, error);
                 });
             }
-
         // Загрузка из VK Storage
         function loadFromVKStorage(key) {
             if (typeof vkBridge === 'undefined') {
@@ -2091,7 +1252,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     return null;
                 });
         }
-
         // ===== ПОЛУЧЕНИЕ ТЕКУЩИХ ДАННЫХ =====
         function getCurrentGameData() {
             return {
@@ -2103,12 +1263,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 playerY: typeof y !== 'undefined' ? y : 0
             };
         }
-
         function getCurrentAchievements() {
             // Возвращаем то, что сохранено в unlockedAchievements
             return typeof unlockedAchievements !== 'undefined' ? unlockedAchievements : {};
         }
-
         function getCurrentCounters() {
             return {
                 jellyfishDeflected: typeof jellyfishDeflected !== 'undefined' ? jellyfishDeflected : 0,
@@ -2119,11 +1277,9 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 magnetCount: typeof magnetCount !== 'undefined' ? magnetCount : 0
             };
         }
-
         // ===== ОБЪЕДИНЕНИЕ ДАННЫХ (МАКСИМУМ) =====
         function mergeGameData(local, remote) {
                     if (!remote) return local;
-                    
                     // ★★★ Правильное объединение: берём данные с большим уровнем ★★★
                     if (remote.level > local.level) {
                         // Удалённый прогресс лучше - берём его полностью
@@ -2151,7 +1307,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         };
                     }
                 }
-
         function mergeAchievements(local, remote) {
             if (!remote) return local;
             const merged = { ...local };
@@ -2165,7 +1320,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
             return merged;
         }
-
         function mergeCounters(local, remote) {
             if (!remote) return local;
             return {
@@ -2177,15 +1331,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 magnetCount: Math.max(local.magnetCount || 0, remote.magnetCount || 0)
             };
         }
-
         // ===== ПОЛНАЯ СИНХРОНИЗАЦИЯ =====
         function syncAllDataToVK() {
             console.log('🔄 Синхронизация данных с VK Storage...');
-            
             const gameData = getCurrentGameData();
             const achievements = getCurrentAchievements();
             const counters = getCurrentCounters();
-            
             return Promise.all([
                 saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData),
                 saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, achievements),
@@ -2196,23 +1347,19 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 console.warn('⚠️ Ошибка синхронизации:', error);
             });
         }
-
         // ===== ЗАГРУЗКА ВСЕХ ДАННЫХ ИЗ VK =====
         function loadAllDataFromVK() {
             console.log('🔄 Загрузка данных из VK Storage...');
-            
             return Promise.all([
                 loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA),
                 loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
                 loadFromVKStorage(VK_STORAGE_KEYS.COUNTERS)
             ]).then(([gameData, achievementsData, countersData]) => {
                 let loaded = false;
-                
                 // ===== ГАМЕ ДАТА =====
                 if (gameData && gameData.level !== undefined) {
                     const currentLocal = getCurrentGameData();
                     const merged = mergeGameData(currentLocal, gameData);
-                    
                     if (merged.level > currentLocal.level || merged.score > currentLocal.score) {
                         if (typeof level !== 'undefined') level = merged.level;
                         if (typeof score !== 'undefined') score = merged.score;
@@ -2221,7 +1368,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         if (typeof y !== 'undefined') y = merged.playerY;
                         loaded = true;
                         console.log(`✅ Данные игры объединены: уровень ${merged.level}, очки ${merged.score}`);
-                        
                                             // ★★★ СОХРАНЯЕМ В localStorage ДЛЯ КНОПКИ ПРОДОЛЖИТЬ ★★★
                         localStorage.setItem('bathyscaphe_max_level', merged.level);
                         maxSavedLevel = merged.level;
@@ -2230,12 +1376,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         console.log('ℹ️ Новых данных игры из VK нет');
                     }
                 }
-                
                 // ===== ДОСТИЖЕНИЯ =====
                 if (achievementsData && typeof achievementsData === 'object') {
                     const currentLocal = getCurrentAchievements();
                     const merged = mergeAchievements(currentLocal, achievementsData);
-                    
                     if (Object.keys(merged).length > Object.keys(currentLocal).length) {
                         if (typeof unlockedAchievements !== 'undefined') {
                             unlockedAchievements = merged;
@@ -2246,12 +1390,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         console.log('ℹ️ Новых достижений из VK нет');
                     }
                 }
-                
                 // ===== СЧЁТЧИКИ =====
                 if (countersData && typeof countersData === 'object') {
                     const currentLocal = getCurrentCounters();
                     const merged = mergeCounters(currentLocal, countersData);
-                    
                     let hasChanges = false;
                     for (const key in merged) {
                         if (merged[key] > currentLocal[key]) {
@@ -2259,7 +1401,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                             break;
                         }
                     }
-                    
                     if (hasChanges) {
                         if (typeof jellyfishDeflected !== 'undefined') jellyfishDeflected = merged.jellyfishDeflected;
                         if (typeof jellyfishHits !== 'undefined') jellyfishHits = merged.jellyfishHits;
@@ -2273,7 +1414,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         console.log('ℹ️ Новых счётчиков из VK нет');
                     }
                 }
-                
                 // ===== ПОСЛЕ ЗАГРУЗКИ — СОХРАНЯЕМ ВСЁ В VK =====
                 if (loaded) {
                     console.log('📤 Обновление VK Storage после загрузки...');
@@ -2281,7 +1421,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 }
                     // ★★★ ОБНОВЛЯЕМ КНОПКУ ПРОДОЛЖИТЬ ★★★
                 updateContinueButton();
-                
                 return loaded;
             }).catch((error) => {
                 console.warn('⚠️ Ошибка загрузки из VK:', error);
@@ -2290,16 +1429,12 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 return false;
             });
         }
-
         // ===== НАСТРОЙКА АВТО-СИНХРОНИЗАЦИИ =====
         let syncInitialized = false;
-
         function setupAutoSync() {
             if (syncInitialized) return;
             syncInitialized = true;
-            
             console.log('🌐 Настройка авто-синхронизации...');
-            
             // Перехватываем изменения уровня
             const originalCheckAndSaveLevel = window.checkAndSaveLevel;
             if (originalCheckAndSaveLevel) {
@@ -2309,7 +1444,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     setTimeout(syncAllDataToVK, 300);
                 };
             }
-            
             // Перехватываем изменения достижений
             const originalSaveAchievements = window.saveAchievements;
             if (originalSaveAchievements) {
@@ -2318,7 +1452,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, data);
                 };
             }
-            
             // Авто-сохранение при сворачивании
             if (typeof vkBridge !== 'undefined') {
                 vkBridge.subscribe((e) => {
@@ -2328,7 +1461,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     }
                 });
             }
-            
             // Сохранение при потере видимости страницы
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
@@ -2336,10 +1468,8 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     setTimeout(syncAllDataToVK, 300);
                 }
             });
-            
             console.log('✅ Авто-синхронизация настроена');
         }
-
         // ===== ИНИЦИАЛИЗАЦИЯ СИНХРОНИЗАЦИИ (РАННЯЯ) =====
         function initVKStorageSync() {
             if (typeof vkBridge === 'undefined') {
@@ -2360,7 +1490,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 updateContinueButton(); // ★★★
             });
         }
-
         // ===== ОБНОВЛЕНИЕ МЕНЮ ПОСЛЕ ЗАГРУЗКИ =====
         function updateMainMenuUI() {
             // Обновляем отображение уровня в меню (если есть)
@@ -2368,25 +1497,21 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             if (levelDisplay && typeof level !== 'undefined') {
                 levelDisplay.textContent = level || 1;
             }
-            
             // Обновляем счёт
             const scoresEl = document.getElementById('scores');
             if (scoresEl && typeof score !== 'undefined') {
                 scoresEl.textContent = score || 0;
             }
-            
             // Обновляем щиты
             const shieldCount = document.getElementById('shieldCount');
             if (shieldCount && typeof shields !== 'undefined') {
                 shieldCount.textContent = shields || 0;
             }
         }
-
         // ===== ДОСТУП ИЗ КОНСОЛИ =====
         window.syncAllDataToVK = syncAllDataToVK;
         window.loadAllDataFromVK = loadAllDataFromVK;
         window.manualSync = syncAllDataToVK;
-
         // ============================================================
         //  2. ИНИЦИАЛИЗАЦИЯ VK BRIDGE И ПОДПИСКА НА СОБЫТИЯ
         // ============================================================
@@ -2404,14 +1529,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
         }
     });
-
    vkBridge.send('VKWebAppInit')
     .then(() => {
         console.log('✅ VK Bridge инициализирован');
         showBannerAd();
-        
         console.log('🔄 НЕМЕДЛЕННАЯ ЗАГРУЗКА ДАННЫХ ИЗ VK STORAGE...');
-        
         // Загружаем данные игры из VK
         loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
             if (vkData && vkData.level && vkData.level >= 3) {
@@ -2430,10 +1552,8 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 var savedLevel = loadSavedLevel();
                 if (savedLevel >= 3) {
                     console.log('✅ Найдено локальное сохранение: уровень ' + savedLevel);
-                    
                     // ★★★ СОХРАНЯЕМ ЛОКАЛЬНЫЕ ДАННЫЕ В VK STORAGE ★★★
                     console.log('📤 Отправка локальных данных в VK Storage...');
-                    
                     // Загружаем данные из localStorage
                     var gameData = {
                         level: savedLevel,
@@ -2442,7 +1562,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         playerX: 140,
                         playerY: 160
                     };
-                    
                     // Сохраняем в VK Storage
                     saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
                     saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements || {});
@@ -2454,18 +1573,14 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                         slowMotionCount: 0,
                         magnetCount: 0
                     });
-                    
                     console.log('✅ Локальные данные отправлены в VK Storage: уровень ' + savedLevel);
-                    
                     // Обновляем переменные
                     if (typeof level !== 'undefined') level = savedLevel;
                     if (typeof score !== 'undefined') score = (savedLevel - 1) * 10;
                 }
             }
-            
             // ★★★ ОБНОВЛЯЕМ КНОПКУ ★★★
             updateContinueButton();
-            
             // Загружаем достижения и счётчики
             Promise.all([
                 loadFromVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS),
@@ -2490,7 +1605,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     if (typeof slowMotionCount !== 'undefined') slowMotionCount = Math.max(slowMotionCount || 0, countersData.slowMotionCount || 0);
                     if (typeof magnetCount !== 'undefined') magnetCount = Math.max(magnetCount || 0, countersData.magnetCount || 0);
                 }
-                
                 updateContinueButton();
                 updateMainMenuUI();
                 console.log('✅ Все данные загружены из VK Storage');
@@ -2499,13 +1613,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             console.warn('⚠️ Ошибка загрузки из VK:', error);
             updateContinueButton();
         });
-        
         // Запускаем фоновую синхронизацию
         setTimeout(initVKStorageSync, 2000);
     })
     .catch(err => console.warn('⚠️ Ошибка инициализации VK Bridge:', err));
 }
-
         // ============================================================
         //  3. ЗВУКИ (Web Audio API) - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -2522,35 +1634,29 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         var slowMotionTimer = null;
         var originalT = 75;
         var particleBlueInterval = null;
-
         // ============================================================
         //  4. СОХРАНЕНИЕ ПРОГРЕССА (ЛОКАЛЬНОЕ) - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
         var maxSavedLevel = 0;
         var bubbleInterval = null;
         var bubbleOverlayActive = false;
-
         function startBubbleTransition(callback) {
             if (bubbleOverlayActive) return;
             bubbleOverlayActive = true;
-            
             var overlay = document.getElementById('bubbleOverlay');
             if (!overlay) {
                 createBubbleOverlay();
                 overlay = document.getElementById('bubbleOverlay');
             }
-            
             overlay.innerHTML = '';
             overlay.style.display = 'block';
             overlay.style.pointerEvents = 'all';
             overlay.style.background = 'rgba(0, 20, 50, 0.4)';
-            
             for (var i = 0; i < 4; i++) {
                 setTimeout(function() {
                     createBubbleWave();
                 }, i * 200);
             }
-            
             if (bubbleInterval) clearInterval(bubbleInterval);
             bubbleInterval = setInterval(function() {
                 if (bubbleOverlayActive) {
@@ -2560,13 +1666,11 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     bubbleInterval = null;
                 }
             }, 400);
-            
             setTimeout(function() {
                 hideBubbleOverlay();
                 if (callback) callback();
             }, 3000);
         }
-
         function hideBubbleOverlay() {
             var overlay = document.getElementById('bubbleOverlay');
             if (overlay) {
@@ -2581,22 +1685,16 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                 bubbleInterval = null;
             }
         }
-
         function createBubbleWave() {
             if (!bubbleOverlayActive) return;
-            
             var overlay = document.getElementById('bubbleOverlay');
             if (!overlay || overlay.style.display === 'none') return;
-            
             var count = 10 + Math.floor(Math.random() * 15);
-            
             for (var i = 0; i < count; i++) {
                 var bubble = document.createElement('div');
-                
                 var rand = Math.random();
                 var size;
                 var className;
-                
                 if (rand > 0.8) {
                     className = 'bubble-overlay-big';
                     size = 50 + Math.random() * 80;
@@ -2607,12 +1705,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     className = 'bubble-overlay-small';
                     size = 15 + Math.random() * 25;
                 }
-                
                 bubble.className = className;
                 bubble.style.width = size + 'px';
                 bubble.style.height = size + 'px';
                 bubble.style.left = (Math.random() * 90 + 5) + '%';
-                
                 var duration;
                 if (className === 'bubble-overlay-big') {
                     duration = 1.8 + Math.random() * 1.2;
@@ -2622,33 +1718,25 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
                     duration = 1.2 + Math.random() * 0.8;
                 }
                 bubble.style.animationDuration = duration + 's';
-                
                 var startDelay = Math.random() * 0.5;
                 bubble.style.animationDelay = startDelay + 's';
-                
                 if (Math.random() > 0.7) {
                     bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(200, 240, 255, 0.4), rgba(100, 200, 255, 0.1))';
                 }
-                
                 overlay.appendChild(bubble);
-                
                 setTimeout(function(el) {
                     if (el && el.parentNode) el.remove();
                 }, (duration + startDelay) * 1000 + 300, bubble);
             }
         }
-
      function checkAndSaveLevel() {
     console.log('🔍 checkAndSaveLevel() вызвана! level=' + level + ', score=' + score);
-    
     // ★★★ СОХРАНЯЕМ НА ЛЮБОМ УРОВНЕ, КРАТНОМ 3 ★★★
     if (level % 3 === 0 && level > 0) {
         console.log('✅ Сохраняем уровень ' + level);
-        
         // Сохраняем локально
         localStorage.setItem('bathyscaphe_max_level', level);
         maxSavedLevel = level;
-        
         // Сохраняем ВСЕ данные
         var gameData = {
             level: level,
@@ -2657,13 +1745,10 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             playerX: x,
             playerY: y
         };
-        
         console.log('💾 Данные для сохранения:', gameData); // ← ОТЛАДКА
-        
         saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
         saveToVKStorage(VK_STORAGE_KEYS.ACHIEVEMENTS, unlockedAchievements);
         saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
-        
         showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
                updateContinueButton();
         setTimeout(syncAllDataToVK, 1000);
@@ -2671,7 +1756,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
         console.log('❌ Условие НЕ выполнено: level=' + level + ', level%3=' + (level % 3));
     }
 }
-
         function loadSavedLevel() {
             var saved = localStorage.getItem('bathyscaphe_max_level');
             if (saved) {
@@ -2680,8 +1764,6 @@ button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa, .modal-btn, .menu-b
             }
             return 0;
         }
-
-
 function updateContinueButton() {
     var continueBtn = document.querySelector('.menu-btn.continue');
     if (!continueBtn) return;    
@@ -2718,24 +1800,20 @@ function updateContinueButton() {
         }
     }
 }
-
 function continueGame() {
     if (typeof vkBridge !== 'undefined') {
         loadFromVKStorage(VK_STORAGE_KEYS.GAME_DATA).then(function(vkData) {
             if (vkData && vkData.level && vkData.level >= 3) {
                 console.log('✅ Найдено сохранение в VK Storage: уровень ' + vkData.level);
-                
                 // Загружаем данные из VK
                 level = vkData.level;
                 score = vkData.score || ((level - 1) * 10);
                 shields = vkData.shields || 0;
                 x = vkData.playerX || 140;
                 y = vkData.playerY || 160;
-                
                 // ★★★ СОХРАНЯЕМ В LOCALSTORAGE ★★★
                 localStorage.setItem('bathyscaphe_max_level', level);
                 maxSavedLevel = level;
-                
                 // ★★★ СОХРАНЯЕМ ОБРАТНО В VK (чтобы синхронизировать) ★★★
                 var gameData = {
                     level: level,
@@ -2745,7 +1823,6 @@ function continueGame() {
                     playerY: y
                 };
                 saveToVKStorage(VK_STORAGE_KEYS.GAME_DATA, gameData);
-                
                 continueGameWithCurrentData();
             } else {
                 continueGameFromLocal();
@@ -2757,7 +1834,6 @@ function continueGame() {
         continueGameFromLocal();
     }
 }
-
 // ★★★ НОВАЯ ФУНКЦИЯ: продолжение из локального сохранения ★★★
 function continueGameFromLocal() {
     var savedLevel = loadSavedLevel();
@@ -2775,11 +1851,9 @@ function continueGameFromLocal() {
         document.body.appendChild(modal);
         return;
     }
-
     // Загружаем сохранённый уровень
     level = savedLevel;
     score = (level - 1) * 10;
-    
     // ★★★ ГЕНЕРИРУЕМ ПОЗИЦИЮ РАКУШКИ ★★★
     var margin = 35;
     var blockSize = 28;
@@ -2787,20 +1861,16 @@ function continueGameFromLocal() {
     var maxY = 370 - blockSize - margin;
     cx = Math.floor(Math.random() * (maxX - margin) + margin);
     cy = Math.floor(Math.random() * (maxY - margin) + margin);
-    
     if (block) {
         block.style.left = cx + 'px';
         block.style.top = cy + 'px';
     }
-    
     continueGameWithCurrentData();
 }
-
 // ★★★ НОВАЯ ФУНКЦИЯ: запуск игры с текущими данными (весь твой код) ★★★
 function continueGameWithCurrentData() {
     scoresEl.innerHTML = score;
     levelDisplay.textContent = level;
-
       // ★★★ ГЕНЕРИРУЕМ НОВУЮ ПОЗИЦИЮ РАКУШКИ С ОТСТУПОМ ОТ СТЕН ★★★
     var margin = 35; // отступ от стен
     var blockSize = 28;
@@ -2808,7 +1878,6 @@ function continueGameWithCurrentData() {
     var maxY = 370 - blockSize - margin;
     cx = Math.floor(Math.random() * (maxX - margin) + margin);
     cy = Math.floor(Math.random() * (maxY - margin) + margin);
-    
     // Обновляем позицию ракушки на поле
     if (block) {
         block.style.left = cx + 'px';
@@ -2829,7 +1898,6 @@ function continueGameWithCurrentData() {
              updateContinueButton();
         console.log('💾 continueGameWithCurrentData Данные загружены и сохранены в VK: уровень ' + level);
     }
-
     // Включаем эффекты для текущего уровня
     if (level >= 30 && level < 100) {
         startParticlesBlue();
@@ -2851,10 +1919,8 @@ function continueGameWithCurrentData() {
         document.querySelector('.shell .spiral').style.background = 
             'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
     }
-
     mainMenu.style.display = 'none';
     gameContainer.style.display = 'flex';
-    
     // Ставим игру на паузу для обратного отсчёта
     paus = true;
     if (u) u.disabled = true;
@@ -2864,7 +1930,6 @@ function continueGameWithCurrentData() {
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
     }
-    
     // Запускаем обратный отсчёт
     startCountdown(function() {
         // После отсчёта запускаем игру
@@ -2877,11 +1942,9 @@ function continueGameWithCurrentData() {
         if (pausa) {
             pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
         }
-        
         // Запускаем движение
         down();
         startBackgroundEffects();
-
         // Бонусы для высоких уровней
         if (level >= 30) {
             setInterval(function() {
@@ -2890,7 +1953,6 @@ function continueGameWithCurrentData() {
                 }
             }, 12000 + Math.random() * 8000);
         }
-
         if (level >= 60) {
             setInterval(function() {
                 if (gameActive && !paus && !slowMotionActive && level >= 60) {
@@ -2898,7 +1960,6 @@ function continueGameWithCurrentData() {
                 }
             }, 18000 + Math.random() * 10000);
         }
-
         if (level >= 70) {
             setInterval(function() {
                 if (gameActive && !paus && !magnetActive && level >= 70) {
@@ -2906,58 +1967,22 @@ function continueGameWithCurrentData() {
                 }
             }, 20000 + Math.random() * 12000);
         }
-
         playButtonSound();
     }, '↩️');
 }
-
-// Загрузить игру из данных VK Storage
 function loadGameFromData(vkData) {
     level = vkData.level || 1;
     score = vkData.score || 0;
     shields = vkData.shields || 0;
     x = vkData.playerX || 140;
     y = vkData.playerY || 160;
-    
-    // Обновляем локальное сохранение
     localStorage.setItem('bathyscaphe_max_level', level);
     maxSavedLevel = level;
-    
-    // Запускаем игру
     continueGameWithLevel(level, score);
 }
-
-// Продолжить игру с указанным уровнем
-function continueGameWithLevel(level, score) {
-    scoresEl.innerHTML = score;
-    levelDisplay.textContent = level;
-    
-    // Включаем эффекты для текущего уровня
-    if (level >= 30 && level < 100) {
-        startParticlesBlue();
-    }
-    if (level >= 100) {
-        startParticles();
-    }
-    if (level >= 50) {
-        document.querySelector('.bathyscaphe .body').style.background = 
-            'radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)';
-        document.querySelector('.bathyscaphe .window').style.background = 
-            'radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';
-    }
-    if (level >= 100) {
-        document.querySelector('.bathyscaphe .body').style.background = 
-            'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
-        document.querySelector('.bathyscaphe .window').style.background = 
-            'radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)';
-        document.querySelector('.shell .spiral').style.background = 
-            'radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';
-    }
-
+function continueGameWithLevel(level, score){ scoresEl.innerHTML=score; levelDisplay.textContent=level; // Включаем эффекты для текущего уровня if (level >=30 && level < 100){ startParticlesBlue();} if (level >=100){ startParticles();} if (level >=50){ document.querySelector('.bathyscaphe .body').style.background='radial-gradient(ellipse at 40% 30%, #00ff88, #00aa66)'; document.querySelector('.bathyscaphe .window').style.background='radial-gradient(circle at 35% 35%, #88ffcc, #00aa77)';} if (level >=100){ document.querySelector('.bathyscaphe .body').style.background='radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)'; document.querySelector('.bathyscaphe .window').style.background='radial-gradient(circle at 35% 35%, #ff88ff, #9900cc)'; document.querySelector('.shell .spiral').style.background='radial-gradient(ellipse at 60% 40%, #ffd700, #ff8c00, #cc6600)';}
     mainMenu.style.display = 'none';
     gameContainer.style.display = 'flex';
-    
-    // Ставим игру на паузу для обратного отсчёта
     paus = true;
     if (u) u.disabled = true;
     if (d) d.disabled = true;
@@ -2966,11 +1991,8 @@ function continueGameWithLevel(level, score) {
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
     }
-    
-    // Запускаем обратный отсчёт
     startCountdown(function() {
-        // После отсчёта запускаем игру
-        gameActive = true;
+             gameActive = true;
         paus = false;
         if (u) u.disabled = false;
         if (d) d.disabled = false;
@@ -2979,12 +2001,8 @@ function continueGameWithLevel(level, score) {
         if (pausa) {
             pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
         }
-        
-        // Запускаем движение
-        down();
+         down();
         startBackgroundEffects();
-
-        // Бонусы для высоких уровней
         if (level >= 30) {
             setInterval(function() {
                 if (gameActive && !paus && !speedBoostActive && level >= 30) {
@@ -2992,7 +2010,6 @@ function continueGameWithLevel(level, score) {
                 }
             }, 12000 + Math.random() * 8000);
         }
-
         if (level >= 60) {
             setInterval(function() {
                 if (gameActive && !paus && !slowMotionActive && level >= 60) {
@@ -3000,7 +2017,6 @@ function continueGameWithLevel(level, score) {
                 }
             }, 18000 + Math.random() * 10000);
         }
-
         if (level >= 70) {
             setInterval(function() {
                 if (gameActive && !paus && !magnetActive && level >= 70) {
@@ -3008,65 +2024,19 @@ function continueGameWithLevel(level, score) {
                 }
             }, 20000 + Math.random() * 12000);
         }
-
         playButtonSound();
     }, '↩️');
 }
-        // ============================================================
-        //  5. ЧАСТИЦЫ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
-        function startParticlesBlue() {
-            if (particleBlueInterval) clearInterval(particleBlueInterval);
-            particleBlueInterval = setInterval(function() {
-                if (!gameActive || paus || level < 30 || level >= 100) return;
-                var particle = document.createElement('div');
-                particle.className = 'particle-blue';
-                particle.style.left = (Math.random() * 280 + 10) + 'px';
-                particle.style.top = (Math.random() * 280 + 20) + 'px';
-                var size = 2 + Math.random() * 3;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.animationDuration = (2 + Math.random() * 3) + 's';
-                gameblock.appendChild(particle);
-                setTimeout(function() { particle.remove(); }, 5000);
-            }, 400);
-        }
-
-        function stopParticlesBlue() {
-            if (particleBlueInterval) clearInterval(particleBlueInterval);
-        }
-
-        function startParticles() {
-            if (particleInterval) clearInterval(particleInterval);
-            particleInterval = setInterval(function() {
-                if (!gameActive || paus || level < 100) return;
-                var particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = (Math.random() * 280 + 10) + 'px';
-                particle.style.top = (Math.random() * 280 + 20) + 'px';
-                var size = 2 + Math.random() * 4;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.animationDuration = (2 + Math.random() * 3) + 's';
-                gameblock.appendChild(particle);
-                setTimeout(function() { particle.remove(); }, 5000);
-            }, 300);
-        }
-
+    function startParticlesBlue(){ if (particleBlueInterval) clearInterval(particleBlueInterval); particleBlueInterval=setInterval(function(){ if (!gameActive || paus || level < 30 || level >=100) return; var particle=document.createElement('div'); particle.className='particle-blue'; particle.style.left=(Math.random() * 280 + 10) + 'px'; particle.style.top=(Math.random() * 280 + 20) + 'px'; var size=2 + Math.random() * 3; particle.style.width=size + 'px'; particle.style.height=size + 'px'; particle.style.animationDuration=(2 + Math.random() * 3) + 's'; gameblock.appendChild(particle); setTimeout(function(){ particle.remove();}, 5000);}, 400);} function stopParticlesBlue(){ if (particleBlueInterval) clearInterval(particleBlueInterval);} function startParticles(){ if (particleInterval) clearInterval(particleInterval); particleInterval=setInterval(function(){ if (!gameActive || paus || level < 100) return; var particle=document.createElement('div'); particle.className='particle'; particle.style.left=(Math.random() * 280 + 10) + 'px'; particle.style.top=(Math.random() * 280 + 20) + 'px'; var size=2 + Math.random() * 4; particle.style.width=size + 'px'; particle.style.height=size + 'px'; particle.style.animationDuration=(2 + Math.random() * 3) + 's'; gameblock.appendChild(particle); setTimeout(function(){ particle.remove();}, 5000);}, 300);}
         function stopParticles() {
             if (particleInterval) clearInterval(particleInterval);
             if (particleBlueInterval) clearInterval(particleBlueInterval);
         }
-
-        // ============================================================
-        //  6. ЗВУКИ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
-        function initAudio() {
+               function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
-
         function playTone(freq, duration, type, volume) {
             if (!isSoundEnabled) return;
             try {
@@ -3083,19 +2053,14 @@ function continueGameWithLevel(level, score) {
                 oscillator.stop(audioCtx.currentTime + duration);
             } catch(e) { /* игнорируем ошибки аудио */ }
         }
-
         function playShellSound() { playTone(800, 0.15, 'sine', 0.1);
             setTimeout(function() { playTone(1000, 0.1, 'sine', 0.08); }, 100); }
-
         function playStarSound() { playTone(1200, 0.1, 'sine', 0.3);
             setTimeout(function() { playTone(1500, 0.1, 'sine', 0.3); }, 100);
             setTimeout(function() { playTone(1800, 0.15, 'sine', 0.3); }, 200); }
-
         function playGameOverSound() { playTone(300, 0.3, 'sawtooth', 0.3);
             setTimeout(function() { playTone(200, 0.4, 'sawtooth', 0.3); }, 300); }
-
        function playButtonSound() {
-    // НЕ играем звуки, если игра не активна или мы в меню
     if (!gameActive || !isSoundEnabled || mainMenu.style.display !== 'none') {
         return;
     }
@@ -3108,36 +2073,20 @@ function continueGameWithLevel(level, score) {
             playButtonSound();
             return;
         }
-        for (var i = 0; i < 4; i++) {
-            setTimeout(function(idx) {
-                var freq = 700 + idx * 80;
-                var vol = 0.03 - idx * 0.005;
-                if (vol > 0.01) {
-                    playTone(freq, 0.04, 'sine', vol);
-                }
-            }, i * 60, i);
-        }
+   for (var i=0; i < 4; i++){ setTimeout(function(idx){ var freq=700 + idx * 80; var vol=0.03 - idx * 0.005; if (vol >0.01){ playTone(freq, 0.04, 'sine', vol);}}, i * 60, i);}
         playButtonSound();
     }, randomDelay);
 }
         function playLevelUpSound() { playTone(523, 0.15, 'sine', 0.3);
             setTimeout(function() { playTone(659, 0.15, 'sine', 0.3); }, 150);
             setTimeout(function() { playTone(784, 0.2, 'sine', 0.4); }, 300); }
-
         function playJellyfishSound() { playTone(200, 0.2, 'sawtooth', 0.2);
             setTimeout(function() { playTone(150, 0.3, 'sawtooth', 0.2); }, 200); }
-
         function playShieldSound() { playTone(1000, 0.1, 'sine', 0.3);
             setTimeout(function() { playTone(1200, 0.15, 'sine', 0.4); }, 100); }
-
         function playShieldUseSound() { playTone(400, 0.2, 'square', 0.25);
             setTimeout(function() { playTone(600, 0.2, 'square', 0.25); }, 150); }
-
-        // ============================================================
-        //  7. УПРАВЛЕНИЕ ПАУЗОЙ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
         var wasPausedByHide = false;
-
         function pauseGameOnHide() {
             if (gameActive && !paus) {
                 console.log('⏸️ Автоматическая пауза (сворачивание)');
@@ -3158,11 +2107,9 @@ function continueGameWithLevel(level, score) {
                 }
             }
         }
-
         function pause() {
             if (!gameActive) return;
             clearAllIntervals();
-            
             if (paus === false) {
                 console.log('⏸️ Ручная пауза');
                 if (window.buttonSoundTimer) {
@@ -3201,10 +2148,6 @@ function continueGameWithLevel(level, score) {
                 }
             }
         }
-
-        // ============================================================
-        //  8. ПЕРЕМЕННЫЕ ИГРЫ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
         var player = document.getElementById('player');
         var block = document.getElementById('block');
         var block2 = document.getElementById('block2');
@@ -3224,7 +2167,6 @@ function continueGameWithLevel(level, score) {
         var finalLevelEl = document.getElementById('finalLevel');
         var gameblock = document.getElementById('gameblock');
         var toastTimeout = null;
-
         var x = 0, y = 0;
         var cx = 50, cy = 50;
         var bx, by;
@@ -3269,32 +2211,12 @@ function continueGameWithLevel(level, score) {
         ];
         var colorIndex = 0;
         var bgInterval = null;
-
-        // ============================================================
-        //  9. ФУНКЦИИ МЕНЮ - БЕЗ ИЗМЕНЕНИЙ (кроме sync при старте)
-        // ============================================================
-             function startGame() {
+                function startGame() {
     if (!mainMenu || !gameContainer) {
         console.error('Элементы меню не найдены');
         return;
     }
-    isSoundEnabled = true;
-    wasPausedByHide = false;
-    initAudio();
-    
-    // Возобновляем аудио контекст
-    if (audioCtx && audioCtx.state === 'suspended') {
-        try {
-            audioCtx.resume();
-        } catch(e) {}
-    }
-    
-    mainMenu.style.display = 'none';
-    gameContainer.style.display = 'flex';
-    resetGame();
-    
-    // Ставим игру на паузу для обратного отсчёта
-    paus = true;
+ isSoundEnabled=true; wasPausedByHide=false; initAudio(); if (audioCtx && audioCtx.state==='suspended'){ try{ audioCtx.resume();} catch(e){}} mainMenu.style.display='none'; gameContainer.style.display='flex'; resetGame(); paus=true;
     if (u) u.disabled = true;
     if (d) d.disabled = true;
     if (r) r.disabled = true;
@@ -3302,7 +2224,6 @@ function continueGameWithLevel(level, score) {
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
     }
-    
     // Запускаем обратный отсчёт
     startCountdown(function() {
         // После отсчёта запускаем игру
@@ -3315,50 +2236,12 @@ function continueGameWithLevel(level, score) {
         if (pausa) {
             pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
         }
-        
-        // Запускаем движение
-        down();
-        startBackgroundEffects();
-
-        // Бонусы для высоких уровней
-        if (level >= 30) {
-            setInterval(function() {
-                if (gameActive && !paus && !speedBoostActive && level >= 30) {
-                    spawnSpeedBoost();
-                }
-            }, 12000 + Math.random() * 8000);
-        }
-
-        if (level >= 60) {
-            setInterval(function() {
-                if (gameActive && !paus && !slowMotionActive && level >= 60) {
-                    spawnSlowMotion();
-                }
-            }, 18000 + Math.random() * 10000);
-        }
-
-        if (level >= 70) {
-            setInterval(function() {
-                if (gameActive && !paus && !magnetActive && level >= 70) {
-                    spawnMagnet();
-                }
-            }, 20000 + Math.random() * 12000);
-        }
-
-        if (level >= 30 && level < 100) {
-            startParticlesBlue();
-        }
-        if (level >= 100) {
-            startParticles();
-        }
-
+       down(); startBackgroundEffects(); if (level >=30){ setInterval(function(){ if (gameActive && !paus && !speedBoostActive && level >=30){ spawnSpeedBoost();}}, 12000 + Math.random() * 8000);} if (level >=60){ setInterval(function(){ if (gameActive && !paus && !slowMotionActive && level >=60){ spawnSlowMotion();}}, 18000 + Math.random() * 10000);} if (level >=70){ setInterval(function(){ if (gameActive && !paus && !magnetActive && level >=70){ spawnMagnet();}}, 20000 + Math.random() * 12000);} if (level >=30 && level < 100){ startParticlesBlue();} if (level >=100){ startParticles();}
         playButtonSound();
-        
         // Синхронизация при старте игры
         setTimeout(syncAllDataToVK, 1000);
     }, '🎮');
 }
-
 function goToMenu() {
     gameActive = false;
     clearAllIntervals();
@@ -3376,26 +2259,19 @@ function goToMenu() {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
 }
-
-
  function goToMenuFromOver() {    
     closeGameOverModal();
-    // Полностью останавливаем игру и выходим в меню
     goToMenu();
 }
-
   function showHowTo() {
     var modal = document.getElementById('howToModal');
     if (modal) {
-        // Убеждаемся, что модалка полностью загружена перед показом
-        modal.style.display = 'flex';
-        // Небольшая задержка для плавного появления
+               modal.style.display = 'flex';
         requestAnimationFrame(function() {
             modal.classList.add('active');
         });
     }
 }
-
 function closeHowTo() {
     var modal = document.getElementById('howToModal');
     if (modal) {
@@ -3408,67 +2284,21 @@ function closeHowTo() {
         }, 300);
     }
 }
-
-        // ============================================================
-//  УНИВЕРСАЛЬНЫЙ ОБРАТНЫЙ ОТСЧЁТ 3-2-1
-// ============================================================
-
-function startCountdown(callback, customMessage) {
-    var message = customMessage || '🎮';
-    var countdown = 3;
-    
-    showCountdownNotification(message + ' ' + countdown);
-    
-    var countdownInterval = setInterval(function() {
-        countdown--;
-        if (countdown > 0) {
-            showCountdownNotification(message + ' ' + countdown);
-        } else {
-            clearInterval(countdownInterval);
-            showCountdownNotification('🚀 Вперёд!');
-            setTimeout(function() {
-                if (callback) callback();
-            }, 500);
-        }
-    }, 1000);
-}
-
-function showCountdownNotification(text) {
-    // Удаляем старые уведомления
-    var oldNotifications = document.querySelectorAll('.countdown-notification');
-    oldNotifications.forEach(function(el) { el.remove(); });
-    
-    var notification = document.createElement('div');
-    notification.className = 'countdown-notification';
-    notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
-        'z-index:35;font-size:24px;color:#faa61a;text-shadow:0 0 30px rgba(255,215,0,0.8);' +
-        'animation:saveAnim 1.5s ease-out forwards;pointer-events:none;' +
-        'background:rgba(0,0,0,0.7);padding:15px 30px;border-radius:12px;' +
-        'border:2px solid rgba(255,215,0,0.3);font-weight:bold;' +
-        'min-width:120px;text-align:center;';
-    notification.textContent = text;
-    gameblock.appendChild(notification);
-    setTimeout(function() { 
-        if (notification.parentNode) notification.remove(); 
-    }, 1200);
-}
+function startCountdown(callback, customMessage){ var message=customMessage || '🎮'; var countdown=3; showCountdownNotification(message + ' ' + countdown); var countdownInterval=setInterval(function(){ countdown--; if (countdown >0){ showCountdownNotification(message + ' ' + countdown)} else{ clearInterval(countdownInterval); showCountdownNotification('🚀 Вперёд!'); setTimeout(function(){ if (callback) callback()}, 500)}}, 1000)}
+function showCountdownNotification(text){ var oldNotifications=document.querySelectorAll('.countdown-notification'); oldNotifications.forEach(function(el){ el.remove();}); var notification=document.createElement('div'); notification.className='countdown-notification'; notification.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' + 'z-index:35;font-size:24px;color:#faa61a;text-shadow:0 0 30px rgba(255,215,0,0.8);' + 'animation:saveAnim 1.5s ease-out forwards;pointer-events:none;' + 'background:rgba(0,0,0,0.7);padding:15px 30px;border-radius:12px;' + 'border:2px solid rgba(255,215,0,0.3);font-weight:bold;' + 'min-width:120px;text-align:center;'; notification.textContent=text; gameblock.appendChild(notification); setTimeout(function(){ if (notification.parentNode) notification.remove();}, 1200);}
         function showGamesModal() {
             var modal = document.getElementById('gamesModal');
             if (modal) modal.classList.add('active');
         }
-
         function closeGamesModal() {
             var modal = document.getElementById('gamesModal');
             if (modal) modal.classList.remove('active');
         }
-
        function showGameOverModal() {
-    // ЗАЩИТА: не показываем модалку, если меню видно или игра не активна
     if (mainMenu.style.display === 'flex') {
         console.log('🛡️ showGameOverModal() заблокирована - меню видно или игра не активна');
         return;
     }    
-    //console.log('💀 showGameOverModal() вызвана!');    
     if (finalScoreEl) finalScoreEl.textContent = score;
     if (finalLevelEl) finalLevelEl.textContent = level;
     if (gameOverModal) gameOverModal.classList.add('active');
@@ -3478,72 +2308,13 @@ function showCountdownNotification(text) {
         window.buttonSoundTimer = null;
     }
 }
-
       function closeGameOverModal() {
         if (gameOverModal) {        gameOverModal.classList.remove('active');
         }
     }
-
-       function restartGame() {
-    // Закрываем модалку проигрыша
-    closeGameOverModal();
-    
-    // ===== 1. ПОЛНОСТЬЮ СБРАСЫВАЕМ СОСТОЯНИЕ ИГРЫ =====
-    // Останавливаем всё
-    gameActive = false;
-    clearAllIntervals();
-    stopBackgroundEffects();
-    stopParticles();
-    stopParticlesBlue();
-    
-    // Сбрасываем все переменные
-    level = 1;
-    score = 0;
-    shields = 0;
-    rad = 40;
-    t = 75;
-    x = 140;
-    y = 160;
-    cx = Math.floor(Math.random() * 240 + 20);
-    cy = Math.floor(Math.random() * 280 + 20);
-    intcount = 0;
-    intval = (Math.floor(Math.random() * 10 + 15));
-    jellyfishActive = false;
-    paus = false;
-    wasPausedByHide = false;
-    shieldPopupPaused = false;
-    repairPopupPaused = false;
-    window.keysBlocked = false;
-    
-    // Сбрасываем счётчики
-    jellyfishDeflected = 0;
-    jellyfishHits = 0;
-    deathCount = 0;
-    speedBoostCount = 0;
-    slowMotionCount = 0;
-    magnetCount = 0;
-    achievementsChecked = false;
-    
-    // Обновляем UI
-    scoresEl.innerHTML = '0';
-    levelDisplay.textContent = '1';
-    shieldCountDisplay.textContent = '0';
-    
-    // Сбрасываем позицию игрока
-    if (player) {
-        player.style.left = x + 'px';
-        player.style.top = y + 'px';
-        player.style.width = rad + 'px';
-        player.style.height = rad + 'px';
-    }
-    if (block) {
-        block.style.left = cx + 'px';
-        block.style.top = cy + 'px';
-    }
+    function restartGame(){ closeGameOverModal(); gameActive=false; clearAllIntervals(); stopBackgroundEffects(); stopParticles(); stopParticlesBlue(); level=1; score=0; shields=0; rad=40; t=75; x=140; y=160; cx=Math.floor(Math.random() * 240 + 20); cy=Math.floor(Math.random() * 280 + 20); intcount=0; intval=(Math.floor(Math.random() * 10 + 15)); jellyfishActive=false; paus=false; wasPausedByHide=false; shieldPopupPaused=false; repairPopupPaused=false; window.keysBlocked=false; jellyfishDeflected=0; jellyfishHits=0; deathCount=0; speedBoostCount=0; slowMotionCount=0; magnetCount=0; achievementsChecked=false; scoresEl.innerHTML='0'; levelDisplay.textContent='1'; shieldCountDisplay.textContent='0'; if (player){ player.style.left=x + 'px'; player.style.top=y + 'px'; player.style.width=rad + 'px'; player.style.height=rad + 'px';} if (block){ block.style.left=cx + 'px'; block.style.top=cy + 'px';}
     if (block2) block2.style.display = 'none';
     if (shieldItem) shieldItem.style.display = 'none';
-    
-    // Сбрасываем цвета
     gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
     document.querySelector('.vine').style.opacity = '0.5';
     document.querySelector('.bathyscaphe .body').style.background = 
@@ -3552,80 +2323,19 @@ function showCountdownNotification(text) {
         'radial-gradient(circle at 35% 35%, #66ccff, #1a6699)';
     document.querySelector('.shell .spiral').style.background = 
         'radial-gradient(ellipse at 60% 40%, #ffd4a8, #d49a6a, #b8784a)';
-    
     // Удаляем эффекты
     document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
         el.remove();
     });
-    
-    // Восстанавливаем иконку паузы
-    if (pausa) {
-        pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-    }
-    
-    // Разблокируем кнопки
-    if (u) u.disabled = false;
-    if (d) d.disabled = false;
-    if (r) r.disabled = false;
-    if (l) l.disabled = false;
-    
-    isSoundEnabled = true;
-    
-    // ===== 2. ПОКАЗЫВАЕМ РЕКЛАМУ =====
-   /* if (typeof vkBridge !== 'undefined') {
-        var now = Date.now();
-        if ((now - lastAdTime) >= adCooldown) {
-            lastAdTime = now;
-            vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
-                .then(function() {
-                    console.log('📱 Реклама показана');
-                })
-                .catch(function(e) {
-                    console.log('⚠️ Ошибка рекламы:', e);
-                });
-        }
-    }*/
-    
-    // ===== 3. ЗАПУСКАЕМ АНИМАЦИЮ ПУЗЫРЕЙ И НОВУЮ ИГРУ =====
-    startBubbleTransition(function() {
-        // После анимации пузырей запускаем новую игру с обратным отсчётом
-        paus = true;
-        if (u) u.disabled = true;
-        if (d) d.disabled = true;
-        if (r) r.disabled = true;
-        if (l) l.disabled = true;
-        if (pausa) {
-            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-        }
-        
-        startCountdown(function() {
-            gameActive = true;
-            paus = false;
-            if (u) u.disabled = false;
-            if (d) d.disabled = false;
-            if (r) r.disabled = false;
-            if (l) l.disabled = false;
-            if (pausa) {
-                pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
-            }
-            down();
-            startBackgroundEffects();
-            playButtonSound();
-        }, '🔄');
-    });
-}
-
-     
+    if (pausa){ pausa.innerHTML='<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';} if (u) u.disabled=false; if (d) d.disabled=false; if (r) r.disabled=false; if (l) l.disabled=false; isSoundEnabled=true; startBubbleTransition(function(){ paus=true; if (u) u.disabled=true; if (d) d.disabled=true; if (r) r.disabled=true; if (l) l.disabled=true; if (pausa){ pausa.innerHTML='<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>'} startCountdown(function(){ gameActive=true; paus=false; if (u) u.disabled=false; if (d) d.disabled=false; if (r) r.disabled=false; if (l) l.disabled=false; if (pausa){ pausa.innerHTML='<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';} down(); startBackgroundEffects(); playButtonSound();}, '🔄');});}
         function createBubbleOverlay() {
             var overlay = document.getElementById('bubbleOverlay');
             if (overlay) return;
-            
             overlay = document.createElement('div');
             overlay.id = 'bubbleOverlay';
             overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:2000;pointer-events:none;display:none;overflow:hidden;background:transparent;';
             document.body.appendChild(overlay);
         }
-  
         function inviteFriends() {
             if (typeof vkBridge !== 'undefined') {
                 vkBridge.send("VKWebAppShowInviteBox", {})
@@ -3635,11 +2345,7 @@ function showCountdownNotification(text) {
                 alert('Пригласить друзей (работает только в VK)');
             }
         }
-
-        // ============================================================
-        //  10. ФОНОВЫЕ ЭФФЕКТЫ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
-        function startBackgroundEffects() {
+               function startBackgroundEffects() {
             if (bgInterval) clearInterval(bgInterval);
             bgInterval = setInterval(function() {
                 colorIndex = (colorIndex + 1) % waterColors.length;
@@ -3647,7 +2353,6 @@ function showCountdownNotification(text) {
                 gameblock.style.background = 'linear-gradient(180deg, ' +
                     colors[0] + ' 0%, ' + colors[1] + ' 30%, ' +
                     colors[2] + ' 60%, ' + colors[3] + ' 100%)';
-                
                 dayNightMode = (colorIndex % 2 === 0) ? 0 : 1;
                 var overlay = document.createElement('div');
                 overlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:1;pointer-events:none;' +
@@ -3658,19 +2363,16 @@ function showCountdownNotification(text) {
                 if (oldOverlay) oldOverlay.remove();
                 gameblock.appendChild(overlay);
             }, 8000);
-
             if (jellyfishTimer) clearInterval(jellyfishTimer);
             jellyfishTimer = setInterval(function() {
                 if (!gameActive || paus) return;
                 spawnJellyfish();
             }, 12000 + Math.random() * 20000);
-
             if (shieldTimer) clearInterval(shieldTimer);
             shieldTimer = setInterval(function() {
                 if (!gameActive || paus || shields >= 3) return;
                 spawnShield();
             }, 18000 + Math.random() * 10000);
-
             if (level >= 70) {
                 setInterval(function() {
                     if (gameActive && !paus && !magnetActive) {
@@ -3678,7 +2380,6 @@ function showCountdownNotification(text) {
                     }
                 }, 20000 + Math.random() * 20000);
             }
-
             if (level >= 80) {
                 var jellyInterval = Math.max(5000, 12000 - (level - 80) * 100);
                 if (jellyfishTimer) clearInterval(jellyfishTimer);
@@ -3690,7 +2391,6 @@ function showCountdownNotification(text) {
                     }
                 }, jellyInterval);
             }
-
             if (level >= 50) {
                 setInterval(function() {
                     if (gameActive && !paus) {
@@ -3700,13 +2400,11 @@ function showCountdownNotification(text) {
                 }, 5000 + Math.random() * 5000);
             }
         }
-
         function stopBackgroundEffects() {
             if (bgInterval) clearInterval(bgInterval);
             if (jellyfishTimer) clearInterval(jellyfishTimer);
             if (shieldTimer) clearInterval(shieldTimer);
         }
-
         // ============================================================
         //  11. МЕДУЗА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -3725,7 +2423,6 @@ function showCountdownNotification(text) {
             jellyfishActive = true;
             jx = startX;
             jy = parseInt(jellyfish.style.top);
-
             var speed = 1 + Math.random() * 2;
             var dir = startX > 0 ? -1 : 1;
             var moveInterval = setInterval(function() {
@@ -3765,7 +2462,6 @@ function showCountdownNotification(text) {
                     jellyfish.remove();
                 }
             }, 30);
-
             setTimeout(function() {
                 if (jellyfishActive) {
                     clearInterval(moveInterval);
@@ -3774,19 +2470,16 @@ function showCountdownNotification(text) {
                 }
             }, 8000);
         }
-
         // ============================================================
         //  12. ЩИТ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
               function spawnShield() {
     if (shieldItem.style.display === 'flex' || paus) return;
     if (shields >= 99) return;
-    
     // Отступ от стен (30px)
     var margin = 30;
     var maxX = 300 - 30 - margin;
     var maxY = 370 - 30 - margin;
-    
     sx = (Math.floor(Math.random() * (maxX - margin) + margin));
     sy = (Math.floor(Math.random() * (maxY - margin) + margin));
     shieldItem.style.display = 'flex';
@@ -3794,7 +2487,6 @@ function showCountdownNotification(text) {
     shieldItem.style.top = sy + 'px';
     playShieldSound();
 }
-
         // ============================================================
         //  13. БОНУСЫ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -3808,7 +2500,6 @@ function showCountdownNotification(text) {
                 'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
                 'animation:magnetPulse 1s ease-in-out infinite alternate;';
             gameblock.appendChild(magnet);
-            
             var checkMagnet = setInterval(function() {
                 if (!gameActive || paus || !magnet) return;
                 var mx = parseInt(magnet.style.left);
@@ -3821,7 +2512,6 @@ function showCountdownNotification(text) {
                     achievementsChecked = false;
                     setTimeout(checkAndNotifyAchievements, 100);
                     showEffect(mx, my, '🧲', '#ff6600');
-                    
                     var attractInterval = setInterval(function() {
                         if (!gameActive || paus || !magnetActive) {
                             clearInterval(attractInterval);
@@ -3844,14 +2534,12 @@ function showCountdownNotification(text) {
                             }
                         }
                     }, 50);
-                    
                     magnetTimer = setTimeout(function() {
                         magnetActive = false;
                         clearInterval(attractInterval);
                     }, 5000);
                 }
             }, 100);
-            
             setTimeout(function() {
                 if (magnet) {
                     clearInterval(checkMagnet);
@@ -3859,7 +2547,6 @@ function showCountdownNotification(text) {
                 }
             }, 8000);
         }
-
         function spawnSpeedBoost() {
             if (level < 30 || speedBoostActive || paus) return;
             var boost = document.createElement('div');
@@ -3869,7 +2556,6 @@ function showCountdownNotification(text) {
                 'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
                 'animation:magnetPulse 0.8s ease-in-out infinite alternate;';
             gameblock.appendChild(boost);
-            
             var checkBoost = setInterval(function() {
                 if (!gameActive || paus || !boost) return;
                 var bx = parseInt(boost.style.left);
@@ -3887,7 +2573,6 @@ function showCountdownNotification(text) {
                     }, 3000);
                 }
             }, 100);
-            
             setTimeout(function() {
                 if (boost) {
                     clearInterval(checkBoost);
@@ -3895,7 +2580,6 @@ function showCountdownNotification(text) {
                 }
             }, 7000);
         }
-
         function spawnSlowMotion() {
             if (level < 60 || slowMotionActive || paus) return;
             var slow = document.createElement('div');
@@ -3905,7 +2589,6 @@ function showCountdownNotification(text) {
                 'top:' + (Math.floor(Math.random() * 280 + 20)) + 'px;' +
                 'animation:magnetPulse 1.2s ease-in-out infinite alternate;';
             gameblock.appendChild(slow);
-            
             var checkSlow = setInterval(function() {
                 if (!gameActive || paus || !slow) return;
                 var sx = parseInt(slow.style.left);
@@ -3923,7 +2606,6 @@ function showCountdownNotification(text) {
                     }, 3000);
                 }
             }, 100);
-            
             setTimeout(function() {
                 if (slow) {
                     clearInterval(checkSlow);
@@ -3931,7 +2613,6 @@ function showCountdownNotification(text) {
                 }
             }, 7000);
         }
-
         // ============================================================
         //  14. ЭФФЕКТЫ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -3945,7 +2626,6 @@ function showCountdownNotification(text) {
             gameblock.appendChild(effect);
             setTimeout(function() { effect.remove(); }, 700);
         }
-
         function spawnBubbles() {
             if (paus) return;
             for (var i = 0; i < 3; i++) {
@@ -3961,7 +2641,6 @@ function showCountdownNotification(text) {
                 setTimeout(function() { bubble.remove(); }, 3000);
             }
         }
-
         function showLevelUp() {
             var effect = document.createElement('div');
             effect.className = 'level-up-effect';
@@ -3971,7 +2650,6 @@ function showCountdownNotification(text) {
             playLevelUpSound();
             achievementsChecked = false;
             setTimeout(checkAndNotifyAchievements, 200);
-            
             var flash = document.createElement('div');
             flash.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;' +
                 'background:rgba(255,215,0,0.2);pointer-events:none;animation:flashAnim 0.6s ease-out forwards;';
@@ -3980,18 +2658,15 @@ function showCountdownNotification(text) {
             if (oldFlash) oldFlash.remove();
             gameblock.appendChild(flash);
             setTimeout(function() { flash.remove(); }, 700);
-
             if (level >= 50) {
                 gameblock.style.background = 'linear-gradient(180deg, #0a0a2a 0%, #1a0a3a 30%, #2a0a4a 60%, #3a0a5a 100%)';
                 document.querySelector('.vine').style.opacity = '0.8';
             }
         }
-
         var styleSheet = document.createElement("style");
         styleSheet.textContent = '@keyframes flashAnim { 0% { opacity:1; } 100% { opacity:0; } }' +
             '@keyframes shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-5px); } 75% { transform:translateX(5px); } }';
         document.head.appendChild(styleSheet);
-
         // ============================================================
         //  15. VK РЕКЛАМА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -4008,7 +2683,6 @@ function showCountdownNotification(text) {
                     });
             }
         }
-
         // ============================================================
         //  16. ИГРОВАЯ ЛОГИКА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -4027,8 +2701,6 @@ function showCountdownNotification(text) {
     if (speedBoostTimer) { clearTimeout(speedBoostTimer); speedBoostTimer = null; }
     if (slowMotionTimer) { clearTimeout(slowMotionTimer); slowMotionTimer = null; }
 }
-
-
         function resetGame() {
             stopParticles();
             stopParticlesBlue();
@@ -4050,7 +2722,6 @@ function showCountdownNotification(text) {
             jellyfishActive = false;
             paus = false;
             wasPausedByHide = false;
-            
             if (block2) block2.style.display = 'none';
             if (shieldItem) shieldItem.style.display = 'none';
             if (player) {
@@ -4066,11 +2737,9 @@ function showCountdownNotification(text) {
             if (scoresEl) scoresEl.innerHTML = '0';
             if (levelDisplay) levelDisplay.textContent = '1';
             if (shieldCountDisplay) shieldCountDisplay.textContent = '0';
-            
             document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash, #dayNightOverlay, .jellyfish').forEach(function(el) {
                 el.remove();
             });
-            
             if (pausa) {
                 pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
             }
@@ -4078,24 +2747,19 @@ function showCountdownNotification(text) {
             if (d) d.disabled = false;
             if (r) r.disabled = false;
             if (l) l.disabled = false;
-            
             gameblock.style.background = 'linear-gradient(180deg, #1a3a6a 0%, #2a5a8a 30%, #3a7aaa 60%, #5a9aca 100%)';
             document.querySelector('.vine').style.opacity = '0.5';
-            
             document.querySelector('.bathyscaphe .body').style.background = 
                 'radial-gradient(ellipse at 40% 30%, #ff6b35, #cc3300)';
             document.querySelector('.bathyscaphe .window').style.background = 
                 'radial-gradient(circle at 35% 35%, #66ccff, #1a6699)';
-            
             document.querySelector('.shell .spiral').style.background = 
                 'radial-gradient(ellipse at 60% 40%, #ffd4a8, #d49a6a, #b8784a)';
             document.querySelector('.shell .spiral').style.borderColor = '#c08860';
             document.querySelector('.shell .spiral').style.boxShadow = 
                 'inset -5px -5px 20px rgba(120, 60, 30, 0.4), inset 5px 5px 20px rgba(255, 220, 180, 0.3)';
-            
             isSoundEnabled = true;
         }
-
             function updateShieldDisplay() {
                 if (shieldCountDisplay) shieldCountDisplay.textContent = shields;
                 // Скрываем щит на поле, если он есть
@@ -4119,23 +2783,19 @@ function showCountdownNotification(text) {
     var margin = 30;
     var maxX = 300 - 28 - margin; // 300 - ширина блока - отступ
     var maxY = 370 - 28 - margin; // 370 - высота блока - отступ
-    
     cx = (Math.floor(Math.random() * (maxX - margin) + margin));
     cy = (Math.floor(Math.random() * (maxY - margin) + margin));
     intcount++;
-    
     block.style.transform = 'scale(0)';
     setTimeout(function() {
         block.style.transform = 'scale(1)';
     }, 50);
-    
     if (rad < 60) {
         rad++;
         x--;
         y--;
         t++;
     }
-    
     if (intcount >= intval) {
         bx = (Math.floor(Math.random() * (maxX - margin) + margin));
         by = (Math.floor(Math.random() * (maxY - margin) + margin));
@@ -4151,7 +2811,6 @@ function showCountdownNotification(text) {
         }
         intval = (Math.floor(Math.random() * 10 + 15));
     }
-    
     if (player) {
         player.style.width = rad + 'px';
         player.style.height = rad + 'px';
@@ -4170,10 +2829,8 @@ function showCountdownNotification(text) {
             'inset -5px -5px 20px rgba(200,100,0,0.4), inset 5px 5px 20px rgba(255,220,180,0.3), 0 0 30px rgba(255,215,0,0.3)';
     }
 }
-
         function checkCollision() {
             if (paus || !gameActive || mainMenu.style.display !== 'none') return false;
-            
             var blockSize = 28;
             var playerSize = rad;
             if (x > cx - playerSize && x < cx + blockSize && y > cy - playerSize && y < cy + blockSize) {
@@ -4188,7 +2845,6 @@ function showCountdownNotification(text) {
                 spawnBubbles();
                 achievementsChecked = false;
                 setTimeout(checkAndNotifyAchievements, 100);
-
                 scoresEl.classList.remove('pulse');
                 setTimeout(function() {
                     scoresEl.classList.add('pulse');
@@ -4196,9 +2852,7 @@ function showCountdownNotification(text) {
                 setTimeout(function() {
                     scoresEl.classList.remove('pulse');
                 }, 400);
-                
                 poyman();
-                
                 var newLevel = Math.floor(score / 10) + 1;
                 if (newLevel > level) {
                     level = newLevel;
@@ -4211,7 +2865,6 @@ function showCountdownNotification(text) {
                                 console.log('💾 Принудительное сохранение уровня ' + level);
                                 localStorage.setItem('bathyscaphe_max_level', level);
                                 maxSavedLevel = level;
-                                
                                 var gameData = {
                                     level: level,
                                     score: score,
@@ -4224,11 +2877,9 @@ function showCountdownNotification(text) {
                                 saveToVKStorage(VK_STORAGE_KEYS.COUNTERS, getCurrentCounters());
                                 showSaveNotification('💾 Прогресс сохранён! Уровень ' + level);
                             }
-                            
                             checkAndSaveLevel(); // ← ОСТАВЛЯЕМ
                             setTimeout(syncAllDataToVK, 500);
                         }
-
                 if (level >= 30 && level < 100) {
                     startParticlesBlue();
                     stopParticles();
@@ -4236,7 +2887,6 @@ function showCountdownNotification(text) {
                     stopParticlesBlue();
                     startParticles();
                 }
-
                 if (level >= 100) {
                     document.querySelector('.bathyscaphe .body').style.background = 
                         'radial-gradient(ellipse at 40% 30%, #ff00ff, #6600cc)';
@@ -4250,7 +2900,6 @@ function showCountdownNotification(text) {
                 }
                 return true;
             }
-            
             if (block2 && block2.style.display === 'flex' && x > bx - playerSize && x < bx + 30 && y > by - playerSize && y < by + 30) {
                 block2.style.display = 'none';
                 playStarSound();
@@ -4266,7 +2915,6 @@ function showCountdownNotification(text) {
                 intval = (Math.floor(Math.random() * 10 + 15));
                 return true;
             }
-            
             if (shieldItem && shieldItem.style.display === 'flex' && x > sx - playerSize && x < sx + 30 && y > sy - playerSize && y < sy + 30) {
                 shieldItem.style.display = 'none';
                 shields++;
@@ -4275,10 +2923,8 @@ function showCountdownNotification(text) {
                 showEffect(sx, sy, '🛡️', '#66ccff');
                 return true;
             }
-            
             return false;
         }
-
        function gameover() {
     // ===== 1. СНАЧАЛА ПОКАЗЫВАЕМ МОДАЛКУ =====    // Она должна показаться ДО того, как мы что-то меняем
     showGameOverModal();     
@@ -4288,15 +2934,12 @@ function showCountdownNotification(text) {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
     }
-    
     deathCount++;
     achievementsChecked = false;
     showBannerAd();
-    
     // Синхронизация при game over
     setTimeout(syncAllDataToVK, 500);
 }
-
         // ============================================================
         //  17. УПРАВЛЕНИЕ - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -4321,7 +2964,6 @@ function showCountdownNotification(text) {
             spawnBubbles();
             if (player) player.style.left = x + "px";
         }
-
         function left() {
               if (!gameActive || paus || mainMenu.style.display !== 'none') return;
             clearAllIntervals();
@@ -4343,7 +2985,6 @@ function showCountdownNotification(text) {
             spawnBubbles();
             if (player) player.style.left = x + "px";
         }
-
         function down() {
             if (!gameActive || paus || mainMenu.style.display !== 'none') return;
             clearAllIntervals();
@@ -4365,7 +3006,6 @@ function showCountdownNotification(text) {
             spawnBubbles();
             if (player) player.style.top = y + "px";
         }
-
         function up() {
              if (!gameActive || paus || mainMenu.style.display !== 'none') return;
             clearAllIntervals();
@@ -4387,7 +3027,6 @@ function showCountdownNotification(text) {
             spawnBubbles();
             if (player) player.style.top = y + "px";
         }
-
         // ============================================================
         //  18. КЛАВИАТУРА - БЕЗ ИЗМЕНЕНИЙ
         // ============================================================
@@ -4397,37 +3036,31 @@ function showCountdownNotification(text) {
         e.preventDefault();
         return;
     }
-    
     var key = e.key;
-    
     // ★★★ ВЕРХ (W или стрелка вверх) ★★★
     if (key === 'ArrowUp' || key === 'w' || key === 'W' || key === 'ц' || key === 'Ц') {
         e.preventDefault();
         up();
         return;
     }
-    
     // ★★★ НИЗ (S или стрелка вниз) ★★★
     if (key === 'ArrowDown' || key === 's' || key === 'S' || key === 'ы' || key === 'Ы') {
         e.preventDefault();
         down();
         return;
     }
-    
     // ★★★ ВЛЕВО (A или стрелка влево) ★★★
     if (key === 'ArrowLeft' || key === 'a' || key === 'A' || key === 'ф' || key === 'Ф') {
         e.preventDefault();
         left();
         return;
     }
-    
     // ★★★ ВПРАВО (D или стрелка вправо) ★★★
     if (key === 'ArrowRight' || key === 'd' || key === 'D' || key === 'в' || key === 'В') {
         e.preventDefault();
         right();
         return;
     }
-    
     // Пробел - пауза
     if (key === ' ') {
         e.preventDefault();
@@ -4435,7 +3068,6 @@ function showCountdownNotification(text) {
         return;
     }
 });
-
 // ============================================================
 //  ТАЧ-УПРАВЛЕНИЕ (привязано к батискафу) - ИСПРАВЛЕНО
 // ============================================================
@@ -4443,24 +3075,17 @@ function showCountdownNotification(text) {
     var gameblock = document.getElementById('gameblock');
     var player = document.getElementById('player');
     if (!gameblock || !player) return;
-    
     var touchId = null;
     var moveInterval = null;
     var currentDirection = null; // ★★★ ХРАНИМ ТЕКУЩЕЕ НАПРАВЛЕНИЕ ★★★
-    
     function getDirection(touchX, touchY) {
         if (!gameblock || !player) return null;
-        
         var playerRect = player.getBoundingClientRect();
-        
         var playerCenterX = playerRect.left + playerRect.width / 2;
         var playerCenterY = playerRect.top + playerRect.height / 2;
-        
         var dx = touchX - playerCenterX;
         var dy = touchY - playerCenterY;
-        
         var threshold = 15;
-        
         if (Math.abs(dy) > Math.abs(dx)) {
             if (dy > threshold) {
                 return 'down';
@@ -4479,23 +3104,17 @@ function showCountdownNotification(text) {
             }
         }
     }
-    
     function startMove(direction) {
         if (!gameActive || paus) return;
-        
         // ★★★ ЕСЛИ НАПРАВЛЕНИЕ НЕ ИЗМЕНИЛОСЬ - НИЧЕГО НЕ ДЕЛАЕМ ★★★
         if (direction === currentDirection && moveInterval !== null) {
             return;
         }
-        
         // ★★★ ОСТАНАВЛИВАЕМ СТАРОЕ ДВИЖЕНИЕ ★★★
         stopMove();
-        
         // ★★★ ЗАПОМИНАЕМ НОВОЕ НАПРАВЛЕНИЕ ★★★
         currentDirection = direction;
-        
         console.log('🚀 Движение:', direction);
-        
         // ★★★ ЗАПУСКАЕМ НОВОЕ ДВИЖЕНИЕ СРАЗУ ★★★
         // Выполняем первый шаг сразу
         switch(direction) {
@@ -4504,7 +3123,6 @@ function showCountdownNotification(text) {
             case 'left': left(); break;
             case 'right': right(); break;
         }
-        
         // ★★★ ЗАПУСКАЕМ ИНТЕРВАЛ ДЛЯ ПРОДОЛЖЕНИЯ ★★★
         moveInterval = setInterval(function() {
             if (!gameActive || paus) {
@@ -4519,7 +3137,6 @@ function showCountdownNotification(text) {
             }
         }, 50);
     }
-    
     function stopMove() {
         if (moveInterval) {
             clearInterval(moveInterval);
@@ -4531,21 +3148,16 @@ function showCountdownNotification(text) {
         if (l) l.disabled = false;
         if (r) r.disabled = false;
     }
-    
    function showDirectionHint(direction, x, y) {
     var oldHint = document.getElementById('touchHint');
     if (oldHint) oldHint.remove();
-    
     if (!direction) return;
-    
     var hint = document.createElement('div');
     hint.id = 'touchHint';
-    
     // ★★★ КРАСИВЫЕ СТРЕЛКИ С ЦВЕТАМИ ★★★
     var arrowText = '';
     var color = '';
     var glowColor = '';
-    
     switch(direction) {
         case 'up':
             arrowText = '▲';
@@ -4568,7 +3180,6 @@ function showCountdownNotification(text) {
             glowColor = 'rgba(168,224,99,0.6)';
             break;
     }
-    
     hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
         'font-size:52px;font-weight:bold;' +
         'color:' + color + ';' +
@@ -4578,46 +3189,36 @@ function showCountdownNotification(text) {
         'animation:arrowPulse 1.2s ease-out forwards;' +
         'transform:translate(-50%, -50%);' +
         'font-family:Arial, sans-serif;';
-    
     hint.textContent = arrowText;
     hint.style.left = x + 'px';
     hint.style.top = y + 'px';
     gameblock.appendChild(hint);
-    
     setTimeout(function() {
         if (hint.parentNode) hint.remove();
     }, 1200);
 }
-
     // Обработчик начала касания
     gameblock.addEventListener('touchstart', function(e) {
         if (!gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-        
         e.preventDefault();
-        
         var touch = e.changedTouches[0];
         if (!touch) return;
         touchId = touch.identifier;
-        
         var rect = gameblock.getBoundingClientRect();
         var relX = touch.clientX - rect.left;
         var relY = touch.clientY - rect.top;
-        
         var direction = getDirection(touch.clientX, touch.clientY);
         if (direction) {
             showDirectionHint(direction, relX, relY);
             startMove(direction);
         }
     }, { passive: false });
-    
     // Обработчик перемещения
     gameblock.addEventListener('touchmove', function(e) {
         if (!gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-        
         e.preventDefault();
-        
         var touch = null;
         for (var i = 0; i < e.changedTouches.length; i++) {
             if (e.changedTouches[i].identifier === touchId || touchId === null) {
@@ -4626,13 +3227,10 @@ function showCountdownNotification(text) {
             }
         }
         if (!touch) return;
-        
         if (touchId === null) touchId = touch.identifier;
-        
         var rect = gameblock.getBoundingClientRect();
         var relX = touch.clientX - rect.left;
         var relY = touch.clientY - rect.top;
-        
         var direction = getDirection(touch.clientX, touch.clientY);
         if (direction) {
             showDirectionHint(direction, relX, relY);
@@ -4643,7 +3241,6 @@ function showCountdownNotification(text) {
             stopMove();
         }
     }, { passive: false });
-    
     // Обработчик окончания
     gameblock.addEventListener('touchend', function(e) {
         e.preventDefault();
@@ -4661,7 +3258,6 @@ function showCountdownNotification(text) {
             if (hint) hint.remove();
         }
     }, { passive: false });
-    
     gameblock.addEventListener('touchcancel', function(e) {
         e.preventDefault();
         touchId = null;
@@ -4669,11 +3265,8 @@ function showCountdownNotification(text) {
         var hint = document.getElementById('touchHint');
         if (hint) hint.remove();
     }, { passive: false });
-    
     console.log('✅ Тач-управление привязано к батискафу (мгновенная реакция)');
 })();
-
-
 // ============================================================
 //  УПРАВЛЕНИЕ МЫШЬЮ (привязано к батискафу) - С СО СТРЕЛКАМИ
 // ============================================================
@@ -4681,24 +3274,17 @@ function showCountdownNotification(text) {
     var gameblock = document.getElementById('gameblock');
     var player = document.getElementById('player');
     if (!gameblock || !player) return;
-    
     var isMouseDown = false;
     var mouseInterval = null;
     var currentDirection = null;
-    
     function getMouseDirection(mouseX, mouseY) {
         if (!gameblock || !player) return null;
-        
         var playerRect = player.getBoundingClientRect();
-        
         var playerCenterX = playerRect.left + playerRect.width / 2;
         var playerCenterY = playerRect.top + playerRect.height / 2;
-        
         var dx = mouseX - playerCenterX;
         var dy = mouseY - playerCenterY;
-        
         var threshold = 15;
-        
         if (Math.abs(dy) > Math.abs(dx)) {
             if (dy > threshold) {
                 return 'down';
@@ -4717,17 +3303,13 @@ function showCountdownNotification(text) {
             }
         }
     }
-    
     function startMouseMove(direction) {
         if (!gameActive || paus || !isMouseDown) return;
-        
         if (direction === currentDirection && mouseInterval !== null) {
             return;
         }
-        
         stopMouseMove();
         currentDirection = direction;
-        
         // ★★★ ПЕРВЫЙ ШАГ СРАЗУ ★★★
         switch(direction) {
             case 'up': up(); break;
@@ -4735,7 +3317,6 @@ function showCountdownNotification(text) {
             case 'left': left(); break;
             case 'right': right(); break;
         }
-        
         mouseInterval = setInterval(function() {
             if (!gameActive || paus || !isMouseDown) {
                 stopMouseMove();
@@ -4749,7 +3330,6 @@ function showCountdownNotification(text) {
             }
         }, 50);
     }
-    
     function stopMouseMove() {
         if (mouseInterval) {
             clearInterval(mouseInterval);
@@ -4761,21 +3341,16 @@ function showCountdownNotification(text) {
         if (l) l.disabled = false;
         if (r) r.disabled = false;
     }
-    
     // ★★★ ФУНКЦИЯ ДЛЯ СТРЕЛОК (копия из тач-контрола) ★★★
     function showMouseHint(direction, x, y) {
         var oldHint = document.getElementById('mouseHint');
         if (oldHint) oldHint.remove();
-        
         if (!direction) return;
-        
         var hint = document.createElement('div');
         hint.id = 'mouseHint';
-        
         var arrowText = '';
         var color = '';
         var glowColor = '';
-        
         switch(direction) {
             case 'up':
                 arrowText = '▲';
@@ -4798,7 +3373,6 @@ function showCountdownNotification(text) {
                 glowColor = 'rgba(168,224,99,0.6)';
                 break;
         }
-        
         hint.style.cssText = 'position:absolute;z-index:50;pointer-events:none;' +
             'font-size:52px;font-weight:bold;' +
             'color:' + color + ';' +
@@ -4808,27 +3382,21 @@ function showCountdownNotification(text) {
             'animation:arrowPulse 1.2s ease-out forwards;' +
             'transform:translate(-50%, -50%);' +
             'font-family:Arial, sans-serif;';
-        
         hint.textContent = arrowText;
         hint.style.left = x + 'px';
         hint.style.top = y + 'px';
         gameblock.appendChild(hint);
-        
         setTimeout(function() {
             if (hint.parentNode) hint.remove();
         }, 1200);
     }
-    
     gameblock.addEventListener('mousedown', function(e) {
         if (!gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-        
         isMouseDown = true;
-        
         var rect = gameblock.getBoundingClientRect();
         var relX = e.clientX - rect.left;
         var relY = e.clientY - rect.top;
-        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
             console.log('🖱️ Направление мыши:', direction);
@@ -4837,15 +3405,12 @@ function showCountdownNotification(text) {
             startMouseMove(direction);
         }
     });
-    
     gameblock.addEventListener('mousemove', function(e) {
         if (!isMouseDown || !gameActive || paus) return;
         if (e.target.closest && e.target.closest('button, .btn, #pausa')) return;
-        
         var rect = gameblock.getBoundingClientRect();
         var relX = e.clientX - rect.left;
         var relY = e.clientY - rect.top;
-        
         var direction = getMouseDirection(e.clientX, e.clientY);
         if (direction) {
             // ★★★ ПОКАЗЫВАЕМ СТРЕЛКУ ★★★
@@ -4857,31 +3422,25 @@ function showCountdownNotification(text) {
             if (hint) hint.remove();
         }
     });
-    
     gameblock.addEventListener('mouseup', function(e) {
         isMouseDown = false;
         stopMouseMove();
         var hint = document.getElementById('mouseHint');
         if (hint) hint.remove();
     });
-    
     gameblock.addEventListener('mouseleave', function(e) {
         isMouseDown = false;
         stopMouseMove();
         var hint = document.getElementById('mouseHint');
         if (hint) hint.remove();
     });
-    
     console.log('✅ Управление мышью со стрелками');
 })();
-
             // ============================================================
         //  19. ДОСТИЖЕНИЯ (С ИНТЕГРАЦИЕЙ VK STORAGE)
         // ============================================================
-        
         // Ключ для сохранения достижений (локально)
         const ACHIEVEMENTS_KEY = 'bathyscaphe_achievements';
-        
         // Список достижений (как в оригинале)
         const ACHIEVEMENTS_LIST = {
             level_5: {
@@ -5363,10 +3922,8 @@ function showCountdownNotification(text) {
                 check: function() { return level >= 100; }
             }
         };
-
         // Состояние достижений
         let unlockedAchievements = loadAchievements();
-
         function loadAchievements() {
             try {
                 const saved = localStorage.getItem(ACHIEVEMENTS_KEY);
@@ -5376,7 +3933,6 @@ function showCountdownNotification(text) {
                 return {};
             }
         }
-
         function saveAchievements(data) {
             try {
                 localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(data));
@@ -5386,12 +3942,9 @@ function showCountdownNotification(text) {
                 console.warn('Ошибка сохранения достижений:', e);
             }
         }
-
         function checkAchievements() {
             if (achievementsChecked) return;
-            
             let newAchievements = [];
-            
             for (const key in ACHIEVEMENTS_LIST) {
                 const ach = ACHIEVEMENTS_LIST[key];
                 if (!unlockedAchievements[ach.id] && ach.check()) {
@@ -5399,7 +3952,6 @@ function showCountdownNotification(text) {
                     newAchievements.push(ach);
                 }
             }
-            
             if (newAchievements.length > 0) {
                 saveAchievements(unlockedAchievements);
                 showAchievementPopup(newAchievements[0]);
@@ -5414,38 +3966,29 @@ function showCountdownNotification(text) {
                 }
             }
         }
-
         function showAchievementPopup(achievement) {
             console.log('🎉 Достижение:', achievement.name);
-            
             if (gameActive && !paus) {
                 pauseGameForAchievement();
                 achievementPopupPaused = true;
             }
-            
             const popup = document.getElementById('achievementPopup');
             const iconEl = document.getElementById('popupAchievementIcon');
             const nameEl = document.getElementById('popupAchievementName');
             const descEl = document.getElementById('popupAchievementDesc');
-            
             if (iconEl) iconEl.textContent = achievement.icon || '🏆';
             if (nameEl) nameEl.textContent = achievement.name;
             if (descEl) descEl.textContent = achievement.description;
-            
             if (popup) popup.classList.add('active');
             playLevelUpSound();
         }
-
         function closeAchievementPopup() {
             const popup = document.getElementById('achievementPopup');
             if (popup) popup.classList.remove('active');
-            
             if (achievementPopupPaused) {
                 achievementPopupPaused = false;
-                
                 let countdown = 3;
                 showResumeNotification('⏳ ' + countdown);
-                
                 var countdownInterval = setInterval(function() {
                     countdown--;
                     if (countdown > 0) {
@@ -5460,7 +4003,6 @@ function showCountdownNotification(text) {
                 }, 1000);
             }
         }
-
         function showResumeNotification(text) {
             var notification = document.createElement('div');
             notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
@@ -5474,7 +4016,6 @@ function showCountdownNotification(text) {
                 if (notification.parentNode) notification.remove(); 
             }, 1800);
         }
-
         function pauseGameForAchievement() {
             if (!gameActive) return;
             clearAllIntervals();
@@ -5489,7 +4030,6 @@ function showCountdownNotification(text) {
             window.keysBlocked = true;
             console.log('⏸️ Игра на паузе (достижение)');
         }
-
         function resumeGameAfterAchievement() {
             if (!gameActive) return;
             if (u) u.disabled = false;
@@ -5507,54 +4047,44 @@ function showCountdownNotification(text) {
             playButtonSound();
             console.log('▶️ Игра возобновлена');
         }
-
         function openAchievementsModal() {
             renderAchievementsList();
             const modal = document.getElementById('achievementsModal');
             if (modal) modal.classList.add('active');
             playButtonSound();
         }
-
         function closeAchievementsModal() {
             const modal = document.getElementById('achievementsModal');
             if (modal) modal.classList.remove('active');
         }
-
         function renderAchievementsList() {
             const container = document.getElementById('achievementsList');
             if (!container) return;
-            
             let total = 0;
             let unlocked = 0;
             for (const key in ACHIEVEMENTS_LIST) {
                 total++;
                 if (unlockedAchievements[ACHIEVEMENTS_LIST[key].id]) unlocked++;
             }
-            
             let html = '';
-            
             html += `
                 <div class="stats-header">
                     <span>🏆 ${unlocked} / ${total}</span>
                     <span>достижений</span>
                 </div>
             `;
-            
             const categories = {};
             for (const key in ACHIEVEMENTS_LIST) {
                 const ach = ACHIEVEMENTS_LIST[key];
                 if (!categories[ach.category]) categories[ach.category] = [];
                 categories[ach.category].push(ach);
             }
-            
             for (const category in categories) {
                 html += `
                     <div class="category-header">${category}</div>
                 `;
-                
                 for (const ach of categories[category]) {
                     const isUnlocked = unlockedAchievements[ach.id] || false;
-                    
                     html += `
                         <div class="achievement-item ${isUnlocked ? 'unlocked' : 'locked'}">
                             <span class="icon">${ach.icon}</span>
@@ -5567,15 +4097,12 @@ function showCountdownNotification(text) {
                     `;
                 }
             }
-            
             container.innerHTML = html;
         }
-
         function checkAndNotifyAchievements() {
             if (!gameActive) return;
             checkAchievements();
         }
-
         function resetAchievements() {
             localStorage.removeItem(ACHIEVEMENTS_KEY);
             unlockedAchievements = {};
@@ -5591,8 +4118,6 @@ function showCountdownNotification(text) {
                 location.reload();
             }
         }
-
-       
 //  ПОЛУЧЕНИЕ ЩИТОВ ЧЕРЕЗ РЕКЛАМУ
 // ============================================================
               // Открыть модалку получения щитов
@@ -5642,14 +4167,10 @@ function closeShieldAdModal() {
         }
     }
 }
-
-
 function resumeGameAfterShield() {
     if (!gameActive) {
-  
         gameActive = true;
     }
-    
     if (u) u.disabled = false;
     if (d) d.disabled = false;
     if (r) r.disabled = false;
@@ -5657,51 +4178,36 @@ function resumeGameAfterShield() {
     paus = false;
     shieldPopupPaused = false;
     window.keysBlocked = false;
-    
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
-    
-
     if (iint) {
         setTimeout(iint, t);
     }
-    
-
     if (gameActive) {
         startBackgroundEffects();
     }
-    
     playButtonSound();
     console.log('▶️ Игра возобновлена после получения щитов');
 }
-               
 function getShieldsViaAd() {
-
     if (shieldAdModal) {
         shieldAdModal.classList.remove('active');
     }
-  
     if (shieldAdLoadingModal) {
         shieldAdLoadingModal.classList.add('active');
     }
-    
-
     var adShown = false;
-  
     var adTimeout = setTimeout(function() {
         if (!adShown) {
             console.log('⏰ Таймаут загрузки рекламы (10 сек)');
             if (shieldAdLoadingModal) {
                 shieldAdLoadingModal.classList.remove('active');
             }
-            
             showToast('❌ Реклама недоступна. 🛡️+1 щит', true);
-            
             shields += 1;
             updateShieldDisplay();
             playShieldSound();
-            
             if (shieldPopupPaused) {
                 shieldPopupPaused = false;
                 if (gameActive) {
@@ -5728,7 +4234,6 @@ function getShieldsViaAd() {
             }
         }
     }, 60000);
-    
     // Проверяем доступность VK Bridge
     if (typeof vkBridge === 'undefined') {
         clearTimeout(adTimeout);
@@ -5736,11 +4241,9 @@ function getShieldsViaAd() {
             shieldAdLoadingModal.classList.remove('active');
         }
         showToast('❌ Реклама недоступна. 🛡️+1 щит', true);
-        
         shields += 1;
         updateShieldDisplay();
         playShieldSound();
-        
         if (shieldPopupPaused) {
             shieldPopupPaused = false;
             if (gameActive) {
@@ -5767,7 +4270,6 @@ function getShieldsViaAd() {
         }
         return;
     }
-    
     // Пытаемся показать рекламу за вознаграждение
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
@@ -5817,11 +4319,9 @@ function getShieldsViaAd() {
                     shieldAdLoadingModal.classList.remove('active');
                 }
                 showToast('❌ Реклама недоступна. Попробуйте позже.', true);
-                
                 shields += 1;
                 updateShieldDisplay();
                 playShieldSound();
-                
                 if (shieldPopupPaused) {
                     shieldPopupPaused = false;
                     if (gameActive) {
@@ -5849,7 +4349,6 @@ function getShieldsViaAd() {
             }, 500);
         });
 }
-
 // Пауза для получения щитов
                 function pauseGameForShield() {
                     if (!gameActive) return;
@@ -5866,137 +4365,64 @@ function getShieldsViaAd() {
                     window.keysBlocked = true;
                     console.log('⏸️ Игра на паузе (получение щитов)');
                 }
-
-
-        //  20. ВИДИМОСТЬ - БЕЗ ИЗМЕНЕНИЙ
-        // ============================================================
-// ============================================================
-//  ПОЧИНКА БАТИСКАФА ЧЕРЕЗ РЕКЛАМУ
-// ============================================================
-
-// Открыть модалку починки
-function openRepairModal() {
-    // Закрываем модалку проигрыша
-    closeGameOverModal();
-    
-    // Ставим игру на паузу (если ещё не на паузе)
-    if (!paus) {
-        clearAllIntervals();
-        if (u) u.disabled = true;
-        if (d) d.disabled = true;
-        if (r) r.disabled = true;
-        if (l) l.disabled = true;
-        paus = true;
-        repairPopupPaused = true;
-        window.keysBlocked = true;
-        if (pausa) {
-            pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';
-        }
-    }
-    
-    if (repairModal) {
-        repairModal.classList.add('active');
-    }
-}
-
-// Закрыть модалку починки
+ function openRepairModal(){ closeGameOverModal(); if (!paus){ clearAllIntervals(); if (u) u.disabled=true; if (d) d.disabled=true; if (r) r.disabled=true; if (l) l.disabled=true; paus=true; repairPopupPaused=true; window.keysBlocked=true; if (pausa){ pausa.innerHTML='<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 22 28"><path d="M21.625 14.484L.875 26.015c-.484.266-.875.031-.875-.516v-23c0-.547.391-.781.875-.516l20.75 11.531c.484.266.484.703 0 .969z"/></svg>';}} if (repairModal){ repairModal.classList.add('active');}}
 function closeRepairModal() {
     if (repairModal) {
         repairModal.classList.remove('active');
     }
-    
-    // Если игра не активна и это не перезапуск, показываем модалку проигрыша
     if (!gameActive && !repairPopupPaused) {
         showGameOverModal();
     }
-    
-    // Снимаем паузу, если она была поставлена
     if (repairPopupPaused) {
         repairPopupPaused = false;
-        // Если игра всё ещё активна, возобновляем
         if (gameActive) {
             resumeGameAfterRepair();
         }
     }
 }
-
-// Починить батискаф через рекламу
 function getRepairViaAd() {
-    // Закрываем модалку с предложением
     closeRepairModal();
-    
-    // Показываем модалку загрузки
     if (shieldAdLoadingModal) {
         shieldAdLoadingModal.classList.add('active');
     }
-    
-    // Флаг для отслеживания, была ли показана реклама
     var adShown = false;
-    
-    // Таймаут на случай, если реклама зависла (10 секунд)
     var adTimeout = setTimeout(function() {
         if (!adShown) {
             console.log('⏰ Таймаут загрузки рекламы (10 сек)');
             if (shieldAdLoadingModal) {
                 shieldAdLoadingModal.classList.remove('active');
             }
-            // Закрываем модалку загрузки
-            // Показываем модалку ошибки починки
             showRepairErrorModal();
         }
-    }, 60000); // 60 секунд на загрузку
-    
-    // Проверяем доступность VK Bridge
+    }, 60000); 
     if (typeof vkBridge === 'undefined') {
         clearTimeout(adTimeout);
         if (shieldAdLoadingModal) {
             shieldAdLoadingModal.classList.remove('active');
         }
-        // Показываем модалку ошибки
         showRepairErrorModal();
         return;
     }
-    
-    // Пытаемся показать рекламу за вознаграждение
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
         .then(function(data) {
             adShown = true;
             clearTimeout(adTimeout);
             console.log('✅ Реклама за вознаграждение показана, награда выдана:', data);
-            // Реклама просмотрена → починка
             setTimeout(function() {
                 if (shieldAdLoadingModal) {
                     shieldAdLoadingModal.classList.remove('active');
                 }
-                // Выполняем починку
-                performRepair();
+                    performRepair();
                 showToast('🔧 Батискаф починен! Продолжаем!');
                 playLevelUpSound();
-                // Синхронизация с VK Storage
                 setTimeout(syncAllDataToVK, 300);
-                // Возобновляем игру с обратным отсчётом
                 startCountdown(function() {
     resumeGameAfterRepair();
 }, '🔧');
             }, 500);
         })
-        .catch(function(error) {
-            adShown = true;
-            clearTimeout(adTimeout);
-            console.log("❌ Ошибка или реклама не досмотрена:", error);
-            // Реклама недоступна → показываем ошибку
-            setTimeout(function() {
-                if (shieldAdLoadingModal) {
-                    shieldAdLoadingModal.classList.remove('active');
-                }
-                // Показываем модалку ошибки
-                showRepairErrorModal();
-            }, 500);
-        });
-}
-
-// Универсальный тост с возможностью настройки длительности
+ .catch(function(error){ adShown=true; clearTimeout(adTimeout); console.log("❌ Ошибка или реклама не досмотрена:", error); setTimeout(function(){ if (shieldAdLoadingModal){ shieldAdLoadingModal.classList.remove('active');} showRepairErrorModal();}, 500);});}
 function showToast(message, isError = false, duration = 4000) {
     const toast = document.getElementById('toast');
     if (!toast) {
@@ -6014,35 +4440,24 @@ function showToast(message, isError = false, duration = 4000) {
         }, duration);
         return;
     }
-    
     toast.textContent = message;
     toast.style.background = isError ? '#ef4444' : '#1f2937';
     toast.classList.add('show');
-    
-    // Очищаем предыдущий таймаут
-    if (toastTimeout) {
+  if (toastTimeout) {
         clearTimeout(toastTimeout);
         toastTimeout = null;
     }
-    
     toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
         toastTimeout = null;
     }, duration);
 }
-
-
-// Показать модалку ошибки починки
 function showRepairErrorModal() {
-    // Убеждаемся, что модалка загрузки закрыта
     if (shieldAdLoadingModal) {
         shieldAdLoadingModal.classList.remove('active');
     }
-    
-    // Снимаем паузу, если она была
     if (repairPopupPaused) {
         repairPopupPaused = false;
-        // Снимаем паузу, но не возобновляем игру
         paus = false;
         if (u) u.disabled = false;
         if (d) d.disabled = false;
@@ -6053,7 +4468,6 @@ function showRepairErrorModal() {
             pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
         }
     }
-    
     // Останавливаем игру
     gameActive = false;
     clearAllIntervals();
@@ -6062,57 +4476,39 @@ function showRepairErrorModal() {
         clearTimeout(window.buttonSoundTimer);
         window.buttonSoundTimer = null;
     }
-    
     // Показываем тост с ошибкой
     showToast('❌ Реклама недоступна. Проверьте интернет-соединение.', true, 5000);
-    
     // Показываем модалку ошибки
     if (repairErrorModal) {
         repairErrorModal.classList.add('active');
     }
 }
-// Закрыть модалку ошибки и начать новую игру
 function closeRepairErrorAndRestart() {
     if (repairErrorModal) {
         repairErrorModal.classList.remove('active');
     }
-    // Закрываем модалку проигрыша
     closeGameOverModal();
-    // Запускаем новую игру
     restartGame();
 }
-
-// Закрыть модалку ошибки и вернуться в меню
 function closeRepairErrorAndMenu() {
     if (repairErrorModal) {
         repairErrorModal.classList.remove('active');
     }
-    // Закрываем модалку проигрыша
     closeGameOverModal();
-    // Возвращаемся в меню
     goToMenuFromOver();
 }
-// Выполнить починку батискафа
 function performRepair() {
-    // Возвращаем батискаф в центр поля
     x = 140;
     y = 160;
-    
     // Обновляем позицию игрока
     if (player) {
         player.style.left = x + 'px';
         player.style.top = y + 'px';
     }
-    
-    // Сбрасываем флаг смерти и активируем игру
     gameActive = true;
-    
-    // Очищаем эффекты
     document.querySelectorAll('.explosion, .bubble, .level-up-effect, #levelFlash').forEach(function(el) {
         el.remove();
     });
-    
-    // Восстанавливаем размер батискафа, если он слишком маленький
     if (rad < 20) {
         rad = 25;
         if (player) {
@@ -6120,27 +4516,19 @@ function performRepair() {
             player.style.height = rad + 'px';
         }
     }
-    
     // Показываем эффект починки
     showEffect(x, y, '🔧', '#4fc3f7');
     setTimeout(function() {
         showEffect(x, y, '✨', '#ffd700');
     }, 300);
-    
-    // Сбрасываем состояние паузы (но не возобновляем игру сразу)
     repairPopupPaused = false;
-    paus = true; // Оставляем на паузе до обратного отсчёта
-    
+    paus = true; 
     console.log('🔧 Батискаф починен! Позиция: x=' + x + ', y=' + y);
 }
-
-// Возобновить игру после починки
 function resumeGameAfterRepair() {
     if (!gameActive) {
-        // Если игра не активна, активируем
         gameActive = true;
     }
-    
     if (u) u.disabled = false;
     if (d) d.disabled = false;
     if (r) r.disabled = false;
@@ -6148,24 +4536,17 @@ function resumeGameAfterRepair() {
     paus = false;
     repairPopupPaused = false;
     window.keysBlocked = false;
-    
     if (pausa) {
         pausa.innerHTML = '<svg fill="white" opacity="1.0" width="26" height="26" viewBox="0 0 24 28"><path d="M24 3v22c0 .547-.453 1-1 1h-8c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1zM10 3v22c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V3c0-.547.453-1 1-1h8c.547 0 1 .453 1 1z"/></svg>';
     }
-    
     // Запускаем движение
     if (iint) {
         setTimeout(iint, t);
     }
-    
-    // Возобновляем фоновые эффекты
     startBackgroundEffects();
-    
     playButtonSound();
     console.log('▶️ Игра возобновлена после починки');
 }
-
-// Показ уведомления об обратном отсчёте (для починки)
 function showRepairResumeNotification(text) {
     var notification = document.createElement('div');
     notification.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);' +
@@ -6179,20 +4560,13 @@ function showRepairResumeNotification(text) {
         if (notification.parentNode) notification.remove(); 
     }, 1200);
 }
-      
-      
-      
-      
-       // Обработчик видимости страницы
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
-        // Страница скрыта
         if (gameActive && !paus && mainMenu.style.display === 'none') {
             console.log('⏸️ Вкладка скрыта — пауза');
             pauseGameOnHide();
         }
     } else {
-        // Страница видна
         if (paus && mainMenu.style.display === 'none') {
             console.log('▶️ Вкладка активна');
             isSoundEnabled = true;
@@ -6202,81 +4576,57 @@ document.addEventListener("visibilitychange", function() {
         }
     }
 });
-// ============================================================
-//  БЛОКИРОВКА КОНТЕКСТНОГО МЕНЮ И СКРОЛЛА
-// ============================================================
-
-// 1. Блокировка контекстного меню (правая кнопка мыши)
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
 });
-
-// 2. Блокировка выделения текста
 document.addEventListener('selectstart', function(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
 });
-
-// 3. Блокировка перетаскивания
 document.addEventListener('dragstart', function(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
 });
-
-// 4. Блокировка скролла на телефонах (touchmove) - ТОЛЬКО ДЛЯ ИГРОВОГО ПОЛЯ
 document.addEventListener('touchmove', function(e) {
-    // Разрешаем скролл только внутри модалок
     var target = e.target;
     if (target.closest && target.closest('.modal-overlay.active')) {
-        return; // Разрешаем скролл в модалках
+        return; 
     }
-    // Разрешаем касания для кнопок
     if (target.closest && target.closest('button, .btn, .menu-btn, .menu-btn-icon, .btn-small, #pausa')) {
         return; // Кнопки работают
     }
-    // Запрещаем скролл только на игровом поле
     if (target.closest && target.closest('#gameblock, #gameContainer, #mainMenu')) {
         e.preventDefault();
         e.stopPropagation();
     }
 }, { passive: false });
-
-// 5. Блокировка скролла колесиком мыши
 document.addEventListener('wheel', function(e) {
-    // Разрешаем скролл только внутри модалок
     var target = e.target;
     if (target.closest && target.closest('.modal-overlay.active')) {
-        return; // Разрешаем скролл в модалках
+        return; 
     }
     e.preventDefault();
     e.stopPropagation();
 }, { passive: false });
-
-// 6. Блокировка жестов на телефонах (pinch-zoom, swipe)
 document.addEventListener('gesturestart', function(e) {
     e.preventDefault();
     return false;
 });
-
 document.addEventListener('gesturechange', function(e) {
     e.preventDefault();
     return false;
 });
-
 document.addEventListener('gestureend', function(e) {
     e.preventDefault();
     return false;
 });
-
-// 7. Блокировка скролла стрелками клавиатуры
 document.addEventListener('keydown', function(e) {
     var keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'];
     if (keys.includes(e.key)) {
-        // Разрешаем скролл только внутри модалок
         var target = e.target;
         if (target.closest && target.closest('.modal-overlay.active')) {
             return;
@@ -6293,40 +4643,28 @@ document.addEventListener('keydown', function(e) {
         e.stopPropagation();
     }
 });
-
 // 8. Блокировка двойного клика (zoom на телефонах)
 document.addEventListener('dblclick', function(e) {
     e.preventDefault();
     e.stopPropagation();
     return false;
 });
-
-// 9. Блокировка скролла при касании игры
 document.getElementById('gameblock')?.addEventListener('touchstart', function(e) {
     e.preventDefault();
 }, { passive: false });
-
-        // ============================================================
-        //  21. ИНИЦИАЛИЗАЦИЯ
-        // ============================================================
         if (mainMenu) mainMenu.style.display = 'flex';
         if (gameContainer) gameContainer.style.display = 'none';
-
         document.addEventListener('contextmenu', function(e) {
             if (e.target.closest('#gameblock') || e.target.closest('.btn')) {
                 e.preventDefault();
             }
         });
-
         // Загружаем сохранённый уровень при старте
         loadSavedLevel();
-
         console.log('🌊 Батискаф в западне загружен!');      
         console.log('💾 Сохранение прогресса каждые 3 уровня');
         console.log('🏆 Система достижений активна!');
         console.log('☁️ VK Storage синхронизация активна!');
-
-  // Показываем меню после загрузки
     setTimeout(function() {
         var menu = document.getElementById('mainMenu');
         if (menu) {
@@ -6335,7 +4673,6 @@ document.getElementById('gameblock')?.addEventListener('touchstart', function(e)
         // ★★★ ОБНОВЛЯЕМ КНОПКУ ПОСЛЕ ЗАГРУЗКИ ★★★
     updateContinueButton();
     }, 100);
-
     </script>
 </body>
 </html>
