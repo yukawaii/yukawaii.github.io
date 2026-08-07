@@ -572,14 +572,13 @@ function openColoring(categoryKey, index, imagePath) {
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
 
-    const coloringBook = document.createElement('jl-coloringbook');
-    coloringBook.setAttribute('autoinit', '1');
-    coloringBook.setAttribute('css');
-    coloringBook.setAttribute('maxbrushsize', '32');
-    coloringBook.style.width = '100%';
-    coloringBook.style.display = 'block';
-    coloringBook.style.webkitTapHighlightColor = 'transparent';
-    coloringBook.style.userSelect = 'none';
+const coloringBook = document.createElement('jl-coloringbook');
+coloringBook.setAttribute('autoinit', '1');
+coloringBook.setAttribute('maxbrushsize', '32');
+coloringBook.style.width = '100%';
+coloringBook.style.display = 'block';
+coloringBook.style.webkitTapHighlightColor = 'transparent';
+coloringBook.style.userSelect = 'none';
     
     coloringBook.innerHTML = `<img src="${path}" />`;
 

@@ -24,15 +24,14 @@ window.addEventListener('brushUnlocked', function(e) {
         this.zoomLevel = 1;
         this.zoomMin = 0.5;
         this.zoomMax = 3;
-  this.panMode = false;          // ← добавить
-    this.panDragging = false;      // ← добавить
-    this.panStartX = 0;            // ← добавить
-    this.panStartY = 0;            // ← добавить
-    this.panX = 0;                 // ← добавить
-    this.panY = 0;                 // ← добавить // ← режим перетаскивания
+  this.panMode = false;         
+    this.panDragging = false;     
+    this.panStartX = 0;           
+    this.panStartY = 0;           
+    this.panX = 0;             
     this.panBaseX = 0;
 this.panBaseY = 0;
- this.lastNonEraserColor = 0; //ластик
+ this.lastNonEraserColor = 0; 
 
     }
 
