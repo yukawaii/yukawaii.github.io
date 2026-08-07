@@ -249,9 +249,6 @@ function isColored(category, index) {
     });
 }
 
-function isColored(category, index) {
-    return appState.coloredImages.some(item => item.category === category && item.index === index);
-}
 
 // ===== УРОВНИ =====
 function loadUnlockedState() {
@@ -583,6 +580,7 @@ coloringBook.style.userSelect = 'none';
     coloringBook.innerHTML = `<img src="${path}" />`;
 
     wrapper.appendChild(coloringBook);
+
 
     document.getElementById('coloringPoints').textContent = '0';
     document.getElementById('progressPercent').textContent = '0';
@@ -1030,24 +1028,115 @@ function loadAppStateFromVK() {
                 if (value) {
                     try {
                         const data = JSON.parse(value);
-                        // Обновляем appState
-                        if (data.totalPoints !== undefined) appState.totalPoints = data.totalPoints;
-                        if (data.coloredImages) appState.coloredImages = data.coloredImages;
-                        if (data.unlockedAchievements) appState.unlockedAchievements = data.unlockedAchievements;
-                        if (data.unlockedLevels) unlockedLevels = data.unlockedLevels;
-                        if (data.brushesState) brushesState = data.brushesState;
-                        if (data.scrollsProgress) {
-                            localStorage.setItem('coloringScrollsProgress', JSON.stringify(data.scrollsProgress));
+
+                        // ===== 1. coloredImages (массив объектов) =====
+                        if (data.coloredImages && Array.isArray(data.coloredImages)) {
+                            const existing = appState.coloredImages.map(item => 
+                                JSON.stringify(item) // сериализуем для сравнения
+                            );
+                            const incoming = data.coloredImages.filter(item => 
+                                !existing.includes(JSON.stringify(item))
+                            );
+                            appState.coloredImages = [...appState.coloredImages, ...incoming];
                         }
-                        if (data.dailyBonusData) {
-                            dailyBonusData = data.dailyBonusData;
-                            localStorage.setItem('dailyBonusData', JSON.stringify(dailyBonusData));
+
+                        // ===== 2. unlockedAchievements (массив строк) =====
+                        if (data.unlockedAchievements && Array.isArray(data.unlockedAchievements)) {
+                            const merged = new Set([
+                                ...appState.unlockedAchievements,
+                                ...data.unlockedAchievements
+                            ]);
+                            appState.unlockedAchievements = Array.from(merged);
                         }
+
+                        // ===== 3. unlockedLevels (объект {ключ: true}) =====
+                        if (data.unlockedLevels && typeof data.unlockedLevels === 'object') {
+                            // объединяем ключи – если ключ есть в загруженных, добавляем его
+                            for (const key of Object.keys(data.unlockedLevels)) {
+                                if (data.unlockedLevels[key] === true) {
+                                    appState.unlockedLevels[key] = true;
+                                }
+                            }
+                        }
+
+                        // ===== 4. scrollsProgress (объект {номер: true}) =====
+                        if (data.scrollsProgress && typeof data.scrollsProgress === 'object') {
+                            let localProgress = getScrollsProgress(); // функция из scrolls.js
+                            for (const key of Object.keys(data.scrollsProgress)) {
+                                if (data.scrollsProgress[key] === true) {
+                                    localProgress[key] = true;
+                                }
+                            }
+                            // Сохраняем объединённый прогресс обратно в localStorage
+                            saveScrollsProgress(localProgress);
+                        }
+
+                        // ===== 5. brushesState (объект с данными кистей) =====
+                        if (data.brushesState && typeof data.brushesState === 'object') {
+                            const now = Date.now();
+                            for (const brushId of Object.keys(data.brushesState)) {
+                                const remote = data.brushesState[brushId];
+                                const local = brushesState[brushId] || { unlocked: false, expiresAt: null };
+
+                                // Если удалённо кисть заблокирована – пропускаем
+                                if (!remote.unlocked) continue;
+
+                                // Проверяем, не истекла ли удалённая кисть
+                                if (remote.expiresAt && remote.expiresAt < now) continue;
+
+                                // Если локально кисть уже разблокирована и её срок действия дольше (или бессрочна)
+                                if (local.unlocked) {
+                                    // Бессрочная локальная всегда приоритетнее
+                                    if (local.expiresAt === null) continue;
+                                    // Если у удалённой бессрочная – берём её
+                                    if (remote.expiresAt === null) {
+                                        brushesState[brushId] = { unlocked: true, expiresAt: null };
+                                        continue;
+                                    }
+                                    // Иначе оставляем ту, у которой expiresAt больше
+                                    if (remote.expiresAt > local.expiresAt) {
+                                        brushesState[brushId] = { unlocked: true, expiresAt: remote.expiresAt };
+                                    }
+                                    // иначе оставляем локальную
+                                } else {
+                                    // Локально кисть заблокирована – берём удалённую
+                                    brushesState[brushId] = { unlocked: true, expiresAt: remote.expiresAt || null };
+                                }
+                            }
+                            // Сохраняем объединённое состояние кистей
+                            saveBrushesState();
+                        }
+
+                        // ===== 6. dailyBonusData (объект с датой) =====
+                        if (data.dailyBonusData && typeof data.dailyBonusData === 'object') {
+                            // Просто берём самую позднюю дату, если у нас есть локальная
+                            const localDate = dailyBonusData.lastClaimDate;
+                            const remoteDate = data.dailyBonusData.lastClaimDate;
+                            if (remoteDate && (!localDate || remoteDate > localDate)) {
+                                dailyBonusData.lastClaimDate = remoteDate;
+                                saveDailyBonusData();
+                            }
+                        }
+
+                        // ===== 7. totalPoints – просто берём максимум =====
+                        if (typeof data.totalPoints === 'number') {
+                            if (data.totalPoints > appState.totalPoints) {
+                                appState.totalPoints = data.totalPoints;
+                            }
+                        }
+
                         // Обновляем UI
                         updateStats();
                         if (currentCategory) renderLevels(currentCategory);
+
+                        // Сохраняем локально (после всех объединений)
+                        saveState();
+
                         return data;
-                    } catch(e) {}
+
+                    } catch(e) {
+                        console.warn('Ошибка парсинга данных из VK:', e);
+                    }
                 }
             }
             return null;
@@ -1299,6 +1388,20 @@ function showRewardedAd() {
             });
     });
 }
+
+    document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        // Приложение стало видимым – синхронизируем данные из VK
+        if (typeof loadAppStateFromVK === 'function') {
+            loadAppStateFromVK().then(() => {
+                // Обновляем UI после синхронизации
+                updateStats();
+                if (currentCategory) renderLevels(currentCategory);
+            });
+        }
+    }
+});
+
 
 function watchAdForDailyBonus() {
     if (typeof vkBridge === 'undefined' || !navigator.onLine) {

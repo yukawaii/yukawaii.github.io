@@ -162,7 +162,7 @@ function loadVKBridgeScript() {
 
 
 // ===== ПОЛНАЯ ИНИЦИАЛИЗАЦИЯ =====
-preloadRewardAd// В vk.js или app.js - обновите initVK()
+
 function initVK() {
     console.log('🔌 Запуск инициализации VK...');
 

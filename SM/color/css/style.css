@@ -1803,3 +1803,10 @@ html, body {
     overscroll-behavior: none;
     height: 100%;
 }
+
+.app-container {
+    /* Резервные отступы для старых браузеров */
+    padding: 20px;
+    /* Основные отступы с учётом безопасной зоны */
+    padding: env(safe-area-inset-top)  env(safe-area-inset-bottom) ;
+}
