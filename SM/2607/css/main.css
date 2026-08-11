@@ -990,7 +990,10 @@ img, canvas, button, div {
     width: auto;          /* ширина подстраивается под изображение */
     pointer-events: none;
     will-change: transform;
+
     z-index: 1;           /* выше фона, но ниже интерфейса (кнопки, диалоги) */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .placeholder-board img.bg-portrait-img {
     height: 100%;

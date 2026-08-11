@@ -15,7 +15,7 @@ const AudioManager = {
         this.musicEnabled = settings.musicEnabled !== undefined ? settings.musicEnabled : true;
 
         const prog = Storage.getProgress();
-        this._selectedTrack = prog.selectedMusicTrack || 'birds';
+      this._selectedTrack = prog.selectedMusicTrack || 'notes';
 
         try {
             this._ctx = new (window.AudioContext || window.webkitAudioContext)();

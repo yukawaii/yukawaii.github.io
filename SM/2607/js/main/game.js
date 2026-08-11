@@ -33,6 +33,10 @@ _clickLock: false,
     boardSize: 0,
     canvas: null,
     ctx: null,
+    _fpsLimit: 30,          // для мобильных
+_lastFrameTime: 0,
+_backgroundCanvas: null,
+_backgroundCtx: null,
 
     _lastGiftTime: 0,
     _giftCooldown: 120000, // 2 минуты
@@ -204,6 +208,8 @@ loadWebImage(callback) {
 init(rows, cols, loadFromSave = false) {
     this.rows = rows || (this.isMobile ? this.mobileRows : 9);
     this.cols = cols || (this.isMobile ? this.mobileCols : 9);
+    this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
+this._fpsLimit = this.isMobile ? 25 : 60;
 
     let sceneCfg = getCurrentSceneConfig();
     const playerLevel = this.level || 1;
@@ -329,7 +335,8 @@ for (let r = 0; r < this.rows; r++) {
  // --- Загрузка спрайтов и запуск ---
 this.loadSprites(() => {
     this.initCanvas();
-    this.inventoryBtn = document.getElementById('inventory-btn');
+    this._drawBackground();
+        this.inventoryBtn = document.getElementById('inventory-btn');
     this.updateUI();
     this.updateInventoryButton();
     this.updateInfoPanel();
@@ -408,6 +415,20 @@ _initBoard() {
     const available = this.sceneConfig.availableTypes;
     const typeIndices = available || this.imageNames.map((_, i) => i);
 
+    // ---- 1. Определяем РЕДКИЕ типы из заказов ----
+    const sceneCfg = getCurrentSceneConfig();
+    const ordersCfg = sceneCfg.orders || {};
+    let allOrderTypes = [];
+    if (Array.isArray(ordersCfg.allowedTypes)) {
+        if (typeof ordersCfg.allowedTypes[0] === 'number') {
+            allOrderTypes = ordersCfg.allowedTypes.slice();
+        } else if (typeof ordersCfg.allowedTypes[0] === 'object' && ordersCfg.allowedTypes[0].type !== undefined) {
+            allOrderTypes = ordersCfg.allowedTypes.map(entry => entry.type);
+        }
+    }
+    const rareTypes = allOrderTypes.filter(t => !typeIndices.includes(t));
+
+    // ---- 2. Заполняем пул типов (как было) ----
     const totalCells = this.rows * this.cols;
     let pool = [];
     while (pool.length < totalCells) {
@@ -423,6 +444,7 @@ _initBoard() {
         [pool[i], pool[j]] = [pool[j], pool[i]];
     }
 
+    // ---- 3. Создаём доску ----
     let idx = 0;
     for (let r = 0; r < this.rows; r++) {
         this.board[r] = [];
@@ -440,63 +462,62 @@ _initBoard() {
                 col: c,
                 locked: !isUnlocked,
             };
-                 // Инициализация генератора, если применимо
-           // this.initGeneratorFields(this.board[r][c], typeIndex, 1);
-
-             /*if (typeof CollectionManager !== 'undefined') {
-                    CollectionManager.markAsSeen(typeIndex, 1);
-                }*/
         }
     }
-    // Установка уровня 2 и флага covered для крайних закрытых клеток
-for (let r = 0; r < this.rows; r++) {
-    for (let c = 0; c < this.cols; c++) {
-        const cell = this.board[r][c];
-         if (cell && cell.typeIndex !== undefined && cell.level !== undefined) {
-               // this.initGeneratorFields(cell, cell.typeIndex, cell.level);
-            }
-                    if (cell.locked) {
-                        const isEdge = (r < 2 || r >= this.rows - 2 || c < 2 || c >= this.cols - 2);
-                        if (isEdge) {
-                            // ★★★ Случайный уровень: 1 или 2 ★★★
-                            cell.level = Math.random() < 0.5 ? 1 : 2;
-                            cell.covered = true;
-                          /*  if (typeof CollectionManager !== 'undefined') {
-                                CollectionManager.markAsSeen(cell.typeIndex, cell.level);
-                            }*/
-                        } else {
-                            cell.covered = false;
-                        }
+
+    // ---- 4. Настройка крайних клеток (только самая внешняя граница) и проставление covered ----
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            const cell = this.board[r][c];
+            if (cell.locked) {
+                // Проверяем, находится ли клетка на самой внешней границе
+                const isOuterEdge = (r === 0 || r === this.rows - 1 || c === 0 || c === this.cols - 1);
+                if (isOuterEdge) {
+                    // Редкие предметы
+                    let newTypeIndex;
+                    let newLevel;
+                    if (rareTypes.length > 0) {
+                        newTypeIndex = rareTypes[Math.floor(Math.random() * rareTypes.length)];
+                        newLevel = 2 + Math.floor(Math.random() * 2); // 2 или 3
                     } else {
-            cell.covered = false; // открытые клетки не покрыты
-        }
-    }
-}
-
-// После инициализации снять коробки с тех крайних клеток, которые соседствуют с открытыми
-for (let r = 0; r < this.rows; r++) {
-    for (let c = 0; c < this.cols; c++) {
-        if (!this.board[r][c].locked) {
-            this.uncoverNeighbors(r, c);
-        }
-    }
-}
-// Добавляем начальные открытые предметы в коллекцию (discovered = true, stickerRemoved не трогаем)
-for (let r = 0; r < this.rows; r++) {
-    for (let c = 0; c < this.cols; c++) {
-        const cell = this.board[r][c];
-        if (cell && !cell.locked && cell.type) {
-            if (typeof CollectionManager !== 'undefined') {
-                CollectionManager.onItemCreated(cell.typeIndex, cell.level);
+                        newTypeIndex = cell.typeIndex;
+                        newLevel = Math.random() < 0.5 ? 1 : 2;
+                    }
+                    cell.typeIndex = newTypeIndex;
+                    cell.type = this.imageNames[newTypeIndex] || '🍀';
+                    cell.level = newLevel;
+                } else {
+                    // Внутренние закрытые клетки – оставляем тип из пула, уровень 1 (уже установлен)
+                }
+                // Все locked клетки получают коробку (покрытие)
+                cell.covered = true;
+            } else {
+                cell.covered = false;
             }
-            // 2. Инициализация генератора для открытых клеток (ЕСЛИ они генераторы)
-            //    Уровень уже установлен (1 для центра), поэтому вызываем здесь.
-            this.initGeneratorFields(cell, cell.typeIndex, cell.level);
         }
     }
-}
 
+    // ---- 5. Снимаем коробки с соседей открытых клеток ----
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            if (!this.board[r][c].locked) {
+                this.uncoverNeighbors(r, c);
+            }
+        }
+    }
 
+    // ---- 6. Инициализация генераторов и коллекций для открытых клеток ----
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            const cell = this.board[r][c];
+            if (cell && !cell.locked && cell.type) {
+                if (typeof CollectionManager !== 'undefined') {
+                    CollectionManager.onItemCreated(cell.typeIndex, cell.level);
+                }
+                this.initGeneratorFields(cell, cell.typeIndex, cell.level);
+            }
+        }
+    }
 },
 
 uncoverNeighbors(row, col, animate = false) {
@@ -1497,7 +1518,7 @@ findHintPair() {
 spawnStars(row, col) {
     const cx = col * this.cellWidth + this.cellWidth / 2;
     const cy = row * this.cellHeight + this.cellHeight / 2;
-    const count = 6;
+   const count = this.isMobile ? 3 : 6;
     for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
         const distance = 30 + Math.random() * 50; // в 2 раза больше
@@ -1653,8 +1674,10 @@ spawnConfetti(row, col) {
         for (const p of particles) {
             ctx.globalAlpha = p.life;
             ctx.fillStyle = p.color;
-            ctx.shadowColor = p.color;
-            ctx.shadowBlur = 4;
+            if (!this.isMobile) {
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 4;
+            }
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
@@ -1700,6 +1723,7 @@ addItemAnimation(fromRow, fromCol, toRow, toCol, item) {
 
     // Добавляем пульсацию для предмета
 addPulse(row, col, duration = 0.3, maxScale = 1.2) {
+      if (this.pulseItems.length > 5) return; // не больше 5 пульсаций одновременно
     const existing = this.pulseItems.find(p => p.row === row && p.col === col);
     if (existing) return;
     // Скорость зависит от длительности (чем короче, тем быстрее)
@@ -1713,6 +1737,53 @@ addPulse(row, col, duration = 0.3, maxScale = 1.2) {
         maxScale: maxScale,
     });
 },
+
+ // ---------- ОБМЕН МЕСТАМИ С АНИМАЦИЕЙ ----------
+    swapItems(r1, c1, r2, c2) {
+        const sourceItem = this.board[r1][c1];
+        const targetItem = this.board[r2][c2];
+        if (!sourceItem || !targetItem) return;
+
+        // Очищаем клетки
+        this.board[r1][c1] = { locked: false, row: r1, col: c1 };
+        this.board[r2][c2] = { locked: false, row: r2, col: c2 };
+
+        // Анимация sourceItem → (r2,c2)
+        this.itemAnimations.push({
+            startX: c1 * this.cellWidth + this.cellWidth / 2,
+            startY: r1 * this.cellHeight + this.cellHeight / 2,
+            endX: c2 * this.cellWidth + this.cellWidth / 2,
+            endY: r2 * this.cellHeight + this.cellHeight / 2,
+            progress: 0,
+            speed: 0.025,
+            itemObject: sourceItem,
+            toRow: r2,
+            toCol: c2,
+            added: false,
+            scale: 0.1,
+            targetScale: 0.85,
+        });
+
+        // Анимация targetItem → (r1,c1)
+        this.itemAnimations.push({
+            startX: c2 * this.cellWidth + this.cellWidth / 2,
+            startY: r2 * this.cellHeight + this.cellHeight / 2,
+            endX: c1 * this.cellWidth + this.cellWidth / 2,
+            endY: r1 * this.cellHeight + this.cellHeight / 2,
+            progress: 0,
+            speed: 0.025,
+            itemObject: targetItem,
+            toRow: r1,
+            toCol: c1,
+            added: false,
+            scale: 0.1,
+            targetScale: 0.85,
+        });
+
+        AudioManager.play('merge'); // звук объединения (или другой)
+        this.saveBoardState();
+        this.updateUI();
+    },
 
  updatePulses() {
     for (let i = this.pulseItems.length - 1; i >= 0; i--) {
@@ -1736,61 +1807,74 @@ addPulse(row, col, duration = 0.3, maxScale = 1.2) {
     }
 },
 
-updateItemAnimations() {
-    for (let i = this.itemAnimations.length - 1; i >= 0; i--) {
-        const anim = this.itemAnimations[i];
-        anim.progress += anim.speed;
-        if (anim.progress >= 1) {
-            anim.progress = 1;
-            if (!anim.added) {
-                const newItem = {
-                    type: anim.itemType,
-                    typeIndex: anim.itemTypeIndex,
-                    level: anim.itemLevel,
-                    merged: false,
-                    row: anim.toRow,
-                    col: anim.toCol,
-                    locked: false,
-                };
-                this.board[anim.toRow][anim.toCol] = newItem;
-                // Инициализация генератора для нового предмета
-                this.initGeneratorFields(newItem, newItem.typeIndex, newItem.level);
-                                if (typeof CollectionManager !== 'undefined') {
-                        CollectionManager.onItemCreated(newItem.typeIndex, newItem.level);
+ // ---------- ОБНОВЛЕНИЕ АНИМАЦИЙ (изменённый метод) ----------
+    updateItemAnimations() {
+        for (let i = this.itemAnimations.length - 1; i >= 0; i--) {
+            const anim = this.itemAnimations[i];
+            anim.progress += anim.speed;
+            if (anim.progress >= 1) {
+                anim.progress = 1;
+                if (!anim.added) {
+                    if (anim.itemObject) {
+                        // Используем готовый объект (обмен)
+                        const item = anim.itemObject;
+                        this.board[anim.toRow][anim.toCol] = item;
+                        // Не вызываем initGeneratorFields и CollectionManager,
+                        // так как предмет уже существует
+                    } else {
+                        // Стандартное создание предмета (спавн, перемещение из корзинки)
+                        const newItem = {
+                            type: anim.itemType,
+                            typeIndex: anim.itemTypeIndex,
+                            level: anim.itemLevel,
+                            merged: false,
+                            row: anim.toRow,
+                            col: anim.toCol,
+                            locked: false,
+                        };
+                        this.board[anim.toRow][anim.toCol] = newItem;
+                        this.initGeneratorFields(newItem, newItem.typeIndex, newItem.level);
+                        if (typeof CollectionManager !== 'undefined') {
+                            CollectionManager.onItemCreated(newItem.typeIndex, newItem.level);
+                        }
                     }
-                this.saveBoardState();
-                anim.added = true;
-                this.addPulse(anim.toRow, anim.toCol, 0.5, 1.1);
-                this.spawnStars(anim.toRow, anim.toCol);
-            }
-            // ★ Удаляем анимацию из массива
-            this.itemAnimations.splice(i, 1);
-            // ★ Сбрасываем блокировку только после удаления
-            // (если в массиве ещё есть анимации, флаг останется true)
-            if (this.itemAnimations.length === 0) {
-                this.processingClick = false;
+                    anim.added = true;
+                    this.addPulse(anim.toRow, anim.toCol, 0.5, 1.1);
+                    this.spawnStars(anim.toRow, anim.toCol);
+                    this.saveBoardState();
+                }
+                // Удаляем анимацию
+                this.itemAnimations.splice(i, 1);
+                if (this.itemAnimations.length === 0) {
+                    this.processingClick = false;
+                }
             }
         }
-    }
-},
+    },
 
     // ---------- ЦИКЛ ОТРИСОВКИ ----------
 animateLoop() {
     if (this._loopActive) return;
     this._loopActive = true;
 
-    const loop = () => {
+    const loop = (timestamp) => {
         if (!this.isRunning) {
             this._loopActive = false;
             this._animationFrameId = null;
             return;
         }
 
-        if (!this.isPaused) {
-             this.updateCooldowns(); // <-- обновляем перезарядки
-            this.updatePulses();
-            this.updateItemAnimations(); // ← единственный вызов обновления анимаций
+        // Ограничение FPS
+        if (timestamp - this._lastFrameTime < 1000 / this._fpsLimit) {
+            this._animationFrameId = requestAnimationFrame(loop);
+            return;
+        }
+        this._lastFrameTime = timestamp;
 
+        if (!this.isPaused) {
+            this.updateCooldowns();
+            this.updatePulses();
+            this.updateItemAnimations();
             if (this.hintAnimations.length > 0) {
                 this.hintPhase = (this.hintPhase + 0.006) % 1;
             }
@@ -1798,6 +1882,7 @@ animateLoop() {
 
         this.drawAll();
 
+        // Продолжаем цикл
         if (this.isRunning) {
             this._animationFrameId = requestAnimationFrame(loop);
         } else {
@@ -1857,8 +1942,10 @@ if (this.hintAnimations.length === 2) {
                 this.ctx.save();
                 this.ctx.translate(x1 + shiftX1, y1 + shiftY1);
                 this.ctx.scale(scale, scale);
+                if (!this.isMobile) {
                 this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
                 this.ctx.shadowBlur = 10;
+                }
                 this.ctx.drawImage(img1, -size1 / 2, -size1 / 2, size1, size1);
                 this.ctx.restore();
             }
@@ -1882,8 +1969,10 @@ if (this.hintAnimations.length === 2) {
                 this.ctx.save();
                 this.ctx.translate(x2 + shiftX2, y2 + shiftY2);
                 this.ctx.scale(scale, scale);
+                if (!this.isMobile) {
                 this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
                 this.ctx.shadowBlur = 10;
+                }
                 this.ctx.drawImage(img2, -size2 / 2, -size2 / 2, size2, size2);
                 this.ctx.restore();
             }
@@ -1905,8 +1994,11 @@ for (const anim of this.itemAnimations) {
         this.ctx.save();
         this.ctx.translate(x, y);
         this.ctx.scale(scale / anim.targetScale, scale / anim.targetScale);
+
+        if (!this.isMobile) {
         this.ctx.shadowColor = 'rgba(255,255,255,0.1)';
         this.ctx.shadowBlur = 10;
+        }
         this.ctx.drawImage(img, -size/2, -size/2, size, size);
         this.ctx.restore();
     }
@@ -1926,8 +2018,10 @@ for (const anim of this.itemAnimations) {
         this.ctx.save();
         this.ctx.globalAlpha = s.alpha;
         this.ctx.fillStyle = '#ffffff';
+        if (!this.isMobile) {
         this.ctx.shadowColor = '#ffffff';
         this.ctx.shadowBlur = 12;
+        }
         this.ctx.beginPath();
         const outerRadius = s.size;
         const innerRadius = s.size * 0.4;
@@ -1977,8 +2071,10 @@ if (this.hoverCell && !this.isDragging) {
                     this.ctx.save();
                     this.ctx.translate(x, y);
                     this.ctx.scale(scale, scale);
+                    if (!this.isMobile) {
                     this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
                     this.ctx.shadowBlur = 10;
+                    }
                     this.ctx.drawImage(img, -size/2, -size/2, size, size);
                     this.ctx.restore();
                 }
@@ -2010,8 +2106,10 @@ drawPulseEffects() {
         ctx.save();
         ctx.translate(x, y);
         ctx.scale(scale, scale);
-        ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
-        ctx.shadowBlur = 15;
+        if (!this.isMobile) {
+                ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
+                ctx.shadowBlur = 15;
+        }
         ctx.drawImage(img, -size/2, -size/2, size, size);
         ctx.restore();
     }
@@ -2373,316 +2471,105 @@ if (nextLevel > maxMerge) {
 
 
 drawBoard() {
-    const ctx = this.ctx;
-    if (!ctx) return;
+    if (!this.ctx) return;
 
-    const boardWidth = this.canvas.width;
-    const boardHeight = this.canvas.height;
+    // 1. Скопировать кешированный фон
+    if (!this._backgroundCanvas) {
+        this._drawBackground();
+    }
+    this.ctx.drawImage(this._backgroundCanvas, 0, 0);
+
     const cw = this.cellWidth;
     const ch = this.cellHeight;
+    const ctx = this.ctx;
 
-    ctx.clearRect(0, 0, boardWidth, boardHeight);
-
-    // ---- Адаптивная толщина линий ----
-    const cellSize = Math.min(cw, ch);
-    let strokeWidth = 3;
-    if (cellSize < 40) strokeWidth = 0.8;
-    else if (cellSize < 60) strokeWidth = 1.5;
-    else if (cellSize < 80) strokeWidth = 2;
-
-    const frameLineWidth = Math.max(2, strokeWidth * 1.3);   // рамки
-    const hatchLineWidth = Math.max(0.5, strokeWidth * 0.4); // штриховка
-
-    // ---- 1. Фон доски (деревянная текстура) ----
-    const woodBase = '#8b6b4d';
-    const woodLight = '#a8865e';
-    const grad = ctx.createLinearGradient(0, 0, boardWidth, boardHeight);
-    grad.addColorStop(0, woodBase);
-    grad.addColorStop(0.5, woodLight);
-    grad.addColorStop(1, '#6f4f32');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, boardWidth, boardHeight);
-
-    // Волокна дерева (толщина тоже адаптивная)
-    ctx.save();
-    ctx.strokeStyle = 'rgba(60, 40, 20, 0.15)';
-    ctx.lineWidth = hatchLineWidth * 0.8;
-    for (let i = 0; i < boardWidth; i += 8 + Math.random() * 16) {
-        ctx.beginPath();
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i + 20, boardHeight);
-        ctx.stroke();
-    }
-    for (let i = 0; i < boardHeight; i += 8 + Math.random() * 16) {
-        ctx.beginPath();
-        ctx.moveTo(0, i);
-        ctx.lineTo(boardWidth, i + 20);
-        ctx.stroke();
-    }
-    ctx.restore();
-
-    // ---- 2. Отрисовка клеток ----
-    const hatchColor = 'rgba(40, 30, 20, 0.12)';
-    const strokeColor = '#2a1f14';
-
+    // ---- Рисуем предметы (без пульсирующих и подсвеченных) ----
     for (let r = 0; r < this.rows; r++) {
         for (let c = 0; c < this.cols; c++) {
             const x = c * cw;
             const y = r * ch;
             const cell = this.board[r][c];
-            const isLocked = cell && cell.locked === true;
-
-
-            // ---- Цвет клетки (плоские землистые тона) ----
-            // Чередование: тёплый беж и серо-зелёный
-            let baseColor;
-            if ((r + c) % 2 === 0) {
-                baseColor = '#d9c5a6'; // светлый беж
-            } else {
-                baseColor = '#c9b18c'; // приглушённый оливковый
-            }
-            // Заблокированные темнее
-            const fillColor = isLocked
-                 ? ( (r + c) % 2 === 0 ? '#a38564' : '#92785b' ) // значительно темнее
-                : baseColor;
-
-       // Рисуем клетку с закруглениями
-            const radius = Math.min(cw, ch) * 0.06;
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(x + radius, y);
-            ctx.arcTo(x + cw, y, x + cw, y + ch, radius);
-            ctx.arcTo(x + cw, y + ch, x, y + ch, radius);
-            ctx.arcTo(x, y + ch, x, y, radius);
-            ctx.arcTo(x, y, x + cw, y, radius);
-            ctx.closePath();
-
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-
-            // ---- Толстая обводка (адаптивная) ----
-            ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = strokeWidth;
-            ctx.stroke();
-
-            // ---- Штриховка (cross‑hatching) ----
-            ctx.clip();
-            const step = 10;
-            const offset = (r + c) % 2 === 0 ? 2 : 0;
-            ctx.strokeStyle = hatchColor;
-            ctx.lineWidth = hatchLineWidth;
-
-            for (let i = -ch; i < cw + ch; i += step) {
-                const x1 = x + i + offset;
-                const y1 = y - ch;
-                const x2 = x + i + ch + offset;
-                const y2 = y + ch;
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-            }
-            for (let i = -ch; i < cw + ch; i += step) {
-                const x1 = x - ch + i + offset;
-                const y1 = y + ch + i;
-                const x2 = x + ch + i + offset;
-                const y2 = y - ch + i;
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-            }
-            ctx.restore(); // снимаем clip и save
-
-            // ---- Рисуем предмет внутри клетки ----
+            if (!cell || !cell.type) continue;
+            const isLocked = cell.locked === true;
             const isPulsing = this.pulseItems.some(p => p.row === r && p.col === c);
-            const canMerge = this.canMergeToLevel(cell?.typeIndex, cell?.level);
-            let canSpawn = false;
-            if (cell) {
-                const itemData = this.itemData[cell.typeIndex];
-                if (itemData) {
-                    canSpawn = (itemData.spawnable && itemData.spawnLevels.includes(cell.level) && cell.level >= 3) || !!itemData.spawnRules;
-                }
-            }
             const isHovering = this.hoverCell && !this.isDragging &&
                                this.hoverCell.row === r && this.hoverCell.col === c &&
-                               !isLocked && cell && (canMerge || canSpawn);
+                               !isLocked && (this.canMergeToLevel(cell.typeIndex, cell.level) ||
+                               (this.itemData[cell.typeIndex]?.spawnable && this.itemData[cell.typeIndex].spawnLevels.includes(cell.level)));
             const isHint = this.hintAnimations.some(h => h.row === r && h.col === c);
 
-// === УГОЛКИ (разный цвет для открытых/закрытых) ===
- if (this.dragTarget && this.dragTarget.row === r && this.dragTarget.col === c) {
-    const target = this.dragTarget;
-    const src = this.dragStart?.item;
-    if (src && cell && cell.type && src.typeIndex === cell.typeIndex && src.level === cell.level) {
-        const x = c * this.cellWidth;
-        const y = r * this.cellHeight;
-        const w = this.cellWidth;
-        const h = this.cellHeight;
-        const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 300);
-        const alpha = 0.5 + 0.5 * pulse;
-        const size = Math.min(w, h) * 0.15;
-        const lineWidth = 2 + pulse * 2;
-        // Выбираем цвет в зависимости от заблокированности
-        const isTargetLocked = cell.locked === true;
-        const color = isTargetLocked ? '#d4a373' : '#a77b50';
-
-        this.ctx.save();
-        this.ctx.globalAlpha = alpha;
-        this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = lineWidth;
-        this.ctx.setLineDash([]);
-
-        // Четыре уголка (L-образные)
-        const corners = [
-            [x + 4, y + 4, 1, 1],
-            [x + w - 4, y + 4, -1, 1],
-            [x + 4, y + h - 4, 1, -1],
-            [x + w - 4, y + h - 4, -1, -1]
-        ];
-        for (let [cx, cy, dx, dy] of corners) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(cx + dx * size, cy);
-            this.ctx.lineTo(cx, cy);
-            this.ctx.lineTo(cx, cy + dy * size);
-            this.ctx.stroke();
-        }
-        this.ctx.restore();
-    }
-}  
-// === ШТРИХОВОЙ КРЕСТ (разный цвет для открытых/закрытых) ===
-/*if (this.dragTarget && this.dragTarget.row === r && this.dragTarget.col === c) {
-    const target = this.dragTarget;
-    const src = this.dragStart?.item;
-    if (src && cell && cell.type && src.typeIndex === cell.typeIndex && src.level === cell.level) {
-        const cx = c * this.cellWidth + this.cellWidth / 2;
-        const cy = r * this.cellHeight + this.cellHeight / 2;
-        const maxRadius = Math.min(this.cellWidth, this.cellHeight) * 0.5;
-        const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 350);
-        const alpha = 0.4 + 0.4 * pulse;
-        const length = maxRadius * (0.6 + 0.4 * pulse);
-        const lineWidth = 2;
-        // Цвет в зависимости от заблокированности
-        const isTargetLocked = cell.locked === true;
-        const color = isTargetLocked ? '#d4a373' : '#a77b50';
-
-        this.ctx.save();
-        this.ctx.globalAlpha = alpha;
-        this.ctx.strokeStyle = color;
-        this.ctx.lineWidth = lineWidth;
-        this.ctx.setLineDash([4, 4]);
-        this.ctx.lineDashOffset = -Date.now() / 200;
-
-        // Две диагонали (4 линии)
-        for (let angle = -Math.PI/4; angle < Math.PI/2; angle += Math.PI/2) {
-            const x1 = cx + Math.cos(angle) * (maxRadius * 0.1);
-            const y1 = cy + Math.sin(angle) * (maxRadius * 0.1);
-            const x2 = cx + Math.cos(angle) * length;
-            const y2 = cy + Math.sin(angle) * length;
-            this.ctx.beginPath();
-            this.ctx.moveTo(x1, y1);
-            this.ctx.lineTo(x2, y2);
-            this.ctx.stroke();
-            // Зеркальная линия
-            const x3 = cx - Math.cos(angle) * length;
-            const y3 = cy - Math.sin(angle) * length;
-            this.ctx.beginPath();
-            this.ctx.moveTo(cx - Math.cos(angle) * (maxRadius * 0.1), cy - Math.sin(angle) * (maxRadius * 0.1));
-            this.ctx.lineTo(x3, y3);
-            this.ctx.stroke();
-        }
-        this.ctx.restore();
-    }
-}*/
-
-
-            if (cell && cell.type && !isPulsing && !isHovering && !isHint) {
+            // Рисуем только если не пульсирует, не подсвечивается и не является подсказкой
+            // (пульсация и подсказка рисуются отдельно в drawAll)
+            if (!isPulsing && !isHovering && !isHint) {
                 const size = Math.min(cw, ch) * 0.8;
                 const offsetX = (cw - size) / 2;
                 const offsetY = (ch - size) / 2;
-
                 const img = this.getSpriteImage(cell);
                 ctx.save();
-                if (isLocked) {
-                    ctx.globalAlpha = 0.5;
-                }
+                if (isLocked) ctx.globalAlpha = 0.5;
                 if (img) {
                     ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
                 } else {
-                    const fallbackEmoji = this.itemTypes[cell.typeIndex % this.itemTypes.length] || '🍀';
                     ctx.font = (size * 0.9) + 'px sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = isLocked ? '#5a4a3a' : '#2a1f14';
-                    ctx.fillText(fallbackEmoji, x + cw/2, y + ch/2 + 2);
+                    ctx.fillText(this.itemTypes[cell.typeIndex % this.itemTypes.length] || '🍀', x + cw/2, y + ch/2 + 2);
                 }
                 ctx.restore();
             }
 
-// ----  МЕТКУ генов ЗДЕСЬ (после отрисовки предмета) ----
-// Проверяем, является ли предмет генератором
-            if (cell && cell.type) {
-                const itemData = this.itemData[cell.typeIndex];
-                const isGenerator = itemData && 
-                                    itemData.spawnable && 
-                                    itemData.spawnLevels && 
-                                    itemData.spawnLevels.includes(cell.level);
-                if (isGenerator) {
-                    // уголки для генов
-            const d = Math.min(cw, ch) * 0.1;
+            // ---- Метка генератора (уголки) ----
+            const itemData = this.itemData[cell.typeIndex];
+            const isGenerator = itemData && itemData.spawnable && itemData.spawnLevels && itemData.spawnLevels.includes(cell.level);
+            if (isGenerator) {
+                const d = Math.min(cw, ch) * 0.1;
                 ctx.save();
                 ctx.strokeStyle = '#2a1f14';
                 ctx.lineWidth = 2;
-                // левый верхний угол
                 ctx.beginPath();
                 ctx.moveTo(x + 4, y + 4 + d);
                 ctx.lineTo(x + 4, y + 4);
                 ctx.lineTo(x + 4 + d, y + 4);
                 ctx.stroke();
-                // правый нижний
                 ctx.beginPath();
                 ctx.moveTo(x + cw - 4 - d, y + ch - 4);
                 ctx.lineTo(x + cw - 4, y + ch - 4);
                 ctx.lineTo(x + cw - 4, y + ch - 4 - d);
                 ctx.stroke();
                 ctx.restore();
-                }
             }
-         
- 
 
-            // ---- Паутинка для заблокированных ----
+            // ---- Таймер перезарядки ----
+            if (cell && cell.charges !== undefined && cell.charges !== Infinity && cell.cooldownEnd > Date.now()) {
+                this.drawCooldownTimer(ctx, cell, x, y, cw, ch);
+            }
+
+            // ---- Паутинка для заблокированных (рисуем поверх предмета) ----
             if (isLocked && this.webImage) {
-                ctx.save();
                 const webSize = Math.min(cw, ch) * 0.7;
                 const webOffsetX = (cw - webSize) / 2;
                 const webOffsetY = (ch - webSize) / 2;
+                ctx.save();
                 ctx.globalAlpha = 0.6;
                 ctx.drawImage(this.webImage, x + webOffsetX, y + webOffsetY, webSize, webSize);
                 ctx.restore();
             }
-//korobka
-    if (cell && cell.covered === true && this.boxImage) {
-    ctx.save();
-    ctx.globalAlpha = 0.95;
-    const size = Math.min(cw, ch) * 0.85; // подгоните размер
-    const offsetX = (cw - size) / 2;
-    const offsetY = (ch - size) / 2;
-    ctx.drawImage(this.boxImage, x + offsetX, y + offsetY, size, size);
-    ctx.restore();
-}
 
-            // ---- Таймер перезарядки (после всего, поверх) ----
-                        if (cell && cell.charges !== undefined && cell.charges !== Infinity) {
-                            if (cell.cooldownEnd > Date.now()) {
-                                this.drawCooldownTimer(ctx, cell, x, y, cw, ch);
-                            }
-                        }
-
+            // ---- Коробка (covered) – поверх всего, НЕПРОЗРАЧНАЯ ----
+            if (cell && cell.covered === true && this.boxImage) {
+                const size = Math.min(cw, ch) * 0.85;
+                const offsetX = (cw - size) / 2;
+                const offsetY = (ch - size) / 2;
+                ctx.save();
+                ctx.globalAlpha = 1.0;   // полностью непрозрачная
+                ctx.drawImage(this.boxImage, x + offsetX, y + offsetY, size, size);
+                ctx.restore();
+            }
         }
     }
 
-
-    // ---- 3. Рамка dragTarget (прерывистая, адаптивная толщина) ----
+    // ---- Рамка dragTarget (прерывистая) ----
     if (this.dragTarget) {
         const { row, col } = this.dragTarget;
         const targetCell = this.board[row]?.[col];
@@ -2711,11 +2598,9 @@ drawBoard() {
             const x = col * cw;
             const y = row * ch;
             ctx.save();
-              // ---- Цвет пунктира в зависимости от состояния клетки ----
-                const isTargetLocked = targetCell && targetCell.locked === true;
-                // Для открытых клеток – тёмный цвет (хорошо виден), для закрытых – светлый
-                ctx.strokeStyle = isTargetLocked ? '#d4a373' : '#a77b50';
-            ctx.lineWidth = frameLineWidth;
+            const isTargetLocked = targetCell && targetCell.locked === true;
+            ctx.strokeStyle = isTargetLocked ? '#d4a373' : '#a77b50';
+            ctx.lineWidth = Math.max(2, Math.min(cw, ch) * 0.04);
             ctx.setLineDash([6, 6]);
             ctx.strokeRect(x + 4, y + 4, cw - 8, ch - 8);
             ctx.setLineDash([]);
@@ -2723,7 +2608,7 @@ drawBoard() {
         }
     }
 
-    // ---- 4. Рамка выделения (комикс-стиль, адаптивная) ----
+    // ---- Рамка выделения (комикс-стиль) ----
     if (this.selectedCell) {
         const { row, col } = this.selectedCell;
         const x = col * cw;
@@ -2732,14 +2617,11 @@ drawBoard() {
         if (this.frameImage) {
             ctx.drawImage(this.frameImage, x, y, cw, ch);
         } else {
-            // Жирная чёрная рамка
             ctx.strokeStyle = '#ac7d4f';
-            ctx.lineWidth = frameLineWidth;
+            ctx.lineWidth = Math.max(2, Math.min(cw, ch) * 0.04);
             ctx.strokeRect(x + 3, y + 3, cw - 6, ch - 6);
-
-            // Уголки (зазубрины)
             const d = 8;
-            ctx.lineWidth = frameLineWidth * 0.8;
+            ctx.lineWidth = Math.max(1.5, Math.min(cw, ch) * 0.03);
             ctx.strokeStyle = '#d4a373';
             // Верхний левый
             ctx.beginPath();
@@ -3324,15 +3206,17 @@ drawCooldownTimer(ctx, cell, x, y, cw, ch) {
     ctx.save();
     // Полупрозрачный фон
     ctx.globalAlpha = 0.85;
+    if (!this.isMobile) {
     ctx.shadowColor = 'rgba(0,0,0,0.3)';
-    ctx.shadowBlur = 8;
+    ctx.shadowBlur = 8;}
 
     // Рисуем круглый индикатор (как часы)
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
     ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.fill();
-    ctx.shadowBlur = 0;
+    if (!this.isMobile) {
+    ctx.shadowBlur = 0;}
 
     // Дуга прогресса – от 12 часов по часовой стрелке
     const startAngle = -Math.PI / 2;
@@ -3359,7 +3243,119 @@ saveBoardState() {
     }
 },
 
+// ===== КЕШИРОВАНИЕ ФОНА =====
+_drawBackground() {
+    // Создаём offscreen‑canvas, если ещё нет
+    if (!this._backgroundCanvas) {
+        this._backgroundCanvas = document.createElement('canvas');
+        this._backgroundCanvas.width = this.canvas.width;
+        this._backgroundCanvas.height = this.canvas.height;
+        this._backgroundCtx = this._backgroundCanvas.getContext('2d');
+    }
 
+    const ctx = this._backgroundCtx;
+    const cw = this.cellWidth;
+    const ch = this.cellHeight;
+    const boardWidth = this.canvas.width;
+    const boardHeight = this.canvas.height;
+
+    // ---- 1. Фон доски (деревянная текстура) ----
+    const woodBase = '#8b6b4d';
+    const woodLight = '#a8865e';
+    const grad = ctx.createLinearGradient(0, 0, boardWidth, boardHeight);
+    grad.addColorStop(0, woodBase);
+    grad.addColorStop(0.5, woodLight);
+    grad.addColorStop(1, '#6f4f32');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, boardWidth, boardHeight);
+
+    // Волокна дерева – убираем на мобильных
+    if (!this.isMobile) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(60, 40, 20, 0.15)';
+        const hatchLineWidth = Math.max(0.5, Math.min(cw, ch) * 0.03);
+        ctx.lineWidth = hatchLineWidth * 0.8;
+        for (let i = 0; i < boardWidth; i += 8 + Math.random() * 16) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i + 20, boardHeight);
+            ctx.stroke();
+        }
+        for (let i = 0; i < boardHeight; i += 8 + Math.random() * 16) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(boardWidth, i + 20);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    // ---- 2. Отрисовка клеток (только фон и сетка, без предметов, паутинки и коробок) ----
+    const cellSize = Math.min(cw, ch);
+    let strokeWidth = 3;
+    if (cellSize < 40) strokeWidth = 0.8;
+    else if (cellSize < 60) strokeWidth = 1.5;
+    else if (cellSize < 80) strokeWidth = 2;
+
+    const hatchColor = 'rgba(40, 30, 20, 0.12)';
+    const strokeColor = '#2a1f14';
+    const hatchLineWidth2 = Math.max(0.5, strokeWidth * 0.4);
+
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            const x = c * cw;
+            const y = r * ch;
+            const cell = this.board[r][c];
+            const isLocked = cell && cell.locked === true;
+
+            let baseColor;
+            if ((r + c) % 2 === 0) baseColor = '#d9c5a6';
+            else baseColor = '#c9b18c';
+            const fillColor = isLocked ? ((r + c) % 2 === 0 ? '#a38564' : '#92785b') : baseColor;
+
+            // Закруглённая клетка
+            const radius = Math.min(cw, ch) * 0.06;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.arcTo(x + cw, y, x + cw, y + ch, radius);
+            ctx.arcTo(x + cw, y + ch, x, y + ch, radius);
+            ctx.arcTo(x, y + ch, x, y, radius);
+            ctx.arcTo(x, y, x + cw, y, radius);
+            ctx.closePath();
+            ctx.fillStyle = fillColor;
+            ctx.fill();
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = strokeWidth;
+            ctx.stroke();
+
+            // Штриховка – на мобильных убираем
+            if (!this.isMobile) {
+                ctx.clip();
+                const step = 10;
+                const offset = (r + c) % 2 === 0 ? 2 : 0;
+                ctx.strokeStyle = hatchColor;
+                ctx.lineWidth = hatchLineWidth2;
+                for (let i = -ch; i < cw + ch; i += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(x + i + offset, y - ch);
+                    ctx.lineTo(x + i + ch + offset, y + ch);
+                    ctx.stroke();
+                }
+                for (let i = -ch; i < cw + ch; i += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(x - ch + i + offset, y + ch + i);
+                    ctx.lineTo(x + ch + i + offset, y - ch + i);
+                    ctx.stroke();
+                }
+                ctx.restore(); // снимаем clip
+            } else {
+                ctx.restore(); // без clip
+            }
+        }
+    }
+    // Паутинка, коробки, рамки – НЕ рисуем здесь, они будут в drawBoard()
+},
 
     reset() {
                this.isRunning = false;

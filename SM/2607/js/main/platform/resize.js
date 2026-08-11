@@ -122,6 +122,7 @@ const ResizeManager = {
 
         // Перерисовываем
         game.initCanvas();
+        game._drawBackground();
         game.drawBoard();
         game.findHintPair();
     },
@@ -132,6 +133,7 @@ const ResizeManager = {
         if (!game) return;
         if (game.canvas) {
             game.initCanvas();
+            game._drawBackground();
             game.drawBoard();
         }
     }
