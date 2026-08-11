@@ -116,14 +116,22 @@ addInterior(interiorDataOrId) {
     const container = this.getActiveContainer();
     if (!container) return;
 
-    // Проверяем, есть ли уже такой элемент
     const existing = container.querySelector(`.interior-item[data-interior-id="${interiorId}"]`);
     if (existing) return;
 
     const img = document.createElement('img');
     img.className = 'interior-item';
     img.dataset.interiorId = interiorId;
-    img.src = interiorData.imagePath;
+
+    // --- ИСПОЛЬЗУЕМ АТЛАС ---
+    const spriteName = `interiors/${interiorId}.png`;
+    const dataUrl = SpriteAtlas.getSpriteDataURL('interiors', spriteName);
+    if (dataUrl) {
+        img.src = dataUrl;
+    } else {
+        // fallback на старый путь
+        img.src = interiorData.imagePath;
+    }
 
     img.dataset.offsetX = interiorData.offsetX || 0.5;
     img.dataset.offsetY = interiorData.offsetY || 0.5;
@@ -139,7 +147,7 @@ addInterior(interiorDataOrId) {
     };
 
     img.onload = positionInterior;
-    img.onerror = () => console.warn('[InteriorManager] Ошибка загрузки:', interiorData.imagePath);
+    img.onerror = () => console.warn('[InteriorManager] Ошибка загрузки:', img.src);
     if (img.complete && img.naturalWidth > 0) {
         positionInterior();
     }

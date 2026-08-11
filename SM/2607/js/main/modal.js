@@ -240,7 +240,7 @@ showInventoryModal() {
 
     let gridHtml = '<div class="item-info-grid" style="justify-content:center; gap:0.5rem; flex-wrap:wrap;">';
     inventory.forEach((item, index) => {
-        const src = Game.getImageSrc(item.typeIndex, item.level);
+       const src = Game.getItemImageDataUrl(item.typeIndex, item.level);
         gridHtml += `<div class="item-info-cell inventory-cell" data-index="${index}" style="cursor:pointer;">`;
         gridHtml += `<img src="${src}" class="item-info-img" alt="">`;
         gridHtml += `</div>`;

@@ -666,6 +666,7 @@ img, canvas, button, div {
     border: 3px solid #2a1f14;
     border-radius: clamp(12px, 3vw, 20px);
     box-shadow: 3px 3px 0 #2a1f14;
+     will-change: transform;
     background-image: repeating-linear-gradient(45deg, rgba(40,30,20,0.05) 0px, rgba(40,30,20,0.05) 4px, transparent 4px, transparent 8px);
 }
 

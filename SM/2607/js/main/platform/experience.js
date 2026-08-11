@@ -121,7 +121,7 @@ const Experience = {
     ];
     const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
 
-    const imgSrc = game.getImageSrc(typeIndex, rewardLevel) || '';
+const imgSrc = game.getItemImageDataUrl(typeIndex, rewardLevel) || '';
     ModalManager.showCenterModal({
         title: getText('gift_title', 'Подарок'),
         body: `

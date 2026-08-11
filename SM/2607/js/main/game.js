@@ -37,6 +37,7 @@ _clickLock: false,
 _lastFrameTime: 0,
 _backgroundCanvas: null,
 _backgroundCtx: null,
+ _spriteCache: {}, // кеш для спрайтов { 'typeIndex_level': spriteData или null }
 
     _lastGiftTime: 0,
     _giftCooldown: 120000, // 2 минуты
@@ -46,12 +47,10 @@ _backgroundCtx: null,
        // --- АНИМАЦИОННЫЕ ДАННЫЕ ---
     pulseItems: [],         // [{ row, col, progress, speed }] – для пульсации
     selectedCell: null,   // { row, col } или null
-frameImage: null,
 hintAnimations: [],   // для подсказки – два предмета, которые можно объединить
 _animationFrameId: null,
 _loopActive: false,
   allSpecialCombinations: [],
-spawnLevels: window.spawnLevels || [],
    itemData: window.ITEM_DATA || [],
     // imageNames, spawnableFlags, spawnLevels теперь вычисляются из itemData (для совместимости)
     get imageNames() { return this.itemData.map(item => item.name); },
@@ -62,10 +61,9 @@ inactivityTimeout: 10000, // 10 секунд
 hintPhase: 0,
     // --- hover (без зажатия) ---
     hoverCell: null,         // { row, col }
-    webImage: null,
+  
     itemTypes: [         '🥔', '🌶️', '🌿', '🧹',     ],
     maxLevels: [],
-    spriteMap: {},
     spritesLoaded: false,
       sceneConfig: {        availableTypes: null,        maxSpawnLevel: 1,        maxMergeLevel: 3,        maxMergeLevelPerType: {},    },
     onScoreUpdate: null,
@@ -75,11 +73,8 @@ hintPhase: 0,
 loadSprites(callback) {
     if (this.spritesLoaded) { callback && callback(); return; }
 
-    // ---- ВЫЧИСЛЯЕМ МАКСИМАЛЬНЫЕ УРОВНИ ИЗ ITEM_DATA ----
     const computedMaxLevels = window.getMaxLevelsForItems ? window.getMaxLevelsForItems() : null;
     if (!computedMaxLevels || computedMaxLevels.length === 0) {
-        console.warn('[Game] getMaxLevelsForItems не дала результата, используем fallback 5');
-        // fallback на случай, если функция недоступна
         for (let i = 0; i < this.imageNames.length; i++) {
             this.maxLevels[i] = 5;
         }
@@ -87,117 +82,46 @@ loadSprites(callback) {
         this.maxLevels = computedMaxLevels;
     }
 
-    const types = this.imageNames; // <-- ЕДИНСТВЕННОЕ ОБЪЯВЛЕНИЕ
-    let totalChecks = 0;
-    let loadedCount = 0;
-    let anyLoaded = false;
-
-    // ---- ПОДСЧИТЫВАЕМ ОБЩЕЕ КОЛИЧЕСТВО ПРОВЕРОК ----
-    for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
-        const maxLv = this.maxLevels[typeIndex] || 1;
-        totalChecks += maxLv;
-    }
-
-    this.spriteMap = {};
-
-    types.forEach((name, typeIndex) => {
-        const maxLv = this.maxLevels[typeIndex] || 1;
-        for (let level = 1; level <= maxLv; level++) {
-            const path = `images/level${level}/${name}.png`;
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => {
-                const key = level + '_' + typeIndex;
-                this.spriteMap[key] = img;
-                anyLoaded = true;
-                loadedCount++;
-                checkCompletion();
-            };
-            img.onerror = () => {
-                loadedCount++;
-                checkCompletion();
-            };
-            img.src = path;
-        }
+    SpriteAtlas.loadAll(() => {
+        this.spritesLoaded = true;
+        callback && callback();
     });
+},
 
-    const checkCompletion = () => {
-        if (loadedCount === totalChecks) {
-            this.loadWebImage(() => {
-                this.loadFrameImage(() => {
-                    this.loadBoxImage(() => {
-                        this.spritesLoaded = true;
-                        if (!anyLoaded) {
-                            console.warn('[Game] Ни одно изображение не загрузилось. Проверьте пути и CORS.');
-                        }
-                        callback && callback();
-                    });
-                });
-            });
+
+
+getSpriteData(item) {
+    const level = item.level || 1;
+    const typeIndex = item.typeIndex || 0;
+    const name = this.imageNames[typeIndex];
+    if (!name) return null;
+    
+    const cacheKey = `${typeIndex}_${level}`;
+    
+    // Если ключ уже есть в кеше — возвращаем (даже если null)
+    if (this._spriteCache[cacheKey] !== undefined) {
+        return this._spriteCache[cacheKey];
+    }
+    
+    const spriteName = `items/level${level}/${name}.png`;
+    const sprite = SpriteAtlas.getSprite('items', spriteName);
+    
+    if (sprite) {
+        this._spriteCache[cacheKey] = sprite;
+        return sprite;
+    } else {
+        this._spriteCache[cacheKey] = null;
+        // Предупреждение только один раз
+        const warnKey = cacheKey + '_warned';
+        if (!this._spriteCache[warnKey]) {
+            this._spriteCache[warnKey] = true;
+            console.warn(`[Game] Спрайт не найден: ${spriteName}`);
         }
-    };
-
-    // Таймаут для страховки
-    setTimeout(() => {
-        if (!this.spritesLoaded) {
-            console.warn('[Game] Таймаут загрузки спрайтов, используем эмодзи');
-            this.loadWebImage(() => {
-                this.loadFrameImage(() => {
-                    this.spritesLoaded = true;
-                    callback && callback();
-                });
-            });
-        }
-    }, 5000);
-},
+        return null;
+    }
+}, 
 
 
-loadFrameImage(callback) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-        this.frameImage = img;
-        callback && callback();
-    };
-    img.onerror = () => {
-        console.warn('[Game] Не удалось загрузить kletkaramka.png');
-        callback && callback();
-    };
-    img.src = 'images/kletkaramka.png';
-},
-
-loadBoxImage(callback) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-        this.boxImage = img;
-        callback && callback();
-    };
-    img.onerror = () => {
-        console.warn('[Game] Не удалось загрузить box.png');
-        callback && callback();
-    };
-    img.src = 'images/ui/box.png';
-},
-
-loadWebImage(callback) {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-        this.webImage = img;
-        callback && callback();
-    };
-    img.onerror = () => {
-        console.warn('[Game] Не удалось загрузить web.png, паутинка не будет отображаться');
-        callback && callback();
-    };
-    img.src = 'images/web.png';
-},
-
-    getSpriteImage(item) {
-        const key = (item.level || 1) + '_' + (item.typeIndex || 0);
-        return this.spriteMap[key] || null;
-    },
 
     updateSceneConfig(newConfig) {
         Object.assign(this.sceneConfig, newConfig);
@@ -206,10 +130,11 @@ loadWebImage(callback) {
 
     // ---------- ИНИЦИАЛИЗАЦИЯ ----------
 init(rows, cols, loadFromSave = false) {
+
     this.rows = rows || (this.isMobile ? this.mobileRows : 9);
     this.cols = cols || (this.isMobile ? this.mobileCols : 9);
     this.isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
-this._fpsLimit = this.isMobile ? 25 : 60;
+this._fpsLimit = this.isMobile ? 25 : 120;
 
     let sceneCfg = getCurrentSceneConfig();
     const playerLevel = this.level || 1;
@@ -972,11 +897,29 @@ handleClick(row, col) {
     }
 },
 
-// Вспомогательный метод – получить путь к картинке предмета
-getImageSrc(typeIndex, level) {
-    const name = this.imageNames[typeIndex];
-    if (!name) return null;
-    return `images/level${level}/${name}.png`;
+
+getItemImageDataUrl(typeIndex, level) {
+    const spriteData = this.getSpriteData({ typeIndex, level });
+    if (spriteData) {
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = spriteData.sw;
+            canvas.height = spriteData.sh;
+            ctx.drawImage(spriteData.image, spriteData.sx, spriteData.sy, spriteData.sw, spriteData.sh, 0, 0, spriteData.sw, spriteData.sh);
+            return canvas.toDataURL('image/png');
+        } catch (e) {
+            console.warn('[Game] Ошибка создания dataURL для предмета', typeIndex, level, e);
+        }
+    }
+    return null; // больше нет fallback
+},
+
+// Добавьте в объект Game:
+getUIImage(name) {
+    // name: 'web', 'box', 'kletkaramka', 'points', 'colect', ...
+    const spriteData = SpriteAtlas.getSprite('ui', `ui/${name}.png`);
+    return spriteData || null;
 },
 
 // Обновить панель информации в зависимости от выделения
@@ -1042,7 +985,7 @@ showItemInfo(row, col) {
         ? getText('press_to_spawn', 'НАЖМИТЕ, чтобы получить предмет')
         : getText('combine_to_upgrade', 'ОБЪЕДИНИТЕ для улучшения');
 
-    const imgSrc = this.getImageSrc(typeIdx, cell.level);
+    const imgSrc = this.getItemImageDataUrl(typeIdx, cell.level);
     const cellHtml = `
         <div class="info-item-preview" style="
             width: clamp(2rem, 8vh, 8rem);
@@ -1125,7 +1068,7 @@ buildItemInfoHTMLFromCell(cell) {
 
         let innerContent;
         if (isDiscovered) {
-            const src = this.getImageSrc(typeIdx, lv);
+          const src = this.getItemImageDataUrl(typeIdx, lv);
             innerContent = `<img src="${src}" class="item-info-img" alt="">`;
         } else {
             innerContent = `<span style="font-size:clamp(1rem, 2vw, 1.5rem); color:#aaa;">?</span>`;
@@ -1230,7 +1173,7 @@ _getItemSources(typeIdx, level) {
 
 _renderItemCell(typeIndex, level, label) {
     const name = this.imageNames[typeIndex] || 'unknown';
-    const src = `images/level${level}/${name}.png`;
+    const src = this.getItemImageDataUrl(typeIndex, level);
     return `
         <div class="item-info-cell">
             <img src="${src}" class="item-info-img" alt="">
@@ -1241,7 +1184,7 @@ _renderItemCell(typeIndex, level, label) {
 
 _renderSourceCell(typeIndex, level) {
     const name = this.imageNames[typeIndex] || 'unknown';
-    const src = `images/level${level}/${name}.png`;
+   const src = this.getItemImageDataUrl(typeIndex, level);
     return `
         <div class="item-info-cell clickable" onclick="Game.openItemInfo(${typeIndex}, ${level})">
             <img src="${src}" class="item-info-img" alt="">
@@ -1896,115 +1839,121 @@ animateLoop() {
 
 drawAll() {
     if (!this.ctx) return;
-   this.drawBoard();
+    this.drawBoard();
 
-    // --- Подсказка: два предмета тянутся друг к другу (синхронно и зеркально) ---
-if (this.hintAnimations.length === 2) {
-    const h1 = this.hintAnimations[0];
-    const h2 = this.hintAnimations[1];
-    const phase = this.hintPhase;
+    // --- Подсказка: два предмета тянутся друг к другу ---
+    if (this.hintAnimations.length === 2) {
+        const h1 = this.hintAnimations[0];
+        const h2 = this.hintAnimations[1];
+        const phase = this.hintPhase;
 
-    const moveDuration = 2;
-    const pauseDuration = 1 - moveDuration;
+        const moveDuration = 2;
+        let effectivePhase = 0;
+        let isPaused = false;
 
-    let effectivePhase = 0;
-    let isPaused = false;
+        if (phase < moveDuration) {
+            const t = phase / moveDuration;
+            effectivePhase = t * 2;
+        } else {
+            isPaused = true;
+            effectivePhase = 0;
+        }
 
-    if (phase < moveDuration) {
-        const t = phase / moveDuration;
-        effectivePhase = t * 2;
-    } else {
-        isPaused = true;
-        effectivePhase = 0;
-    }
+        const amplitude = Math.min(this.cellWidth, this.cellHeight) * 0.06;
+        const scaleAmp = 0.03;
+        const offset = isPaused ? 0 : amplitude * Math.sin(effectivePhase * Math.PI * 2);
+        const scale = isPaused ? 1 : 1 + scaleAmp * Math.sin(effectivePhase * Math.PI * 2);
 
-    const amplitude = Math.min(this.cellWidth, this.cellHeight) * 0.06;
-    const scaleAmp = 0.03;
-    const offset = isPaused ? 0 : amplitude * Math.sin(effectivePhase * Math.PI * 2);
-    const scale = isPaused ? 1 : 1 + scaleAmp * Math.sin(effectivePhase * Math.PI * 2);
-
-    // Первый предмет
-    const cell1 = this.board[h1.row]?.[h1.col];
-   // ★★★ Не рисуем, если клетка заблокирована и скрыта коробкой ★★★
-    if (cell1 && cell1.type && !(cell1.locked && cell1.covered === true)) {
-        const x1 = h1.col * this.cellWidth + this.cellWidth / 2;
-        const y1 = h1.row * this.cellHeight + this.cellHeight / 2;
-        const tx1 = h1.targetCol * this.cellWidth + this.cellWidth / 2;
-        const ty1 = h1.targetRow * this.cellHeight + this.cellHeight / 2;
-        const dx1 = tx1 - x1, dy1 = ty1 - y1;
-        const len1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
-        if (len1 > 0) {
-            const shiftX1 = (dx1 / len1) * offset;
-            const shiftY1 = (dy1 / len1) * offset;
-            const size1 = Math.min(this.cellWidth, this.cellHeight) * 0.85 * scale;
-            const img1 = this.getSpriteImage(cell1);
-            if (img1) {
-                this.ctx.save();
-                this.ctx.translate(x1 + shiftX1, y1 + shiftY1);
-                this.ctx.scale(scale, scale);
-                if (!this.isMobile) {
-                this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
-                this.ctx.shadowBlur = 10;
+        // Первый предмет
+        const cell1 = this.board[h1.row]?.[h1.col];
+        if (cell1 && cell1.type && !(cell1.locked && cell1.covered === true)) {
+            const x1 = h1.col * this.cellWidth + this.cellWidth / 2;
+            const y1 = h1.row * this.cellHeight + this.cellHeight / 2;
+            const tx1 = h1.targetCol * this.cellWidth + this.cellWidth / 2;
+            const ty1 = h1.targetRow * this.cellHeight + this.cellHeight / 2;
+            const dx1 = tx1 - x1, dy1 = ty1 - y1;
+            const len1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            if (len1 > 0) {
+                const shiftX1 = (dx1 / len1) * offset;
+                const shiftY1 = (dy1 / len1) * offset;
+                const size1 = Math.min(this.cellWidth, this.cellHeight) * 0.85 * scale;
+                const spriteData1 = this.getSpriteData(cell1);
+                if (spriteData1) {
+                    this.ctx.save();
+                    this.ctx.translate(x1 + shiftX1, y1 + shiftY1);
+                    this.ctx.scale(scale, scale);
+                    if (!this.isMobile) {
+                        this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
+                        this.ctx.shadowBlur = 10;
+                    }
+                    // Рисуем спрайт из атласа
+                    this.ctx.drawImage(
+                        spriteData1.image, spriteData1.sx, spriteData1.sy, spriteData1.sw, spriteData1.sh,
+                        -size1/2, -size1/2, size1, size1
+                    );
+                    this.ctx.restore();
                 }
-                this.ctx.drawImage(img1, -size1 / 2, -size1 / 2, size1, size1);
-                this.ctx.restore();
+            }
+        }
+
+        // Второй предмет – аналогично
+        const cell2 = this.board[h2.row]?.[h2.col];
+        if (cell2 && cell2.type && !(cell2.locked && cell2.covered === true)) {
+            const x2 = h2.col * this.cellWidth + this.cellWidth / 2;
+            const y2 = h2.row * this.cellHeight + this.cellHeight / 2;
+            const tx2 = h2.targetCol * this.cellWidth + this.cellWidth / 2;
+            const ty2 = h2.targetRow * this.cellHeight + this.cellHeight / 2;
+            const dx2 = tx2 - x2, dy2 = ty2 - y2;
+            const len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            if (len2 > 0) {
+                const shiftX2 = (dx2 / len2) * offset;
+                const shiftY2 = (dy2 / len2) * offset;
+                const size2 = Math.min(this.cellWidth, this.cellHeight) * 0.85 * scale;
+                const spriteData2 = this.getSpriteData(cell2);
+                if (spriteData2) {
+                    this.ctx.save();
+                    this.ctx.translate(x2 + shiftX2, y2 + shiftY2);
+                    this.ctx.scale(scale, scale);
+                    if (!this.isMobile) {
+                        this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
+                        this.ctx.shadowBlur = 10;
+                    }
+                    this.ctx.drawImage(
+                        spriteData2.image, spriteData2.sx, spriteData2.sy, spriteData2.sw, spriteData2.sh,
+                        -size2/2, -size2/2, size2, size2
+                    );
+                    this.ctx.restore();
+                }
             }
         }
     }
-    // Второй предмет
-    const cell2 = this.board[h2.row]?.[h2.col];
-    if (cell2 && cell2.type && !(cell2.locked && cell2.covered === true)) {
-        const x2 = h2.col * this.cellWidth + this.cellWidth / 2;
-        const y2 = h2.row * this.cellHeight + this.cellHeight / 2;
-        const tx2 = h2.targetCol * this.cellWidth + this.cellWidth / 2;
-        const ty2 = h2.targetRow * this.cellHeight + this.cellHeight / 2;
-        const dx2 = tx2 - x2, dy2 = ty2 - y2;
-        const len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-        if (len2 > 0) {
-            const shiftX2 = (dx2 / len2) * offset;
-            const shiftY2 = (dy2 / len2) * offset;
-            const size2 = Math.min(this.cellWidth, this.cellHeight) * 0.85 * scale;
-            const img2 = this.getSpriteImage(cell2);
-            if (img2) {
-                this.ctx.save();
-                this.ctx.translate(x2 + shiftX2, y2 + shiftY2);
-                this.ctx.scale(scale, scale);
-                if (!this.isMobile) {
-                this.ctx.shadowColor = 'rgba(255, 215, 0, 0.2)';
+
+    // Рисуем анимации предметов (перемещение из корзинки)
+    for (const anim of this.itemAnimations) {
+        const progress = anim.progress;
+        const x = anim.startX + (anim.endX - anim.startX) * progress;
+        const y = anim.startY + (anim.endY - anim.startY) * progress;
+        const scale = anim.scale + (anim.targetScale - anim.scale) * progress;
+        const size = Math.min(this.cellWidth, this.cellHeight) * scale;
+        const tempItem = { typeIndex: anim.itemTypeIndex, level: anim.itemLevel };
+        const spriteData = this.getSpriteData(tempItem);
+        if (spriteData) {
+            this.ctx.save();
+            this.ctx.translate(x, y);
+            this.ctx.scale(scale / anim.targetScale, scale / anim.targetScale);
+            if (!this.isMobile) {
+                this.ctx.shadowColor = 'rgba(255,255,255,0.1)';
                 this.ctx.shadowBlur = 10;
-                }
-                this.ctx.drawImage(img2, -size2 / 2, -size2 / 2, size2, size2);
-                this.ctx.restore();
             }
+            this.ctx.drawImage(
+                spriteData.image, spriteData.sx, spriteData.sy, spriteData.sw, spriteData.sh,
+                -size/2, -size/2, size, size
+            );
+            this.ctx.restore();
         }
     }
-}
 
-   // Рисуем анимации предметов (перемещение из корзинки)
-for (const anim of this.itemAnimations) {
-    const progress = anim.progress;
-    const x = anim.startX + (anim.endX - anim.startX) * progress;
-    const y = anim.startY + (anim.endY - anim.startY) * progress;
-    const scale = anim.scale + (anim.targetScale - anim.scale) * progress;
-    const size = Math.min(this.cellWidth, this.cellHeight) * scale;
-    // Создаём временный объект для получения картинки
-    const tempItem = { typeIndex: anim.itemTypeIndex, level: anim.itemLevel };
-    const img = this.getSpriteImage(tempItem);
-    if (img) {
-        this.ctx.save();
-        this.ctx.translate(x, y);
-        this.ctx.scale(scale / anim.targetScale, scale / anim.targetScale);
-
-        if (!this.isMobile) {
-        this.ctx.shadowColor = 'rgba(255,255,255,0.1)';
-        this.ctx.shadowBlur = 10;
-        }
-        this.ctx.drawImage(img, -size/2, -size/2, size, size);
-        this.ctx.restore();
-    }
-}
-
-    // --- Рисуем звёздочки ---
+    // --- Рисуем звёздочки (остаётся без изменений) ---
     for (let i = this.stars.length - 1; i >= 0; i--) {
         const s = this.stars[i];
         s.progress += s.speed;
@@ -2019,8 +1968,8 @@ for (const anim of this.itemAnimations) {
         this.ctx.globalAlpha = s.alpha;
         this.ctx.fillStyle = '#ffffff';
         if (!this.isMobile) {
-        this.ctx.shadowColor = '#ffffff';
-        this.ctx.shadowBlur = 12;
+            this.ctx.shadowColor = '#ffffff';
+            this.ctx.shadowBlur = 12;
         }
         this.ctx.beginPath();
         const outerRadius = s.size;
@@ -2037,51 +1986,50 @@ for (const anim of this.itemAnimations) {
         this.ctx.fill();
         this.ctx.restore();
     }
-  
-    this.drawPulseEffects(); //пульс рожающих предметов и рождающихся   
-  // Пульсация при наведении (без зажатия) – только для открытых клеток с возможностью объединения
-if (this.hoverCell && !this.isDragging) {
-    const { row, col } = this.hoverCell;
-    const cell = this.board[row]?.[col];
-    if (!cell || !cell.type) {
-        // если клетка пуста – выходим (но тут не должно быть return, а пропустить)
-        // просто ничего не делаем
-    } else {
-        const isHint = this.hintAnimations.some(h => h.row === row && h.col === col);
-        const canMerge = this.canMergeToLevel(cell.typeIndex, cell.level);
-        // --- Новая логика canSpawn через itemData ---
-        let canSpawn = false;
-        const itemData = this.itemData[cell.typeIndex];
-        if (itemData) {
-            canSpawn = (itemData.spawnable && itemData.spawnLevels.includes(cell.level) && cell.level >= 3) || !!itemData.spawnRules;
-        }
-        if (!cell.locked && !isHint && (canMerge || canSpawn)) {
-            const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
-            if (!hasPulse) {
-                const cw = this.cellWidth;
-                const ch = this.cellHeight;
-                const x = col * cw + cw / 2;
-                const y = row * ch + ch / 2;
-                const time = Date.now() / 1000;
-                const scale = 0.95 + 0.05 * Math.sin(time * 3);
-                const size = Math.min(cw, ch) * 0.85 * scale;
 
-                const img = this.getSpriteImage(cell);
-                if (img) {
-                    this.ctx.save();
-                    this.ctx.translate(x, y);
-                    this.ctx.scale(scale, scale);
-                    if (!this.isMobile) {
-                    this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
-                    this.ctx.shadowBlur = 10;
+    this.drawPulseEffects();
+
+    // Пульсация при наведении (без зажатия)
+    if (this.hoverCell && !this.isDragging) {
+        const { row, col } = this.hoverCell;
+        const cell = this.board[row]?.[col];
+        if (cell && cell.type) {
+            const isHint = this.hintAnimations.some(h => h.row === row && h.col === col);
+            const canMerge = this.canMergeToLevel(cell.typeIndex, cell.level);
+            let canSpawn = false;
+            const itemData = this.itemData[cell.typeIndex];
+            if (itemData) {
+                canSpawn = (itemData.spawnable && itemData.spawnLevels.includes(cell.level) && cell.level >= 3) || !!itemData.spawnRules;
+            }
+            if (!cell.locked && !isHint && (canMerge || canSpawn)) {
+                const hasPulse = this.pulseItems.some(p => p.row === row && p.col === col);
+                if (!hasPulse) {
+                    const cw = this.cellWidth;
+                    const ch = this.cellHeight;
+                    const x = col * cw + cw / 2;
+                    const y = row * ch + ch / 2;
+                    const time = Date.now() / 1000;
+                    const scale = 0.95 + 0.05 * Math.sin(time * 3);
+                    const size = Math.min(cw, ch) * 0.85 * scale;
+                    const spriteData = this.getSpriteData(cell);
+                    if (spriteData) {
+                        this.ctx.save();
+                        this.ctx.translate(x, y);
+                        this.ctx.scale(scale, scale);
+                        if (!this.isMobile) {
+                            this.ctx.shadowColor = 'rgba(255, 176, 124, 0.2)';
+                            this.ctx.shadowBlur = 10;
+                        }
+                        this.ctx.drawImage(
+                            spriteData.image, spriteData.sx, spriteData.sy, spriteData.sw, spriteData.sh,
+                            -size/2, -size/2, size, size
+                        );
+                        this.ctx.restore();
                     }
-                    this.ctx.drawImage(img, -size/2, -size/2, size, size);
-                    this.ctx.restore();
                 }
             }
         }
     }
-}
 },
 
 drawPulseEffects() {
@@ -2092,7 +2040,6 @@ drawPulseEffects() {
 
     for (const p of this.pulseItems) {
         const item = this.board[p.row]?.[p.col];
-        // ★ Добавляем проверку: если клетка пуста (нет type), пропускаем
         if (!item || !item.type) continue;
 
         const x = p.col * cw + cw / 2;
@@ -2100,17 +2047,20 @@ drawPulseEffects() {
         const scale = 1 + (p.maxScale - 1) * Math.sin(p.progress * Math.PI);
         const size = Math.min(cw, ch) * 0.85 * scale;
 
-        const img = this.getSpriteImage(item);
-        if (!img) continue;
+        const spriteData = this.getSpriteData(item);
+        if (!spriteData) continue;
 
         ctx.save();
         ctx.translate(x, y);
         ctx.scale(scale, scale);
         if (!this.isMobile) {
-                ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
-                ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 176, 124, 0.3)';
+            ctx.shadowBlur = 15;
         }
-        ctx.drawImage(img, -size/2, -size/2, size, size);
+        ctx.drawImage(
+            spriteData.image, spriteData.sx, spriteData.sy, spriteData.sw, spriteData.sh,
+            -size/2, -size/2, size, size
+        );
         ctx.restore();
     }
 },
@@ -2131,7 +2081,7 @@ drawPulseEffects() {
     ghost.style.width = size + 'px';
     ghost.style.height = size + 'px';
 
-    const imgSrc = this.getImageSrc(item.typeIndex, item.level);
+    const imgSrc = this.getItemImageDataUrl(item.typeIndex, item.level);
     if (imgSrc) {
         ghost.innerHTML = `<img src="${imgSrc}" style="width:100%; height:100%; object-fit: contain;">`;
     } else {
@@ -2504,19 +2454,25 @@ drawBoard() {
                 const size = Math.min(cw, ch) * 0.8;
                 const offsetX = (cw - size) / 2;
                 const offsetY = (ch - size) / 2;
-                const img = this.getSpriteImage(cell);
-                ctx.save();
-                if (isLocked) ctx.globalAlpha = 0.5;
-                if (img) {
-                    ctx.drawImage(img, x + offsetX, y + offsetY, size, size);
+                const spriteData = this.getSpriteData(cell);
+                if (spriteData) {
+                    ctx.save();
+                    if (isLocked) ctx.globalAlpha = 0.5;
+                    const { image, sx, sy, sw, sh } = spriteData;
+                    // Рисуем спрайт из атласа (вырезаем нужную область)
+                    ctx.drawImage(image, sx, sy, sw, sh, x + offsetX, y + offsetY, size, size);
+                    ctx.restore();
                 } else {
+                    // fallback: рисуем эмодзи, если спрайт не найден
+                    ctx.save();
+                    if (isLocked) ctx.globalAlpha = 0.5;
                     ctx.font = (size * 0.9) + 'px sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = isLocked ? '#5a4a3a' : '#2a1f14';
                     ctx.fillText(this.itemTypes[cell.typeIndex % this.itemTypes.length] || '🍀', x + cw/2, y + ch/2 + 2);
+                    ctx.restore();
                 }
-                ctx.restore();
             }
 
             // ---- Метка генератора (уголки) ----
@@ -2543,29 +2499,34 @@ drawBoard() {
             // ---- Таймер перезарядки ----
             if (cell && cell.charges !== undefined && cell.charges !== Infinity && cell.cooldownEnd > Date.now()) {
                 this.drawCooldownTimer(ctx, cell, x, y, cw, ch);
-            }
-
-            // ---- Паутинка для заблокированных (рисуем поверх предмета) ----
-            if (isLocked && this.webImage) {
-                const webSize = Math.min(cw, ch) * 0.7;
-                const webOffsetX = (cw - webSize) / 2;
-                const webOffsetY = (ch - webSize) / 2;
-                ctx.save();
-                ctx.globalAlpha = 0.6;
-                ctx.drawImage(this.webImage, x + webOffsetX, y + webOffsetY, webSize, webSize);
-                ctx.restore();
-            }
+            }         
+            // ---- Паутинка для заблокированных ----
+                if (isLocked) {
+                    const webSprite = SpriteAtlas.getSprite('ui', 'ui/web.png');
+                    if (webSprite) {
+                        const webSize = Math.min(cw, ch) * 0.7;
+                        const webOffsetX = (cw - webSize) / 2;
+                        const webOffsetY = (ch - webSize) / 2;
+                        ctx.save();
+                        ctx.globalAlpha = 0.6;
+                        ctx.drawImage(webSprite.image, webSprite.sx, webSprite.sy, webSprite.sw, webSprite.sh, x + webOffsetX, y + webOffsetY, webSize, webSize);
+                        ctx.restore();
+                    }
+                }
 
             // ---- Коробка (covered) – поверх всего, НЕПРОЗРАЧНАЯ ----
-            if (cell && cell.covered === true && this.boxImage) {
-                const size = Math.min(cw, ch) * 0.85;
-                const offsetX = (cw - size) / 2;
-                const offsetY = (ch - size) / 2;
-                ctx.save();
-                ctx.globalAlpha = 1.0;   // полностью непрозрачная
-                ctx.drawImage(this.boxImage, x + offsetX, y + offsetY, size, size);
-                ctx.restore();
-            }
+                    if (cell && cell.covered === true) {
+                        const boxSprite = SpriteAtlas.getSprite('ui', 'ui/box.png');
+                        if (boxSprite) {
+                            const size = Math.min(cw, ch) * 0.85;
+                            const offsetX = (cw - size) / 2;
+                            const offsetY = (ch - size) / 2;
+                            ctx.save();
+                            ctx.globalAlpha = 1.0;
+                            ctx.drawImage(boxSprite.image, boxSprite.sx, boxSprite.sy, boxSprite.sw, boxSprite.sh, x + offsetX, y + offsetY, size, size);
+                            ctx.restore();
+                        }
+                    }
         }
     }
 
@@ -2608,48 +2569,48 @@ drawBoard() {
         }
     }
 
-    // ---- Рамка выделения (комикс-стиль) ----
-    if (this.selectedCell) {
-        const { row, col } = this.selectedCell;
-        const x = col * cw;
-        const y = row * ch;
+  // ---- Рамка выделения (комикс-стиль) ----
+if (this.selectedCell) {
+    const { row, col } = this.selectedCell;
+    const x = col * cw;
+    const y = row * ch;
+    const frameSprite = SpriteAtlas.getSprite('ui', 'ui/kletkaramka.png');
+    if (frameSprite) {
         ctx.save();
-        if (this.frameImage) {
-            ctx.drawImage(this.frameImage, x, y, cw, ch);
-        } else {
-            ctx.strokeStyle = '#ac7d4f';
-            ctx.lineWidth = Math.max(2, Math.min(cw, ch) * 0.04);
-            ctx.strokeRect(x + 3, y + 3, cw - 6, ch - 6);
-            const d = 8;
-            ctx.lineWidth = Math.max(1.5, Math.min(cw, ch) * 0.03);
-            ctx.strokeStyle = '#d4a373';
-            // Верхний левый
-            ctx.beginPath();
-            ctx.moveTo(x + 6, y + d);
-            ctx.lineTo(x + 6, y + 6);
-            ctx.lineTo(x + d, y + 6);
-            ctx.stroke();
-            // Верхний правый
-            ctx.beginPath();
-            ctx.moveTo(x + cw - d, y + 6);
-            ctx.lineTo(x + cw - 6, y + 6);
-            ctx.lineTo(x + cw - 6, y + d);
-            ctx.stroke();
-            // Нижний левый
-            ctx.beginPath();
-            ctx.moveTo(x + 6, y + ch - d);
-            ctx.lineTo(x + 6, y + ch - 6);
-            ctx.lineTo(x + d, y + ch - 6);
-            ctx.stroke();
-            // Нижний правый
-            ctx.beginPath();
-            ctx.moveTo(x + cw - d, y + ch - 6);
-            ctx.lineTo(x + cw - 6, y + ch - 6);
-            ctx.lineTo(x + cw - 6, y + ch - d);
-            ctx.stroke();
-        }
+        ctx.drawImage(frameSprite.image, frameSprite.sx, frameSprite.sy, frameSprite.sw, frameSprite.sh, x, y, cw, ch);
+        ctx.restore();
+    } else {
+        // fallback (старый код)
+        ctx.save();
+        ctx.strokeStyle = '#ac7d4f';
+        ctx.lineWidth = Math.max(2, Math.min(cw, ch) * 0.04);
+        ctx.strokeRect(x + 3, y + 3, cw - 6, ch - 6);
+        const d = 8;
+        ctx.lineWidth = Math.max(1.5, Math.min(cw, ch) * 0.03);
+        ctx.strokeStyle = '#d4a373';
+        ctx.beginPath();
+        ctx.moveTo(x + 6, y + d);
+        ctx.lineTo(x + 6, y + 6);
+        ctx.lineTo(x + d, y + 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + cw - d, y + 6);
+        ctx.lineTo(x + cw - 6, y + 6);
+        ctx.lineTo(x + cw - 6, y + d);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + 6, y + ch - d);
+        ctx.lineTo(x + 6, y + ch - 6);
+        ctx.lineTo(x + d, y + ch - 6);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + cw - d, y + ch - 6);
+        ctx.lineTo(x + cw - 6, y + ch - 6);
+        ctx.lineTo(x + cw - 6, y + ch - d);
+        ctx.stroke();
         ctx.restore();
     }
+}
 },
 
 updateUI() {
@@ -2658,7 +2619,8 @@ updateUI() {
     const menuScore = document.getElementById('menu-score-display');
     const dialogueScore = document.getElementById('dialogue-score');
 
-    const pointsImg = '<img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;">';
+  const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
+const pointsImg = `<img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;">`;
 
     if (scoreEl) scoreEl.innerHTML = pointsImg + ' ' + this.score;
    // if (levelEl) levelEl.textContent = this.level;
@@ -2897,7 +2859,7 @@ onGiftClick() {
     const level = 1;
 
     const itemName = getItemName(randomType, level);
-    const imgSrc = this.getImageSrc(randomType, level);
+   const imgSrc = this.getItemImageDataUrl(randomType, level);
 
     // Рандомный текст из четырёх вариантов
     const texts = [
@@ -3063,8 +3025,32 @@ updateProgressBar() {
 },
 
 showBoxDisappear(row, col) {
-    // Если картинка не загружена – убираем коробку мгновенно (без анимации)
-    if (!this.boxImage || !this.boxImage.complete || this.boxImage.naturalWidth === 0) {
+    if (this.isMobile) {
+    if (this.board[row] && this.board[row][col]) {
+        this.board[row][col].covered = false;
+        this.drawBoard();
+    }
+    return;
+}
+
+    // Получаем dataURL коробки из атласа
+    const boxSprite = SpriteAtlas.getSprite('ui', 'ui/box.png');
+    let boxSrc = null;
+    if (boxSprite) {
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = boxSprite.sw;
+            canvas.height = boxSprite.sh;
+            ctx.drawImage(boxSprite.image, boxSprite.sx, boxSprite.sy, boxSprite.sw, boxSprite.sh, 0, 0, boxSprite.sw, boxSprite.sh);
+            boxSrc = canvas.toDataURL('image/png');
+        } catch (e) {
+            console.warn('[Game] Ошибка создания dataURL для box', e);
+        }
+    }
+
+    // Если не удалось получить из атласа – убираем коробку мгновенно
+    if (!boxSrc) {
         if (this.board[row] && this.board[row][col]) {
             this.board[row][col].covered = false;
             this.drawBoard();
@@ -3079,22 +3065,19 @@ showBoxDisappear(row, col) {
 
     const canvasRect = this.canvas.getBoundingClientRect();
 
-    // Координаты клетки и размер коробки в CSS-пикселях
     const x = col * this.cellWidth;
     const y = row * this.cellHeight;
     const size = Math.min(this.cellWidth, this.cellHeight) * 0.85;
     const offsetX = (this.cellWidth - size) / 2;
     const offsetY = (this.cellHeight - size) / 2;
 
-    // Прямое позиционирование (без учёта devicePixelRatio, так как canvasRect и cellWidth уже в CSS-пикселях)
     const left = canvasRect.left + x + offsetX;
     const top = canvasRect.top + y + offsetY;
     const width = size;
     const height = size;
 
-    // 1. Создаём DOM-элемент с коробкой
     const el = document.createElement('img');
-    el.src = this.boxImage.src;
+    el.src = boxSrc;
     el.style.cssText = `
         position: fixed;
         left: ${left}px;
@@ -3110,8 +3093,6 @@ showBoxDisappear(row, col) {
     `;
     document.body.appendChild(el);
 
-    // 2. Двойной requestAnimationFrame – даём браузеру два кадра,
-    //    чтобы DOM-элемент гарантированно отрисовался до перерисовки canvas
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             if (this.board[row] && this.board[row][col]) {
@@ -3121,7 +3102,6 @@ showBoxDisappear(row, col) {
         });
     });
 
-    // 3. Через 1 секунду запускаем анимацию исчезновения DOM-элемента
     setTimeout(() => {
         AudioManager.play('box_disappear');
         el.style.transition = 'opacity 1.5s ease, transform 1.5s ease';
@@ -3129,7 +3109,6 @@ showBoxDisappear(row, col) {
         el.style.transform = 'scale(0.2) rotate(10deg)';
     }, 1000);
 
-    // 4. Через 4.5 секунды удаляем элемент
     setTimeout(() => {
         if (el.parentNode) el.parentNode.removeChild(el);
         this._boxAnimations.delete(key);
@@ -3312,7 +3291,6 @@ _drawBackground() {
             const y = r * ch;
             const cell = this.board[r][c];
             const isLocked = cell && cell.locked === true;
-            // Цвет клетки – упрощаем на мобильных
             let fillColor;
             if (this.isMobile) {
                 // Одинаковый цвет для всех клеток (светло-бежевый)
@@ -3386,6 +3364,7 @@ _drawBackground() {
     },
 
   restartBoard() {
+        this._spriteCache = {}; // сброс кэша спрайтов Это гарантирует, что после смены сцены или перезагрузки кеш будет актуален.
     // Сброс состояний взаимодействия
      this.giftPending = false;
        this.isRunning = true;

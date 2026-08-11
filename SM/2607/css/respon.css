@@ -42,11 +42,13 @@
     .center-modal .modal-btn-secondary, .menu-btn-secondary,
     .game-overlay .overlay-btn-secondary {
         border-width: 2px !important;
-        box-shadow: 2px 2px 0 #2a1f14 !important;
+      /*  box-shadow: 2px 2px 0 #2a1f14 !important;*/
+       box-shadow: none;
     }
     .center-modal .modal-btn-secondary, .menu-btn-secondary,
     .game-overlay .overlay-btn-secondary {
-        box-shadow: 1px 1px 0 #2a1f14 !important;
+      /*  box-shadow: 1px 1px 0 #2a1f14 !important;*/
+      box-shadow: none;
     }
 
     /* Интерьеры */
@@ -54,13 +56,15 @@
         width: clamp(40px, 6vh, 60px) !important;
         height: clamp(40px, 6vh, 60px) !important;
         border-width: 2px !important;
-        box-shadow: 2px 2px 0 #2a1f14 !important;
+      /*  box-shadow: 2px 2px 0 #2a1f14 !important;*/
+       box-shadow: none;
     }
     .interior-btn .interior-cost {
         font-size: clamp(8px, 1.2vh, 12px) !important;
         padding: 1px 6px !important;
         border-width: 1.5px !important;
-        box-shadow: 1.5px 1.5px 0 #2a1f14 !important;
+      /*  box-shadow: 1.5px 1.5px 0 #2a1f14 !important;*/
+       box-shadow: none;
     }
     .cloud-part { border-width: 2px !important; }
     .bubble { border-width: 1.5px !important; }
@@ -94,13 +98,15 @@
         width: clamp(30px, 5vh, 45px) !important;
         height: clamp(30px, 5vh, 45px) !important;
         border-width: 1.5px !important;
-        box-shadow: 1.5px 1.5px 0 #2a1f14 !important;
+      /*  box-shadow: 1.5px 1.5px 0 #2a1f14 !important;*/
+       box-shadow: none;
     }
     .interior-btn .interior-cost {
         font-size: clamp(7px, 1vh, 10px) !important;
         padding: 1px 4px !important;
         border-width: 1px !important;
-        box-shadow: 1px 1px 0 #2a1f14 !important;
+     /*   box-shadow: 1px 1px 0 #2a1f14 !important;*/
+      box-shadow: none;
     }
     .cloud-part { border-width: 1.5px !important; }
     .sponge-animation {
@@ -116,11 +122,13 @@
     .center-modal .modal-btn-secondary, .menu-btn-secondary,
     .game-overlay .overlay-btn-secondary {
         border-width: 1px !important;
-        box-shadow: 1px 1px 0 #2a1f14 !important;
+       /* box-shadow: 1px 1px 0 #2a1f14 !important;*/
+        box-shadow: none;
     }
     .center-modal .modal-btn-secondary, .menu-btn-secondary,
     .game-overlay .overlay-btn-secondary {
-        box-shadow: 0.5px 0.5px 0 #2a1f14 !important;
+       /* box-shadow: 0.5px 0.5px 0 #2a1f14 !important;*/
+        box-shadow: none;
     }
     .dialogue-container { padding: 1.2rem 1.2rem 1.4rem !important; border-radius: 16px 16px 0 0 !important; }
     .item-info-cell { width: clamp(2rem, 12vw, 4rem); height: clamp(2rem, 12vw, 4rem); }
@@ -128,7 +136,8 @@
     #right-panel .tb-btn,
     #right-panel-dialogue .tb-btn {
         border-width: 0.8px !important;
-        box-shadow: 0.8px 0.8px 0 #2a1f14 !important;
+      /*  box-shadow: 0.8px 0.8px 0 #2a1f14 !important;*/
+       box-shadow: none;
     }
 }
 
@@ -185,7 +194,8 @@
     }
     #game-board canvas {
         border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 -4px 8px rgba(0,0,0,0.1), inset 0 4px 8px rgba(255,255,255,0.15);
+       /* box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 -4px 8px rgba(0,0,0,0.1), inset 0 4px 8px rgba(255,255,255,0.15);*/
+        box-shadow: none;
     }
     #info-modal-container {
         order: 3 !important;
@@ -258,6 +268,7 @@
          aspect-ratio: auto !important;
            width: auto !important;
     margin: 0 !important;
+    box-shadow: none;
     }
     .order-avatar {
         flex: 0 0 auto !important;
@@ -265,74 +276,43 @@
         height: 100% !important;
         max-height: none !important;
         min-height: unset !important;
-        aspect-ratio: unset !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow: hidden;
-        background: none !important;
-        border: none !important;
+        aspect-ratio: unset !important;       
         border-radius: 0 !important;
         box-shadow: none !important;
         clip-path: inset(0 0 0% 0) !important;
         z-index: 1 !important;
     }
     .order-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain !important;
-        object-position: top;
-        display: block;
+               object-fit: contain !important;
+              display: block;
     }
     .order-price {
-        position: absolute !important;
-        top: clamp(4px, 1vh, 10px) !important;
+         top: clamp(4px, 1vh, 10px) !important;
         right: clamp(4px, 1vw, 10px) !important;
-        z-index: 5 !important;
         font-size: clamp(14px, 3vw, 24px) !important;
-        color: #FFD700 !important;
-        text-shadow: 0 0 8px rgba(0,0,0,0.8) !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 2px !important;
+       text-shadow: none !important;
+        gap: 1px !important;
         background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
     }
     .order-extra {
-        position: absolute !important;
-        top: 25% !important;
+                top: 25% !important;
         right: clamp(4px, 1vw, 10px) !important;
         left: auto !important;
-        z-index: 10 !important;
-        font-size: clamp(10px, 2vw, 16px) !important;
-        color: #2a1f14  !important;
-        background: rgba(0,255,128,0.4) !important;
-        padding: 2px 6px !important;
-        border-radius: 4px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 2px !important;
-        min-height: clamp(14px, 2vh, 24px) !important;
-        min-width: clamp(14px, 2vw, 24px) !important;
-        pointer-events: none !important;
+               font-size: clamp(10px, 2vw, 16px) !important;
+               padding: 2px 4px !important;
+           gap: 1px !important;
         border: 1px solid rgba(255,255,255,0.2) !important;
     }
     .order-tray {
         position: absolute !important;
         bottom: 4% !important;
-        flex: 0 0 30% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        flex: 0 0 30% !important;           
         margin-top: clamp(-10%, -2vh, -20%) !important;
-        z-index: 2 !important;
         padding: 1px 1px !important;
-        box-sizing: border-box !important;
-        overflow: visible !important;
-        width: auto !important;
-        min-width: 30% !important;
-        max-width: 100% !important;
+            overflow: visible !important;             
+         box-shadow: none !important;
+    will-change: auto;
+    border-width: 1px;
     }
     .order-item-img {
         height: clamp(30px, 110%, 100px) !important;
@@ -354,18 +334,16 @@
         position: relative !important;
         top: auto !important;
         right: auto !important;
-        display: flex !important;
-        flex: 0 0 auto !important;
+                flex: 0 0 auto !important;
         flex-direction: row !important;
         justify-content: center !important;
-        align-items: center !important;
-        gap: clamp(8px, 2vw, 20px) !important;
+            gap: clamp(8px, 2vw, 20px) !important;
         padding: clamp(2px, 0.4vh, 6px) 0 !important;
         background: transparent !important;
         border: none !important;
         min-height: clamp(36px, 6vh, 56px) !important;
         width: 100% !important;
-        z-index: 2 !important;
+       
     }
     #right-panel-dialogue .tb-btn {
         width: clamp(32px, 6vw, 56px) !important;
@@ -500,14 +478,16 @@
                 .center-modal .modal-close,
                 .dialog-modal .dialog-close            {
                     border-width: 1.8px !important;
-                    box-shadow: 1.8px 1.8px 0 #2a1f14 !important;
+                   /* box-shadow: 1.8px 1.8px 0 #2a1f14 !important;*/
+                    box-shadow: none;
                 }
                 /* Вторичные кнопки – меньшая тень */
                 .center-modal .modal-btn-secondary,
                 .menu-btn-secondary, .order-tray,
                 .game-overlay .overlay-btn-secondary {
                     border-width: 1.3px !important;
-                    box-shadow: 1px 1px 0 #2a1f14 !important;
+                  /*  box-shadow: 1px 1px 0 #2a1f14 !important;*/
+                   box-shadow: none;
                 }
 
 
@@ -554,6 +534,7 @@
         max-width: 100% !important;
         min-width: 0 !important;
         margin-left: 0 !important;
+         box-shadow: none;
     }
     .order-avatar { width: 20% !important; }
     #order-area {
@@ -659,13 +640,15 @@
             .item-info-cell,
             .info-item-preview {
                 border-width: 1.7px !important;
-                box-shadow: 1.7px 1.7px 0 #2a1f14 !important;
+               /* box-shadow: 1.7px 1.7px 0 #2a1f14 !important;*/
+                box-shadow: none;
             }
             /* Вторичные кнопки – меньшая тень */
             .center-modal .modal-btn-secondary,.order-tray,
             .menu-btn-secondary,            .game-overlay .overlay-btn-secondary {
                 border-width: 1.3px !important;
-                box-shadow: 1.3px 1.3px 0 #2a1f14 !important;
+               /* box-shadow: 1.3px 1.3px 0 #2a1f14 !important;*/
+                box-shadow: none;
             }
 }
 

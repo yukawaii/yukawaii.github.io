@@ -12,28 +12,16 @@ const OrderManager = {
     avatarFileNames: [],
     ordersCreatedInScene: 0,   // счётчик заказов, созданных в текущей сцене
 
-    // --- Загрузка аватаров (без изменений) ---
     loadAvatars(callback) {
         if (this.avatarFileNames.length > 0) {
             callback && callback();
-            return;
+            return;        }
+        // Предполагаем, что у нас есть k1..k10
+        for (let i = 1; i <= 10; i++) {
+            this.avatarFileNames.push(`k${i}.png`);
         }
-        let i = 1;
-        const tryLoad = () => {
-            const img = new Image();
-            img.onload = () => {
-                this.avatarFileNames.push(`k${i}.png`);
-                i++;
-                tryLoad();
-            };
-            img.onerror = () => {
-                callback && callback();
-            };
-            img.src = `images/chara/pokupateli/k${i}.png`;
-        };
-        tryLoad();
+        callback && callback();
     },
-
     // --- Инициализация ---
  init(game) {
     this.game = game;
@@ -243,12 +231,18 @@ const OrderManager = {
     },
 
     // --- Создание DOM-элемента заказа  ---
-  createOrderElement(order) {
+createOrderElement(order) {
     const el = document.createElement('div');
     el.className = 'order-item';
     el.dataset.orderId = order.id;
 
-    // --- Аватар (без изменений) ---
+    
+    // ★ ОТКЛЮЧАЕМ ПЕРЕХОДЫ НА МОБИЛЬНЫХ
+    if (this.game.isMobile) {
+        el.style.transition = 'none';
+    }
+
+    // --- Аватар ---
     const avatar = document.createElement('div');
     avatar.className = 'order-avatar';
     let avatarFile = 'k1.png';
@@ -256,34 +250,47 @@ const OrderManager = {
         avatarFile = this.avatarFileNames[Math.floor(Math.random() * this.avatarFileNames.length)];
     }
     const img = document.createElement('img');
-    img.src = `images/chara/pokupateli/${avatarFile}`;
-    img.alt = 'Покупатель';
+    const avatarName = avatarFile.replace(/\.[^.]+$/, ''); // без расширения
+    const spriteName = `chara/pokupateli/${avatarName}.png`;
+    const dataUrl = SpriteAtlas.getSpriteDataURL('chara', spriteName);
+    if (dataUrl) {
+        img.src = dataUrl;
+    } else {
+        img.src = `images/chara/pokupateli/${avatarFile}`;
+    }
+    img.alt = 'Покупатель'; 
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
     img.style.objectPosition = 'top';
     avatar.appendChild(img);
 
-    const animNames = [
-        'sway-horizontal', 'sway-horizontal-strong', 'sway-horizontal-weak',
-        'sway-vertical', 'sway-vertical-strong', 'sway-vertical-weak'
-    ];
-    const randomAnim = animNames[Math.floor(Math.random() * animNames.length)];
-    const duration = 2 + Math.random() * 3;
-    const delay = Math.random() * 2;
-    avatar.style.animationName = randomAnim;
-    avatar.style.animationDuration = duration + 's';
-    avatar.style.animationDelay = delay + 's';
-    avatar.style.animationIterationCount = 'infinite';
-    avatar.style.animationTimingFunction = 'ease-in-out';
-    avatar.style.transformOrigin = 'bottom center';
-    avatar.style.animationFillMode = 'backwards';
+    // ★ Анимация аватара ТОЛЬКО для ПК (не на мобильных)
+    if (!this.game.isMobile) {
+        const animNames = [
+            'sway-horizontal', 'sway-horizontal-strong', 'sway-horizontal-weak',
+            'sway-vertical', 'sway-vertical-strong', 'sway-vertical-weak'
+        ];
+        const randomAnim = animNames[Math.floor(Math.random() * animNames.length)];
+        const duration = 2 + Math.random() * 3;
+        const delay = Math.random() * 2;
+        avatar.style.animationName = randomAnim;
+        avatar.style.animationDuration = duration + 's';
+        avatar.style.animationDelay = delay + 's';
+        avatar.style.animationIterationCount = 'infinite';
+        avatar.style.animationTimingFunction = 'ease-in-out';
+        avatar.style.transformOrigin = 'bottom center';
+        avatar.style.animationFillMode = 'backwards';
+    }
+    // На мобильных анимация не задаётся – аватар статичен
+
     el.appendChild(avatar);
 
     // --- Цена (звёзды) ---
     const price = document.createElement('div');
     price.className = 'order-price';
-    price.innerHTML = `<img src="images/ui/points.png" style="width:1.2em;height:1.2em;vertical-align:middle;"> ${order.stars}`;
+  const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
+price.innerHTML = `<img src="${pointsUrl}" style="width:1.2em;height:1.2em;vertical-align:middle;"> ${order.stars}`;
     el.appendChild(price);
 
     // --- Единый tray для всех предметов (в ряд) ---
@@ -302,6 +309,19 @@ const OrderManager = {
     tray.style.minWidth = '40px';
     tray.style.position = 'relative';
 
+   // ★ Тени и будет-чейндж – только для ПК
+    if (!this.game.isMobile) {
+              tray.style.willChange = 'transform';         // для плавной анимации появления
+        // Фоновые полоски (уже было)
+        tray.style.backgroundImage = 'repeating-linear-gradient(45deg, rgba(40,30,20,0.05) 0px, rgba(40,30,20,0.05) 4px, transparent 4px, transparent 8px)';
+    } else {
+        // На мобильных – убираем тени и will-change (экономия)
+        tray.style.boxShadow = 'none';
+        tray.style.willChange = 'auto';
+        // Можно также уменьшить border-width, если нужно
+        tray.style.borderWidth = '1px';
+    }
+
     // Для каждого предмета создаём слот с иконкой и галочкой (если выполнено)
     order.items.forEach((item, index) => {
         const slot = document.createElement('div');
@@ -314,7 +334,8 @@ const OrderManager = {
 
         const icon = document.createElement('img');
         icon.className = 'order-item-img';
-        icon.src = `images/level${item.level}/${this.game.imageNames[item.typeIndex]}.png`;
+   const iconSrc = this.game.getItemImageDataUrl(item.typeIndex, item.level);
+icon.src = iconSrc;
         icon.alt = getItemName(item.typeIndex, item.level);
         icon.style.width = '100%';
         icon.style.height = '100%';
@@ -357,7 +378,8 @@ const OrderManager = {
     // Обновляем цену
     const price = el.querySelector('.order-price');
     if (price) {
-        price.innerHTML = `<img src="images/ui/points.png" style="width:1.2em;height:1.2em;vertical-align:middle;"> ${order.stars}`;
+       const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
+price.innerHTML = `<img src="${pointsUrl}" style="width:1.2em;height:1.2em;vertical-align:middle;"> ${order.stars}`;
     }
 
     // Находим tray и слоты
@@ -373,7 +395,7 @@ const OrderManager = {
         // Обновляем иконку (на случай изменения уровня/типа)
         const img = slot.querySelector('.order-item-img');
         if (img) {
-            img.src = `images/level${item.level}/${this.game.imageNames[item.typeIndex]}.png`;
+          img.src = this.game.getItemImageDataUrl(item.typeIndex, item.level);
             img.alt = getItemName(item.typeIndex, item.level);
         }
 
@@ -417,19 +439,26 @@ const OrderManager = {
             return;
         }
 
-        this.orders.forEach(order => {
-            const el = this.createOrderElement(order);
-            container.appendChild(el);
-            requestAnimationFrame(() => {
-                el.classList.add('order-appearing');
-                const onEnd = () => {
-                    el.classList.remove('order-appearing');
-                    el.removeEventListener('animationend', onEnd);
-                };
-                el.addEventListener('animationend', onEnd);
-            });
-            this._renderedIds.add(order.id);
+this.orders.forEach(order => {
+    const el = this.createOrderElement(order);
+    container.appendChild(el);
+
+    if (!this.game.isMobile) {
+        requestAnimationFrame(() => {
+            el.classList.add('order-appearing');
+            const onEnd = () => {
+                el.classList.remove('order-appearing');
+                el.removeEventListener('animationend', onEnd);
+            };
+            el.addEventListener('animationend', onEnd);
         });
+    } else {
+        // На мобильных – сразу показываем без анимации
+        el.style.opacity = '1';
+        el.style.transform = 'scale(1)';
+    }
+    this._renderedIds.add(order.id);
+});
     },
 
     // --- Проверка дропа (теперь ищем невыполненный предмет) ---
@@ -502,23 +531,29 @@ const OrderManager = {
         // Случайное целевое количество от minActive до maxActive
         const target = this.minActive + Math.floor(Math.random() * (this.maxActive - this.minActive + 1));
         const toAdd = target - currentCount;
-        for (let i = 0; i < toAdd; i++) {
-            const newOrder = this.generateSingleOrder();
-            if (newOrder) {
-                this.orders.push(newOrder);
-                this._renderedIds.add(newOrder.id);
-                const el = this.createOrderElement(newOrder);
-                container.appendChild(el);
-                requestAnimationFrame(() => {
-                    el.classList.add('order-appearing');
-                    const onEnd = () => {
-                        el.classList.remove('order-appearing');
-                        el.removeEventListener('animationend', onEnd);
-                    };
-                    el.addEventListener('animationend', onEnd);
-                });
-            }
+ for (let i = 0; i < toAdd; i++) {
+    const newOrder = this.generateSingleOrder();
+    if (newOrder) {
+        this.orders.push(newOrder);
+        this._renderedIds.add(newOrder.id);
+        const el = this.createOrderElement(newOrder);
+        container.appendChild(el);
+
+        if (!this.game.isMobile) {
+            requestAnimationFrame(() => {
+                el.classList.add('order-appearing');
+                const onEnd = () => {
+                    el.classList.remove('order-appearing');
+                    el.removeEventListener('animationend', onEnd);
+                };
+                el.addEventListener('animationend', onEnd);
+            });
+        } else {
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1)';
         }
+    }
+}
     }
     // Если заказов >= minActive – ничего не делаем (не удаляем, не добавляем)
 

@@ -43,28 +43,7 @@ const CollectionManager = {
 _buildCategories() {
     this._categories = {};
     const itemData = window.ITEM_DATA || [];
-
-    // ---- ВЫЧИСЛЯЕМ МАКСИМАЛЬНЫЕ УРОВНИ (общая функция) ----
-    let maxLevels = window.getMaxLevelsForItems ? window.getMaxLevelsForItems() : null;
-    if (!maxLevels || maxLevels.length === 0) {
-        // fallback – пробегаем по spriteMap (если есть)
-        const spriteMap = this._game?.spriteMap || {};
-        maxLevels = new Array(itemData.length).fill(0);
-        for (const mapKey in spriteMap) {
-            const parts = mapKey.split('_');
-            if (parts.length === 2) {
-                const level = parseInt(parts[0], 10);
-                const typeIndex = parseInt(parts[1], 10);
-                if (typeIndex < maxLevels.length && level > maxLevels[typeIndex]) {
-                    maxLevels[typeIndex] = level;
-                }
-            }
-        }
-        // если всё равно нули – хотя бы 1
-        for (let i = 0; i < maxLevels.length; i++) {
-            if (maxLevels[i] === 0) maxLevels[i] = 1;
-        }
-    }
+    const maxLevels = window.getMaxLevelsForItems ? window.getMaxLevelsForItems() : [];
 
     for (const item of itemData) {
         const category = item.categoryKey || 'Прочее';
@@ -119,7 +98,8 @@ _buildCategories() {
         const btn = document.createElement('button');
         btn.id = 'collection-btn';
         btn.className = 'tb-btn';
-        btn.innerHTML = `<img src="images/ui/colect.png" style="width:70%; height:70%; object-fit:contain;">`;
+      const colectUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/colect.png') || '';
+btn.innerHTML = `<img src="${colectUrl}" style="width:70%; height:70%; object-fit:contain;">`;
         btn.addEventListener('pointerdown', () => {
             this.openCollectionModal();
         });
@@ -165,27 +145,42 @@ _buildCategories() {
 
         const modalBody = this._modalInstance?.querySelector('.modal-body');
         if (modalBody) {
-            modalBody.addEventListener('click', (e) => {
-                const target = e.target.closest('.collection-cell');
-                if (!target) return;
-                const key = target.dataset.key;
-                if (key && this._stickerRemoved[key] === undefined) {
-                    this._stickerRemoved[key] = true;
-                    this._saveProgress();
-                    this._refreshModal();
-                }
-            });
+           modalBody.addEventListener('click', (e) => {
+    // 1. Обработка клика по ячейке (стикер)
+    const target = e.target.closest('.collection-cell');
+    if (target) {
+        const key = target.dataset.key;
+        if (key && this._stickerRemoved[key] === undefined) {
+            // Отмечаем стикер как снятый
+            this._stickerRemoved[key] = true;
+            this._saveProgress();
 
-            modalBody.addEventListener('click', (e) => {
-                const catBtn = e.target.closest('.category-btn');
-                if (catBtn) {
-                    const cat = catBtn.dataset.category;
-                    if (cat && this._categoryList.includes(cat)) {
-                        this._currentCategory = cat;
-                        this._refreshModal();
-                    }
-                }
-            });
+            // Обновляем только эту ячейку
+            const [typeIndex, level] = key.split('_').map(Number);
+            const discovered = this._discovered[key];
+            let innerHtml;
+            if (discovered) {
+                const src = this._game?.getItemImageDataUrl(typeIndex, level) || '';
+                innerHtml = `<img src="${src}" alt="" style="width:90%; height:90%; object-fit:contain;">`;
+            } else {
+                innerHtml = `<span style="font-size:clamp(1rem, 3vw, 2rem); color:#aaa;">?</span>`;
+            }
+            target.innerHTML = innerHtml;
+            target.classList.remove('pulse-attention'); // убираем анимацию
+        }
+        return; // не идём дальше
+    }
+
+    // 2. Обработка клика по кнопке категории (оставляем как было)
+    const catBtn = e.target.closest('.category-btn');
+    if (catBtn) {
+        const cat = catBtn.dataset.category;
+        if (cat && this._categoryList.includes(cat)) {
+            this._currentCategory = cat;
+            this._refreshModal();
+        }
+    }
+});
         }
     },
 
@@ -273,7 +268,7 @@ _renderModalContent(category) {
             let innerHtml = '';
             if (stickerRemoved) {
                 if (discovered) {
-                    const src = this._game?.getImageSrc(typeIndex, level) || '';
+                  const src = this._game?.getItemImageDataUrl(typeIndex, level) || '';
                     innerHtml = `<img src="${src}" alt="" style="width:90%; height:90%; object-fit:contain;">`;
                 } else {
                     innerHtml = `<span style="font-size:clamp(1rem, 3vw, 2rem); color:#aaa;">?</span>`;
@@ -330,7 +325,7 @@ _renderModalContent(category) {
     for (const cat of this._categoryList) {
         const isActive = cat === category;
         const first = this._categories[cat][0];
-        const imgSrc = first ? this._game?.getImageSrc(first.typeIndex, first.level) : '';
+        const imgSrc = first ? this._game?.getItemImageDataUrl(first.typeIndex, first.level) : '';
         html += `
             <button class="category-btn ${isActive ? 'active' : ''}" data-category="${cat}" style="
                 border: none;

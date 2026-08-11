@@ -31,7 +31,7 @@
             <div class="menu-content">
                 <div class="menu-title" data-lkey="menu_title">🍜 Уютные<br>Лапки</div>
                 <div class="menu-subtitle" data-lkey="menu_sub">~ Кафе Котёнка ~</div>
-                <div class="menu-score" id="menu-score-display"><img src="images/ui/points.png" style="width:1.5em; height:1.5em; vertical-align:middle;"> 0</div>
+                <div class="menu-score" id="menu-score-display"><img src="" style="width:1.5em; height:1.5em; vertical-align:middle;"> 0</div>
                 <button class="menu-btn" id="menu-play-btn" data-lkey="menu_play">Играть</button>
                 <div class="menu-button-row">
                <button class="menu-btn-settings" id="menu-settings-btn">⚙️</button>
@@ -59,7 +59,7 @@
                         <div class="progress-bar-track">
                             <div class="progress-bar-fill" id="dialogue-progress-fill" style="width: 0%;"></div>
                         </div>
-                        <img src="images/ui/podarok.png" class="progress-gift-icon" alt="подарок">
+                        <img src="" class="progress-gift-icon" alt="подарок">
                     </div>
                 </div>
                          <!-- Индикатор прогресса (десктоп) -->
@@ -76,7 +76,7 @@
             <button class="tb-btn subscene-toggle-btn" id="subscene-toggle-btn-dialogue">🔨</button>
         </div>
         <button class="tb-btn" id="dialogue-home-btn">
-                <img src="images/ui/menu.png" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
+                <img src="" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
             </button>
     </div>
 
@@ -121,7 +121,7 @@
                                 <div class="progress-bar-track">
                                     <div class="progress-bar-fill" id="game-progress-fill" style="width: 0%;"></div>
                                 </div>
-                                <img src="images/ui/podarok.png" class="progress-gift-icon" alt="подарок">
+                                <img src="" class="progress-gift-icon" alt="подарок">
                             </div>
                         </div>
                 </div>
@@ -152,14 +152,14 @@
                     </div>
                     <button class="tb-btn" id="game-pause-btn">⏸</button>
                  <button class="tb-btn" id="game-home-btn">
-                        <img src="images/ui/menu.png" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
+                        <img src="" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
                     </button>
-                      <button class="tb-btn" id="quest-btn" style="display:none;">
+                  <!--   <button class="tb-btn" id="quest-btn" style="display:none;">
                         <img src="images/ui/kvest.png" alt="Задания" style="width: 100%; height: 100%; object-fit: contain;">
                     </button>
                     <button class="tb-btn" id="inventory-btn" style="display:none;">
                         <img src="images/ui/korzina.png" alt="Корзинка" style="width:100%; height:100%; object-fit:contain;">
-                    </button>
+                    </button>--> 
                 </div>
             </div>
         </div>
@@ -173,10 +173,12 @@
         <script src="js/main/dialogue.js"></script>
         <script src="js/main/scene.js"></script>
         <script src="js/main/sceneConfig.js"></script>
+          <script src="js/items/spriteAtlas.js"></script>
         <script src="js/items/itemLocalization.js"></script>
         <script src="js/items/itemData.js"></script>
         <script src="js/main/modal.js"></script>
         <script src="js/main/platform/resize.js"></script>
+
         <script src="js/main/game.js"></script>
         <script src="js/main/order.js"></script>
         <script src="js/items/background.js"></script>
@@ -186,6 +188,8 @@
         <script src="js/qu/quest.js"></script>     
         <script src="js/main/collection.js"></script>
         <script src="js/main/platform/app.js"></script>
+
+        
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 if (typeof App !== 'undefined') App.init();

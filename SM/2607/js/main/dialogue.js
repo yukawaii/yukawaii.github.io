@@ -189,12 +189,13 @@ showDialogue() {
             charContainer.classList.add(step.side === 'right' ? 'character-right' : 'character-left');
         }
 
-        if (step.chara) {
-            const newSrc = `images/chara/${step.chara}`;
-            if (imgEl.src !== newSrc) {
-                imgEl.src = newSrc;
-            }
-
+       if (step.chara) {
+    const charaId = step.chara.replace(/\.[^.]+$/, ''); // без расширения
+    const spriteName = `chara/${charaId}.png`; // например 'chara/gg1.png'
+    const dataUrl = SpriteAtlas.getSpriteDataURL('chara', spriteName);
+    if (dataUrl) {
+        imgEl.src = dataUrl;
+    }
             if (!this._shownCharacters.has(step.chara)) {
                 this._shownCharacters.add(step.chara);
                 imgEl.classList.remove('fade-in-scale');

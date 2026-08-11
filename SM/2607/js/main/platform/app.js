@@ -171,7 +171,8 @@ onPlatformReady() {
         const prog = Storage.getProgress();
         const menuScore = document.getElementById('menu-score-display');
         if (menuScore) {
-            menuScore.innerHTML = `<img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${prog.score || 0}`;
+          const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
+menuScore.innerHTML = `<img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${prog.score || 0}`;
         }
         SceneManager.show('menu');
         this.bindMenuEvents();
@@ -309,24 +310,25 @@ updatePulseState() {
 
     // ---- Обновление кнопки переключения ----
 
-    updateSubsceneButton() {
-        const buttons = document.querySelectorAll('.subscene-toggle-btn');
-        const isGame = this.currentSubscene === 'game';
-        const iconSrc = isGame ? 'images/ui/stroika.png' : 'images/ui/gotovka.png';
-        if (this.subsceneButtonItem) {
-            const imgSrc = Game.getImageSrc(this.subsceneButtonItem.typeIndex, this.subsceneButtonItem.level);
-            buttons.forEach(btn => {
-                btn.innerHTML = `<img src="${imgSrc}" alt="">`;
-                btn.classList.add('has-item');
-            });
-        } else {
-            buttons.forEach(btn => {
-                btn.innerHTML = `<img src="${iconSrc}" alt="">`;
-                btn.classList.remove('has-item');
-            });
-        }
-        this.updatePulseState();
-    },
+updateSubsceneButton() {
+    const buttons = document.querySelectorAll('.subscene-toggle-btn');
+    const isGame = this.currentSubscene === 'game';
+    const iconSrc = isGame ? 'stroika' : 'gotovka';
+    const iconUrl = SpriteAtlas.getSpriteDataURL('ui', `ui/${iconSrc}.png`) || '';
+    if (this.subsceneButtonItem) {
+        const imgSrc = Game.getItemImageDataUrl(this.subsceneButtonItem.typeIndex, this.subsceneButtonItem.level);
+        buttons.forEach(btn => {
+            btn.innerHTML = `<img src="${imgSrc}" alt="">`;
+            btn.classList.add('has-item');
+        });
+    } else {
+        buttons.forEach(btn => {
+            btn.innerHTML = `<img src="${iconUrl}" alt="">`;
+            btn.classList.remove('has-item');
+        });
+    }
+    this.updatePulseState();
+},
 
     setSubsceneButtonItem(typeIndex, level) {
         this.subsceneButtonItem = { typeIndex, level };
@@ -349,35 +351,45 @@ updatePulseState() {
         }
     },
 
-    showHelpModal() {
+showHelpModal() {
+    // --- Получаем картинки из атласов ---
+    const vedroUrl = Game.getItemImageDataUrl(4, 1);   // ведро уровень 1 (typeIndex 4)
+    const shetkaUrl = Game.getItemImageDataUrl(3, 4);  // щётка уровень 4 (typeIndex 3)
+    const k5Url = SpriteAtlas.getSpriteDataURL('chara', 'chara/pokupateli/k5.png') ||
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect width="100" height="100" fill="%23d9c5a6"/%3E%3Ctext x="50" y="55" font-size="40" text-anchor="middle" fill="%232a1f14"%3E🧑%3C/text%3E%3C/svg%3E';
+    const stroikaUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/stroika.png') ||
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect width="100" height="100" fill="%23d9c5a6"/%3E%3Ctext x="50" y="55" font-size="40" text-anchor="middle" fill="%232a1f14"%3E🔨%3C/text%3E%3C/svg%3E';
+    const korzinaUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/korzina.png') ||
+        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect width="100" height="100" fill="%23d9c5a6"/%3E%3Ctext x="50" y="55" font-size="40" text-anchor="middle" fill="%232a1f14"%3E🧺%3C/text%3E%3C/svg%3E';
+
     const rules = [
         `<div class="help-rule">
             <div class="item-info-cell" style="width:clamp(2.5rem,5vmin,4rem); height:clamp(2.5rem,5vmin,4rem); flex-shrink:0;">
-                <img src="images/level1/vedro.png" style="width:80%; height:80%; object-fit:contain;">
+                <img src="${vedroUrl}" style="width:80%; height:80%; object-fit:contain;">
             </div>
             <span class="help-rule-text">${getText('help_rule1')}</span>
         </div>`,
         `<div class="help-rule">
             <div class="item-info-cell" style="width:clamp(2.5rem,5vmin,4rem); height:clamp(2.5rem,5vmin,4rem); flex-shrink:0;">
-                <img src="images/level4/shetka.png" style="width:80%; height:80%; object-fit:contain;">
+                <img src="${shetkaUrl}" style="width:80%; height:80%; object-fit:contain;">
             </div>
             <span class="help-rule-text">${getText('help_rule2')}</span>
         </div>`,
         `<div class="help-rule">
             <div class="item-info-cell" style="width:clamp(2.5rem,5vmin,4rem); height:clamp(2.5rem,5vmin,4rem); flex-shrink:0;">
-                <img src="images/chara/pokupateli/k5.png" style="width:80%; height:80%; object-fit:contain;">
+                <img src="${k5Url}" style="width:80%; height:80%; object-fit:contain;">
             </div>
             <span class="help-rule-text">${getText('help_rule3')}</span>
         </div>`,
         `<div class="help-rule">
             <div class="item-info-cell" style="width:clamp(2.5rem,5vmin,4rem); height:clamp(2.5rem,5vmin,4rem); flex-shrink:0;">
-                <img src="images/ui/stroika.png" style="width:80%; height:80%; object-fit:contain;">
+                <img src="${stroikaUrl}" style="width:80%; height:80%; object-fit:contain;">
             </div>
             <span class="help-rule-text">${getText('help_rule4')}</span>
         </div>`,
         `<div class="help-rule">
             <div class="item-info-cell" style="width:clamp(2.5rem,5vmin,4rem); height:clamp(2.5rem,5vmin,4rem); flex-shrink:0;">
-                <img src="images/ui/korzina.png" style="width:80%; height:80%; object-fit:contain;">
+                <img src="${korzinaUrl}" style="width:80%; height:80%; object-fit:contain;">
             </div>
             <span class="help-rule-text">${getText('help_rule5')}</span>
         </div>`
@@ -745,7 +757,8 @@ if (giftBtn) giftBtn.remove();
 giftBtn = document.createElement('button');
 giftBtn.id = 'gift-btn';
 giftBtn.className = 'tb-btn';
-giftBtn.innerHTML = `<img src="images/ui/podarok.png" style="width:70%; height:70%; object-fit:contain;" onerror="this.outerHTML='🎁';">`;
+const podarokUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/podarok.png') || '';
+giftBtn.innerHTML = `<img src="${podarokUrl}" style="width:70%; height:70%; object-fit:contain;" onerror="this.outerHTML='🎁';">`;
 giftBtn.style.display = 'none';
 giftBtn.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
@@ -759,7 +772,8 @@ if (rightPanel) rightPanel.appendChild(giftBtn);
         tvBtn = document.createElement('button');
         tvBtn.id = 'tv-btn';
         tvBtn.className = 'tb-btn';
-        tvBtn.innerHTML = `<img src="images/ui/tv.png" style="width:70%; height:70%; object-fit:contain;">`;
+       const tvUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/tv.png') || '';
+tvBtn.innerHTML = `<img src="${tvUrl}" style="width:70%; height:70%; object-fit:contain;">`;
         // Видимость – только если реклама доступна
         tvBtn.style.display = Platform.isRewardedAdAvailable() ? 'flex' : 'none';
         tvBtn.addEventListener('pointerdown', (e) => {
@@ -775,7 +789,8 @@ if (questBtn) questBtn.remove();
 questBtn = document.createElement('button');
 questBtn.id = 'quest-btn';
 questBtn.className = 'tb-btn';
-questBtn.innerHTML = `<img src="images/ui/kvest.png" style="width:70%; height:70%; object-fit:contain;" onerror="this.outerHTML='📋';">`;
+const questUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/kvest.png') || '';
+questBtn.innerHTML = `<img src="${questUrl}" style="width:70%; height:70%; object-fit:contain;" onerror="this.outerHTML='📋';">`;
 questBtn.style.display = 'none';
 questBtn.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
@@ -790,7 +805,8 @@ if (rightPanelDialogue) {
     collectionBtn = document.createElement('button');
     collectionBtn.id = 'collection-btn';
     collectionBtn.className = 'tb-btn';
-    collectionBtn.innerHTML = `<img src="images/ui/colect.png" style="width:70%; height:70%; object-fit:contain;">`;
+   const colectUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/colect.png') || '';
+collectionBtn.innerHTML = `<img src="${colectUrl}" style="width:70%; height:70%; object-fit:contain;">`;
     collectionBtn.addEventListener('pointerdown', () => {
         if (typeof CollectionManager !== 'undefined') {
             CollectionManager.openCollectionModal();
@@ -798,6 +814,18 @@ if (rightPanelDialogue) {
     });
     rightPanelDialogue.appendChild(collectionBtn);
 }    
+
+// Замена иконок home на атлас
+const menuUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/menu.png') || '';
+document.querySelectorAll('#dialogue-home-btn img, #game-home-btn img').forEach(img => {
+    if (img) img.src = menuUrl;
+});
+
+// Замена иконок подарка в прогресс-баре на атлас
+const podarokUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/podarok.png') || '';
+document.querySelectorAll('.progress-gift-icon').forEach(img => {
+    if (img) img.src = podarokUrl;
+});
 
     CollectionManager.init(Game);     
     CollectionManager.updateButtonVisibility();
