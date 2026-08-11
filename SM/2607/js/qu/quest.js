@@ -162,7 +162,9 @@ const QuestManager = {
     _createInteriorButtonElement(quest, cycleId, questIndex) {
         const btn = document.createElement('button');
         btn.className = 'interior-btn fade-in-scale'; // добавляем анимацию появления
-       btn.innerHTML = `<img src="images/ui/stroika.png" alt=""><div class="interior-cost"><img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${quest.cost}</div>`;
+    const stroikaUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/stroika.png') || '';
+const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
+btn.innerHTML = `<img src="${stroikaUrl}" alt=""><div class="interior-cost"><img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${quest.cost}</div>`;
         btn.dataset.cycleId = cycleId;
         btn.dataset.questIndex = questIndex;
         btn.dataset.interiorId = quest.interior?.id || '';
@@ -203,7 +205,7 @@ const QuestManager = {
     _showQuestConfirmModal(quest, btn) {
         const title = getText('quest_title', 'Задание');
         const bodyHtml = this._buildQuestModalContent(quest);
-
+    const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
         const cost = quest.cost;
         const currentScore = this._game.score;
         const disabled = currentScore < cost ? 'disabled' : '';
@@ -211,8 +213,8 @@ const QuestManager = {
         ModalManager.showCenterModal({
             title: title,
             body: bodyHtml,
-            buttons: [{
-                text: `<img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${cost} / <img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${currentScore}`,
+            buttons: [{         
+text: `<img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${cost} / <img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${currentScore}`,
                 class: `quest-accept-btn ${disabled}`,
                 onClick: () => {
                     if (this._game.score >= cost) {
@@ -297,8 +299,9 @@ const QuestManager = {
         });
 
         // 3. Губка
-        const sponge = document.createElement('img');
-        sponge.src = 'images/level1/gubka.png';
+const sponge = document.createElement('img');
+const gubkaUrl = Game.getItemImageDataUrl(10, 1) || ''; // typeIndex 10 – губка, уровень 1
+sponge.src = gubkaUrl;
         sponge.className = 'sponge-animation';
         sponge.style.left = btn.style.left;
         sponge.style.top = btn.style.top;
@@ -401,17 +404,16 @@ const QuestManager = {
         return bodyHtml;
     },
 
-    _renderRewardItem(typeIndex, level, count) {
-        const name = this._game.imageNames[typeIndex] || 'unknown';
-        const src = `images/level${level}/${name}.png`;
-        const label = count > 1 ? count : '';
-        return `<div class="item-info-cell"><img src="${src}" class="item-info-img" alt="">${label ? `<span class="item-info-badge">${label}</span>` : ''}</div>`;
-    },
+_renderRewardItem(typeIndex, level, count) {
+    const src = this._game.getItemImageDataUrl(typeIndex, level) || '';
+    const label = count > 1 ? count : '';
+    return `<div class="item-info-cell"><img src="${src}" class="item-info-img" alt="">${label ? `<span class="item-info-badge">${label}</span>` : ''}</div>`;
+},
 
-    _renderExpCell(exp) {
-        const src = 'images/ui/exp.png';
-        return `<div class="item-info-cell"><img src="${src}" class="item-info-img" alt="exp"><span class="item-info-badge">${exp}</span></div>`;
-    },
+ _renderExpCell(exp) {
+    const expUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/exp.png') || '';
+    return `<div class="item-info-cell"><img src="${expUrl}" class="item-info-img" alt="exp"><span class="item-info-badge">${exp}</span></div>`;
+},
 
     _addRewardsToInventory(quest) {
         if (!quest.rewards || !quest.rewards.items) return;

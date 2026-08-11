@@ -651,7 +651,7 @@ document.getElementById('menu-reset-btn')?.addEventListener('pointerdown', (e) =
         // Переключение в меню
         SceneManager.show('menu');
         const menuScore = document.getElementById('menu-score-display');
-        if (menuScore) menuScore.innerHTML = `<img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> 0`;
+        if (menuScore) menuScore.innerHTML = `<img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> 0`;
 
         // Сброс заказов
         if (typeof OrderManager !== 'undefined' && OrderManager.reset) {
@@ -734,6 +734,7 @@ document.getElementById('menu-reset-btn')?.addEventListener('pointerdown', (e) =
     },
 
 startGame() {
+    const pointsUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/points.png') || '';
     AudioManager.playMusic();
     const isMobile = window.innerWidth < 768 || window.innerHeight < 600;
     Game.isMobile = isMobile;
@@ -751,7 +752,7 @@ const rightPanelDialogue = document.getElementById('right-panel-dialogue');
     ResizeManager.init(Game);
     QuestManager.init(Game);
 
-            // ★ Кнопка подарка
+// ★ Кнопка подарка
 let giftBtn = document.getElementById('gift-btn');
 if (giftBtn) giftBtn.remove();
 giftBtn = document.createElement('button');
@@ -821,8 +822,7 @@ document.querySelectorAll('#dialogue-home-btn img, #game-home-btn img').forEach(
     if (img) img.src = menuUrl;
 });
 
-// Замена иконок подарка в прогресс-баре на атлас
-const podarokUrl = SpriteAtlas.getSpriteDataURL('ui', 'ui/podarok.png') || '';
+// Замена иконок подарка в прогресс-баре (используем ту же переменную)
 document.querySelectorAll('.progress-gift-icon').forEach(img => {
     if (img) img.src = podarokUrl;
 });
@@ -840,11 +840,12 @@ document.querySelectorAll('.progress-gift-icon').forEach(img => {
     }
 
     // ★ Колбэки для обновления UI
-    Game.onScoreUpdate = (score) => {
-        const menuScore = document.getElementById('menu-score-display');
-        if (menuScore) menuScore.innerHTML = `<img src="images/ui/points.png" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${score}`;
-        QuestManager.checkAll();
-    };
+
+Game.onScoreUpdate = (score) => {
+    const menuScore = document.getElementById('menu-score-display');
+    if (menuScore) menuScore.innerHTML = `<img src="${pointsUrl}" style="width:1.5em;height:1.5em;vertical-align:middle;"> ${score}`;
+    QuestManager.checkAll();
+};
         Game.onLevelUpdate = (level) => {
             // Уровень больше не отображается цифрой, обновляем прогресс-бар
             if (typeof Game.updateProgressBar === 'function') {
