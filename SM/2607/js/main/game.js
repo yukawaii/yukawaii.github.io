@@ -3260,6 +3260,12 @@ _drawBackground() {
     const boardHeight = this.canvas.height;
 
     // ---- 1. Фон доски (деревянная текстура) ----
+     if (this.isMobile) {
+        // Упрощённый сплошной цвет без градиента
+        ctx.fillStyle = '#8b6b4d';  // тот же базовый цвет, что и в градиенте
+        ctx.fillRect(0, 0, boardWidth, boardHeight);
+    } else {
+        // Полноценный градиент для ПК
     const woodBase = '#8b6b4d';
     const woodLight = '#a8865e';
     const grad = ctx.createLinearGradient(0, 0, boardWidth, boardHeight);
@@ -3270,7 +3276,6 @@ _drawBackground() {
     ctx.fillRect(0, 0, boardWidth, boardHeight);
 
     // Волокна дерева – убираем на мобильных
-    if (!this.isMobile) {
         ctx.save();
         ctx.strokeStyle = 'rgba(60, 40, 20, 0.15)';
         const hatchLineWidth = Math.max(0.5, Math.min(cw, ch) * 0.03);
@@ -3307,11 +3312,18 @@ _drawBackground() {
             const y = r * ch;
             const cell = this.board[r][c];
             const isLocked = cell && cell.locked === true;
+            // Цвет клетки – упрощаем на мобильных
+            let fillColor;
+            if (this.isMobile) {
+                // Одинаковый цвет для всех клеток (светло-бежевый)
+                fillColor = '#d9c5a6';
+                if (isLocked) fillColor = '#a38564'; // заблокированные темнее
+            } else {
+                // Чередование цветов для ПК
+                fillColor = (r + c) % 2 === 0 ? '#d9c5a6' : '#c9b18c';
+                if (isLocked) fillColor = (r + c) % 2 === 0 ? '#a38564' : '#92785b';
+            }
 
-            let baseColor;
-            if ((r + c) % 2 === 0) baseColor = '#d9c5a6';
-            else baseColor = '#c9b18c';
-            const fillColor = isLocked ? ((r + c) % 2 === 0 ? '#a38564' : '#92785b') : baseColor;
 
             // Закруглённая клетка
             const radius = Math.min(cw, ch) * 0.06;
