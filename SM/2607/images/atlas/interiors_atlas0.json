@@ -1,0 +1,93 @@
+{"frames": [
+
+{
+	"filename": "interiors/door2_fixed.png",
+	"frame": {"x":864,"y":891,"w":535,"h":659},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":535,"h":659},
+	"sourceSize": {"w":535,"h":659}
+},
+{
+	"filename": "interiors/kamin_fixed.png",
+	"frame": {"x":919,"y":1552,"w":632,"h":469},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":632,"h":469},
+	"sourceSize": {"w":632,"h":469}
+},
+{
+	"filename": "interiors/list_fixed.png",
+	"frame": {"x":1,"y":1,"w":1917,"h":560},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1917,"h":560},
+	"sourceSize": {"w":1917,"h":560}
+},
+{
+	"filename": "interiors/okno2_fixed.png",
+	"frame": {"x":697,"y":1602,"w":220,"h":204},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":220,"h":204},
+	"sourceSize": {"w":220,"h":204}
+},
+{
+	"filename": "interiors/okno_fixed.png",
+	"frame": {"x":424,"y":1602,"w":271,"h":274},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":271,"h":274},
+	"sourceSize": {"w":271,"h":274}
+},
+{
+	"filename": "interiors/pled.png",
+	"frame": {"x":1,"y":1602,"w":421,"h":248},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":421,"h":248},
+	"sourceSize": {"w":421,"h":248}
+},
+{
+	"filename": "interiors/podushki.png",
+	"frame": {"x":1,"y":1852,"w":200,"h":148},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":148},
+	"sourceSize": {"w":200,"h":148}
+},
+{
+	"filename": "interiors/pol_fixed.png",
+	"frame": {"x":1,"y":563,"w":1920,"h":326},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1920,"h":326},
+	"sourceSize": {"w":1920,"h":326}
+},
+{
+	"filename": "interiors/stenaC_fixed.png",
+	"frame": {"x":1401,"y":891,"w":552,"h":630},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":552,"h":630},
+	"sourceSize": {"w":552,"h":630}
+},
+{
+	"filename": "interiors/stenaL_fixed.png",
+	"frame": {"x":1,"y":891,"w":861,"h":709},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":861,"h":709},
+	"sourceSize": {"w":861,"h":709}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "interiors_atlas0.png",
+	"format": "RGBA8888",
+	"size": {"w":1954,"h":2022},
+	"scale": "1",
+	"related_multi_packs": [ "interiors_atlas1.json" ],
+	"smartupdate": "$TexturePacker:SmartUpdate:1a00ad27e95864b565750f4964649fa4:eb5d2e4b187ba84e3b4185f829aef433:1d265f8ff42b4c5c9a4cb1ccf264f0d4$"
+}
+}
