@@ -177,7 +177,129 @@ let adPreloaded=false;
 function preloadAd(){ if (typeof vkBridge==='undefined'){ console.log('ℹ️ VK Bridge не доступен, предзагрузка невозможна'); return;} if (adPreloaded){ return;} console.log('📺 Предзагрузка рекламы...'); vkBridge.send('VKWebAppCheckNativeAds',{ ad_format: 'reward'}) .then(function(data){ adPreloaded=true;}) .catch(function(error){ console.warn('⚠️ Ошибка предзагрузки рекламы:', error);});}
 function showAdUnavailableModal(){ const existing=document.querySelector('.modal-window[data-modal="ad-unavailable"]'); if (existing){ return;} const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.setAttribute('data-modal', 'ad-unavailable'); modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:30002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;'; contentDiv.innerHTML=` <div style="font-size:3rem;margin-bottom:10px;">⚠️</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Реклама недоступна</h3><p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">Рекламы сейчас нет.<br>Попробуйте зайти позже! 🕐 </p><button id="adUnavailableOkBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">OK 👌 </button>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.getElementById('adUnavailableOkBtn').onclick=function(){ modalDiv.remove(); showMessage('⚠️ Реклама недоступна, попробуйте позже', 2000);}; modalDiv.onclick=function(e){ if (e.target===modalDiv) modalDiv.remove();};}
 function revealWordsSuccess(){ isWordsRevealed=true; wordsListContainer.style.display='flex'; const wordsHeader=document.getElementById('wordsHeader'); if (wordsHeader){ wordsHeader.style.display='none';} showMessage('📖 Список слов открыт!', 1500);}
-function showRewardedAd(onSuccess, onFail){ if (typeof vkBridge==='undefined'){ console.log('ℹ️ VK Bridge не доступен'); onFail('Реклама временно недоступна'); return;} if (!navigator.onLine){ console.log('ℹ️ Нет интернета'); onFail('Реклама временно недоступна'); return;} showLoadingOverlay(); let isFinished=false; let adStarted=false; const timeoutId=setTimeout(function(){ if (!isFinished){ isFinished=true; hideLoadingOverlay(); console.log('⏰ Таймаут! Реклама не отвечает'); onFail('Реклама временно недоступна');}}, 120000); vkBridge.send('VKWebAppCheckNativeAds',{ ad_format: 'reward'}) .then(function(checkData){ if (isFinished) return; hideLoadingOverlay(); return vkBridge.send('VKWebAppShowNativeAds',{ ad_format: 'reward'});}) .then(function(showData){ if (isFinished) return; isFinished=true; clearTimeout(timeoutId); hideLoadingOverlay(); if (showData && showData.result===true){ adPreloaded=false; onSuccess();} else{ console.log('ℹ️ Реклама не показана (result: false)'); onFail('Реклама не показана');}}) .catch(function(error){ if (isFinished) return; isFinished=true; clearTimeout(timeoutId); hideLoadingOverlay(); console.warn('❌ Ошибка показа рекламы:', error); console.warn('❌ error_type:', error?.error_type); console.warn('❌ error_data:', error?.error_data); onFail('Реклама временно недоступна');});}
+function showRewardedAd(onSuccess, onFail) {
+    console.log('📺 showRewardedAd вызван');
+    console.log('🔍 typeof vkBridge:', typeof vkBridge);
+    console.log('🔍 navigator.onLine:', navigator.onLine);
+    
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge не доступен');
+        onFail('Реклама временно недоступна');
+        return;
+    }
+    
+    if (!navigator.onLine) {
+        console.log('ℹ️ Нет интернета');
+        onFail('Реклама временно недоступна');
+        return;
+    }
+    
+    // ✅ ПОКАЗЫВАЕМ ОВЕРЛЕЙ ЗАГРУЗКИ
+    showLoadingOverlay();
+    
+    let isFinished = false;
+    let isAdShown = false; // флаг: получен ли ответ от VK (успех или ошибка)
+    let timeoutId = null;
+    let isHidden = false; // флаг: вкладка скрыта
+    
+    // Функция очистки таймаута
+    function clearAdTimeout() {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+    }
+    
+    // Функция завершения (успех или ошибка)
+    function finish(result, errorMessage) {
+        if (isFinished) return;
+        isFinished = true;
+        clearAdTimeout();
+        hideLoadingOverlay();
+        
+        // Убираем обработчик видимости, если он был установлен
+        document.removeEventListener('visibilitychange', visibilityHandler);
+        
+        if (result === 'success') {
+            onSuccess();
+        } else {
+            onFail(errorMessage || 'Реклама временно недоступна');
+        }
+    }
+    
+    // Обработчик изменения видимости вкладки
+    function visibilityHandler() {
+        if (document.hidden) {
+            isHidden = true;
+            console.log('📱 Вкладка скрыта — таймаут приостановлен');
+            clearAdTimeout();
+        } else {
+            if (!isFinished) {
+                isHidden = false;
+                console.log('📱 Вкладка активна — таймаут возобновлён');
+                // Перезапускаем таймаут с новым временем (ещё 120 секунд)
+                clearAdTimeout();
+                timeoutId = setTimeout(function() {
+                    if (!isFinished && !isHidden) {
+                        console.log('⏰ Таймаут! Реклама не отвечает');
+                        finish('error', 'Реклама временно недоступна');
+                    }
+                }, 120000); // 120 секунд
+            }
+        }
+    }
+    
+    // Подписываемся на изменение видимости вкладки
+    document.addEventListener('visibilitychange', visibilityHandler);
+    
+    // ⏰ Устанавливаем таймаут на 120 секунд (2 минуты) — достаточно для обычного ожидания
+    timeoutId = setTimeout(function() {
+        if (!isFinished && !isHidden) {
+            console.log('⏰ Таймаут! Реклама не отвечает');
+            finish('error', 'Реклама временно недоступна');
+        } else if (!isFinished && isHidden) {
+            // Если вкладка скрыта, ничего не делаем — таймаут будет перезапущен при возвращении
+            console.log('⏸️ Таймаут приостановлен из-за скрытой вкладки');
+        }
+    }, 120000); // 120 секунд
+    
+    console.log('📺 Проверяем готовность рекламы...');
+    vkBridge.send('VKWebAppCheckNativeAds', {
+        ad_format: 'reward'
+    })
+    .then(function(checkData) {
+        console.log('📺 Проверка рекламы:', checkData);
+        if (isFinished) return;
+        
+        // ✅ СКРЫВАЕМ ОВЕРЛЕЙ, КОГДА РЕКЛАМА ГОТОВА К ПОКАЗУ
+        hideLoadingOverlay();
+        
+        console.log('📺 Отправляем запрос VKWebAppShowNativeAds...');
+        return vkBridge.send('VKWebAppShowNativeAds', {
+            ad_format: 'reward'
+        });
+    })
+    .then(function(showData) {
+        if (isFinished) return;
+        console.log('📺 Ответ от VK Bridge:', showData);
+        console.log('📺 Результат показа:', showData?.result);
+        
+        if (showData && showData.result === true) {
+            adPreloaded = false;
+            finish('success');
+        } else {
+            console.log('ℹ️ Реклама не показана (result: false)');
+            finish('error', 'Реклама не показана');
+        }
+    })
+    .catch(function(error) {
+        if (isFinished) return;
+        console.warn('❌ Ошибка показа рекламы:', error);
+        console.warn('❌ error_type:', error?.error_type);
+        console.warn('❌ error_data:', error?.error_data);
+        finish('error', 'Реклама временно недоступна');
+    });
+}
 function handleRevealWords(){ if (isWordsRevealed){ showMessage('📖 Слова уже открыты', 1000); return;} showConfirmModal();}
 if (revealWordsBtn){ revealWordsBtn.addEventListener('click', handleRevealWords);}
 function resetWordsVisibility(){ isWordsRevealed=false; if (wordsListContainer){ wordsListContainer.style.display='none';} const wordsHeader=document.getElementById('wordsHeader'); if (wordsHeader){ wordsHeader.style.display='flex';} if (revealWordsBtn){ revealWordsBtn.textContent='📖 Показать слова'; revealWordsBtn.style.background='var(--accent-color, #ffa54d)';}}
