@@ -124,6 +124,8 @@ scheduleBannerRetry() {
 
             // Проверка прямых полей
             if (result.result === true || result.success === true || result.status === 'success') {
+                 // ✅ Реклама показана — предзагружаем следующую
+                        this.preloadRewardedAd(); 
                 resolve(true);
                 return;
             }
@@ -152,6 +154,30 @@ scheduleBannerRetry() {
         });
     });
 }
+
+// Предзагрузка рекламы за вознаграждение
+preloadRewardedAd() {
+    if (typeof vkBridge === 'undefined') {
+        console.log('VK Bridge не найден, предзагрузка невозможна');
+        return;
+    }
+
+    const sendMethod = vkBridge.sendPromise || vkBridge.send;
+    sendMethod.call(vkBridge, 'VKWebAppCheckNativeAds', {
+        ad_format: 'reward'
+    })
+    .then((data) => {
+        if (data && data.result) {
+            console.log('✅ Рекламные материалы предзагружены');
+        } else {
+            console.log('⚠️ Рекламные материалы не найдены, запрос отправлен');
+        }
+    })
+    .catch((error) => {
+        console.warn('❌ Ошибка предзагрузки рекламы:', error);
+    });
+}
+
 }
 // ============================================================
 // 3. Простой звуковой движок
@@ -209,6 +235,7 @@ class SudokuGame {
     constructor() {
         this.sound = new SoundManager();
         this.adManager = new AdManager();
+        this.adManager.preloadRewardedAd(); 
         this.difficulty = 'easy';
         this.grid = [];
         this.solution = [];
