@@ -1,2399 +1,311 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-         <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+   <meta charset="UTF-8"><script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
     <title>Судоку</title>
-    <style>
-                        /*основные*/
-                                        * {
-                                            margin: 0;
-                                            padding: 0;
-                                            box-sizing: border-box;
-                                            user-select: none;
-                                            -webkit-tap-highlight-color: transparent;
-
-                                        }
-                                html {
-                                    overflow: hidden !important;
-                                    height: 100% !important;
-                                    max-height: 100% !important;
-                                    position: fixed !important;
-                                    width: 100% !important;
-                                }
-                                iframe, .container, body {
-                                    overflow: hidden !important;
-                                }
-                     body{ overflow: hidden !important; position: fixed !important; width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; overscroll-behavior: none !important; touch-action: none !important; margin: 0 !important; padding: 0 !important;}
-
-                                .container {
-                                    overflow: hidden !important;
-                                }
-                                
-                                       body::before{ content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%); background-size: 100% 100%; z-index: 0; pointer-events: none;}
-                                        .container {
-                                            background: rgba(22, 33, 62, 0.92);
-                                            backdrop-filter: blur(10px);
-                                            padding: 10px;
-                                                border-radius: 24px;
-                                            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-                                            width: 100%;
-                                            max-width: 500px;
-                                            margin: 0 auto 50px; 
-                                                margin-top: 4px!important;
-                                            text-align: center;
-                                            position: relative;
-                                            z-index: 1;
-                                            border: 1px solid rgba(255,255,255,0.05);
-                                            max-height: 95vh;
-                                            overflow: hidden;
-                                        }
-                                        /* МЕНЮ */
-                           #menuScreen {
-                                            display: flex;
-                                            flex-direction: column;
-                                            align-items: center;
-                                            gap: 15px;
-                                            padding: 20px 0;
-                                                    }
-                                        #menuScreen h1 {
-                                            font-size: 3rem;
-                                            color: #e94560;
-                                            text-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
-                                            margin-bottom: 5px;
-                                        }
-                                        #menuScreen .subtitle {
-                                            color: #aaa;
-                                            font-size: 1rem;
-                                            margin-bottom: 10px;
-                                            letter-spacing: 2px;
-                                        }
-                                        .menu-btn{ background: #e94560; color: #fff; border: none; padding: 14px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 85%; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3); touch-action: manipulation;}
-                                        .menu-btn:active {
-                                            transform: scale(0.95);
-                                        }
-                                        .menu-btn.secondary {
-                                            background: #0f3460;
-                                            box-shadow: 0 4px 20px rgba(15, 52, 96, 0.3);
-                                        }
-                                        .menu-btn.secondary.active {
-                                            background: #e94560;
-                                        }
-                                        .menu-btn.social {
-                                            background: #4a6fa5;
-                                            box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3);
-                                        }
-                                        .menu-btn .emoji {
-                                            margin-right: 8px;
-                                        }
-                                        .difficulty-section {
-                                            width: 85%;
-                                            display: grid;
-                                            grid-template-columns: 1fr 1fr;
-                                            gap: 8px;
-                                            margin: 5px 0;
-                                        }
-                                        .action-btn.check-btn {
-                                    background: #2a4a6e;
-                                }
-                                        .diff-btn {
-                                            background: #1a2a4a;
-                                            border: 2px solid transparent;
-                                            color: #aaa;
-                                            padding: 10px;
-                                            border-radius: 12px;
-                                            font-size: 0.9rem;
-                                            font-weight: bold;
-                                            cursor: pointer;
-                                            transition: 0.3s;
-                                            touch-action: manipulation;
-                                        }
-                                        .diff-btn:active {
-                                            transform: scale(0.95);
-                                        }
-                                .diff-btn.active {
-                                    border-color: #e94560;
-                                    color: #fff;
-                                    background: #2a1a3a;
-                                    transform: scale(1.05);
-                                    box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
-                                }
-
-                                /* Дополнительные цвета для выбранных режимов */
-                                .diff-btn.easy.active { 
-                                    background: #1a3a1a; 
-                                    color: #4caf50; 
-                                    border-color: #4caf50;
-                                    box-shadow: 0 0 25px rgba(76, 175, 80, 0.4);
-                                }
-                                .diff-btn.medium.active { 
-                                    background: #3a2a1a; 
-                                    color: #ff9800; 
-                                    border-color: #ff9800;
-                                    box-shadow: 0 0 25px rgba(255, 152, 0, 0.4);
-                                }
-                                .diff-btn.hard.active { 
-                                    background: #3a1a1a; 
-                                    color: #f44336; 
-                                    border-color: #f44336;
-                                    box-shadow: 0 0 25px rgba(244, 67, 54, 0.4);
-                                }
-                                .diff-btn.expert.active { 
-                                    background: #2a1a3a; 
-                                    color: #9c27b0; 
-                                    border-color: #9c27b0;
-                                    box-shadow: 0 0 25px rgba(156, 39, 176, 0.4);
-                                }
-
-                                /* Эффект при наведении */
-                                .diff-btn:hover {
-                                    transform: translateY(-2px);
-                                    box-shadow: 0 4px 15px rgba(255,255,255,0.1);
-                                }
-
-                                /* Индикатор выбора - галочка или обводка */
-                                .diff-btn.active::after {
-                                    content: ' ✓';
-                                    font-weight: bold;
-                                    color: #e94560;
-                                }
-
-                                .diff-btn.easy.active::after {
-                                    color: #4caf50;
-                                }
-                                .diff-btn.medium.active::after {
-                                    color: #ff9800;
-                                }
-                                .diff-btn.hard.active::after {
-                                    color: #f44336;
-                                }
-                                .diff-btn.expert.active::after {
-                                    color: #9c27b0;
-                                }
-
-                                        /* ИГРОВОЙ ЭКРАН */
-                                        #gameScreen {
-                                            display: none;
-                                            flex-direction: column;
-                                            align-items: center;
-                                            gap: 12px;
-                                        }
-                                        #gameScreen .top-bar {
-                                            display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;
-                                            width: 100%;
-                                            padding: 0 5px;
-                                            margin-bottom: 2px;
-                                        }
-                                        #gameScreen .top-bar .back-btn {
-                                            background: rgba(255,255,255,0.08);
-                                            border: 1px solid #444;
-                                            color: #fff;
-                                            padding: 6px 14px;
-                                            border-radius: 30px;
-                                            font-size: 0.85rem;
-                                            cursor: pointer;
-                                            transition: 0.2s;
-                                            touch-action: manipulation;
-                                        }
-                                        #gameScreen .top-bar .back-btn:active {
-                                            background: rgba(255,255,255,0.2);
-                                        }
-                                        #gameScreen .top-bar .status {
-                                            font-size: 1.1rem;
-                                            font-weight: bold;
-                                            color: #e94560;
-                                        }
-                                        #gameScreen .top-bar .timer {
-                                            font-size: 1rem;
-                                            color: #aaa;
-                                            font-variant-numeric: tabular-nums;
-                                        }
-                                        /* Сетка Судоку */
-                                        #sudoku-grid {
-                                            display: grid;
-                                            grid-template-columns: repeat(9, 1fr);
-                                            gap: 1px;
-                                            background: #0f3460;
-                                            padding: 2px;
-                                            border-radius: 12px;
-                                            width: 100%;
-                                            aspect-ratio: 1 / 1;
-                                            max-width: 450px;
-                                            touch-action: manipulation;
-                                            border: 3px solid #0f3460;
-                                        }
-                                        .cell{ background: #1a1a2e; display: flex; justify-content: center; align-items: center; font-size: clamp(1rem, 5vw, 1.8rem); font-weight: bold; color: #fff; cursor: pointer; border-radius: 2px; transition: 0.1s; aspect-ratio: 1 / 1; touch-action: manipulation; position: relative;}
-                                        /* Толстые границы для блоков 3x3 */
-                                        .cell.block-border-right {
-                                            border-right: 3px solid #4a6fa5;
-                                        }
-                                        .cell.block-border-bottom {
-                                            border-bottom: 3px solid #4a6fa5;
-                                        }
-                                        .cell.given {
-                                            color: #8a8fa8;
-                                        }
-                                        .cell.user {
-                                            color: #4fc3f7;
-                                        }
-                                        .cell.selected {
-                                            background: #f18093 !important;
-                                            color: #fff !important;
-                                            box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
-                                        }
-                                        .cell.highlighted {
-                                            background: #2a3a5e;
-                                        }
-                                        .cell.same-number {
-                                            background: #2a4a6e;
-                                        }
-                                        .cell.error {
-                                            color: #ff5252 !important;
-                                            animation: shake 0.3s ease;
-                                        }
-                                        .cell.hint {
-                                    background: #ffd54f !important;
-                                    color: #1a1a2e !important;
-                                    animation: hintPulse 1s ease 3;
-                                    box-shadow: 0 0 30px rgba(255, 213, 79, 0.6);
-                                        }
-                                        @keyframes shake {
-                                            0%, 100% { transform: translateX(0); }
-                                            25% { transform: translateX(-5px); }
-                                            75% { transform: translateX(5px); }
-                                        }
-                                        @keyframes pulse {
-                                    0%, 100% { transform: scale(1); opacity: 1; }
-                                    50% { transform: scale(1.1); opacity: 0.7; }
-                                        }
-                                        /* Цифровая панель */
-                                        #num-panel {
-                                            display: grid;
-                                            grid-template-columns: repeat(9, 1fr);
-                                            gap: 5px;
-                                            width: 100%;
-                                            max-width: 450px;
-                                            margin-top: 2px;
-                                        }
-                                        .num-btn {
-                                            background: #0f3460;
-                                            border: none;
-                                            color: #fff;
-                                            font-size: 1.2rem;
-                                            font-weight: bold;
-                                            padding: 8px 0;
-                                            border-radius: 10px;
-                                            cursor: pointer;
-                                            transition: 0.15s;
-                                            touch-action: manipulation;
-                                        }
-                                        .num-btn:active {
-                                            background: #e94560;
-                                            transform: scale(0.92);
-                                        }
-                                        .num-btn.erase {
-                                            background: #4a2a2a;
-                                            font-size: 0.9rem;
-                                        }
-                                        .num-btn.solve-all {
-                                            background: #2a4a2a;
-                                            font-size: 0.8rem;
-                                            grid-column: span 3;
-                                        }
-                                        /* Кнопки управления */
-                                .action-row {
-                                    display: grid;
-                                    grid-template-columns: 1fr 1fr 2fr;
-                                    gap: 8px;
-                                    width: 100%;
-                                    max-width: 450px;
-                                }
-                                .action-btn {
-                                    background: #0f3460;
-                                    border: none;
-                                    color: #fff;
-                                    padding: 8px;
-                                    border-radius: 10px;
-                                    font-size: 1.3rem;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                    transition: 0.15s;
-                                    touch-action: manipulation;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                }
-                                .action-btn:active {
-                                    transform: scale(0.95);
-                                    background: #e94560;
-                                }
-                                .action-btn.hint-btn {
-                                    background: #2a4a2a;
-                                    font-size: 1.5rem;
-                                }
-                                .action-btn.check-btn {
-                                    background: #2a4a6e;
-                                    font-size: 1.5rem;
-                                }
-                                .action-btn.solve-btn {
-                                    background: #4a2a2a;
-                                    font-size: 0.85rem;
-                                    grid-column: span 1;
-                                }
-                                        /* Сообщение */
-                                        #message {
-                                            font-size: 1rem;
-                                            min-height: 1.8em;
-                                            color: #ffd54f;
-                                            margin-top: 2px;
-                                        }
-                                        /* Скролл только для модального окна */
-#howToPlayModal > div {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Стилизация скролла для модалки */
-#howToPlayModal > div::-webkit-scrollbar {
-    width: 4px;
-}
-
-#howToPlayModal > div::-webkit-scrollbar-thumb {
-    background: #e94560;
-    border-radius: 4px;
-}
-
-#howToPlayModal > div::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-    border-radius: 4px;
-}
-                                    
-        /* Адаптив */
-        @media (max-width: 450px) {
-            .container { padding: 12px; max-height: 98vh;  margin-bottom: 50px;}
-            .num-btn { font-size: 1rem; padding: 6px 0; }
-            #menuScreen h1 { font-size: 2.5rem; }
-            .menu-btn { padding: 12px 20px; font-size: 1rem; }
-            .diff-btn { font-size: 0.8rem; padding: 8px; }
-             .action-btn {
-        font-size: 1.1rem;
-        padding: 6px;
-    }
-    .action-btn.hint-btn,
-    .action-btn.check-btn {
-        font-size: 1.3rem;
-    }
-    .action-btn.solve-btn {
-        font-size: 0.75rem;
-    }
-        }
-        @media (max-width: 380px) {
-            .cell { font-size: 0.9rem; }
-            .num-btn { font-size: 0.9rem; padding: 5px 0; }
-            .action-btn { font-size: 0.75rem; padding: 6px; }
-        }
-        /* Скрытие скролла */
-        .container::-webkit-scrollbar {
-            width: 0;
-        }
-        .container {
-            scrollbar-width: none;
-        }
-        /* Модальное окно */
-#howToPlayModal {
-    animation: fadeIn 0.3s ease;
-}
-#howToPlayModal > div {
-    animation: slideUp 0.3s ease;
-       margin-bottom: 50px !important;
-          color: #c4c2c2; 
-    -webkit-overflow-scrolling: touch !important;
-   }
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-@keyframes slideUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-#howToPlayModal ul {
-    list-style-type: none;
-}
-#howToPlayModal ul li::before {
-    content: "• ";
-    color: #e94560;
-}
-/* Только для модального окна - показываем скролл */
-#howToPlayModal > div::-webkit-scrollbar {
-    width: 4px;
-}
-#howToPlayModal > div::-webkit-scrollbar-thumb {
-    background: #e94560;
-    border-radius: 4px;
-}
-/* ============================================================
-   Ландшафтная ориентация для мобильных (особенно iPhone SE)
-   ============================================================ */
-@media (orientation: landscape) and (max-height: 500px) {
-    .container {
-        margin-bottom: 20px !important;
-        padding: 4px 8px !important;
-                max-height: 85vh !important;
-        max-width: 450px !important;
-         overflow: hidden !important;
-
-    }
-     body {
-        overflow: hidden !important;   
-          /*  align-items: center !important;   
-    padding-top: 0 !important;  
-          margin-top: 2x!important;*/
-    }
-    /* Скрываем лишние элементы в меню */
-    #menuScreen {
-        gap: 4px;
-        padding: 5px 0;
-    }
-    #menuScreen h1 {
-        font-size: 1.5rem;
-        margin-bottom: 2px;
-    }
-    #menuScreen .subtitle {
-        font-size: 0.65rem;
-        margin-bottom: 2px;
-    }
-    .menu-btn {
-        padding: 4px 10px;
-        font-size: 1rem;
-        width: 95%;
-        border-radius: 30px;
-    }
-    .diff-btn {
-        font-size: 0.9rem;
-        padding: 3px 5px;
-        border-radius: 8px;
-    }
-    .difficulty-section {
-        gap: 3px;
-        width: 95%;
-    }
-    
-    /* Игровое поле */
-    #sudoku-grid {
-        max-width: 420px !important;
-        padding: 1px;
-        border-width: 2px;
-    }
-    .cell {
-        font-size: clamp(0.5rem, 1.8vw, 0.8rem) !important;
-        border-radius: 1px;
-    }
-    .cell.block-border-right {
-        border-right-width: 2px;
-    }
-    .cell.block-border-bottom {
-        border-bottom-width: 2px;
-    }
-    
-    /* Панель цифр */
-    #num-panel {
-        gap: 2px;
-        max-width: 300px !important;
-    }
-    .num-btn {
-        font-size: 0.8rem !important;
-        padding: 2px 0 !important;
-        border-radius: 6px;
-    }
-    
-    /* Кнопки действий */
-    .action-row {
-        gap: 3px;
-        max-width: 200px !important;
-    }
-    .action-btn {
-        font-size: 0.6rem !important;
-        padding: 2px !important;
-        border-radius: 6px;
-    }
-    .action-btn.hint-btn,
-    .action-btn.check-btn {
-        font-size: 0.6rem !important;
-    }
-    .action-btn.solve-btn {
-        font-size: 0.6rem !important;
-    }
-    
-    /* Верхняя панель */
-    #gameScreen {
-        gap: 3px;
-        
-    }
-    #gameScreen .top-bar {
-        padding: 0 2px;
-    }
-    #gameScreen .top-bar .back-btn {
-        font-size: 0.6rem;
-        padding: 2px 8px;
-    }
-    #gameScreen .top-bar .status {
-        font-size: 0.6rem;
-    }
-    #gameScreen .top-bar .timer {
-        font-size: 0.6rem;
-    }
-    
-    /* Сообщение */
-    #message {
-        font-size: 0.6rem;
-        min-height: 1em;
-    }
-    
-    /* Модальное окно */
-    #howToPlayModal > div {
-        padding: 15px !important;
-        max-height: 70vh !important;
-        margin-bottom: 50px !important;
-          margin-top: 2px !important;
-    }
-    #howToPlayModal h2 {
-        font-size: 1.2rem !important;
-        margin-bottom: 10px !important;
-    }
-    #howToPlayModal div[style*="color:#ccc"] {
-        font-size: 0.75rem !important;
-        line-height: 1.4 !important;
-    }
-    #howToPlayModal ul {
-        padding-left: 12px !important;
-        margin: 4px 0 !important;
-    }
-    #howToPlayModal .menu-btn {
-        font-size: 0.7rem !important;
-        padding: 6px !important;
-        margin-top: 10px !important;
-    }
-    #closeHowToPlay {
-        font-size: 1.2rem !important;
-        top: 5px !important;
-        right: 10px !important;
-    }
-}
-
-/* Дополнительно для очень маленьких экранов */
-@media (orientation: landscape) and (max-height: 400px) {
-    .container {
-        margin-bottom: 10vh !important;
-        padding: 2px 6px !important;
-        max-height: 83vh !important;
-    }
-    #sudoku-grid {
-        max-width: 200px !important;
-    }
-    #num-panel {
-        max-width: 180px !important;
-    }
-    .action-row {
-        max-width: 180px !important;
-    }
-    .cell {
-        font-size: clamp(0.4rem, 1.5vw, 0.6rem) !important;
-    }
-}
-
-/* ============================================================
-   Специальные стили для iframe ВК 1000x750
-   ============================================================ */
-@media (min-width: 900px) and (max-width: 1100px) and (min-height: 680px) and (max-height: 800px) {
-    .container {
-        padding: 8px 15px 10px 15px !important;  /* уменьшил нижний паддинг */
-        max-width: 450px !important;
-        margin: 0 auto 50px !important;
-        max-height: 100% !important;
-        overflow: hidden !important;
-        transform: none !important;
-    }
-    
-    body {
-        overflow: hidden !important;
-     /*   align-items: flex-start !important;
-        padding-top: 5px !important;   уменьшил */
-    }
-    
-    /* Уменьшаем игровое поле */
-    #sudoku-grid {
-        max-width: 440px !important;  /* уменьшил с 420 */
-        padding: 2px !important;
-        border-width: 2px !important;
-    }
-    .cell {
-        font-size: clamp(1rem, 3.5vw, 1.5rem) !important;  /* уменьшил */
-    }
-    
-    /* Панель цифр */
-    #num-panel {
-        max-width: 440px !important;
-        gap: 3px !important;
-        margin-top: 2px !important;
-    }
-    .num-btn {
-        font-size: 0.85rem !important;
-        padding: 4px 0 !important;
-        border-radius: 6px !important;
-    }
-    
-    /* Кнопки действий */
-    .action-row {
-        max-width: 380px !important;
-        gap: 4px !important;
-    }
-    .action-btn {
-        font-size: 1.2rem !important;
-        padding: 4px !important;
-        border-radius: 6px !important;
-    }
-    .action-btn.hint-btn,
-    .action-btn.check-btn {
-        font-size: 1.2rem !important;
-    }
-    .action-btn.solve-btn {
-        font-size: 1.2rem !important;
-    }
-    
-    /* Верхняя панель */
-    #gameScreen {
-        gap: 3px !important;
-        margin-top: 0 !important;
-    }
-    #gameScreen .top-bar {
-        padding: 0 5px !important;
-        margin-bottom: 0 !important;
-    }
-    #gameScreen .top-bar .back-btn {
-        font-size: 1.2rem !important;
-        padding: 2px 8px !important;
-    }
-    #gameScreen .top-bar .status {
-        font-size: 1.2rem !important;
-    }
-    #gameScreen .top-bar .timer {
-        font-size: 1.2rem !important;
-    }
-    
-    #message {
-        font-size: 1.2rem !important;
-        min-height: 1em !important;
-        margin-top: 2px !important;
-    }
-}
-/* Когда банер есть - уменьшаем всё ещё сильнее */
-@media (min-width: 900px) and (max-width: 1100px) and (min-height: 600px) and (max-height: 679px) {
-    .container {
-        padding: 4px 10px 6px 10px !important;
-        max-width: 420px !important;
-        margin: 0 auto 50px !important;
-        max-height: 100% !important;
-        overflow-y: hidden !important;
-    }
-    
-    body {
-        overflow: hidden !important;
-      /*  align-items: flex-start !important;
-        padding-top: 2px !important;*/
-    }
-    
-    /* Ещё меньше поле */
-    #sudoku-grid {
-        max-width: 420px !important;
-        padding: 1px !important;
-        border-width: 2px !important;
-    }
-    .cell {
-        font-size: clamp(0.8rem, 3vw, 1.4rem) !important;
-    }
-    
-    #num-panel {
-        max-width: 420px !important;
-        gap: 2px !important;
-        margin-top: 2px !important;
-    }
-    .num-btn {
-        font-size: 0.9rem !important;
-        padding: 3px 0 !important;
-        border-radius: 4px !important;
-    }
-    
-    .action-row {
-        max-width: 380px !important;
-        gap: 3px !important;
-    }
-    .action-btn {
-        font-size: 1.2rem !important;
-        padding: 3px !important;
-        border-radius: 4px !important;
-    }
-    .action-btn.hint-btn,
-    .action-btn.check-btn {
-        font-size: 1.2rem !important;
-    }
-    .action-btn.solve-btn {
-        font-size: 1.2rem !important;
-    }
-    
-    #gameScreen {
-        gap: 2px !important;
-    }
-    #gameScreen .top-bar .back-btn {
-        font-size: 1.2rem !important;
-        padding: 2px 6px !important;
-    }
-    #gameScreen .top-bar .status {
-        font-size: 1.2rem !important;
-    }
-    #gameScreen .top-bar .timer {
-        font-size: 1.2rem !important;
-    }
-    
-    #message {
-        font-size: 1.1rem !important;
-        min-height: 0.8em !important;
-    }
-}
-
-
-/* ============================================================
-   ТЕМЫ ОФОРМЛЕНИЯ (меняют только фон и оформление)
-   Цвета цифр НЕ МЕНЯЮТСЯ - единые для всех тем
-   ============================================================ */
-
-/* --- ТЁМНАЯ (по умолчанию) --- */
-
-body.theme-dark::before{ background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%);}
-
-
-body.theme-dark {
-    background: #0a0a1a !important;
-}
-body.theme-dark .container {
-    background: rgba(22, 33, 62, 0.92) !important;
-    border-color: rgba(255,255,255,0.05) !important;
-}
-body.theme-dark #sudoku-grid {
-    background: #0f3460 !important;
-    border-color: #0f3460 !important;
-}
-body.theme-dark .cell {
-    background: #1a1a2e !important;
-}
-body.theme-dark #themeModal > div {
-    background: #16213e !important;
-    color: #fff !important;
-}
-/* В светлой теме */
-body.theme-dark .cell.selected {    background: #350066 !important;     box-shadow: 0 0 25px rgba(119, 49, 177, 0.6) !important;}
-body.theme-dark #themeModal h2 { color: #e94560 !important; }
-body.theme-dark #themeModal .theme-subtitle { color: #aaa !important; }
-body.theme-dark #themeModal .theme-btn { color: #fff !important; }
-body.theme-dark #themeModal .theme-btn.active-theme { border-color: #e94560 !important; background: rgba(233, 69, 96, 0.15) !important; }
-body.theme-dark .cell.highlighted { background: #2a3a5e !important; }
-body.theme-dark .cell.same-number { background: #2a4a6e !important; }
-body.theme-dark .num-btn { background: #0f3460 !important; color: #fff !important; }
-body.theme-dark .num-btn.erase { background: #4a2a2a !important; }
-body.theme-dark .action-btn { background: #0f3460 !important; color: #fff !important; }
-body.theme-dark .action-btn.hint-btn { background: #2a4a2a !important; }
-body.theme-dark .action-btn.check-btn { background: #2a4a6e !important; }
-body.theme-dark .action-btn.solve-btn { background: #4a2a2a !important; }
-body.theme-dark .menu-btn { background: #e94560 !important; color: #fff !important; }
-body.theme-dark .menu-btn.secondary { background: #0f3460 !important; }
-body.theme-dark .menu-btn.social { background: #4a6fa5 !important; }
-body.theme-dark .diff-btn { background: #1a2a4a !important; color: #aaa !important; }
-body.theme-dark .diff-btn.active { border-color: #e94560 !important; background: #2a1a3a !important; color: #fff !important; }
-body.theme-dark #menuScreen h1 { color: #e94560 !important; text-shadow: 0 0 30px rgba(233, 69, 96, 0.3) !important; }
-body.theme-dark #message { color: #ffd54f !important; }
-body.theme-dark #howToPlayModal > div { background: #16213e !important;color: #c4c2c2 !important;  }
-body.theme-dark #howToPlayModal > div h2 { color: #e94560 !important; }
-body.theme-dark #howToPlayModal > div .menu-btn { background: #e94560 !important; color: #000000 !important; }
-
-/* --- СВЕТЛАЯ --- */
-body.theme-light {
-    background: #f0ebe3 !important;
-}
-body.theme-light .container {
-    background: rgba(255, 248, 240, 0.95) !important;
-    border-color: rgba(0,0,0,0.1) !important;
-}
-body.theme-light #sudoku-grid {
-    background: #d5cdc5 !important;
-    border-color: #d5cdc5 !important;
-}
-body.theme-light .cell {
-    background: #f5f0e8 !important;
-}
-body.theme-light #themeModal > div {
-    background: #f0ebe3 !important;
-    color: #1a1a2e !important;
-}
-body.theme-light::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
-                                        /* ===== ЗАВИТУШКИ ===== */
-    /* ===== ЗАВИТУШКИ-ВОЛНЫ через SVG ===== */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M20 150 Q70 100 120 150 T220 150' stroke='rgba(180,160,140,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M40 180 Q90 130 140 180 T240 180' stroke='rgba(180,160,140,0.1)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M10 120 Q60 70 110 120 T210 120' stroke='rgba(200,100,150,0.3)' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") repeat,
-        
-                                        /* Градиент фона */
-                                              linear-gradient(135deg, #f0ffe2 0%, #ffe3c8 50%, #ffd6ff 100%) !important;
-                                        }
-
-
-body.theme-light .cell.selected {    background: #c9f0d1 !important; box-shadow: 0 0 25px rgba(179, 255, 202, 0.6) !important; }  
-body.theme-light #gameScreen .top-bar .status {    color: #17415e !important;  }
-body.theme-light #gameScreen .top-bar .back-btn {    color: #17415e  !important;     border-color: #888 !important;}
-body.theme-light #themeModal h2 { color: #f35544 !important; }
-body.theme-light #themeModal .theme-subtitle { color: #666 !important; }
-body.theme-light #themeModal .theme-btn { color: #1a1a2e !important; }
-body.theme-light #themeModal .theme-btn.active-theme { border-color: #c0392b !important; background: rgba(192, 57, 43, 0.15) !important; }
-body.theme-light #closeThemeModal { color: #1a1a2e !important; }
-body.theme-light .cell.highlighted { background: #e8e0d8 !important; }
-body.theme-light .cell.same-number { background: #d8d0c8 !important; }
-body.theme-light .num-btn { background: #b6faff !important; color: #1a1a2e !important; }
-body.theme-light .num-btn.erase { background: #c8b8a8 !important; color: #1a1a2e !important; }
-body.theme-light .num-btn:active { background: #edfcb8 !important; color: #fff !important; }
-body.theme-light .action-btn { background: #d5cdc5 !important; color: #1a1a2e !important; }
-body.theme-light .action-btn.hint-btn { background: #cee986 !important; color: #1a1a2e !important; }
-body.theme-light .action-btn.check-btn { background: #77cff8 !important; color: #1a1a2e !important; }
-body.theme-light .action-btn.solve-btn { background: #bc80ec !important; color: #1a1a2e !important; }
-body.theme-light .action-btn:active { background: #e94560 !important; color: #fff !important; }
-body.theme-light .menu-btn { background: #d5f1cf !important; color: #bb6a00 !important; box-shadow: 0 4px 20px rgba(192, 57, 43, 0.3) !important; }
-body.theme-light .menu-btn.secondary { background: #93bb8b !important; color: #fff !important; }
-body.theme-light .menu-btn.social { background: #4a6fa5 !important; color: #fff !important; }
-body.theme-light .diff-btn { background: #e8e0d8 !important; color: #555 !important; }
-body.theme-light .diff-btn.active { border-color: #c0392b !important; background: #f5f0e8 !important; color: #1a1a2e !important; }
-body.theme-light #menuScreen h1 { color: #c0392b !important; text-shadow: 0 0 30px rgba(192, 57, 43, 0.2) !important; }
-body.theme-light #message { color: #c0392b !important; }
-body.theme-light #howToPlayModal > div { background: #f0ebe3 !important; color: #1a1a2e !important; }
-body.theme-light #howToPlayModal > div h2 { color: #ee60d6 !important; }
-body.theme-light #howToPlayModal > div .menu-btn { background: #eea199 !important; color: #000000 !important; }
-
-/* --- синяя --- */
-body.theme-blue {
-    background: #0a1a3a !important;
-}
-body.theme-blue .container {
-    background: rgba(15, 35, 75, 0.95) !important;
-    border-color: rgba(100, 150, 255, 0.15) !important;
-}
-body.theme-blue #sudoku-grid {
-    background: #1a3a6a !important;
-    border-color: #1a3a6a !important;
-}
-body.theme-blue .cell {
-    background: #0a2a5a !important;
-}
-body.theme-blue #themeModal > div {
-    background: #1a2a5e !important;
-    color: #b8d4ff !important;
-}
-body.theme-blue #gameScreen .top-bar .status {    color: #4a8af0 !important;  }
-body.theme-blue #gameScreen .top-bar .back-btn {    color: #4a8af0  !important;     border-color: #888 !important;}
-body.theme-blue #themeModal h2 { color: #4a8af0 !important; }
-body.theme-blue #themeModal .theme-subtitle { color: #88aacc !important; }
-body.theme-blue #themeModal .theme-btn { color: #b8d4ff !important; }
-body.theme-blue #themeModal .theme-btn.active-theme { border-color: #4a8af0 !important; background: rgba(42, 106, 240, 0.15) !important; }
-body.theme-blue #closeThemeModal { color: #b8d4ff !important; }
-body.theme-blue .cell.highlighted { background: #1a3a6a !important; }
-body.theme-blue .cell.same-number { background: #1a4a7a !important; }
-body.theme-blue .num-btn { background: #1a3a6a !important; color: #b8d4ff !important; }
-body.theme-blue .num-btn.erase { background: #3a2a4a !important; color: #b8d4ff !important; }
-body.theme-blue .num-btn:active { background: #4a8af0 !important; color: #fff !important; }
-body.theme-blue .action-btn { background: #1a3a6a !important; color: #b8d4ff !important; }
-body.theme-blue .action-btn.hint-btn { background: #1a4a3a !important; color: #b8d4ff !important; }
-body.theme-blue .action-btn.check-btn { background: #2a3a7a !important; color: #b8d4ff !important; }
-body.theme-blue .action-btn.solve-btn { background: #4a2a4a !important; color: #b8d4ff !important; }
-body.theme-blue .action-btn:active { background: #4a8af0 !important; color: #fff !important; }
-body.theme-blue .menu-btn { background: #2a6af0 !important; color: #fff !important; box-shadow: 0 4px 20px rgba(42, 106, 240, 0.3) !important; }
-body.theme-blue .menu-btn.secondary { background: #1a3a6a !important; color: #b8d4ff !important; }
-body.theme-blue .menu-btn.social { background: #3a7af0 !important; color: #fff !important; }
-body.theme-blue .diff-btn { background: #0a2a5a !important; color: #88aacc !important; }
-body.theme-blue .diff-btn.active { border-color: #4a8af0 !important; background: #1a3a6a !important; color: #fff !important; }
-body.theme-blue #menuScreen h1 { color: #4a8af0 !important; text-shadow: 0 0 30px rgba(42, 106, 240, 0.3) !important; }
-body.theme-blue #message { color: #66ddff !important; }
-body.theme-blue #howToPlayModal > div { background: #1a2a5e !important; color: #b8d4ff !important; }
-body.theme-blue #howToPlayModal > div h2 { color: #4a8af0 !important; }
-body.theme-blue #howToPlayModal > div .menu-btn { background: #2a6af0 !important; color: #fff !important; }
-
-/* --- ПАСТЕЛЬ (персиково-бежевая) --- */
-body.theme-pastel {
-    background: #f5e6d3 !important;
-}
-body.theme-pastel .container {
-    background: rgba(245, 230, 211, 0.95) !important;
-    border-color: rgba(180, 150, 120, 0.2) !important;
-}
-body.theme-pastel #sudoku-grid {
-    background: #e0d0c0 !important;
-    border-color: #e0d0c0 !important;
-}
-body.theme-pastel .cell {
-    background: #f5e8dc !important;
-}
-body.theme-pastel #themeModal > div {
-    background: #f5e6d3 !important;
-    color: #5a4a3a !important;
-}
-body.theme-pastel #themeModal h2 { color: #e08060 !important; }
-body.theme-pastel #themeModal .theme-subtitle { color: #8a7a6a !important; }
-body.theme-pastel #themeModal .theme-btn { color: #5a4a3a !important; }
-body.theme-pastel #themeModal .theme-btn.active-theme { border-color: #e08060 !important; background: rgba(224, 128, 96, 0.15) !important; }
-body.theme-pastel #closeThemeModal { color: #5a4a3a !important; }
-body.theme-pastel .cell.highlighted { background: #e8dcc8 !important; }
-body.theme-pastel .cell.same-number { background: #dcccb8 !important; }
-body.theme-pastel .num-btn { background: #e0d0c0 !important; color: #5a4a3a !important; }
-body.theme-pastel .num-btn.erase { background: #d0b8a8 !important; color: #5a4a3a !important; }
-body.theme-pastel .num-btn:active { background: #e07050 !important; color: #fff !important; }
-body.theme-pastel .action-btn { background: #e0d0c0 !important; color: #5a4a3a !important; }
-body.theme-pastel .action-btn.hint-btn { background: #c8b8a8 !important; color: #5a4a3a !important; }
-body.theme-pastel .action-btn.check-btn { background: #b8a8b8 !important; color: #5a4a3a !important; }
-body.theme-pastel .action-btn.solve-btn { background: #d8b8a8 !important; color: #5a4a3a !important; }
-body.theme-pastel .action-btn:active { background: #e07050 !important; color: #fff !important; }
-body.theme-pastel .menu-btn { background: #e08060 !important; color: #fff !important; box-shadow: 0 4px 20px rgba(224, 128, 96, 0.3) !important; }
-body.theme-pastel .menu-btn.secondary { background: #d0c0b0 !important; color: #5a4a3a !important; }
-body.theme-pastel .menu-btn.social { background: #b0a090 !important; color: #fff !important; }
-body.theme-pastel .diff-btn { background: #e8dcc8 !important; color: #7a6a5a !important; }
-body.theme-pastel .diff-btn.active { border-color: #e08060 !important; background: #f5e8dc !important; color: #5a4a3a !important; }
-body.theme-pastel #menuScreen h1 { color: #e08060 !important; text-shadow: 0 0 30px rgba(224, 128, 96, 0.2) !important; }
-body.theme-pastel #message { color: #e08060 !important; }
-body.theme-pastel #howToPlayModal > div { background: #f5e6d3 !important; color: #5a4a3a !important; }
-body.theme-pastel #howToPlayModal > div h2 { color: #e08060 !important; }
-body.theme-pastel #howToPlayModal > div .menu-btn { background: #e08060 !important; color: #fff !important; }
-body.theme-pastel #howToPlayModal > div .menu-btn.secondary { background: #d0c0b0 !important; color: #5a4a3a !important; }
-body.theme-pastel .cell.selected {    background: #FEE5AC !important; box-shadow: 0 0 25px rgba(253, 255, 160, 0.6) !important; }  
-body.theme-pastel #gameScreen .top-bar .status {    color: #e08060 !important;  }
-body.theme-pastel #gameScreen .top-bar .back-btn {    color: #e08060  !important;     border-color: #888 !important;}
-body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)),
-    /* ===== РОМБЫ ===== */
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M0 60 L60 0 L120 60 L60 120 Z' stroke='rgba(180,160,140,0.15)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M30 60 L60 30 L90 60 L60 90 Z' stroke='rgba(180,160,140,0.1)' stroke-width='1' fill='none'/%3E%3Cpath d='M15 60 L60 15 L105 60 L60 105 Z' stroke='rgba(180,160,140,0.08)' stroke-width='0.8' fill='none'/%3E%3C/svg%3E") repeat,
-        
-                                        /* Градиент фона */
-                                              linear-gradient(135deg, #f0ffe2 0%, #ffe3c8 50%, #ffd6ff 100%) !important;
-                                        }
-
-
-/* ============================================================
-   ЕДИНЫЕ ЦВЕТА ЦИФР ДЛЯ ВСЕХ ТЕМ (НЕ МЕНЯЮТСЯ)
-   ============================================================ */
-
-/* Изначальные цифры (given) - серые */
-.cell.given {
-    color: #8a8fa8 !important;
-}
-
-/* Цифры пользователя (user) - зеленые (верные) */
-.cell.user {
-    color: #4fc3f7 !important;
-}
-
-/* Ошибки - красные */
-.cell.error {
-    color: #ff1744 !important;
-}
-
-/* Подсказки - желтый фон, темный текст */
-.cell.hint {
-    background: #ffd54f !important;
-    color: #1a1a2e !important;
-    box-shadow: 0 0 30px rgba(255, 213, 79, 0.6) !important;
-}
-
-/* Выделенная клетка - красный фон, белый текст */
-.cell.selected {
-    background: #ee6178;
-    color: #fff ;
-    box-shadow: 0 0 20px rgba(233, 69, 96, 0.4) !important;
-}
-
-/* Ряд с иконками */
-.social-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    width: 85%;
-}
-
-.menu-btn.social-icon {
-    background: #4a6fa5;
-    box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3);
-    padding: 14px 0;
-    font-size: 1.5rem;
-    width: 60px !important;
-    min-width: 50px;
-    flex: 0 0 auto;
-}
-
-.menu-btn.social-icon:active {
-    transform: scale(0.95);
-}
-
-/* Модальное окно с темами */
-#themeModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-#themeModal > div {
-    background: #16213e;
-    border-radius: 20px;
-    padding: 30px;
-    max-width: 400px;
-    width: 100%;
-    position: relative;
-    animation: slideUp 0.3s ease;
-}
-
-#themeModal h2 {
-    color: #e94560;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-#themeModal .theme-subtitle {
-    color: #aaa;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-}
-
-.theme-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.theme-btn {
-    background: rgba(255,255,255,0.05);
-    border: 2px solid transparent;
-    color: #fff;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.3s;
-    text-align: center;
-}
-
-.theme-btn:active {
-    transform: scale(0.95);
-}
-
-.theme-btn.active-theme {
-    border-color: #e94560;
-    background: rgba(233, 69, 96, 0.15);
-}
-
-.theme-btn .theme-color {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 10px;
-    border: 2px solid rgba(255,255,255,0.2);
-}
-
-/* Цвета тем */
-.theme-btn.dark .theme-color { background: #0a0a1a; }
-.theme-btn.light .theme-color { background: #f5f0e8; }
-.theme-btn.blue .theme-color { background: #3d67f0; }
-.theme-btn.pastel .theme-color { background: #f5bd74; }
-
-#closeThemeModal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    cursor: pointer;
-}
-
-/* Адаптив для маленьких экранов */
-@media (max-width: 450px) {
-    .menu-btn.social-icon {
-        width: 50px !important;
-        font-size: 1.3rem;
-        padding: 12px 0;
-    }
-    #themeModal > div {
-        padding: 20px;
-        margin: 0 10px;
-    }
-}
-/* Общие стили для модалок */
-#themeModal > div,
-#howToPlayModal > div {
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-#themeModal .theme-btn {
-    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-/* Переопределение для проверенных клеток (самый высокий приоритет) */
-.cell.checked-correct {
-    color: #39ff14 !important;
-    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5) !important;
-}
-
-.cell.checked-error {
-    color: #ff1744 !important;
-    text-shadow: 0 0 10px rgba(255, 23, 68, 0.5) !important;
-}
-
-/* ============================================================
-   Модалка для получения подсказок за рекламу
-   ============================================================ */
-#hintAdModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    animation: fadeIn 0.3s ease;
-}
-
-#hintAdModal.show {
-    display: flex;
-}
-
-#hintAdModal .modal-content {
-    background: rgba(22, 33, 62, 0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 24px;
-    padding: 30px 25px;
-    max-width: 420px;
-    width: 100%;
-    text-align: center;
-    animation: slideUp 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Декоративный фон модалки */
-#hintAdModal .modal-content::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 20%, rgba(233, 69, 96, 0.08), transparent 60%);
-    pointer-events: none;
-}
-
-#hintAdModal .modal-icon {
-    font-size: 3.5rem;
-    margin-bottom: 10px;
-    display: block;
-    animation: pulse 1.5s ease infinite;
-}
-
-#hintAdModal h2 {
-    color: #fff;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-    position: relative;
-}
-
-#hintAdModal .modal-title {
-    color: #e94560;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    position: relative;
-}
-
-#hintAdModal .modal-subtitle {
-    color: #8a8fa8;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    line-height: 1.5;
-    position: relative;
-}
-
-#hintAdModal .modal-subtitle strong {
-    color: #ffd54f;
-}
-
-#hintAdModal .modal-buttons {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    position: relative;
-}
-
-#hintAdModal .modal-btn {
-    padding: 12px 28px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-    touch-action: manipulation;
-    flex: 1;
-}
-
-#hintAdModal .modal-btn:active {
-    transform: scale(0.95);
-}
-
-#hintAdModal .modal-btn-cancel {
-    background: rgba(255,255,255,0.08);
-    color: #aaa;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-#hintAdModal .modal-btn-cancel:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-}
-
-#hintAdModal .modal-btn-confirm {
-    background: linear-gradient(135deg, #e94560, #c23152);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(233, 69, 96, 0.4);
-}
-
-#hintAdModal .modal-btn-confirm:hover {
-    box-shadow: 0 6px 35px rgba(233, 69, 96, 0.5);
-    transform: translateY(-2px);
-}
-
-#hintAdModal .modal-btn-confirm:active {
-    transform: scale(0.95) !important;
-}
-
-/* Адаптив для модалки */
-@media (max-width: 450px) {
-    #hintAdModal .modal-content {
-        padding: 25px 20px;
-        max-width: 95%;
-    }
-    
-    #hintAdModal .modal-icon {
-        font-size: 2.8rem;
-    }
-    
-    #hintAdModal h2 {
-        font-size: 1.3rem;
-    }
-    
-    #hintAdModal .modal-title {
-        font-size: 1rem;
-    }
-    
-    #hintAdModal .modal-subtitle {
-        font-size: 0.8rem;
-        margin-bottom: 15px;
-    }
-    
-    #hintAdModal .modal-btn {
-        padding: 10px 16px;
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 380px) {
-    #hintAdModal .modal-content {
-        padding: 20px 15px;
-    }
-    
-    #hintAdModal .modal-icon {
-        font-size: 2.2rem;
-    }
-    
-    #hintAdModal h2 {
-        font-size: 1.1rem;
-    }
-    
-    #hintAdModal .modal-btn {
-        padding: 8px 12px;
-        font-size: 0.75rem;
-    }
-}
-
-/* Ландшафтный режим для модалки */
-@media (orientation: landscape) and (max-height: 500px) {
-    #hintAdModal .modal-content {
-        padding: 15px 20px;
-        max-width: 400px;
-        max-height: 85vh;
-        overflow-y: auto;
-    }
-    
-    #hintAdModal .modal-icon {
-        font-size: 2rem;
-        margin-bottom: 5px;
-    }
-    
-    #hintAdModal h2 {
-        font-size: 1.1rem;
-        margin-bottom: 4px;
-    }
-    
-    #hintAdModal .modal-title {
-        font-size: 0.85rem;
-    }
-    
-    #hintAdModal .modal-subtitle {
-        font-size: 0.7rem;
-        margin-bottom: 10px;
-    }
-    
-    #hintAdModal .modal-btn {
-        padding: 6px 14px;
-        font-size: 0.75rem;
-    }
-}
-
-/* Специальные стили для iframe 1000x750 */
-@media (min-width: 800px) and (max-height: 850px) {
-    #hintAdModal .modal-content {
-        padding: 20px 25px;
-        max-width: 380px;
-    }
-    
-    #hintAdModal .modal-icon {
-        font-size: 2.5rem;
-        margin-bottom: 5px;
-    }
-    
-    #hintAdModal h2 {
-        font-size: 1.2rem;
-        margin-bottom: 4px;
-    }
-    
-    #hintAdModal .modal-title {
-        font-size: 0.9rem;
-    }
-    
-    #hintAdModal .modal-subtitle {
-        font-size: 0.75rem;
-        margin-bottom: 12px;
-    }
-    
-    #hintAdModal .modal-btn {
-        padding: 8px 18px;
-        font-size: 0.8rem;
-    }
-}
-/* ============================================================
-   Модалка достижений
-   ============================================================ */
-#achievementsModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 3000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    animation: fadeIn 0.3s ease;
-}
-
-
-#closeAchievementsModal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: 0.2s;
-    padding: 0 5px;
-}
-#closeAchievementsModal:hover {
-    opacity: 0.7;
-}
-
-#achievementsModal h2 {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 2px;
-    font-size: 1.5rem;
-}
-
-#achievementsModal .achievements-subtitle {
-    color: #8a8fa8;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-}
-
-/* Список достижений */
-#achievementsList {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    max-height: calc(85vh - 140px); /* учитываем заголовок, подзаголовок, пагинацию */
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-/* Стилизация скролла для списка */
-#achievementsList::-webkit-scrollbar {
-    width: 4px;
-}
-#achievementsList::-webkit-scrollbar-thumb {
-    background: #e94560;
-    border-radius: 4px;
-}
-#achievementsList::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-}
-
-/* Элемент достижения */
-.achievement-item {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 12px 10px;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: 0.2s;
-}
-
-.achievement-item.unlocked {
-    border-color: #ffd54f;
-    background: rgba(255, 213, 79, 0.08);
-}
-.achievement-item.locked {
-    opacity: 0.5;
-}
-
-.achievement-item .icon {
-    font-size: 2rem;
-    display: block;
-    line-height: 1.2;
-}
-.achievement-item .name {
-    color: #fff;
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-top: 4px;
-}
-.achievement-item .desc {
-    color: #aaa;
-    font-size: 0.75rem;
-}
-
-/* Пагинация */
-.achievements-pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-}
-
-.achievements-pagination button {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #aaa;
-    padding: 8px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 0.9rem;
-}
-.achievements-pagination button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-}
-.achievements-pagination button:active {
-    transform: scale(0.95);
-}
-.achievements-pagination .page-info {
-    color: #aaa;
-    font-size: 0.9rem;
-}
-
-/* ============================================================
-   Адаптив для мобильных
-   ============================================================ */
-@media (max-width: 599px) {
-    #achievementsList {
-        grid-template-columns: 1fr;
-        max-height: calc(85vh - 120px);
-        gap: 8px;
-    }
-    .achievement-item {
-        padding: 10px;
-    }
-    .achievement-item .icon {
-        font-size: 1.8rem;
-    }
-    .achievement-item .name {
-        font-size: 0.85rem;
-    }
-    #achievementsModal > div {
-        padding: 20px 15px 15px;
-        max-width: 95%;
-    }
-    .achievements-pagination button {
-        padding: 6px 14px;
-        font-size: 0.8rem;
-    }
-}
-
-/* Для очень маленьких экранов */
-@media (max-width: 380px) {
-    #achievementsModal > div {
-        padding: 15px 10px;
-    }
-    .achievement-item {
-        padding: 8px;
-    }
-    .achievement-item .icon {
-        font-size: 1.5rem;
-    }
-    .achievement-item .name {
-        font-size: 0.8rem;
-    }
-    .achievement-item .desc {
-        font-size: 0.7rem;
-    }
-}
-
-/* Ландшафтная ориентация на телефонах */
-@media (orientation: landscape) and (max-height: 500px) {
-    #achievementsModal > div {
-        max-height: 90vh;
-        padding: 15px;
-    }
-    #achievementsList {
-        max-height: calc(90vh - 110px);
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-    }
-    .achievement-item {
-        padding: 6px;
-    }
-    .achievement-item .icon {
-        font-size: 1.4rem;
-    }
-    .achievement-item .name {
-        font-size: 0.7rem;
-    }
-    .achievement-item .desc {
-        font-size: 0.6rem;
-    }
-    #achievementsModal h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0;
-    }
-    #achievementsModal .achievements-subtitle {
-        font-size: 0.7rem;
-        margin-bottom: 8px;
-    }
-    .achievements-pagination {
-        margin-top: 8px;
-    }
-    .achievements-pagination button {
-        padding: 4px 12px;
-        font-size: 0.7rem;
-    }
-}
-/* ============================================================
-   Попап достижения
-   ============================================================ */
-#achievementPopup.show {
-    display: block !important;
-    opacity: 1 !important;
-    transform: translateX(-50%) scale(1) !important;
-    pointer-events: none;
-}
-
-#achievementPopup.hide {
-    opacity: 0 !important;
-    transform: translateX(-50%) scale(0.9) !important;
-    pointer-events: none;
-}
-
-/* Адаптив для маленьких экранов */
-@media (max-width: 480px) {
-    #achievementPopup {
-        top: 10px;
-        padding: 12px 20px;
-        min-width: unset;
-        width: 90%;
-    }
-    #achievementPopupIcon {
-        font-size: 2rem !important;
-    }
-    #achievementPopupName {
-        font-size: 1rem !important;
-    }
-}
-/* === Стили для бонусных модалок (адаптируются под тему) === */
-.bonus-modal-content {
-    background: rgba(22,33,62,0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 24px;
-    padding: 30px 25px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    animation: slideUp 0.3s ease;
-}
-
-.bonus-modal-content h2 {
-    color: #fff;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-}
-.bonus-subtitle {
-    color: #8a8fa8;
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.bonus-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    transition: transform 0.15s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.bonus-btn:active {
-    transform: scale(0.92);
-}
-
-.bonus-cancel {
-    background: rgba(255,255,255,0.08);
-    color: #aaa;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 12px;
-    border-radius: 50px;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-.bonus-cancel:active {
-    transform: scale(0.95);
-}
-
-.bonus-ok-btn {
-    border: none;
-    padding: 12px 40px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    background: linear-gradient(135deg, #e94560, #c23152);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(233,69,96,0.4);
-    transition: transform 0.15s, background 0.3s, color 0.3s, box-shadow 0.3s;
-}
-.bonus-ok-btn:active {
-    transform: scale(0.95);
-}
-
-/* Адаптация под темы */
-body.theme-light .bonus-modal-content {
-    background: rgba(255, 248, 240, 0.95);
-    border-color: rgba(0,0,0,0.1);
-}
-body.theme-light .bonus-modal-content h2 {
-    color: #1a1a2e;
-}
-body.theme-light .bonus-subtitle {
-    color: #555;
-}
-body.theme-light .bonus-cancel {
-    background: #e8e0d8;
-    color: #1a1a2e;
-    border-color: #ccc;
-}
-body.theme-light .bonus-ok-btn {
-    background: linear-gradient(135deg, #ef5350, #c62828);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(239,83,80,0.4);
-}
-
-body.theme-blue .bonus-modal-content {
-    background: rgba(15, 35, 75, 0.95);
-    border-color: rgba(100,150,255,0.15);
-}
-body.theme-blue .bonus-modal-content h2 {
-    color: #4a8af0;
-}
-body.theme-blue .bonus-subtitle {
-    color: #88aacc;
-}
-body.theme-blue .bonus-cancel {
-    background: rgba(255,255,255,0.08);
-    color: #88aacc;
-    border-color: rgba(255,255,255,0.1);
-}
-body.theme-blue .bonus-ok-btn {
-    background: linear-gradient(135deg, #2a6af0, #0d47a1);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(42,106,240,0.4);
-}
-
-body.theme-pastel .bonus-modal-content {
-    background: rgba(245, 230, 211, 0.95);
-    border-color: rgba(180,150,120,0.2);
-}
-body.theme-pastel .bonus-modal-content h2 {
-    color: #e08060;
-}
-body.theme-pastel .bonus-subtitle {
-    color: #7a6a5a;
-}
-body.theme-pastel .bonus-cancel {
-    background: #e8dcc8;
-    color: #5a4a3a;
-    border-color: #ccc;
-}
-body.theme-pastel .bonus-ok-btn {
-    background: linear-gradient(135deg, #ef9a9a, #c62828);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(239,154,154,0.4);
-}
-
-/* Также для кнопок +5 и +15 разные цвета в зависимости от темы */
-body.theme-dark .bonus-5 {
-    background: linear-gradient(135deg, #4caf50, #2e7d32);
-    color: #fff;
-}
-body.theme-dark .bonus-15 {
-    background: linear-gradient(135deg, #4fc3f7, #0288d1);
-    color: #fff;
-}
-body.theme-light .bonus-5 {
-    background: linear-gradient(135deg, #66bb6a, #388e3c);
-    color: #fff;
-}
-body.theme-light .bonus-15 {
-    background: linear-gradient(135deg, #4dd0e1, #00acc1);
-    color: #fff;
-}
-body.theme-blue .bonus-5 {
-    background: linear-gradient(135deg, #66bb6a, #2e7d32);
-    color: #fff;
-}
-body.theme-blue .bonus-15 {
-    background: linear-gradient(135deg, #4fc3f7, #0277bd);
-    color: #fff;
-}
-body.theme-pastel .bonus-5 {
-    background: linear-gradient(135deg, #81c784, #388e3c);
-    color: #fff;
-}
-body.theme-pastel .bonus-15 {
-    background: linear-gradient(135deg, #80deea, #00838f);
-    color: #fff;
-}
-/* === Стили для модалки "Бонус получен" === */
-.result-modal-content {
-    background: rgba(22,33,62,0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 24px;
-    padding: 30px 25px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    animation: slideUp 0.3s ease;
-}
-.result-modal-content h2 {
-    color: #fff;
-    font-size: 1.6rem;
-    margin-bottom: 5px;
-}
-.result-modal-content #bonusResultAmount {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #ffd54f;
-    margin: 10px 0 20px;
-}
-.result-ok-btn {
-    background: linear-gradient(135deg, #e94560, #c23152);
-    color: #fff;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 25px rgba(233,69,96,0.4);
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.15s;
-}
-.result-ok-btn:active {
-    transform: scale(0.95);
-}
-
-/* === Стили для модалки достижений === */
-.achievements-modal-content {
-    background: rgba(22,33,62,0.95);
-    backdrop-filter: blur(15px);
-    border-radius: 24px;
-    padding: 25px 20px;
-    max-width: 500px;
-    width: 100%;
-    max-height: 80vh;
-    position: relative;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    animation: slideUp 0.3s ease;
-    overflow: hidden;
-}
-.achievements-modal-content .ach-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-.achievements-modal-content h2 {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 5px;
-}
-.achievements-modal-content .ach-subtitle {
-    color: #8a8fa8;
-    text-align: center;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-}
-
-/* Сетка достижений – 2 колонки */
-.achievements-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding-right: 5px;
-    overflow-y: auto;
-    max-height: calc(80vh - 140px); /* подстраивается под размер */
-}
-.achievements-grid::-webkit-scrollbar {
-    width: 4px;
-}
-.achievements-grid::-webkit-scrollbar-thumb {
-    background: #e94560;
-    border-radius: 4px;
-}
-.achievements-grid::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-    border-radius: 4px;
-}
-
-/* Пагинация */
-.ach-pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-}
-.ach-page-btn {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #aaa;
-    padding: 8px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
-}
-.ach-page-btn:active {
-    transform: scale(0.95);
-}
-.ach-page-info {
-    color: #aaa;
-    font-size: 0.9rem;
-}
-
-/* ===== Адаптация под темы ===== */
-body.theme-light .result-modal-content {
-    background: rgba(255, 248, 240, 0.95);
-    border-color: rgba(0,0,0,0.1);
-}
-body.theme-light .result-modal-content h2 {
-    color: #1a1a2e;
-}
-body.theme-light .result-ok-btn {
-    background: linear-gradient(135deg, #ef5350, #c62828);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(239,83,80,0.4);
-}
-
-body.theme-blue .result-modal-content {
-    background: rgba(15, 35, 75, 0.95);
-    border-color: rgba(100,150,255,0.15);
-}
-body.theme-blue .result-modal-content h2 {
-    color: #4a8af0;
-}
-body.theme-blue .result-ok-btn {
-    background: linear-gradient(135deg, #2a6af0, #0d47a1);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(42,106,240,0.4);
-}
-
-body.theme-pastel .result-modal-content {
-    background: rgba(245, 230, 211, 0.95);
-    border-color: rgba(180,150,120,0.2);
-}
-body.theme-pastel .result-modal-content h2 {
-    color: #e08060;
-}
-body.theme-pastel .result-ok-btn {
-    background: linear-gradient(135deg, #ef9a9a, #c62828);
-    color: #fff;
-    box-shadow: 0 4px 25px rgba(239,154,154,0.4);
-}
-.achievements-modal-content {
-    background: rgba(22,33,62,0.95); /* основной */
-}
-body.theme-light .achievements-modal-content {
-    background: rgba(255,248,240,0.95);
-}
-body.theme-blue .achievements-modal-content {
-    background: rgba(15,35,75,0.95);
-}
-body.theme-pastel .achievements-modal-content {
-    background: rgba(245,230,211,0.95);
-}
-
-/* ===== Цвета текста в модалке достижений для разных тем ===== */
-/* ===== Цвета текста в модалке достижений для разных тем ===== */
-
-/* Светлая тема */
-body.theme-light .achievements-modal-content h2,
-body.theme-light #achievementsModal h2 {
-    color: #1a1a2e !important;
-}
+  <style>*{ margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent;} html{ overflow: hidden !important; height: 100% !important; max-height: 100% !important; position: fixed !important; width: 100% !important;} iframe, .container, body{ overflow: hidden !important;} body{ overflow: hidden !important; position: fixed !important; width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; overscroll-behavior: none !important; touch-action: none !important; margin: 0 !important; padding: 0 !important} .container{ overflow: hidden !important;} body::before{ content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%); background-size: 100% 100%; z-index: 0; pointer-events: none} .container{ background: rgba(22, 33, 62, 0.92); backdrop-filter: blur(10px); padding: 10px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); width: 100%; max-width: 500px; margin: 0 auto 50px; margin-top: 4px!important; text-align: center; position: relative; z-index: 1; border: 1px solid rgba(255,255,255,0.05); max-height: 95vh; overflow: hidden;} #menuScreen{ display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px 0;} #menuScreen h1{ font-size: 3rem; color: #e94560; text-shadow: 0 0 30px rgba(233, 69, 96, 0.3); margin-bottom: 5px;} #menuScreen .subtitle{ color: #aaa; font-size: 1rem; margin-bottom: 10px; letter-spacing: 2px;} .menu-btn{ background: #e94560; color: #fff; border: none; padding: 14px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 85%; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(233, 69, 96, 0.3); touch-action: manipulation} .menu-btn:active{ transform: scale(0.95);} .menu-btn.secondary{ background: #0f3460; box-shadow: 0 4px 20px rgba(15, 52, 96, 0.3);} .menu-btn.secondary.active{ background: #e94560;} .menu-btn.social{ background: #4a6fa5; box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3);} .menu-btn .emoji{ margin-right: 8px;} .difficulty-section{ width: 85%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 5px 0;} .action-btn.check-btn{ background: #2a4a6e;} .diff-btn{ background: #1a2a4a; border: 2px solid transparent; color: #aaa; padding: 10px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: 0.3s; touch-action: manipulation;} .diff-btn:active{ transform: scale(0.95);} .diff-btn.active{ border-color: #e94560; color: #fff; background: #2a1a3a; transform: scale(1.05); box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);} .diff-btn.easy.active{ background: #1a3a1a; color: #4caf50; border-color: #4caf50; box-shadow: 0 0 25px rgba(76, 175, 80, 0.4);} .diff-btn.medium.active{ background: #3a2a1a; color: #ff9800; border-color: #ff9800; box-shadow: 0 0 25px rgba(255, 152, 0, 0.4);} .diff-btn.hard.active{ background: #3a1a1a; color: #f44336; border-color: #f44336; box-shadow: 0 0 25px rgba(244, 67, 54, 0.4);} .diff-btn.expert.active{ background: #2a1a3a; color: #9c27b0; border-color: #9c27b0; box-shadow: 0 0 25px rgba(156, 39, 176, 0.4);} .diff-btn:hover{ transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,255,255,0.1);} .diff-btn.active::after{ content: ' ✓'; font-weight: bold; color: #e94560;} .diff-btn.easy.active::after{ color: #4caf50;} .diff-btn.medium.active::after{ color: #ff9800;} .diff-btn.hard.active::after{ color: #f44336;} .diff-btn.expert.active::after{ color: #9c27b0;} #gameScreen{ display: none; flex-direction: column; align-items: center; gap: 12px;} #gameScreen .top-bar{ display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 5px; margin-bottom: 2px;} #gameScreen .top-bar .back-btn{ background: rgba(255,255,255,0.08); border: 1px solid #444; color: #fff; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; touch-action: manipulation;} #gameScreen .top-bar .back-btn:active{ background: rgba(255,255,255,0.2);} #gameScreen .top-bar .status{ font-size: 1.1rem; font-weight: bold; color: #e94560;} #gameScreen .top-bar .timer{ font-size: 1rem; color: #aaa; font-variant-numeric: tabular-nums;} #sudoku-grid{ display: grid; grid-template-columns: repeat(9, 1fr); gap: 1px; background: #0f3460; padding: 2px; border-radius: 12px; width: 100%; aspect-ratio: 1 / 1; max-width: 450px; touch-action: manipulation; border: 3px solid #0f3460;} .cell{ background: #1a1a2e; display: flex; justify-content: center; align-items: center; font-size: clamp(1rem, 5vw, 1.8rem); font-weight: bold; color: #fff; cursor: pointer; border-radius: 2px; transition: 0.1s; aspect-ratio: 1 / 1; touch-action: manipulation; position: relative} .cell.block-border-right{ border-right: 3px solid #4a6fa5;} .cell.block-border-bottom{ border-bottom: 3px solid #4a6fa5;} .cell.given{ color: #8a8fa8;} .cell.user{ color: #4fc3f7;} .cell.selected{ background: #f18093 !important; color: #fff !important; box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);} .cell.highlighted{ background: #2a3a5e;} .cell.same-number{ background: #2a4a6e;} .cell.error{ color: #ff5252 !important; animation: shake 0.3s ease;} .cell.hint{ background: #ffd54f !important; color: #1a1a2e !important; animation: hintPulse 1s ease 3; box-shadow: 0 0 30px rgba(255, 213, 79, 0.6);} @keyframes shake{ 0%, 100%{ transform: translateX(0);} 25%{ transform: translateX(-5px);} 75%{ transform: translateX(5px);}} @keyframes pulse{ 0%, 100%{ transform: scale(1); opacity: 1;} 50%{ transform: scale(1.1); opacity: 0.7;}} #num-panel{ display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px; width: 100%; max-width: 450px; margin-top: 2px;} .num-btn{ background: #0f3460; border: none; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 8px 0; border-radius: 10px; cursor: pointer; transition: 0.15s; touch-action: manipulation;} .num-btn:active{ background: #e94560; transform: scale(0.92);} .num-btn.erase{ background: #4a2a2a; font-size: 0.9rem;} .num-btn.solve-all{ background: #2a4a2a; font-size: 0.8rem; grid-column: span 3;} .action-row{ display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 8px; width: 100%; max-width: 450px;} .action-btn{ background: #0f3460; border: none; color: #fff; padding: 8px; border-radius: 10px; font-size: 1.3rem; font-weight: bold; cursor: pointer; transition: 0.15s; touch-action: manipulation; display: flex; align-items: center; justify-content: center;} .action-btn:active{ transform: scale(0.95); background: #e94560;} .action-btn.hint-btn{ background: #2a4a2a; font-size: 1.5rem;} .action-btn.check-btn{ background: #2a4a6e; font-size: 1.5rem;} .action-btn.solve-btn{ background: #4a2a2a; font-size: 0.85rem; grid-column: span 1;} #message{ font-size: 1rem; min-height: 1.8em; color: #ffd54f; margin-top: 2px;} #howToPlayModal >div{ overflow-y: auto; -webkit-overflow-scrolling: touch;} #howToPlayModal >div::-webkit-scrollbar{ width: 4px;}
+#howToPlayModal >div::-webkit-scrollbar-thumb{ background: #e94560; border-radius: 4px;}
+#howToPlayModal >div::-webkit-scrollbar-track{ background: rgba(255,255,255,0.05); border-radius: 4px;} @media (max-width: 450px){ .container{ padding: 12px; max-height: 98vh; margin-bottom: 50px} .num-btn{ font-size: 1rem; padding: 6px 0;} #menuScreen h1{ font-size: 2.5rem;} .menu-btn{ padding: 12px 20px; font-size: 1rem;} .diff-btn{ font-size: 0.8rem; padding: 8px;} .action-btn{ font-size: 1.1rem; padding: 6px;} .action-btn.hint-btn, .action-btn.check-btn{ font-size: 1.3rem;} .action-btn.solve-btn{ font-size: 0.75rem;}} @media (max-width: 380px){ .cell{ font-size: 0.9rem;} .num-btn{ font-size: 0.9rem; padding: 5px 0;} .action-btn{ font-size: 0.75rem; padding: 6px;}} .container::-webkit-scrollbar{ width: 0;} .container{ scrollbar-width: none;} #howToPlayModal{ animation: fadeIn 0.3s ease;}
+#howToPlayModal >div{ animation: slideUp 0.3s ease; margin-bottom: 50px !important; color: #c4c2c2; -webkit-overflow-scrolling: touch !important;}
+@keyframes fadeIn{ from{ opacity: 0;} to{ opacity: 1;}}
+@keyframes slideUp{ from{ transform: translateY(30px); opacity: 0;} to{ transform: translateY(0); opacity: 1;}}
+#howToPlayModal ul{ list-style-type: none;}
+#howToPlayModal ul li::before{ content: "• "; color: #e94560;} #howToPlayModal >div::-webkit-scrollbar{ width: 4px;}
+#howToPlayModal >div::-webkit-scrollbar-thumb{ background: #e94560; border-radius: 4px;}
+/*============================================================Ландшафтная ориентация для мобильных (особенно iPhone SE)============================================================*/
+@media (orientation: landscape) and (max-height: 500px){ .container{ margin-bottom: 20px !important; padding: 4px 8px !important; max-height: 85vh !important; max-width: 450px !important; overflow: hidden !important;} body{ overflow: hidden !important; /* align-items: center !important; padding-top: 0 !important; margin-top: 2x!important;*/} #menuScreen{ gap: 4px; padding: 5px 0;} #menuScreen h1{ font-size: 1.5rem; margin-bottom: 2px;} #menuScreen .subtitle{ font-size: 0.65rem; margin-bottom: 2px;} .menu-btn{ padding: 4px 10px; font-size: 1rem; width: 95%; border-radius: 30px;} .diff-btn{ font-size: 0.9rem; padding: 3px 5px; border-radius: 8px;} .difficulty-section{ gap: 3px; width: 95%;} #sudoku-grid{ max-width: 420px !important; padding: 1px; border-width: 2px;} .cell{ font-size: clamp(0.5rem, 1.8vw, 0.8rem) !important; border-radius: 1px;} .cell.block-border-right{ border-right-width: 2px;} .cell.block-border-bottom{ border-bottom-width: 2px;} #num-panel{ gap: 2px; max-width: 300px !important;} .num-btn{ font-size: 0.8rem !important; padding: 2px 0 !important; border-radius: 6px;} .action-row{ gap: 3px; max-width: 200px !important;} .action-btn{ font-size: 0.6rem !important; padding: 2px !important; border-radius: 6px;} .action-btn.hint-btn, .action-btn.check-btn{ font-size: 0.6rem !important;} .action-btn.solve-btn{ font-size: 0.6rem !important;} #gameScreen{ gap: 3px;} #gameScreen .top-bar{ padding: 0 2px;} #gameScreen .top-bar .back-btn{ font-size: 0.6rem; padding: 2px 8px;} #gameScreen .top-bar .status{ font-size: 0.6rem;} #gameScreen .top-bar .timer{ font-size: 0.6rem;} #message{ font-size: 0.6rem; min-height: 1em;} #howToPlayModal >div{ padding: 15px !important; max-height: 70vh !important; margin-bottom: 50px !important; margin-top: 2px !important;} #howToPlayModal h2{ font-size: 1.2rem !important; margin-bottom: 10px !important;} #howToPlayModal div[style*="color:#ccc"]{ font-size: 0.75rem !important; line-height: 1.4 !important;} #howToPlayModal ul{ padding-left: 12px !important; margin: 4px 0 !important;} #howToPlayModal .menu-btn{ font-size: 0.7rem !important; padding: 6px !important; margin-top: 10px !important;} #closeHowToPlay{ font-size: 1.2rem !important; top: 5px !important; right: 10px !important;}} @media (orientation: landscape) and (max-height: 400px){ .container{ margin-bottom: 10vh !important; padding: 2px 6px !important; max-height: 83vh !important;} #sudoku-grid{ max-width: 200px !important;} #num-panel{ max-width: 180px !important;} .action-row{ max-width: 180px !important;} .cell{ font-size: clamp(0.4rem, 1.5vw, 0.6rem) !important;}}
+/*============================================================Специальные стили для iframe ВК 1000x750============================================================*/
+@media (min-width: 900px) and (max-width: 1100px) and (min-height: 680px) and (max-height: 800px){ .container{ padding: 8px 15px 10px 15px !important; max-width: 450px !important; margin: 0 auto 50px !important; max-height: 100% !important; overflow: hidden !important; transform: none !important;} body{ overflow: hidden !important; /* align-items: flex-start !important; padding-top: 5px !important; уменьшил */} #sudoku-grid{ max-width: 440px !important; padding: 2px !important; border-width: 2px !important;} .cell{ font-size: clamp(1rem, 3.5vw, 1.5rem) !important; } #num-panel{ max-width: 440px !important; gap: 3px !important; margin-top: 2px !important;} .num-btn{ font-size: 0.85rem !important; padding: 4px 0 !important; border-radius: 6px !important;} .action-row{ max-width: 380px !important; gap: 4px !important;} .action-btn{ font-size: 1.2rem !important; padding: 4px !important; border-radius: 6px !important;} .action-btn.hint-btn, .action-btn.check-btn{ font-size: 1.2rem !important;} .action-btn.solve-btn{ font-size: 1.2rem !important;} #gameScreen{ gap: 3px !important; margin-top: 0 !important;} #gameScreen .top-bar{ padding: 0 5px !important; margin-bottom: 0 !important;} #gameScreen .top-bar .back-btn{ font-size: 1.2rem !important; padding: 2px 8px !important;} #gameScreen .top-bar .status{ font-size: 1.2rem !important;} #gameScreen .top-bar .timer{ font-size: 1.2rem !important;} #message{ font-size: 1.2rem !important; min-height: 1em !important; margin-top: 2px !important;}} @media (min-width: 900px) and (max-width: 1100px) and (min-height: 600px) and (max-height: 679px){ .container{ padding: 4px 10px 6px 10px !important; max-width: 420px !important; margin: 0 auto 50px !important; max-height: 100% !important; overflow-y: hidden !important;} body{ overflow: hidden !important; /* align-items: flex-start !important; padding-top: 2px !important;*/} #sudoku-grid{ max-width: 420px !important; padding: 1px !important; border-width: 2px !important;} .cell{ font-size: clamp(0.8rem, 3vw, 1.4rem) !important;} #num-panel{ max-width: 420px !important; gap: 2px !important; margin-top: 2px !important;} .num-btn{ font-size: 0.9rem !important; padding: 3px 0 !important; border-radius: 4px !important;} .action-row{ max-width: 380px !important; gap: 3px !important;} .action-btn{ font-size: 1.2rem !important; padding: 3px !important; border-radius: 4px !important;} .action-btn.hint-btn, .action-btn.check-btn{ font-size: 1.2rem !important;} .action-btn.solve-btn{ font-size: 1.2rem !important;} #gameScreen{ gap: 2px !important;} #gameScreen .top-bar .back-btn{ font-size: 1.2rem !important; padding: 2px 6px !important;} #gameScreen .top-bar .status{ font-size: 1.2rem !important;} #gameScreen .top-bar .timer{ font-size: 1.2rem !important;} #message{ font-size: 1.1rem !important; min-height: 0.8em !important;}}
+/*============================================================ТЕМЫ ОФОРМЛЕНИЯ (меняют только фон и оформление) Цвета цифр НЕ МЕНЯЮТСЯ - единые для всех тем============================================================*/ body.theme-dark::before{ background: radial-gradient(2px 2px at 5% 10%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #fff, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(255,255,255,0.7), rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(255,255,255,0.7), rgba(0,0,0,0)), linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0d0d2b 100%)}
+body.theme-dark{ background: #0a0a1a !important;}
+body.theme-dark .container{ background: rgba(22, 33, 62, 0.92) !important; border-color: rgba(255,255,255,0.05) !important;}
+body.theme-dark #sudoku-grid{ background: #0f3460 !important; border-color: #0f3460 !important;}
+body.theme-dark .cell{ background: #1a1a2e !important;}
+body.theme-dark #themeModal >div{ background: #16213e !important; color: #fff !important;} body.theme-dark .cell.selected{ background: #350066 !important; box-shadow: 0 0 25px rgba(119, 49, 177, 0.6) !important}
+body.theme-dark #themeModal h2{ color: #e94560 !important;}
+body.theme-dark #themeModal .theme-subtitle{ color: #aaa !important;}
+body.theme-dark #themeModal .theme-btn{ color: #fff !important;}
+body.theme-dark #themeModal .theme-btn.active-theme{ border-color: #e94560 !important; background: rgba(233, 69, 96, 0.15) !important;}
+body.theme-dark .cell.highlighted{ background: #2a3a5e !important;}
+body.theme-dark .cell.same-number{ background: #2a4a6e !important;}
+body.theme-dark .num-btn{ background: #0f3460 !important; color: #fff !important;}
+body.theme-dark .num-btn.erase{ background: #4a2a2a !important;}
+body.theme-dark .action-btn{ background: #0f3460 !important; color: #fff !important;}
+body.theme-dark .action-btn.hint-btn{ background: #2a4a2a !important;}
+body.theme-dark .action-btn.check-btn{ background: #2a4a6e !important;}
+body.theme-dark .action-btn.solve-btn{ background: #4a2a2a !important;}
+body.theme-dark .menu-btn{ background: #e94560 !important; color: #fff !important;}
+body.theme-dark .menu-btn.secondary{ background: #0f3460 !important;}
+body.theme-dark .menu-btn.social{ background: #4a6fa5 !important;}
+body.theme-dark .diff-btn{ background: #1a2a4a !important; color: #aaa !important;}
+body.theme-dark .diff-btn.active{ border-color: #e94560 !important; background: #2a1a3a !important; color: #fff !important;}
+body.theme-dark #menuScreen h1{ color: #e94560 !important; text-shadow: 0 0 30px rgba(233, 69, 96, 0.3) !important;}
+body.theme-dark #message{ color: #ffd54f !important;}
+body.theme-dark #howToPlayModal >div{ background: #16213e !important;color: #c4c2c2 !important;}
+body.theme-dark #howToPlayModal >div h2{ color: #e94560 !important;}
+body.theme-dark #howToPlayModal >div .menu-btn{ background: #e94560 !important; color: #000000 !important;} body.theme-light{ background: #f0ebe3 !important;}
+body.theme-light .container{ background: rgba(255, 248, 240, 0.95) !important; border-color: rgba(0,0,0,0.1) !important;}
+body.theme-light #sudoku-grid{ background: #d5cdc5 !important; border-color: #d5cdc5 !important;}
+body.theme-light .cell{ background: #f5f0e8 !important;}
+body.theme-light #themeModal >div{ background: #f0ebe3 !important; color: #1a1a2e !important;}
+body.theme-light::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cpath d='M20 150 Q70 100 120 150 T220 150' stroke='rgba(180,160,140,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M40 180 Q90 130 140 180 T240 180' stroke='rgba(180,160,140,0.1)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M10 120 Q60 70 110 120 T210 120' stroke='rgba(200,100,150,0.3)' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") repeat, linear-gradient(135deg, #f0ffe2 0%, #ffe3c8 50%, #ffd6ff 100%) !important;}
+body.theme-light .cell.selected{ background: #c9f0d1 !important; box-shadow: 0 0 25px rgba(179, 255, 202, 0.6) !important;} body.theme-light #gameScreen .top-bar .status{ color: #17415e !important;}
+body.theme-light #gameScreen .top-bar .back-btn{ color: #17415e !important; border-color: #888 !important}
+body.theme-light #themeModal h2{ color: #f35544 !important;}
+body.theme-light #themeModal .theme-subtitle{ color: #666 !important;}
+body.theme-light #themeModal .theme-btn{ color: #1a1a2e !important;}
+body.theme-light #themeModal .theme-btn.active-theme{ border-color: #c0392b !important; background: rgba(192, 57, 43, 0.15) !important;}
+body.theme-light #closeThemeModal{ color: #1a1a2e !important;}
+body.theme-light .cell.highlighted{ background: #e8e0d8 !important;}
+body.theme-light .cell.same-number{ background: #d8d0c8 !important;}
+body.theme-light .num-btn{ background: #b6faff !important; color: #1a1a2e !important;}
+body.theme-light .num-btn.erase{ background: #c8b8a8 !important; color: #1a1a2e !important;}
+body.theme-light .num-btn:active{ background: #edfcb8 !important; color: #fff !important;}
+body.theme-light .action-btn{ background: #d5cdc5 !important; color: #1a1a2e !important;}
+body.theme-light .action-btn.hint-btn{ background: #cee986 !important; color: #1a1a2e !important;}
+body.theme-light .action-btn.check-btn{ background: #77cff8 !important; color: #1a1a2e !important;}
+body.theme-light .action-btn.solve-btn{ background: #bc80ec !important; color: #1a1a2e !important;}
+body.theme-light .action-btn:active{ background: #e94560 !important; color: #fff !important;}
+body.theme-light .menu-btn{ background: #d5f1cf !important; color: #bb6a00 !important; box-shadow: 0 4px 20px rgba(192, 57, 43, 0.3) !important;}
+body.theme-light .menu-btn.secondary{ background: #93bb8b !important; color: #fff !important;}
+body.theme-light .menu-btn.social{ background: #4a6fa5 !important; color: #fff !important;}
+body.theme-light .diff-btn{ background: #e8e0d8 !important; color: #555 !important;}
+body.theme-light .diff-btn.active{ border-color: #c0392b !important; background: #f5f0e8 !important; color: #1a1a2e !important;}
+body.theme-light #menuScreen h1{ color: #c0392b !important; text-shadow: 0 0 30px rgba(192, 57, 43, 0.2) !important;}
+body.theme-light #message{ color: #c0392b !important;}
+body.theme-light #howToPlayModal >div{ background: #f0ebe3 !important; color: #1a1a2e !important;}
+body.theme-light #howToPlayModal >div h2{ color: #ee60d6 !important;}
+body.theme-light #howToPlayModal >div .menu-btn{ background: #eea199 !important; color: #000000 !important;} body.theme-blue{ background: #0a1a3a !important;}
+body.theme-blue .container{ background: rgba(15, 35, 75, 0.95) !important; border-color: rgba(100, 150, 255, 0.15) !important;}
+body.theme-blue #sudoku-grid{ background: #1a3a6a !important; border-color: #1a3a6a !important;}
+body.theme-blue .cell{ background: #0a2a5a !important;}
+body.theme-blue #themeModal >div{ background: #1a2a5e !important; color: #b8d4ff !important;}
+body.theme-blue #gameScreen .top-bar .status{ color: #4a8af0 !important;}
+body.theme-blue #gameScreen .top-bar .back-btn{ color: #4a8af0 !important; border-color: #888 !important}
+body.theme-blue #themeModal h2{ color: #4a8af0 !important;}
+body.theme-blue #themeModal .theme-subtitle{ color: #88aacc !important;}
+body.theme-blue #themeModal .theme-btn{ color: #b8d4ff !important;}
+body.theme-blue #themeModal .theme-btn.active-theme{ border-color: #4a8af0 !important; background: rgba(42, 106, 240, 0.15) !important;}
+body.theme-blue #closeThemeModal{ color: #b8d4ff !important;}
+body.theme-blue .cell.highlighted{ background: #1a3a6a !important;}
+body.theme-blue .cell.same-number{ background: #1a4a7a !important;}
+body.theme-blue .num-btn{ background: #1a3a6a !important; color: #b8d4ff !important;}
+body.theme-blue .num-btn.erase{ background: #3a2a4a !important; color: #b8d4ff !important;}
+body.theme-blue .num-btn:active{ background: #4a8af0 !important; color: #fff !important;}
+body.theme-blue .action-btn{ background: #1a3a6a !important; color: #b8d4ff !important;}
+body.theme-blue .action-btn.hint-btn{ background: #1a4a3a !important; color: #b8d4ff !important;}
+body.theme-blue .action-btn.check-btn{ background: #2a3a7a !important; color: #b8d4ff !important;}
+body.theme-blue .action-btn.solve-btn{ background: #4a2a4a !important; color: #b8d4ff !important;}
+body.theme-blue .action-btn:active{ background: #4a8af0 !important; color: #fff !important;}
+body.theme-blue .menu-btn{ background: #2a6af0 !important; color: #fff !important; box-shadow: 0 4px 20px rgba(42, 106, 240, 0.3) !important;}
+body.theme-blue .menu-btn.secondary{ background: #1a3a6a !important; color: #b8d4ff !important;}
+body.theme-blue .menu-btn.social{ background: #3a7af0 !important; color: #fff !important;}
+body.theme-blue .diff-btn{ background: #0a2a5a !important; color: #88aacc !important;}
+body.theme-blue .diff-btn.active{ border-color: #4a8af0 !important; background: #1a3a6a !important; color: #fff !important;}
+body.theme-blue #menuScreen h1{ color: #4a8af0 !important; text-shadow: 0 0 30px rgba(42, 106, 240, 0.3) !important;}
+body.theme-blue #message{ color: #66ddff !important;}
+body.theme-blue #howToPlayModal >div{ background: #1a2a5e !important; color: #b8d4ff !important;}
+body.theme-blue #howToPlayModal >div h2{ color: #4a8af0 !important;}
+body.theme-blue #howToPlayModal >div .menu-btn{ background: #2a6af0 !important; color: #fff !important;} body.theme-pastel{ background: #f5e6d3 !important;}
+body.theme-pastel .container{ background: rgba(245, 230, 211, 0.95) !important; border-color: rgba(180, 150, 120, 0.2) !important;}
+body.theme-pastel #sudoku-grid{ background: #e0d0c0 !important; border-color: #e0d0c0 !important;}
+body.theme-pastel .cell{ background: #f5e8dc !important;}
+body.theme-pastel #themeModal >div{ background: #f5e6d3 !important; color: #5a4a3a !important;}
+body.theme-pastel #themeModal h2{ color: #e08060 !important;}
+body.theme-pastel #themeModal .theme-subtitle{ color: #8a7a6a !important;}
+body.theme-pastel #themeModal .theme-btn{ color: #5a4a3a !important;}
+body.theme-pastel #themeModal .theme-btn.active-theme{ border-color: #e08060 !important; background: rgba(224, 128, 96, 0.15) !important;}
+body.theme-pastel #closeThemeModal{ color: #5a4a3a !important;}
+body.theme-pastel .cell.highlighted{ background: #e8dcc8 !important;}
+body.theme-pastel .cell.same-number{ background: #dcccb8 !important;}
+body.theme-pastel .num-btn{ background: #e0d0c0 !important; color: #5a4a3a !important;}
+body.theme-pastel .num-btn.erase{ background: #d0b8a8 !important; color: #5a4a3a !important;}
+body.theme-pastel .num-btn:active{ background: #e07050 !important; color: #fff !important;}
+body.theme-pastel .action-btn{ background: #e0d0c0 !important; color: #5a4a3a !important;}
+body.theme-pastel .action-btn.hint-btn{ background: #c8b8a8 !important; color: #5a4a3a !important;}
+body.theme-pastel .action-btn.check-btn{ background: #b8a8b8 !important; color: #5a4a3a !important;}
+body.theme-pastel .action-btn.solve-btn{ background: #d8b8a8 !important; color: #5a4a3a !important;}
+body.theme-pastel .action-btn:active{ background: #e07050 !important; color: #fff !important;}
+body.theme-pastel .menu-btn{ background: #e08060 !important; color: #fff !important; box-shadow: 0 4px 20px rgba(224, 128, 96, 0.3) !important;}
+body.theme-pastel .menu-btn.secondary{ background: #d0c0b0 !important; color: #5a4a3a !important;}
+body.theme-pastel .menu-btn.social{ background: #b0a090 !important; color: #fff !important;}
+body.theme-pastel .diff-btn{ background: #e8dcc8 !important; color: #7a6a5a !important;}
+body.theme-pastel .diff-btn.active{ border-color: #e08060 !important; background: #f5e8dc !important; color: #5a4a3a !important;}
+body.theme-pastel #menuScreen h1{ color: #e08060 !important; text-shadow: 0 0 30px rgba(224, 128, 96, 0.2) !important;}
+body.theme-pastel #message{ color: #e08060 !important;}
+body.theme-pastel #howToPlayModal >div{ background: #f5e6d3 !important; color: #5a4a3a !important;}
+body.theme-pastel #howToPlayModal >div h2{ color: #e08060 !important;}
+body.theme-pastel #howToPlayModal >div .menu-btn{ background: #e08060 !important; color: #fff !important;}
+body.theme-pastel #howToPlayModal >div .menu-btn.secondary{ background: #d0c0b0 !important; color: #5a4a3a !important;}
+body.theme-pastel .cell.selected{ background: #FEE5AC !important; box-shadow: 0 0 25px rgba(253, 255, 160, 0.6) !important;} body.theme-pastel #gameScreen .top-bar .status{ color: #e08060 !important;}
+body.theme-pastel #gameScreen .top-bar .back-btn{ color: #e08060 !important; border-color: #888 !important}
+body.theme-pastel::before{ background: radial-gradient(2px 2px at 5% 10%, #91ff00, rgba(0,0,0,0)), radial-gradient(2px 2px at 15% 85%, #ffc4ff, rgba(0,0,0,0)), radial-gradient(2px 2px at 25% 25%, #79aefd, rgba(0,0,0,0)), radial-gradient(2px 2px at 35% 75%, #ff7d7d, rgba(0,0,0,0)), radial-gradient(2px 2px at 45% 15%, #ffcece, rgba(0,0,0,0)), radial-gradient(2px 2px at 55% 65%, #29ff45, rgba(0,0,0,0)), radial-gradient(2px 2px at 65% 35%, #ffe600, rgba(0,0,0,0)), radial-gradient(2px 2px at 75% 55%, #00d824, rgba(0,0,0,0)), radial-gradient(2px 2px at 85% 5%, #fffb00, rgba(0,0,0,0)), radial-gradient(2px 2px at 95% 95%, #00e231, rgba(0,0,0,0)), radial-gradient(1px 1px at 8% 20%, #eeff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 12% 50%, #ff88ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 18% 70%, #fddc23, rgba(0,0,0,0)), radial-gradient(1px 1px at 22% 40%, #ffc6c6, rgba(0,0,0,0)), radial-gradient(1px 1px at 28% 90%, #7e9cff, rgba(0,0,0,0)), radial-gradient(1px 1px at 32% 5%, #0bffc2, rgba(0,0,0,0)), radial-gradient(1px 1px at 38% 60%, #03ff74, rgba(0,0,0,0)), radial-gradient(1px 1px at 42% 30%, #9dff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 48% 80%, hsl(192, 67%, 80%), rgba(0,0,0,0)), radial-gradient(1px 1px at 52% 10%, #5871ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 58% 45%, #ffe600, rgba(0,0,0,0)), radial-gradient(1px 1px at 62% 95%, #bbff00, rgba(0,0,0,0)), radial-gradient(1px 1px at 68% 20%, #ffc5c5, rgba(0,0,0,0)), radial-gradient(1px 1px at 72% 50%, #08c5ff, rgba(0,0,0,0)), radial-gradient(1px 1px at 78% 75%, #00d636, rgba(0,0,0,0)), radial-gradient(1px 1px at 82% 15%, #14ffcc, rgba(0,0,0,0)), radial-gradient(1px 1px at 88% 65%, #f58e3b, rgba(206, 255, 239, 0)), radial-gradient(1px 1px at 92% 40%, #67ffb3, rgba(0,0,0,0)), radial-gradient(1px 1px at 98% 30%, #19ff8c, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 10% 45%, rgba(255, 238, 0, 0.7), rgba(197, 255, 103, 0)), radial-gradient(1.5px 1.5px at 30% 55%, rgba(251, 255, 0, 0.7), rgba(255, 119, 119, 0)), radial-gradient(1.5px 1.5px at 50% 35%, rgba(32, 255, 106, 0.7), rgba(255, 130, 130, 0)), radial-gradient(1.5px 1.5px at 70% 45%, rgba(97, 255, 49, 0.7), rgba(127, 255, 155, 0)), radial-gradient(1.5px 1.5px at 90% 55%, rgba(6, 255, 19, 0.7), rgba(255, 132, 132, 0)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M0 60 L60 0 L120 60 L60 120 Z' stroke='rgba(180,160,140,0.15)' stroke-width='1.5' fill='none'/%3E%3Cpath d='M30 60 L60 30 L90 60 L60 90 Z' stroke='rgba(180,160,140,0.1)' stroke-width='1' fill='none'/%3E%3Cpath d='M15 60 L60 15 L105 60 L60 105 Z' stroke='rgba(180,160,140,0.08)' stroke-width='0.8' fill='none'/%3E%3C/svg%3E") repeat, linear-gradient(135deg, #f0ffe2 0%, #ffe3c8 50%, #ffd6ff 100%) !important;}
+/*============================================================ЕДИНЫЕ ЦВЕТА ЦИФР ДЛЯ ВСЕХ ТЕМ (НЕ МЕНЯЮТСЯ)============================================================*/ .cell.given{ color: #8a8fa8 !important;} .cell.user{ color: #4fc3f7 !important;} .cell.error{ color: #ff1744 !important;} .cell.hint{ background: #ffd54f !important; color: #1a1a2e !important; box-shadow: 0 0 30px rgba(255, 213, 79, 0.6) !important;} .cell.selected{ background: #ee6178; color: #fff ; box-shadow: 0 0 20px rgba(233, 69, 96, 0.4) !important;} .social-row{ display: flex; justify-content: center; gap: 10px; width: 85%;}
+.menu-btn.social-icon{ background: #4a6fa5; box-shadow: 0 4px 20px rgba(74, 111, 165, 0.3); padding: 14px 0; font-size: 1.5rem; width: 60px !important; min-width: 50px; flex: 0 0 auto;}
+.menu-btn.social-icon:active{ transform: scale(0.95);} #themeModal{ display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 20px;}
+#themeModal >div{ background: #16213e; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; position: relative; animation: slideUp 0.3s ease;}
+#themeModal h2{ color: #e94560; margin-bottom: 10px; text-align: center;}
+#themeModal .theme-subtitle{ color: #aaa; text-align: center; font-size: 0.9rem; margin-bottom: 20px;}
+.theme-options{ display: flex; flex-direction: column; gap: 10px;}
+.theme-btn{ background: rgba(255,255,255,0.05); border: 2px solid transparent; color: #fff; padding: 12px; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: 0.3s; text-align: center;}
+.theme-btn:active{ transform: scale(0.95);}
+.theme-btn.active-theme{ border-color: #e94560; background: rgba(233, 69, 96, 0.15);}
+.theme-btn .theme-color{ display: inline-block; width: 20px; height: 20px; border-radius: 50%; vertical-align: middle; margin-right: 10px; border: 2px solid rgba(255,255,255,0.2);} .theme-btn.dark .theme-color{ background: #0a0a1a;}
+.theme-btn.light .theme-color{ background: #f5f0e8;}
+.theme-btn.blue .theme-color{ background: #3d67f0;}
+.theme-btn.pastel .theme-color{ background: #f5bd74;}
+#closeThemeModal{ position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer;} @media (max-width: 450px){ .menu-btn.social-icon{ width: 50px !important; font-size: 1.3rem; padding: 12px 0;} #themeModal >div{ padding: 20px; margin: 0 10px;}} #themeModal >div,
+#howToPlayModal >div{ transition: background 0.3s ease, color 0.3s ease;}
+#themeModal .theme-btn{ transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;} .cell.checked-correct{ color: #39ff14 !important; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5) !important;}
+.cell.checked-error{ color: #ff1744 !important; text-shadow: 0 0 10px rgba(255, 23, 68, 0.5) !important;}
+/*============================================================Модалка для получения подсказок за рекламу============================================================*/
+#hintAdModal{ display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 3000; justify-content: center; align-items: center; padding: 20px; animation: fadeIn 0.3s ease;}
+#hintAdModal.show{ display: flex;}
+#hintAdModal .modal-content{ background: rgba(22, 33, 62, 0.95); backdrop-filter: blur(15px); border-radius: 24px; padding: 30px 25px; max-width: 420px; width: 100%; text-align: center; animation: slideUp 0.3s ease; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; overflow: hidden;} #hintAdModal .modal-content::before{ content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 20%, rgba(233, 69, 96, 0.08), transparent 60%); pointer-events: none;}
+#hintAdModal .modal-icon{ font-size: 3.5rem; margin-bottom: 10px; display: block; animation: pulse 1.5s ease infinite;}
+#hintAdModal h2{ color: #fff; font-size: 1.5rem; margin-bottom: 8px; position: relative;}
+#hintAdModal .modal-title{ color: #e94560; font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; position: relative;}
+#hintAdModal .modal-subtitle{ color: #8a8fa8; font-size: 0.85rem; margin-bottom: 20px; line-height: 1.5; position: relative;}
+#hintAdModal .modal-subtitle strong{ color: #ffd54f;}
+#hintAdModal .modal-buttons{ display: flex; gap: 10px; justify-content: center; position: relative;}
+#hintAdModal .modal-btn{ padding: 12px 28px; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; touch-action: manipulation; flex: 1;}
+#hintAdModal .modal-btn:active{ transform: scale(0.95);}
+#hintAdModal .modal-btn-cancel{ background: rgba(255,255,255,0.08); color: #aaa; border: 1px solid rgba(255,255,255,0.1);}
+#hintAdModal .modal-btn-cancel:hover{ background: rgba(255,255,255,0.15); color: #fff;}
+#hintAdModal .modal-btn-confirm{ background: linear-gradient(135deg, #e94560, #c23152); color: #fff; box-shadow: 0 4px 25px rgba(233, 69, 96, 0.4);}
+#hintAdModal .modal-btn-confirm:hover{ box-shadow: 0 6px 35px rgba(233, 69, 96, 0.5); transform: translateY(-2px);}
+#hintAdModal .modal-btn-confirm:active{ transform: scale(0.95) !important;} @media (max-width: 450px){ #hintAdModal .modal-content{ padding: 25px 20px; max-width: 95%;} #hintAdModal .modal-icon{ font-size: 2.8rem;} #hintAdModal h2{ font-size: 1.3rem;} #hintAdModal .modal-title{ font-size: 1rem;} #hintAdModal .modal-subtitle{ font-size: 0.8rem; margin-bottom: 15px;} #hintAdModal .modal-btn{ padding: 10px 16px; font-size: 0.85rem;}}
+@media (max-width: 380px){ #hintAdModal .modal-content{ padding: 20px 15px;} #hintAdModal .modal-icon{ font-size: 2.2rem;} #hintAdModal h2{ font-size: 1.1rem;} #hintAdModal .modal-btn{ padding: 8px 12px; font-size: 0.75rem;}} @media (orientation: landscape) and (max-height: 500px){ #hintAdModal .modal-content{ padding: 15px 20px; max-width: 400px; max-height: 85vh; overflow-y: auto;} #hintAdModal .modal-icon{ font-size: 2rem; margin-bottom: 5px;} #hintAdModal h2{ font-size: 1.1rem; margin-bottom: 4px;} #hintAdModal .modal-title{ font-size: 0.85rem;} #hintAdModal .modal-subtitle{ font-size: 0.7rem; margin-bottom: 10px;} #hintAdModal .modal-btn{ padding: 6px 14px; font-size: 0.75rem;}} @media (min-width: 800px) and (max-height: 850px){ #hintAdModal .modal-content{ padding: 20px 25px; max-width: 380px;} #hintAdModal .modal-icon{ font-size: 2.5rem; margin-bottom: 5px;} #hintAdModal h2{ font-size: 1.2rem; margin-bottom: 4px;} #hintAdModal .modal-title{ font-size: 0.9rem;} #hintAdModal .modal-subtitle{ font-size: 0.75rem; margin-bottom: 12px;} #hintAdModal .modal-btn{ padding: 8px 18px; font-size: 0.8rem;}}
+/*============================================================Модалка достижений============================================================*/
+#achievementsModal{ display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 3000; justify-content: center; align-items: center; padding: 20px; animation: fadeIn 0.3s ease;}
+#closeAchievementsModal{ position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; transition: 0.2s; padding: 0 5px;}
+#closeAchievementsModal:hover{ opacity: 0.7;}
+#achievementsModal h2{ color: #fff; text-align: center; margin-bottom: 2px; font-size: 1.5rem;}
+#achievementsModal .achievements-subtitle{ color: #8a8fa8; text-align: center; font-size: 0.9rem; margin-bottom: 15px;} #achievementsList{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: calc(85vh - 140px); overflow-y: auto; padding-right: 5px;} #achievementsList::-webkit-scrollbar{ width: 4px;}
+#achievementsList::-webkit-scrollbar-thumb{ background: #e94560; border-radius: 4px;}
+#achievementsList::-webkit-scrollbar-track{ background: rgba(255, 255, 255, 0.05); border-radius: 4px;} .achievement-item{ background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px 10px; text-align: center; border: 2px solid transparent; transition: 0.2s;}
+.achievement-item.unlocked{ border-color: #ffd54f; background: rgba(255, 213, 79, 0.08);}
+.achievement-item.locked{ opacity: 0.5;}
+.achievement-item .icon{ font-size: 2rem; display: block; line-height: 1.2;}
+.achievement-item .name{ color: #fff; font-weight: bold; font-size: 0.9rem; margin-top: 4px;}
+.achievement-item .desc{ color: #aaa; font-size: 0.75rem;} .achievements-pagination{ display: flex; justify-content: space-between; align-items: center; margin-top: 15px;}
+.achievements-pagination button{ background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.1); color: #aaa; padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: 0.2s; font-size: 0.9rem;}
+.achievements-pagination button:hover{ background: rgba(255, 255, 255, 0.15); color: #fff;}
+.achievements-pagination button:active{ transform: scale(0.95);}
+.achievements-pagination .page-info{ color: #aaa; font-size: 0.9rem;}
+/*============================================================Адаптив для мобильных============================================================*/
+@media (max-width: 599px){ #achievementsList{ grid-template-columns: 1fr; max-height: calc(85vh - 120px); gap: 8px;} .achievement-item{ padding: 10px;} .achievement-item .icon{ font-size: 1.8rem;} .achievement-item .name{ font-size: 0.85rem;} #achievementsModal >div{ padding: 20px 15px 15px; max-width: 95%;} .achievements-pagination button{ padding: 6px 14px; font-size: 0.8rem;}} @media (max-width: 380px){ #achievementsModal >div{ padding: 15px 10px;} .achievement-item{ padding: 8px;} .achievement-item .icon{ font-size: 1.5rem;} .achievement-item .name{ font-size: 0.8rem;} .achievement-item .desc{ font-size: 0.7rem;}} @media (orientation: landscape) and (max-height: 500px){ #achievementsModal >div{ max-height: 90vh; padding: 15px;} #achievementsList{ max-height: calc(90vh - 110px); grid-template-columns: 1fr 1fr; gap: 6px;} .achievement-item{ padding: 6px;} .achievement-item .icon{ font-size: 1.4rem;} .achievement-item .name{ font-size: 0.7rem;} .achievement-item .desc{ font-size: 0.6rem;} #achievementsModal h2{ font-size: 1.2rem; margin-bottom: 0;} #achievementsModal .achievements-subtitle{ font-size: 0.7rem; margin-bottom: 8px;} .achievements-pagination{ margin-top: 8px;} .achievements-pagination button{ padding: 4px 12px; font-size: 0.7rem;}}
+/*============================================================Попап достижения============================================================*/
+#achievementPopup.show{ display: block !important; opacity: 1 !important; transform: translateX(-50%) scale(1) !important; pointer-events: none;}
+#achievementPopup.hide{ opacity: 0 !important; transform: translateX(-50%) scale(0.9) !important; pointer-events: none;} @media (max-width: 480px){ #achievementPopup{ top: 10px; padding: 12px 20px; min-width: unset; width: 90%;} #achievementPopupIcon{ font-size: 2rem !important;} #achievementPopupName{ font-size: 1rem !important;}} .bonus-modal-content{ background: rgba(22,33,62,0.95); backdrop-filter: blur(15px); border-radius: 24px; padding: 30px 25px; max-width: 400px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: slideUp 0.3s ease;}
+.bonus-modal-content h2{ color: #fff; font-size: 1.5rem; margin-bottom: 8px;}
+.bonus-subtitle{ color: #8a8fa8; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;}
+.bonus-btn{ width: 80px; height: 80px; border-radius: 50%; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; transition: transform 0.15s; box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+.bonus-btn:active{ transform: scale(0.92);}
+.bonus-cancel{ background: rgba(255,255,255,0.08); color: #aaa; border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 50px; font-size: 1rem; cursor: pointer; width: 100%; transition: background 0.3s, color 0.3s, border-color 0.3s;}
+.bonus-cancel:active{ transform: scale(0.95);}
+.bonus-ok-btn{ border: none; padding: 12px 40px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; background: linear-gradient(135deg, #e94560, #c23152); color: #fff; box-shadow: 0 4px 25px rgba(233,69,96,0.4); transition: transform 0.15s, background 0.3s, color 0.3s, box-shadow 0.3s;}
+.bonus-ok-btn:active{ transform: scale(0.95);} body.theme-light .bonus-modal-content{ background: rgba(255, 248, 240, 0.95); border-color: rgba(0,0,0,0.1);}
+body.theme-light .bonus-modal-content h2{ color: #1a1a2e;}
+body.theme-light .bonus-subtitle{ color: #555;}
+body.theme-light .bonus-cancel{ background: #e8e0d8; color: #1a1a2e; border-color: #ccc;}
+body.theme-light .bonus-ok-btn{ background: linear-gradient(135deg, #ef5350, #c62828); color: #fff; box-shadow: 0 4px 25px rgba(239,83,80,0.4);}
+body.theme-blue .bonus-modal-content{ background: rgba(15, 35, 75, 0.95); border-color: rgba(100,150,255,0.15);}
+body.theme-blue .bonus-modal-content h2{ color: #4a8af0;}
+body.theme-blue .bonus-subtitle{ color: #88aacc;}
+body.theme-blue .bonus-cancel{ background: rgba(255,255,255,0.08); color: #88aacc; border-color: rgba(255,255,255,0.1);}
+body.theme-blue .bonus-ok-btn{ background: linear-gradient(135deg, #2a6af0, #0d47a1); color: #fff; box-shadow: 0 4px 25px rgba(42,106,240,0.4);}
+body.theme-pastel .bonus-modal-content{ background: rgba(245, 230, 211, 0.95); border-color: rgba(180,150,120,0.2);}
+body.theme-pastel .bonus-modal-content h2{ color: #e08060;}
+body.theme-pastel .bonus-subtitle{ color: #7a6a5a;}
+body.theme-pastel .bonus-cancel{ background: #e8dcc8; color: #5a4a3a; border-color: #ccc;}
+body.theme-pastel .bonus-ok-btn{ background: linear-gradient(135deg, #ef9a9a, #c62828); color: #fff; box-shadow: 0 4px 25px rgba(239,154,154,0.4);} body.theme-dark .bonus-5{ background: linear-gradient(135deg, #4caf50, #2e7d32); color: #fff;}
+body.theme-dark .bonus-15{ background: linear-gradient(135deg, #4fc3f7, #0288d1); color: #fff;}
+body.theme-light .bonus-5{ background: linear-gradient(135deg, #66bb6a, #388e3c); color: #fff;}
+body.theme-light .bonus-15{ background: linear-gradient(135deg, #4dd0e1, #00acc1); color: #fff;}
+body.theme-blue .bonus-5{ background: linear-gradient(135deg, #66bb6a, #2e7d32); color: #fff;}
+body.theme-blue .bonus-15{ background: linear-gradient(135deg, #4fc3f7, #0277bd); color: #fff;}
+body.theme-pastel .bonus-5{ background: linear-gradient(135deg, #81c784, #388e3c); color: #fff;}
+body.theme-pastel .bonus-15{ background: linear-gradient(135deg, #80deea, #00838f); color: #fff;} .result-modal-content{ background: rgba(22,33,62,0.95); backdrop-filter: blur(15px); border-radius: 24px; padding: 30px 25px; max-width: 400px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: slideUp 0.3s ease;}
+.result-modal-content h2{ color: #fff; font-size: 1.6rem; margin-bottom: 5px;}
+.result-modal-content #bonusResultAmount{ font-size: 1.8rem; font-weight: bold; color: #ffd54f; margin: 10px 0 20px;}
+.result-ok-btn{ background: linear-gradient(135deg, #e94560, #c23152); color: #fff; border: none; padding: 12px 40px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 25px rgba(233,69,96,0.4); transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.15s;}
+.result-ok-btn:active{ transform: scale(0.95);} .achievements-modal-content{ background: rgba(22,33,62,0.95); backdrop-filter: blur(15px); border-radius: 24px; padding: 25px 20px; max-width: 500px; width: 100%; max-height: 80vh; position: relative; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: slideUp 0.3s ease; overflow: hidden;}
+.achievements-modal-content .ach-close-btn{ position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 1.8rem; cursor: pointer; transition: color 0.3s;}
+.achievements-modal-content h2{ color: #fff; text-align: center; margin-bottom: 5px;}
+.achievements-modal-content .ach-subtitle{ color: #8a8fa8; text-align: center; font-size: 0.9rem; margin-bottom: 15px;} .achievements-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-right: 5px; overflow-y: auto; max-height: calc(80vh - 140px); }
+.achievements-grid::-webkit-scrollbar{ width: 4px;}
+.achievements-grid::-webkit-scrollbar-thumb{ background: #e94560; border-radius: 4px;}
+.achievements-grid::-webkit-scrollbar-track{ background: rgba(255,255,255,0.05); border-radius: 4px;} .ach-pagination{ display: flex; justify-content: space-between; align-items: center; margin-top: 15px;}
+.ach-page-btn{ background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: background 0.3s, color 0.3s, border-color 0.3s;}
+.ach-page-btn:active{ transform: scale(0.95);}
+.ach-page-info{ color: #aaa; font-size: 0.9rem;} body.theme-light .result-modal-content{ background: rgba(255, 248, 240, 0.95); border-color: rgba(0,0,0,0.1);}
+body.theme-light .result-modal-content h2{ color: #1a1a2e;}
+body.theme-light .result-ok-btn{ background: linear-gradient(135deg, #ef5350, #c62828); color: #fff; box-shadow: 0 4px 25px rgba(239,83,80,0.4);}
+body.theme-blue .result-modal-content{ background: rgba(15, 35, 75, 0.95); border-color: rgba(100,150,255,0.15);}
+body.theme-blue .result-modal-content h2{ color: #4a8af0;}
+body.theme-blue .result-ok-btn{ background: linear-gradient(135deg, #2a6af0, #0d47a1); color: #fff; box-shadow: 0 4px 25px rgba(42,106,240,0.4);}
+body.theme-pastel .result-modal-content{ background: rgba(245, 230, 211, 0.95); border-color: rgba(180,150,120,0.2);}
+body.theme-pastel .result-modal-content h2{ color: #e08060;}
+body.theme-pastel .result-ok-btn{ background: linear-gradient(135deg, #ef9a9a, #c62828); color: #fff; box-shadow: 0 4px 25px rgba(239,154,154,0.4);}
+.achievements-modal-content{ background: rgba(22,33,62,0.95); }
+body.theme-light .achievements-modal-content{ background: rgba(255,248,240,0.95);}
+body.theme-blue .achievements-modal-content{ background: rgba(15,35,75,0.95);}
+body.theme-pastel .achievements-modal-content{ background: rgba(245,230,211,0.95);} body.theme-light .achievements-modal-content h2,
+body.theme-light #achievementsModal h2{ color: #1a1a2e !important;}
 body.theme-light .achievements-modal-content .ach-subtitle,
-body.theme-light #achievementsModal .ach-subtitle {
-    color: #555 !important;
-}
-body.theme-light .achievements-modal-content .achievement-item .name {
-    color: #1a1a2e !important;
-}
-body.theme-light .achievements-modal-content .achievement-item .desc {
-    color: #666 !important;
-}
+body.theme-light #achievementsModal .ach-subtitle{ color: #555 !important;}
+body.theme-light .achievements-modal-content .achievement-item .name{ color: #1a1a2e !important;}
+body.theme-light .achievements-modal-content .achievement-item .desc{ color: #666 !important;}
 body.theme-light .achievements-modal-content .ach-page-btn,
-body.theme-light #achievementsModal .ach-page-btn {
-    color: #1a1a2e !important;
-    border-color: #ccc !important;
-    background: #e8e0d8 !important;
-}
+body.theme-light #achievementsModal .ach-page-btn{ color: #1a1a2e !important; border-color: #ccc !important; background: #e8e0d8 !important;}
 body.theme-light .achievements-modal-content .ach-page-info,
-body.theme-light #achievementsModal .ach-page-info {
-    color: #1a1a2e !important;
-}
+body.theme-light #achievementsModal .ach-page-info{ color: #1a1a2e !important;}
 body.theme-light .achievements-modal-content .ach-close-btn,
-body.theme-light #achievementsModal .ach-close-btn {
-    color: #1a1a2e !important;
-}
-
-/* Синяя тема */
-body.theme-blue .achievements-modal-content h2,
-body.theme-blue #achievementsModal h2 {
-    color: #4a8af0 !important;
-}
+body.theme-light #achievementsModal .ach-close-btn{ color: #1a1a2e !important;} body.theme-blue .achievements-modal-content h2,
+body.theme-blue #achievementsModal h2{ color: #4a8af0 !important;}
 body.theme-blue .achievements-modal-content .ach-subtitle,
-body.theme-blue #achievementsModal .ach-subtitle {
-    color: #88aacc !important;
-}
-body.theme-blue .achievements-modal-content .achievement-item .name {
-    color: #b8d4ff !important;
-}
-body.theme-blue .achievements-modal-content .achievement-item .desc {
-    color: #88aacc !important;
-}
+body.theme-blue #achievementsModal .ach-subtitle{ color: #88aacc !important;}
+body.theme-blue .achievements-modal-content .achievement-item .name{ color: #b8d4ff !important;}
+body.theme-blue .achievements-modal-content .achievement-item .desc{ color: #88aacc !important;}
 body.theme-blue .achievements-modal-content .ach-page-btn,
-body.theme-blue #achievementsModal .ach-page-btn {
-    color: #88aacc !important;
-    border-color: rgba(255,255,255,0.1) !important;
-    background: rgba(255,255,255,0.08) !important;
-}
+body.theme-blue #achievementsModal .ach-page-btn{ color: #88aacc !important; border-color: rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.08) !important;}
 body.theme-blue .achievements-modal-content .ach-page-info,
-body.theme-blue #achievementsModal .ach-page-info {
-    color: #88aacc !important;
-}
+body.theme-blue #achievementsModal .ach-page-info{ color: #88aacc !important;}
 body.theme-blue .achievements-modal-content .ach-close-btn,
-body.theme-blue #achievementsModal .ach-close-btn {
-    color: #b8d4ff !important;
-}
-
-/* Пастельная тема */
-body.theme-pastel .achievements-modal-content h2,
-body.theme-pastel #achievementsModal h2 {
-    color: #e08060 !important;
-}
+body.theme-blue #achievementsModal .ach-close-btn{ color: #b8d4ff !important;} body.theme-pastel .achievements-modal-content h2,
+body.theme-pastel #achievementsModal h2{ color: #e08060 !important;}
 body.theme-pastel .achievements-modal-content .ach-subtitle,
-body.theme-pastel #achievementsModal .ach-subtitle {
-    color: #7a6a5a !important;
-}
-body.theme-pastel .achievements-modal-content .achievement-item .name {
-    color: #5a4a3a !important;
-}
-body.theme-pastel .achievements-modal-content .achievement-item .desc {
-    color: #7a6a5a !important;
-}
+body.theme-pastel #achievementsModal .ach-subtitle{ color: #7a6a5a !important;}
+body.theme-pastel .achievements-modal-content .achievement-item .name{ color: #5a4a3a !important;}
+body.theme-pastel .achievements-modal-content .achievement-item .desc{ color: #7a6a5a !important;}
 body.theme-pastel .achievements-modal-content .ach-page-btn,
-body.theme-pastel #achievementsModal .ach-page-btn {
-    color: #5a4a3a !important;
-    border-color: #ccc !important;
-    background: #e8dcc8 !important;
-}
+body.theme-pastel #achievementsModal .ach-page-btn{ color: #5a4a3a !important; border-color: #ccc !important; background: #e8dcc8 !important;}
 body.theme-pastel .achievements-modal-content .ach-page-info,
-body.theme-pastel #achievementsModal .ach-page-info {
-    color: #5a4a3a !important;
-}
+body.theme-pastel #achievementsModal .ach-page-info{ color: #5a4a3a !important;}
 body.theme-pastel .achievements-modal-content .ach-close-btn,
-body.theme-pastel #achievementsModal .ach-close-btn {
-    color: #5a4a3a !important;
-}
-/* Цвета уровней сложности в модалке "Как играть?" */
-.level-easy   { color: #4caf50; }
-.level-medium { color: #ff9800; }
-.level-hard   { color: #f44336; }
-.level-expert { color: #9c27b0; }
-
-/* Цвет текста "1 подсказка и 1 проверка" – будет браться из темы */
-.hint-check-text { color: #ffd54f; } /* по умолчанию (тёмная тема) */
-body.theme-light .level-easy   { color: #2e7d32; }
-body.theme-light .level-medium { color: #e65100; }
-body.theme-light .level-hard   { color: #c62828; }
-body.theme-light .level-expert { color: #6a1b9a; }
-body.theme-light .hint-check-text { color: #c62828; }
-/* ---- Цвета для текста в модалке "Как играть?" ---- */
-
-/* Основной текст (описание подсказок/проверок) */
-.hint-info-text {
-    font-size: 0.95rem;
-    margin: 5px 0 10px 0;
-    color: #ccc; /* цвет для тёмной темы (по умолчанию) */
-}
-
-body.theme-light .hint-info-text {
-    color: #333; /* тёмно-серый на светлом фоне */
-}
-
-body.theme-blue .hint-info-text {
-    color: #b8d4ff; /* светлый голубой на синем фоне */
-}
-
-body.theme-pastel .hint-info-text {
-    color: #5a4a3a; /* тёмный коричневый на пастельном фоне */
-}
-
-/* Выделенные слова "подсказка" и "проверка" */
-.hint-check-text {
-    color: #ffd54f; /* жёлтый по умолчанию (тёмная тема) */
-}
-
-body.theme-light .hint-check-text {
-    color: #c62828; /* красный для контраста на светлом */
-}
-
-body.theme-blue .hint-check-text {
-    color: #66ddff; /* яркий голубой на синем */
-}
-
-body.theme-pastel .hint-check-text {
-    color: #e08060; /* персиковый на пастели */
-}
-
-/* Кнопка победы */
-.solve-btn.win-btn {
-    background: #2e7d32 !important;
-    color: #fff !important;
-    animation: pulseWin 1.2s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(46, 125, 50, 0.6);
-}
-@keyframes pulseWin {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-    
-#confettiCanvas {
-    will-change: transform;
-}
+body.theme-pastel #achievementsModal .ach-close-btn{ color: #5a4a3a !important;} .level-easy { color: #4caf50;}
+.level-medium{ color: #ff9800;}
+.level-hard { color: #f44336;}
+.level-expert{ color: #9c27b0;} .hint-check-text{ color: #ffd54f;} body.theme-light .level-easy { color: #2e7d32;}
+body.theme-light .level-medium{ color: #e65100;}
+body.theme-light .level-hard { color: #c62828;}
+body.theme-light .level-expert{ color: #6a1b9a;}
+body.theme-light .hint-check-text{ color: #c62828;} .hint-info-text{ font-size: 0.95rem; margin: 5px 0 10px 0; color: #ccc; }
+body.theme-light .hint-info-text{ color: #333; }
+body.theme-blue .hint-info-text{ color: #b8d4ff; }
+body.theme-pastel .hint-info-text{ color: #5a4a3a; } .hint-check-text{ color: #ffd54f; }
+body.theme-light .hint-check-text{ color: #c62828; }
+body.theme-blue .hint-check-text{ color: #66ddff; }
+body.theme-pastel .hint-check-text{ color: #e08060; } .solve-btn.win-btn{ background: #2e7d32 !important; color: #fff !important; animation: pulseWin 1.2s ease-in-out infinite; box-shadow: 0 0 30px rgba(46, 125, 50, 0.6);}
+@keyframes pulseWin{ 0%{ transform: scale(1);} 50%{ transform: scale(1.05);} 100%{ transform: scale(1);}}
+#confettiCanvas{ will-change: transform;}
 </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
-    <div id="loadingScreen" style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0a0a1a; display:flex; justify-content:center; align-items:center; z-index:9999; color:#fff; font-size:1.5rem; flex-direction:column; gap:10px;">
-    <span style="font-size:3rem;">♢</span>
-    <span>Загрузка...</span>
-</div>
-<canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none;"></canvas>
-
-<div class="container" id="app">
-    <!-- ЭКРАН МЕНЮ -->
-    <div id="menuScreen">
-        <h1>♢ СУДОКУ</h1>
-        <div class="diamonds-row">
-    <span id="diamond-counter" class="subtitle">💎 0</span>
-</div>
-        <p class="subtitle">Выберите сложность</p>
-        <div class="difficulty-section">
-            <button class="diff-btn easy active" data-diff="easy">🟢 Лёгкий</button>
-            <button class="diff-btn medium" data-diff="medium">🟠 Средний</button>
-            <button class="diff-btn hard" data-diff="hard">🔴 Сложный</button>
-            <button class="diff-btn expert" data-diff="expert">🟣 Эксперт</button>
-        </div>
-        <button class="menu-btn" id="btnStartGame">▶ Начать игру</button>
-     <div class="social-row">
-    <button class="menu-btn social-icon" id="btnInviteFriends">👤</button>
-    <button class="menu-btn social-icon" id="btnThemeSun">☀️</button>
-    <button class="menu-btn social-icon" id="btnLeaderboard">🏆</button>
-    <button class="menu-btn social-icon" id="btnAchievements">🏅</button>
-      <button class="menu-btn social-icon" id="btnHowToPlay">❓</button>
-</div>
-<button class="menu-btn secondary" id="btnDailyBonus">🎁 Ежедневный бонус</button>
-             <button class="menu-btn secondary" id="btnToggleSound">🔊 Звук: Вкл</button>
-        <div id="adBanner"></div>
-    </div>
-
-    <!-- ЭКРАН ИГРЫ -->
-    <div id="gameScreen">
-        <div class="top-bar">
-            <button class="back-btn" id="btnBackToMenu">← Меню</button>
-            <span class="status" id="gameStatus">Игра</span>
-            <span class="timer" id="timerDisplay">00:00</span>
-        </div>
-        <div id="sudoku-grid"></div>
-        <div id="num-panel"></div>
-        <div class="action-row">
-    <button class="action-btn hint-btn" id="btnHint"> 💡 </button>
-    <button class="action-btn check-btn" id="btnCheck"> ✅ </button>
-    <button class="action-btn solve-btn" id="btnSolveAll">⚡ Решить всё</button>
-        </div>
-        <div id="message"></div>
-        <div id="adBanner"></div>
-    </div>
-</div>
-<!-- ============================================================ -->
-<!-- Всплывающее уведомление для достижений -->
-<!-- ============================================================ -->
-<div id="achievementPopup" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:5000; background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:16px; padding:16px 30px; border:2px solid #ffd54f; box-shadow:0 10px 40px rgba(0,0,0,0.6); text-align:center; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease; opacity:0; transform:translateX(-50%) scale(0.9); min-width:200px; max-width:90%;">
-    <div style="display:flex; align-items:center; gap:12px; justify-content:center;">
-        <span id="achievementPopupIcon" style="font-size:2.5rem; line-height:1;">🏅</span>
-        <div style="text-align:left;">
-            <div style="color:#ffd54f; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; font-weight:bold;">Достижение разблокировано!</div>
-            <div id="achievementPopupName" style="color:#fff; font-size:1.2rem; font-weight:bold; margin-top:2px;">Название</div>
-        </div>
-    </div>
-</div>
-<!-- Модалка "Подсказки закончились" -->
-<div id="hintAdModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:420px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6);">
-        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">💡</span>
-        <h2 style="color:#fff; font-size:1.5rem; margin-bottom:8px;">Подсказки закончились!</h2>
-        <div style="color:#e94560; font-size:1.1rem; font-weight:bold; margin-bottom:5px;">📺 Получите ещё подсказки!</div>
-        <div style="color:#8a8fa8; font-size:0.85rem; margin-bottom:20px; line-height:1.5;">
-            Посмотрите рекламу и получите <strong style="color:#ffd54f;">+3 подсказки</strong>
-            <br><span style="font-size:0.8rem; color:#666;">Доступно на любом уровне сложности</span>
-        </div>
-        <div style="display:flex; gap:10px; justify-content:center;">
-            <button id="hintAdCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px 28px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; flex:1;">❌ Отмена</button>
-            <button id="hintAdConfirm" style="background:linear-gradient(135deg, #e94560, #c23152); color:#fff; border:none; padding:12px 28px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; flex:1; box-shadow:0 4px 25px rgba(233,69,96,0.4);">🎁 Получить</button>
-        </div>
-    </div>
-</div>
-<!-- Модальное окно "Как играть?" -->
-<div id="howToPlayModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:#16213e;  border-radius:20px; padding:30px; max-width:500px; width:100%; max-height:80vh; overflow-y:auto; position:relative;">
-        <button id="closeHowToPlay" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;">✕</button>
-        <h2 style="margin-bottom:10px;"> Как играть в Судоку❓</h2>
-        <div style="text-align:left; line-height:1.8; font-size:0.95rem;">
-<p><strong >🎯 Цель игры:</strong> Заполните пустые клетки цифрами от 1 до 9 так, чтобы:</p>
-<ul style="padding-left:20px; margin:10px 0;">
-    <li>✨В каждой строке цифры не повторялись</li>
-    <li>✨В каждом столбце цифры не повторялись</li>
-    <li>✨В каждом квадрате 3×3 цифры не повторялись</li>
-</ul>
-
-<p><strong>🎮 Управление:</strong></p>
-<ul style="padding-left:20px; margin:10px 0;">
-    <li>Нажмите на клетку, чтобы выбрать её</li>
-    <li>Выберите цифру внизу, чтобы поставить её</li>
-    <li>Нажмите ✕, чтобы стереть цифру</li>
-</ul>
-
-<p><strong style=>💡 Кнопки помощи:</strong></p>
-<ul style="padding-left:20px; margin:10px 0;">
-    <li><strong>💡 Подсказка</strong> — ставит правильную цифру в выбранную пустую клетку</li>
-    <li><strong>✅ Проверить</strong> — проверяет правильность всех цифр на поле</li>
-    <li><strong>⚡ Решить всё</strong> — заполняет все клетки верными цифрами</li>
-</ul>
-<p><strong>💡 Уровни сложности:</strong></p>
-<p class="hint-info-text">
-    На каждом уровне вам доступны <strong class="hint-check-text">1 подсказка</strong> и <strong class="hint-check-text">1 проверка</strong>.<br>
-    Дополнительные можно получить за просмотр рекламы.
-</p>
-<ul style="padding-left:20px; margin:10px 0;">
-    <li><span class="level-easy">🟢 Лёгкий</span> — меньше всего пустых клеток, идеально для новичков.</li>
-    <li><span class="level-medium">🟠 Средний</span> — баланс между пустыми и заполненными клетками.</li>
-    <li><span class="level-hard">🔴 Сложный</span> — много пустых клеток, требует внимательности.</li>
-    <li><span class="level-expert">🟣 Эксперт</span> — максимальное количество пустых клеток, для настоящих мастеров.</li>
-</ul>
-
-        </div>
-        <button id="closeHowToPlayBtn" class="menu-btn" style="margin-top:20px; width:100%;">Понятно!</button>
-    </div>
-   <!--<div style="height: 110px; width: 100%;"></div> -->
-</div>
-<!-- Модальное окно с темами -->
-<div id="themeModal">
-    <div>
-        <button id="closeThemeModal">✕</button>
-        <h2>🎨 Выберите тему</h2>
-        <p class="theme-subtitle">Оформление приложения</p>
-        <div class="theme-options">
-            <button class="theme-btn dark active-theme" data-theme="dark">
-                <span class="theme-color"></span> Тёмная
-            </button>
-            <button class="theme-btn light" data-theme="light">
-                <span class="theme-color"></span> Светлая
-            </button>
-            <button class="theme-btn blue" data-theme="blue">
-                <span class="theme-color"></span> Синяя
-            </button>
-            <button class="theme-btn pastel" data-theme="pastel">
-                <span class="theme-color"></span> Пастель
-            </button>
-        </div>
-    </div>
-</div>
-<!-- ============================================================ -->
-<!-- Модалка выбора ежедневного бонуса -->
-<!-- ============================================================ -->
-
-<div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2500; justify-content:center; align-items:center; padding:20px;">
-    <div class="bonus-modal-content">
-        <!-- Блок выбора -->
-        <div class="bonus-choice">
-            <span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span>
-            <h2>Ежедневный бонус</h2>
-            <p class="bonus-subtitle">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p>
-            <div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;">
-                <div style="display:flex; gap:30px; justify-content:center;">
-                    <button id="dailyBonus5" class="bonus-btn bonus-5">
-                        <span style="font-size:2.5rem;">🎁</span>
-                        <span style="font-size:0.9rem;">+5</span>
-                    </button>
-                    <button id="dailyBonus15" class="bonus-btn bonus-15">
-                        <span style="font-size:2.5rem;">📺</span>
-                        <span style="font-size:0.9rem;">+15</span>
-                    </button>
-                </div>           
-            </div>
-            <button id="dailyBonusCancel" class="bonus-cancel">❌ Отмена</button>
-        </div>
-        <!-- Блок загрузки (изначально скрыт) -->
-        <div class="bonus-loading" style="display:none; text-align:center;">
-            <span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span>
-            <h2>Загрузка рекламы...</h2>
-            <p class="bonus-subtitle">Пожалуйста, подождите</p>
-            <div style="margin-top:15px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
-                <div style="width:30%; height:100%; background:linear-gradient(90deg, #e94560, #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div>
-            </div>
-            <style>
-                @keyframes loadingBar {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(400%); }
-                }
-            </style>
-        </div>
-    </div>
-</div>
-
-<!-- Модалка "Бонус уже получен" -->
-<div id="dailyBonusUnavailableModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2501; justify-content:center; align-items:center; padding:20px;">
-    <div class="bonus-modal-content">
-        <span style="font-size:3.5rem; display:block; margin-bottom:10px;">❌</span>
-        <h2>Бонус уже получен</h2>
-        <p class="bonus-subtitle">Вы уже получили ежедневный бонус сегодня. Возвращайтесь завтра!</p>
-        <button id="dailyBonusUnavailableOk" class="bonus-ok-btn">Ок</button>
-    </div>
-</div>
-
-
-<!-- Модалка "Бонус получен!" -->
-<div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2600; justify-content:center; align-items:center; padding:20px;">
-    <div class="bonus-modal-content">
-        <span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span>
-        <h2 id="bonusResultTitle">Бонус получен!</h2>
-        <p id="bonusResultAmount" class="bonus-subtitle">💎 +5</p>
-        <button id="bonusResultOk" class="bonus-ok-btn">Ок</button>
-    </div>
-</div>
-<!-- Глобальный тост для уведомлений на всех экранах -->
-<div id="globalToast" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(22,33,62,0.9); backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 30px rgba(0,0,0,0.5); color:#fff; font-size:1rem; font-weight:bold; transition:opacity 0.3s ease, transform 0.3s ease; opacity:0; transform:translateX(-50%) translateY(20px); pointer-events:none; text-align:center; max-width:90%;">
-    <span id="globalToastMessage"></span>
-</div>
-<!-- Модалка достижений -->
-<div id="achievementsModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
-    <div class="achievements-modal-content">
-        <button id="closeAchievementsModal" class="ach-close-btn">✕</button>
-        <h2>🏅 Достижения</h2>
-        <p class="ach-subtitle">Разблокируйте все!</p>
-        <div id="achievementsList" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:5px; max-height:calc(80vh - 140px); overflow-y:auto;"></div>
-        <div class="ach-pagination">
-            <button id="achPrevPage" class="ach-page-btn">◀</button>
-            <span id="achPageInfo" class="ach-page-info">1 / 1</span>
-            <button id="achNextPage" class="ach-page-btn">▶</button>
-        </div>
-    </div>
-</div>
-
-<!-- Модалка "Проверки закончились" (адаптивная под тему) -->
+ <div id="loadingScreen" style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0a0a1a; display:flex; justify-content:center; align-items:center; z-index:9999; color:#fff; font-size:1.5rem; flex-direction:column; gap:10px;"><span style="font-size:3rem;">♢</span><span>Загрузка...</span></div><canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; display:none;"></canvas><div class="container" id="app"><div id="menuScreen"><h1>♢ СУДОКУ</h1><div class="diamonds-row"><span id="diamond-counter" class="subtitle">💎 0</span></div><p class="subtitle">Выберите сложность</p><div class="difficulty-section"><button class="diff-btn easy active" data-diff="easy">🟢 Лёгкий</button><button class="diff-btn medium" data-diff="medium">🟠 Средний</button><button class="diff-btn hard" data-diff="hard">🔴 Сложный</button><button class="diff-btn expert" data-diff="expert">🟣 Эксперт</button></div><button class="menu-btn" id="btnStartGame">▶ Начать игру</button><div class="social-row"><button class="menu-btn social-icon" id="btnInviteFriends">👤</button><button class="menu-btn social-icon" id="btnThemeSun">☀️</button><button class="menu-btn social-icon" id="btnLeaderboard">🏆</button><button class="menu-btn social-icon" id="btnAchievements">🏅</button><button class="menu-btn social-icon" id="btnHowToPlay">❓</button></div><button class="menu-btn secondary" id="btnDailyBonus">🎁 Ежедневный бонус</button><button class="menu-btn secondary" id="btnToggleSound">🔊 Звук: Вкл</button><div id="adBanner"></div></div><div id="gameScreen"><div class="top-bar"><button class="back-btn" id="btnBackToMenu">← Меню</button><span class="status" id="gameStatus">Игра</span><span class="timer" id="timerDisplay">00:00</span></div><div id="sudoku-grid"></div><div id="num-panel"></div><div class="action-row"><button class="action-btn hint-btn" id="btnHint">💡 </button><button class="action-btn check-btn" id="btnCheck">✅ </button><button class="action-btn solve-btn" id="btnSolveAll">⚡ Решить всё</button></div><div id="message"></div><div id="adBanner"></div></div></div><div id="achievementPopup" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:5000; background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:16px; padding:16px 30px; border:2px solid #ffd54f; box-shadow:0 10px 40px rgba(0,0,0,0.6); text-align:center; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease; opacity:0; transform:translateX(-50%) scale(0.9); min-width:200px; max-width:90%;"><div style="display:flex; align-items:center; gap:12px; justify-content:center;"><span id="achievementPopupIcon" style="font-size:2.5rem; line-height:1;">🏅</span><div style="text-align:left;"><div style="color:#ffd54f; font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; font-weight:bold;">Достижение разблокировано!</div><div id="achievementPopupName" style="color:#fff; font-size:1.2rem; font-weight:bold; margin-top:2px;">Название</div></div></div></div><div id="hintAdModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;"><div style="background:rgba(22,33,62,0.95); backdrop-filter:blur(15px); border-radius:24px; padding:30px 25px; max-width:420px; width:100%; text-align:center; border:1px solid rgba(255,255,255,0.08); box-shadow:0 20px 60px rgba(0,0,0,0.6);"><span style="font-size:3.5rem; display:block; margin-bottom:10px;">💡</span><h2 style="color:#fff; font-size:1.5rem; margin-bottom:8px;">Подсказки закончились!</h2><div style="color:#e94560; font-size:1.1rem; font-weight:bold; margin-bottom:5px;">📺 Получите ещё подсказки!</div><div style="color:#8a8fa8; font-size:0.85rem; margin-bottom:20px; line-height:1.5;">Посмотрите рекламу и получите <strong style="color:#ffd54f;">+3 подсказки</strong><br><span style="font-size:0.8rem; color:#666;">Доступно на любом уровне сложности</span></div><div style="display:flex; gap:10px; justify-content:center;"><button id="hintAdCancel" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:12px 28px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; flex:1;">❌ Отмена</button><button id="hintAdConfirm" style="background:linear-gradient(135deg, #e94560, #c23152); color:#fff; border:none; padding:12px 28px; border-radius:50px; font-size:1rem; font-weight:bold; cursor:pointer; flex:1; box-shadow:0 4px 25px rgba(233,69,96,0.4);">🎁 Получить</button></div></div></div><div id="howToPlayModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center; padding:20px;"><div style="background:#16213e; border-radius:20px; padding:30px; max-width:500px; width:100%; max-height:80vh; overflow-y:auto; position:relative;"><button id="closeHowToPlay" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;">✕</button><h2 style="margin-bottom:10px;">Как играть в Судоку❓</h2><div style="text-align:left; line-height:1.8; font-size:0.95rem;"><p><strong >🎯 Цель игры:</strong>Заполните пустые клетки цифрами от 1 до 9 так, чтобы:</p><ul style="padding-left:20px; margin:10px 0;"><li>✨В каждой строке цифры не повторялись</li><li>✨В каждом столбце цифры не повторялись</li><li>✨В каждом квадрате 3×3 цифры не повторялись</li></ul><p><strong>🎮 Управление:</strong></p><ul style="padding-left:20px; margin:10px 0;"><li>Нажмите на клетку, чтобы выбрать её</li><li>Выберите цифру внизу, чтобы поставить её</li><li>Нажмите ✕, чтобы стереть цифру</li></ul><p><strong style=>💡 Кнопки помощи:</strong></p><ul style="padding-left:20px; margin:10px 0;"><li><strong>💡 Подсказка</strong>— ставит правильную цифру в выбранную пустую клетку</li><li><strong>✅ Проверить</strong>— проверяет правильность всех цифр на поле</li><li><strong>⚡ Решить всё</strong>— заполняет все клетки верными цифрами</li></ul><p><strong>💡 Уровни сложности:</strong></p><p class="hint-info-text">На каждом уровне вам доступны <strong class="hint-check-text">1 подсказка</strong>и <strong class="hint-check-text">1 проверка</strong>.<br>Дополнительные можно получить за просмотр рекламы.
+</p><ul style="padding-left:20px; margin:10px 0;"><li><span class="level-easy">🟢 Лёгкий</span>— меньше всего пустых клеток, идеально для новичков.</li><li><span class="level-medium">🟠 Средний</span>— баланс между пустыми и заполненными клетками.</li><li><span class="level-hard">🔴 Сложный</span>— много пустых клеток, требует внимательности.</li><li><span class="level-expert">🟣 Эксперт</span>— максимальное количество пустых клеток, для настоящих мастеров.</li></ul></div><button id="closeHowToPlayBtn" class="menu-btn" style="margin-top:20px; width:100%;">Понятно!</button></div></div><div id="themeModal"><div><button id="closeThemeModal">✕</button><h2>🎨 Выберите тему</h2><p class="theme-subtitle">Оформление приложения</p><div class="theme-options"><button class="theme-btn dark active-theme" data-theme="dark"><span class="theme-color"></span>Тёмная </button><button class="theme-btn light" data-theme="light"><span class="theme-color"></span>Светлая </button><button class="theme-btn blue" data-theme="blue"><span class="theme-color"></span>Синяя </button><button class="theme-btn pastel" data-theme="pastel"><span class="theme-color"></span>Пастель </button></div></div></div>
+<div id="dailyBonusModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2500; justify-content:center; align-items:center; padding:20px;"><div class="bonus-modal-content"><div class="bonus-choice"><span style="font-size:3.5rem; display:block; margin-bottom:10px;">🎁</span><h2>Ежедневный бонус</h2><p class="bonus-subtitle">Получите обычный бонус за вход или усиленный - после просмотра рекламы.</p><div style="display:flex; flex-direction:column; align-items:center; gap:5px; margin-bottom:20px;"><div style="display:flex; gap:30px; justify-content:center;"><button id="dailyBonus5" class="bonus-btn bonus-5"><span style="font-size:2.5rem;">🎁</span><span style="font-size:0.9rem;">+5</span></button><button id="dailyBonus15" class="bonus-btn bonus-15"><span style="font-size:2.5rem;">📺</span><span style="font-size:0.9rem;">+15</span></button></div></div><button id="dailyBonusCancel" class="bonus-cancel">❌ Отмена</button></div><div class="bonus-loading" style="display:none; text-align:center;"><span style="font-size:3.5rem; display:block; margin-bottom:10px;">⏳</span><h2>Загрузка рекламы...</h2><p class="bonus-subtitle">Пожалуйста, подождите</p><div style="margin-top:15px; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;"><div style="width:30%; height:100%; background:linear-gradient(90deg, #e94560, #ff6b8a); border-radius:4px; animation: loadingBar 1.2s infinite ease-in-out;"></div></div><style>@keyframes loadingBar{ 0%{ transform: translateX(-100%);} 100%{ transform: translateX(400%);}} </style></div></div></div><div id="dailyBonusUnavailableModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2501; justify-content:center; align-items:center; padding:20px;"><div class="bonus-modal-content"><span style="font-size:3.5rem; display:block; margin-bottom:10px;">❌</span><h2>Бонус уже получен</h2><p class="bonus-subtitle">Вы уже получили ежедневный бонус сегодня. Возвращайтесь завтра!</p><button id="dailyBonusUnavailableOk" class="bonus-ok-btn">Ок</button></div></div><div id="bonusResultModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:2600; justify-content:center; align-items:center; padding:20px;"><div class="bonus-modal-content"><span style="font-size:4rem; display:block; margin-bottom:10px;">🎉</span><h2 id="bonusResultTitle">Бонус получен!</h2><p id="bonusResultAmount" class="bonus-subtitle">💎 +5</p><button id="bonusResultOk" class="bonus-ok-btn">Ок</button></div></div><div id="globalToast" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:9999; background:rgba(22,33,62,0.9); backdrop-filter:blur(10px); padding:12px 24px; border-radius:50px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 30px rgba(0,0,0,0.5); color:#fff; font-size:1rem; font-weight:bold; transition:opacity 0.3s ease, transform 0.3s ease; opacity:0; transform:translateX(-50%) translateY(20px); pointer-events:none; text-align:center; max-width:90%;"><span id="globalToastMessage"></span></div><div id="achievementsModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;"><div class="achievements-modal-content"><button id="closeAchievementsModal" class="ach-close-btn">✕</button><h2>🏅 Достижения</h2><p class="ach-subtitle">Разблокируйте все!</p><div id="achievementsList" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-right:5px; max-height:calc(80vh - 140px); overflow-y:auto;"></div><div class="ach-pagination"><button id="achPrevPage" class="ach-page-btn">◀</button><span id="achPageInfo" class="ach-page-info">1 / 1</span><button id="achNextPage" class="ach-page-btn">▶</button></div></div></div>
 <div id="checkAdModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; justify-content:center; align-items:center; padding:20px;">
     <div class="bonus-modal-content">
         <span style="font-size:3.5rem; display:block; margin-bottom:10px;">✅</span>
@@ -2409,22 +321,8 @@ body.theme-pastel .hint-check-text {
     </div>
 </div>
 <script>
-// Инициализация VK Bridge, если он доступен
-if (typeof vkBridge !== 'undefined' && vkBridge.send) {
-   vkBridge.send('VKWebAppInit').then(() => {
-    console.log('✅ VKWebAppInit успешно выполнен, мост инициализирован из индекс');
-}).catch(e => {
-    console.warn('❌ VKWebAppInit ошибка:', e);
-});
-}
-    // Отладка размеров для CSS
-    console.log('Ширина:', window.innerWidth);
-    console.log('Высота:', window.innerHeight);
-    console.log('User Agent:', navigator.userAgent);
-
-
+if (typeof vkBridge !=='undefined' && vkBridge.send){ vkBridge.send('VKWebAppInit').then(()=>{ console.log('✅ VKWebAppInit успешно выполнен, мост инициализирован из индекс');}).catch(e=>{ console.warn('❌ VKWebAppInit ошибка:', e);});} console.log('Ширина:', window.innerWidth); console.log('Высота:', window.innerHeight); console.log('User Agent:', navigator.userAgent); 
 </script>
 <script src="sudoku.js"></script>
-
 </body>
 </html>
