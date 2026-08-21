@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Уютные лапки</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/modal.css">
+     <link rel="stylesheet" href="css/respon.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+         <script src="js/main/platform/pako.min.js"></script>
+
+</head>
+<body>
+    <div id="game-wrapper" class="no-scroll">
+        <canvas id="board-canvas"></canvas>
+
+        <!-- LOADING -->
+        <div id="scene-loading" class="scene active">
+            <div class="loader">
+                <div class="loader-spinner"></div>
+                <div class="loader-text" data-lkey="loading">Загрузка...</div>
+                <div class="loader-progress"><div class="loader-progress-bar" id="load-progress"></div></div>
+            </div>
+        </div>
+
+        <!-- MENU -->
+        <div id="scene-menu" class="scene">
+                <div id="menu-bg-wrapper" class="bg-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:0; pointer-events:none;">
+                    <img id="menu-bg-img" src="images/back/menu.jpg" alt="фон меню">
+                </div>
+
+            <div class="menu-content">
+                <div class="menu-title" data-lkey="menu_title">🍜 Уютные<br>Лапки</div>
+                <div class="menu-subtitle" data-lkey="menu_sub">~ Кафе Котёнка ~</div>
+                <div class="menu-score" id="menu-score-display"><img src="" style="width:1.5em; height:1.5em; vertical-align:middle;"> 0</div>
+                <button class="menu-btn" id="menu-play-btn" data-lkey="menu_play">Играть</button>
+                <div class="menu-button-row">
+               <button class="menu-btn-settings" id="menu-settings-btn">⚙️</button>
+               <button class="menu-btn-settings" id="menu-help-btn">?</button>
+               </div>
+                <button class="menu-btn menu-btn-secondary" id="menu-reset-btn" data-lkey="menu_reset">Сброс</button>
+                <div class="menu-footer" data-lkey="menu_footer">© 2026 · Версия 0.1</div>
+            </div>
+        </div>
+
+        <!-- DIALOGUE -->
+<div id="scene-dialogue" class="scene">
+   
+                    <div id="dialogue-bg-wrapper" class="bg-wrapper">
+                    <img id="dialogue-bg-img" src="" alt="фон">
+                </div>
+    <!-- Верхняя панель -->
+    <div class="game-topbar">
+        <div class="tb-left">
+<div class="tb-item">
+    <span class="tb-value" id="dialogue-score">0</span>
+</div>
+           <div class="tb-item tb-progress">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" id="dialogue-progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <img src="" class="progress-gift-icon" alt="подарок">
+                    </div>
+                </div>
+                         <!-- Индикатор прогресса (десктоп) -->
+                        <div id="quest-progress-desktop" class="quest-progress-wrapper">
+                            <!-- сюда будет вставляться HTML через JS -->
+                        </div>
+        </div>        
+        <div class="tb-right"></div>
+    </div>
+
+
+    <div id="right-panel-dialogue" class="hidden">
+    <div class="subscene-toggle-wrapper">
+        <button class="tb-btn subscene-toggle-btn" id="subscene-toggle-btn-dialogue">🔨</button>
+    </div>
+    <!-- ★ Кнопка ивента ★ -->
+    <button id="event-btn" class="tb-btn" style="display:none;"></button>
+    <!-- ★ Кнопка коллекции ★ -->
+    <button id="collection-btn" class="tb-btn" style="display:none;"></button>
+    <button class="tb-btn" id="dialogue-home-btn">
+        <img src="" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
+    </button>
+  
+</div>
+                       
+    <!-- НОВЫЙ КОНТЕЙНЕР – только для портретного диалога -->
+    <div class="dialogue-portrait-placeholders">
+                    <div class="placeholder-block placeholder-order">
+                                   <div id="quest-progress-mobile" class="quest-progress-wrapper">
+                                    <!-- сюда будет вставляться HTML через JS -->
+                                </div>
+                                <!-- здесь могут быть другие элементы, если есть -->
+                    </div> 
+
+        <div class="placeholder-block placeholder-board">  <!-- сюда будет помещён img через JS --></div>
+        <div class="placeholder-block placeholder-info"></div>
+    </div>
+
+    <!-- Диалоговое окно (будет абсолютно поверх) -->
+    <div class="dialogue-container character-left">
+        <div class="dialogue-character character-left">
+            <img id="dialogue-character-img" src="" alt="Персонаж" onerror="this.style.background='none'; this.style.objectFit='none';">
+        </div>
+        <div class="dialogue-speaker" data-lkey="dialogue_speaker">Котёнок</div>
+        <div class="dialogue-text" id="dialogue-text">...</div>
+        <button class="dialogue-continue" id="dialogue-continue-btn" data-lkey="pause_resume">Продолжить</button>
+    </div>
+</div>
+
+
+        <!-- GAME -->
+        <div id="scene-game" class="scene">
+                                                              <div id="game-bg-wrapper" class="bg-wrapper">
+                                            <img id="game-bg-img" src="" alt="фон">
+                                        </div>
+            <!-- Верхняя панель -->
+            <div class="game-topbar">
+                <div class="tb-left">
+<div class="tb-item">
+    <span class="tb-value" id="game-score">0</span>
+</div>
+                  <div class="tb-item tb-progress">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-track">
+                                    <div class="progress-bar-fill" id="game-progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <img src="" class="progress-gift-icon" alt="подарок">
+                            </div>
+                        </div>
+                </div>
+                <div class="tb-right">
+                    <!-- Таймер удалён -->
+                </div>
+            </div>
+
+            <!-- Основной контейнер для трёх колонок -->
+            <div id="game-board-container">
+                <div id="left-panel">
+                    <div id="order-area"></div>
+                    <div id="info-modal-container"></div>
+                </div>
+
+                <div id="game-board">
+                    <canvas id="game-canvas"></canvas>
+                 <div class="game-overlay" id="overlay-pause">
+    <div class="overlay-title" data-lkey="pause_title">⏸ Пауза</div>
+    <div class="overlay-text" data-lkey="pause_text">Игра приостановлена</div>
+    <button class="overlay-btn" id="overlay-resume-btn" data-lkey="pause_resume">Продолжить</button>
+</div>
+                   
+                </div>
+
+                <div id="drag-ghost" style="display: none; position: fixed; pointer-events: none; z-index: 9999; background: transparent; transform: translate(-50%, -50%);"></div>
+
+
+                <div id="right-panel">
+    <div class="subscene-toggle-wrapper">
+        <button class="tb-btn subscene-toggle-btn" id="subscene-toggle-btn-game">🔨</button>
+    </div>
+    <!-- ★ Статичные кнопки ★ -->
+    <button id="gift-btn" class="tb-btn" style="display:none;"></button>
+    <button id="tv-btn" class="tb-btn" style="display:none;"></button>
+    <button id="quest-btn" class="tb-btn" style="display:none;"></button>
+    <button id="inventory-btn" class="tb-btn" style="display:none;"></button>
+    <button class="tb-btn" id="game-pause-btn">⏸</button>
+    <button class="tb-btn" id="game-home-btn">
+        <img src="" alt="Меню" style="width:100%; height:100%; object-fit:contain;">
+    </button>
+</div>
+      
+            </div>
+        </div>
+
+        <!-- EVENT -->
+<div id="scene-event" class="scene">
+    <div id="event-bg-wrapper" class="bg-wrapper">
+        <img id="event-bg-img" src="" alt="фон ивента">
+    </div>
+    <!-- Верхняя панель ивента -->
+    <div class="game-topbar">
+        <div class="tb-left">
+            <div class="tb-item">
+                <span class="tb-value" id="event-score">0</span>
+            </div>
+            <div class="tb-item tb-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="event-progress-fill" style="width: 0%;"></div>
+                    </div>
+                      <img src="" class="progress-gift-icon" id="event-progress-gift" alt="подарок">
+                </div>
+            </div>
+        </div>
+        <div class="tb-right"></div>
+    </div>
+
+    <!-- Основной контейнер -->
+    <div id="event-board-container">
+        <div id="event-left-panel">
+            <div id="event-order-area">
+                <div id="event-timer"></div>
+                <div id="event-chain"></div>
+            </div>
+            <div id="event-info-modal-container"></div>
+        </div>
+        <div id="event-board">
+            <canvas id="event-canvas"></canvas>
+              <div class="game-overlay" id="event-overlay-pause">
+    <div class="overlay-title" data-lkey="pause_title">⏸ Пауза</div>
+    <div class="overlay-text" data-lkey="pause_text">Игра приостановлена</div>
+    <button class="overlay-btn" id="event-overlay-resume-btn" data-lkey="pause_resume">Продолжить</button>
+</div>
+        </div>
+        <div id="event-right-panel">
+                    </div>
+    </div>
+</div>
+
+        <!-- Подключаем модули -->
+        <script src="js/main/platform/localization.js"></script>
+        <script src="js/main/platform/platform.js"></script>
+        <script src="js/main/platform/storage.js"></script>
+        <script src="js/main/platform/const.js"></script>
+        <script src="js/main/platform/experience.js"></script>
+        <script src="js/main/platform/audio.js"></script>
+        <script src="js/main/dialogue.js"></script>
+        <script src="js/main/scene.js"></script>
+        <script src="js/data/sceneConfig.js"></script>
+        <script src="js/main/platform/spriteAtlas.js"></script>
+        <script src="js/main/platform/itemLocalization.js"></script>
+        <script src="js/data/itemData.js"></script>
+        <script src="js/main/modal.js"></script>
+        <script src="js/main/platform/resize.js"></script>
+        <script src="js/main/platform/scrollablePanel.js"></script>
+                         
+        <script src="js/main/platform/boardCore.js"></script>
+        <script src="js/main/game.js"></script>
+        <script src="js/main/order.js"></script>
+        <script src="js/main/platform/background.js"></script>
+        <script src="js/data/interiorData.js"></script>
+        <script src="js/main/platform/interior.js"></script>
+        <script src="js/data/questData.js"></script>
+        <script src="js/main/quest.js"></script>
+        <script src="js/main/event.js"></script>
+        <script src="js/data/eventData.js"></script>
+        <script src="js/data/gonkaData.js"></script>
+             <script src="js/main/platform/puzzCore.js"></script>
+<script src="js/data/puzzData.js"></script>
+<script src="js/main/puzz.js"></script>
+
+        <script src="js/main/gonka.js"></script>
+        <script src="js/main/collection.js"></script>
+
+        <script src="js/main/platform/app.js"></script>
+
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof App !== 'undefined') App.init();
+            });
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                if (typeof App !== 'undefined' && !App.initialized) App.init();
+            }
+        </script>
+    </div>
+</body>
+</html>
