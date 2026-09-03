@@ -1,1 +1,2822 @@
-"use strict";customElements.define("jl-coloringbook",class extends HTMLElement{constructor(){super(),this.shadow=this.attachShadow({mode:"open"}),this.loadIcons(),this.eyedropperMode=!1,this.deleteColorMode=!1,this.brushType="simple";let t=this;window.addEventListener("brushUnlocked",(function(e){if(e.detail&&e.detail.brushId){const e=t.shadowRoot.querySelector(".brushMenu");e&&(jQuery(e).remove(),jQuery(".brushSelectorButton",t.shadowRoot).removeClass("active")),t.showToast("✅ Кисть разблокирована! Откройте меню кистей заново.")}})),this.zoomLevel=1,this.zoomMin=.2,this.zoomMax=3,this.panMode=!1,this.panDragging=!1,this.panStartX=0,this.panStartY=0,this.panX=0,this.panY=0,this.panBaseX=0,this.panBaseY=0,this.lastNonEraserColor=0}init(){jQuery(this).css("display","block"),this.paletteColors=["rgba(87, 87, 87,0.8)","rgba(220, 35, 35,0.8)","rgba(42, 75, 215,0.8)","rgba(29, 105, 20,0.8)","rgba(129, 74, 25,0.8)","rgba(129, 38, 192,0.8)","rgba(160, 160, 160,0.8)","rgba(129, 197, 122,0.8)","rgba(157, 175, 255,0.8)","rgba(41, 208, 208,0.8)","rgba(255, 146, 51,0.8)","rgba(255, 238, 51,0.8)","rgba(233, 222, 187,0.8)","rgba(255, 205, 243,0.8)","white"],this.dragging=!1,this.paths=[];let t=this;this.slots=jQuery('<div class="slots" style="display:none"><slot></slot></div>').appendTo(this.shadowRoot),this.slots.off("slotchange").on("slotchange",(function(){t.drawTemplate()}))}connectedCallback(){"0"!==jQuery(this).attr("autoinit")&&this.init()}loadIcons(){try{new FontFace("Material Icons","url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf)").load().then((function(t){document.fonts.add(t)})).catch((function(t){}))}catch(t){}}drawTemplate(){jQuery(this).on("click",(function(t){t.preventDefault(),t.stopPropagation()})),jQuery("\n            <style>\n                @font-face {\n                    font-family: 'Material Icons';\n                    font-style: normal;\n                    font-weight: 400;\n                    src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');\n                }\n                .material-icons {\n                    font-family: 'Material Icons';\n                    font-weight: normal;\n                    font-style: normal;\n                    font-size: 18px;\n                    line-height: 1;\n                    letter-spacing: normal;\n                    text-transform: none;\n                    display: inline-block;\n                    white-space: nowrap;\n                    word-wrap: normal;\n                    direction: ltr;\n                }\n                .wrapper { \n                    width:100%; \n                    -webkit-touch-callout: none; \n                    -webkit-user-select: none; \n                    -khtml-user-select: none; \n                    -moz-user-select: none; \n                    -ms-user-select: none; \n                    user-select: none;\n                    position: relative;\n                    overflow: hidden;\n                    touch-action: none;\n                }\n                \n                .imageNav img {\n                    box-sizing:border-box;\n                    border:3px solid transparent;\n                    width:12%; min-width:75px; max-width:150px;\n                    margin:4px;\n                }\n                .imageNav img.selected {\n                    border: 3px solid green; \n                }\n                .toolbar {\n                    z-index:100000;\n                    position: sticky;\n                    position: -webkit-sticky; \n                    top: 0;\n                    background-color: rgba(200,200,200,.1);\n                    padding: 4px 0;\n                }\n                .tools {\n                    display:flex;\n                    justify-content:flex-start;\n                    flex-wrap:wrap;\n                    max-width:100%;\n                    gap: 4px;\n                    align-items: center;\n                }\n                .sizerTool {\n                    cursor:inherit;\n                    align-self:flex-start;\n                    width:64px;\n                }\n                .spacer {\n                    flex-basis:0;\n                    flex-grow:1;\n                }\n                .tools > * {margin:2px}\n\n                .tools .button {\n                    background: rgba(168, 85, 247, 0.15) !important;\n                    border: 2px solid #a855f7 !important;\n                    border-radius: 8px !important;\n                    color: #f0eaff !important;\n                    padding: 4px 8px !important;\n                    cursor: pointer !important;\n                    transition: all 0.3s ease !important;\n                    font-size: 14px !important;\n                    display: inline-flex !important;\n                    align-items: center !important;\n                    justify-content: center !important;\n                    box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;\n                }\n                .tools .button:hover {\n                    background: #a855f7 !important;\n                    color: #ffffff !important;\n                    box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;\n                }\n                .tools .button:active {\n                    transform: scale(0.95) !important;\n                }\n                .tools .undoButton { border-color: #f59e0b !important; }\n                .tools .undoButton:hover { background: #f59e0b !important; }\n                .tools .clearButton { border-color: #ef4444 !important; }\n                .tools .clearButton:hover { background: #ef4444 !important; }\n                .tools .saveButton { border-color: #22c55e !important; }\n                .tools .saveButton:hover { background: #22c55e !important; }\n                               \n/* Стили для кнопки палитры (paletteToggle) */\n.paletteToggle {\n    border-color: #ec4899 !important;\n}\n.paletteToggle:focus,\n.paletteToggle:active {\n    outline: none !important;\n    box-shadow: none !important;\n}\n.paletteToggle:not(.active) {\n    background: rgba(168, 85, 247, 0.15) !important;\n    border-color: #a855f7 !important;\n    color: #f0eaff !important;\n}\n.paletteToggle:not(.active):hover {\n    background: rgba(168, 85, 247, 0.15) !important;\n    color: #f0eaff !important;\n}\n.paletteToggle.active {\n    background: #ec4899 !important;\n    color: #fff !important;\n    border-color: #ec4899 !important;\n}\n.paletteToggle.active:hover {\n    background: #ec4899 !important;\n    color: #fff !important;\n}\n\n                               .palette {\n                    display: flex !important;\n                    flex-wrap: wrap !important;\n                    gap: 4px !important;\n                    padding: 4px 0 !important;\n                    align-items: center !important;\n                }\n                .palette .tool-btn {\n                    width: 28px !important;\n                    height: 28px !important;\n                    border-radius: 50% !important;\n                    border: 2px solid rgba(255, 255, 255, 0.15) !important;\n                    background: rgba(168, 85, 247, 0.15) !important;\n                    color: #f0eaff !important;\n                    padding: 0 !important;\n                    cursor: pointer !important;\n                    transition: all 0.2s ease !important;\n                    display: inline-flex !important;\n                    align-items: center !important;\n                    justify-content: center !important;\n                    font-size: 0 !important;\n                    line-height: 0 !important;\n                    flex-shrink: 0 !important;\n                }\n                .palette .tool-btn i {\n                    font-size: 16px !important;\n                    line-height: 1 !important;\n                }\n                .palette .tool-btn:hover {\n                    transform: scale(1.15) !important;\n                    border-color: #a855f7 !important;\n                }\n                .palette .tool-btn.active {\n                    border-color: #a855f7 !important;\n                    transform: scale(1.2) !important;\n                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;\n                }\n                .paletteColor {\n                    width: 28px !important;\n                    height: 28px !important;\n                    border-radius: 50% !important;\n                    border: 2px solid rgba(255, 255, 255, 0.15) !important;\n                    cursor: pointer !important;\n                    transition: all 0.2s ease !important;\n                    display: inline-block !important;\n                    flex-shrink: 0 !important;\n                }\n                .paletteColor:hover {\n                    transform: scale(1.15) !important;\n                    border-color: #a855f7 !important;\n                }\n                .paletteColor.selected {\n                    border-color: #a855f7 !important;\n                    transform: scale(1.2) !important;\n                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;\n                }\n                .paletteColor.eraser {\n    background: transparent !important;\n    border-color: #efb944 !important;\n    display: flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    font-size: 16px !important;\n    color: #ecef44 !important;\n    font-weight: bold !important;\n}\n                \n                .canvasWrapper {\n                    display:inline-block;\n                    position:relative;\n                    width:100%;\n                    overflow: hidden;\n                    touch-action: none;\n                }\n                \n                .canvasContainer {\n                    position: relative;\n                    transform-origin: 0 0;\n                    transition: none;\n                    touch-action: none;\n                }\n                \n                .canvas {\n                    z-index:1000;\n                    position:absolute;\n                    top:0;left:0;\n                    width:100%;\n                    touch-action: none;\n                }\n                .activeCanvas {\n                    z-index:1001;\n                    position:absolute;\n                    top:0;left:0;\n                    width:100%;\n                    touch-action: none;\n                }\n                .canvasBackgroundImage {\n                    width:100%;\n                    display: block;\n                    pointer-events: none;\n                    touch-action: none;\n                }\n                \n                .zoom-indicator {\n                    position: absolute;\n                    bottom: 10px;\n                    right: 10px;\n                    background: rgba(0,0,0,0.6);\n                    color: white;\n                    padding: 4px 10px;\n                    border-radius: 12px;\n                    font-size: 12px;\n                    z-index: 2000;\n                    pointer-events: none;\n                }\n             /* Стили для кнопки лупы (zoomToggle) */\n.zoomToggle {\n    border-color: #3b82f6 !important;\n}\n.zoomToggle:focus,\n.zoomToggle:active {\n    outline: none !important;\n    box-shadow: none !important;\n}\n.zoomToggle:not(.active) {\n    background: rgba(168, 85, 247, 0.15) !important;\n    border-color: #a855f7 !important;\n    color: #f0eaff !important;\n}\n.zoomToggle:not(.active):hover {\n    background: rgba(168, 85, 247, 0.15) !important;\n    color: #f0eaff !important;\n}\n.zoomToggle.active {\n    background: #3b82f6 !important;\n    color: #fff !important;\n    border-color: #3b82f6 !important;\n}\n.zoomToggle.active:hover {\n    background: #3b82f6 !important;\n    color: #fff !important;\n}\n.zoomContainer {\n    display: inline-block;\n    margin-left: 4px;\n}\n\n.zoomTools {\n    display: flex;\n    gap: 4px;\n    align-items: center;\n    background: rgba(0,0,0,0.3);\n    padding: 4px 8px;\n    border-radius: 8px;\n    border: 1px solid rgba(59, 130, 246, 0.3);\n}\n\n.zoom-btn {\n    background: rgba(59, 130, 246, 0.15) !important;\n    border: 2px solid #3b82f6 !important;\n    border-radius: 8px !important;\n    color: #f0eaff !important;\n    width: 32px !important;\n    height: 32px !important;\n    cursor: pointer !important;\n    transition: all 0.3s ease !important;\n    font-size: 18px !important;\n    display: inline-flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    padding: 0 !important;\n    line-height: 1 !important;\n}\n.zoom-btn:hover {\n    background: #3b82f6 !important;\n    color: #ffffff !important;\n    box-shadow: 0 0 25px rgba(59, 130, 246, 0.3) !important;\n}\n.zoom-btn:active {\n    transform: scale(0.95) !important;\n}\n\n/* Стили для кнопки \"Рука\" (panToggle) */\n.panToggle {\n    border-color: #3b82f6 !important;\n}\n.panToggle:focus,\n.panToggle:active {\n    outline: none !important;\n    box-shadow: none !important;\n}\n.panToggle:not(.active) {\n    background: rgba(168, 85, 247, 0.15) !important;\n    border-color: #a855f7 !important;\n    color: #f0eaff !important;\n}\n.panToggle:not(.active):hover {\n    background: rgba(168, 85, 247, 0.15) !important; /* Не меняем фон при наведении в неактивном состоянии */\n    color: #f0eaff !important;\n}\n.panToggle.active {\n    background: #3b82f6 !important;\n    color: #fff !important;\n    border-color: #3b82f6 !important;\n}\n.panToggle.active:hover {\n    background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */\n    color: #fff !important;\n}\n\n\n\n\n/* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */\n@media (min-width: 1024px) {\n    /*.canvasWrapper {\n        flex: 1;              /* занимает всё свободное место */\n        min-height: 0;        /* разрешаем сжиматься */\n        overflow: hidden;\n    }*/\n\n    .canvasContainer {\n        width: 100%;\n        height: 100%;\n        overflow: hidden;\n    }\n\n    /* Отменяем растяжение картинки и канвасов по ширине */\n    .canvasBackgroundImage,\n    .canvas,\n    .activeCanvas {\n        width: auto !important;\n        height: 100% !important; /* или auto, но тогда нужно следить за пропорциями */\n        /* лучше оставить width: auto, а height: 100% — тогда картинка будет по высоте,\n           а ширина подстроится, но может исказиться. Чтобы сохранить пропорции,\n           используем object-fit: contain для фона, но для canvas это сложнее.\n           Поэтому оставляем как есть — fitToScreen() сам подстроит масштаб. */\n    }\n\n    /* Убедимся, что картинка не вылезает за пределы */\n    .canvasWrapper {\n        position: relative;\n    }\n}\n\n            </style>\n        ").appendTo(this.shadowRoot),jQuery(this).attr("css")&&jQuery(`<link href="${jQuery(this).attr("css")}" rel="stylesheet" type="text/css" />`).appendTo(this.shadowRoot),jQuery(`\n            <div class="wrapper">\n                <div class="imageNav"></div>\n                <div class="toolbar">\n                    <div class="tools">\n                        <input class="sizerTool input" type="range" min="1" max="${jQuery(this).attr("maxbrushsize")||32}">\n                        \n                        <button class="undoButton button"><i class="material-icons">undo</i></button>\n                        <button class="clearButton button"><i class="material-icons">clear</i></button>\n                        <button class="saveButton button"><i class="material-icons">save</i></button>\n                        \n                       <button class="zoomToggle button" id="zoomToggleBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>\n<div class="zoomContainer" style="display:none;">\n    <div class="zoomTools">\n        <button class="zoom-btn" id="zoomInBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>\n        <button class="zoom-btn" id="zoomOutBtn"><i class="material-icons" style="font-size:18px;">zoom_out</i></button>\n        <button class="zoom-btn" id="zoomResetBtn"><i class="material-icons" style="font-size:18px;">center_focus_strong</i></button>\n        <button class="panToggle button" id="panToggleBtn"><i class="material-icons" style="font-size:18px;">pan_tool</i></button>\n        <span class="zoom-level" id="zoomLevel">100%</span>\n    </div>\n</div>\n                        \n                        <div class="spacer"></div>\n                        <button class="paletteToggle button"><i class="material-icons">palette</i></button>\n                    </div>\n                    <div class="paletteContainer" style="display:none;">\n                        <div class="palette"></div>\n                    </div>\n                </div>\n                <div class="canvasWrapper">\n                    <div class="canvasContainer" id="canvasContainer">\n                    </div>\n                    <div class="zoom-indicator" id="zoomIndicator">100%</div>\n                </div>\n            </div>\n        `).appendTo(this.shadowRoot),this.sizer=jQuery(".sizerTool",this.shadowRoot),this.sizer.val(15),this.wrapper=jQuery(".wrapper",this.shadowRoot),this.wrapper.css("height","100%"),this.wrapper.css("display","flex"),this.wrapper.css("flex-direction","column");const t=jQuery(".canvasWrapper",this.shadowRoot);t.css("flex","1"),t.css("min-height","0"),t.css("overflow","hidden"),this.canvasContainer=jQuery("#canvasContainer",this.shadowRoot),this.canvasContainer.css("will-change","transform"),this.zoomIndicator=jQuery("#zoomIndicator",this.shadowRoot),this.generatePalette(),this.drawImageNav();let e=this;jQuery(".sizerTool",this.shadowRoot).on("input",(function(){e.updateSize()})),jQuery(".undoButton",this.shadowRoot).on("click",(function(){e.paths.pop(),localStorage.setItem("v2:"+jQuery(e).attr("src"),JSON.stringify(e.paths)),e.refresh()})),jQuery(".clearButton",this.shadowRoot).on("click",(function(){e.paths=[],localStorage.setItem("v2:"+jQuery(e).attr("src"),JSON.stringify(e.paths)),e.refresh()})),jQuery(".saveButton",this.shadowRoot).on("click",(function(){e.save()})),jQuery("#zoomToggleBtn",this.shadowRoot).on("click",(function(){jQuery(".zoomContainer",e.shadowRoot).toggle();const t=jQuery(this);t.toggleClass("active"),t.blur()})),jQuery("#zoomInBtn",this.shadowRoot).on("click",(function(){e.zoomIn()})),jQuery("#zoomOutBtn",this.shadowRoot).on("click",(function(){e.zoomOut()})),jQuery("#zoomResetBtn",this.shadowRoot).on("click",(function(){e.zoomReset()})),jQuery("#panToggleBtn",this.shadowRoot).on("click",(function(){e.panMode=!e.panMode;const t=jQuery(this);t.blur(),e.panMode?(t.addClass("active"),e.wrapper.css("cursor","grab"),e.activeCanvas.css("cursor","grab"),e.showToast("✋ Режим перемещения")):(t.removeClass("active"),e.setCursor(),e.activeCanvas.css("cursor","default"),e.showToast("🖌️ Режим рисования"))})),jQuery(this.wrapper).on("wheel",(function(t){t.preventDefault();var o=Math.max(-1,Math.min(1,t.originalEvent.deltaY||t.originalEvent.wheelDelta||0));o<0?e.zoomIn():o>0&&e.zoomOut()})),jQuery(".paletteToggle",this.shadowRoot).on("click",(function(){jQuery(".paletteContainer",e.shadowRoot).slideToggle(200);const t=jQuery(this);t.toggleClass("active"),t.blur()}))}generatePalette(){let t=[],e=jQuery("slot",this.slots)[0].assignedElements();for(const o of e)"I"==o.tagName&&t.push(jQuery(o).attr("color"));t.length&&(this.paletteColors=t);let o=jQuery(".palette",this.shadowRoot);o.empty();let n=0,a="",r=this;for(let t of this.paletteColors){let e;a="",n==this.paletteColors.length-1&&(a="eraser"),e="eraser"===a?jQuery(`<div class="paletteColor ${a} color${n}" style="background-color:${t};display:flex;align-items:center;justify-content:center;font-size:18px;color:#ff4444;">🧹</div>`).data("color",n):jQuery(`<div class="paletteColor ${a} color${n}" style="background-color:${t};"><i class="material-icons"></i></div>`).data("color",n),e.on("click",(function(){const t=jQuery(this).data("color");if(jQuery(this).hasClass("eraser"))if(r.color===t){let t=void 0!==r.lastNonEraserColor?r.lastNonEraserColor:0;t===r.paletteColors.length-1&&(t=0),r.color=t,r.setCursor(),jQuery(this).parent().children().removeClass("selected"),jQuery(`.paletteColor.color${r.color}`,r.shadowRoot).addClass("selected")}else r.lastNonEraserColor=r.color,r.color=t,r.setCursor(),jQuery(this).parent().children().removeClass("selected"),jQuery(this).addClass("selected");else r.color=t,r.setCursor(),jQuery(this).parent().children().removeClass("selected"),jQuery(this).addClass("selected"),r.lastNonEraserColor=t})).appendTo(o),n++}jQuery('<div class="eyedropperButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:rgba(168,85,247,0.15);color:#f0eaff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;"><i class="material-icons" style="font-size:16px;line-height:1;">colorize</i></div>').appendTo(o).on("click",(function(){r.eyedropperMode=!r.eyedropperMode,jQuery(this).toggleClass("active"),r.eyedropperMode?(r.wrapper.css("cursor","crosshair"),r.activeCanvas.css("cursor","crosshair")):(r.setCursor(),r.activeCanvas.css("cursor","default"))}));jQuery('<div class="advancedPickerButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(168,85,247,0.3);background:linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;" title="Продвинутая палитра"><i class="material-icons" style="font-size:16px;line-height:1;color:white;text-shadow:0 0 4px rgba(0,0,0,0.5);">gradient</i></div>').appendTo(o).on("click",(function(){r.openAdvancedPicker()})),jQuery('<div class="deleteColorButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,0,0,0.3);background:rgba(255,0,0,0.12);color:#ff4444;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;" title="Удалить цвет из палитры"><i class="material-icons" style="font-size:16px;line-height:1;">close</i></div>').appendTo(o).on("click",(function(){r.deleteColorMode=!r.deleteColorMode,jQuery(this).toggleClass("active"),r.deleteColorMode?(jQuery(this).css({background:"rgba(255,0,0,0.3)","border-color":"#ff0000",transform:"scale(1.1)"}),jQuery(".paletteColor",r.shadowRoot).each((function(){jQuery(this).hasClass("eraser")||jQuery(this).css({cursor:"pointer","box-shadow":"0 0 15px rgba(255,0,0,0.3)","border-color":"rgba(255,0,0,0.5)"})})),r.showToast("👆 Нажмите на цвет, чтобы удалить его из палитры")):(jQuery(this).css({background:"rgba(255,0,0,0.12)","border-color":"rgba(255,0,0,0.3)",transform:"scale(1)"}),jQuery(".paletteColor",r.shadowRoot).css({cursor:"","box-shadow":"","border-color":""}))})),jQuery('<div class="brushSelectorButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.15);color:#f0eaff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;position:relative;" title="Выбор кисти"><i class="material-icons" style="font-size:16px;line-height:1;">brush</i></div>').appendTo(o).on("click",(function(t){t.stopPropagation(),r.toggleBrushMenu()})),o.off("click.deleteColor").on("click.deleteColor",".paletteColor:not(.eraser)",(function(t){if(!r.deleteColorMode)return;const e=jQuery(this).data("color");r.paletteColors.length<=2?r.showToast("⚠️ Должен остаться хотя бы один цвет!"):(r.paletteColors.splice(e,1),r.generatePalette(),r.deleteColorMode=!1,jQuery(".deleteColorButton",r.shadowRoot).removeClass("active").css({background:"rgba(255,0,0,0.12)","border-color":"rgba(255,0,0,0.3)",transform:"scale(1)"}),r.color>=r.paletteColors.length-1&&(r.color=0),jQuery(".paletteColor",r.shadowRoot).removeClass("selected"),jQuery(`.paletteColor.color${r.color}`,r.shadowRoot).addClass("selected"),r.setCursor(),r.showToast("🗑️ Цвет удалён!"))})),jQuery("<style>.eyedropperButton.active { border-color: #a855f7 !important; transform: scale(1.2) !important; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important; } .advancedPickerButton:hover { transform: scale(1.15) !important; border-color: #a855f7 !important; } .deleteColorButton:hover { transform: scale(1.15) !important; border-color: #ff0000 !important; } .deleteColorButton.active { background: rgba(255,0,0,0.3) !important; border-color: #ff0000 !important; transform: scale(1.1) !important; } .brushSelectorButton:hover { transform: scale(1.15) !important; border-color: #a855f7 !important; } .brushSelectorButton.active { background: #a855f7 !important; border-color: #a855f7 !important; }</style>").appendTo(this.shadowRoot)}drawImageNav(){this.images=[];let t=jQuery("slot",this.slots)[0].assignedElements();for(const e of t)"IMG"==e.tagName&&this.images.push(jQuery(e).attr("data-lazy-src")||jQuery(e).attr("src"));let e=this,o=jQuery(".imageNav",this.shadowRoot);jQuery(o).empty();let n=0,a=0;if(jQuery(this).attr("randomize")&&(n=Math.floor(Math.random()*this.images.length)),this.images.length>1)for(const t of this.images){let r=jQuery(`<img src="${t}">`).addClass("image").appendTo(o).on("click",(function(){e.selectImage(this)}));n==a&&this.selectImage(r),a++}else this.selectImage(jQuery(`<img src="${this.images[0]}" />`))}selectImage(t){this.src=jQuery(t).attr("src"),this.img=jQuery(`<img class="canvasBackgroundImage" src="${this.src}">`),jQuery(t).siblings().removeClass("selected"),jQuery(t).addClass("selected"),this.drawCanvas()}drawCanvas(){let t=this;jQuery(this).attr("src",this.img.attr("src")),this.canvasContainer.empty().append(this.img),this.canvas=jQuery('<canvas class="canvas"/>').appendTo(this.canvasContainer),this.activeCanvas=jQuery('<canvas class="activeCanvas"/>').appendTo(this.canvasContainer),this.ctx=this.canvas[0].getContext("2d"),this.activeCtx=this.activeCanvas[0].getContext("2d"),this.img.off("load").on("load",(function(){if(t.sizeCanvas(),!t._resizeBound){let e;t._resizeBound=!0,window.addEventListener("resize",(function(){clearTimeout(e),e=setTimeout((()=>{t.img&&t.img[0]&&requestAnimationFrame((()=>t.fitToScreen()))}),100)}))}let e=window.localStorage.getItem("v2:"+jQuery(this).attr("src"));e?(t.paths=JSON.parse(e),t.refresh()):(t.paths=[],t.refresh()),t.color||jQuery(".paletteColor.color3",t.shadowRoot).trigger("click")})),this.activeCanvas.on("mousedown",(function(e){t.panMode?t.panStart(e):t.mouseDown(e)})).on("mouseup",(function(e){t.panMode?t.panEnd(e):t.mouseUp(e)})).on("mousemove",(function(e){t.panMode?t.panMove(e):t.mouseMove(e)})).on("click",(function(e){t.panMode||t.handleCanvasClick(e)})).on("touchstart",(function(e){if(!t.panMode)return t.touchStart(e);t.panStart(e.originalEvent)})).on("touchend",(function(e){if(!t.panMode)return t.touchEnd(e);t.panEnd(e.originalEvent)})).on("touchmove",(function(e){if(!t.panMode)return t.touchMove(e);t.panMove(e.originalEvent)})).on("touchcancel",(function(e){t.panMode?t.panDragging=!1:t.dragging=!1}))}getCanvasCoords(t){const e=this.canvas[0],o=e.getBoundingClientRect();let n,a;t.touches&&t.touches.length>0?(n=t.touches[0].clientX,a=t.touches[0].clientY):t.changedTouches&&t.changedTouches.length>0?(n=t.changedTouches[0].clientX,a=t.changedTouches[0].clientY):(n=t.clientX,a=t.clientY);let r=n-o.left,i=a-o.top;return{x:r*(e.width/o.width),y:i*(e.height/o.height)}}getCursorPosition(t){return this.getCanvasCoords(t)}handleCanvasClick(t){if(this.eyedropperMode)return t.stopPropagation(),t.preventDefault(),void this.pickColor(t)}touchStart(t){if(this.panMode)return void this.panStart(t.originalEvent);if(this.eyedropperMode)return;let e=t.originalEvent;this.mouseDown(e)}touchEnd(t){if(this.panMode)return void this.panEnd(t.originalEvent);if(this.eyedropperMode)return void(this.dragging=!1);let e=t.originalEvent;this.mouseUp(e)}touchMove(t){if(this.panMode)return void this.panMove(t.originalEvent);if(this.eyedropperMode)return;let e=t.originalEvent;if(e.touches.length>=2)return!0;e.preventDefault(),e.stopPropagation();let o=e.touches[0];e.clientX=o.clientX,e.clientY=o.clientY,this.mouseMove(e)}mouseDown(t){if(this.eyedropperMode)return;let e=this.getCursorPosition(t);this.dragging=!0,e.c=this.color,e.s=this.sizer.val(),e.brush=this.brushType||"solid",this.paths.push([e]),this.setCursor()}mouseUp(t){this.eyedropperMode?this.dragging=!1:(this.commitActivePath(),this.dragging&&localStorage.setItem("v2:"+jQuery(this).attr("src"),JSON.stringify(this.paths)),this.dragging=!1,this.updateProgress())}mouseMove(t){if(!this.dragging)return;let e=this.getCursorPosition(t);e.x=Math.max(0,Math.min(e.x,this.canvas[0].width-1)),e.y=Math.max(0,Math.min(e.y,this.canvas[0].height-1)),this.paths[this.paths.length-1].push(e),this.drawActivePath()}commitActivePath(){this.drawActivePath(!0),setTimeout((()=>this.updateProgress()),50)}clearActivePath(){let t=this.img[0].naturalHeight,e=this.img[0].naturalWidth;this.activeCtx.clearRect(0,0,e,t)}drawActivePath(t=!1){let e;this.clearActivePath();let o=this.paths[this.paths.length-1];e=1==t||o[0].c==this.paletteColors.length-1?this.ctx:this.activeCtx,o[0].c||(o[0].c=0);const n=o[0].brush||this.brushType||"solid",a=this.paletteColors[o[0].c],r=o[0].s*(this.img[0].naturalWidth/this.img.width());if(e.save(),o[0].c==this.paletteColors.length-1)e.globalCompositeOperation="destination-out",e.strokeStyle="white",e.lineCap="round",e.lineJoin="round",e.lineWidth=r;else switch(e.globalCompositeOperation="source-over",e.lineCap="round",e.lineJoin="round",n){case"solid":e.strokeStyle=a,e.lineWidth=r,e.shadowBlur=0,e.globalAlpha=1;break;case"soft":e.strokeStyle=a,e.lineWidth=2.5*r,e.shadowColor=a,e.shadowBlur=4*r,e.globalAlpha=.4;break;case"sparkle":e.strokeStyle=a,e.lineWidth=1.2*r,e.shadowBlur=0,e.globalAlpha=1;break;case"texture":e.strokeStyle=a,e.lineWidth=1.3*r,e.shadowBlur=0,e.globalAlpha=.85,e.setLineDash([2,1]),e.lineCap="butt";break;case"dotted":e.strokeStyle=a,e.lineWidth=.6*r,e.shadowBlur=0,e.globalAlpha=1,e.setLineDash([2,8]),e.lineCap="round";break;case"outline":e.strokeStyle=a,e.lineWidth=2*r,e.shadowColor=a,e.shadowBlur=20*r,e.globalAlpha=1;break;case"simple":e.strokeStyle=a,e.lineWidth=1.3*r,e.shadowBlur=0,e.globalAlpha=.85,e.lineCap="round",e.lineJoin="round";break;case"neon":e.strokeStyle=a,e.lineWidth=1.5*r,e.shadowBlur=0,e.globalAlpha=1,e.lineCap="round",e.lineJoin="round";break;case"rainbow":const t=o[o.length-1],n=e.createLinearGradient(o[0].x,o[0].y,t.x,t.y);n.addColorStop(0,"#ff0000"),n.addColorStop(.17,"#ff8800"),n.addColorStop(.33,"#ffff00"),n.addColorStop(.5,"#00ff00"),n.addColorStop(.67,"#0088ff"),n.addColorStop(.83,"#8800ff"),n.addColorStop(1,"#ff00ff"),e.strokeStyle=n,e.lineWidth=1.5*r,e.shadowColor="#ffffff",e.shadowBlur=2*r,e.globalAlpha=1;break;default:e.strokeStyle=a,e.lineWidth=r}e.beginPath(),e.moveTo(o[0].x,o[0].y);for(let t=1;t<o.length;++t)e.lineTo(o[t].x,o[t].y);if(e.stroke(),"neon"===n&&o[0].c!=this.paletteColors.length-1){const t=a,n=r;e.save(),e.filter=`blur(${.8*n}px)`,e.globalAlpha=.35,e.lineWidth=4*n,e.strokeStyle=t,e.beginPath(),e.moveTo(o[0].x,o[0].y);for(let t=1;t<o.length;++t)e.lineTo(o[t].x,o[t].y);e.stroke(),e.filter=`blur(${.3*n}px)`,e.globalAlpha=.6,e.lineWidth=2*n,e.strokeStyle=t,e.beginPath(),e.moveTo(o[0].x,o[0].y);for(let t=1;t<o.length;++t)e.lineTo(o[t].x,o[t].y);e.stroke(),e.restore()}if("outline"===n&&o[0].c!=this.paletteColors.length-1){e.shadowBlur=0,e.globalAlpha=1,e.lineWidth=.6*r,e.strokeStyle="#ffffff",e.beginPath(),e.moveTo(o[0].x,o[0].y);for(let t=1;t<o.length;++t)e.lineTo(o[t].x,o[t].y);e.stroke(),e.shadowBlur=0,e.globalAlpha=.8,e.lineWidth=.8*r,e.strokeStyle=a,e.beginPath(),e.moveTo(o[0].x,o[0].y);for(let t=1;t<o.length;++t)e.lineTo(o[t].x,o[t].y);e.stroke()}if(e.restore(),"sparkle"===n&&o[0].c!=this.paletteColors.length-1){const t=["#ff0000","#ff8800","#ffff00","#00ff00","#0088ff","#8800ff","#ff00ff"];e.save(),e.globalCompositeOperation="source-over",e.shadowBlur=0,e.globalAlpha=1;for(let n=0;n<o.length;n+=3)if(n%2==0){const a=o[n],i=t[Math.floor(Math.random()*t.length)],s=r*(.2+.8*Math.random()),l=(Math.random()-.5)*r*2.5,c=(Math.random()-.5)*r*2.5;e.translate(a.x+l,a.y+c),e.fillStyle=i,e.shadowColor=i,e.shadowBlur=2*s;const d=s/2;e.beginPath(),e.moveTo(-d,0),e.lineTo(0,-d),e.lineTo(d,0),e.lineTo(0,d),e.closePath(),e.fill(),e.beginPath();const h=.7*d;e.moveTo(-h,-h),e.lineTo(h,h),e.moveTo(h,-h),e.lineTo(-h,h),e.strokeStyle=i,e.lineWidth=1,e.stroke(),e.setTransform(1,0,0,1,0,0)}e.restore()}e.setLineDash([]),e.shadowBlur=0,e.globalAlpha=1}refresh(){this.clearActivePath();let t=this.img[0].naturalHeight,e=this.img[0].naturalWidth,o=this.ctx;o.clearRect(0,0,e,t);for(let t=0;t<this.paths.length;++t){let e=this.paths[t];if(e.length<1)continue;e[0].c||(e[0].c=0);const n=e[0].brush||this.brushType||"solid",a=this.paletteColors[e[0].c],r=e[0].s*(this.img[0].naturalWidth/this.img.width());if(o.save(),e[0].c==this.paletteColors.length-1)o.globalCompositeOperation="destination-out",o.strokeStyle="white",o.lineCap="round",o.lineJoin="round",o.lineWidth=r;else switch(o.globalCompositeOperation="source-over",o.lineCap="round",o.lineJoin="round",n){case"solid":o.strokeStyle=a,o.lineWidth=r,o.shadowBlur=0,o.globalAlpha=1;break;case"soft":o.strokeStyle=a,o.lineWidth=2.5*r,o.shadowColor=a,o.shadowBlur=4*r,o.globalAlpha=.4;break;case"sparkle":o.strokeStyle=a,o.lineWidth=1.2*r,o.shadowBlur=0,o.globalAlpha=1;break;case"texture":o.strokeStyle=a,o.lineWidth=1.3*r,o.shadowBlur=0,o.globalAlpha=.85,o.setLineDash([2,1]),o.lineCap="butt";break;case"dotted":o.strokeStyle=a,o.lineWidth=.6*r,o.shadowBlur=0,o.globalAlpha=1,o.setLineDash([2,8]),o.lineCap="round";break;case"outline":o.strokeStyle=a,o.lineWidth=2*r,o.shadowColor=a,o.shadowBlur=20*r,o.globalAlpha=1;break;case"simple":o.strokeStyle=a,o.lineWidth=1.3*r,o.shadowBlur=0,o.globalAlpha=.85,o.lineCap="round",o.lineJoin="round";break;case"neon":o.strokeStyle=a,o.lineWidth=1.5*r,o.shadowBlur=0,o.globalAlpha=1,o.lineCap="round",o.lineJoin="round";break;case"rainbow":const t=e[e.length-1],n=o.createLinearGradient(e[0].x,e[0].y,t.x,t.y);n.addColorStop(0,"#ff0000"),n.addColorStop(.17,"#ff8800"),n.addColorStop(.33,"#ffff00"),n.addColorStop(.5,"#00ff00"),n.addColorStop(.67,"#0088ff"),n.addColorStop(.83,"#8800ff"),n.addColorStop(1,"#ff00ff"),o.strokeStyle=n,o.lineWidth=1.5*r,o.shadowColor="#ffffff",o.shadowBlur=2*r,o.globalAlpha=1;break;default:o.strokeStyle=a,o.lineWidth=r}o.beginPath(),o.moveTo(e[0].x,e[0].y);for(let t=1;t<e.length;++t)o.lineTo(e[t].x,e[t].y);if(o.stroke(),"neon"===n&&e[0].c!=this.paletteColors.length-1){const t=a,n=r;o.save(),o.filter=`blur(${.8*n}px)`,o.globalAlpha=.35,o.lineWidth=4*n,o.strokeStyle=t,o.beginPath(),o.moveTo(e[0].x,e[0].y);for(let t=1;t<e.length;++t)o.lineTo(e[t].x,e[t].y);o.stroke(),o.filter=`blur(${.3*n}px)`,o.globalAlpha=.6,o.lineWidth=2*n,o.strokeStyle=t,o.beginPath(),o.moveTo(e[0].x,e[0].y);for(let t=1;t<e.length;++t)o.lineTo(e[t].x,e[t].y);o.stroke(),o.restore()}if("outline"===n&&e[0].c!=this.paletteColors.length-1){o.shadowBlur=0,o.globalAlpha=1,o.lineWidth=.6*r,o.strokeStyle="#ffffff",o.beginPath(),o.moveTo(e[0].x,e[0].y);for(let t=1;t<e.length;++t)o.lineTo(e[t].x,e[t].y);o.stroke(),o.shadowBlur=0,o.globalAlpha=.8,o.lineWidth=.8*r,o.strokeStyle=a,o.beginPath(),o.moveTo(e[0].x,e[0].y);for(let t=1;t<e.length;++t)o.lineTo(e[t].x,e[t].y);o.stroke()}if(o.restore(),o.setLineDash([]),o.shadowBlur=0,o.globalAlpha=1,"sparkle"===n&&e[0].c!=this.paletteColors.length-1){const t=["#ff0000","#ff8800","#ffff00","#00ff00","#0088ff","#8800ff","#ff00ff"];o.save(),o.globalCompositeOperation="source-over",o.shadowBlur=0,o.globalAlpha=1;for(let n=0;n<e.length;n+=3)if(n%2==0){const a=e[n],i=t[Math.floor(Math.random()*t.length)],s=r*(.2+.8*Math.random()),l=(Math.random()-.5)*r*2.5,c=(Math.random()-.5)*r*2.5;o.translate(a.x+l,a.y+c),o.fillStyle=i,o.shadowColor=i,o.shadowBlur=2*s;const d=s/2;o.beginPath(),o.moveTo(-d,0),o.lineTo(0,-d),o.lineTo(d,0),o.lineTo(0,d),o.closePath(),o.fill(),o.beginPath();const h=.7*d;o.moveTo(-h,-h),o.lineTo(h,h),o.moveTo(h,-h),o.lineTo(-h,h),o.strokeStyle=i,o.lineWidth=1,o.stroke(),o.setTransform(1,0,0,1,0,0)}o.restore()}}setTimeout((()=>this.updateProgress()),100)}zoomIn(){this.zoomLevel=Math.min(3,this.zoomLevel+.25),this.applyZoom()}zoomOut(){this.zoomLevel=Math.max(this.zoomMin,this.zoomLevel-.25),this.applyZoom()}zoomReset(){this.zoomLevel=1,this.panX=0,this.panY=0,this.applyZoom()}applyZoom(){this.canvasContainer.css("will-change","transform");const t=Math.round(100*this.zoomLevel);this.canvasContainer.css({transform:`translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`,"transform-origin":"0 0"}),this.zoomIndicator.text(t+"%"),jQuery("#zoomLevel",this.shadowRoot).text(t+"%")}sizeCanvas(){const t=this.img[0].naturalWidth,e=this.img[0].naturalHeight;this.canvas.attr("height",e),this.canvas.attr("width",t),this.activeCanvas.attr("height",e),this.activeCanvas.attr("width",t),this.fitToScreen(),setTimeout((()=>this.fitToScreen()),100)}fitToScreen(){const t=this.canvasContainer[0];if(!t)return void this.zoomReset();const e=t.parentElement;if(!e)return void this.zoomReset();const o=e.clientWidth,n=e.clientHeight,a=this.img[0].naturalWidth,r=this.img[0].naturalHeight;if(0===o||0===n||0===a||0===r)return void this.zoomReset();const i=o/a,s=n/r;let l=Math.min(i,s);l=Math.min(l,1),l=Math.max(l,.1),this.zoomLevel=l,this.panX=0,this.panY=0,this.applyZoom()}updateSize(){this.setCursor()}setCursor(){let t=this.sizer.val();t<2&&(t=2),t>32&&(t=32);let e=jQuery('<canvas height="32" width="32"/>'),o=e[0].getContext("2d");const n=16,a=16,r=t/2,i=this.paletteColors[this.color]||"#ffffff";switch(o.beginPath(),o.arc(n,a,r,0,2*Math.PI,!1),this.brushType){case"soft":o.fillStyle=i,o.fill(),o.shadowColor=i,o.shadowBlur=20,o.globalAlpha=.4,o.beginPath(),o.arc(n,a,1.5*r,0,2*Math.PI),o.fill();break;case"sparkle":o.fillStyle=i,o.fill();const t=["#ff0000","#ffff00","#00ff00","#0088ff","#ff00ff"];for(let e=0;e<6;e++){const i=e/6*Math.PI*2,s=1.3*r,l=n+Math.cos(i)*s,c=a+Math.sin(i)*s,d=2+2*Math.random();o.fillStyle=t[e%t.length],o.shadowColor=t[e%t.length],o.shadowBlur=5,o.beginPath(),o.arc(l,c,d,0,2*Math.PI),o.fill()}break;case"texture":o.fillStyle=i,o.fill();for(let t=0;t<8;t++){const t=32*Math.random(),e=32*Math.random();o.fillStyle=i,o.globalAlpha=.3+.3*Math.random(),o.fillRect(t,e,2,2)}break;case"dotted":o.fillStyle=i,o.fill(),o.globalAlpha=1,o.shadowBlur=0,o.setLineDash([2,4]),o.strokeStyle=i,o.lineWidth=2,o.beginPath(),o.arc(n,a,.8*r,0,2*Math.PI),o.stroke();break;case"simple":o.globalAlpha=.85,o.fillStyle=i,o.shadowBlur=0,o.beginPath(),o.arc(n,a,1.1*r,0,2*Math.PI),o.fill();break;case"neon":o.shadowBlur=0,o.globalAlpha=1;const e=o.createRadialGradient(n,a,0,n,a,2.5*r);e.addColorStop(0,i),e.addColorStop(.3,i),e.addColorStop(1,"transparent"),o.filter=`blur(${.5*r}px)`,o.beginPath(),o.arc(n,a,2.5*r,0,2*Math.PI),o.fillStyle=e,o.fill(),o.filter="none",o.beginPath(),o.arc(n,a,.7*r,0,2*Math.PI),o.fillStyle="#ffffff",o.fill(),o.beginPath(),o.arc(n,a,.5*r,0,2*Math.PI),o.fillStyle=i,o.fill();break;case"rainbow":const s=o.createRadialGradient(n,a,0,n,a,r);s.addColorStop(0,"#ff0000"),s.addColorStop(.17,"#ff8800"),s.addColorStop(.33,"#ffff00"),s.addColorStop(.5,"#00ff00"),s.addColorStop(.67,"#0088ff"),s.addColorStop(.83,"#8800ff"),s.addColorStop(1,"#ff00ff"),o.fillStyle=s,o.shadowBlur=0,o.fill();break;default:o.fillStyle=i,o.fill(),o.shadowBlur=0}o.strokeStyle="rgba(0, 0, 0, 0.5)",o.lineWidth=1,o.globalAlpha=1,o.setLineDash([]),o.beginPath(),o.moveTo(0,a),o.lineTo(32,a),o.moveTo(n,0),o.lineTo(n,32),o.stroke();let s=e[0].toDataURL();this.wrapper.css("cursor",`url(${s}) 16 16, pointer`)}updateProgress(){try{const t=this.canvas?this.canvas[0]:null,e=this.activeCanvas?this.activeCanvas[0]:null;if(!t)return;const o=document.createElement("canvas");o.width=t.width,o.height=t.height;const n=o.getContext("2d",{willReadFrequently:!0});n.drawImage(t,0,0),e&&n.drawImage(e,0,0);const a=n.getImageData(0,0,o.width,o.height).data;let r=0;const i=a.length/4;for(let t=3;t<a.length;t+=4)a[t]>10&&r++;let s=0;i>0&&(s=Math.min(Math.round(r/i*100),100),r>0&&0===s&&(s=1));const l=new CustomEvent("progressUpdate",{detail:{percent:s,coloredPixels:r,totalPixels:i}});this.dispatchEvent(l)}catch(t){}}getProgress(){return new Promise((t=>{try{const e=this.canvas?this.canvas[0]:null;if(!e)return void t({percent:0,coloredPixels:0,totalPixels:0});const o=e.getContext("2d",{willReadFrequently:!0}),n=o.getImageData(0,0,e.width,e.height).data;let a=0;const r=n.length/4;for(let t=3;t<n.length;t+=4)n[t]>10&&a++;let i=0;r>0&&(i=Math.min(Math.round(a/r*100),100),a>0&&0===i&&(i=1)),t({percent:i,coloredPixels:a,totalPixels:r})}catch(e){t({percent:0,coloredPixels:0,totalPixels:0})}}))}pickColor(t){if(!this.eyedropperMode)return;const e=this.getCursorPosition(t);if(e.x<0||e.y<0||e.x>=this.canvas[0].width||e.y>=this.canvas[0].height)return;const o=Math.floor(e.x),n=Math.floor(e.y);let a=this.activeCtx.getImageData(o,n,1,1).data,r=a[0],i=a[1],s=a[2],l=a[3];if(l<10&&(a=this.ctx.getImageData(o,n,1,1).data,r=a[0],i=a[1],s=a[2],l=a[3]),l<10)return;let c=0,d=1/0;for(let t=0;t<this.paletteColors.length-1;t++){const e=this.paletteColors[t].match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);if(!e)continue;const o=parseInt(e[1]),n=parseInt(e[2]),a=parseInt(e[3]),l=e[4]?parseFloat(e[4]):1;let h=o,p=n,u=a;if(l<1){const t=l;h=Math.round(o*t+255*(1-t)),p=Math.round(n*t+255*(1-t)),u=Math.round(a*t+255*(1-t))}const f=Math.sqrt(Math.pow(r-h,2)+Math.pow(i-p,2)+Math.pow(s-u,2));f<d&&(d=f,c=t)}this.color=c,jQuery(".paletteColor",this.shadowRoot).removeClass("selected"),jQuery(`.paletteColor.color${c}`,this.shadowRoot).addClass("selected"),this.setCursor(),this.disableEyedropper()}disableEyedropper(){this.eyedropperMode=!1;jQuery(".eyedropperButton",this.shadowRoot).removeClass("active"),this.wrapper.css("cursor","default"),this.setCursor()}async save(){try{const t=await fetch(this.img[0].src),e=await t.blob(),o=URL.createObjectURL(e),n=new Image;n.src=o,await new Promise((t=>{n.complete?t():n.onload=t}));const a=n.naturalWidth||n.width,r=n.naturalHeight||n.height,i=document.createElement("canvas");i.width=a,i.height=r;const s=i.getContext("2d");s.drawImage(n,0,0,a,r);const l=this.canvas[0];s.drawImage(l,0,0,a,r);const c=i.toDataURL("image/png"),d=document.createElement("a");d.href=c,d.download="coloring.png",document.body.appendChild(d),d.click(),document.body.removeChild(d),URL.revokeObjectURL(o)}catch(t){try{const t=new Image;t.crossOrigin="anonymous",t.src=this.img[0].src,await new Promise((e=>{t.complete?e():t.onload=e}));const e=t.naturalWidth||t.width,o=t.naturalHeight||t.height,n=document.createElement("canvas");n.width=e,n.height=o;const a=n.getContext("2d");a.drawImage(t,0,0,e,o),a.drawImage(this.canvas[0],0,0,e,o);const r=n.toDataURL("image/png"),i=document.createElement("a");i.href=r,i.download="coloring.png",document.body.appendChild(i),i.click(),document.body.removeChild(i)}catch(t){this.showToast("❌ Не удалось сохранить рисунок. Попробуйте ещё раз.")}}}openAdvancedPicker(){let t=this;const e=jQuery('\n        <div class="advancedPickerModal" style="\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            background: rgba(0,0,0,0.7);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            z-index: 999999;\n            backdrop-filter: blur(8px);\n            animation: fadeIn 0.3s ease;\n        ">\n            <div class="advancedPickerContent" style="\n                background: rgba(20, 20, 40, 0.95);\n                border-radius: 20px;\n                padding: 24px;\n                max-width: 380px;\n                width: 90%;\n                border: 1px solid rgba(168, 85, 247, 0.3);\n                box-shadow: 0 20px 60px rgba(0,0,0,0.8);\n                position: relative;\n            ">\n               <button class="pickerClose" id="pickerCloseBtn" style="\n    position: absolute;\n    top: 12px;\n    right: 16px;\n    background: none;\n    border: none;\n    color: #888;\n    font-size: 24px;\n    cursor: pointer;\n    transition: color 0.2s;\n    z-index: 10;\n">✖</button>\n                \n                <h3 style="\n                    color: #f0eaff;\n                    margin: 0 0 16px 0;\n                    font-size: 18px;\n                    text-align: center;\n                ">🎨 Выберите цвет</h3>\n                \n                <div class="pickerPreview" style="\n                    width: 100%;\n                    height: 50px;\n                    border-radius: 12px;\n                    margin-bottom: 16px;\n                    border: 2px solid rgba(255,255,255,0.1);\n                    transition: background 0.1s;\n                "></div>\n                \n                <div class="pickerHue" style="\n                    width: 100%;\n                    height: 24px;\n                    border-radius: 12px;\n                    background: linear-gradient(to right, \n                        #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000\n                    );\n                    margin-bottom: 12px;\n                    cursor: pointer;\n                    position: relative;\n                    border: 1px solid rgba(255,255,255,0.1);\n                ">\n                    <div class="hueIndicator" style="\n                        position: absolute;\n                        top: -4px;\n                        width: 4px;\n                        height: 32px;\n                        background: white;\n                        border-radius: 2px;\n                        box-shadow: 0 0 10px rgba(255,255,255,0.5);\n                        pointer-events: none;\n                    "></div>\n                </div>\n                \n                <div class="pickerSaturation" style="\n                    width: 100%;\n                    height: 120px;\n                    border-radius: 12px;\n                    margin-bottom: 16px;\n                    cursor: pointer;\n                    position: relative;\n                    border: 1px solid rgba(255,255,255,0.1);\n                ">\n                    <div class="satIndicator" style="\n                        position: absolute;\n                        width: 16px;\n                        height: 16px;\n                        border-radius: 50%;\n                        border: 2px solid white;\n                        box-shadow: 0 0 10px rgba(0,0,0,0.5);\n                        pointer-events: none;\n                        transform: translate(-50%, -50%);\n                    "></div>\n                </div>\n                \n                <div style="display: flex; gap: 8px; margin-bottom: 12px;">\n                    <input type="text" class="hexInput" value="#ffffff" style="\n                        flex: 1;\n                        padding: 8px 12px;\n                        border-radius: 8px;\n                        border: 1px solid rgba(255,255,255,0.1);\n                        background: rgba(255,255,255,0.05);\n                        color: #f0eaff;\n                        font-size: 14px;\n                        font-family: monospace;\n                        text-transform: uppercase;\n                    ">\n                    <input type="color" class="nativePicker" value="#ffffff" style="\n                        width: 40px;\n                        height: 40px;\n                        border: none;\n                        border-radius: 8px;\n                        cursor: pointer;\n                        background: none;\n                    ">\n                </div>\n                \n                <div style="display: flex; gap: 8px;">\n                    <button class="pickerAdd" style="\n                        flex: 1;\n                        padding: 10px;\n                        border-radius: 10px;\n                        border: none;\n                        background: linear-gradient(135deg, #a855f7, #7c3aed);\n                        color: white;\n                        font-size: 16px;\n                        font-weight: 600;\n                        cursor: pointer;\n                        transition: transform 0.2s;\n                    ">➕ Добавить</button>\n                    <button class="pickerSelect" style="\n                        flex: 1;\n                        padding: 10px;\n                        border-radius: 10px;\n                        border: none;\n                        background: linear-gradient(135deg, #22c55e, #16a34a);\n                        color: white;\n                        font-size: 16px;\n                        font-weight: 600;\n                        cursor: pointer;\n                        transition: transform 0.2s;\n                    ">✅ Выбрать</button>\n                </div>\n            </div>\n        </div>\n    ').appendTo("body");let o="#ffffff",n=0,a=100,r=50,i=!1,s=!1;const l=e.find(".pickerPreview"),c=e.find(".pickerHue"),d=e.find(".pickerSaturation"),h=e.find(".hueIndicator"),p=e.find(".satIndicator"),u=e.find(".hexInput"),f=e.find(".nativePicker");function g(t){const e=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(t);return e?{r:parseInt(e[1],16),g:parseInt(e[2],16),b:parseInt(e[3],16)}:null}function m(t,e,n){o=function(t,e,o){o/=100;const n=e=>(e+t/30)%12,a=(e/=100)*Math.min(o,1-o),r=t=>o-a*Math.max(-1,Math.min(n(t)-3,9-n(t),1)),i=t=>Math.round(255*r(t)).toString(16).padStart(2,"0");return`#${i(0)}${i(8)}${i(4)}`}(t,e,n),l.css("background",o),u.val(o.toUpperCase()),f.val(o),d.css("background",`linear-gradient(to right, \n            hsl(${t}, 0%, ${n}%), \n            hsl(${t}, 100%, ${n}%)\n        )`)}function b(t){const e=parseInt(t.slice(1,3),16)/255,o=parseInt(t.slice(3,5),16)/255,n=parseInt(t.slice(5,7),16)/255,a=Math.max(e,o,n),r=Math.min(e,o,n);let i,s,l=(a+r)/2;if(a===r)i=s=0;else{const t=a-r;switch(s=l>.5?t/(2-a-r):t/(a+r),a){case e:i=((o-n)/t+(o<n?6:0))/6;break;case o:i=((n-e)/t+2)/6;break;case n:i=((e-o)/t+4)/6;break}}return{h:Math.round(360*i),s:Math.round(100*s),l:Math.round(100*l)}}function v(t){const e=d[0].getBoundingClientRect(),o=Math.max(0,Math.min(1,(t.clientX-e.left)/e.width)),i=Math.max(0,Math.min(1,(t.clientY-e.top)/e.height));a=Math.round(100*o),r=Math.round(100*(1-i)),m(n,a,r),p.css({left:100*o+"%",top:100*(1-i)+"%"})}m(0,100,50),c.on("mousedown",(function(t){i=!0;const e=this.getBoundingClientRect(),o=Math.max(0,Math.min(1,(t.clientX-e.left)/e.width));n=Math.round(360*o),m(n,a,r),h.css("left",100*o+"%")})),$(document).on("mousemove",(function(t){if(i){const e=c[0].getBoundingClientRect(),o=Math.max(0,Math.min(1,(t.clientX-e.left)/e.width));n=Math.round(360*o),m(n,a,r),h.css("left",100*o+"%")}s&&v(t)})),$(document).on("mouseup",(function(){i=!1,s=!1})),d.on("mousedown",(function(t){s=!0,v(t)})),c.on("touchstart",(function(t){const e=t.originalEvent.touches[0],o=this.getBoundingClientRect(),i=Math.max(0,Math.min(1,(e.clientX-o.left)/o.width));n=Math.round(360*i),m(n,a,r),h.css("left",100*i+"%")})),d.on("touchstart",(function(t){const e=t.originalEvent.touches[0],o=this.getBoundingClientRect(),i=Math.max(0,Math.min(1,(e.clientX-o.left)/o.width)),s=Math.max(0,Math.min(1,(e.clientY-o.top)/o.height));a=Math.round(100*i),r=Math.round(100*(1-s)),m(n,a,r),p.css({left:100*i+"%",top:100*(1-s)+"%"})})),u.on("input",(function(){let t=this.value.trim();if(/^#?[0-9a-f]{6}$/i.test(t.replace("#",""))){t.startsWith("#")||(t="#"+t);const e=b(t);n=e.h,a=e.s,r=e.l,m(n,a,r),h.css("left",n/360*100+"%"),p.css({left:a/100*100+"%",top:100*(1-r/100)+"%"})}})),f.on("input",(function(){const t=b(this.value);n=t.h,a=t.s,r=t.l,m(n,a,r),h.css("left",n/360*100+"%"),p.css({left:a/100*100+"%",top:100*(1-r/100)+"%"})})),e.find(".pickerSelect").on("click",(function(){const n=g(o);if(!n)return void t.showToast("⚠️ Некорректный цвет");const a=`rgba(${n.r}, ${n.g}, ${n.b}, 0.8)`;let r=!1,i=-1;for(let e=0;e<t.paletteColors.length-1;e++)if(t.paletteColors[e]===a){r=!0,i=e;break}if(!r){const e=t.paletteColors.length-1;t.paletteColors.splice(e,0,a),i=e}t.generatePalette(),t.color=i,jQuery(".paletteColor",t.shadowRoot).removeClass("selected"),jQuery(`.paletteColor.color${i}`,t.shadowRoot).addClass("selected"),t.setCursor(),e.remove(),t.showToast("✅ Цвет выбран!")})),e.find(".pickerAdd").on("click",(function(){const e=g(o);if(!e)return void t.showToast("⚠️ Некорректный цвет");const n=`rgba(${e.r}, ${e.g}, ${e.b}, 0.8)`;let a=!1;for(let e=0;e<t.paletteColors.length-1;e++)if(t.paletteColors[e]===n){a=!0;break}if(a)t.showToast("⚠️ Этот цвет уже есть в палитре!");else{const e=t.paletteColors.length-1;t.paletteColors.splice(e,0,n),t.generatePalette(),t.showToast("✅ Цвет добавлен в палитру!")}})),e.find(".pickerClose").on("click",(function(t){t.preventDefault(),t.stopPropagation(),e.remove()})),e.on("click",(function(t){t.target===this&&e.remove()})),$(document).on("keydown",(function(t){"Escape"!==t.key&&"Esc"!==t.key||e.is(":visible")&&e.remove()})),jQuery("<style>@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }</style>").appendTo("head")}showToast(t){const e=document.querySelector(".toast-notification");e&&e.remove();const o=document.createElement("div");o.className="toast-notification",o.textContent=t,o.style.cssText="\n        position: fixed;\n        bottom: 80px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: rgba(0,0,0,0.85);\n        color: white;\n        padding: 12px 24px;\n        border-radius: 12px;\n        font-size: 16px;\n        z-index: 999999;\n        backdrop-filter: blur(8px);\n        border: 1px solid rgba(255,255,255,0.1);\n        animation: toastFadeIn 0.3s ease;\n        white-space: nowrap;\n        max-width: 90%;\n        overflow: hidden;\n        text-overflow: ellipsis;\n        pointer-events: none;\n    ",document.body.appendChild(o),setTimeout((function(){o.style.opacity="0",o.style.transition="opacity 0.3s ease",setTimeout((function(){o.remove()}),300)}),2500)}showBrushUnlockModal(t){const e=this.getBrushName(t),o=this.getBrushIcon(t);if("function"==typeof openUnlockModal){const n=document.getElementById("unlockModal");if(!n)return void this.showToast("⚠️ Модалка не найдена");const a=n.querySelector(".modal-header h2"),r=n.querySelector(".modal-body");a&&(a.textContent="🔓 Открыть кисть"),r&&(r.innerHTML=`\n                <div style="text-align:center;padding:10px 0;">\n                    <div style="font-size:48px;margin-bottom:10px;">${o}</div>\n                    <p style="font-size:18px;color:var(--text-primary);margin-bottom:8px;">\n                        Кисть <strong>«${e}»</strong>\n                    </p>\n                    <p style="font-size:15px;color:var(--text-secondary);margin-bottom:20px;">\n                        Посмотрите рекламу, чтобы разблокировать эту кисть на <strong>24 часа</strong>! 🎬\n                    </p>\n                    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">\n                        <button class="btn-neon" onclick="window._pendingBrushUnlock = '${t}'; window._pendingBrushUnlockFromColoring = true; watchAdForBrushUnlock();">🎬 Открыть</button>\n                        <button class="btn-neon" onclick="closeUnlockModal();" style="background:rgba(255,0,0,0.1);border-color:#ef4444;">❌ Отмена</button>\n                    </div>\n                </div>\n            `),n.classList.add("show"),window._pendingBrushUnlock=t,window._pendingBrushUnlockFromColoring=!0}else this.showToast(`🔒 Кисть «${e}» заблокирована!`)}getBrushName(t){return{simple:"Простая",solid:"Твёрдая",soft:"Мягкая",texture:"Текстура",dotted:"Пунктир",outline:"Обводка",neon:"Неон",sparkle:"Блёстки",rainbow:"Радуга"}[t]||t}getBrushIcon(t){return{simple:"🖊️",solid:"✏️",soft:"🖌️",texture:"🌟",dotted:"▪️",outline:"🔲",neon:"💡",sparkle:"✨",rainbow:"🌈"}[t]||"🖌️"}toggleBrushMenu(){let t=this;const e=this.shadowRoot.querySelector(".brushMenu");if(e)return jQuery(e).remove(),void jQuery(".brushSelectorButton",this.shadowRoot).removeClass("active");jQuery(".brushSelectorButton",this.shadowRoot).addClass("active");const o=jQuery('<div class="brushMenu" style="\n        position: absolute;\n        bottom: 40px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: rgba(20, 20, 40, 0.95);\n        backdrop-filter: blur(12px);\n        border-radius: 16px;\n        padding: 8px;\n        border: 1px solid rgba(168, 85, 247, 0.3);\n        box-shadow: 0 10px 40px rgba(0,0,0,0.6);\n        display: grid;\n        grid-template-columns: repeat(4, 1fr);\n        gap: 6px;\n        z-index: 1000;\n        min-width: 180px;\n        animation: fadeIn 0.2s ease;\n    ">').appendTo(this.shadowRoot);[{id:"simple",icon:"🖊️",name:"Простая",defaultUnlocked:!0},{id:"solid",icon:"✏️",name:"Твёрдая",defaultUnlocked:!0},{id:"soft",icon:"🖌️",name:"Мягкая",defaultUnlocked:!0},{id:"texture",icon:"🌟",name:"Текстура",defaultUnlocked:!1},{id:"dotted",icon:"▪️",name:"Пунктир",defaultUnlocked:!1},{id:"outline",icon:"🔲",name:"Обводка",defaultUnlocked:!1},{id:"neon",icon:"💡",name:"Неон",defaultUnlocked:!1},{id:"sparkle",icon:"✨",name:"Блёстки",defaultUnlocked:!1},{id:"rainbow",icon:"🌈",name:"Радуга",defaultUnlocked:!1}].forEach((e=>{let n=e.defaultUnlocked||!1;"undefined"!=typeof isBrushUnlocked&&(n=isBrushUnlocked(e.id));const a=this.brushType===e.id,r=jQuery(`<div class="brushOption" style="\n        padding: 8px 6px;\n        border-radius: 10px;\n        cursor: ${n?"pointer":"not-allowed"};\n        text-align: center;\n        transition: all 0.2s ease;\n        background: ${a?"rgba(168, 85, 247, 0.25)":"transparent"};\n        border: 2px solid ${a?"#a855f7":"transparent"};\n        opacity: ${n?1:.4};\n        ${n?"":"filter: grayscale(0.5);"}\n    ">`).data("brush",e.id).appendTo(o),i=n?"":"🔒";jQuery(`<div style="font-size: 20px;">${e.icon} ${i}</div>`).appendTo(r),jQuery(`<div style="font-size: 10px; color: #f0eaff; margin-top: 2px;">${e.name}</div>`).appendTo(r),r.on("click",(function(){const n=jQuery(this).data("brush");let a=e.defaultUnlocked||!1;"undefined"!=typeof isBrushUnlocked&&(a=isBrushUnlocked(n)),a?(t.brushType=n,t.setCursor(),t.showToast(`🖌️ Кисть: ${e.name}`),o.find(".brushOption").css({background:"transparent","border-color":"transparent"}),jQuery(this).css({background:"rgba(168, 85, 247, 0.25)","border-color":"#a855f7"}),setTimeout((()=>{jQuery(o).remove(),jQuery(".brushSelectorButton",t.shadowRoot).removeClass("active")}),300)):"function"==typeof showBrushUnlockModal?showBrushUnlockModal(n):"function"==typeof t.showBrushUnlockModal?t.showBrushUnlockModal(n):t.showToast("🔒 Кисть заблокирована! Откройте через рекламу.")})),r.on("mouseenter",(function(){jQuery(this).css("background","rgba(168, 85, 247, 0.15)")})),r.on("mouseleave",(function(){jQuery(this).hasClass("active")||jQuery(this).css("background","transparent")}))}));const n=e=>{jQuery(e.target).closest(".brushMenu").length||jQuery(e.target).closest(".brushSelectorButton").length||(jQuery(o).remove(),jQuery(".brushSelectorButton",t.shadowRoot).removeClass("active"),$(document).off("click",n))};setTimeout((()=>{$(document).on("click",n)}),100)}panStart(t){if(t.touches&&t.touches.length>1)return;this.panDragging=!0,this._panFramePending=!1;const e=this.canvasContainer[0].getBoundingClientRect();let o,n;t.touches&&t.touches.length>0?(o=t.touches[0].clientX,n=t.touches[0].clientY):t.changedTouches&&t.changedTouches.length>0?(o=t.changedTouches[0].clientX,n=t.changedTouches[0].clientY):(o=t.clientX,n=t.clientY),this.panStartX=o-e.left,this.panStartY=n-e.top,this.panBaseX=this.panX,this.panBaseY=this.panY,this.wrapper.css("cursor","grabbing"),this.activeCanvas.css("cursor","grabbing")}panMove(t){if(!this.panDragging)return;if(t.touches&&t.touches.length>1)return;const e=this.canvasContainer[0].getBoundingClientRect();let o,n;t.touches&&t.touches.length>0?(o=t.touches[0].clientX,n=t.touches[0].clientY):t.changedTouches&&t.changedTouches.length>0?(o=t.changedTouches[0].clientX,n=t.changedTouches[0].clientY):(o=t.clientX,n=t.clientY);const a=o-e.left,r=n-e.top,i=a-this.panStartX,s=r-this.panStartY;Math.abs(i)<.5&&Math.abs(s)<.5||(this.panX+=i,this.panY+=s,this.panStartX=a,this.panStartY=r,this._panFramePending||(this._panFramePending=!0,requestAnimationFrame((()=>{this._panFramePending=!1,this.applyZoom()}))))}panEnd(t){this.panDragging=!1,this._panFramePending=!1,this.wrapper.css("cursor","grab"),this.activeCanvas.css("cursor","grab")}});
+"use strict";
+customElements.define('jl-coloringbook', class extends HTMLElement 
+{
+    constructor() 
+    {
+        super();
+        this.shadow = this.attachShadow({mode: 'open'}); 
+        this.loadIcons();
+        this.eyedropperMode = false;  
+         this.deleteColorMode = false;  // =====удаление из палитры =====
+         this.brushType = 'simple'; 
+         let me = this;
+// В конструкторе col1.js, внутри window.addEventListener('brushUnlocked', ...)
+window.addEventListener('brushUnlocked', function(e) {
+    if (e.detail && e.detail.brushId) {
+        console.log('🔄 Событие brushUnlocked получено для кисти:', e.detail.brushId);
+        
+        // Проверяем состояние после разблокировки
+        if (typeof isBrushUnlocked !== 'undefined') {
+            const unlocked = isBrushUnlocked(e.detail.brushId);
+            console.log(`🔍 Кисть ${e.detail.brushId} разблокирована:`, unlocked);
+        }
+        
+        // Закрываем меню, если открыто
+        const menu = me.shadowRoot.querySelector('.brushMenu');
+        if (menu) {
+            jQuery(menu).remove();
+            jQuery('.brushSelectorButton', me.shadowRoot).removeClass('active');
+        }
+        
+        // Показываем тост
+        const brushName = me.getBrushName(e.detail.brushId);
+        me.showToast(`✅ Кисть «${brushName}» разблокирована!`);
+        
+        // Через 500мс открываем меню заново
+        setTimeout(() => {
+            console.log('🔄 Открываем меню заново...');
+            me.toggleBrushMenu();
+        }, 500);
+    }
+});
+        this.zoomLevel = 1;
+        this.zoomMin = 0.2;
+        this.zoomMax = 3;
+  this.panMode = false;          // ← добавить
+    this.panDragging = false;      // ← добавить
+    this.panStartX = 0;            // ← добавить
+    this.panStartY = 0;            // ← добавить
+    this.panX = 0;                 // ← добавить
+    this.panY = 0;                 // ← добавить // ← режим перетаскивания
+    this.panBaseX = 0;
+this.panBaseY = 0;
+ this.lastNonEraserColor = 0; //ластик
+
+    }
+
+    init()
+    {
+        jQuery(this).css('display','block');
+        this.paletteColors=[
+            'rgba(87, 87, 87,0.8)',
+            'rgba(220, 35, 35,0.8)',
+            'rgba(42, 75, 215,0.8)',
+            'rgba(29, 105, 20,0.8)',
+            'rgba(129, 74, 25,0.8)',
+            'rgba(129, 38, 192,0.8)',
+            'rgba(160, 160, 160,0.8)',
+            'rgba(129, 197, 122,0.8)',
+            'rgba(157, 175, 255,0.8)',
+            'rgba(41, 208, 208,0.8)',
+            'rgba(255, 146, 51,0.8)',
+            'rgba(255, 238, 51,0.8)',
+            'rgba(233, 222, 187,0.8)',
+            'rgba(255, 205, 243,0.8)',
+            'white'];
+        this.dragging=false;
+        this.paths = [];
+        let me=this;
+        this.slots=jQuery(`<div class="slots" style="display:none"><slot></slot></div>`).appendTo(this.shadowRoot)
+    
+        this.slots.off('slotchange').on('slotchange', function()
+        {
+            me.drawTemplate()
+        });
+    }
+
+    connectedCallback()
+    {
+        let auto =jQuery(this).attr('autoinit');
+        if (auto!=='0') {
+            this.init();
+        } 
+    }
+
+    loadIcons()
+    {
+        try {
+            let material = new FontFace('Material Icons', 'url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf)');
+            material.load().then(function(loaded_face) {
+                document.fonts.add(loaded_face);
+            }).catch(function(error) {});
+        } catch(err) {}
+    }
+    
+    drawTemplate()
+    {
+        jQuery(this).on('click', function(e) {e.preventDefault();
+e.stopPropagation();})
+        jQuery(`
+            <style>
+                @font-face {
+                    font-family: 'Material Icons';
+                    font-style: normal;
+                    font-weight: 400;
+                    src: url(https://fonts.gstatic.com/s/materialicons/v50/flUhRq6tzZclQEJ-Vdg-IuiaDsNZ.ttf) format('truetype');
+                }
+                .material-icons {
+                    font-family: 'Material Icons';
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 18px;
+                    line-height: 1;
+                    letter-spacing: normal;
+                    text-transform: none;
+                    display: inline-block;
+                    white-space: nowrap;
+                    word-wrap: normal;
+                    direction: ltr;
+                }
+                .wrapper { 
+                    width:100%; 
+                    -webkit-touch-callout: none; 
+                    -webkit-user-select: none; 
+                    -khtml-user-select: none; 
+                    -moz-user-select: none; 
+                    -ms-user-select: none; 
+                    user-select: none;
+                    position: relative;
+                    overflow: hidden;
+                    touch-action: none;
+                }
+                
+                .imageNav img {
+                    box-sizing:border-box;
+                    border:3px solid transparent;
+                    width:12%; min-width:75px; max-width:150px;
+                    margin:4px;
+                }
+                .imageNav img.selected {
+                    border: 3px solid green; 
+                }
+                .toolbar {
+                    z-index:100000;
+                    position: sticky;
+                    position: -webkit-sticky; 
+                    top: 0;
+                    background-color: rgba(200,200,200,.1);
+                    padding: 4px 0;
+                }
+                .tools {
+                    display:flex;
+                    justify-content:flex-start;
+                    flex-wrap:wrap;
+                    max-width:100%;
+                    gap: 4px;
+                    align-items: center;
+                }
+                .sizerTool {
+                    cursor:inherit;
+                    align-self:flex-start;
+                    width:64px;
+                }
+                .spacer {
+                    flex-basis:0;
+                    flex-grow:1;
+                }
+                .tools > * {margin:2px}
+
+                .tools .button {
+                    background: rgba(168, 85, 247, 0.15) !important;
+                    border: 2px solid #a855f7 !important;
+                    border-radius: 8px !important;
+                    color: #f0eaff !important;
+                    padding: 4px 8px !important;
+                    cursor: pointer !important;
+                    transition: all 0.3s ease !important;
+                    font-size: 14px !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    box-shadow: 0 0 10px rgba(168, 85, 247, 0.1) !important;
+                }
+                .tools .button:hover {
+                    background: #a855f7 !important;
+                    color: #ffffff !important;
+                    box-shadow: 0 0 25px rgba(168, 85, 247, 0.3) !important;
+                }
+                .tools .button:active {
+                    transform: scale(0.95) !important;
+                }
+                .tools .undoButton { border-color: #f59e0b !important; }
+                .tools .undoButton:hover { background: #f59e0b !important; }
+                .tools .clearButton { border-color: #ef4444 !important; }
+                .tools .clearButton:hover { background: #ef4444 !important; }
+                .tools .saveButton { border-color: #22c55e !important; }
+                .tools .saveButton:hover { background: #22c55e !important; }
+                               
+/* Стили для кнопки палитры (paletteToggle) */
+.paletteToggle {
+    border-color: #ec4899 !important;
+}
+.paletteToggle:focus,
+.paletteToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.paletteToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.paletteToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #f0eaff !important;
+}
+.paletteToggle.active {
+    background: #ec4899 !important;
+    color: #fff !important;
+    border-color: #ec4899 !important;
+}
+.paletteToggle.active:hover {
+    background: #ec4899 !important;
+    color: #fff !important;
+}
+
+                               .palette {
+                    display: flex !important;
+                    flex-wrap: wrap !important;
+                    gap: 4px !important;
+                    padding: 4px 0 !important;
+                    align-items: center !important;
+                }
+                .palette .tool-btn {
+                    width: 28px !important;
+                    height: 28px !important;
+                    border-radius: 50% !important;
+                    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+                    background: rgba(168, 85, 247, 0.15) !important;
+                    color: #f0eaff !important;
+                    padding: 0 !important;
+                    cursor: pointer !important;
+                    transition: all 0.2s ease !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    font-size: 0 !important;
+                    line-height: 0 !important;
+                    flex-shrink: 0 !important;
+                }
+                .palette .tool-btn i {
+                    font-size: 16px !important;
+                    line-height: 1 !important;
+                }
+                .palette .tool-btn:hover {
+                    transform: scale(1.15) !important;
+                    border-color: #a855f7 !important;
+                }
+                .palette .tool-btn.active {
+                    border-color: #a855f7 !important;
+                    transform: scale(1.2) !important;
+                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+                }
+                .paletteColor {
+                    width: 28px !important;
+                    height: 28px !important;
+                    border-radius: 50% !important;
+                    border: 2px solid rgba(255, 255, 255, 0.15) !important;
+                    cursor: pointer !important;
+                    transition: all 0.2s ease !important;
+                    display: inline-block !important;
+                    flex-shrink: 0 !important;
+                }
+                .paletteColor:hover {
+                    transform: scale(1.15) !important;
+                    border-color: #a855f7 !important;
+                }
+                .paletteColor.selected {
+                    border-color: #a855f7 !important;
+                    transform: scale(1.2) !important;
+                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+                }
+                .paletteColor.eraser {
+    background: transparent !important;
+    border-color: #efb944 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 16px !important;
+    color: #ecef44 !important;
+    font-weight: bold !important;
+}
+                
+                .canvasWrapper {
+                    display:inline-block;
+                    position:relative;
+                    width:100%;
+                    overflow: hidden;
+                    touch-action: none;
+                }
+                
+                .canvasContainer {
+                    position: relative;
+                    transform-origin: 0 0;
+                    transition: none;
+                    touch-action: none;
+                }
+                
+                .canvas {
+                    z-index:1000;
+                    position:absolute;
+                    top:0;left:0;
+                    width:100%;
+                    touch-action: none;
+                }
+                .activeCanvas {
+                    z-index:1001;
+                    position:absolute;
+                    top:0;left:0;
+                    width:100%;
+                    touch-action: none;
+                }
+                .canvasBackgroundImage {
+                    width:100%;
+                    display: block;
+                    pointer-events: none;
+                    touch-action: none;
+                }
+                
+                .zoom-indicator {
+                    position: absolute;
+                    bottom: 10px;
+                    right: 10px;
+                    background: rgba(0,0,0,0.6);
+                    color: white;
+                    padding: 4px 10px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    z-index: 2000;
+                    pointer-events: none;
+                }
+             /* Стили для кнопки лупы (zoomToggle) */
+.zoomToggle {
+    border-color: #3b82f6 !important;
+}
+.zoomToggle:focus,
+.zoomToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.zoomToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.zoomToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #f0eaff !important;
+}
+.zoomToggle.active {
+    background: #3b82f6 !important;
+    color: #fff !important;
+    border-color: #3b82f6 !important;
+}
+.zoomToggle.active:hover {
+    background: #3b82f6 !important;
+    color: #fff !important;
+}
+.zoomContainer {
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.zoomTools {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    background: rgba(0,0,0,0.3);
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.zoom-btn {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border: 2px solid #3b82f6 !important;
+    border-radius: 8px !important;
+    color: #f0eaff !important;
+    width: 32px !important;
+    height: 32px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+.zoom-btn:hover {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.3) !important;
+}
+.zoom-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* Стили для кнопки "Рука" (panToggle) */
+.panToggle {
+    border-color: #3b82f6 !important;
+}
+.panToggle:focus,
+.panToggle:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+.panToggle:not(.active) {
+    background: rgba(168, 85, 247, 0.15) !important;
+    border-color: #a855f7 !important;
+    color: #f0eaff !important;
+}
+.panToggle:not(.active):hover {
+    background: rgba(168, 85, 247, 0.15) !important; /* Не меняем фон при наведении в неактивном состоянии */
+    color: #f0eaff !important;
+}
+.panToggle.active {
+    background: #3b82f6 !important;
+    color: #fff !important;
+    border-color: #3b82f6 !important;
+}
+.panToggle.active:hover {
+    background: #3b82f6 !important; /* В активном состоянии фон остаётся синим */
+    color: #fff !important;
+}
+
+
+
+
+/* ===== ТОЛЬКО ДЛЯ ШИРОКИХ ЭКРАНОВ (ПК) ===== */
+@media (min-width: 1024px) {
+    /*.canvasWrapper {
+        flex: 1;              /* занимает всё свободное место */
+        min-height: 0;        /* разрешаем сжиматься */
+        overflow: hidden;
+    }*/
+
+    .canvasContainer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Отменяем растяжение картинки и канвасов по ширине */
+    .canvasBackgroundImage,
+    .canvas,
+    .activeCanvas {
+        width: auto !important;
+        height: 100% !important; /* или auto, но тогда нужно следить за пропорциями */
+        /* лучше оставить width: auto, а height: 100% — тогда картинка будет по высоте,
+           а ширина подстроится, но может исказиться. Чтобы сохранить пропорции,
+           используем object-fit: contain для фона, но для canvas это сложнее.
+           Поэтому оставляем как есть — fitToScreen() сам подстроит масштаб. */
+    }
+
+    /* Убедимся, что картинка не вылезает за пределы */
+    .canvasWrapper {
+        position: relative;
+    }
+}
+
+            </style>
+        `).appendTo(this.shadowRoot);
+        
+        if (jQuery(this).attr('css')) {
+            jQuery(`<link href="${jQuery(this).attr('css')}" rel="stylesheet" type="text/css" />`).appendTo(this.shadowRoot);
+        }
+        
+        jQuery(`
+            <div class="wrapper">
+                <div class="imageNav"></div>
+                <div class="toolbar">
+                    <div class="tools">
+                        <input class="sizerTool input" type="range" min="1" max="${jQuery(this).attr('maxbrushsize') || 32}">
+                        
+                        <button class="undoButton button"><i class="material-icons">undo</i></button>
+                        <button class="clearButton button"><i class="material-icons">clear</i></button>
+                        <button class="saveButton button"><i class="material-icons">save</i></button>
+                        
+                       <button class="zoomToggle button" id="zoomToggleBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
+<div class="zoomContainer" style="display:none;">
+    <div class="zoomTools">
+        <button class="zoom-btn" id="zoomInBtn"><i class="material-icons" style="font-size:18px;">zoom_in</i></button>
+        <button class="zoom-btn" id="zoomOutBtn"><i class="material-icons" style="font-size:18px;">zoom_out</i></button>
+        <button class="zoom-btn" id="zoomResetBtn"><i class="material-icons" style="font-size:18px;">center_focus_strong</i></button>
+        <button class="panToggle button" id="panToggleBtn"><i class="material-icons" style="font-size:18px;">pan_tool</i></button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+    </div>
+</div>
+                        
+                        <div class="spacer"></div>
+                        <button class="paletteToggle button"><i class="material-icons">palette</i></button>
+                    </div>
+                    <div class="paletteContainer" style="display:none;">
+                        <div class="palette"></div>
+                    </div>
+                </div>
+                <div class="canvasWrapper">
+                    <div class="canvasContainer" id="canvasContainer">
+                    </div>
+                    <div class="zoom-indicator" id="zoomIndicator">100%</div>
+                </div>
+            </div>
+        `).appendTo(this.shadowRoot);
+        
+        this.sizer = jQuery('.sizerTool', this.shadowRoot);
+        this.sizer.val(15);
+        this.wrapper = jQuery('.wrapper', this.shadowRoot);
+
+this.wrapper.css('height', '100%');
+this.wrapper.css('display', 'flex');
+this.wrapper.css('flex-direction', 'column');
+
+// Растягиваем canvasWrapper
+const canvasWrapper = jQuery('.canvasWrapper', this.shadowRoot);
+canvasWrapper.css('flex', '1');
+canvasWrapper.css('min-height', '0');
+canvasWrapper.css('overflow', 'hidden');
+
+        this.canvasContainer = jQuery('#canvasContainer', this.shadowRoot);
+this.canvasContainer.css('will-change', 'transform');
+
+        this.zoomIndicator = jQuery('#zoomIndicator', this.shadowRoot);
+        
+        this.generatePalette();
+        this.drawImageNav();
+        
+        let me = this;
+        
+        jQuery('.sizerTool', this.shadowRoot).on('input', function(){me.updateSize()});
+        jQuery('.undoButton', this.shadowRoot).on('click', function(){me.paths.pop(); localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths)); me.refresh();});
+        jQuery('.clearButton', this.shadowRoot).on('click', function(){me.paths=[];localStorage.setItem('v2:'+jQuery(me).attr('src'),JSON.stringify(me.paths));me.refresh();});
+        jQuery('.saveButton', this.shadowRoot).on('click', function() {me.save()});
+        
+jQuery('#zoomToggleBtn', this.shadowRoot).on('click', function() {
+    const container = jQuery('.zoomContainer', me.shadowRoot);
+    container.toggle();
+    const btn = jQuery(this);
+    btn.toggleClass('active');
+    btn.blur();
+});
+        jQuery('#zoomInBtn', this.shadowRoot).on('click', function() { me.zoomIn(); });
+        jQuery('#zoomOutBtn', this.shadowRoot).on('click', function() { me.zoomOut(); });
+        jQuery('#zoomResetBtn', this.shadowRoot).on('click', function() { me.zoomReset(); });
+jQuery('#panToggleBtn', this.shadowRoot).on('click', function() {
+    me.panMode = !me.panMode;
+    const btn = jQuery(this);
+    btn.blur(); // снимаем фокус с кнопки
+    if (me.panMode) {
+        btn.addClass('active');
+        me.wrapper.css('cursor', 'grab');
+        me.activeCanvas.css('cursor', 'grab');
+        me.showToast('✋ Режим перемещения');
+    } else {
+        btn.removeClass('active');
+        me.setCursor();
+        me.activeCanvas.css('cursor', 'default');
+        me.showToast('🖌️ Режим рисования');
+    }
+});
+        
+       jQuery(this.wrapper).on('wheel', function(e) {
+    e.preventDefault();
+    var delta = Math.max(-1, Math.min(1, e.originalEvent.deltaY || e.originalEvent.wheelDelta || 0));
+    if (delta < 0) {
+        me.zoomIn();
+    } else if (delta > 0) {
+        me.zoomOut();
+    }
+});    
+jQuery('.paletteToggle', this.shadowRoot).on('click', function() {
+    const container = jQuery('.paletteContainer', me.shadowRoot);
+    container.slideToggle(200);
+    const btn = jQuery(this);
+    btn.toggleClass('active');
+    btn.blur();
+});
+
+
+    }
+
+
+ generatePalette()
+{
+    let paletteColors=[];
+    let list= jQuery('slot',this.slots)[0].assignedElements();
+    
+    for (const x of list)
+    {
+        if (x.tagName=='I')
+        {
+            paletteColors.push(jQuery(x).attr('color'));
+        }
+    }
+    if (paletteColors.length) this.paletteColors=paletteColors;
+  
+    let palette=jQuery(`.palette`,this.shadowRoot);
+    
+    // ОЧИЩАЕМ ПАЛИТРУ ПЕРЕД ПЕРЕСОЗДАНИЕМ
+    palette.empty();
+    
+    let i=0;
+    let className='';
+    let me = this; // ← ВАЖНО: сохраняем this
+    
+    // === ЦИКЛ ДЛЯ ЦВЕТОВ (ОБЫЧНАЯ ПАЛИТРА) ===
+    for (let value of this.paletteColors)
+    {
+        className='';
+        if (i==(this.paletteColors.length-1)) className="eraser";
+        
+                   let colorDiv;
+        if (className === 'eraser') {
+            // Ластик – используем эмодзи вместо иконки
+            colorDiv = jQuery(`<div class="paletteColor ${className} color${i}" style="background-color:${value};display:flex;align-items:center;justify-content:center;font-size:18px;color:#ff4444;">🧹</div>`).data('color',i);
+        } else {
+            colorDiv = jQuery(`<div class="paletteColor ${className} color${i}" style="background-color:${value};"><i class="material-icons"></i></div>`).data('color',i);
+        }
+        
+        // Обработчик клика с учётом ластика
+        colorDiv.on('click', function(){
+            const clickedColor = jQuery(this).data('color');
+            const isEraser = jQuery(this).hasClass('eraser');
+            
+            if (isEraser) {
+                // Если ластик уже выбран, переключаемся на предыдущий цвет
+                if (me.color === clickedColor) {
+                    // Возвращаемся к последнему не-ластику, если он есть, иначе к первому цвету (0)
+                    let prevColor = me.lastNonEraserColor !== undefined ? me.lastNonEraserColor : 0;
+                    // Убедимся, что prevColor не ластик (на случай, если lastNonEraserColor = индекс ластика)
+                    if (prevColor === me.paletteColors.length - 1) {
+                        prevColor = 0;
+                    }
+                    me.color = prevColor;
+                    me.setCursor();
+                    jQuery(this).parent().children().removeClass('selected');
+                    jQuery(`.paletteColor.color${me.color}`, me.shadowRoot).addClass('selected');
+                    // Не обновляем lastNonEraserColor, так как мы переключились на цвет
+                } else {
+                    // Выбираем ластик, запоминаем текущий цвет как предыдущий
+                    me.lastNonEraserColor = me.color;
+                    me.color = clickedColor;
+                    me.setCursor();
+                    jQuery(this).parent().children().removeClass('selected');
+                    jQuery(this).addClass('selected');
+                }
+            } else {
+                // Обычный цвет
+                me.color = clickedColor;
+                me.setCursor();
+                jQuery(this).parent().children().removeClass('selected');
+                jQuery(this).addClass('selected');
+                // Запоминаем как последний не-ластик
+                me.lastNonEraserColor = clickedColor;
+            }
+        }).appendTo(palette);
+        i++;
+    }
+
+    // === ПИПЕТКА ===
+    const eyedropperBtn = jQuery(`<div class="eyedropperButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:rgba(168,85,247,0.15);color:#f0eaff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;"><i class="material-icons" style="font-size:16px;line-height:1;">colorize</i></div>`)
+        .appendTo(palette)
+        .on('click', function() {
+            me.eyedropperMode = !me.eyedropperMode;
+            jQuery(this).toggleClass('active');
+            if (me.eyedropperMode) {
+                me.wrapper.css('cursor', 'crosshair');
+                me.activeCanvas.css('cursor', 'crosshair');
+            } else {
+                me.setCursor();
+                me.activeCanvas.css('cursor', 'default');
+            }
+        });
+
+    // === КНОПКА ПРОДВИНУТОЙ ПАЛИТРЫ ===
+    jQuery(`<div class="advancedPickerButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(168,85,247,0.3);background:linear-gradient(135deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;" title="Продвинутая палитра"><i class="material-icons" style="font-size:16px;line-height:1;color:white;text-shadow:0 0 4px rgba(0,0,0,0.5);">gradient</i></div>`)
+        .appendTo(palette)
+        .on('click', function() {
+            me.openAdvancedPicker();
+        });
+
+    // === КНОПКА УДАЛЕНИЯ ЦВЕТА ===
+    jQuery(`<div class="deleteColorButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,0,0,0.3);background:rgba(255,0,0,0.12);color:#ff4444;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;" title="Удалить цвет из палитры"><i class="material-icons" style="font-size:16px;line-height:1;">close</i></div>`)
+        .appendTo(palette)
+        .on('click', function() {
+            me.deleteColorMode = !me.deleteColorMode;
+            jQuery(this).toggleClass('active');
+            if (me.deleteColorMode) {
+                jQuery(this).css({
+                    'background': 'rgba(255,0,0,0.3)',
+                    'border-color': '#ff0000',
+                    'transform': 'scale(1.1)'
+                });
+                jQuery('.paletteColor', me.shadowRoot).each(function() {
+                    if (!jQuery(this).hasClass('eraser')) {
+                        jQuery(this).css({
+                            'cursor': 'pointer',
+                            'box-shadow': '0 0 15px rgba(255,0,0,0.3)',
+                            'border-color': 'rgba(255,0,0,0.5)'
+                        });
+                    }
+                });
+                me.showToast('👆 Нажмите на цвет, чтобы удалить его из палитры');
+            } else {
+                jQuery(this).css({
+                    'background': 'rgba(255,0,0,0.12)',
+                    'border-color': 'rgba(255,0,0,0.3)',
+                    'transform': 'scale(1)'
+                });
+                jQuery('.paletteColor', me.shadowRoot).css({
+                    'cursor': '',
+                    'box-shadow': '',
+                    'border-color': ''
+                });
+            }
+        });
+
+    // === КНОПКА ВЫБОРА КИСТЕЙ ===
+    jQuery(`<div class="brushSelectorButton tool-btn" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(168,85,247,0.3);background:rgba(168,85,247,0.15);color:#f0eaff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:0;line-height:0;flex-shrink:0;transition:all 0.2s ease;margin-left:4px;position:relative;" title="Выбор кисти"><i class="material-icons" style="font-size:16px;line-height:1;">brush</i></div>`)
+        .appendTo(palette)
+        .on('click', function(e) {
+            e.stopPropagation();
+            me.toggleBrushMenu();
+        });
+
+    // === ОБРАБОТЧИК УДАЛЕНИЯ ЦВЕТА ===
+    palette.off('click.deleteColor').on('click.deleteColor', '.paletteColor:not(.eraser)', function(e) {
+        if (!me.deleteColorMode) return;
+        
+        const colorElement = jQuery(this);
+        const colorIndex = colorElement.data('color');
+        
+        if (me.paletteColors.length <= 2) {
+            me.showToast('⚠️ Должен остаться хотя бы один цвет!');
+            return;
+        }
+        
+        me.paletteColors.splice(colorIndex, 1);
+        me.generatePalette();
+        me.deleteColorMode = false;
+        jQuery('.deleteColorButton', me.shadowRoot).removeClass('active').css({
+            'background': 'rgba(255,0,0,0.12)',
+            'border-color': 'rgba(255,0,0,0.3)',
+            'transform': 'scale(1)'
+        });
+        
+        if (me.color >= me.paletteColors.length - 1) {
+            me.color = 0;
+        }
+        jQuery('.paletteColor', me.shadowRoot).removeClass('selected');
+        jQuery(`.paletteColor.color${me.color}`, me.shadowRoot).addClass('selected');
+        me.setCursor();
+        me.showToast('🗑️ Цвет удалён!');
+    });
+
+    // Стили
+    jQuery('<style>.eyedropperButton.active { border-color: #a855f7 !important; transform: scale(1.2) !important; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important; } .advancedPickerButton:hover { transform: scale(1.15) !important; border-color: #a855f7 !important; } .deleteColorButton:hover { transform: scale(1.15) !important; border-color: #ff0000 !important; } .deleteColorButton.active { background: rgba(255,0,0,0.3) !important; border-color: #ff0000 !important; transform: scale(1.1) !important; } .brushSelectorButton:hover { transform: scale(1.15) !important; border-color: #a855f7 !important; } .brushSelectorButton.active { background: #a855f7 !important; border-color: #a855f7 !important; }</style>').appendTo(this.shadowRoot);
+}
+
+
+
+    drawImageNav()
+    {
+        this.images=[];
+        let list= jQuery('slot',this.slots)[0].assignedElements();
+        for (const x of list) {
+            if (x.tagName=='IMG') {
+                this.images.push(jQuery(x).attr('data-lazy-src')||jQuery(x).attr('src'));
+            }
+        }
+        let me = this;
+        let imageNav=jQuery('.imageNav',this.shadowRoot);
+        jQuery(imageNav).empty();
+        let sel=0;
+        let i=0;
+        if (jQuery(this).attr('randomize')) sel = Math.floor(Math.random()*this.images.length);
+        if (this.images.length > 1) {
+            for(const src of this.images) {
+                let x= jQuery(`<img src="${src}">`).addClass('image').appendTo(imageNav)
+                .on('click', function(){
+                    me.selectImage(this);
+                });
+                if (sel==i) this.selectImage(x);
+                i++;
+            }
+        } else this.selectImage(jQuery(`<img src="${this.images[0]}" />`));
+    }
+
+    selectImage(sourceImg)
+    {
+        this.src=jQuery(sourceImg).attr('src');
+        this.img=jQuery(`<img class="canvasBackgroundImage" src="${this.src}">`)
+        jQuery(sourceImg).siblings().removeClass('selected')
+        jQuery(sourceImg).addClass('selected');
+        this.drawCanvas();
+    }
+
+    drawCanvas()
+    {
+        let me = this;
+        jQuery(this).attr('src',this.img.attr('src'));
+        
+        this.canvasContainer.empty().append(this.img); 
+        
+        this.canvas = jQuery(`<canvas class="canvas"/>`).appendTo(this.canvasContainer);
+        this.activeCanvas = jQuery(`<canvas class="activeCanvas"/>`).appendTo(this.canvasContainer);
+        
+        this.ctx = this.canvas[0].getContext('2d');
+        this.activeCtx = this.activeCanvas[0].getContext('2d');
+
+        this.img.off('load').on('load', function() {
+               me.sizeCanvas(); 
+            // Пересчёт при изменении размера окна
+if (!me._resizeBound) {
+    me._resizeBound = true;
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (me.img && me.img[0]) {
+                requestAnimationFrame(() => me.fitToScreen());
+            }
+        }, 100);
+    });
+}
+
+            let x = window.localStorage.getItem('v2:'+jQuery(this).attr('src'));
+            if (x){
+                me.paths=JSON.parse(x);
+                me.refresh();
+            } else {
+                me.paths=[];
+                me.refresh();
+            }
+            if (!me.color) {
+                jQuery('.paletteColor.color3', me.shadowRoot).trigger('click');
+            }
+        });
+        
+        this.activeCanvas.on('mousedown', function(e) {
+    if (me.panMode) {
+        me.panStart(e);
+        return;
+    }
+    me.mouseDown(e);
+})
+.on('mouseup', function(e) {
+    if (me.panMode) {
+        me.panEnd(e);
+        return;
+    }
+    me.mouseUp(e);
+})
+.on('mousemove', function(e) {
+    if (me.panMode) {
+        me.panMove(e);
+        return;
+    }
+    me.mouseMove(e);
+})
+.on('click', function(e) {
+    if (me.panMode) return; // в режиме панорамирования клик не нужен
+    me.handleCanvasClick(e);
+})
+.on('touchstart', function(e) {
+    if (me.panMode) {
+        me.panStart(e.originalEvent);
+        return;
+    }
+    return me.touchStart(e);
+})
+.on('touchend', function(e) {
+    if (me.panMode) {
+        me.panEnd(e.originalEvent);
+        return;
+    }
+    return me.touchEnd(e);
+})
+.on('touchmove', function(e) {
+    if (me.panMode) {
+        me.panMove(e.originalEvent);
+        return;
+    }
+    return me.touchMove(e);
+})
+.on('touchcancel', function(e) {
+    if (me.panMode) {
+        me.panDragging = false;
+        return;
+    }
+    me.dragging = false;
+});
+
+    }
+
+    getCanvasCoords(e) {
+        const canvas = this.canvas[0];
+        const rect = canvas.getBoundingClientRect();
+        
+        let clientX, clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else if (e.changedTouches && e.changedTouches.length > 0) {
+            clientX = e.changedTouches[0].clientX;
+            clientY = e.changedTouches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        
+        let x = (clientX - rect.left);
+        let y = (clientY - rect.top);
+        
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        return {
+            x: x * scaleX,
+            y: y * scaleY
+        };
+    }
+
+    getCursorPosition(e) {
+        return this.getCanvasCoords(e);
+    }
+
+ handleCanvasClick(e) {
+    // Если пипетка активна - обрабатываем только её
+    if (this.eyedropperMode) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.pickColor(e);
+        return;
+    }
+}
+
+touchStart(oe)
+{   
+     if (this.panMode) {
+        this.panStart(oe.originalEvent);
+        return;
+    }
+    
+    // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
+    if (this.eyedropperMode) {
+        // Не создаем путь в режиме пипетки
+        return;
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    let e = oe.originalEvent;
+    // Просто передаём event — он содержит touches
+    this.mouseDown(e);
+}
+
+   touchEnd(oe)
+{  if (this.panMode) {
+        this.panEnd(oe.originalEvent);
+        return;
+    }
+    // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
+    if (this.eyedropperMode) {
+        this.dragging = false;
+        return;
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+
+    let e=oe.originalEvent;
+    this.mouseUp(e);
+}
+
+  touchMove(oe)
+{    if (this.panMode) {
+        this.panMove(oe.originalEvent);
+        return;
+    }
+    // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
+    if (this.eyedropperMode) {
+        return;
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    let e= oe.originalEvent;
+    if (e.touches.length >=2) return true; // allow 2 finger gestures through
+    e.preventDefault();
+    e.stopPropagation();
+    
+    let touch = e.touches[0];
+
+    e.clientX=touch.clientX;
+    e.clientY=touch.clientY;
+    this.mouseMove(e)
+}
+
+mouseDown(e)
+{
+    // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
+    if (this.eyedropperMode) {
+        // Не создаем путь, просто выходим
+        return;
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    let pos = this.getCursorPosition(e);               
+    this.dragging = true;
+    pos.c=this.color;
+    pos.s=this.sizer.val();
+    pos.brush = this.brushType || 'solid'; 
+    this.paths.push([pos]);
+    this.setCursor();
+}
+
+   mouseUp(e) 
+{
+    // ===== ДОБАВЬТЕ ЭТУ ПРОВЕРКУ =====
+    if (this.eyedropperMode) {
+        this.dragging = false;
+        return;
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    this.commitActivePath();
+    if (this.dragging) localStorage.setItem('v2:'+jQuery(this).attr('src'),JSON.stringify(this.paths));
+    this.dragging = false;
+    // Обновляем прогресс после завершения рисования
+    this.updateProgress();
+}
+
+    mouseMove(e) {
+        if (!this.dragging) return;
+        let pos = this.getCursorPosition(e);
+        pos.x = Math.max(0, Math.min(pos.x, this.canvas[0].width - 1));
+        pos.y = Math.max(0, Math.min(pos.y, this.canvas[0].height - 1));
+        this.paths[this.paths.length-1].push(pos);
+        this.drawActivePath();
+    }
+
+    commitActivePath() {
+        this.drawActivePath(true);
+        setTimeout(() => this.updateProgress(), 50);
+    }
+
+    clearActivePath() {
+        let height = this.img[0].naturalHeight;
+        let width = this.img[0].naturalWidth;
+        let ctx = this.activeCtx;
+        ctx.clearRect(0, 0, width, height);
+    }
+
+drawActivePath(saveToCanvas=false)
+{
+    this.clearActivePath();
+    let ctx;
+    let path=this.paths[this.paths.length-1];
+    if (saveToCanvas==true || path[0].c==(this.paletteColors.length-1)) {ctx=this.ctx;} 
+        else {ctx=this.activeCtx;}
+
+    if (!path[0].c) {  path[0].c=0;}
+    
+    const brushType = path[0].brush || this.brushType || 'solid';
+    const color = this.paletteColors[path[0].c];
+    const lineWidth = path[0].s * (this.img[0].naturalWidth/this.img.width());
+    
+    ctx.save();
+    
+    if (path[0].c==(this.paletteColors.length-1)) {
+        ctx.globalCompositeOperation="destination-out";
+        ctx.strokeStyle = `white`;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = lineWidth;
+    } else {
+        ctx.globalCompositeOperation="source-over";
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        
+        switch(brushType) {
+            case 'solid':
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1.0;
+                break;
+                
+            case 'soft':
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * 2.5;
+                ctx.shadowColor = color;
+                ctx.shadowBlur = lineWidth * 4;
+                ctx.globalAlpha = 0.4;
+                break;
+                
+            case 'sparkle':
+                // Блёстки - обычная кисть + разноцветные звёздочки
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * 1.2;
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1.0;
+                break;
+                
+            case 'texture':
+                // Текстура - обычная кисть с текстурным эффектом
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * 1.3;
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 0.85;
+                // Имитация текстуры через неровную линию (маленький dash)
+                ctx.setLineDash([2, 1]);
+                ctx.lineCap = 'butt';
+                break;
+                
+            case 'dotted':
+                // Пунктир - точки без свечения
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth * 0.6;
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1.0;
+                ctx.setLineDash([2, 8]);
+                ctx.lineCap = 'round';
+                break;
+                
+case 'outline':
+    // Обводка - белая сердцевина + цветной контур
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 2;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = lineWidth * 20;
+    ctx.globalAlpha = 1.0;
+    break;
+
+case 'simple':
+    // Простая - чуть больше и прозрачнее, чем твёрдая
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 1.3;  // ← чуть больше
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.85;           // ← чуть прозрачнее
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    break;
+case 'neon':
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 1.5;
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    break;
+                
+            case 'rainbow':
+                const lastPoint = path[path.length-1];
+                const gradient = ctx.createLinearGradient(path[0].x, path[0].y, lastPoint.x, lastPoint.y);
+                gradient.addColorStop(0, '#ff0000');
+                gradient.addColorStop(0.17, '#ff8800');
+                gradient.addColorStop(0.33, '#ffff00');
+                gradient.addColorStop(0.5, '#00ff00');
+                gradient.addColorStop(0.67, '#0088ff');
+                gradient.addColorStop(0.83, '#8800ff');
+                gradient.addColorStop(1, '#ff00ff');
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = lineWidth * 1.5;
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = lineWidth * 2;
+                ctx.globalAlpha = 1.0;
+                break;
+                
+            default:
+                ctx.strokeStyle = color;
+                ctx.lineWidth = lineWidth;
+        }
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+ctx.stroke();
+
+/// ===== НЕОН через filter: blur() =====
+if (brushType === 'neon' && path[0].c != (this.paletteColors.length-1)) {
+    const neonColor = color;
+    const neonWidth = lineWidth;
+    
+    ctx.save();
+    
+    // 1. Большой ореол - сильно размытый
+    ctx.filter = `blur(${neonWidth * 0.8}px)`;
+    ctx.globalAlpha = 0.35;
+    ctx.lineWidth = neonWidth * 4;
+    ctx.strokeStyle = neonColor;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    // 2. Средний ореол
+    ctx.filter = `blur(${neonWidth * 0.3}px)`;
+    ctx.globalAlpha = 0.6;
+    ctx.lineWidth = neonWidth * 2;
+    ctx.strokeStyle = neonColor;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    ctx.restore();
+}
+// ===== КОНЕЦ =====
+
+   // ===== ДОПОЛНИТЕЛЬНЫЙ ПРОХОД ДЛЯ ОБВОДКИ =====
+if (brushType === 'outline' && path[0].c != (this.paletteColors.length-1)) {
+    // Чёткая линия поверх для яркости
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    ctx.lineWidth = lineWidth * 0.6;
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    // Цветная линия чуть толще
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.8;
+    ctx.lineWidth = lineWidth * 0.8;
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+}
+// ===== КОНЕЦ =====
+    
+    ctx.restore();
+    
+    // ===== ДОПОЛНИТЕЛЬНЫЙ ПРОХОД ДЛЯ БЛЁСТОК =====
+if (brushType === 'sparkle' && path[0].c != (this.paletteColors.length-1)) {
+    // Рисуем звёздочки с хаотичным разбросом
+    const sparkleColors = ['#ff0000', '#ff8800', '#ffff00', '#00ff00', '#0088ff', '#8800ff', '#ff00ff'];
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    
+    // Проходим по точкам пути и рисуем звёздочки
+    for (let j = 0; j < path.length; j += 3) {
+        if (j % 2 === 0) {
+            const point = path[j];
+            const sparkleColor = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+            const size = lineWidth * (0.2 + Math.random() * 0.8);
+            
+            // ===== ХАОТИЧНОЕ СМЕЩЕНИЕ =====
+            const offsetX = (Math.random() - 0.5) * lineWidth * 2.5;
+            const offsetY = (Math.random() - 0.5) * lineWidth * 2.5;
+            // ===== КОНЕЦ =====
+            
+            // Рисуем звезду как 4-конечную звезду
+            ctx.translate(point.x + offsetX, point.y + offsetY);
+            ctx.fillStyle = sparkleColor;
+            ctx.shadowColor = sparkleColor;
+            ctx.shadowBlur = size * 2;
+            
+            // Рисуем крестик (звёздочка)
+            const half = size / 2;
+            ctx.beginPath();
+            ctx.moveTo(-half, 0);
+            ctx.lineTo(0, -half);
+            ctx.lineTo(half, 0);
+            ctx.lineTo(0, half);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Второй крестик под углом 45 градусов
+            ctx.beginPath();
+            const rotHalf = half * 0.7;
+            ctx.moveTo(-rotHalf, -rotHalf);
+            ctx.lineTo(rotHalf, rotHalf);
+            ctx.moveTo(rotHalf, -rotHalf);
+            ctx.lineTo(-rotHalf, rotHalf);
+            ctx.strokeStyle = sparkleColor;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+    }
+    ctx.restore();
+}
+// ===== КОНЕЦ ДОПОЛНИТЕЛЬНОГО ПРОХОДА =====
+    
+    ctx.setLineDash([]);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+}
+
+refresh()
+{   
+    this.clearActivePath()
+    let height=this.img[0].naturalHeight;
+    let width=this.img[0].naturalWidth;
+    let ctx=this.ctx;
+    ctx.clearRect(0, 0, width, height);
+    for (let i=0; i<this.paths.length; ++i) {
+        let path = this.paths[i];
+        if (path.length<1) continue;
+        if (!path[0].c) { path[0].c=0;}
+        
+        const brushType = path[0].brush || this.brushType || 'solid';
+        const color = this.paletteColors[path[0].c];
+        const lineWidth = path[0].s * (this.img[0].naturalWidth/this.img.width());
+        
+        ctx.save();
+        
+        if (path[0].c==(this.paletteColors.length-1)) {
+            ctx.globalCompositeOperation="destination-out";
+            ctx.strokeStyle = `white`;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = lineWidth;
+        } else {
+            ctx.globalCompositeOperation="source-over";
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            switch(brushType) {
+                case 'solid':
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth;
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1.0;
+                    break;
+                    
+                case 'soft':
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth * 2.5;
+                    ctx.shadowColor = color;
+                    ctx.shadowBlur = lineWidth * 4;
+                    ctx.globalAlpha = 0.4;
+                    break;
+                    
+                case 'sparkle':
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth * 1.2;
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1.0;
+                    break;
+                    
+                case 'texture':
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth * 1.3;
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 0.85;
+                    ctx.setLineDash([2, 1]);
+                    ctx.lineCap = 'butt';
+                    break;
+                    
+                case 'dotted':
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth * 0.6;
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1.0;
+                    ctx.setLineDash([2, 8]);
+                    ctx.lineCap = 'round';
+                    break;
+                    
+case 'outline':
+    // Обводка - белая сердцевина + цветной контур
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 2;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = lineWidth * 20;
+    ctx.globalAlpha = 1.0;
+    break;
+
+case 'simple':
+    // Простая - чуть больше и прозрачнее, чем твёрдая
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 1.3;  // ← чуть больше
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.85;           // ← чуть прозрачнее
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    break;
+case 'neon':
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth * 1.5;
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    break;
+
+                    
+                case 'rainbow':
+                    const lastPoint = path[path.length-1];
+                    const gradient = ctx.createLinearGradient(path[0].x, path[0].y, lastPoint.x, lastPoint.y);
+                    gradient.addColorStop(0, '#ff0000');
+                    gradient.addColorStop(0.17, '#ff8800');
+                    gradient.addColorStop(0.33, '#ffff00');
+                    gradient.addColorStop(0.5, '#00ff00');
+                    gradient.addColorStop(0.67, '#0088ff');
+                    gradient.addColorStop(0.83, '#8800ff');
+                    gradient.addColorStop(1, '#ff00ff');
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = lineWidth * 1.5;
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = lineWidth * 2;
+                    ctx.globalAlpha = 1.0;
+                    break;
+                    
+                default:
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth;
+            }
+        }
+        
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let j=1; j<path.length; ++j)
+            ctx.lineTo(path[j].x, path[j].y);
+      ctx.stroke();
+// ===== НЕОН через filter: blur() =====
+if (brushType === 'neon' && path[0].c != (this.paletteColors.length-1)) {
+    const neonColor = color;
+    const neonWidth = lineWidth;
+    
+    ctx.save();
+    
+    // 1. Большой ореол - сильно размытый
+    ctx.filter = `blur(${neonWidth * 0.8}px)`;
+    ctx.globalAlpha = 0.35;
+    ctx.lineWidth = neonWidth * 4;
+    ctx.strokeStyle = neonColor;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    // 2. Средний ореол
+    ctx.filter = `blur(${neonWidth * 0.3}px)`;
+    ctx.globalAlpha = 0.6;
+    ctx.lineWidth = neonWidth * 2;
+    ctx.strokeStyle = neonColor;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    ctx.restore();
+}
+// ===== КОНЕЦ =====
+
+        // ===== ДОПОЛНИТЕЛЬНЫЙ ПРОХОД ДЛЯ ОБВОДКИ =====
+if (brushType === 'outline' && path[0].c != (this.paletteColors.length-1)) {
+    // Чёткая линия поверх для яркости
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    ctx.lineWidth = lineWidth * 0.6;
+    ctx.strokeStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+    
+    // Цветная линия чуть толще
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 0.8;
+    ctx.lineWidth = lineWidth * 0.8;
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    for (let j=1; j<path.length; ++j)
+        ctx.lineTo(path[j].x, path[j].y);
+    ctx.stroke();
+}
+// ===== КОНЕЦ =====
+    
+    ctx.restore();
+        
+        ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1.0;
+        
+       // ===== ДОПОЛНИТЕЛЬНЫЙ ПРОХОД ДЛЯ БЛЁСТОК =====
+if (brushType === 'sparkle' && path[0].c != (this.paletteColors.length-1)) {
+    // Рисуем звёздочки с хаотичным разбросом
+    const sparkleColors = ['#ff0000', '#ff8800', '#ffff00', '#00ff00', '#0088ff', '#8800ff', '#ff00ff'];
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+    
+    // Проходим по точкам пути и рисуем звёздочки
+    for (let j = 0; j < path.length; j += 3) {
+        if (j % 2 === 0) {
+            const point = path[j];
+            const sparkleColor = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+            const size = lineWidth * (0.2 + Math.random() * 0.8);
+            
+            // ===== ХАОТИЧНОЕ СМЕЩЕНИЕ =====
+            const offsetX = (Math.random() - 0.5) * lineWidth * 2.5;
+            const offsetY = (Math.random() - 0.5) * lineWidth * 2.5;
+            // ===== КОНЕЦ =====
+            
+            // Рисуем звезду как 4-конечную звезду
+            ctx.translate(point.x + offsetX, point.y + offsetY);
+            ctx.fillStyle = sparkleColor;
+            ctx.shadowColor = sparkleColor;
+            ctx.shadowBlur = size * 2;
+            
+            // Рисуем крестик (звёздочка)
+            const half = size / 2;
+            ctx.beginPath();
+            ctx.moveTo(-half, 0);
+            ctx.lineTo(0, -half);
+            ctx.lineTo(half, 0);
+            ctx.lineTo(0, half);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Второй крестик под углом 45 градусов
+            ctx.beginPath();
+            const rotHalf = half * 0.7;
+            ctx.moveTo(-rotHalf, -rotHalf);
+            ctx.lineTo(rotHalf, rotHalf);
+            ctx.moveTo(rotHalf, -rotHalf);
+            ctx.lineTo(-rotHalf, rotHalf);
+            ctx.strokeStyle = sparkleColor;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+    }
+    ctx.restore();
+}
+// ===== КОНЕЦ ДОПОЛНИТЕЛЬНОГО ПРОХОДА =====
+    }
+    setTimeout(() => this.updateProgress(), 100);
+}
+
+
+    zoomIn() {
+        this.zoomLevel = Math.min(3, this.zoomLevel + 0.25);
+        this.applyZoom();
+    }
+    
+zoomOut() {
+    this.zoomLevel = Math.max(this.zoomMin, this.zoomLevel - 0.25);
+    this.applyZoom();
+}
+    
+zoomReset() {
+    this.zoomLevel = 1;
+    this.panX = 0;
+    this.panY = 0;
+    this.applyZoom();
+}
+    
+applyZoom() {
+      this.canvasContainer.css('will-change', 'transform');
+    const percent = Math.round(this.zoomLevel * 100);
+    this.canvasContainer.css({
+        'transform': `translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`,
+        'transform-origin': '0 0'
+    });
+    this.zoomIndicator.text(percent + '%');
+    jQuery('#zoomLevel', this.shadowRoot).text(percent + '%');
+}
+
+sizeCanvas() {
+    const naturalWidth = this.img[0].naturalWidth;
+    const naturalHeight = this.img[0].naturalHeight;
+    this.canvas.attr('height', naturalHeight);
+    this.canvas.attr('width', naturalWidth);
+    this.activeCanvas.attr('height', naturalHeight);
+    this.activeCanvas.attr('width', naturalWidth);
+    // Вычисляем масштаб, чтобы картинка помещалась
+    this.fitToScreen();
+    // Дополнительный пересчёт после рендеринга
+    setTimeout(() => this.fitToScreen(), 100);
+}
+
+
+fitToScreen() {
+    const container = this.canvasContainer[0];
+    if (!container) {
+        this.zoomReset();
+        return;
+    }
+    const wrapper = container.parentElement; // .canvasWrapper
+    if (!wrapper) {
+        this.zoomReset();
+        return;
+    }
+    const availableWidth = wrapper.clientWidth;
+    const availableHeight = wrapper.clientHeight;
+    const imgWidth = this.img[0].naturalWidth;
+    const imgHeight = this.img[0].naturalHeight;
+    if (availableWidth === 0 || availableHeight === 0 || imgWidth === 0 || imgHeight === 0) {
+        this.zoomReset();
+        return;
+    }
+    const scaleX = availableWidth / imgWidth;
+    const scaleY = availableHeight / imgHeight;
+    let scale = Math.min(scaleX, scaleY);
+    scale = Math.min(scale, 1);
+    scale = Math.max(scale, 0.1);
+    this.zoomLevel = scale;
+    this.panX = 0;
+    this.panY = 0;
+    this.applyZoom();
+}
+
+    updateSize() {
+        this.setCursor();
+    }
+
+setCursor()
+{
+    let size = this.sizer.val();
+    if (size < 2) size=2;
+    if (size > 32) size=32;
+    let canvas=jQuery(`<canvas height="32" width="32"/>`);
+    let context = canvas[0].getContext('2d');
+
+    const centerX = 16;
+    const centerY = 16;
+    const radius = size/2;
+    const color = this.paletteColors[this.color] || '#ffffff';
+    
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    
+    switch(this.brushType) {
+        case 'soft':
+            context.fillStyle = color;
+            context.fill();
+            context.shadowColor = color;
+            context.shadowBlur = 20;
+            context.globalAlpha = 0.4;
+            context.beginPath();
+            context.arc(centerX, centerY, radius * 1.5, 0, 2 * Math.PI);
+            context.fill();
+            break;
+            
+        case 'sparkle':
+            context.fillStyle = color;
+            context.fill();
+            // Рисуем звёздочки
+            const sparkleColors = ['#ff0000', '#ffff00', '#00ff00', '#0088ff', '#ff00ff'];
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const dist = radius * 1.3;
+                const x = centerX + Math.cos(angle) * dist;
+                const y = centerY + Math.sin(angle) * dist;
+                const s = 2 + Math.random() * 2;
+                context.fillStyle = sparkleColors[i % sparkleColors.length];
+                context.shadowColor = sparkleColors[i % sparkleColors.length];
+                context.shadowBlur = 5;
+                context.beginPath();
+                context.arc(x, y, s, 0, Math.PI * 2);
+                context.fill();
+            }
+            break;
+            
+        case 'texture':
+            context.fillStyle = color;
+            context.fill();
+            // Текстурный узор
+            for (let i = 0; i < 8; i++) {
+                const x = Math.random() * 32;
+                const y = Math.random() * 32;
+                context.fillStyle = color;
+                context.globalAlpha = 0.3 + Math.random() * 0.3;
+                context.fillRect(x, y, 2, 2);
+            }
+            break;
+            
+        case 'dotted':
+            context.fillStyle = color;
+            context.fill();
+            context.globalAlpha = 1;
+            context.shadowBlur = 0;
+            // Пунктирный круг
+            context.setLineDash([2, 4]);
+            context.strokeStyle = color;
+            context.lineWidth = 2;
+            context.beginPath();
+            context.arc(centerX, centerY, radius * 0.8, 0, Math.PI * 2);
+            context.stroke();
+            break;
+case 'simple':
+    // Простая - чуть больше и прозрачнее
+    context.globalAlpha = 0.85;
+    context.fillStyle = color;
+    context.shadowBlur = 0;
+    context.beginPath();
+    context.arc(centerX, centerY, radius * 1.1, 0, Math.PI * 2);
+    context.fill();
+    break;
+   case 'neon':
+    // Неон с размытием
+    context.shadowBlur = 0;
+    context.globalAlpha = 1.0;
+    
+    // Сначала рисуем размытый ореол
+    const grad = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 2.5);
+    grad.addColorStop(0, color);
+    grad.addColorStop(0.3, color);
+    grad.addColorStop(1, 'transparent');
+    context.filter = `blur(${radius * 0.5}px)`;
+    context.beginPath();
+    context.arc(centerX, centerY, radius * 2.5, 0, Math.PI * 2);
+    context.fillStyle = grad;
+    context.fill();
+    
+    // Яркая сердцевина
+    context.filter = 'none';
+    context.beginPath();
+    context.arc(centerX, centerY, radius * 0.7, 0, Math.PI * 2);
+    context.fillStyle = '#ffffff';
+    context.fill();
+    
+    context.beginPath();
+    context.arc(centerX, centerY, radius * 0.5, 0, Math.PI * 2);
+    context.fillStyle = color;
+    context.fill();
+    break;
+            
+        case 'rainbow':
+            const gradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+            gradient.addColorStop(0, '#ff0000');
+            gradient.addColorStop(0.17, '#ff8800');
+            gradient.addColorStop(0.33, '#ffff00');
+            gradient.addColorStop(0.5, '#00ff00');
+            gradient.addColorStop(0.67, '#0088ff');
+            gradient.addColorStop(0.83, '#8800ff');
+            gradient.addColorStop(1, '#ff00ff');
+            context.fillStyle = gradient;
+            context.shadowBlur = 0;
+            context.fill();
+            break;
+            
+        default: // solid
+            context.fillStyle = color;
+            context.fill();
+            context.shadowBlur = 0;
+    }
+    
+    context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    context.lineWidth = 1;
+    context.globalAlpha = 1;
+    context.setLineDash([]);
+    context.beginPath();
+    context.moveTo(0, centerY);
+    context.lineTo(32, centerY);
+    context.moveTo(centerX, 0);
+    context.lineTo(centerX, 32);
+    context.stroke();
+    
+    let url=canvas[0].toDataURL();
+    this.wrapper.css('cursor', `url(${url}) 16 16, pointer`);
+}
+
+    updateProgress() {
+        try {
+            const canvas = this.canvas ? this.canvas[0] : null;
+            const activeCanvas = this.activeCanvas ? this.activeCanvas[0] : null;
+            
+            if (!canvas) return;
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+            
+            tempCtx.drawImage(canvas, 0, 0);
+            if (activeCanvas) {
+                tempCtx.drawImage(activeCanvas, 0, 0);
+            }
+            
+            const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+            const data = imageData.data;
+            
+            let coloredPixels = 0;
+            const totalPixels = data.length / 4;
+            
+            for (let i = 3; i < data.length; i += 4) {
+                if (data[i] > 10) coloredPixels++;
+            }
+            
+            let percent = 0;
+            if (totalPixels > 0) {
+                percent = Math.min(Math.round((coloredPixels / totalPixels) * 100), 100);
+                if (coloredPixels > 0 && percent === 0) percent = 1;
+            }
+            
+            const event = new CustomEvent('progressUpdate', {
+                detail: { 
+                    percent: percent,
+                    coloredPixels: coloredPixels,
+                    totalPixels: totalPixels
+                }
+            });
+            this.dispatchEvent(event);
+            
+        } catch(e) {}
+    }
+
+    getProgress() {
+        return new Promise((resolve) => {
+            try {
+                const canvas = this.canvas ? this.canvas[0] : null;
+                if (!canvas) {
+                    resolve({ percent: 0, coloredPixels: 0, totalPixels: 0 });
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                let coloredPixels = 0;
+                const totalPixels = data.length / 4;
+                
+                for (let i = 3; i < data.length; i += 4) {
+                    if (data[i] > 10) coloredPixels++;
+                }
+                
+                let percent = 0;
+                if (totalPixels > 0) {
+                    percent = Math.min(Math.round((coloredPixels / totalPixels) * 100), 100);
+                    if (coloredPixels > 0 && percent === 0) percent = 1;
+                }
+                
+                resolve({ percent, coloredPixels, totalPixels });
+            } catch(e) {
+                resolve({ percent: 0, coloredPixels: 0, totalPixels: 0 });
+            }
+        });
+    }
+
+pickColor(e) {
+    if (!this.eyedropperMode) return; 
+    const pos = this.getCursorPosition(e);
+    
+    if (pos.x < 0 || pos.y < 0 || pos.x >= this.canvas[0].width || pos.y >= this.canvas[0].height) {       
+        return;
+    }
+    
+    const x = Math.floor(pos.x);
+    const y = Math.floor(pos.y);    
+    // 1. СНАЧАЛА проверяем АКТИВНЫЙ canvas (текущая линия)
+    let pixel = this.activeCtx.getImageData(x, y, 1, 1).data;
+    let r = pixel[0], g = pixel[1], b = pixel[2], a = pixel[3];     
+    // 2. Если на активном пусто - проверяем ОСНОВНОЙ canvas
+    if (a < 10) {
+        pixel = this.ctx.getImageData(x, y, 1, 1).data;
+        r = pixel[0];
+        g = pixel[1];
+        b = pixel[2];
+        a = pixel[3];       
+    }    
+    // Если всё ещё прозрачный - выходим
+    if (a < 10) {  
+        return;
+    }
+            // Ищем ближайший цвет в палитре
+    let closestIndex = 0;
+    let closestDist = Infinity;
+    
+    for (let i = 0; i < this.paletteColors.length - 1; i++) {
+        const color = this.paletteColors[i];
+        
+        // Парсим цвет
+        const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        if (!match) continue;
+        
+        const cr = parseInt(match[1]);
+        const cg = parseInt(match[2]);
+        const cb = parseInt(match[3]);
+        const ca = match[4] ? parseFloat(match[4]) : 1;
+        
+        // Корректируем цвет с учетом альфа-канала (смешиваем с белым)
+        let adjustedR = cr;
+        let adjustedG = cg;
+        let adjustedB = cb;
+        
+        if (ca < 1) {
+            const alpha = ca;
+            adjustedR = Math.round(cr * alpha + 255 * (1 - alpha));
+            adjustedG = Math.round(cg * alpha + 255 * (1 - alpha));
+            adjustedB = Math.round(cb * alpha + 255 * (1 - alpha));
+        }
+        
+        const dist = Math.sqrt(
+            Math.pow(r - adjustedR, 2) +
+            Math.pow(g - adjustedG, 2) +
+            Math.pow(b - adjustedB, 2)
+        );        
+        
+        if (dist < closestDist) {
+            closestDist = dist;
+            closestIndex = i;
+        }
+    }    
+    // ПРИМЕНЯЕМ ЦВЕТ
+    this.color = closestIndex;    
+    // Обновляем UI палитры
+    jQuery('.paletteColor', this.shadowRoot).removeClass('selected');
+    jQuery(`.paletteColor.color${closestIndex}`, this.shadowRoot).addClass('selected');    
+    // ОБНОВЛЯЕМ КУРСОР КИСТИ
+    this.setCursor();    
+    // Отключаем режим пипетки
+    this.disableEyedropper();
+}
+
+disableEyedropper() {
+    this.eyedropperMode = false;
+    const btn = jQuery('.eyedropperButton', this.shadowRoot);
+    btn.removeClass('active');
+    this.wrapper.css('cursor', 'default');
+    this.setCursor();
+    // НЕ вызываем refresh(), НЕ перерисовываем ничего!
+}
+   
+   async save() {
+    try {
+        // Загружаем фоновое изображение через fetch как blob (обходит CORS)
+        const response = await fetch(this.img[0].src);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        
+        // Создаем изображение из blob
+        const bgImage = new Image();
+        bgImage.src = url;
+        
+        // Ждем загрузки
+        await new Promise((resolve) => {
+            if (bgImage.complete) {
+                resolve();
+            } else {
+                bgImage.onload = resolve;
+            }
+        });
+        
+        // Создаем временный canvas
+        const width = bgImage.naturalWidth || bgImage.width;
+        const height = bgImage.naturalHeight || bgImage.height;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const ctx = tempCanvas.getContext('2d');
+        
+        // Рисуем фоновое изображение
+        ctx.drawImage(bgImage, 0, 0, width, height);
+        
+        // Рисуем раскраску поверх
+        // Масштабируем canvas раскраски до размеров фона
+        const overlayCanvas = this.canvas[0];
+        ctx.drawImage(overlayCanvas, 0, 0, width, height);
+        
+        // Сохраняем
+        const link = tempCanvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = link;
+        a.download = 'coloring.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Очищаем URL
+        URL.revokeObjectURL(url);
+        
+    } catch(e) {
+        console.error('Ошибка:', e);
+        // Если не получилось через fetch, пробуем альтернативный способ
+        try {
+            // Альтернативный способ - используем img напрямую
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = this.img[0].src;
+            
+            await new Promise((resolve) => {
+                if (img.complete) {
+                    resolve();
+                } else {
+                    img.onload = resolve;
+                }
+            });
+            
+            const width = img.naturalWidth || img.width;
+            const height = img.naturalHeight || img.height;
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            const ctx = tempCanvas.getContext('2d');
+            
+            ctx.drawImage(img, 0, 0, width, height);
+            ctx.drawImage(this.canvas[0], 0, 0, width, height);
+            
+            const link = tempCanvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = link;
+            a.download = 'coloring.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+        } catch(e2) {
+           this.showToast('❌ Не удалось сохранить рисунок. Попробуйте ещё раз.');
+            console.error('Ошибка сохранения:', e2);
+        }
+    }
+}
+// ===== ОТКРЫТЬ ПРОДВИНУТУЮ ПАЛИТРУ =====
+openAdvancedPicker()
+{
+    let me = this;
+    
+    // Создаём модальное окно с палитрой
+    const modal = jQuery(`
+        <div class="advancedPickerModal" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease;
+        ">
+            <div class="advancedPickerContent" style="
+                background: rgba(20, 20, 40, 0.95);
+                border-radius: 20px;
+                padding: 24px;
+                max-width: 380px;
+                width: 90%;
+                border: 1px solid rgba(168, 85, 247, 0.3);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+                position: relative;
+            ">
+               <button class="pickerClose" id="pickerCloseBtn" style="
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 10;
+">✖</button>
+                
+                <h3 style="
+                    color: #f0eaff;
+                    margin: 0 0 16px 0;
+                    font-size: 18px;
+                    text-align: center;
+                ">🎨 Выберите цвет</h3>
+                
+                <div class="pickerPreview" style="
+                    width: 100%;
+                    height: 50px;
+                    border-radius: 12px;
+                    margin-bottom: 16px;
+                    border: 2px solid rgba(255,255,255,0.1);
+                    transition: background 0.1s;
+                "></div>
+                
+                <div class="pickerHue" style="
+                    width: 100%;
+                    height: 24px;
+                    border-radius: 12px;
+                    background: linear-gradient(to right, 
+                        #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000
+                    );
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    position: relative;
+                    border: 1px solid rgba(255,255,255,0.1);
+                ">
+                    <div class="hueIndicator" style="
+                        position: absolute;
+                        top: -4px;
+                        width: 4px;
+                        height: 32px;
+                        background: white;
+                        border-radius: 2px;
+                        box-shadow: 0 0 10px rgba(255,255,255,0.5);
+                        pointer-events: none;
+                    "></div>
+                </div>
+                
+                <div class="pickerSaturation" style="
+                    width: 100%;
+                    height: 120px;
+                    border-radius: 12px;
+                    margin-bottom: 16px;
+                    cursor: pointer;
+                    position: relative;
+                    border: 1px solid rgba(255,255,255,0.1);
+                ">
+                    <div class="satIndicator" style="
+                        position: absolute;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                        pointer-events: none;
+                        transform: translate(-50%, -50%);
+                    "></div>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <input type="text" class="hexInput" value="#ffffff" style="
+                        flex: 1;
+                        padding: 8px 12px;
+                        border-radius: 8px;
+                        border: 1px solid rgba(255,255,255,0.1);
+                        background: rgba(255,255,255,0.05);
+                        color: #f0eaff;
+                        font-size: 14px;
+                        font-family: monospace;
+                        text-transform: uppercase;
+                    ">
+                    <input type="color" class="nativePicker" value="#ffffff" style="
+                        width: 40px;
+                        height: 40px;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        background: none;
+                    ">
+                </div>
+                
+                <div style="display: flex; gap: 8px;">
+                    <button class="pickerAdd" style="
+                        flex: 1;
+                        padding: 10px;
+                        border-radius: 10px;
+                        border: none;
+                        background: linear-gradient(135deg, #a855f7, #7c3aed);
+                        color: white;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    ">➕ Добавить</button>
+                    <button class="pickerSelect" style="
+                        flex: 1;
+                        padding: 10px;
+                        border-radius: 10px;
+                        border: none;
+                        background: linear-gradient(135deg, #22c55e, #16a34a);
+                        color: white;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    ">✅ Выбрать</button>
+                </div>
+            </div>
+        </div>
+    `).appendTo('body');
+
+    // Переменные состояния
+    let currentColor = '#ffffff';
+    let hue = 0;
+    let sat = 100;
+    let light = 50;
+    let isHueDragging = false;
+    let isSatDragging = false;
+
+    const preview = modal.find('.pickerPreview');
+    const hueEl = modal.find('.pickerHue');
+    const satEl = modal.find('.pickerSaturation');
+    const hueIndicator = modal.find('.hueIndicator');
+    const satIndicator = modal.find('.satIndicator');
+    const hexInput = modal.find('.hexInput');
+    const nativePicker = modal.find('.nativePicker');
+
+    // ===== ДОБАВЛЯЕМ ФУНКЦИЮ ПРЕОБРАЗОВАНИЯ HEX В RGB =====
+    function hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+    // ===== КОНЕЦ =====
+
+    // Обновить цвет
+    function updateColor(h, s, l) {
+        currentColor = hslToHex(h, s, l);
+        preview.css('background', currentColor);
+        hexInput.val(currentColor.toUpperCase());
+        nativePicker.val(currentColor);
+        
+        // Обновляем фон насыщенности
+        satEl.css('background', `linear-gradient(to right, 
+            hsl(${h}, 0%, ${l}%), 
+            hsl(${h}, 100%, ${l}%)
+        )`);
+    }
+
+    // HSL в HEX
+    function hslToHex(h, s, l) {
+        s /= 100;
+        l /= 100;
+        const k = n => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+        const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+        const toHex = x => Math.round(255 * f(x)).toString(16).padStart(2, '0');
+        return `#${toHex(0)}${toHex(8)}${toHex(4)}`;
+    }
+
+    // HEX в HSL
+    function hexToHsl(hex) {
+        const r = parseInt(hex.slice(1,3), 16) / 255;
+        const g = parseInt(hex.slice(3,5), 16) / 255;
+        const b = parseInt(hex.slice(5,7), 16) / 255;
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                case g: h = ((b - r) / d + 2) / 6; break;
+                case b: h = ((r - g) / d + 4) / 6; break;
+            }
+        }
+        return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    // Получить цвет по позиции мыши на насыщенности
+    function getSatColor(e) {
+        const rect = satEl[0].getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+        sat = Math.round(x * 100);
+        light = Math.round((1 - y) * 100);
+        updateColor(hue, sat, light);
+        satIndicator.css({
+            left: x * 100 + '%',
+            top: (1 - y) * 100 + '%'
+        });
+    }
+
+    // Инициализация
+    updateColor(0, 100, 50);
+
+    // События для hue
+    hueEl.on('mousedown', function(e) {
+        isHueDragging = true;
+        const rect = this.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        hue = Math.round(x * 360);
+        updateColor(hue, sat, light);
+        hueIndicator.css('left', x * 100 + '%');
+    });
+
+    $(document).on('mousemove', function(e) {
+        if (isHueDragging) {
+            const rect = hueEl[0].getBoundingClientRect();
+            const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            hue = Math.round(x * 360);
+            updateColor(hue, sat, light);
+            hueIndicator.css('left', x * 100 + '%');
+        }
+        if (isSatDragging) {
+            getSatColor(e);
+        }
+    });
+
+    $(document).on('mouseup', function() {
+        isHueDragging = false;
+        isSatDragging = false;
+    });
+
+    // События для насыщенности
+    satEl.on('mousedown', function(e) {
+        isSatDragging = true;
+        getSatColor(e);
+    });
+
+    // Touch события для мобильных
+    hueEl.on('touchstart', function(e) {
+        const touch = e.originalEvent.touches[0];
+        const rect = this.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+        hue = Math.round(x * 360);
+        updateColor(hue, sat, light);
+        hueIndicator.css('left', x * 100 + '%');
+    });
+
+    satEl.on('touchstart', function(e) {
+        const touch = e.originalEvent.touches[0];
+        const rect = this.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+        const y = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height));
+        sat = Math.round(x * 100);
+        light = Math.round((1 - y) * 100);
+        updateColor(hue, sat, light);
+        satIndicator.css({
+            left: x * 100 + '%',
+            top: (1 - y) * 100 + '%'
+        });
+    });
+
+    // Ввод hex
+    hexInput.on('input', function() {
+        let val = this.value.trim();
+        if (/^#?[0-9a-f]{6}$/i.test(val.replace('#', ''))) {
+            if (!val.startsWith('#')) val = '#' + val;
+            const hsl = hexToHsl(val);
+            hue = hsl.h;
+            sat = hsl.s;
+            light = hsl.l;
+            updateColor(hue, sat, light);
+            hueIndicator.css('left', (hue / 360) * 100 + '%');
+            satIndicator.css({
+                left: (sat / 100) * 100 + '%',
+                top: (1 - light / 100) * 100 + '%'
+            });
+        }
+    });
+
+    // Native picker
+    nativePicker.on('input', function() {
+        const hsl = hexToHsl(this.value);
+        hue = hsl.h;
+        sat = hsl.s;
+        light = hsl.l;
+        updateColor(hue, sat, light);
+        hueIndicator.css('left', (hue / 360) * 100 + '%');
+        satIndicator.css({
+            left: (sat / 100) * 100 + '%',
+            top: (1 - light / 100) * 100 + '%'
+        });
+    });
+
+    // ===== ОБНОВЛЁННЫЕ ОБРАБОТЧИКИ =====
+    // Кнопка "Выбрать" - выбирает цвет и закрывает палитру
+    modal.find('.pickerSelect').on('click', function() {
+        const rgb = hexToRgb(currentColor);
+        if (!rgb) {
+            me.showToast('⚠️ Некорректный цвет');
+            return;
+        }
+        const rgbaColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`;
+        
+        let colorExists = false;
+        let existingIndex = -1;
+        for (let i = 0; i < me.paletteColors.length - 1; i++) {
+            if (me.paletteColors[i] === rgbaColor) {
+                colorExists = true;
+                existingIndex = i;
+                break;
+            }
+        }
+        
+        if (!colorExists) {
+            const colorIndex = me.paletteColors.length - 1;
+            me.paletteColors.splice(colorIndex, 0, rgbaColor);
+            existingIndex = colorIndex;
+        }
+        
+        me.generatePalette();
+        me.color = existingIndex;
+        jQuery('.paletteColor', me.shadowRoot).removeClass('selected');
+        jQuery(`.paletteColor.color${existingIndex}`, me.shadowRoot).addClass('selected');
+        me.setCursor();
+        modal.remove();
+        me.showToast('✅ Цвет выбран!');
+    });
+
+    // Кнопка "Добавить" - добавляет цвет в палитру, НЕ закрывает окно
+    modal.find('.pickerAdd').on('click', function() {
+        const rgb = hexToRgb(currentColor);
+        if (!rgb) {
+            me.showToast('⚠️ Некорректный цвет');
+            return;
+        }
+        const rgbaColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`;
+        
+        let colorExists = false;
+        for (let i = 0; i < me.paletteColors.length - 1; i++) {
+            if (me.paletteColors[i] === rgbaColor) {
+                colorExists = true;
+                break;
+            }
+        }
+        
+        if (!colorExists) {
+            const colorIndex = me.paletteColors.length - 1;
+            me.paletteColors.splice(colorIndex, 0, rgbaColor);
+            me.generatePalette();
+            me.showToast('✅ Цвет добавлен в палитру!');
+        } else {
+            me.showToast('⚠️ Этот цвет уже есть в палитре!');
+        }
+    });
+    // ===== КОНЕЦ =====
+
+    // Закрытие по кнопке ✖
+    modal.find('.pickerClose').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        modal.remove();
+    });
+
+    // Закрытие по клику на фон
+    modal.on('click', function(e) {
+        if (e.target === this) {
+            modal.remove();
+        }
+    });
+
+    // Закрытие по клавише ESC
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            if (modal.is(':visible')) {
+                modal.remove();
+            }
+        }
+    });
+
+    // Добавляем анимацию
+    jQuery('<style>@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }</style>').appendTo('head');
+}
+
+// ===== TOAST ДЛЯ COLORING.JS =====
+showToast(message)
+{
+    const existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.85);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 16px;
+        z-index: 999999;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        animation: toastFadeIn 0.3s ease;
+        white-space: nowrap;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        pointer-events: none;
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(function() { toast.remove(); }, 300);
+    }, 2500);
+}
+
+refreshBrushMenu() {
+    console.log('🔄 Обновление меню кистей');
+    const menu = this.shadowRoot.querySelector('.brushMenu');
+    if (menu) {
+        jQuery(menu).remove();
+        jQuery('.brushSelectorButton', this.shadowRoot).removeClass('active');
+        // Открываем заново
+        this.toggleBrushMenu();
+    }
+}
+// ===== ПОКАЗАТЬ МОДАЛКУ ДЛЯ ОТКРЫТИЯ КИСТИ =====
+showBrushUnlockModal(brushId)
+{
+    console.log('🔓 showBrushUnlockModal вызван для кисти:', brushId);
+    
+    // ✅ Закрываем меню кистей
+    const existingMenu = this.shadowRoot.querySelector('.brushMenu');
+    if (existingMenu) {
+        jQuery(existingMenu).remove();
+        jQuery('.brushSelectorButton', this.shadowRoot).removeClass('active');
+    }
+    
+    const brushName = this.getBrushName(brushId);
+    const brushIcon = this.getBrushIcon(brushId);
+    
+    if (typeof openUnlockModal === 'function') {
+        const modal = document.getElementById('unlockModal');
+        if (!modal) {
+            this.showToast('⚠️ Модалка не найдена');
+            return;
+        }
+        
+        const title = modal.querySelector('.modal-header h2');
+        const body = modal.querySelector('.modal-body');
+        
+        if (title) title.textContent = '🔓 Открыть кисть';
+        if (body) {
+            body.innerHTML = `
+                <div style="text-align:center;padding:10px 0;">
+                    <div style="font-size:48px;margin-bottom:10px;">${brushIcon}</div>
+                    <p style="font-size:18px;color:var(--text-primary);margin-bottom:8px;">
+                        Кисть <strong>«${brushName}»</strong>
+                    </p>
+                    <p style="font-size:15px;color:var(--text-secondary);margin-bottom:20px;">
+                        Посмотрите рекламу, чтобы разблокировать эту кисть на <strong>24 часа</strong>! 🎬
+                    </p>
+                    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                        <button class="btn-neon" onclick="console.log('🔘 Клик по кнопке Открыть'); window._pendingBrushUnlock = '${brushId}'; window._pendingBrushUnlockFromColoring = true; watchAdForBrushUnlock();">🎬 Открыть</button>
+                        <button class="btn-neon" onclick="closeUnlockModal();" style="background:rgba(255,0,0,0.1);border-color:#ef4444;">❌ Отмена</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        modal.classList.add('show');
+        modal.style.zIndex = '99999';
+        window._pendingBrushUnlock = brushId;
+        window._pendingBrushUnlockFromColoring = true;
+        console.log('✅ Модалка открыта, _pendingBrushUnlock =', brushId);
+    } else {
+        console.error('❌ Функция openUnlockModal не найдена');
+        this.showToast(`🔒 Кисть «${brushName}» заблокирована!`);
+    }
+}
+// ===== ПОЛУЧИТЬ НАЗВАНИЕ КИСТИ =====
+getBrushName(brushId)
+{
+    const names = {
+        simple: 'Простая',
+        solid: 'Твёрдая',
+        soft: 'Мягкая',
+        texture: 'Текстура',
+        dotted: 'Пунктир',
+        outline: 'Обводка',
+        neon: 'Неон',
+        sparkle: 'Блёстки',
+        rainbow: 'Радуга'
+    };
+    return names[brushId] || brushId;
+}
+
+// ===== ПОЛУЧИТЬ ИКОНКУ КИСТИ =====
+getBrushIcon(brushId)
+{
+    const icons = {
+        simple: '🖊️',
+        solid: '✏️',
+        soft: '🖌️',
+        texture: '🌟',
+        dotted: '▪️',
+        outline: '🔲',
+        neon: '💡',
+        sparkle: '✨',
+        rainbow: '🌈'
+    };
+    return icons[brushId] || '🖌️';
+}
+
+toggleBrushMenu()
+{
+    let me = this;
+    
+    const existingMenu = this.shadowRoot.querySelector('.brushMenu');
+    if (existingMenu) {
+        jQuery(existingMenu).remove();
+        jQuery('.brushSelectorButton', this.shadowRoot).removeClass('active');
+        return;
+    }
+
+    jQuery('.brushSelectorButton', this.shadowRoot).addClass('active');
+
+    const brushes = [
+        { id: 'simple', icon: '🖊️', name: 'Простая', defaultUnlocked: true },
+        { id: 'solid', icon: '✏️', name: 'Твёрдая', defaultUnlocked: true },
+        { id: 'soft', icon: '🖌️', name: 'Мягкая', defaultUnlocked: true },
+        { id: 'texture', icon: '🌟', name: 'Текстура', defaultUnlocked: false },
+        { id: 'dotted', icon: '▪️', name: 'Пунктир', defaultUnlocked: false },
+        { id: 'outline', icon: '🔲', name: 'Обводка', defaultUnlocked: false },
+        { id: 'neon', icon: '💡', name: 'Неон', defaultUnlocked: false },
+        { id: 'sparkle', icon: '✨', name: 'Блёстки', defaultUnlocked: false },
+        { id: 'rainbow', icon: '🌈', name: 'Радуга', defaultUnlocked: false }
+    ];
+
+    const menu = jQuery(`<div class="brushMenu" style="
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(20, 20, 40, 0.95);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 8px;
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        z-index: 1000;
+        min-width: 180px;
+        animation: fadeIn 0.2s ease;
+    ">`).appendTo(this.shadowRoot);
+
+brushes.forEach(brush => {
+    // ===== ПРОВЕРКА РАЗБЛОКИРОВАНА ЛИ КИСТЬ =====
+    let isUnlocked = brush.defaultUnlocked || false;
+    // Проверяем глобальное состояние, если функция доступна
+    if (typeof isBrushUnlocked !== 'undefined') {
+        isUnlocked = isBrushUnlocked(brush.id);
+    }
+    // ===== КОНЕЦ ПРОВЕРКИ =====
+    
+    const isActive = this.brushType === brush.id;
+    const btn = jQuery(`<div class="brushOption" style="
+        padding: 8px 6px;
+        border-radius: 10px;
+        cursor: ${isUnlocked ? 'pointer' : 'not-allowed'};
+        text-align: center;
+        transition: all 0.2s ease;
+        background: ${isActive ? 'rgba(168, 85, 247, 0.25)' : 'transparent'};
+        border: 2px solid ${isActive ? '#a855f7' : 'transparent'};
+        opacity: ${isUnlocked ? 1 : 0.4};
+        ${!isUnlocked ? 'filter: grayscale(0.5);' : ''}
+    ">`)
+    .data('brush', brush.id)
+    .appendTo(menu);
+        
+        // Если кисть заблокирована - добавляем замок
+        const lockIcon = !isUnlocked ? '🔒' : '';
+
+        jQuery(`<div style="font-size: 20px;">${brush.icon} ${lockIcon}</div>`).appendTo(btn);
+        jQuery(`<div style="font-size: 10px; color: #f0eaff; margin-top: 2px;">${brush.name}</div>`).appendTo(btn);
+
+btn.on('click', function() {
+    const brushId = jQuery(this).data('brush');
+    
+    let isUnlocked = brush.defaultUnlocked || false;
+    if (typeof isBrushUnlocked !== 'undefined') {
+        isUnlocked = isBrushUnlocked(brushId);
+    }
+    
+    if (!isUnlocked) {
+        // ✅ Очищаем флаги уровня, чтобы они не мешали
+        if (typeof pendingUnlockLevel !== 'undefined') {
+            pendingUnlockLevel = null;
+        }
+        
+        if (typeof showBrushUnlockModal === 'function') {
+            showBrushUnlockModal(brushId);
+        } else if (typeof me.showBrushUnlockModal === 'function') {
+            me.showBrushUnlockModal(brushId);
+        } else {
+            me.showToast('🔒 Кисть заблокирована! Откройте через рекламу.');
+        }
+        return;
+    }
+    // ===== КОНЕЦ =====
+    
+    me.brushType = brushId;
+    me.setCursor();
+    me.showToast(`🖌️ Кисть: ${brush.name}`);
+            
+            menu.find('.brushOption').css({
+                'background': 'transparent',
+                'border-color': 'transparent'
+            });
+            jQuery(this).css({
+                'background': 'rgba(168, 85, 247, 0.25)',
+                'border-color': '#a855f7'
+            });
+            
+            setTimeout(() => {
+                jQuery(menu).remove();
+                jQuery('.brushSelectorButton', me.shadowRoot).removeClass('active');
+            }, 300);
+        });
+
+        btn.on('mouseenter', function() {
+            jQuery(this).css('background', 'rgba(168, 85, 247, 0.15)');
+        });
+        btn.on('mouseleave', function() {
+            if (!jQuery(this).hasClass('active')) {
+                jQuery(this).css('background', 'transparent');
+            }
+        });
+    });
+
+    const closeMenu = (e) => {
+        if (!jQuery(e.target).closest('.brushMenu').length && !jQuery(e.target).closest('.brushSelectorButton').length) {
+            jQuery(menu).remove();
+            jQuery('.brushSelectorButton', me.shadowRoot).removeClass('active');
+            $(document).off('click', closeMenu);
+        }
+    };
+    setTimeout(() => {
+        $(document).on('click', closeMenu);
+    }, 100);
+}
+
+panStart(e) {
+      if (e.touches && e.touches.length > 1) {
+        return; // два пальца – не панорамируем
+    }
+    this.panDragging = true;
+    this._panFramePending = false;
+    const rect = this.canvasContainer[0].getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    this.panStartX = clientX - rect.left;
+    this.panStartY = clientY - rect.top;
+    // Сохраняем текущие значения panX и panY как базовые
+    this.panBaseX = this.panX;
+    this.panBaseY = this.panY;
+    this.wrapper.css('cursor', 'grabbing');
+    this.activeCanvas.css('cursor', 'grabbing');
+}
+
+panMove(e) {
+    if (!this.panDragging) return;
+    if (e.touches && e.touches.length > 1) return;
+
+    const rect = this.canvasContainer[0].getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const dx = x - this.panStartX;
+    const dy = y - this.panStartY;
+
+    // Игнорируем микро-смещения
+    if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) return;
+
+    this.panX += dx;
+    this.panY += dy;
+    this.panStartX = x;
+    this.panStartY = y;
+
+    // Откладываем применение трансформации до следующего кадра
+    if (!this._panFramePending) {
+        this._panFramePending = true;
+        requestAnimationFrame(() => {
+            this._panFramePending = false;
+            this.applyZoom();
+        });
+    }
+}
+
+panEnd(e) {
+    this.panDragging = false;
+    this._panFramePending = false;
+    this.wrapper.css('cursor', 'grab');
+    this.activeCanvas.css('cursor', 'grab');
+}
+
+
+});

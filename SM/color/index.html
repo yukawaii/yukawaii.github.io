@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
- <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>🎨 Раскраска</title><link rel="stylesheet" href="css/style.css"><script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script><script src="https://code.jquery.com/jquery-3.4.1.min.js"></script><script src="js/col1.js"></script>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"> 
+    <title>🎨 Раскраска</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <!-- ПРАВИЛЬНЫЙ ПУТЬ К coloring.js -->
+   <!--  <script src="js/coloring.js"></script> -->
+     <script src="js/col1.js"></script>
      <script>
     (function() {
         // Перехватываем конструктор AudioContext
@@ -57,13 +65,259 @@
 </head>
 <body oncontextmenu="return false">
 
-    
-<div id="splashScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary,#0a0a1a);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;"><div style="font-size:64px;margin-bottom:20px;">🎨</div><div style="font-size:24px;color:var(--text-primary);font-weight:600;">Загрузка...</div><div style="margin-top:20px;width:40px;height:40px;border:4px solid rgba(168,85,247,0.3);border-top-color:#a855f7;border-radius:50%;animation:spin 1s linear infinite;"></div></div>
+    <!-- Экран загрузки -->
+<div id="splashScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary,#0a0a1a);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
+    <div style="font-size:64px;margin-bottom:20px;">🎨</div>
+    <div style="font-size:24px;color:var(--text-primary);font-weight:600;">Загрузка...</div>
+    <div style="margin-top:20px;width:40px;height:40px;border:4px solid rgba(168,85,247,0.3);border-top-color:#a855f7;border-radius:50%;animation:spin 1s linear infinite;"></div>
+</div>
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
-<div class="app-container"><div class="glass-card"><h1 class="app-title">🎨 Раскраска</h1><p class="app-subtitle">Раскрашивай и зарабатывай звёзды!</p><div class="theme-picker" id="themePicker"><button class="theme-btn active" data-theme="cosmic">🌌</button><button class="theme-btn" data-theme="pastel">🌸</button><button class="theme-btn" data-theme="blue">💎</button></div><div class="user-stats"><div class="stat-item"><span class="stat-icon">⭐</span><span class="stat-value" id="totalPoints">0</span></div><div class="stat-item"><span class="stat-icon">🖼️</span><span class="stat-value" id="coloredCount">0</span><span class="stat-label">раскрашено</span></div></div><div class="main-menu category-grid"><button class="category-btn" onclick="openCategory('easy')" title="Лёгкие">🐣</button><button class="category-btn" onclick="openCategory('cosmos')" title="Космос">🌌</button><button class="category-btn" onclick="openCategory('animals')" title="Животные">🐾</button><button class="category-btn" onclick="openCategory('people')" title="Люди">💁‍♀️</button><button class="category-btn" onclick="openCategory('plants')" title="Растения">🌸</button><button class="category-btn" onclick="openCategory('food')" title="Еда">🍰</button><button class="category-btn" onclick="openCategory('items')" title="Предметы">👜</button><button class="category-btn" onclick="openCategory('doodles')" title="Дудлс">🧶</button><button class="category-btn" onclick="openCategory('mandala')" title="Мандала">🧘</button></div><div class="action-buttons"><button class="btn-neon" onclick="openAchievements()">🏆 Достижения</button><button class="btn-neon" onclick="openCollections()">📚 Прогресс</button></div><div class="vk-actions"><button class="btn-circle" onclick="openGamesModal()" title="Другие игры">🎮</button><button class="btn-circle" onclick="inviteFriends()" title="Пригласить друзей">👥</button><button class="btn-circle" onclick="openScrollsModal()" title="Свитки">📜</button><button class="btn-circle" onclick="showLeaderboard()" title="Таблица лидеров">🏆</button><button class="btn-circle" onclick="openDailyBonusModal()" title="Ежедневный бонус">🎁</button></div></div></div><div class="modal" id="scrollsModal"><div class="modal-content"><div class="modal-header"><h2>📜 Свитки</h2><button class="modal-close" onclick="closeScrollsModal()">✖</button></div><div class="modal-body" id="scrollsList"></div><div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);"><button id="scrollsPrevPage" onclick="prevScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">◀</button><span id="scrollsPageInfo" style="color: #64748b; font-size: 14px;">1 / 1</span><button id="scrollsNextPage" onclick="nextScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">▶</button></div></div></div><div class="modal" id="dailyBonusModal"><div class="modal-content" style="max-width: 400px;"><div class="modal-header"><h2>🎁 Ежедневный бонус</h2><button class="modal-close" onclick="closeDailyBonusModal()">✖</button></div><div class="modal-body" id="dailyBonusBody" style="text-align:center;padding:20px;"></div></div></div><div class="modal" id="gamesModal"><div class="modal-content"><div class="modal-header"><h2>🎮 Другие игры</h2><button class="modal-close" onclick="closeGamesModal()">✖</button></div><div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:16px;"><a href="https://vk.com/app54620141" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🧩 Тетра</a><a href="https://vk.com/app54636699" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🦊 ГдеЛиса</a><a href="https://vk.com/app51399364" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🧩 Судоку</a><a href="https://vk.com/app54634418" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">📚 Словарекс</a><a href="https://vk.com/app51399471" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🚢 Батискаф</a></div></div></div><div class="modal" id="categoryModal"><div class="modal-content modal-levels"><div class="modal-header"><h2 id="categoryTitle">Категория</h2><button class="modal-close" onclick="closeCategory()">✖</button></div><div class="modal-body"><div class="level-pagination"><button class="btn-pagination" onclick="changePage(-1)">◀</button><span class="page-info" id="pageInfo">1 / 10</span><button class="btn-pagination" onclick="changePage(1)">▶</button></div><div class="level-grid" id="levelGrid"></div><div class="category-progress"><span>Прогресс: <span id="categoryProgress">0</span>%</span><div class="progress-bar"><div class="progress-fill" id="categoryProgressFill" style="width: 0%"></div></div></div></div></div></div><div class="modal" id="unlockModal"><div class="modal-content modal-small"><div class="modal-header"><h2>🔓 Открыть уровень</h2><button class="modal-close" onclick="closeUnlockModal()">✖</button></div><div class="modal-body" style="text-align: center; padding: 30px 20px;"><p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 20px;">Посмотрите рекламу, чтобы открыть этот уровень! 🎬 </p><div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;"><button class="btn-neon" onclick="watchAdForUnlock()">🎬 Открыть</button><button class="btn-neon" onclick="closeUnlockModal()" style="background: rgba(255,0,0,0.1); border-color: #ef4444;">❌ Отмена</button></div></div></div></div>
-<div class="modal" id="adErrorModal"><div class="modal-content modal-small"><div class="modal-header"><h2>⚠️ Ой, рекламы нет</h2><button class="modal-close" onclick="closeAdErrorModal()">✖</button></div><div class="modal-body" style="text-align:center;padding:30px 20px;"><div style="font-size:48px;margin-bottom:15px;">📡</div><p style="font-size:17px;color:var(--text-secondary);margin-bottom:8px;">Реклама временно недоступна. </p><p style="font-size:15px;color:var(--text-secondary);opacity:0.7;margin-bottom:20px;">Попробуйте позже. </p><button class="btn-neon" onclick="closeAdErrorModal()" style="min-width:120px;">👍 Ок </button></div></div></div><div class="modal" id="adLoadingModal"><div class="modal-content modal-small"><div class="modal-body" style="text-align: center; padding: 40px 20px;"><div style="font-size: 48px; margin-bottom: 15px;">⏳</div><h3 style="color: var(--text-primary); margin-bottom: 10px;">Загрузка рекламы...</h3><p style="color: var(--text-secondary);">Пожалуйста, подождите несколько секунд</p><div class="spinner" style="margin-top: 20px;"></div></div></div></div><div class="modal" id="coloringModal"><div class="modal-content modal-large"><div class="modal-body" style="padding: 10px 16px 16px 16px;"><div class="coloring-toolbar" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><button class="modal-close" onclick="closeColoring()" style="background: none; border: none; color: var(--text-secondary); font-size: 22px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;">✖</button><span style="display: flex; align-items: center; gap: 4px; font-size: 16px; color: var(--text-secondary);">⭐ <span id="coloringPoints" style="color: var(--text-primary); font-weight: 600;">0</span></span></div><span style="font-size: 16px; color: var(--text-secondary); text-align: center;">Прогресс: <span id="progressPercent" style="color: var(--text-primary); font-weight: 600;">0</span>%</span><div style="width: 40px; flex-shrink: 0;"></div></div><div id="coloringCanvasWrapper"></div></div></div></div><div class="modal" id="achievementsModal"><div class="modal-content"><div class="modal-header"><h2>🏆 Достижения</h2><button class="modal-close" onclick="closeAchievements()">✖</button></div><div class="modal-body" id="achievementsList"></div></div></div><div class="modal" id="collectionsModal"><div class="modal-content"><div class="modal-header"><h2>📚 Прогресс</h2><button class="modal-close" onclick="closeCollections()">✖</button></div><div class="modal-body" id="collectionsList"></div></div></div>
+<div class="app-container">
+    <div class="glass-card">
 
-<div class="modal" id="scrollTextModal"><div class="modal-content" style="max-width: 500px;"><div class="modal-header"><h2 id="scrollTextTitle">📜 Свиток</h2><button class="modal-close" onclick="closeScrollTextModal()">✖</button></div><div class="modal-body" id="scrollTextContent" style="padding: 20px; font-size: 16px; line-height: 1.8; color: var(--text-primary); max-height: 50vh; overflow-y: auto;">Текст свитка... </div><div style="padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;"><button class="btn-neon" onclick="closeScrollTextModal()" style="width: 100%;">Прочитано</button></div></div></div><script src="js/app.js"></script><script src="js/achievements.js"></script><script src="js/vk.js"></script><script src="js/scrolls.js"></script></body></html>
+        <h1 class="app-title">🎨 Раскраска</h1>
+        <p class="app-subtitle">Раскрашивай и зарабатывай звёзды!</p>
+
+        <!-- Переключатель тем -->
+        <div class="theme-picker" id="themePicker">
+            <button class="theme-btn active" data-theme="cosmic">🌌</button>
+            <button class="theme-btn" data-theme="pastel">🌸</button>
+            <button class="theme-btn" data-theme="blue">💎</button>
+        </div>
+
+        <!-- Статистика -->
+        <div class="user-stats">
+            <div class="stat-item">
+                <span class="stat-icon">⭐</span>
+                 <span class="stat-value" id="totalPoints">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">🖼️</span>
+                <span class="stat-value" id="coloredCount">0</span>
+                <span class="stat-label">раскрашено</span>
+            </div>
+        </div>
+
+        <!-- Категории -->
+<div class="main-menu category-grid">
+    <button class="category-btn" onclick="openCategory('easy')" title="Лёгкие">🐣</button>
+    <button class="category-btn" onclick="openCategory('cosmos')" title="Космос">🌌</button>
+    <button class="category-btn" onclick="openCategory('animals')" title="Животные">🐾</button>
+    <button class="category-btn" onclick="openCategory('people')" title="Люди">💁‍♀️</button>
+    <button class="category-btn" onclick="openCategory('plants')" title="Растения">🌸</button>
+    <button class="category-btn" onclick="openCategory('food')" title="Еда">🍰</button>
+    <button class="category-btn" onclick="openCategory('items')" title="Предметы">👜</button>
+    <button class="category-btn" onclick="openCategory('doodles')" title="Дудлс">🧶</button>
+    <button class="category-btn" onclick="openCategory('mandala')" title="Мандала">🧘</button>
+</div>
+
+        <!-- Кнопки действий -->
+        <div class="action-buttons">
+            <button class="btn-neon" onclick="openAchievements()">🏆 Достижения</button>
+            <button class="btn-neon" onclick="openCollections()">📚 Прогресс</button>
+        </div>
+
+        <!-- Круглые кнопки VK -->
+        <div class="vk-actions">
+            <button class="btn-circle" onclick="openGamesModal()" title="Другие игры">🎮</button>
+            <button class="btn-circle" onclick="inviteFriends()" title="Пригласить друзей">👥</button>
+            <button class="btn-circle" onclick="openScrollsModal()" title="Свитки">📜</button>
+             <button class="btn-circle" onclick="showLeaderboard()" title="Таблица лидеров">🏆</button>
+                <button class="btn-circle" onclick="openDailyBonusModal()" title="Ежедневный бонус">🎁</button>
+
+        </div>
+
+    </div>
+</div>
+<!-- Модалка свитков -->
+<div class="modal" id="scrollsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📜 Свитки</h2>
+            <button class="modal-close" onclick="closeScrollsModal()">✖</button>
+        </div>
+        <div class="modal-body" id="scrollsList">
+            <!-- Список свитков будет рендериться JS -->
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05);">
+    <button id="scrollsPrevPage" onclick="prevScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">◀</button>
+    <span id="scrollsPageInfo" style="color: #64748b; font-size: 14px;">1 / 1</span>
+    <button id="scrollsNextPage" onclick="nextScrollPage()" style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; cursor: pointer; color: #94a3b8; font-size: 18px; transition: all 0.2s;">▶</button>
+</div>
+    </div>
+</div>
+
+<!-- Модалка ежедневного бонуса -->
+<div class="modal" id="dailyBonusModal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2>🎁 Ежедневный бонус</h2>
+            <button class="modal-close" onclick="closeDailyBonusModal()">✖</button>
+        </div>
+        <div class="modal-body" id="dailyBonusBody" style="text-align:center;padding:20px;">
+            <!-- контент генерируется JS -->
+        </div>
+    </div>
+</div>
+
+<!-- Модалка "Другие игры" -->
+<div class="modal" id="gamesModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>🎮 Другие игры</h2>
+            <button class="modal-close" onclick="closeGamesModal()">✖</button>
+        </div>
+        <div class="modal-body" style="display:flex;flex-direction:column;gap:10px;padding:16px;">
+            <a href="https://vk.com/app54620141" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🧩 Тетра</a>
+            <a href="https://vk.com/app54636699" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🦊 ГдеЛиса</a>
+            <a href="https://vk.com/app51399364" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🧩 Судоку</a>
+            <a href="https://vk.com/app54634418" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">📚 Словарекс</a>
+            <a href="https://vk.com/app51399471" target="_blank" class="btn-neon" style="text-align:center;text-decoration:none;">🚢 Батискаф</a>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка уровней -->
+<div class="modal" id="categoryModal">
+    <div class="modal-content modal-levels">
+        <div class="modal-header">
+            <h2 id="categoryTitle">Категория</h2>
+            <button class="modal-close" onclick="closeCategory()">✖</button>
+        </div>
+        <div class="modal-body">
+            <!-- Пагинация сверху -->
+            <div class="level-pagination">
+                <button class="btn-pagination" onclick="changePage(-1)">◀</button>
+                <span class="page-info" id="pageInfo">1 / 10</span>
+                <button class="btn-pagination" onclick="changePage(1)">▶</button>
+            </div>
+            
+            <!-- Сетка уровней -->
+            <div class="level-grid" id="levelGrid">
+                <!-- Генерируется через JS -->
+            </div>
+            
+            <!-- Индикатор прогресса категории -->
+            <div class="category-progress">
+                <span>Прогресс: <span id="categoryProgress">0</span>%</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="categoryProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка "Открыть уровень" -->
+<div class="modal" id="unlockModal">
+    <div class="modal-content modal-small">
+        <div class="modal-header">
+            <h2>🔓 Открыть уровень</h2>
+            <button class="modal-close" onclick="closeUnlockModal()">✖</button>
+        </div>
+        <div class="modal-body" style="text-align: center; padding: 30px 20px;">
+            <p style="font-size: 18px; color: var(--text-secondary); margin-bottom: 20px;">
+                Посмотрите рекламу, чтобы открыть этот уровень! 🎬
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-neon" onclick="watchAdForUnlock()">🎬 Открыть</button>
+                <button class="btn-neon" onclick="closeUnlockModal()" style="background: rgba(255,0,0,0.1); border-color: #ef4444;">❌ Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Модалка ошибки рекламы -->
+<div class="modal" id="adErrorModal">
+    <div class="modal-content modal-small">
+        <div class="modal-header">
+            <h2>⚠️ Ой, рекламы нет</h2>
+            <button class="modal-close" onclick="closeAdErrorModal()">✖</button>
+        </div>
+        <div class="modal-body" style="text-align:center;padding:30px 20px;">
+            <div style="font-size:48px;margin-bottom:15px;">📡</div>
+            <p style="font-size:17px;color:var(--text-secondary);margin-bottom:8px;">
+                Реклама временно недоступна.
+            </p>
+            <p style="font-size:15px;color:var(--text-secondary);opacity:0.7;margin-bottom:20px;">
+                Попробуйте позже.
+            </p>
+            <button class="btn-neon" onclick="closeAdErrorModal()" style="min-width:120px;">
+                👍 Ок
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Модалка "Загрузка рекламы" -->
+<div class="modal" id="adLoadingModal">
+    <div class="modal-content modal-small">
+        <div class="modal-body" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 48px; margin-bottom: 15px;">⏳</div>
+            <h3 style="color: var(--text-primary); margin-bottom: 10px;">Загрузка рекламы...</h3>
+            <p style="color: var(--text-secondary);">Пожалуйста, подождите несколько секунд</p>
+            <div class="spinner" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка раскраски -->
+<div class="modal" id="coloringModal">
+    <div class="modal-content modal-large">
+        <div class="modal-body" style="padding: 10px 16px 16px 16px;">
+<div class="coloring-toolbar" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="modal-close" onclick="closeColoring()" style="background: none; border: none; color: var(--text-secondary); font-size: 22px; cursor: pointer; padding: 0; line-height: 1; transition: color 0.2s;">✖</button>
+        <span style="display: flex; align-items: center; gap: 4px; font-size: 16px; color: var(--text-secondary);">⭐ <span id="coloringPoints" style="color: var(--text-primary); font-weight: 600;">0</span></span>
+    </div>
+    <span style="font-size: 16px; color: var(--text-secondary); text-align: center;">Прогресс: <span id="progressPercent" style="color: var(--text-primary); font-weight: 600;">0</span>%</span>
+    <div style="width: 40px; flex-shrink: 0;"></div>
+</div>
+            <div id="coloringCanvasWrapper"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка достижений -->
+<div class="modal" id="achievementsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>🏆 Достижения</h2>
+            <button class="modal-close" onclick="closeAchievements()">✖</button>
+        </div>
+        <div class="modal-body" id="achievementsList"></div>
+    </div>
+</div>
+
+<!-- Модалка коллекций -->
+<div class="modal" id="collectionsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📚 Прогресс</h2>
+            <button class="modal-close" onclick="closeCollections()">✖</button>
+        </div>
+        <div class="modal-body" id="collectionsList"></div>
+    </div>
+</div>
+<!-- Модалка текста свитка -->
+<div class="modal" id="scrollTextModal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h2 id="scrollTextTitle">📜 Свиток</h2>
+            <button class="modal-close" onclick="closeScrollTextModal()">✖</button>
+        </div>
+        <div class="modal-body" id="scrollTextContent" style="padding: 20px; font-size: 16px; line-height: 1.8; color: var(--text-primary); max-height: 50vh; overflow-y: auto;">
+            Текст свитка...
+        </div>
+        <div style="padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
+            <button class="btn-neon" onclick="closeScrollTextModal()" style="width: 100%;">Прочитано</button>
+        </div>
+    </div>
+</div>
+<script src="js/app.js"></script>
+<script src="js/achievements.js"></script>
+<script src="js/vk.js"></script>
+<script src="js/scrolls.js"></script>
+</body>
+</html>
