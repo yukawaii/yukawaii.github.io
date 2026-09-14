@@ -1,0 +1,1 @@
+!function(){"use strict";const o=new URLSearchParams(window.location.search),s={};for(const[r,e]of o)s[r]=e;const r="ok"===s.vk_client,e=r?"ok":"vk",i=parseInt(s.vk_ok_user_id||s.viewer_id||s.user_id||"0"),n=r?"ok_":"";window.__PLATFORM={isOK:r,isVK:!r,platform:e,userId:i,storagePrefix:n,launchParams:s}}();
