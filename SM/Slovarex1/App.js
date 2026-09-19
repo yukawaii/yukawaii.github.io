@@ -658,3 +658,37 @@ document.addEventListener('visibilitychange', function() {
         runInit();
     }
 })();
+
+// ===== ВРЕМЕННЫЙ ДЕБАГ VK STORAGE (удалить после проверки) =====
+(function () {
+    function dumpVKStorage() {
+        if (typeof vkBridge === 'undefined') { alert('VK Bridge не найден'); return; }
+
+        const keys = [
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_total_score_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_galaxy_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_level_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_hints_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_achievements_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_theme_v2',
+            (window.__PLATFORM.storagePrefix || '') + 'wordgame_sound_v2'
+        ];
+
+        vkBridge.send('VKWebAppStorageGet', { keys: keys })
+            .then(function (data) {
+                let text = 'Платформа: ' + window.__PLATFORM.platform +
+                           '\nПрефикс: "' + (window.__PLATFORM.storagePrefix || '(нет)') + '"\n\n';
+                (data.keys || []).forEach(function (k) {
+                    const v = k.value === '' ? '(пусто)' : k.value;
+                    text += k.key + '\n  = ' + v + '\n\n';
+                });
+                alert(text);
+            })
+            .catch(function (e) {
+                alert('Ошибка VK Storage: ' + JSON.stringify(e));
+            });
+    }
+
+    // Даём мосту время инициализироваться, потом читаем
+    setTimeout(dumpVKStorage, 3000);
+})();
