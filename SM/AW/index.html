@@ -10,21 +10,37 @@
   var sp = new URLSearchParams(location.search);
   var isVK = sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform')
           || sp.has('vk_user_id') || sp.has('vk_client');
+
   if (isVK) {
-    var vk = document.createElement('script');
-    vk.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
-    vk.async = true;
-    document.head.appendChild(vk);
-  } else if (typeof YaGames === 'undefined') {
-    var s = document.createElement('script');
-    s.src = '/sdk.js';
-    s.async = true;
-    s.onload = function () {
-      window.__YANDEX_SDK_LOADED__ = true;
-      try { window.dispatchEvent(new Event('yandex-sdk-ready')); } catch (e) {}
-    };
-    s.onerror = function () { console.warn('Yandex Games SDK failed to load'); };
-    document.head.appendChild(s);
+    window.__vkBridgeReady = new Promise(function (resolve) {
+      if (window.vkBridge) return resolve(window.vkBridge);
+      var vk = document.createElement('script');
+      vk.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
+      vk.async = true;
+      vk.onload = function () {
+        var b = window.vkBridge && (window.vkBridge.default || window.vkBridge);
+        if (window.vkBridge && !window.vkBridge.send && b) window.vkBridge = b;
+        resolve(window.vkBridge || null);
+      };
+      vk.onerror = function () {
+        console.warn('VK Bridge failed to load');
+        resolve(null);
+      };
+      document.head.appendChild(vk);
+    });
+  } else {
+    window.__vkBridgeReady = Promise.resolve(null);
+    if (typeof YaGames === 'undefined') {
+      var s = document.createElement('script');
+      s.src = '/sdk.js';
+      s.async = true;
+      s.onload = function () {
+        window.__YANDEX_SDK_LOADED__ = true;
+        try { window.dispatchEvent(new Event('yandex-sdk-ready')); } catch (e) {}
+      };
+      s.onerror = function () { console.warn('Yandex Games SDK failed to load'); };
+      document.head.appendChild(s);
+    }
   }
 })();
 </script>
@@ -931,16 +947,23 @@ let ysdk = null, ysdkPlayer = null;
 function vkSend(method, params, timeoutMs) {
   timeoutMs = timeoutMs || 2000;
   if (!(isVK || isOK)) return Promise.resolve(null);
-  const bridge = w.vkBridge;
-  if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
-  let settled = false;
-  const call = new Promise(resolve => {
-    try {
-      bridge.send(method, params || {}).then(r => { if (!settled) { settled = true; resolve(r); } }).catch(() => { if (!settled) { settled = true; resolve(null); } });
-    } catch (e) { if (!settled) { settled = true; resolve(null); } }
-  });
-  const timer = new Promise(res => setTimeout(() => { if (!settled) { settled = true; res(null); } }, timeoutMs));
-  return Promise.race([call, timer]);
+  const trySend = () => {
+    const bridge = w.vkBridge;
+    if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
+    let settled = false;
+    const call = new Promise(resolve => {
+      try {
+        bridge.send(method, params || {}).then(r => { if (!settled) { settled = true; resolve(r); } })
+          .catch(() => { if (!settled) { settled = true; resolve(null); } });
+      } catch (e) { if (!settled) { settled = true; resolve(null); } }
+    });
+    const timer = new Promise(res => setTimeout(() => { if (!settled) { settled = true; res(null); } }, timeoutMs));
+    return Promise.race([call, timer]);
+  };
+  if (w.__vkBridgeReady && !w.vkBridge) {
+    return w.__vkBridgeReady.then(() => trySend());
+  }
+  return trySend();
 }
 let __actionLock = false;
 async function withLock(fn) {
@@ -2570,22 +2593,31 @@ async function boot() {
 applySoundState();
 attachAudioUnlock();
 attachSfxToUI();
-    if (isVK || isOK) {
-      await initVK();
-      try {
-        vkBridge.subscribe(function (event) {
-          const type = event && event.detail && event.detail.type;
-          if (type === 'VKWebAppViewHide') {
-            console.log('VK ViewHide');
-            if (!adPlaying && soundEnabled) Sound.stopBg();
-          }
-          if (type === 'VKWebAppViewRestore') {
-            console.log('VK ViewRestore');
-            if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
-               }
-        });
-      } catch (e) { console.warn('VK subscribe failed', e); }
-    } else {
+if (isVK || isOK) {
+  // Ждём загрузку VK Bridge
+  try {
+    if (window.__vkBridgeReady) await window.__vkBridgeReady;
+  } catch (e) {}
+
+  if (window.vkBridge) {
+    await initVK();
+    try {
+      window.vkBridge.subscribe(function (event) {
+        const type = event && event.detail && event.detail.type;
+        if (type === 'VKWebAppViewHide') {
+          console.log('VK ViewHide');
+          if (!adPlaying && soundEnabled) Sound.stopBg();
+        }
+        if (type === 'VKWebAppViewRestore') {
+          console.log('VK ViewRestore');
+          if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
+        }
+      });
+    } catch (e) { console.warn('VK subscribe failed', e); }
+  } else {
+    console.warn('VK Bridge unavailable — running in fallback mode');
+  }
+} else {
       const hasYa = isYandex || typeof YaGames !== 'undefined' || w.__YANDEX_SDK_LOADED__ === true;
       if (hasYa) {
         if (!isYandex) {
