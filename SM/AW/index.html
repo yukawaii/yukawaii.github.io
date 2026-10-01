@@ -208,6 +208,12 @@ body.app-ready .app { opacity: 1; }
 .quiz-body { display: contents; }
 .question-card { padding: var(--pad); text-align: center; }
 .question-img { max-width: 100%; max-height: min(38vh, 320px); width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto; border-radius: var(--r-sm); }
+.question-img[hidden],
+.question-text[hidden],
+.description[hidden],
+.next-btn[hidden] {
+  display: none !important;
+}
 .options { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-sm); }
 .option {
   padding: clamp(8px, 1.6vmin, 14px) clamp(10px, 2vmin, 16px);
@@ -817,6 +823,16 @@ html.is-dark .option.photo-option {
     align-items: stretch;
     gap: var(--gap);
     justify-content: flex-start;
+  }
+  /* Карточка вопроса в фото-режиме — минимальный паддинг, без пустот */
+  .quiz-body.photo-mode .question-card {
+    min-height: 0;
+    padding: var(--gap-sm) var(--gap);
+  }
+  .quiz-body.photo-mode .question-img[hidden] {
+    display: none !important;
+    height: 0;
+    margin: 0;
   }
   /* Карточка вопроса — компактная, во всю ширину */
   .quiz-body.photo-mode .question-card {
