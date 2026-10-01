@@ -5,13 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
 <title data-i18n="appTitle">Угадай животное!</title>
 <meta name="theme-color" content="#fff6ef">
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 <script>
 (function () {
   var sp = new URLSearchParams(location.search);
   var isVK = sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform')
           || sp.has('vk_user_id') || sp.has('vk_client');
-  if (!isVK) {
+  if (isVK) {
+    var vk = document.createElement('script');
+    vk.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
+    vk.async = true;
+    document.head.appendChild(vk);
+  } else if (typeof YaGames === 'undefined') {
     var s = document.createElement('script');
     s.src = '/sdk.js';
     s.async = true;
@@ -322,8 +326,9 @@ html.is-dark .option.photo-option{background:rgba(255,255,255,.08)}
 }
 @media (max-width:719px),(orientation:portrait){
 .options.photo-options{max-width:520px;margin:0 auto}
-.option.photo-option{max-height:42vh}
-}
+.option.photo-option{max-height:42vh}}
+html.is-vk .app,
+html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0px) + 60px);}
 </style>
 </head>
 <body>
@@ -2470,27 +2475,6 @@ async function renderOtherGames() {
   const list = isOK ? OK_GAMES : VK_GAMES;
   list.forEach(g => renderCard({ url: g.href, title: g.name, emoji: g.emoji }));
 }
-function vkResizeWindow() {
-  if (!(isVK || isOK)) return;
-  const bridge = w.vkBridge;
-  if (!bridge || typeof bridge.send !== 'function') return;
-  const h = Math.max(d.body.scrollHeight, d.documentElement.scrollHeight, d.body.offsetHeight, d.documentElement.offsetHeight, d.body.clientHeight, d.documentElement.clientHeight);
-  try { bridge.send('VKWebAppResizeWindow', { height: h }).catch(() => {}); } catch (e) {}
-}
-w.vkResizeWindow = vkResizeWindow;
-function setupVkResizeWatcher() {
-  if (!(isVK || isOK)) return;
-  w.addEventListener('hashchange', () => setTimeout(vkResizeWindow, 200));
-  w.addEventListener('resize', () => setTimeout(vkResizeWindow, 200));
-  if (w.MutationObserver) {
-    const mo = new MutationObserver(() => {
-      clearTimeout(mo.__t);
-      mo.__t = setTimeout(vkResizeWindow, 150);
-    });
-    mo.observe(d.body, { childList: true, subtree: true });
-  }
-  setTimeout(vkResizeWindow, 500);
-}
 function bindGlobalUI() {
   d.addEventListener('contextmenu', e => e.preventDefault());
   d.addEventListener('dragstart', e => e.preventDefault());
@@ -2526,7 +2510,6 @@ function bindGlobalUI() {
       console.log('Page visible — resuming audio');
       if (soundEnabled && bgStarted) Sound.startBg();
       yandexGameplayStart();
-      if (isVK || isOK) setTimeout(vkResizeWindow, 200);
     }
   });
 }
@@ -2562,7 +2545,6 @@ async function navigate() {
     else if (route.name === 'igames') await renderOtherGames();
   } catch (e) { console.warn('navigate error', e); }
   try { window.scrollTo(0, 0); } catch (e) {}
-  if (isVK || isOK) setTimeout(vkResizeWindow, 200);
 }
 async function boot() {
   w.addEventListener('error', function (e) {
@@ -2600,8 +2582,7 @@ attachSfxToUI();
           if (type === 'VKWebAppViewRestore') {
             console.log('VK ViewRestore');
             if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
-            setTimeout(vkResizeWindow, 200);
-          }
+               }
         });
       } catch (e) { console.warn('VK subscribe failed', e); }
     } else {
@@ -2643,7 +2624,6 @@ attachSfxToUI();
     try { await updateAuthButton(); } catch (e) {}
     try { await updateShortcutButton(); } catch (e) {}
     bindGlobalUI();
-    if (isVK || isOK) setupVkResizeWatcher();
   } catch (e) { console.warn('Boot error:', e); }
   w.addEventListener('hashchange', navigate);
   try { await navigate(); } catch (e) { console.error('Navigate failed:', e); }
