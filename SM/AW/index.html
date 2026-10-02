@@ -926,9 +926,17 @@ function vkSend(method, params, timeoutMs) {
     let settled = false;
     const call = new Promise(resolve => {
       try {
-        bridge.send(method, params || {}).then(r => { if (!settled) { settled = true; resolve(r); } })
-          .catch(() => { if (!settled) { settled = true; resolve(null); } });
-      } catch (e) { if (!settled) { settled = true; resolve(null); } }
+        bridge.send(method, params || {}).then(r => {
+          if (!settled) { settled = true; resolve(r); }
+        })
+        .catch(err => {
+          console.error(`VK Bridge ${method} ошибка:`, err);
+          if (!settled) { settled = true; resolve(null); }
+        });
+      } catch (e) {
+        console.error(`VK Bridge ${method} исключение:`, e);
+        if (!settled) { settled = true; resolve(null); }
+      }
     });
     const timer = new Promise(res => setTimeout(() => { if (!settled) { settled = true; res(null); } }, timeoutMs));
     return Promise.race([call, timer]);
@@ -1239,10 +1247,31 @@ function infr() {
   if (isYandex || P.isStandalone) { toast(w.t('inviteVKOnly')); return; }
   vkSend('VKWebAppShowInviteBox');
 }
-function top0() {
+async function top0() {
   if (isOK) return;
   if (!isVK) return;
   if (!P.inIframe) { toast(w.t('topVKOnly')); return; }
+  const totalScore = Number(w.score) || 0;
+  const uid = P.userId || Number(sessionStorage.getItem('id'));
+  if (uid && totalScore > 0) {
+    try {
+      await vkSend('VKWebAppCallAPIMethod', {
+        method: 'secure.addAppEvent',
+        params: {
+          client_secret: '8lihTQSiEYN5qlLIW3cU',
+          user_id: uid,
+          activity_id: 2,
+          value: totalScore,
+          v: '5.131',
+          access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'
+        }
+      }, 8000);
+    } catch (e) {
+      console.warn('Ошибка secure.addAppEvent:', e);
+    }
+  }
+
+  // 2. Теперь открываем таблицу
   const s = Number(w.score) || 0;
   vkSend('VKWebAppShowLeaderBoardBox', { user_result: s, global: 1 });
 }
@@ -1754,9 +1783,19 @@ async function initVK() {
     if (info && info.id) {
       uid = info.id;
       w.id = info.id;
-      try { sessionStorage.setItem('id', info.id); } catch (e) {}
+      sessionStorage.setItem('id', info.id);
     }
   }
+  if (!uid) {
+    const sp = new URLSearchParams(location.search);
+    const viewerId = sp.get('viewer_id');
+    if (viewerId) {
+      uid = parseInt(viewerId);
+      w.id = uid;
+      sessionStorage.setItem('id', uid);
+    }
+  }
+  P.userId = uid; 
   showBanner();
   preloadRewardedAd();
 }
