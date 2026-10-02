@@ -869,7 +869,7 @@ const hasYaEnv = !!(yaEnv && (yaEnv.appId || yaEnv.clipId));
 let isVK = false, isOK = false, isYandex = false, platform = 'standalone';
 if (hasVKParams) { isOK = vkOK; isVK = !vkOK; platform = isOK ? 'ok' : 'vk'; }
 else if (hasYaGames && hasYaEnv) { isYandex = true; platform = 'yandex'; }
-const userId = parseInt(launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0');
+const userId = parseInt(launchParams.vk_user_id || launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0');
 const storagePrefix = isOK ? 'ok_' : '';
 const P = {isVK, isOK, isYandex, platform, userId, storagePrefix, launchParams, isStandalone: platform === 'standalone', inIframe: (() => { try { return w.self !== w.top; } catch (e) { return true; } })()};
 w.__PLATFORM = P;
@@ -924,21 +924,26 @@ function vkSend(method, params, timeoutMs) {
     const bridge = w.vkBridge;
     if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
     let settled = false;
+    let timerId = null;
     const call = new Promise(resolve => {
       try {
         bridge.send(method, params || {}).then(r => {
-          if (!settled) { settled = true; resolve(r); }
+          if (!settled) { settled = true; clearTimeout(timerId); resolve(r); }
         })
         .catch(err => {
           console.error(`VK Bridge ${method} ошибка:`, err);
-          if (!settled) { settled = true; resolve(null); }
+          if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
         });
       } catch (e) {
         console.error(`VK Bridge ${method} исключение:`, e);
-        if (!settled) { settled = true; resolve(null); }
+        if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
       }
     });
-    const timer = new Promise(res => setTimeout(() => { if (!settled) { settled = true; res(null); } }, timeoutMs));
+    const timer = new Promise(res => {
+      timerId = setTimeout(() => {
+        if (!settled) { settled = true; resolve(null); }
+      }, timeoutMs);
+    });
     return Promise.race([call, timer]);
   };
   if (w.__vkBridgeReady && !w.vkBridge) {
@@ -1008,7 +1013,7 @@ function deepMergeMetrics(local, remote) {
   return out;
 }
 async function remoteGet(name) {
-  const key = storageKey(name);
+  const key = storageKey(name); 
   if (isYandex) {
     if (!ysdkPlayer) return null;
     try {
@@ -1157,39 +1162,47 @@ function showRewardedAd() {
       } else resolve(false);
     });
   }
-  if (isVK || isOK) {
-    if (w.__rewardAdInFlight) return w.__rewardAdInFlight;
-    let resolveOuter;
-    w.__rewardAdInFlight = new Promise(res => { resolveOuter = res; });
-    adMute();
-    const bridge = w.vkBridge;
-    const promise = new Promise(resolve => {
-      let finished = false;
-      let hardTimer = null;
-      const done = (result, reason) => {
-        if (finished) return;
-        finished = true;
-        if (hardTimer) { clearTimeout(hardTimer); hardTimer = null; }
-        try { if (!d.hidden) adUnmute(); else adPlaying = false; } catch (e) { adUnmute(); }
-        console.log('VK reward ad →', reason, '| result =', result);
-        w.__rewardAdInFlight = null;
-        resolve(result);
-        resolveOuter(result);
-      };
-      hardTimer = setTimeout(() => done(false, 'hard-timeout-300s'), 300000);
-      if (!bridge || typeof bridge.send !== 'function') return done(false, 'no-bridge');
-      try {
-        bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' }).then(data => {
-          if (data == null) return done(false, 'null-response');
-          const ok = data.result === true || data.result === 1 || data.result === 'true' || data.success === true;
-          try { bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' }).catch(() => {}); } catch (e) {}
-          if (ok) done(true, 'watched');
-          else done(false, 'not-completed:' + JSON.stringify(data));
-        }).catch(err => done(false, 'error:' + ((err && err.message) || err)));
-      } catch (e) { done(false, 'exception:' + ((e && e.message) || e)); }
-    });
-    return promise;
-  }
+ if (isVK || isOK) {
+  if (w.__rewardAdInFlight) return w.__rewardAdInFlight;
+  let resolveOuter;
+  w.__rewardAdInFlight = new Promise(res => { resolveOuter = res; });
+  adMute();
+  const bridge = w.vkBridge;
+  const promise = new Promise(resolve => {
+    let finished = false;
+    let hardTimer = null;
+    const done = (result, reason) => {
+      if (finished) return;
+      finished = true;
+      if (hardTimer) { clearTimeout(hardTimer); hardTimer = null; }
+      try { if (!d.hidden) adUnmute(); else adPlaying = false; } catch (e) { adUnmute(); }
+      console.log('VK reward ad →', reason, '| result =', result);
+      w.__rewardAdInFlight = null;
+      resolve(result);
+      resolveOuter(result);
+    };
+    hardTimer = setTimeout(() => done(false, 'hard-timeout-300s'), 300000);
+    const adTimeout = setTimeout(() => done(false, 'ad-timeout-30s'), 30000);
+    if (!bridge || typeof bridge.send !== 'function') return done(false, 'no-bridge');
+    try {
+      bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' }).then(data => {
+        clearTimeout(adTimeout);
+        if (data == null) return done(false, 'null-response');
+        const ok = data.result === true || data.result === 1 || data.result === 'true' || data.success === true;
+        try { bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' }).catch(() => {}); } catch (e) {}
+        if (ok) done(true, 'watched');
+        else done(false, 'not-completed:' + JSON.stringify(data));
+      }).catch(err => {
+        clearTimeout(adTimeout);
+        done(false, 'error:' + ((err && err.message) || err));
+      });
+    } catch (e) {
+      clearTimeout(adTimeout);
+      done(false, 'exception:' + ((e && e.message) || e));
+    }
+  });
+  return promise;
+}
   return Promise.resolve(false);
 }
 function showInterstitial() {
@@ -1224,11 +1237,12 @@ w.yandexGameplayStart = yandexGameplayStart;
 w.yandexGameplayStop = yandexGameplayStop;
 function submitScore(value) {
   if ((isVK || isOK) && P.inIframe) {
-    const uid = P.userId || Number(sessionStorage.getItem('id'));
+    let storedId = 0;
+    try { storedId = Number(sessionStorage.getItem('id')) || 0; } catch (e) {}
+    const uid = P.userId || storedId;
     if (!uid) return;
     vkSend('VKWebAppCallAPIMethod', {
       method: 'secure.addAppEvent',
-      request_id: 'aq_' + Date.now(),
       params: { client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8' }
     }, 5000);
   }
@@ -1251,43 +1265,20 @@ async function top0() {
   if (isOK) return;
   if (!isVK) return;
   if (!P.inIframe) { toast(w.t('topVKOnly')); return; }
-
-  // === ПОДРОБНОЕ ЛОГИРОВАНИЕ UID ===
-  console.log('═══════════════════════════════════════');
-  console.log('🏆 top0() ДИАГНОСТИКА:');
-  console.log('  P.userId            =', P.userId, '(typeof:', typeof P.userId, ')');
-  console.log('  w.id                =', w.id);
-  console.log('  sessionStorage.id   =', sessionStorage.getItem('id'));
-  console.log('  launchParams        =', JSON.stringify(launchParams));
-  console.log('  location.search     =', location.search);
-  console.log('  P.inIframe          =', P.inIframe);
-  console.log('  P.platform          =', P.platform);
-
   const totalScore = Number(w.score) || Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
   const uid = P.userId || Number(sessionStorage.getItem('id'));
-
-  console.log('  ИТОГОВЫЙ uid        =', uid, '(typeof:', typeof uid, ')');
-  console.log('  totalScore          =', totalScore);
-  console.log('═══════════════════════════════════════');
-
-  // === ПРОВЕРКА uid ===
   if (!uid || isNaN(uid) || uid === 0) {
     console.error('❌ uid невалиден! Ни один из способов не дал числовой ID. Отправка невозможна.');
     toast('Не удалось определить ваш ID. Попробуйте перезагрузить игру.', true);
-    // Всё равно попробуем открыть таблицу
     try {
       await vkSend('VKWebAppShowLeaderBoardBox', { user_result: totalScore, global: 1 }, 5000);
     } catch (e) {}
     return;
   }
-
-  // === ОТПРАВКА ОЧКОВ ===
   if (totalScore > 0) {
     const lastSent = Number(localStorage.getItem('aq_lastSentScore') || '0');
     const isImprovement = totalScore > lastSent;
-
     console.log('🏆 lastSent =', lastSent, '| isImprovement =', isImprovement);
-
     if (isImprovement) {
       try {
         const result = await vkSend('VKWebAppCallAPIMethod', {
@@ -1301,9 +1292,7 @@ async function top0() {
             access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'
           }
         }, 8000);
-
         console.log('🏆 secure.addAppEvent ПОЛНЫЙ ответ:', JSON.stringify(result));
-
         if (result && result.error) {
           console.error('❌ Ошибка VK API:', result.error.error_code, '-', result.error.error_msg);
           toast('Ошибка отправки: ' + (result.error.error_msg || 'unknown'), true);
@@ -1764,10 +1753,11 @@ async function gatingLoad(forceReload) {
     let arr = await storageGet('unlocked');
     if (!Array.isArray(arr)) arr = [];
     if (storedVer < CURRENT_GATING_VER) {
-      arr = DEFAULT_UNLOCKED.slice();
+      const storedUnlocked = arr.map(Number).filter(n => !isNaN(n) && n > 0);
+      arr = Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked]));
       await storageSet('unlocked', arr);
       await storageSet('unlocked_v', CURRENT_GATING_VER);
-      console.log('Gating reset → v' + CURRENT_GATING_VER, arr);
+      console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);
     } else {
       const merged = Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)]));
       if (merged.length !== arr.length) await storageSet('unlocked', merged);
@@ -1838,13 +1828,13 @@ function showUnlockModal(levelId, onUnlocked) {
 w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, unlockViaAd, showUnlockModal, _invalidate: () => { gatingCache = null; } };
 async function initVK() {
   console.log('🔑 initVK(): старт');
+  if (!w.vkBridge) {
+    console.warn('🔑 vkBridge не найден, инициализация VK пропущена');
+    return;
+  }
   console.log('🔑 P.userId (из URL):', P.userId, '| launchParams.vk_user_id:', launchParams.vk_user_id, '| viewer_id:', launchParams.viewer_id);
-
   await vkSend('VKWebAppInit', {}, 3000);
-
   let uid = P.userId;
-  console.log('🔑 initVK(): uid после P.userId =', uid);
-
   if (!uid) {
     const info = await vkSend('VKWebAppGetUserInfo', {}, 3000);
     console.log('🔑 VKWebAppGetUserInfo ответ:', info);
@@ -1852,29 +1842,20 @@ async function initVK() {
       uid = info.id;
       w.id = info.id;
       try { sessionStorage.setItem('id', info.id); } catch (e) {}
-      console.log('🔑 initVK(): uid получен из GetUserInfo =', uid);
     }
   }
-
   if (!uid) {
     const sp = new URLSearchParams(location.search);
     const viewerId = sp.get('viewer_id');
-    console.log('🔑 initVK(): viewer_id из URL =', viewerId);
     if (viewerId) {
       uid = parseInt(viewerId);
       w.id = uid;
       try { sessionStorage.setItem('id', uid); } catch (e) {}
-      console.log('🔑 initVK(): uid получен из viewer_id =', uid);
     }
   }
-
-  if (!uid) {
-    console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid! Проверьте параметры запуска VK.');
-  }
-
+  if (!uid) console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid!');
   P.userId = uid;
-  console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId =', P.userId, '| typeof =', typeof P.userId);
-
+  console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId =', P.userId);
   showBanner();
   preloadRewardedAd();
 }
@@ -1933,19 +1914,20 @@ async function initYandex() {
       if (soundEnabled) Sound.startBg();
     });
   } catch (e) {}
-  // НЕ вызываем здесь LoadingAPI.ready() — это будет сделано в hideLoadingAndShowMenu
 }
 async function updateAuthButton() {
   const btns = d.querySelectorAll('#yandex-auth-btn');
   if (!btns.length) return;
   if (!isYandex || !ysdk) { btns.forEach(b => b.style.display = 'none'); return; }
-  try {
-    const p = ysdkPlayer || await ysdk.getPlayer();
+ try{ let p=ysdkPlayer; if (!p && ysdk.getPlayer){ p=await ysdk.getPlayer(); ysdkPlayer=p;
+    }
     let authorized = false;
     if (p && typeof p.isAuthorized === 'function') authorized = p.isAuthorized();
     else if (p && typeof p.getMode === 'function') authorized = p.getMode() !== 'lite';
     btns.forEach(b => b.style.display = authorized ? 'none' : '');
-  } catch (e) { btns.forEach(b => b.style.display = ''); }
+  } catch (e) { 
+    btns.forEach(b => b.style.display = ''); 
+  }
 }
 function openAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.add('show'); }
 function closeAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.remove('show'); }
@@ -2042,11 +2024,12 @@ async function syncAllOnStart() {
     const CURRENT_VER = 5;
     let unlocked;
     if (storedVer < CURRENT_VER) {
-      unlocked = DEFAULT_LVL.slice();
+      const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
+      unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
       try { await storageSet('unlocked', unlocked); } catch (e) {}
       try { await storageSet('unlocked_v', CURRENT_VER); } catch (e) {}
       if (w.Gating && w.Gating._invalidate) w.Gating._invalidate();
-      console.log('Gating reset in sync → v' + CURRENT_VER, unlocked);
+      console.log('Gating upgrade → v' + CURRENT_VER, unlocked);
     } else {
       const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
       unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
@@ -2448,55 +2431,24 @@ async function renderQuiz(levelId) {
     state.index++;
     renderQuestion();
   }
-  async function finishQuiz() {
-    if (state.finished) return;
-    state.finished = true;
-    stopTimer();
-    try { w.Sound.playFanfare(); } catch (e) {}
-    show(resultScreen);
-    // Останавливаем геймплей при завершении
-    if (isYandex) yandexGameplayStop();
-    const total = quiz.questions.length;
-    const pct = Math.round((state.score / total) * 100);
-    const earnedStars = calcStars(pct);
-    $('#res-total').textContent = total;
-    $('#res-correct').textContent = state.score;
-    $('#res-wrong').textContent = state.answers - state.score;
-    $('#res-percent').textContent = pct + '%';
-    const starsEl = $('#res-stars');
-    if (starsEl) {
-      starsEl.textContent = '★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars);
-      starsEl.classList.toggle('has-stars', earnedStars > 0);
-    }
-    try {
-      let map = await w.storageGet('stars');
-      if (!map || typeof map !== 'object' || Array.isArray(map)) map = {};
-      const prev = Number(map[levelId]) || 0;
-      if (earnedStars > prev) {
-        map[levelId] = earnedStars;
-        await w.storageSet('stars', map);
-        if (w.__SYNCED__) w.__SYNCED__.stars = map;
-      }
-    } catch (e) {}
-    try {
-      let colList = await w.storageGet('collection');
-      if (!Array.isArray(colList)) colList = [];
-      const before = colList.length;
-      state.roundCollection.forEach(id => { if (!colList.includes(id)) colList.push(id); });
-      if (colList.length !== before) {
-        await w.storageSet('collection', colList);
-        if (w.__SYNCED__) w.__SYNCED__.collection = colList;
-      }
-    } catch (e) {}
-    try { await w.addToTotalScore(state.score); } catch (e) {}
-    if (!state.scoreSent) { state.scoreSent = true; try { w.submitScore(state.score); } catch (e) {} }
-    try {
-      if (w.Ach && w.Ach.recordRound) {
-        await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts });
-      }
-    } catch (e) {}
-    setTimeout(() => { try { w.showInterstitial(); } catch (e) {} }, 400);
-  }
+async function finishQuiz() {
+  if (state.finished) return;
+  state.finished = true;
+  stopTimer();
+  try { w.Sound.playFanfare(); } catch (e) {}
+  show(resultScreen);
+  if (isYandex) yandexGameplayStop();
+  const total = quiz.questions.length;
+  const pct = Math.round((state.score / total) * 100);
+  const earnedStars = calcStars(pct);
+  $('#res-total').textContent = total;
+  $('#res-correct').textContent = state.score;
+  $('#res-wrong').textContent = state.answers - state.score;
+  $('#res-percent').textContent = pct + '%';
+  const starsEl = $('#res-stars');
+ if (starsEl){ starsEl.textContent='★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars); starsEl.classList.toggle('has-stars', earnedStars >0);} try{ let map=await w.storageGet('stars'); if (!map || typeof map !=='object' || Array.isArray(map)) map={}; const prev=Number(map[levelId]) || 0; if (earnedStars >prev){ map[levelId]=earnedStars; await w.storageSet('stars', map); if (w.__SYNCED__) w.__SYNCED__.stars=map;}} catch (e){} try{ let colList=await w.storageGet('collection'); if (!Array.isArray(colList)) colList=[]; const before=colList.length; state.roundCollection.forEach(id=>{ if (!colList.includes(id)) colList.push(id);}); if (colList.length !==before){ await w.storageSet('collection', colList); if (w.__SYNCED__) w.__SYNCED__.collection=colList;}} catch (e){} try{ const newTotal=await w.addToTotalScore(state.score); w.score=Number(newTotal) || 0; console.log('💎 Общий счёт после раунда:', w.score);} catch (e){ w.score=Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; console.warn('Не удалось обновить общий счёт:', e);} if (!state.scoreSent){ state.scoreSent=true; try{ w.submitScore(state.score);} catch (e){}} try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts});}} catch (e){}
+  setTimeout(() => { try { w.showInterstitial(); } catch (e) {} }, 400);
+}
   $('#start-btn').onclick = () => withLock(startQuiz);
   $('#next-btn').onclick = () => withLock(nextQuestion);
   $('#quit-btn').onclick = () => {
