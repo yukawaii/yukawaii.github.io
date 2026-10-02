@@ -1168,12 +1168,10 @@ if (isVK || isOK) {
   const bridge = w.vkBridge;
   const promise = new Promise(resolve => {
     let finished = false;
-    let hardTimer = null;
     let adTimeout = null;
     const done = (result, reason) => {
       if (finished) return;
       finished = true;
-      if (hardTimer) { clearTimeout(hardTimer); hardTimer = null; }
       if (adTimeout) { clearTimeout(adTimeout); adTimeout = null; }
       try { if (!d.hidden) adUnmute(); else adPlaying = false; } catch (e) { adUnmute(); }
       console.log('VK reward ad →', reason, '| result =', result);
@@ -1181,8 +1179,7 @@ if (isVK || isOK) {
       resolve(result);
       resolveOuter(result);
     };
-    hardTimer = setTimeout(() => done(false, 'hard-timeout-300s'), 300000);
-    adTimeout = setTimeout(() => done(false, 'ad-timeout-30s'), 30000);
+    adTimeout = setTimeout(() => done(false, 'timeout-60s'), 60000);
     if (!bridge || typeof bridge.send !== 'function') return done(false, 'no-bridge');
     try {
       bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' }).then(data => {
