@@ -7,41 +7,7 @@
 <meta name="theme-color" content="#fff6ef">
 <script>
 (function () {
-  var sp = new URLSearchParams(location.search);
-  var isVK = sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform')
-          || sp.has('vk_user_id') || sp.has('vk_client');
-
-  if (isVK) {
-    window.__vkBridgeReady = new Promise(function (resolve) {
-      if (window.vkBridge) return resolve(window.vkBridge);
-      var vk = document.createElement('script');
-      vk.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
-      vk.async = true;
-      vk.onload = function () {
-        var b = window.vkBridge && (window.vkBridge.default || window.vkBridge);
-        if (window.vkBridge && !window.vkBridge.send && b) window.vkBridge = b;
-        resolve(window.vkBridge || null);
-      };
-      vk.onerror = function () {
-        console.warn('VK Bridge failed to load');
-        resolve(null);
-      };
-      document.head.appendChild(vk);
-    });
-  } else {
-    window.__vkBridgeReady = Promise.resolve(null);
-    if (typeof YaGames === 'undefined') {
-      var s = document.createElement('script');
-      s.src = '/sdk.js';
-      s.async = true;
-      s.onload = function () {
-        window.__YANDEX_SDK_LOADED__ = true;
-        try { window.dispatchEvent(new Event('yandex-sdk-ready')); } catch (e) {}
-      };
-      s.onerror = function () { console.warn('Yandex Games SDK failed to load'); };
-      document.head.appendChild(s);
-    }
-  }
+ var sp=new URLSearchParams(location.search); var isVK=sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform') || sp.has('vk_user_id') || sp.has('vk_client'); if (isVK){ window.__vkBridgeReady=new Promise(function (resolve){ if (window.vkBridge) return resolve(window.vkBridge); var vk=document.createElement('script'); vk.src='https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js'; vk.async=true; vk.onload=function (){ var b=window.vkBridge && (window.vkBridge.default || window.vkBridge); if (window.vkBridge && !window.vkBridge.send && b) window.vkBridge=b; resolve(window.vkBridge || null);}; vk.onerror=function (){ console.warn('VK Bridge failed to load'); resolve(null);}; document.head.appendChild(vk);});} else{ window.__vkBridgeReady=Promise.resolve(null); if (typeof YaGames==='undefined'){ var s=document.createElement('script'); s.src='/sdk.js'; s.async=true; s.onload=function (){ window.__YANDEX_SDK_LOADED__=true; try{ window.dispatchEvent(new Event('yandex-sdk-ready'));} catch (e){}}; s.onerror=function (){ console.warn('Yandex Games SDK failed to load');}; document.head.appendChild(s);}}
 })();
 </script>
 <style>
@@ -69,16 +35,14 @@
 --r:clamp(10px,2.2vmin,18px)
 }
 html,body{margin:0;padding:0;height:100%}
-html{overflow-x:hidden;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:auto;touch-action:pan-x pan-y}
-body{
-font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-color:var(--text);
-background:radial-gradient(120% 80% at 0% 0%,var(--bg-1) 0%,var(--bg-2) 45%,var(--bg-3) 100%) fixed;
-min-height:100%;height:100%;overflow-x:hidden;overflow-y:scroll;
--webkit-overflow-scrolling:touch;overscroll-behavior:auto;touch-action:pan-x pan-y;
--webkit-font-smoothing:antialiased;line-height:1.35;
--webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
--webkit-touch-callout:none;-webkit-tap-highlight-color:transparent
+html{ height:100%; overflow:hidden; overscroll-behavior:none;}
+body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:var(--text);
+  background:radial-gradient(120% 80% at 0% 0%,var(--bg-1) 0%,var(--bg-2) 45%,var(--bg-3) 100%) fixed;
+ height:100%; overflow-x:hidden; overflow-y:auto;            
+ -webkit-overflow-scrolling:touch; overscroll-behavior:contain; 
+ touch-action:pan-y; -webkit-font-smoothing:antialiased; line-height:1.35;
+  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+  -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent
 }
 .app{
 display:flex;flex-direction:column;gap:var(--gap);
