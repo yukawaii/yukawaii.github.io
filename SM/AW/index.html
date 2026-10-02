@@ -68,13 +68,13 @@
 --r-sm:clamp(6px,1.3vmin,10px);
 --r:clamp(10px,2.2vmin,18px)
 }
-html,body{margin:0;padding:0}
-html{height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:auto;touch-action:pan-x pan-y}
+html,body{margin:0;padding:0;height:100%}
+html{overflow-x:hidden;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:auto;touch-action:pan-x pan-y}
 body{
 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
 color:var(--text);
 background:radial-gradient(120% 80% at 0% 0%,var(--bg-1) 0%,var(--bg-2) 45%,var(--bg-3) 100%) fixed;
-min-height:100%;overflow-x:hidden;overflow-y:auto;
+min-height:100%;height:100%;overflow-x:hidden;overflow-y:scroll;
 -webkit-overflow-scrolling:touch;overscroll-behavior:auto;touch-action:pan-x pan-y;
 -webkit-font-smoothing:antialiased;line-height:1.35;
 -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
@@ -243,6 +243,7 @@ body.app-ready .app{opacity:1}
 html.is-ok [data-vk-only]{display:none !important}
 html:not(.is-vk) [data-vk-only]{display:none !important}
 html.is-yandex [data-hide-on-yandex]{display:none !important}
+html:not(.is-yandex) [data-yandex-only]{display:none !important}
 .score-chip{cursor:default;pointer-events:none;font-weight:800;color:var(--primary-d);white-space:nowrap}
 .score-chip:hover{transform:none;box-shadow:0 3px 10px rgba(0,0,0,.06)}
 #yandex-auth-btn{background:linear-gradient(135deg,#fc3f1d,#d6270f) !important;color:#fff !important;box-shadow:0 6px 20px rgba(252,63,29,.35) !important}
@@ -365,7 +366,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
         ⭐ <span data-total-score>0</span>
       </span>
       <button class="btn btn-primary btn-lg" id="yandex-auth-btn" style="display:none" onclick="openAuthModal()" data-i18n="login">🔑 Войти</button>
-<a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a>
+      <a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a>
       <a class="btn btn-ghost btn-icon" href="#/collection" title="Collection">
         <span class="btn-icon-emoji">📔</span>
         <span class="btn-icon-count" data-col-count>0/0</span>
@@ -375,6 +376,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
         <span class="btn-icon-count" id="ach-badge">0</span>
       </button>
       <button class="btn btn-ghost btn-icon" onclick="top0()" data-vk-only title="Top">🏆</button>
+      <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only title="Top">🏆</button>
       <button class="btn btn-ghost btn-icon" onclick="share2()" data-hide-on-yandex title="Share">📤</button>
       <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" title="Shortcut">📌</button>
       <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only title="Invite">👥</button>
@@ -523,13 +525,20 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
     <p class="modal-desc" id="modal-desc"></p>
   </div>
 </div>
+<div class="modal" id="yandex-leaderboard-modal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2>
+    <div id="yandex-leaderboard-body" class="ach-body"></div>
+  </div>
+</div>
 <script>
 (function (w) {
 'use strict';
 w.I18N = {
-ru: {loadError:'Не удалось загрузить игру. Обновите страницу.',loading:'Загрузка…',appTitle:'Угадай животное!',appSub:'Викторина о фауне всех континентов',totalScore:'Всего очков:',play:'🎮 Играть',collection:'📔 Коллекция',achievements:'🏅 Достижения',top:'🏆 Топ',share:'📤 Поделиться',invite:'👥 Пригласить',otherGames:'🎲 Другие игры',shortcut:'📌 Ярлык',login:'🔑 Войти',knownTitle:'💡 Знаете ли вы?',back:'←',close:'×',playBtn:'Начать игру',backHome:'🏠 В начало',questions:'вопросов',questions_l:'вопросов',tenSeconds:'10 секунд на каждый вопрос',timeOnAnswer:'на ответ',next:'Дальше',results:'Результаты',levelLocked:'Уровень закрыт',levelLockedSub:'Посмотрите рекламу, чтобы открыть его навсегда',watchAd:'📺 Смотреть',resTitle:'Результат',resQuestions:'вопросов',resCorrect:'верно',resWrong:'ошибок',playAgain:'Играть ещё',colTitle:'📔 Коллекция',colLocked:'Открывайте животных, отвечая верно.',achOpened:'Открыто:',unlockTitle:'Уровень закрыт',unlockText:'Посмотрите рекламу, чтобы открыть этот уровень навсегда.',cancel:'Отмена',loadingAd:'⌛ Загрузка...',levelOpened:'🎉 Уровень открыт!',adUnavailable:'Реклама недоступна, попробуйте позже',authTitle:'Войти в аккаунт',adSkipped:'Реклама не досмотрена — попробуйте ещё раз!',authText:'Войдите, чтобы прогресс синхронизировался между устройствами и вы попали в таблицу лидеров.',authYandex:'Войти через Яндекс',authSkip:'Продолжить без входа',authOk:'🎉 Вы вошли в аккаунт Яндекса!',authFail:'Вы не вошли в аккаунт',authUnavail:'Авторизация пока недоступна',authUnavail2:'Авторизация недоступна',achUnlocked:'Достижение',shareVKOnly:'Доступно только в приложении VK/OK',shareYandex:'Скоро появится',shareOK:'Поделиться недоступно в ОК',inviteOK:'Приглашение друзей недоступно в ОК',inviteVKOnly:'Доступно только в VK',topVKOnly:'Топ доступен только в приложении VK',shortcutOk:'🎉 Ярлык добавлен на рабочий стол!',shortcutFail:'Не удалось добавить ярлык',shortcutYa:'Ярлык доступен только в Яндекс Играх',otherGamesEmpty:'Список игр появится позже.',modalOtherTitle:'🎲 Другие игры'},
-en: {loadError:'Failed to load the game. Please refresh the page.',loading:'Loading…',appTitle:'Guess the Animal!',appSub:'A quiz about wildlife from every continent',totalScore:'Total score:',play:'🎮 Play',collection:'📔 Collection',achievements:'🏅 Achievements',top:'🏆 Top',share:'📤 Share',invite:'👥 Invite',otherGames:'🎲 More games',shortcut:'📌 Shortcut',login:'🔑 Sign in',knownTitle:'💡 Did you know?',back:'←',close:'×',playBtn:'Start game',backHome:'🏠 Home',questions:'questions',questions_l:'questions',tenSeconds:'10 seconds per question',timeOnAnswer:'to answer',next:'Next',results:'Results',levelLocked:'Level locked',levelLockedSub:'Watch an ad to unlock it forever',watchAd:'📺 Watch',resTitle:'Result',resQuestions:'questions',resCorrect:'correct',resWrong:'wrong',playAgain:'Play again',colTitle:'📔 Collection',colLocked:'Unlock animals by answering correctly.',achOpened:'Unlocked:',unlockTitle:'Level locked',unlockText:'Watch an ad to unlock this level forever.',cancel:'Cancel',loadingAd:'⌛ Loading...',levelOpened:'🎉 Level unlocked!',adUnavailable:'Ad unavailable; please try again later.',adSkipped:'Ad has not been viewed — try again!',authTitle:'Sign in',authText:'Sign in to sync progress across devices and join the leaderboard.',authYandex:'Sign in with Yandex',authSkip:'Continue without sign-in',authOk:'🎉 Signed in to Yandex!',authFail:'You are not signed in',authUnavail:'Sign-in is not available yet',authUnavail2:'Sign-in is not available',achUnlocked:'Achievement',shareVKOnly:'Only available in VK/OK app',shareYandex:'Coming soon',shareOK:'Sharing is unavailable in OK',inviteOK:'Inviting friends is unavailable in OK',inviteVKOnly:'Available only in VK',topVKOnly:'Leaderboard is available only in VK app',shortcutOk:'🎉 Shortcut added to home screen!',shortcutFail:'Failed to add shortcut',shortcutYa:'Shortcut is available only in Yandex Games',otherGamesEmpty:'Games list will appear later.',modalOtherTitle:'🎲 More games'},
-tr: {loadError:'Oyun yüklenemedi. Lütfen sayfayı yenileyin.',loading:'Yükleniyor…',appTitle:'Hayvanı Tahmin Et!',appSub:'Tüm kıtaların faunası hakkında bir test',adSkipped:'Reklam izlenmedi — tekrar deneyin!',totalScore:'Toplam puan:',play:'🎮 Oyna',collection:'📔 Koleksiyon',achievements:'🏅 Başarımlar',top:'🏆 Liderlik',share:'📤 Paylaş',invite:'👥 Davet et',otherGames:'🎲 Diğer oyunlar',shortcut:'📌 Kısayol',login:'🔑 Giriş yap',knownTitle:'💡 Biliyor muydunuz?',back:'←',close:'×',playBtn:'Oyuna başla',backHome:'🏠 Ana sayfa',questions:'soru',questions_l:'soru',tenSeconds:'Her soru için 10 saniye',timeOnAnswer:'cevap için',next:'İleri',results:'Sonuçlar',levelLocked:'Bölüm kilitli',levelLockedSub:'Sonsuza dek açmak için reklam izleyin',watchAd:'📺 Izle',resTitle:'Sonuç',resQuestions:'soru',resCorrect:'doğru',resWrong:'yanlış',playAgain:'Tekrar oyna',colTitle:'📔 Koleksiyon',colLocked:'Doğru cevaplayarak hayvanların kilidini açın.',achOpened:'Açıldı:',unlockTitle:'Bölüm kilitli',unlockText:'Bu bölümü sonsuza dek açmak için reklam izleyin.',cancel:'İptal',loadingAd:'⌛ Yükleniyor...',levelOpened:'🎉 Bölüm açıldı!',adUnavailable:'Reklam mevcut değil — tekrar deneyin!',authTitle:'Giriş yap',authText:'İlerlemeyi cihazlar arasında senkronize etmek için giriş yapın.',authYandex:'Yandex ile giriş yap',authSkip:'Giriş yapmadan devam et',authOk:'🎉 Yandex hesabına giriş yapıldı!',authFail:'Giriş yapmadınız',authUnavail:'Giriş henüz kullanılamıyor',authUnavail2:'Giriş kullanılamıyor',achUnlocked:'Başarım',shareVKOnly:'Yalnızca VK/OK uygulamasında kullanılabilir',shareYandex:'Yakında',shareOK:'OK\'da paylaşım kullanılamıyor',inviteOK:'OK\'da arkadaş daveti kullanılamıyor',inviteVKOnly:'Yalnızca VK\'da kullanılabilir',topVKOnly:'Liderlik tablosu yalnızca VK uygulamasında kullanılabilir',shortcutOk:'🎉 Kısayol ana ekrana eklendi!',shortcutFail:'Kısayol eklenemedi',shortcutYa:'Kısayol yalnızca Yandex Games\'te kullanılabilir',otherGamesEmpty:'Oyun listesi daha sonra görünecek.',modalOtherTitle:'🎲 Diğer oyunlar'}
+ru: {loadError:'Не удалось загрузить игру. Обновите страницу.',loading:'Загрузка…',appTitle:'Угадай животное!',appSub:'Викторина о фауне всех континентов',totalScore:'Всего очков:',play:'🎮 Играть',collection:'📔 Коллекция',achievements:'🏅 Достижения',top:'🏆 Топ',share:'📤 Поделиться',invite:'👥 Пригласить',otherGames:'🎲 Другие игры',shortcut:'📌 Ярлык',login:'🔑 Войти',knownTitle:'💡 Знаете ли вы?',back:'←',close:'×',playBtn:'Начать игру',backHome:'🏠 В начало',questions:'вопросов',questions_l:'вопросов',tenSeconds:'10 секунд на каждый вопрос',timeOnAnswer:'на ответ',next:'Дальше',results:'Результаты',levelLocked:'Уровень закрыт',levelLockedSub:'Посмотрите рекламу, чтобы открыть его навсегда',watchAd:'📺 Смотреть',resTitle:'Результат',resQuestions:'вопросов',resCorrect:'верно',resWrong:'ошибок',playAgain:'Играть ещё',colTitle:'📔 Коллекция',colLocked:'Открывайте животных, отвечая верно.',achOpened:'Открыто:',unlockTitle:'Уровень закрыт',unlockText:'Посмотрите рекламу, чтобы открыть этот уровень навсегда.',cancel:'Отмена',loadingAd:'⌛ Загрузка...',levelOpened:'🎉 Уровень открыт!',adUnavailable:'Реклама недоступна, попробуйте позже',authTitle:'Войти в аккаунт',adSkipped:'Реклама не досмотрена — попробуйте ещё раз!',authText:'Войдите, чтобы прогресс синхронизировался между устройствами и вы попали в таблицу лидеров.',authYandex:'Войти через Яндекс',authSkip:'Продолжить без входа',authOk:'🎉 Вы вошли в аккаунт Яндекса!',authFail:'Вы не вошли в аккаунт',authUnavail:'Авторизация пока недоступна',authUnavail2:'Авторизация недоступна',achUnlocked:'Достижение',shareVKOnly:'Доступно только в приложении VK/OK',shareYandex:'Скоро появится',shareOK:'Поделиться недоступно в ОК',inviteOK:'Приглашение друзей недоступно в ОК',inviteVKOnly:'Доступно только в VK',topVKOnly:'Топ доступен только в приложении VK',shortcutOk:'🎉 Ярлык добавлен на рабочий стол!',shortcutFail:'Не удалось добавить ярлык',shortcutYa:'Ярлык доступен только в Яндекс Играх',otherGamesEmpty:'Список игр появится позже.',modalOtherTitle:'🎲 Другие игры',leaderboardTitle:'🏆 Таблица лидеров',leaderboardLoading:'Загрузка…',leaderboardError:'Не удалось загрузить таблицу',leaderboardEmpty:'Пока нет результатов'},
+en: {loadError:'Failed to load the game. Please refresh the page.',loading:'Loading…',appTitle:'Guess the Animal!',appSub:'A quiz about wildlife from every continent',totalScore:'Total score:',play:'🎮 Play',collection:'📔 Collection',achievements:'🏅 Achievements',top:'🏆 Top',share:'📤 Share',invite:'👥 Invite',otherGames:'🎲 More games',shortcut:'📌 Shortcut',login:'🔑 Sign in',knownTitle:'💡 Did you know?',back:'←',close:'×',playBtn:'Start game',backHome:'🏠 Home',questions:'questions',questions_l:'questions',tenSeconds:'10 seconds per question',timeOnAnswer:'to answer',next:'Next',results:'Results',levelLocked:'Level locked',levelLockedSub:'Watch an ad to unlock it forever',watchAd:'📺 Watch',resTitle:'Result',resQuestions:'questions',resCorrect:'correct',resWrong:'wrong',playAgain:'Play again',colTitle:'📔 Collection',colLocked:'Unlock animals by answering correctly.',achOpened:'Unlocked:',unlockTitle:'Level locked',unlockText:'Watch an ad to unlock this level forever.',cancel:'Cancel',loadingAd:'⌛ Loading...',levelOpened:'🎉 Level unlocked!',adUnavailable:'Ad unavailable; please try again later.',adSkipped:'Ad has not been viewed — try again!',authTitle:'Sign in',authText:'Sign in to sync progress across devices and join the leaderboard.',authYandex:'Sign in with Yandex',authSkip:'Continue without sign-in',authOk:'🎉 Signed in to Yandex!',authFail:'You are not signed in',authUnavail:'Sign-in is not available yet',authUnavail2:'Sign-in is not available',achUnlocked:'Achievement',shareVKOnly:'Only available in VK/OK app',shareYandex:'Coming soon',shareOK:'Sharing is unavailable in OK',inviteOK:'Inviting friends is unavailable in OK',inviteVKOnly:'Available only in VK',topVKOnly:'Leaderboard is available only in VK app',shortcutOk:'🎉 Shortcut added to home screen!',shortcutFail:'Failed to add shortcut',shortcutYa:'Shortcut is available only in Yandex Games',otherGamesEmpty:'Games list will appear later.',modalOtherTitle:'🎲 More games',leaderboardTitle:'🏆 Leaderboard',leaderboardLoading:'Loading…',leaderboardError:'Failed to load leaderboard',leaderboardEmpty:'No results yet'},
+tr: {loadError:'Oyun yüklenemedi. Lütfen sayfayı yenileyin.',loading:'Yükleniyor…',appTitle:'Hayvanı Tahmin Et!',appSub:'Tüm kıtaların faunası hakkında bir test',adSkipped:'Reklam izlenmedi — tekrar deneyin!',totalScore:'Toplam puan:',play:'🎮 Oyna',collection:'📔 Koleksiyon',achievements:'🏅 Başarımlar',top:'🏆 Liderlik',share:'📤 Paylaş',invite:'👥 Davet et',otherGames:'🎲 Diğer oyunlar',shortcut:'📌 Kısayol',login:'🔑 Giriş yap',knownTitle:'💡 Biliyor muydunuz?',back:'←',close:'×',playBtn:'Oyuna başla',backHome:'🏠 Ana sayfa',questions:'soru',questions_l:'soru',tenSeconds:'Her soru için 10 saniye',timeOnAnswer:'cevap için',next:'İleri',results:'Sonuçlar',levelLocked:'Bölüm kilitli',levelLockedSub:'Sonsuza dek açmak için reklam izleyin',watchAd:'📺 Izle',resTitle:'Sonuç',resQuestions:'soru',resCorrect:'doğru',resWrong:'yanlış',playAgain:'Tekrar oyna',colTitle:'📔 Koleksiyon',colLocked:'Doğru cevaplayarak hayvanların kilidini açın.',achOpened:'Açıldı:',unlockTitle:'Bölüm kilitli',unlockText:'Bu bölümü sonsuza dek açmak için reklam izleyin.',cancel:'İptal',loadingAd:'⌛ Yükleniyor...',levelOpened:'🎉 Bölüm açıldı!',adUnavailable:'Reklam mevcut değil — tekrar deneyin!',authTitle:'Giriş yap',authText:'İlerlemeyi cihazlar arasında senkronize etmek için giriş yapın.',authYandex:'Yandex ile giriş yap',authSkip:'Giriş yapmadan devam et',authOk:'🎉 Yandex hesabına giriş yapıldı!',authFail:'Giriş yapmadınız',authUnavail:'Giriş henüz kullanılamıyor',authUnavail2:'Giriş kullanılamıyor',achUnlocked:'Başarım',shareVKOnly:'Yalnızca VK/OK uygulamasında kullanılabilir',shareYandex:'Yakında',shareOK:'OK\'da paylaşım kullanılamıyor',inviteOK:'OK\'da arkadaş daveti kullanılamıyor',inviteVKOnly:'Yalnızca VK\'da kullanılabilir',topVKOnly:'Liderlik tablosu yalnızca VK uygulamasında kullanılabilir',shortcutOk:'🎉 Kısayol ana ekrana eklendi!',shortcutFail:'Kısayol eklenemedi',shortcutYa:'Kısayol yalnızca Yandex Games\'te kullanılabilir',otherGamesEmpty:'Oyun listesi daha sonra görünecek.',modalOtherTitle:'🎲 Diğer oyunlar',leaderboardTitle:'🏆 Liderlik Tablosu',leaderboardLoading:'Yükleniyor…',leaderboardError:'Liderlik tablosu yüklenemedi',leaderboardEmpty:'Henüz sonuç yok'}
 };
 const T=(ru,en,tr)=>({ru,en:en||ru,tr:tr||ru});
 w.__T=T;
@@ -1842,7 +1851,7 @@ async function initYandex() {
       if (soundEnabled) Sound.startBg();
     });
   } catch (e) {}
-  try { if (ysdk.features && ysdk.features.LoadingAPI) ysdk.features.LoadingAPI.ready(); } catch (e) {}
+  // НЕ вызываем здесь LoadingAPI.ready() — это будет сделано в hideLoadingAndShowMenu
 }
 async function updateAuthButton() {
   const btns = d.querySelectorAll('#yandex-auth-btn');
@@ -1892,6 +1901,34 @@ async function updateShortcutButton() {
   const can = await canShowShortcut();
   btns.forEach(b => b.style.display = can ? '' : 'none');
 }
+async function openYandexLeaderboard() {
+  if (!isYandex || !ysdk) { toast(w.t('topVKOnly')); return; }
+  const modal = d.getElementById('yandex-leaderboard-modal');
+  const body = d.getElementById('yandex-leaderboard-body');
+  if (!modal || !body) return;
+  body.innerHTML = '<p class="modal-text">' + w.t('leaderboardLoading') + '</p>';
+  modal.classList.add('show');
+  try {
+    const entries = await ysdk.leaderboards.getEntries('bestscore', { quantityTop: 10, includeUser: true, quantityAround: 3 });
+    if (!entries || !entries.entries || entries.entries.length === 0) {
+      body.innerHTML = '<p class="modal-text">' + w.t('leaderboardEmpty') + '</p>';
+      return;
+    }
+    let html = '<div class="ach-group"><div class="ach-grid">';
+    entries.entries.forEach(e => {
+      const name = e.player.publicName || 'Игрок';
+      const rank = e.rank;
+      const score = e.score;
+      html += '<div class="ach-item unlocked"><div class="ach-icon">' + (rank <= 3 ? '🏅' : '👤') + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(name) + '</div><div class="ach-desc">' + rank + ' место — ' + score + ' очков</div></div></div>';
+    });
+    html += '</div></div>';
+    body.innerHTML = html;
+  } catch (e) {
+    console.warn('Yandex leaderboard error:', e);
+    body.innerHTML = '<p class="modal-text" style="color:var(--danger);">' + w.t('leaderboardError') + '</p>';
+  }
+}
+w.openYandexLeaderboard = openYandexLeaderboard;
 async function getAllGames() {
   if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.GamesAPI) return [];
   const data = await safeCall(() => ysdk.features.GamesAPI.getAllGames(), null, 'getAllGames');
@@ -1962,7 +1999,12 @@ function hideLoadingAndShowMenu() {
   const root = d.getElementById('app-root');
   if (root) root.classList.add('visible');
   __readySent = true;
-  yandexGameplayStart();
+  // Отправляем Game Ready после того, как меню видно
+  if (isYandex && ysdk && ysdk.features && ysdk.features.LoadingAPI) {
+    try { ysdk.features.LoadingAPI.ready(); } catch (e) {}
+  }
+  // Геймплей в меню должен быть остановлен
+  yandexGameplayStop();
 }
 async function renderIndex() {
   const colArr = (w.__SYNCED__ && w.__SYNCED__.collection) || [];
@@ -2160,6 +2202,8 @@ async function renderQuiz(levelId) {
     state.streak = 0; state.maxStreak = 0; state.fastestCorrect = 99; state.timeouts = 0;
     state.roundCollection = new Set();
     show(quizScreen);
+    // Запускаем геймплей только здесь
+    if (isYandex) yandexGameplayStart();
     renderQuestion();
   }
   function renderQuestion() {
@@ -2328,6 +2372,8 @@ async function renderQuiz(levelId) {
     stopTimer();
     try { w.Sound.playFanfare(); } catch (e) {}
     show(resultScreen);
+    // Останавливаем геймплей при завершении
+    if (isYandex) yandexGameplayStop();
     const total = quiz.questions.length;
     const pct = Math.round((state.score / total) * 100);
     const earnedStars = calcStars(pct);
@@ -2371,7 +2417,11 @@ async function renderQuiz(levelId) {
   }
   $('#start-btn').onclick = () => withLock(startQuiz);
   $('#next-btn').onclick = () => withLock(nextQuestion);
-  $('#quit-btn').onclick = () => { stopTimer(); show(homeScreen); };
+  $('#quit-btn').onclick = () => {
+    stopTimer();
+    if (isYandex) yandexGameplayStop();
+    show(homeScreen);
+  };
   $('#restart-btn').onclick = () => withLock(startQuiz);
   $('#home-btn').onclick = () => show(homeScreen);
   function cleanup() {
@@ -2521,8 +2571,13 @@ function bindGlobalUI() {
     authModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => b.addEventListener('click', closeAuthModal));
     authModal.addEventListener('click', e => { if (e.target === authModal) closeAuthModal(); });
   }
+  const yandexLbModal = d.getElementById('yandex-leaderboard-modal');
+  if (yandexLbModal) {
+    yandexLbModal.querySelectorAll('.modal-close').forEach(b => b.addEventListener('click', () => yandexLbModal.classList.remove('show')));
+    yandexLbModal.addEventListener('click', e => { if (e.target === yandexLbModal) yandexLbModal.classList.remove('show'); });
+  }
   d.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeAchModal(); closeColModal(); closeAuthModal(); }
+    if (e.key === 'Escape') { closeAchModal(); closeColModal(); closeAuthModal(); if (yandexLbModal) yandexLbModal.classList.remove('show'); }
   });
   d.addEventListener('visibilitychange', function () {
     if (d.visibilityState === 'hidden') {
@@ -2532,7 +2587,7 @@ function bindGlobalUI() {
     } else if (d.visibilityState === 'visible') {
       console.log('Page visible — resuming audio');
       if (soundEnabled && bgStarted) Sound.startBg();
-      yandexGameplayStart();
+      // НЕ запускаем геймплей автоматически при возврате — только если мы в викторине
     }
   });
 }
@@ -2561,6 +2616,8 @@ async function navigate() {
     if (el) el.classList.toggle('active', p === route.name);
   });
   currentPage = route.name;
+  // Если уходим с викторины, останавливаем геймплей
+  if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
   try {
     if (route.name === 'index') await renderIndex();
     else if (route.name === 'quiz') currentPageCleanup = await renderQuiz(route.levelId);
@@ -2590,34 +2647,32 @@ async function boot() {
       const saved = await storageGet('sound_on');
       soundEnabled = saved === true;
     } catch (e) { soundEnabled = false; }
-applySoundState();
-attachAudioUnlock();
-attachSfxToUI();
-if (isVK || isOK) {
-  // Ждём загрузку VK Bridge
-  try {
-    if (window.__vkBridgeReady) await window.__vkBridgeReady;
-  } catch (e) {}
-
-  if (window.vkBridge) {
-    await initVK();
-    try {
-      window.vkBridge.subscribe(function (event) {
-        const type = event && event.detail && event.detail.type;
-        if (type === 'VKWebAppViewHide') {
-          console.log('VK ViewHide');
-          if (!adPlaying && soundEnabled) Sound.stopBg();
-        }
-        if (type === 'VKWebAppViewRestore') {
-          console.log('VK ViewRestore');
-          if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
-        }
-      });
-    } catch (e) { console.warn('VK subscribe failed', e); }
-  } else {
-    console.warn('VK Bridge unavailable — running in fallback mode');
-  }
-} else {
+    applySoundState();
+    attachAudioUnlock();
+    attachSfxToUI();
+    if (isVK || isOK) {
+      try {
+        if (window.__vkBridgeReady) await window.__vkBridgeReady;
+      } catch (e) {}
+      if (window.vkBridge) {
+        await initVK();
+        try {
+          window.vkBridge.subscribe(function (event) {
+            const type = event && event.detail && event.detail.type;
+            if (type === 'VKWebAppViewHide') {
+              console.log('VK ViewHide');
+              if (!adPlaying && soundEnabled) Sound.stopBg();
+            }
+            if (type === 'VKWebAppViewRestore') {
+              console.log('VK ViewRestore');
+              if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
+            }
+          });
+        } catch (e) { console.warn('VK subscribe failed', e); }
+      } else {
+        console.warn('VK Bridge unavailable — running in fallback mode');
+      }
+    } else {
       const hasYa = isYandex || typeof YaGames !== 'undefined' || w.__YANDEX_SDK_LOADED__ === true;
       if (hasYa) {
         if (!isYandex) {
