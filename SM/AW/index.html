@@ -1251,29 +1251,90 @@ async function top0() {
   if (isOK) return;
   if (!isVK) return;
   if (!P.inIframe) { toast(w.t('topVKOnly')); return; }
-  const totalScore = Number(w.score) || 0;
+
+  // === ПОДРОБНОЕ ЛОГИРОВАНИЕ UID ===
+  console.log('═══════════════════════════════════════');
+  console.log('🏆 top0() ДИАГНОСТИКА:');
+  console.log('  P.userId            =', P.userId, '(typeof:', typeof P.userId, ')');
+  console.log('  w.id                =', w.id);
+  console.log('  sessionStorage.id   =', sessionStorage.getItem('id'));
+  console.log('  launchParams        =', JSON.stringify(launchParams));
+  console.log('  location.search     =', location.search);
+  console.log('  P.inIframe          =', P.inIframe);
+  console.log('  P.platform          =', P.platform);
+
+  const totalScore = Number(w.score) || Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
   const uid = P.userId || Number(sessionStorage.getItem('id'));
-  if (uid && totalScore > 0) {
+
+  console.log('  ИТОГОВЫЙ uid        =', uid, '(typeof:', typeof uid, ')');
+  console.log('  totalScore          =', totalScore);
+  console.log('═══════════════════════════════════════');
+
+  // === ПРОВЕРКА uid ===
+  if (!uid || isNaN(uid) || uid === 0) {
+    console.error('❌ uid невалиден! Ни один из способов не дал числовой ID. Отправка невозможна.');
+    toast('Не удалось определить ваш ID. Попробуйте перезагрузить игру.', true);
+    // Всё равно попробуем открыть таблицу
     try {
-      await vkSend('VKWebAppCallAPIMethod', {
-        method: 'secure.addAppEvent',
-        params: {
-          client_secret: '8lihTQSiEYN5qlLIW3cU',
-          user_id: uid,
-          activity_id: 2,
-          value: totalScore,
-          v: '5.131',
-          access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'
-        }
-      }, 8000);
-    } catch (e) {
-      console.warn('Ошибка secure.addAppEvent:', e);
-    }
+      await vkSend('VKWebAppShowLeaderBoardBox', { user_result: totalScore, global: 1 }, 5000);
+    } catch (e) {}
+    return;
   }
 
-  // 2. Теперь открываем таблицу
-  const s = Number(w.score) || 0;
-  vkSend('VKWebAppShowLeaderBoardBox', { user_result: s, global: 1 });
+  // === ОТПРАВКА ОЧКОВ ===
+  if (totalScore > 0) {
+    const lastSent = Number(localStorage.getItem('aq_lastSentScore') || '0');
+    const isImprovement = totalScore > lastSent;
+
+    console.log('🏆 lastSent =', lastSent, '| isImprovement =', isImprovement);
+
+    if (isImprovement) {
+      try {
+        const result = await vkSend('VKWebAppCallAPIMethod', {
+          method: 'secure.addAppEvent',
+          params: {
+            client_secret: '8lihTQSiEYN5qlLIW3cU',
+            user_id: uid,
+            activity_id: 2,
+            value: totalScore,
+            v: '5.131',
+            access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'
+          }
+        }, 8000);
+
+        console.log('🏆 secure.addAppEvent ПОЛНЫЙ ответ:', JSON.stringify(result));
+
+        if (result && result.error) {
+          console.error('❌ Ошибка VK API:', result.error.error_code, '-', result.error.error_msg);
+          toast('Ошибка отправки: ' + (result.error.error_msg || 'unknown'), true);
+        } else if (result && result.response !== undefined) {
+          console.log('✅ Очки отправлены:', totalScore);
+          try { localStorage.setItem('aq_lastSentScore', String(totalScore)); } catch (e) {}
+        } else {
+          console.warn('⚠️ Неожиданный ответ:', result);
+        }
+      } catch (e) {
+        console.error('❌ Исключение:', e);
+      }
+    } else {
+      console.log('⏩ Рекорд не улучшен');
+    }
+  } else {
+    console.warn('⚠️ totalScore = 0, отправка пропущена');
+  }
+
+  // === ОТКРЫТИЕ ТАБЛИЦЫ ===
+  try {
+    console.log('🏆 Открываем таблицу, user_result =', totalScore, ', global = 1');
+    const lbResult = await vkSend('VKWebAppShowLeaderBoardBox', {
+      user_result: totalScore,
+      global: 1
+    }, 5000);
+    console.log('🏆 Таблица открыта, ответ:', JSON.stringify(lbResult));
+  } catch (e) {
+    console.error('❌ Ошибка открытия таблицы:', e);
+    toast('Не удалось открыть таблицу', true);
+  }
 }
 function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
 w.submitScore = submitScore;
@@ -1776,26 +1837,44 @@ function showUnlockModal(levelId, onUnlocked) {
 }
 w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, unlockViaAd, showUnlockModal, _invalidate: () => { gatingCache = null; } };
 async function initVK() {
+  console.log('🔑 initVK(): старт');
+  console.log('🔑 P.userId (из URL):', P.userId, '| launchParams.vk_user_id:', launchParams.vk_user_id, '| viewer_id:', launchParams.viewer_id);
+
   await vkSend('VKWebAppInit', {}, 3000);
+
   let uid = P.userId;
+  console.log('🔑 initVK(): uid после P.userId =', uid);
+
   if (!uid) {
     const info = await vkSend('VKWebAppGetUserInfo', {}, 3000);
+    console.log('🔑 VKWebAppGetUserInfo ответ:', info);
     if (info && info.id) {
       uid = info.id;
       w.id = info.id;
-      sessionStorage.setItem('id', info.id);
+      try { sessionStorage.setItem('id', info.id); } catch (e) {}
+      console.log('🔑 initVK(): uid получен из GetUserInfo =', uid);
     }
   }
+
   if (!uid) {
     const sp = new URLSearchParams(location.search);
     const viewerId = sp.get('viewer_id');
+    console.log('🔑 initVK(): viewer_id из URL =', viewerId);
     if (viewerId) {
       uid = parseInt(viewerId);
       w.id = uid;
-      sessionStorage.setItem('id', uid);
+      try { sessionStorage.setItem('id', uid); } catch (e) {}
+      console.log('🔑 initVK(): uid получен из viewer_id =', uid);
     }
   }
-  P.userId = uid; 
+
+  if (!uid) {
+    console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid! Проверьте параметры запуска VK.');
+  }
+
+  P.userId = uid;
+  console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId =', P.userId, '| typeof =', typeof P.userId);
+
   showBanner();
   preloadRewardedAd();
 }
