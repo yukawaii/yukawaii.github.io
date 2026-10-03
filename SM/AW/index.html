@@ -2263,50 +2263,7 @@ async function finishQuiz() {
   w.__currentQuizCleanup = cleanup;
   return cleanup;
 }
-async function renderCollection() {
-  const body = d.getElementById('col-body');
-  if (!body) return;
-  const animalId = img => (img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');
-  const list = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
-  const collected = new Set(Array.isArray(list) ? list.map(String) : []);
-  body.innerHTML = '';
-  let total = 0, opened = 0;
-  (w.REGIONS || []).forEach(region => {
-    const animals = [];
-    region.levels.forEach(lvl => {
-      const qz = (w.QUIZZES || {})[lvl.id];
-      if (!qz) return;
-      qz.questions.forEach(qn => {
-        animals.push({ id: animalId(qn.img), img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description) });
-      });
-    });
-    total += animals.length;
-    opened += animals.filter(a => collected.has(a.id)).length;
-    const sec = d.createElement('section');
-    sec.className = 'col-region';
-    sec.innerHTML = '<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>';
-    const grid = d.createElement('div');
-    grid.className = 'collection-grid';
-    animals.forEach(a => {
-      const isOpen = collected.has(a.id);
-      const item = d.createElement('button');
-      item.type = 'button';
-      item.className = 'collection-item' + (isOpen ? ' unlocked' : ' locked');
-      if (isOpen) {
-        item.innerHTML = '<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy">';
-        item.addEventListener('click', () => openColModal(a));
-      } else {
-        item.innerHTML = '<span class="col-lock">🔒</span>';
-        item.disabled = true;
-      }
-      grid.appendChild(item);
-    });
-    sec.appendChild(grid);
-    body.appendChild(sec);
-  });
-  const counter = d.getElementById('col-counter');
-  if (counter) counter.textContent = opened + ' / ' + total;
-}
+async function renderCollection(){ const body=d.getElementById('col-body'); if (!body) return; const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); const list=asArray(w.__SYNCED__ && w.__SYNCED__.collection); const collected=new Set(Array.isArray(list) ? list.map(String) : []); body.innerHTML=''; const seen=new Set(); let opened=0; (w.REGIONS || []).forEach(region=>{ const animals=[]; region.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ const id=animalId(qn.img); if (!id || seen.has(id)) return; animals.push({ id, img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});}); if (!animals.length) return; animals.forEach(a=>{ if (collected.has(a.id)) opened++;}); const sec=d.createElement('section'); sec.className='col-region'; sec.innerHTML='<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>'; const grid=d.createElement('div'); grid.className='collection-grid'; animals.forEach(a=>{ const isOpen=collected.has(a.id); const item=d.createElement('button'); item.type='button'; item.className='collection-item' + (isOpen ? ' unlocked' : ' locked'); if (isOpen){ item.innerHTML='<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy">'; item.addEventListener('click', ()=>openColModal(a));} else{ item.innerHTML='<span class="col-lock">🔒</span>'; item.disabled=true;} grid.appendChild(item);}); sec.appendChild(grid); body.appendChild(sec);}); const counter=d.getElementById('col-counter'); if (counter) counter.textContent=opened + ' / ' + seen.size;}
 function openColModal(a) {
   const m = d.getElementById('col-modal');
   if (!m) return;
