@@ -10,7 +10,8 @@
  var sp=new URLSearchParams(location.search); var isVK=sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform') || sp.has('vk_user_id') || sp.has('vk_client'); if (isVK){ window.__vkBridgeReady=new Promise(function (resolve){ if (window.vkBridge) return resolve(window.vkBridge); var vk=document.createElement('script'); vk.src='https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js'; vk.async=true; vk.onload=function (){ var b=window.vkBridge && (window.vkBridge.default || window.vkBridge); if (window.vkBridge && !window.vkBridge.send && b) window.vkBridge=b; resolve(window.vkBridge || null);}; vk.onerror=function (){ console.warn('VK Bridge failed to load'); resolve(null);}; document.head.appendChild(vk);});} else{ window.__vkBridgeReady=Promise.resolve(null); if (typeof YaGames==='undefined'){ var s=document.createElement('script'); s.src='/sdk.js'; s.async=true; s.onload=function (){ window.__YANDEX_SDK_LOADED__=true; try{ window.dispatchEvent(new Event('yandex-sdk-ready'));} catch (e){}}; s.onerror=function (){ console.warn('Yandex Games SDK failed to load');}; document.head.appendChild(s);}}
 })();
 </script>
-<style>*,*::before,*::after{box-sizing:border-box}
+<style>
+*,*::before,*::after{box-sizing:border-box}
 :root{
 --bg-1:#fff6ef;--bg-2:#ffe3ef;--bg-3:#e6e1ff;
 --card:rgba(255,255,255,.72);--card-b:rgba(255,255,255,.85);
@@ -31,16 +32,25 @@
 --gap-lg:clamp(12px,2.6vmin,22px);
 --pad:clamp(10px,2.1vmin,20px);
 --r-sm:clamp(6px,1.3vmin,10px);
---r:clamp(10px,2.2vmin,18px)}
+--r:clamp(10px,2.2vmin,18px)
+}
 html,body{margin:0;padding:0;height:100%}
-html{ height:100%; overflow:hidden; overscroll-behavior:none}
-body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:var(--text); background:radial-gradient(120% 80% at 0% 0%,var(--bg-1) 0%,var(--bg-2) 45%,var(--bg-3) 100%) fixed; height:100%; overflow-x:hidden; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; touch-action:pan-y; -webkit-font-smoothing:antialiased; line-height:1.35; -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none; -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+html{ height:100%; overflow:hidden; overscroll-behavior:none;}
+body{ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; color:var(--text);
+  background:radial-gradient(120% 80% at 0% 0%,var(--bg-1) 0%,var(--bg-2) 45%,var(--bg-3) 100%) fixed;
+ height:100%; overflow-x:hidden; overflow-y:auto;            
+ -webkit-overflow-scrolling:touch; overscroll-behavior:contain; 
+ touch-action:pan-y; -webkit-font-smoothing:antialiased; line-height:1.35;
+  -webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;
+  -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent
+}
 .app{
 display:flex;flex-direction:column;gap:var(--gap);
 min-height:100%;max-width:720px;margin:0 auto;padding:var(--gap);
 padding-bottom:calc(var(--gap) + env(safe-area-inset-bottom,0px));
 padding-top:calc(var(--gap) + env(safe-area-inset-top,0px));
-opacity:0;transition:opacity .35s ease}
+opacity:0;transition:opacity .35s ease
+}
 body.app-ready .app{opacity:1}
 .page{display:none;flex-direction:column;gap:var(--gap);flex:1;min-height:0}
 .page.active{display:flex}
@@ -172,7 +182,8 @@ body.app-ready .app{opacity:1}
 #col-modal .modal-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto 1fr;grid-template-areas:"title title" "img desc";gap:var(--gap-lg);max-width:900px;width:100%;align-items:center;text-align:left;padding:var(--gap-lg)}
 #col-modal .modal-title{grid-area:title;text-align:center;font-size:var(--f-xl)}
 #col-modal .modal-img{grid-area:img;width:100%;height:auto;max-height:min(70vh,520px);object-fit:contain;align-self:center;justify-self:center}
-#col-modal .modal-desc{grid-area:desc;max-height:min(70vh,520px);overflow-y:auto;font-size:clamp(15px,3vmin,25px);line-height:1.55;text-align:left}}
+#col-modal .modal-desc{grid-area:desc;max-height:min(70vh,520px);overflow-y:auto;font-size:clamp(15px,3vmin,25px);line-height:1.55;text-align:left}
+}
 @media (max-height:480px){
 :root{--gap:6px;--gap-lg:8px;--pad:4px}
 .hero{padding-top:0}
@@ -180,12 +191,14 @@ body.app-ready .app{opacity:1}
 .app{gap:6px;padding-top:4px;padding-bottom:4px}
 .topbar{gap:6px}
 .quiz-body .question-card{padding:2px}
-.question-img{height:100%;width:100%;max-height:100%;max-width:100%;object-fit:contain;display:block}}
+.question-img{height:100%;width:100%;max-height:100%;max-width:100%;object-fit:contain;display:block}
+}
 @media (max-width:340px){
 .options{grid-template-columns:1fr}
 .result-grid{grid-template-columns:1fr 1fr}
 .games-grid{grid-template-columns:repeat(2,1fr)}
-.collection-grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))}}
+.collection-grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))}
+}
 .stars,.home-stars,.result-stars{font-size:var(--f-md);letter-spacing:2px;color:rgba(36,29,58,.18);line-height:1;user-select:none}
 .stars.has-stars,.home-stars.has-stars,.result-stars.has-stars{color:gold;text-shadow:0 1px 2px rgba(255,200,0,.5)}
 .home-stars{font-size:var(--f-xl);letter-spacing:4px}
@@ -295,18 +308,204 @@ html.is-dark .option.photo-option{background:rgba(255,255,255,.08)}
 .options.photo-options{max-width:520px;margin:0 auto}
 .option.photo-option{max-height:42vh}}
 html.is-vk .app,
-html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0px) + 60px)}
+html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0px) + 60px)} .collapsible .collapsible-header{ width:100%;background:none;border:none;font:inherit;color:inherit; cursor:pointer;padding:0;text-align:left; display:flex;align-items:center;justify-content:space-between;gap:8px; -webkit-tap-highlight-color:transparent; transition:opacity .15s ease;}
+.collapsible .collapsible-header:hover{opacity:.85}
+.collapsible .collapsible-header .toggle-arrow{ font-size:.85em;color:var(--muted);flex-shrink:0; transition:transform .25s ease;line-height:1;}
+.collapsible.open .collapsible-header .toggle-arrow{ transform:rotate(180deg);}
+.collapsible .collapsible-body{ display:none;}
+.collapsible.open .collapsible-body{ display:block; margin-top:var(--gap-sm); animation:collapse-in .28s ease;}
+@keyframes collapse-in{ from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
-<div id="loading-screen" class="loading-screen"><div class="loading-inner"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div></div><div class="app" id="app-root"><div class="page" id="page-index"><header class="hero"><h1 class="hero-title" data-i18n="appTitle">Угадай животное!</h1><p class="hero-sub" data-i18n="appSub">Викторина о фауне всех континентов</p></header><div class="hero-actions"><span class="btn btn-ghost btn-lg score-chip" data-i18n-title="totalScore" title="Total score">⭐ <span data-total-score>0</span></span><button class="btn btn-primary btn-lg" id="yandex-auth-btn" style="display:none" onclick="openAuthModal()" data-i18n="login">🔑 Войти</button><a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a><a class="btn btn-ghost btn-icon" href="#/collection" data-i18n-title="titleCollection"><span class="btn-icon-emoji">📔</span><span class="btn-icon-count" data-col-count>0/0</span></a><button class="btn btn-ghost btn-icon" onclick="Ach.openModal()" data-i18n-title="titleAchievements"><span class="btn-icon-emoji">🏅</span><span class="btn-icon-count" id="ach-badge">0</span></button><button class="btn btn-ghost btn-icon" onclick="top0()" data-vk-only data-i18n-title="titleTop">🏆</button><button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button><button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button><button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button><a class="btn btn-ghost btn-icon" href="#/igames" data-i18n-title="titleMoreGames">🎲</a><button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button><button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div><section class="card fact-card" id="fact-block" hidden><h2 class="fact-heading" data-i18n="knownTitle">💡 Знаете ли вы?</h2><div class="fact-body"><img class="fact-img" id="fact-img" alt=""><div class="fact-text"><div class="fact-name" id="fact-name"></div><p class="fact-desc" id="fact-desc"></p></div></div></section><main id="regions"></main></div><div class="page" id="page-quiz"><section class="screen" id="lock-screen"><div class="card home-card"><div class="lock-big">🔒</div><h1 class="home-title" data-i18n="levelLocked">Уровень закрыт</h1><p class="home-sub" data-i18n="levelLockedSub">Посмотрите рекламу, чтобы открыть его навсегда</p><button class="btn btn-primary btn-lg" id="lock-watch-btn" data-i18n="watchAd">📺 Смотреть</button><div class="home-actions"><a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section><section class="screen" id="home-screen"><div class="card home-card"><div class="badge" id="home-region"></div><h1 class="home-title" id="home-title"></h1><div class="home-stars" id="home-stars"></div><p class="home-sub" data-i18n="tenSeconds">10 секунд на каждый вопрос</p><div class="home-meta"><div class="meta-item"><span class="num" id="home-count">0</span><span data-i18n="questions">вопросов</span></div><div class="meta-item"><span class="num" data-i18n="tenSecondsShort">10с</span><span data-i18n="timeOnAnswer">на ответ</span></div></div><button class="btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button><div class="home-actions"><button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button><button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button><button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button><a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section><section class="screen" id="quiz-screen"><div class="topbar"><button class="icon-btn" id="quit-btn" aria-label="quit">✕</button><div class="progress"><div class="progress-fill" id="progress-fill"></div></div><div class="score-pill"><span id="score-val">0</span></div><button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div><div class="question-meta"><span class="counter" id="counter">1 / 1</span><div class="timer" id="timer"><span id="timer-val">10</span><div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div></div></div><div class="quiz-body"><div class="card question-card"><img class="question-img" id="question-img" alt=""><div class="question-text" id="question-text" hidden></div></div><div class="quiz-right"><div class="options" id="options"></div><div class="description" id="description" hidden></div><button class="btn btn-primary next-btn" id="next-btn" hidden></button></div></div></section><section class="screen" id="result-screen"><div class="card result-card"><h1 class="result-title" data-i18n="resTitle">Результат</h1><div class="result-stars" id="res-stars"></div><div class="result-percent" id="res-percent">0%</div><div class="result-grid"><div class="result-cell"><span class="v" id="res-total">0</span><span class="l" data-i18n="resQuestions">вопросов</span></div><div class="result-cell ok"><span class="v" id="res-correct">0</span><span class="l" data-i18n="resCorrect">верно</span></div><div class="result-cell bad"><span class="v" id="res-wrong">0</span><span class="l" data-i18n="resWrong">ошибок</span></div></div><div class="result-actions"><button class="btn btn-primary" id="restart-btn" data-i18n="playAgain">Играть ещё</button><a class="btn btn-ghost" href="#/collection" data-i18n="collection">📔 Коллекция</a><button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button><button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button><button class="btn btn-ghost" id="home-btn" data-i18n="backHome">🏠 В начало</button><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section></div><div class="page" id="page-collection"><header class="col-header"><a class="icon-btn" href="#/" aria-label="back" data-i18n="back">←</a><h1 class="col-title" data-i18n="colTitle">📔 Коллекция</h1><div class="col-counter" id="col-counter">0 / 0</div><button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></header><main id="col-body"></main></div><div class="page" id="page-igames"><div class="modal modal-inline show"><div class="modal-content"><a class="modal-close" href="#/" aria-label="close">×</a><h2 class="modal-title" data-i18n="modalOtherTitle">🎲 Другие игры</h2><button class="modal-close" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound" style="right:50px;font-size:18px;">🔊</button><div class="games-grid" id="games-grid"></div></div></div></div></div><div class="modal" id="auth-modal"><div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji">🔑</div><h2 class="modal-title" data-i18n="authTitle">Войти в аккаунт</h2><p class="modal-text" data-i18n="authText">Войдите, чтобы прогресс синхронизировался.</p><div class="modal-actions"><button class="btn btn-primary" onclick="doYandexAuth()" data-i18n="authYandex">Войти через Яндекс</button><button class="btn btn-ghost" onclick="closeAuthModal()" data-i18n="authSkip">Продолжить без входа</button></div></div></div><div class="modal" id="ach-modal"><div class="modal-content"><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" data-i18n="achievements">🏅 Достижения</h2><div class="ach-total"><span data-i18n="achOpened">Открыто:</span><span id="ach-counter">0 / 0</span></div><div id="ach-body" class="ach-body"></div></div></div><div class="modal" id="col-modal"><div class="modal-content"><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" id="modal-title"></h2><img class="modal-img" id="modal-img" alt=""><p class="modal-desc" id="modal-desc"></p></div></div><div class="modal" id="yandex-leaderboard-modal"><div class="modal-content"><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2><div id="yandex-leaderboard-body" class="ach-body"></div></div></div>
+<div id="loading-screen" class="loading-screen">
+  <div class="loading-inner">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading…</div>
+  </div>
+</div>
+<div class="app" id="app-root">
+  <div class="page" id="page-index">
+    <header class="hero">
+      <h1 class="hero-title" data-i18n="appTitle">Угадай животное!</h1>
+      <p class="hero-sub" data-i18n="appSub">Викторина о фауне всех континентов</p>
+    </header>
+    <div class="hero-actions">
+      <span class="btn btn-ghost btn-lg score-chip" data-i18n-title="totalScore" title="Total score">
+        ⭐ <span data-total-score>0</span>
+      </span>
+      <button class="btn btn-primary btn-lg" id="yandex-auth-btn" style="display:none" onclick="openAuthModal()" data-i18n="login">🔑 Войти</button>
+      <a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a>
+      <a class="btn btn-ghost btn-icon" href="#/collection" data-i18n-title="titleCollection">
+        <span class="btn-icon-emoji">📔</span>
+        <span class="btn-icon-count" data-col-count>0/0</span>
+      </a>
+      <button class="btn btn-ghost btn-icon" onclick="Ach.openModal()" data-i18n-title="titleAchievements">
+        <span class="btn-icon-emoji">🏅</span>
+        <span class="btn-icon-count" id="ach-badge">0</span>
+      </button>
+      <button class="btn btn-ghost btn-icon" onclick="top0()" data-vk-only data-i18n-title="titleTop">🏆</button>
+      <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
+      <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
+      <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
+      <a class="btn btn-ghost btn-icon" href="#/igames" data-i18n-title="titleMoreGames">🎲</a>
+      <button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button>
+      <button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+    </div>
+    <section class="card fact-card" id="fact-block" hidden>
+      <h2 class="fact-heading" data-i18n="knownTitle">💡 Знаете ли вы?</h2>
+      <div class="fact-body">
+        <img class="fact-img" id="fact-img" alt="">
+        <div class="fact-text">
+          <div class="fact-name" id="fact-name"></div>
+          <p class="fact-desc" id="fact-desc"></p>
+        </div>
+      </div>
+    </section>
+    <main id="regions"></main>
+  </div>
+  <div class="page" id="page-quiz">
+    <section class="screen" id="lock-screen">
+      <div class="card home-card">
+        <div class="lock-big">🔒</div>
+        <h1 class="home-title" data-i18n="levelLocked">Уровень закрыт</h1>
+        <p class="home-sub" data-i18n="levelLockedSub">Посмотрите рекламу, чтобы открыть его навсегда</p>
+        <button class="btn btn-primary btn-lg" id="lock-watch-btn" data-i18n="watchAd">📺 Смотреть</button>
+        <div class="home-actions">
+          <a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a>
+          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+        </div>
+      </div>
+    </section>
+    <section class="screen" id="home-screen">
+      <div class="card home-card">
+        <div class="badge" id="home-region"></div>
+        <h1 class="home-title" id="home-title"></h1>
+        <div class="home-stars" id="home-stars"></div>
+        <p class="home-sub" data-i18n="tenSeconds">10 секунд на каждый вопрос</p>
+        <div class="home-meta">
+          <div class="meta-item"><span class="num" id="home-count">0</span><span data-i18n="questions">вопросов</span></div>
+   <div class="meta-item"><span class="num" data-i18n="tenSecondsShort">10с</span><span data-i18n="timeOnAnswer">на ответ</span></div>
+        </div>
+        <button class="btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button>
+        <div class="home-actions">
+          <button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button>
+          <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
+          <button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button>
+          <a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a>
+          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+        </div>
+      </div>
+    </section>
+    <section class="screen" id="quiz-screen">
+      <div class="topbar">
+        <button class="icon-btn" id="quit-btn" aria-label="quit">✕</button>
+        <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="score-pill"><span id="score-val">0</span></div>
+        <button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+      </div>
+      <div class="question-meta">
+        <span class="counter" id="counter">1 / 1</span>
+        <div class="timer" id="timer">
+          <span id="timer-val">10</span>
+          <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+      <div class="quiz-body">
+        <div class="card question-card">
+          <img class="question-img" id="question-img" alt="">
+          <div class="question-text" id="question-text" hidden></div>
+        </div>
+        <div class="quiz-right">
+          <div class="options" id="options"></div>
+          <div class="description" id="description" hidden></div>
+          <button class="btn btn-primary next-btn" id="next-btn" hidden></button>
+        </div>
+      </div>
+    </section>
+    <section class="screen" id="result-screen">
+      <div class="card result-card">
+        <h1 class="result-title" data-i18n="resTitle">Результат</h1>
+        <div class="result-stars" id="res-stars"></div>
+        <div class="result-percent" id="res-percent">0%</div>
+        <div class="result-grid">
+          <div class="result-cell"><span class="v" id="res-total">0</span><span class="l" data-i18n="resQuestions">вопросов</span></div>
+          <div class="result-cell ok"><span class="v" id="res-correct">0</span><span class="l" data-i18n="resCorrect">верно</span></div>
+          <div class="result-cell bad"><span class="v" id="res-wrong">0</span><span class="l" data-i18n="resWrong">ошибок</span></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-primary" id="restart-btn" data-i18n="playAgain">Играть ещё</button>
+          <a class="btn btn-ghost" href="#/collection" data-i18n="collection">📔 Коллекция</a>
+          <button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button>
+          <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
+          <button class="btn btn-ghost" id="home-btn" data-i18n="backHome">🏠 В начало</button>
+          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="page" id="page-collection">
+    <header class="col-header">
+      <a class="icon-btn" href="#/" aria-label="back" data-i18n="back">←</a>
+      <h1 class="col-title" data-i18n="colTitle">📔 Коллекция</h1>
+      <div class="col-counter" id="col-counter">0 / 0</div>
+      <button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
+    </header>
+    <main id="col-body"></main>
+  </div>
+  <div class="page" id="page-igames">
+    <div class="modal modal-inline show">
+      <div class="modal-content">
+        <a class="modal-close" href="#/" aria-label="close">×</a>
+        <h2 class="modal-title" data-i18n="modalOtherTitle">🎲 Другие игры</h2>
+        <button class="modal-close" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound" style="right:50px;font-size:18px;">🔊</button>
+        <div class="games-grid" id="games-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="auth-modal">
+  <div class="modal-content modal-narrow">
+    <button class="modal-close" aria-label="close">×</button>
+    <div class="modal-emoji">🔑</div>
+    <h2 class="modal-title" data-i18n="authTitle">Войти в аккаунт</h2>
+    <p class="modal-text" data-i18n="authText">Войдите, чтобы прогресс синхронизировался.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="doYandexAuth()" data-i18n="authYandex">Войти через Яндекс</button>
+      <button class="btn btn-ghost" onclick="closeAuthModal()" data-i18n="authSkip">Продолжить без входа</button>
+    </div>
+  </div>
+</div>
+<div class="modal" id="ach-modal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2 class="modal-title" data-i18n="achievements">🏅 Достижения</h2>
+    <div class="ach-total"><span data-i18n="achOpened">Открыто:</span> <span id="ach-counter">0 / 0</span></div>
+    <div id="ach-body" class="ach-body"></div>
+  </div>
+</div>
+<div class="modal" id="col-modal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <img class="modal-img" id="modal-img" alt="">
+    <p class="modal-desc" id="modal-desc"></p>
+  </div>
+</div>
+<div class="modal" id="yandex-leaderboard-modal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2>
+    <div id="yandex-leaderboard-body" class="ach-body"></div>
+  </div>
+</div>
 <script>
 (function (w) {
 'use strict';
 w.I18N={
-ru:{ tenSecondsShort: '10с',leaderboardPlayer: 'Игрок', leaderboardRow: '{rank} место —{score} очков', topNoId: 'Не удалось определить ваш ID. Попробуйте перезагрузить игру.', topOpenError: 'Не удалось открыть таблицу', soundOnTitle: 'Включить звук', soundOffTitle: 'Выключить звук', themeLightTitle: 'Светлая тема', themeDarkTitle: 'Тёмная тема', titleCollection: 'Коллекция', titleAchievements: 'Достижения', titleTop: 'Топ', titleInvite: 'Пригласить', titleMoreGames: 'Другие игры', titleTheme: 'Тема', titleSound: 'Звук', titleClose: 'Закрыть', titleBack: 'Назад', titleQuit: 'Выйти', titleAd: 'Реклама', loadError:'Не удалось загрузить игру. Обновите страницу.',loading:'Загрузка…',appTitle:'Угадай животное!',appSub:'Викторина о фауне всех континентов',totalScore:'Всего очков:',play:'🎮 Играть',collection:'📔 Коллекция',achievements:'🏅 Достижения',top:'🏆 Топ',invite:'👥 Пригласить',otherGames:'🎲 Другие игры',shortcut:'📌 Ярлык',login:'🔑 Войти',knownTitle:'💡 Знаете ли вы?',back:'←',close:'×',playBtn:'Начать игру',backHome:'🏠 В начало',questions:'вопросов',questions_l:'вопросов',tenSeconds:'10 секунд на каждый вопрос',timeOnAnswer:'на ответ',next:'Дальше',results:'Результаты',levelLocked:'Уровень закрыт',levelLockedSub:'Посмотрите рекламу, чтобы открыть его навсегда',watchAd:'📺 Смотреть',resTitle:'Результат',resQuestions:'вопросов',resCorrect:'верно',resWrong:'ошибок',playAgain:'Играть ещё',colTitle:'📔 Коллекция',colLocked:'Открывайте животных, отвечая верно.',achOpened:'Открыто:',unlockTitle:'Уровень закрыт',unlockText:'Посмотрите рекламу, чтобы открыть этот уровень навсегда.',cancel:'Отмена',loadingAd:'⌛ Загрузка...',levelOpened:'🎉 Уровень открыт!',adUnavailable:'Реклама недоступна, попробуйте позже',authTitle:'Войти в аккаунт',adSkipped:'Реклама не досмотрена — попробуйте ещё раз!',authText:'Войдите, чтобы прогресс синхронизировался между устройствами и вы попали в таблицу лидеров.',authYandex:'Войти через Яндекс',authSkip:'Продолжить без входа',authOk:'🎉 Вы вошли в аккаунт Яндекса!',authFail:'Вы не вошли в аккаунт',authUnavail:'Авторизация пока недоступна',authUnavail2:'Авторизация недоступна',achUnlocked:'Достижение',inviteOK:'Приглашение друзей недоступно в ОК',inviteVKOnly:'Доступно только в VK',topVKOnly:'Топ недоступен',shortcutOk:'🎉 Ярлык добавлен на рабочий стол!',shortcutFail:'Не удалось добавить ярлык',shortcutYa:'Ярлык доступен только в Яндекс Играх',otherGamesEmpty:'Список игр появится позже.',modalOtherTitle:'🎲 Другие игры',leaderboardTitle:'🏆 Таблица лидеров',leaderboardLoading:'Загрузка…',leaderboardError:'Не удалось загрузить таблицу',leaderboardEmpty:'Пока нет результатов'},
-en:{ tenSecondsShort: '10s',leaderboardPlayer: 'Player', leaderboardRow: '{rank} place —{score} points', topNoId: 'Could not determine your ID. Try reloading the game.', topOpenError: 'Could not open leaderboard', soundOnTitle: 'Turn on sound', soundOffTitle: 'Turn off sound', themeLightTitle: 'Light theme', themeDarkTitle: 'Dark theme', titleCollection: 'Collection', titleAchievements: 'Achievements', titleTop: 'Top', titleInvite: 'Invite', titleMoreGames: 'More games', titleTheme: 'Theme', titleSound: 'Sound', titleClose: 'Close', titleBack: 'Back', titleQuit: 'Quit', titleAd: 'Ad',loadError:'Failed to load the game. Please refresh the page.',loading:'Loading…',appTitle:'Guess the Animal!',appSub:'A quiz about wildlife from every continent',totalScore:'Total score:',play:'🎮 Play',collection:'📔 Collection',achievements:'🏅 Achievements',top:'🏆 Top',invite:'👥 Invite',otherGames:'🎲 More games',shortcut:'📌 Shortcut',login:'🔑 Sign in',knownTitle:'💡 Did you know?',back:'←',close:'×',playBtn:'Start game',backHome:'🏠 Home',questions:'questions',questions_l:'questions',tenSeconds:'10 seconds per question',timeOnAnswer:'to answer',next:'Next',results:'Results',levelLocked:'Level locked',levelLockedSub:'Watch an ad to unlock it forever',watchAd:'📺 Watch',resTitle:'Result',resQuestions:'questions',resCorrect:'correct',resWrong:'wrong',playAgain:'Play again',colTitle:'📔 Collection',colLocked:'Unlock animals by answering correctly.',achOpened:'Unlocked:',unlockTitle:'Level locked',unlockText:'Watch an ad to unlock this level forever.',cancel:'Cancel',loadingAd:'⌛ Loading...',levelOpened:'🎉 Level unlocked!',adUnavailable:'Ad unavailable; please try again later.',adSkipped:'Ad has not been viewed — try again!',authTitle:'Sign in',authText:'Sign in to sync progress across devices and join the leaderboard.',authYandex:'Sign in with Yandex',authSkip:'Continue without sign-in',authOk:'🎉 Signed in to Yandex!',authFail:'You are not signed in',authUnavail:'Sign-in is not available yet',authUnavail2:'Sign-in is not available',achUnlocked:'Achievement',inviteOK:'Inviting friends is unavailable in OK',inviteVKOnly:'Available only in VK',topVKOnly:'The top is unavailable',shortcutOk:'🎉 Shortcut added to home screen!',shortcutFail:'Failed to add shortcut',shortcutYa:'Shortcut is available only in Yandex Games',otherGamesEmpty:'Games list will appear later.',modalOtherTitle:'🎲 More games',leaderboardTitle:'🏆 Leaderboard',leaderboardLoading:'Loading…',leaderboardError:'Failed to load leaderboard',leaderboardEmpty:'No results yet'},
-tr:{ tenSecondsShort: '10sn',leaderboardPlayer: 'Oyuncu', leaderboardRow: '{rank}. sıra —{score} puan', topNoId: 'Kimliğiniz belirlenemedi. Oyunu yeniden yüklemeyi deneyin.', topOpenError: 'Liderlik tablosu açılamadı', soundOnTitle: 'Sesi aç', soundOffTitle: 'Sesi kapat', themeLightTitle: 'Açık tema', themeDarkTitle: 'Koyu tema', titleCollection: 'Koleksiyon', titleAchievements: 'Başarımlar', titleTop: 'Sıralama', titleInvite: 'Davet et', titleMoreGames: 'Diğer oyunlar', titleTheme: 'Tema', titleSound: 'Ses', titleClose: 'Kapat', titleBack: 'Geri', titleQuit: 'Çıkış', titleAd: 'Reklam',loadError:'Oyun yüklenemedi. Lütfen sayfayı yenileyin.',loading:'Yükleniyor…',appTitle:'Hayvanı Tahmin Et!',appSub:'Tüm kıtaların faunası hakkında bir test',adSkipped:'Reklam izlenmedi — tekrar deneyin!',totalScore:'Toplam puan:',play:'🎮 Oyna',collection:'📔 Koleksiyon',achievements:'🏅 Başarımlar',top:'🏆 Liderlik',invite:'👥 Davet et',otherGames:'🎲 Diğer oyunlar',shortcut:'📌 Kısayol',login:'🔑 Giriş yap',knownTitle:'💡 Biliyor muydunuz?',back:'←',close:'×',playBtn:'Oyuna başla',backHome:'🏠 Ana sayfa',questions:'soru',questions_l:'soru',tenSeconds:'Her soru için 10 saniye',timeOnAnswer:'cevap için',next:'İleri',results:'Sonuçlar',levelLocked:'Bölüm kilitli',levelLockedSub:'Sonsuza dek açmak için reklam izleyin',watchAd:'📺 Izle',resTitle:'Sonuç',resQuestions:'soru',resCorrect:'doğru',resWrong:'yanlış',playAgain:'Tekrar oyna',colTitle:'📔 Koleksiyon',colLocked:'Doğru cevaplayarak hayvanların kilidini açın.',achOpened:'Açıldı:',unlockTitle:'Bölüm kilitli',unlockText:'Bu bölümü sonsuza dek açmak için reklam izleyin.',cancel:'İptal',loadingAd:'⌛ Yükleniyor...',levelOpened:'🎉 Bölüm açıldı!',adUnavailable:'Reklam mevcut değil — tekrar deneyin!',authTitle:'Giriş yap',authText:'İlerlemeyi cihazlar arasında senkronize etmek için giriş yapın.',authYandex:'Yandex ile giriş yap',authSkip:'Giriş yapmadan devam et',authOk:'🎉 Yandex hesabına giriş yapıldı!',authFail:'Giriş yapmadınız',authUnavail:'Giriş henüz kullanılamıyor',authUnavail2:'Giriş kullanılamıyor',achUnlocked:'Başarım',inviteOK:'OK\'da arkadaş daveti kullanılamıyor',inviteVKOnly:'Yalnızca VK\'da kullanılabilir',topVKOnly:'Top mevcut değil',shortcutOk:'🎉 Kısayol ana ekrana eklendi!',shortcutFail:'Kısayol eklenemedi',shortcutYa:'Kısayol yalnızca Yandex Games\'te kullanılabilir',otherGamesEmpty:'Oyun listesi daha sonra görünecek.',modalOtherTitle:'🎲 Diğer oyunlar',leaderboardTitle:'🏆 Liderlik Tablosu',leaderboardLoading:'Yükleniyor…',leaderboardError:'Liderlik tablosu yüklenemedi',leaderboardEmpty:'Henüz sonuç yok'}};
+ru:{  tenSecondsShort: '10с',leaderboardPlayer: 'Игрок', leaderboardRow: '{rank} место — {score} очков', topNoId: 'Не удалось определить ваш ID. Попробуйте перезагрузить игру.', topOpenError: 'Не удалось открыть таблицу', soundOnTitle: 'Включить звук', soundOffTitle: 'Выключить звук', themeLightTitle: 'Светлая тема', themeDarkTitle: 'Тёмная тема', titleCollection: 'Коллекция', titleAchievements: 'Достижения', titleTop: 'Топ', titleInvite: 'Пригласить', titleMoreGames: 'Другие игры', titleTheme: 'Тема', titleSound: 'Звук', titleClose: 'Закрыть', titleBack: 'Назад', titleQuit: 'Выйти', titleAd: 'Реклама', loadError:'Не удалось загрузить игру. Обновите страницу.',loading:'Загрузка…',appTitle:'Угадай животное!',appSub:'Викторина о фауне всех континентов',totalScore:'Всего очков:',play:'🎮 Играть',collection:'📔 Коллекция',achievements:'🏅 Достижения',top:'🏆 Топ',invite:'👥 Пригласить',otherGames:'🎲 Другие игры',shortcut:'📌 Ярлык',login:'🔑 Войти',knownTitle:'💡 Знаете ли вы?',back:'←',close:'×',playBtn:'Начать игру',backHome:'🏠 В начало',questions:'вопросов',questions_l:'вопросов',tenSeconds:'10 секунд на каждый вопрос',timeOnAnswer:'на ответ',next:'Дальше',results:'Результаты',levelLocked:'Уровень закрыт',levelLockedSub:'Посмотрите рекламу, чтобы открыть его навсегда',watchAd:'📺 Смотреть',resTitle:'Результат',resQuestions:'вопросов',resCorrect:'верно',resWrong:'ошибок',playAgain:'Играть ещё',colTitle:'📔 Коллекция',colLocked:'Открывайте животных, отвечая верно.',achOpened:'Открыто:',unlockTitle:'Уровень закрыт',unlockText:'Посмотрите рекламу, чтобы открыть этот уровень навсегда.',cancel:'Отмена',loadingAd:'⌛ Загрузка...',levelOpened:'🎉 Уровень открыт!',adUnavailable:'Реклама недоступна, попробуйте позже',authTitle:'Войти в аккаунт',adSkipped:'Реклама не досмотрена — попробуйте ещё раз!',authText:'Войдите, чтобы прогресс синхронизировался между устройствами и вы попали в таблицу лидеров.',authYandex:'Войти через Яндекс',authSkip:'Продолжить без входа',authOk:'🎉 Вы вошли в аккаунт Яндекса!',authFail:'Вы не вошли в аккаунт',authUnavail:'Авторизация пока недоступна',authUnavail2:'Авторизация недоступна',achUnlocked:'Достижение',inviteOK:'Приглашение друзей недоступно в ОК',inviteVKOnly:'Доступно только в VK',topVKOnly:'Топ недоступен',shortcutOk:'🎉 Ярлык добавлен на рабочий стол!',shortcutFail:'Не удалось добавить ярлык',shortcutYa:'Ярлык доступен только в Яндекс Играх',otherGamesEmpty:'Список игр появится позже.',modalOtherTitle:'🎲 Другие игры',leaderboardTitle:'🏆 Таблица лидеров',leaderboardLoading:'Загрузка…',leaderboardError:'Не удалось загрузить таблицу',leaderboardEmpty:'Пока нет результатов'},
+en:{  tenSecondsShort: '10s',leaderboardPlayer: 'Player', leaderboardRow: '{rank} place — {score} points', topNoId: 'Could not determine your ID. Try reloading the game.',  topOpenError: 'Could not open leaderboard', soundOnTitle: 'Turn on sound', soundOffTitle: 'Turn off sound', themeLightTitle: 'Light theme', themeDarkTitle: 'Dark theme', titleCollection: 'Collection', titleAchievements: 'Achievements', titleTop: 'Top', titleInvite: 'Invite', titleMoreGames: 'More games', titleTheme: 'Theme', titleSound: 'Sound', titleClose: 'Close', titleBack: 'Back', titleQuit: 'Quit', titleAd: 'Ad',loadError:'Failed to load the game. Please refresh the page.',loading:'Loading…',appTitle:'Guess the Animal!',appSub:'A quiz about wildlife from every continent',totalScore:'Total score:',play:'🎮 Play',collection:'📔 Collection',achievements:'🏅 Achievements',top:'🏆 Top',invite:'👥 Invite',otherGames:'🎲 More games',shortcut:'📌 Shortcut',login:'🔑 Sign in',knownTitle:'💡 Did you know?',back:'←',close:'×',playBtn:'Start game',backHome:'🏠 Home',questions:'questions',questions_l:'questions',tenSeconds:'10 seconds per question',timeOnAnswer:'to answer',next:'Next',results:'Results',levelLocked:'Level locked',levelLockedSub:'Watch an ad to unlock it forever',watchAd:'📺 Watch',resTitle:'Result',resQuestions:'questions',resCorrect:'correct',resWrong:'wrong',playAgain:'Play again',colTitle:'📔 Collection',colLocked:'Unlock animals by answering correctly.',achOpened:'Unlocked:',unlockTitle:'Level locked',unlockText:'Watch an ad to unlock this level forever.',cancel:'Cancel',loadingAd:'⌛ Loading...',levelOpened:'🎉 Level unlocked!',adUnavailable:'Ad unavailable; please try again later.',adSkipped:'Ad has not been viewed — try again!',authTitle:'Sign in',authText:'Sign in to sync progress across devices and join the leaderboard.',authYandex:'Sign in with Yandex',authSkip:'Continue without sign-in',authOk:'🎉 Signed in to Yandex!',authFail:'You are not signed in',authUnavail:'Sign-in is not available yet',authUnavail2:'Sign-in is not available',achUnlocked:'Achievement',inviteOK:'Inviting friends is unavailable in OK',inviteVKOnly:'Available only in VK',topVKOnly:'The top is unavailable',shortcutOk:'🎉 Shortcut added to home screen!',shortcutFail:'Failed to add shortcut',shortcutYa:'Shortcut is available only in Yandex Games',otherGamesEmpty:'Games list will appear later.',modalOtherTitle:'🎲 More games',leaderboardTitle:'🏆 Leaderboard',leaderboardLoading:'Loading…',leaderboardError:'Failed to load leaderboard',leaderboardEmpty:'No results yet'},
+tr:{ tenSecondsShort: '10sn',leaderboardPlayer: 'Oyuncu', leaderboardRow: '{rank}. sıra — {score} puan', topNoId: 'Kimliğiniz belirlenemedi. Oyunu yeniden yüklemeyi deneyin.',  topOpenError: 'Liderlik tablosu açılamadı', soundOnTitle: 'Sesi aç', soundOffTitle: 'Sesi kapat', themeLightTitle: 'Açık tema', themeDarkTitle: 'Koyu tema', titleCollection: 'Koleksiyon', titleAchievements: 'Başarımlar', titleTop: 'Sıralama', titleInvite: 'Davet et', titleMoreGames: 'Diğer oyunlar', titleTheme: 'Tema', titleSound: 'Ses', titleClose: 'Kapat', titleBack: 'Geri', titleQuit: 'Çıkış', titleAd: 'Reklam',loadError:'Oyun yüklenemedi. Lütfen sayfayı yenileyin.',loading:'Yükleniyor…',appTitle:'Hayvanı Tahmin Et!',appSub:'Tüm kıtaların faunası hakkında bir test',adSkipped:'Reklam izlenmedi — tekrar deneyin!',totalScore:'Toplam puan:',play:'🎮 Oyna',collection:'📔 Koleksiyon',achievements:'🏅 Başarımlar',top:'🏆 Liderlik',invite:'👥 Davet et',otherGames:'🎲 Diğer oyunlar',shortcut:'📌 Kısayol',login:'🔑 Giriş yap',knownTitle:'💡 Biliyor muydunuz?',back:'←',close:'×',playBtn:'Oyuna başla',backHome:'🏠 Ana sayfa',questions:'soru',questions_l:'soru',tenSeconds:'Her soru için 10 saniye',timeOnAnswer:'cevap için',next:'İleri',results:'Sonuçlar',levelLocked:'Bölüm kilitli',levelLockedSub:'Sonsuza dek açmak için reklam izleyin',watchAd:'📺 Izle',resTitle:'Sonuç',resQuestions:'soru',resCorrect:'doğru',resWrong:'yanlış',playAgain:'Tekrar oyna',colTitle:'📔 Koleksiyon',colLocked:'Doğru cevaplayarak hayvanların kilidini açın.',achOpened:'Açıldı:',unlockTitle:'Bölüm kilitli',unlockText:'Bu bölümü sonsuza dek açmak için reklam izleyin.',cancel:'İptal',loadingAd:'⌛ Yükleniyor...',levelOpened:'🎉 Bölüm açıldı!',adUnavailable:'Reklam mevcut değil — tekrar deneyin!',authTitle:'Giriş yap',authText:'İlerlemeyi cihazlar arasında senkronize etmek için giriş yapın.',authYandex:'Yandex ile giriş yap',authSkip:'Giriş yapmadan devam et',authOk:'🎉 Yandex hesabına giriş yapıldı!',authFail:'Giriş yapmadınız',authUnavail:'Giriş henüz kullanılamıyor',authUnavail2:'Giriş kullanılamıyor',achUnlocked:'Başarım',inviteOK:'OK\'da arkadaş daveti kullanılamıyor',inviteVKOnly:'Yalnızca VK\'da kullanılabilir',topVKOnly:'Top mevcut değil',shortcutOk:'🎉 Kısayol ana ekrana eklendi!',shortcutFail:'Kısayol eklenemedi',shortcutYa:'Kısayol yalnızca Yandex Games\'te kullanılabilir',otherGamesEmpty:'Oyun listesi daha sonra görünecek.',modalOtherTitle:'🎲 Diğer oyunlar',leaderboardTitle:'🏆 Liderlik Tablosu',leaderboardLoading:'Yükleniyor…',leaderboardError:'Liderlik tablosu yüklenemedi',leaderboardEmpty:'Henüz sonuç yok'}};
 const T=(ru,en,tr)=>({ru,en:en||ru,tr:tr||ru});
 w.__T=T;
 w.REGIONS=[
@@ -348,7 +547,13 @@ qq('25',[T('Волк','Wolf','Kurt'),T('Гиена','Hyena','Sırtlan'),T('Ли�
 qq('27',[T('Краб','Crab','Yengeç'),T('Прыгун','Mudskipper','Çamur zıpzıpı'),T('Жаба','Toad','Kara kurbağa'),T('Скакун','Jumping spider','Zıplayan örümcek')],1,T('Прыгун илистый. Эта рыба может жить на берегу или мелководье. Большую часть времени проводит, зарывшись в грязь.','Mudskipper. This fish can live on shore or in shallows; spends most of its time buried in mud.','Çamur zıpzıpı. Bu balık kıyıda veya sığ suda yaşayabilir; zamanının çoğunu çamurda gömülü geçirir.')),
 qq('28',[T('Ворона','Crow','Karga'),T('Синица','Tit','Baştankara'),T('Галка','Jackdaw','Küçük karga'),T('Дрозд','Thrush','Ardıç kuşu')],0,T('Ворона-свистун. Нередко атакуют велосипедистов, считая их потенциальной угрозой. Моногамная птица.','Little raven. Often attacks cyclists considering them a threat. Monogamous bird.','Küçük karga. Bisikletlileri tehdit olarak görüp sık sık saldırır. Tek eşli bir kuştur.')),
 qq('29',[T('Крокодил','Crocodile','Timsah'),T('Саламандра','Salamander','Semender'),T('Варан','Monitor lizard','Varan'),T('Ящерица','Lizard','Kertenkele')],2,T('Варан гигантский. Умеет бегать как на четырех, так и на двух задних лапах.','Perentie. Can run on all fours as well as on two hind legs.','Perenti. Hem dört hem de iki arka bacağı üzerinde koşabilir.')),
-qq('30',[T('Муравьед','Anteater','Karıncayiyen'),T('Утконос','Platypus','Ornitorenk'),T('Броненосец','Armadillo','Armadillo'),T('Варан','Monitor lizard','Varan')],1,T('Утконос. Клюв мягкий и покрыт голой эластичной кожей.','Platypus. Its bill is soft and covered with bare elastic skin.','Ornitorenk. Gagası yumuşak ve çıplak esnek deriyle kaplıdır.'))
+qq('30',[T('Муравьед','Anteater','Karıncayiyen'),T('Утконос','Platypus','Ornitorenk'),T('Броненосец','Armadillo','Armadillo'),T('Варан','Monitor lizard','Varan')],1,T('Утконос. Клюв мягкий и покрыт голой эластичной кожей.','Platypus. Its bill is soft and covered with bare elastic skin.','Ornitorenk. Gagası yumuşak ve çıplak esnek deriyle kaplıdır.')),
+qq('123',[T('Волк','Wolf','Kurt'),T('Гиена','Hyena','Sırtlan'),T('Лисица','Fox','Tilki'),T('Собака','Dog','Köpek')],3,T('Собака динго. Ведет ночной образ жизни, предпочитает охотиться и общаться с другими собаками днем.','Dingo. Nocturnal, prefers to hunt and socialize with other dingoes during the day.','Dingo. Gececidir, gündüzleri avlanmayı ve diğer dingolarla sosyalleşmeyi tercih eder.')),
+qq('227',[T('Барсук','Badger','Porsuk'),T('Крот','Mole','Köstebek'),T('Вомбат','Wombat','Vombat'),T('Бобр','Beaver','Kunduz')],2,T('Вомбат. Сумчатое, роет длинные норы с несколькими входами. Его помёт — кубической формы, что помогает метить территорию, не скатываясь.','Wombat. A marsupial that digs long burrows with several entrances. Its droppings are cube-shaped, which helps mark territory without rolling away.','Vombat. Birkaç girişi olan uzun yuvalar kazan keseli bir hayvandır. Dışkısı küp şeklindedir; bu, yuvarlandıktan sonra bölgeyi işaretlemesini engeller.')),
+qq('228',[T('Павлин','Peacock','Tavus kuşu'),T('Лирохвост','Lyrebird','Lir kuşu'),T('Фазан','Pheasant','Sülün'),T('Индейка','Turkey','Hindi')],1,T('Лирохвост. Превосходный имитатор: копирует пение других птиц, звуки пилы, фотоаппарата и даже человеческий голос. Хвост самца напоминает лиру.','Lyrebird. A superb mimic: copies other birds\' songs, sounds of saws, cameras and even human speech. The male\'s tail resembles a lyre.','Lir kuşu. Mükemmel bir taklitçidir: diğer kuşların ötüşlerini, testere, fotoğraf makinesi seslerini, hatta insan konuşmasını taklit eder. Erkeğin kuyruğu lir şeklindedir.')),
+qq('229',[T('Кеа','Kea','Kea'),T('Какаду','Cockatoo','Kakadu'),T('Какапо','Kakapo','Kakapo'),T('Лорикет','Lorikeet','Loriket')],2,T('Какапо. Единственный нелетающий попугай в мире. Активен ночью, а днём прячется в траве. Находится на грани исчезновения — осталось около 250 особей.','Kakapo. The only flightless parrot in the world. Active at night, hides in grass by day. Critically endangered — around 250 birds remain.','Kakapo. Dünyadaki tek uçamayan papağandır. Geceleri aktiftir, gündüzleri otların arasında saklanır. Kritik tehlikededir — yaklaşık 250 birey kaldı.')),
+qq('230',[T('Динго','Dingo','Dingo'),T('Куолл','Quoll','Kuoll'),T('Волк','Wolf','Kurt'),T('Лис','Fox','Tilki')],1,T('Куолл. Пятнистый сумчатый хищник размером с кошку. Охотится ночью на мелких млекопитающих, птиц и рептилий.','Quoll. A spotted marsupial predator about the size of a cat. Hunts small mammals, birds and reptiles at night.','Kuoll. Kedi büyüklüğünde benekli keseli bir yırtıcıdır. Geceleri küçük memelileri, kuşları ve sürüngenleri avlar.')),
+qq('263',[T('Бабочка','Butterfly','Kelebek'),T('Стрекоза','Dragonfly','Yusufçuk'),T('Мотылёк','Moth','Güve'),T('Муха','Fly','Sinek')],1,T('Стрекоза. Одна из самых быстрых летающих насекомых: крылья совершают до 30 взмахов в секунду.','Dragonfly. One of the fastest flying insects: wings beat up to 30 times per second.','Yusufçuk. En hızlı uçan böceklerden biridir: kanatlar saniyede 30 kez çırpılır.'))
 ]},
 '2':{regionKey:'australian',sub:T('Папуасская подобласть','Papuan subregion','Papua alt bölgesi'),questions:[
 qq('31',[T('Какаду','Cockatoo','Kakadu'),T('Молох','Thorny devil','Dikenli şeytan'),T('Кукабара','Kookaburra','Kukabura'),T('Казуар','Cassowary','Kazuvar')],0,T('Какаду желтохохлый большой. Очень любит купаться под проливным дождем.','Sulphur-crested cockatoo. Loves bathing in pouring rain.','Sülfür tepeli kakadu. Sağanak yağmurda yıkanmayı sever.')),
@@ -356,7 +561,13 @@ qq('33',[T('Корелла','Cockatiel','Kakatil'),T('Казуар','Cassowary',
 qq('32',[T('Крокодил','Crocodile','Timsah'),T('Аллигатор','Alligator','Alligator'),T('Рыба-крокодил','Crocodilefish','Timsah balığı'),T('Рыба-пила','Sawfish','Testere balığı')],2,T('Рыба-крокодил. Быстро плавает, закапывается в песок при опасности.','Crocodilefish. Swims fast and buries itself in sand when in danger.','Timsah balığı. Hızlı yüzer ve tehlikede kendini kuma gömer.')),
 qq('34',[T('Павлин','Peacock','Tavus kuşu'),T('Попугай','Parrot','Papağan'),T('Курица','Chicken','Tavuk'),T('Голубь','Pigeon','Güvercin')],3,T('Голубь веероносный венценосный. Если погибает один из пары, другой остается навсегда вдовцом.','Crowned pigeon. If one partner dies, the other remains widowed forever.','Taçlı güvercin. Eşlerden biri ölürse diğeri sonsuza kadar dul kalır.')),
 qq('35',[T('Поссум','Possum','Keseli sıçan'),T('Белка','Squirrel','Sincap'),T('Бурундук','Chipmunk','Sincap'),T('Лемур','Lemur','Lemur')],0,T('Поссум сахарный летающий. Ориентируется даже в кромешной темноте.','Sugar glider. Can navigate even in complete darkness.','Şeker planörü. Tamamen karanlıkta bile yön bulabilir.')),
-qq('36',[T('Шишечник','Pineapplefish','Ananas balığı'),T('Анемоновая','Anemonefish','Anemon balığı'),T('Рыба-бабочка','Butterflyfish','Kelebek balığı'),T('Золотая рыбка','Goldfish','Japon balığı')],2,T('Рыба-бабочка меднополосая. Пятно служит обманкой для хищников, считающих, что это глаз рыбы.','Copperband butterflyfish. Its spot deceives predators into thinking it is the fish\'s eye.','Bakır bantlı kelebek balığı. Lekesi, yırtıcıları bunun balığın gözü olduğuna inandırarak kandırır.'))
+qq('36',[T('Шишечник','Pineapplefish','Ananas balığı'),T('Анемоновая','Anemonefish','Anemon balığı'),T('Рыба-бабочка','Butterflyfish','Kelebek balığı'),T('Золотая рыбка','Goldfish','Japon balığı')],2,T('Рыба-бабочка меднополосая. Пятно служит обманкой для хищников, считающих, что это глаз рыбы.','Copperband butterflyfish. Its spot deceives predators into thinking it is the fish\'s eye.','Bakır bantlı kelebek balığı. Lekesi, yırtıcıları bunun balığın gözü olduğuna inandırarak kandırır.')),
+qq('197',[T('Райская птица','Bird of paradise','Cennet kuşu'),T('Колибри','Hummingbird','Sinek kuşu'),T('Павлин','Peacock','Tavus kuşu'),T('Фазан','Pheasant','Sülün')],0,T('Райская птица. Самцы исполняют сложные брачные танцы с распушённым оперением, чтобы привлечь самку.','Bird of paradise. Males perform elaborate courtship dances with ruffled plumage to attract a female.','Cennet kuşu. Erkekler, dişiyi çekmek için tüylerini kabartarak karmaşık kur dansları sergiler.')),
+qq('198',[T('Кенгуру','Kangaroo','Kanguru'),T('Валлаби','Wallaby','Valabi'),T('Древесный кенгуру','Tree kangaroo','Ağaç kangurusu'),T('Коала','Koala','Koala')],2,T('Древесный кенгуру. В отличие от наземных сородичей, прекрасно лазает по деревьям и спит на ветках.','Tree kangaroo. Unlike its ground-dwelling relatives, it climbs trees well and sleeps on branches.','Ağaç kangurusu. Yerde yaşayan akrabalarının aksine ağaçlara iyi tırmanır ve dallarda uyur.')),
+qq('199',[T('Кускус','Cuscus','Kuskus'),T('Белка','Squirrel','Sincap'),T('Бурундук','Chipmunk','Sincap'),T('Лемур','Lemur','Lemur')],0,T('Кускус. Сумчатое с цепким хвостом. Ночью медленно лазает по деревьям в поисках листьев и плодов.','Cuscus. A marsupial with a prehensile tail. At night it slowly climbs trees looking for leaves and fruit.','Kuskus. Kavrayıcı kuyruklu bir keseli. Geceleri yaprak ve meyve arayarak ağaçlara yavaşça tırmanır.')),
+qq('200',[T('Какаду','Cockatoo','Kakadu'),T('Чёрный какаду','Palm cockatoo','Palmiye kakadusu'),T('Попугай','Parrot','Papağan'),T('Ара','Macaw','Makav')],1,T('Чёрный какаду, или пальмовый. Один из крупнейших попугаев: может раскалывать орехи мощным клювом и «играть» на ветках как на барабане.','Palm cockatoo. One of the largest parrots: cracks nuts with a powerful bill and "drums" on branches with a stick.','Palmiye kakadusu. En büyük papağanlardan biri: güçlü gagasıyla fındık kırar ve bir çubukla dallarda "davul çalar".')),
+qq('201',[T('Ехидна','Echidna','Ekidne'),T('Проехидна','Long-beaked echidna','Uzun gagalı ekidne'),T('Ёж','Hedgehog','Kirpi'),T('Утконос','Platypus','Ornitorenk')],1,T('Проехидна. Ночное яйцекладущее млекопитающее. Водится только на Новой Гвинее, занесена в Красную книгу.','Long-beaked echidna. A nocturnal egg-laying mammal. Found only on New Guinea; endangered.','Uzun gagalı ekidne. Gececi, yumurtlayan bir memeli. Yalnızca Yeni Gine\'de bulunur; nesli tükenmekte.')),
+qq('202',[T('Зимородок','Kingfisher','Yalıçapkını'),T('Райский зимородок','Paradise kingfisher','Cennet yalıçapkını'),T('Синица','Tit','Baştankara'),T('Сойка','Jay','Alakarga')],1,T('Райский зимородок. Обитает в тропических лесах Новой Гвинеи. Ярко-синее оперение и длинный хвост-лопата — его визитная карточка.','Paradise kingfisher. Lives in the tropical forests of New Guinea. Bright blue plumage and a long spatula tail are its hallmark.','Cennet yalıçapkını. Yeni Gine tropik ormanlarında yaşar. Parlak mavi tüyleri ve uzun spatula kuyruğu onun simgesidir.'))
 ]},
 '3':{regionKey:'australian',sub:T('Новозеландская подобласть','New Zealand subregion','Yeni Zelanda alt bölgesi'),questions:[
 qq('37',[T('Какаду','Cockatoo','Kakadu'),T('Кеа','Kea','Kea'),T('Орёл','Eagle','Kartal'),T('Сокол','Falcon','Şahin')],1,T('Кеа — единственный попугай, способный жить и размножаться на высоте 1500 м над уровнем моря.','Kea is the only parrot able to live and breed at 1500 m above sea level.','Kea, deniz seviyesinden 1500 m yükseklikte yaşayıp üreyebilen tek papağandır.')),
@@ -370,7 +581,8 @@ qq('44',[T('Валлаби','Wallaby','Valabi'),T('Кенгуру','Kangaroo','K
 qq('45',[T('Касатка','Orca','Katil balina'),T('Акула синяя','Blue shark','Mavi köpek balığı'),T('Дельфин Гектора','Hector\'s dolphin','Hector yunusu'),T('Кит','Whale','Balina')],2,T('Дельфин Гектора. Находится на грани вымирания — сегодня осталось всего около 110 особей.','Hector\'s dolphin. Critically endangered — only about 110 remain.','Hector yunusu. Kritik tehlikede — yalnızca yaklaşık 110 birey kaldı.')),
 qq('46',[T('Кулик','Sandpiper','Kum kuşu'),T('Кулик-сорока','Oystercatcher','Poyraz kuşu'),T('Ворона','Crow','Karga'),T('Галчонок','Jackdaw','Küçük karga')],1,T('Кулик-сорока изменчивый. Может орудовать клювом как консервным ножом, если необходимо открыть раковину моллюска.','Variable oystercatcher. Uses its bill like a can opener to open mollusc shells.','Değişken poyraz kuşu. Yumuşakça kabuklarını açmak için gagasını konserve açacağı gibi kullanır.')),
 qq('51',[T('Абрикос','Apricot','Kayısı'),T('Мандаринка','Mandarin duck','Mandarin ördeği'),T('Персик','Peach','Şeftali'),T('Киви','Kiwi','Kivi')],3,T('Киви южный. Образовав пару, они остаются верными друг другу на протяжении всей жизни.','Southern brown kiwi. Once paired they remain faithful for life.','Güney kahverengi kivi. Eşleştikten sonra yaşam boyu sadık kalırlar.')),
-qq('52',[T('Морской котик','Fur seal','Kürklü fok'),T('Тюлень','Seal','Fok'),T('Варраби','Wallaby','Valabi'),T('Пингвин','Penguin','Penguen')],0,T('Котик морской новозеландский. Большую часть жизни проводит на суше, но за едой отправляется в море.','New Zealand fur seal. Spends most of its life on land but goes to sea to feed.','Yeni Zelanda kürklü foku. Hayatının çoğunu karada geçirir ama beslenmek için denize gider.'))
+qq('52',[T('Морской котик','Fur seal','Kürklü fok'),T('Тюлень','Seal','Fok'),T('Варраби','Wallaby','Valabi'),T('Пингвин','Penguin','Penguen')],0,T('Котик морской новозеландский. Большую часть жизни проводит на суше, но за едой отправляется в море.','New Zealand fur seal. Spends most of its life on land but goes to sea to feed.','Yeni Zelanda kürklü foku. Hayatının çoğunu karada geçirir ama beslenmek için denize gider.')),
+qq('47', [T('Туи','Tui','Tui'), T('Кеа','Kea','Kea'), T('Киви','Kiwi','Kivi'), T('Какапо','Kakapo','Kakapo')], 0, T('Туи — новозеландский медосос. Питается нектаром и ягодами. Обладает громким мелодичным голосом.', 'Tui is a New Zealand honeyeater. Feeds on nectar and berries; has a loud melodious song.', 'Tui bir Yeni Zelanda bal yiyicisidir. Nektar ve meyvelerle beslenir; yüksek melodik bir ötüşü vardır.')), qq('48', [T('Кокако','Kōkako','Kokako'), T('Сорока','Magpie','Saksağan'), T('Дрозд','Thrush','Ardıç kuşu'), T('Скворец','Starling','Sığırcık')], 0, T('Кокако — редкая новозеландская птица. Известна своим мелодичным дуэтным пением.', 'Kōkako is a rare New Zealand bird known for its melodic duet singing.', 'Kokako, melodik düet ötüşüyle bilinen nadir bir Yeni Zelanda kuşudur.')), qq('49', [T('Седлбэк','Saddleback','Saddleback'), T('Соловей','Nightingale','Bülbül'), T('Синица','Tit','Baştankara'), T('Кукабара','Kookaburra','Kukabura')], 0, T('Седлбэк, или тиеке. Новозеландская птица с яркой седлообразной полосой на спине.', 'Saddleback, or tiеke. A New Zealand bird with a bright saddle-shaped stripe on its back.', 'Saddleback veya tieke. Sırtında parlak eyer şeklinde bir şerit olan Yeni Zelanda kuşu.')), qq('50', [T('Сокол новозеландский','New Zealand falcon','Yeni Zelanda doğanı'), T('Орёл','Eagle','Kartal'), T('Ястреб','Hawk','Şahin'), T('Сова','Owl','Baykuş')], 0, T('Сокол новозеландский, или кареареа. Стремительный хищник, охотится на мелких птиц и грызунов.', 'New Zealand falcon, or kārearea. A swift predator that hunts small birds and rodents.', 'Yeni Zelanda doğanı veya karearea. Küçük kuşları ve kemirgenleri avlayan çevik bir yırtıcıdır.'))
 ]},
 '4':{regionKey:'australian',sub:T('Полинезийская подобласть','Polynesian subregion','Polinezya alt bölgesi'),questions:[
 qq('53',[T('Белка-летяга','Flying squirrel','Uçan sincap'),T('Летучая мышь','Bat','Yarasa'),T('Летающая лисица','Flying fox','Uçan tilki'),T('Летучий паук','Flying spider','Uçan örümcek')],2,T('Лисица летучая большая, или калонг, днём отдыхает, зацепившись лапками за ветви, а на закате вылетает на охоту.','Large flying fox, or kalong, rests by day hanging from branches and hunts at dusk.','Büyük uçan tilki ya da kalong, gündüz dallara asılarak dinlenir ve alacakaranlıkta avlanır.')),
@@ -378,7 +590,11 @@ qq('54',[T('Омар','Lobster','Istakoz'),T('Разбойник','Brigand','Hay
 qq('55',[T('Кобра','Cobra','Kobra'),T('Угорь','Eel','Yılan balığı'),T('Гаттерия','Tuatara','Tuatara'),T('Крайт','Sea krait','Deniz kraytı')],3,T('Крайт ужевидный морской проводит большую часть жизни в воде, но часто выходит на сушу.','Sea krait spends most of its life in water but often comes ashore.','Deniz kraytı hayatının çoğunu suda geçirir ama sık sık karaya çıkar.')),
 qq('56',[T('Горлица','Dove','Kumru'),T('Петроика','Petroica','Petroika'),T('Дюгонь','Dugong','Dugong'),T('Казуар','Cassowary','Kazuvar')],0,T('Горлица зебровая полосатая. Любит траву и различные семена растений, поедает небольших насекомых.','Zebra dove. Likes grass and various seeds; also eats small insects.','Zebra kumrusu. Ot ve çeşitli tohumları sever; küçük böcekler de yer.')),
 qq('57',[T('Корелла','Cockatiel','Kakatil'),T('Игуана','Iguana','İguana'),T('Павлин','Peacock','Tavus kuşu'),T('Пингвин','Penguin','Penguen')],1,T('Игуана фиджийская полосатая. Ночью забирается на верхушки деревьев для отдыха и сна.','Fiji banded iguana. At night climbs to treetops to rest and sleep.','Fiji bantlı iguanası. Geceleri dinlenmek ve uyumak için ağaç tepelerine çıkar.')),
-qq('58',[T('Рак-радуга','Rainbow lobster','Gökkuşağı ıstakozu'),T('Краб-клоун','Clown crab','Palyaço yengeci'),T('Креветка-арлекин','Harlequin shrimp','Harlequin karidesi'),T('Рыба-моллюск','Slipper lobster','Terlik ıstakozu')],2,T('Креветка-арлекин голубая. Живут парами. Каждая пара охраняет свою территорию.','Blue harlequin shrimp. Lives in pairs; each pair guards its territory.','Mavi harlequin karidesi. Çiftler halinde yaşar; her çift kendi bölgesini korur.'))
+qq('58',[T('Рак-радуга','Rainbow lobster','Gökkuşağı ıstakozu'),T('Краб-клоун','Clown crab','Palyaço yengeci'),T('Креветка-арлекин','Harlequin shrimp','Harlequin karidesi'),T('Рыба-моллюск','Slipper lobster','Terlik ıstakozu')],2,T('Креветка-арлекин голубая. Живут парами. Каждая пара охраняет свою территорию.','Blue harlequin shrimp. Lives in pairs; each pair guards its territory.','Mavi harlequin karidesi. Çiftler halinde yaşar; her çift kendi bölgesini korur.')),
+qq('203',[T('Летучая мышь','Bat','Yarasa'),T('Полинезийский крылан','Polynesian flying fox','Polinezya uçan tilkisi'),T('Белка-летяга','Flying squirrel','Uçan sincap'),T('Геккон','Gecko','Geko')],1,T('Полинезийский крылан. Днём спит в кронах, закутавшись в кожистые крылья, а ночью летает за плодами.','Polynesian flying fox. Sleeps in canopies by day, wrapped in its leathery wings, and flies after fruit at night.','Polinezya uçan tilkisi. Gündüzleri derimsi kanatlarına sarılarak ağaç tepelerinde uyur, geceleri meyve için uçar.')),
+qq('204',[T('Райская птица','Bird of paradise','Cennet kuşu'),T('Райский зимородок','Paradise kingfisher','Cennet yalıçapkını'),T('Таитянский зимородок','Tahitian kingfisher','Tahiti yalıçapkını'),T('Колибри','Hummingbird','Sinek kuşu')],2,T('Таитянский зимородок. Эндемик островов Общества. Ярко-синяя спинка и белая грудь помогают узнать его среди зелени.','Tahitian kingfisher. Endemic to the Society Islands. Its bright blue back and white breast make it easy to spot among the greenery.','Tahiti yalıçapkını. Society Adaları\'na özgüdür. Parlak mavi sırtı ve beyaz göğsü onu yeşillikler arasında ayırt eder.')),
+qq('205',[T('Буревестник','Petrel','Fırtına kuşu'),T('Полинезийский буревестник','Polynesian storm petrel','Polinezya fırtına kuşu'),T('Чайка','Seagull','Martı'),T('Альбатрос','Albatross','Albatros')],1,T('Полинезийский штормовой буревестник. Гнездится на уединённых тихоокеанских островах. Всю жизнь проводит в море, выходя на сушу только для размножения.','Polynesian storm petrel. Nests on remote Pacific islands. Spends its life at sea, coming ashore only to breed.','Polinezya fırtına kuşu. Uzak Pasifik adalarında yuvalar. Hayatını denizde geçirir, yalnızca üremek için karaya çıkar.')),
+qq('206',[T('Славка','Warbler','Ötleğen'),T('Синица','Tit','Baştankara'),T('Полинезийская славка','Polynesian warbler','Polinezya ötleğeni'),T('Майна','Myna','Çiğdeci')],2,T('Полинезийская славка. Мелкая певчая птица тропических островов Тихого океана. Питается насекомыми, живёт в густых кустарниках.','Polynesian warbler. A small songbird of Pacific tropical islands. Feeds on insects; lives in dense shrubs.','Polinezya ötleğeni. Pasifik tropik adalarının küçük ötücü kuşu. Böceklerle beslenir; sık çalılıklarda yaşar.'))
 ]},
 '5':{regionKey:'australian',sub:T('Гавайская подобласть','Hawaiian subregion','Hawaii alt bölgesi'),questions:[
 qq('59',[T('Гусыня','Goose','Kaz'),T('Казарка','Brent goose','Yosun kazı'),T('Варан','Monitor lizard','Varan'),T('Перепёл','Quail','Bıldırcın')],1,T('Казарка гавайская. Гнездуются в ямках на земле или в застывшей вулканической лаве и выстилают их пухом.','Hawaiian goose. Nests in hollows on the ground or in cooled lava, lined with down.','Hawaii kazı. Yerde veya soğumuş lavda oyuklara yuvalar ve altını tüyle kaplar.')),
@@ -386,7 +602,11 @@ qq('60',[T('Геккон','Gecko','Geko'),T('Саламандра','Salamander',
 qq('61',[T('Морской котик','Fur seal','Kürklü fok'),T('Морской лев','Sea lion','Deniz aslanı'),T('Кукабара','Kookaburra','Kukabura'),T('Тюлень','Seal','Fok')],3,T('Тюлень-монах гавайский. За тягу к уединению получил прозвище «монах».','Hawaiian monk seal. Named "monk" for its love of solitude.','Hawaii keşiş foku. Yalnızlığı sevdiği için "keşiş" adını almıştır.')),
 qq('62',[T('Лысуха','Coot','Sakarca'),T('Казуар','Cassowary','Kazuvar'),T('Утка-мандаринка','Mandarin duck','Mandarin ördeği'),T('Кукабара','Kookaburra','Kukabura')],0,T('Лысуха гавайская. Основа рациона — насекомые и их личинки, моллюски, мелкая рыба.','Hawaiian coot. Diet consists mainly of insects and their larvae, molluscs and small fish.','Hawaii sakarcası. Beslenmesi çoğunlukla böcekler ve larvaları, yumuşakçalar ve küçük balıklardan oluşur.')),
 qq('64',[T('Касатка','Orca','Katil balina'),T('Дельфин','Dolphin','Yunus'),T('Кит','Whale','Balina'),T('Рыба-молот','Hammerhead shark','Çekiç balığı')],2,T('Кит горбатый. Каждый год они преодолевают около 8000 км и считаются одними из самых далеко мигрирующих животных.','Humpback whale. They travel about 8000 km yearly and are among the longest-migrating animals.','Kambur balina. Her yıl yaklaşık 8000 km yol alır ve en uzun göç eden hayvanlardan biridir.')),
-qq('63',[T('Геккон','Gecko','Geko'),T('Ящерица','Lizard','Kertenkele'),T('Саламандра','Salamander','Semender'),T('Змея','Snake','Yılan')],0,T('Геккон токи. Получил название из-за громкого голоса: «та-ке, та-ке, та-ке».','Tokay gecko. Named for its loud call: "to-kay, to-kay, to-kay".','Tokay gekosu. Yüksek sesli "to-kay, to-kay, to-kay" ötüşü nedeniyle bu adı almıştır.'))
+qq('63',[T('Геккон','Gecko','Geko'),T('Ящерица','Lizard','Kertenkele'),T('Саламандра','Salamander','Semender'),T('Змея','Snake','Yılan')],0,T('Геккон токи. Получил название из-за громкого голоса: «та-ке, та-ке, та-ке».','Tokay gecko. Named for its loud call: "to-kay, to-kay, to-kay".','Tokay gekosu. Yüksek sesli "to-kay, to-kay, to-kay" ötüşü nedeniyle bu adı almıştır.')),
+qq('207',[T('Сорока','Magpie','Saksağan'),T('Ворона','Crow','Karga'),T('Алала (гавайская ворона)','Hawaiian crow (alala)','Hawaii kargası (alala)'),T('Сойка','Jay','Alakarga')],2,T('Алала, или гавайская ворона. В природе почти исчезла — сохранилась только в питомниках. Умеет пользоваться палочками, чтобы доставать личинок.','Alalā, the Hawaiian crow. Nearly extinct in the wild — survives only in breeding centers. Uses sticks to extract larvae.','Alalā ya da Hawaii kargası. Doğada neredeyse tükendi — yalnızca üretim merkezlerinde yaşıyor. Larvaları çıkarmak için çubuk kullanır.')),
+qq('208',[T('Колибри','Hummingbird','Sinek kuşu'),T('Иви (гавайская цветочница)','I\'iwi (Hawaiian honeycreeper)','I\'iwi (Hawaii bal yiyicisi)'),T('Синица','Tit','Baştankara'),T('Канарейка','Canary','Kanarya')],1,T('Иви. Ярко-красная гавайская цветочница с серповидным клювом. Питается нектаром, опыляя растения.','I\'iwi. A bright red Hawaiian honeycreeper with a sickle-shaped bill. Feeds on nectar and pollinates plants.','I\'iwi. Orağa benzer gagası olan parlak kırmızı Hawaii bal yiyicisi. Nektarla beslenir ve bitkileri tozlaştırır.')),
+qq('209',[T('Белка-летяга','Flying squirrel','Uçan sincap'),T('Гавайский длиннокрыл','Hawaiian hoary bat','Hawaii yarasası'),T('Летучая мышь','Bat','Yarasa'),T('Летучая лисица','Flying fox','Uçan tilki')],1,T('Гавайский длиннокрыл. Единственное наземное млекопитающее Гавайев. Днём висит на дереве, замаскировавшись под сухой лист.','Hawaiian hoary bat. The only native land mammal of Hawaii. By day it hangs from a tree disguised as a dry leaf.','Hawaii yarasası. Hawaii\'nin tek yerli kara memelisi. Gündüzleri kuru bir yaprak gibi gizlenerek ağaçta asılı kalır.')),
+qq('210',[T('Гавайский пастушок','Hawaiian rail','Hawaii yelvesi'),T('Курица','Chicken','Tavuk'),T('Перепёл','Quail','Bıldırcın'),T('Фазан','Pheasant','Sülün')],0,T('Гавайский пастушок. Маленькая нелетающая птица, обитавшая в густых гавайских лесах. Считается вымершей с конца XIX века.','Hawaiian rail. A small flightless bird that lived in dense Hawaiian forests. Considered extinct since the late 19th century.','Hawaii yelvesi. Sık Hawaii ormanlarında yaşayan küçük, uçamayan bir kuş. 19. yüzyıl sonundan beri soyu tükenmiş sayılıyor.'))
 ]},
 '6':{regionKey:'holarctic',sub:T('Арктическая подобласть','Arctic subregion','Arktik alt bölgesi'),questions:[
 qq('65',[T('Казначей','Treasurer','Kasadar'),T('Бюрократ','Bureaucrat','Bürokrat'),T('Бургомистр','Glaucous gull','Kutup martısı'),T('Буржуй','Bourgeois','Burjuva')],2,T('Бургомистр. Представляет опасность для многих видов птиц, в том числе чаек.','Glaucous gull. A threat to many bird species, including other gulls.','Kutup martısı. Diğer martılar da dahil olmak üzere birçok kuş türü için tehdittir.')),
@@ -403,7 +623,13 @@ qq('75',[T('Овец','Sheep','Koyun'),T('Бык','Bull','Boğa'),T('Буйво�
 qq('76',[T('Урвал','Ran away','Kaçtı'),T('Соврал','Lied','Yalan söyledi'),T('Нарвал','Narwhal','Narval'),T('Пристал','Pestered','Musallat oldu')],2,T('Нарвал. Предпочитая ледяную воду, кочуют вслед за арктическими льдами.','Narwhal. Preferring icy water, they migrate following arctic ice.','Narval. Buzlu suyu tercih ederek kutup buzunu takip ederek göç ederler.')),
 qq('77',[T('Крачка','Tern','Sumru'),T('Чайка','Seagull','Martı'),T('Ласточка','Swallow','Kırlangıç'),T('Синица','Tit','Baştankara')],0,T('Крачка полярная. Получила название из-за звука «Крррррр» в полете.','Arctic tern. Named after the "krrrrrr" sound it makes in flight.','Kutup sumrusu. Uçuş sırasında çıkardığı "krrrrrr" sesi nedeniyle bu adı almıştır.')),
 qq('78',[T('Лисица','Fox','Tilki'),T('Волк','Wolf','Kurt'),T('Бобёр','Beaver','Kunduz'),T('Росомаха','Wolverine','Kurt adam')],3,T('Росомаха. Осторожный хищник-одиночка, всеядный.','Wolverine. Cautious solitary predator, omnivorous.','Kurt adam. Temkinli yalnız yırtıcı, hepçil.')),
-qq('79',[T('Ластоног','Pinniped','Yüzgeçayaklı'),T('Морж','Walrus','Mors'),T('Тюлень','Seal','Fok'),T('Морской котик','Fur seal','Kürklü fok')],1,T('Морж. Запаса воздуха хватает в среднем на 10 минут.','Walrus. Its air supply lasts about 10 minutes on average.','Mors. Hava deposu ortalama 10 dakika yeter.'))
+qq('79',[T('Ластоног','Pinniped','Yüzgeçayaklı'),T('Морж','Walrus','Mors'),T('Тюлень','Seal','Fok'),T('Морской котик','Fur seal','Kürklü fok')],1,T('Морж. Запаса воздуха хватает в среднем на 10 минут.','Walrus. Its air supply lasts about 10 minutes on average.','Mors. Hava deposu ortalama 10 dakika yeter.')),
+qq('241',[T('Синий кит','Blue whale','Mavi balina'),T('Гренландский кит','Bowhead whale','Grönland balinası'),T('Горбатый кит','Humpback whale','Kambur balina'),T('Белуха','Beluga','Beyaz balina')],1,T('Гренландский кит. Живёт в арктических водах до 200 лет — это самое долгоживущее млекопитающее. Огромная голова пробивает лёд, чтобы подышать.','Bowhead whale. Lives in Arctic waters up to 200 years — the longest-living mammal. Its huge head breaks through ice to breathe.','Grönland balinası. Arktik sularda 200 yıla kadar yaşar — en uzun yaşayan memelidir. Devasa başı nefes almak için buzu kırar.')),
+qq('242',[T('Полярный волк','Arctic wolf','Kutup kurdu'),T('Песец','Arctic fox','Kutup tilkisi'),T('Волк серый','Grey wolf','Gri kurt'),T('Росомаха','Wolverine','Kurt adam')],0,T('Полярный волк. Живёт в самых северных широтах. Белый мех помогает маскироваться среди снега, а густой подшёрсток защищает от −50 °C.','Arctic wolf. Lives in the far north. Its white fur blends into snow, and dense underfur protects it from −50 °C.','Kutup kurdu. En kuzey enlemlerde yaşar. Beyaz kürkü karda kamufle olmasına yardımcı olur ve yoğun alt kürkü onu -50 °C\'den korur.')),
+qq('243',[T('Мышь','Mouse','Fare'),T('Полёвка','Vole','Tarla faresi'),T('Лемминг','Lemming','Lemming'),T('Хомяк','Hamster','Hamster')],2,T('Лемминг. Небольшой грызун тундры. В урожайные годы массово размножается — тогда хищники (песцы, совы) тоже дают больше потомства.','Lemming. A small tundra rodent. In good years it multiplies rapidly, and predators (foxes, owls) then also raise more young.','Lemming. Küçük bir tundra kemirgeni. İyi yıllarda hızla çoğalır; yırtıcılar (tilkiler, baykuşlar) da o zaman daha çok yavru büyütür.')),
+qq('244',[T('Арктический голец','Arctic char','Arktik alabalık'),T('Лосось','Salmon','Somon'),T('Форель','Trout','Alabalık'),T('Щука','Pike','Turna balığı')],0,T('Арктический голец. Рыба семейства лососёвых, живёт в холодных озёрах и реках Арктики. Может менять окраску в зависимости от сезона.','Arctic char. A salmonid fish of cold Arctic lakes and rivers. Can change its coloration depending on the season.','Arktik alabalık. Arktik\'in soğuk göllerinde ve nehirlerinde yaşayan bir somon balığıdır. Mevsime göre rengini değiştirebilir.')),
+qq('245',[T('Морж','Walrus','Mors'),T('Морской котик','Fur seal','Kürklü fok'),T('Гренландский тюлень','Harp seal','Grönland foku'),T('Морской лев','Sea lion','Deniz aslanı')],2,T('Гренландский тюлень, или лысун. Детёныш — белёк — рождается с белоснежным мехом и не сходит с льдины, пока не перелиняет.','Harp seal. The pup — a whitecoat — is born with snow-white fur and stays on the ice until it moults.','Grönland foku. Yavrusu — beyaz kürklü — kar beyazı tüyle doğar ve tüy dökene kadar buzdan ayrılmaz.')),
+qq('246',[T('Чайка','Seagull','Martı'),T('Полярная крачка','Arctic tern','Kutup sumrusu'),T('Поморник','Skua','Korsan martı'),T('Белая чайка','Ivory gull','Ak martı')],3,T('Белая чайка. Единственная полностью белая птица Арктики. Гнездится на скалах, питается рыбой и падалью, часто сопровождает белых медведей.','Ivory gull. The only entirely white bird of the Arctic. Nests on cliffs; feeds on fish and carrion, often following polar bears.','Ak martı. Arktik\'in tamamen beyaz olan tek kuşudur. Kayalıklarda yuvalar; balık ve leşle beslenir, sıklıkla kutup ayılarını takip eder.'))
 ]},
 '7':{regionKey:'holarctic',sub:T('Круглобореальная подобласть','Circumboreal subregion','Sirkumboreal alt bölge'),questions:[
 qq('80',[T('Грач','Rook','Ekin kargası'),T('Галка','Jackdaw','Küçük karga'),T('Ворон','Raven','Kuzgun'),T('Сорока','Magpie','Saksağan')],2,T('Ворон. Перед образованием пары самец демонстрирует самке виртуозность своего полета.','Raven. Before pairing, the male shows the female the virtuosity of his flight.','Kuzgun. Eşleşmeden önce erkek, dişiye uçuş hünerini gösterir.')),
@@ -423,7 +649,19 @@ qq('93',[T('Муравьед','Anteater','Karıncayiyen'),T('Крот','Mole','K
 qq('94',[T('Муравей бурый','Brown ant','Kahverengi karınca'),T('Муравей карий','Bay ant','Kestane karınca'),T('Муравей чёрный','Black ant','Siyah karınca'),T('Муравей рыжий','Red ant','Kızıl karınca')],3,T('Муравей рыжий лесной. Предпочитает хвойные леса, сластёна.','Red wood ant. Prefers coniferous forests; has a sweet tooth.','Kızıl orman karıncası. İğne yapraklı ormanları tercih eder; tatlıya düşkündür.')),
 qq('95',[T('Сойка','Jay','Alakarga'),T('Соловей','Nightingale','Bülbül'),T('Снегирь','Bullfinch','Şakrak kuşu'),T('Воробей','Sparrow','Serçe')],0,T('Сойка обыкновенная. На юге оседлая, в северных регионах — мигрирующая.','Eurasian jay. Sedentary in the south, migratory in northern regions.','Bayağı alakarga. Güneyde yerleşik, kuzey bölgelerde göçmendir.')),
 qq('96',[T('Корова','Cow','İnek'),T('Олень','Deer','Geyik'),T('Лось','Moose','Mus'),T('Як','Yak','Yak')],2,T('Лось. Основа рациона — лишайники, грибы и ягоды. Зимой обгрызает кору деревьев.','Moose. Diet is mainly lichen, mushrooms and berries; in winter gnaws tree bark.','Mus. Beslenmesi ağırlıklı olarak liken, mantar ve meyvelerden oluşur; kışın ağaç kabuğu kemirir.')),
-qq('97',[T('Лисица','Fox','Tilki'),T('Манта','Manta ray','Manta vatozu'),T('Медуза','Jellyfish','Denizanası'),T('Рыба-кит','Whale fish','Balina balığı')],0,T('Лисица морская, или скат колючий. Питается донными ракообразными, иногда мелкой рыбой.','Thornback ray. Feeds on bottom crustaceans, occasionally small fish.','Dikenli vatoz. Dip kabuklularla, bazen küçük balıklarla beslenir.'))
+qq('97',[T('Лисица','Fox','Tilki'),T('Манта','Manta ray','Manta vatozu'),T('Медуза','Jellyfish','Denizanası'),T('Рыба-кит','Whale fish','Balina balığı')],0,T('Лисица морская, или скат колючий. Питается донными ракообразными, иногда мелкой рыбой.','Thornback ray. Feeds on bottom crustaceans, occasionally small fish.','Dikenli vatoz. Dip kabuklularla, bazen küçük balıklarla beslenir.')),
+qq('247',[T('Пума','Puma','Puma'),T('Рысь','Lynx','Vaşak'),T('Леопард','Leopard','Leopar'),T('Гепард','Cheetah','Çita')],1,T('Рысь. Хищник тайги и северных лесов. Знаменита кисточками на ушах — считается, что они помогают ей слышать добычу.','Lynx. A predator of the taiga and northern forests. Famous for the tufts on its ears, thought to help it hear prey.','Vaşak. Tayga ve kuzey ormanlarının yırtıcısıdır. Kulaklarındaki püsküllerle ünlüdür; bunların avı duymasına yardımcı olduğu düşünülür.')),
+qq('248',[T('Куница','Marten','Sansar'),T('Горностай','Stoat','Kakım'),T('Соболь','Sable','Samur'),T('Норка','Mink','Vizon')],2,T('Соболь. Небольшой хищник сибирской тайги. Его густой и мягкий мех называют «мягким золотом» России.','Sable. A small predator of the Siberian taiga. Its dense, soft fur is called Russia\'s "soft gold".','Samur. Sibirya taygasının küçük bir yırtıcısıdır. Yoğun ve yumuşak kürkü Rusya\'nın "yumuşak altını" olarak adlandırılır.')),
+qq('249',[T('Белка','Squirrel','Sincap'),T('Азиатский бурундук','Siberian chipmunk','Sibirya sincabı'),T('Суслик','Ground squirrel','Yer sincabı'),T('Тушканчик','Jerboa','Arap tavşanı')],1,T('Азиатский бурундук. Полосатая спинка — его визитная карточка. На зиму делает запасы кедровых орехов, семян и ягод.','Siberian chipmunk. Its striped back is its hallmark. For winter it stores pine nuts, seeds and berries.','Sibirya sincabı. Çizgili sırtı onun simgesidir. Kış için çam fıstığı, tohum ve meyve depolar.')),
+qq('250',[T('Тетерев','Black grouse','Kara orman tavuğu'),T('Рябчик','Hazel grouse','Çil keklik'),T('Глухарь','Capercaillie','Orman horozu'),T('Куропатка','Partridge','Keklik')],2,T('Глухарь. Крупная лесная птица. Весной самцы токуют — исполняют брачные песни, во время которых на мгновение теряют слух (отсюда название).','Capercaillie. A large forest bird. In spring males perform lek displays with a courtship song during which they briefly go deaf — hence the name.','Orman horozu. Büyük bir orman kuşudur. İlkbaharda erkekler kur gösterisi yapar; bu sırada kısa süreliğine sağır olurlar — adı buradan gelir.')),
+qq('251',[T('Рябчик','Hazel grouse','Çil keklik'),T('Куропатка','Partridge','Keklik'),T('Перепёл','Quail','Bıldırcın'),T('Фазан','Pheasant','Sülün')],0,T('Рябчик. Небольшая лесная птица с пёстрым оперением, маскирующим её среди ветвей и мха. Питается почками, серёжками и ягодами.','Hazel grouse. A small forest bird with mottled plumage that hides it among branches and moss. Feeds on buds, catkins and berries.','Çil keklik. Dallar ve yosunlar arasında kamufle olmasını sağlayan alacalı tüylere sahip küçük bir orman kuşudur. Tomurcuk, kedicik ve meyvelerle beslenir.')),
+qq('252',[T('Сойка','Jay','Alakarga'),T('Сорока','Magpie','Saksağan'),T('Кедровка','Nutcracker','Fındıkkıran'),T('Кукша','Siberian jay','Sibirya alakargası')],2,T('Кедровка. Птица семейства врановых. Делает запасы кедровых орехов на зиму — и часто забывает о них, помогая тем самым распространению кедра.','Nutcracker. A member of the crow family. Stores pine nuts for winter and often forgets them, helping to spread the cedar.','Fındıkkıran. Karga familyasındandır. Kış için çam fıstığı depolar ve sıklıkla unutur; bu da sedirin yayılmasına yardımcı olur.')),
+qq('259',[T('Оса','Wasp','Yaban arısı'),T('Пчела медоносная','Honey bee','Bal arısı'),T('Шмель','Bumblebee','Bombus arısı'),T('Муха','Fly','Sinek')],1,T('Пчела медоносная. Живёт большими семьями, собирает нектар и делает мёд. Общается с сородичами с помощью «танцев».','Honey bee. Lives in large colonies, collects nectar and makes honey. Communicates with hive-mates using "dances".','Bal arısı. Büyük koloniler halinde yaşar, nektar toplar ve bal yapar. Kovan arkadaşlarıyla "danslarla" iletişim kurar.')),
+qq('262',[T('Колорадский жук','Colorado beetle','Kolorado böceği'),T('Божья коровка','Ladybug','Uğur böceği'),T('Жук-щелкун','Click beetle','Tıklama böceği'),T('Могильщик','Burying beetle','Gömen böcek')],1,T('Божья коровка. Хищник, поедает тлей, опасных для растений. Яркая окраска предупреждает птиц о горьком вкусе.','Ladybug. A predator that eats aphids harmful to plants. Bright colours warn birds of its bitter taste.','Uğur böceği. Bitkilere zararlı yaprak bitlerini yiyen bir yırtıcıdır. Parlak renkleri kuşları acı tadı konusunda uyarır.'))
+,qq('269',[T('Павлиний глаз','Peacock butterfly','Tavus kelebeği'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği'),T('Адмирал','Red admiral','Kırmızı amiral'),T('Лимонница','Brimstone','Limon kelebeği')],0,T('Павлиний глаз. Назван за характерные «глаза» на крыльях, которые отпугивают хищников.','Peacock butterfly. Named for the characteristic "eyes" on its wings that scare off predators.','Tavus kelebeği. Kanatlarındaki yırtıcıları korkutan karakteristik "gözler" nedeniyle bu adı almıştır.')),
+qq('270',[T('Махаон','Swallowtail','Kırlangıçkuyruk'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği'),T('Репейница','Painted lady','Diken kelebeği'),T('Траурница','Mourning cloak','Yas kelebeği')],1,T('Крапивница. Зимует взрослой особью — одна из первых бабочек, появляющихся весной.','Small tortoiseshell. Overwinters as an adult — one of the first butterflies to appear in spring.','Küçük kaplumbağa kelebeği. Yetişkin olarak kışlar — ilkbaharda ilk görünen kelebeklerden biridir.')),
+qq('271',[T('Павлиний глаз','Peacock butterfly','Tavus kelebeği'),T('Голубянка','Common blue','Mavi kelebek'),T('Махаон','Swallowtail','Kırlangıçkuyruk'),T('Зорька','Orange tip','Turuncu uçlu kelebek')],2,T('Махаон. Одна из крупнейших дневных бабочек Европы. Названа в честь Махаона — врача из греческой мифологии.','Swallowtail. One of the largest European day butterflies. Named after Machaon, a physician from Greek mythology.','Kırlangıçkuyruk. Avrupa\'nın en büyük gündüz kelebeklerinden biridir. Adını Yunan mitolojisindeki hekim Machaon\'dan alır.')),
+qq('273',[T('Траурница','Mourning cloak','Yas kelebeği'),T('Зорька','Orange tip','Turuncu uçlu kelebek'),T('Репейница','Painted lady','Diken kelebeği'),T('Лимонница','Brimstone','Limon kelebeği')],3,T('Лимонница. Лимонно-жёлтые крылья. Зимует взрослой особью — одна из первых весенних бабочек.','Brimstone. Lemon-yellow wings. Overwinters as an adult — one of the first spring butterflies.','Limon kelebeği. Limon sarısı kanatlıdır. Yetişkin olarak kışlar — ilkbaharın ilk kelebeklerinden biridir.'))
 ]},
 '8':{regionKey:'holarctic',sub:T('Средиземноморская подобласть','Mediterranean subregion','Akdeniz alt bölgesi'),questions:[
 qq('98',[T('Чайка','Seagull','Martı'),T('Казарка','Brent goose','Yosun kazı'),T('Перепёлка','Quail','Bıldırcın'),T('Буревестник','Petrel','Fırtına kuşu')],3,T('Буревестник средиземноморский. Ныряет на глубину 15 м, но плохо передвигается по суше.','Mediterranean petrel. Dives to 15 m but moves poorly on land.','Akdeniz fırtına kuşu. 15 m derinliğe dalar ama karada kötü hareket eder.')),
@@ -437,7 +675,20 @@ qq('105',[T('Цапля','Heron','Balıkçıl'),T('Фламинго','Flamingo',
 qq('106',[T('Уж','Grass snake','Su yılanı'),T('Черепаха','Turtle','Kaplumbağa'),T('Полоз','Ratsnake','Yılan'),T('Гюрза','Blunt-nosed viper','Engerek')],2,T('Полоз эскулапов. Укус не смертелен, но весьма болезнен.','Aesculapian snake. Its bite is not deadly but quite painful.','Eskülap yılanı. Isırığı ölümcül değil ama oldukça acı verir.')),
 qq('107',[T('Орбис','Orbis','Orbis'),T('Ибис','Ibis','Aynak'),T('Ирис','Iris','İris'),T('Катарсис','Catharsis','Katarsis')],1,T('Ибис священный. Охотится на других птиц, поедает их яйца.','Sacred ibis. Hunts other birds and eats their eggs.','Kutsal aynak. Diğer kuşları avlar ve yumurtalarını yer.')),
 qq('108',[T('Мышь','Mouse','Fare'),T('Тушканчик','Jerboa','Arap tavşanı'),T('Белка-летяга','Flying squirrel','Uçan sincap'),T('Лисица фенек','Fennec fox','Fenek tilkisi')],3,T('Лисица фенек ведёт ночной образ жизни. Может прыгать на высоту 70 сантиметров.','Fennec fox is nocturnal; can jump up to 70 cm high.','Fenek tilkisi gececidir; 70 cm yüksekliğe zıplayabilir.')),
-qq('109',[T('Скарабей','Scarab','Skareb'),T('Колорад','Colorado beetle','Kolorado böceği'),T('Жук-навозник','Dung beetle','Gübre böceği'),T('Майский жук','May beetle','Mayıs böceği')],0,T('Скарабей священный. Основное занятие — скатывание шариков навоза.','Sacred scarab. Its main activity is rolling balls of dung.','Kutsal skareb. Ana faaliyeti gübre toplarını yuvarlamaktır.'))
+qq('109',[T('Скарабей','Scarab','Skareb'),T('Колорад','Colorado beetle','Kolorado böceği'),T('Жук-навозник','Dung beetle','Gübre böceği'),T('Майский жук','May beetle','Mayıs böceği')],0,T('Скарабей священный. Основное занятие — скатывание шариков навоза.','Sacred scarab. Its main activity is rolling balls of dung.','Kutsal skareb. Ana faaliyeti gübre toplarını yuvarlamaktır.')),
+qq('116',[T('Фламинго','Flamingo','Flamingo'),T('Колпица','Spoonbill','Kaşıkçı'),T('Ибис','Ibis','Aynak'),T('Цапля','Heron','Balıkçıl')],3,T('Цапля рыжая. Ведет колониальный образ жизни. В полете изгибает шею буквой S.','Purple heron. Colonial; in flight it bends its neck into an S shape.','Mor balıkçıl. Kolonyal yaşar; uçuşta boynunu S şeklinde büker.')),
+qq('253',[T('Ящерица','Lizard','Kertenkele'),T('Средиземноморский хамелеон','Mediterranean chameleon','Akdeniz bukalemunu'),T('Геккон','Gecko','Geko'),T('Саламандра','Salamander','Semender')],1,T('Средиземноморский хамелеон. Меняет цвет не только для маскировки, но и для общения — яркие цвета выражают угрозу или готовность к спариванию.','Mediterranean chameleon. Changes colour not only for camouflage but also to communicate — bright colours signal threat or readiness to mate.','Akdeniz bukalemunu. Rengini yalnızca kamufle olmak için değil, iletişim için de değiştirir — parlak renkler tehdit veya çiftleşmeye hazır olduğunu gösterir.')),
+qq('254',[T('Белка','Squirrel','Sincap'),T('Соня-полчок','Fat dormouse','Yediuyur'),T('Бурундук','Chipmunk','Sincap'),T('Мышь','Mouse','Fare')],1,T('Соня-полчок. Мелкий грызун, спит с октября по апрель — больше половины жизни. Питается орехами, желудями и плодами.','Fat dormouse. A small rodent that sleeps from October to April — more than half its life. Feeds on nuts, acorns and fruit.','Yediuyur. Ekimden nisana kadar uyuyan küçük bir kemirgendir — hayatının yarısından fazlası. Fındık, meşe palamudu ve meyveyle beslenir.')),
+qq('255',[T('Серна','Chamois','Kar keçisi'),T('Горный козёл','Ibex','Dağ keçisi'),T('Ибекс','Alpine ibex','Alp dağ keçisi'),T('Баран','Ram','Koç')],2,T('Ибекс, или альпийский козёл. Живёт в высокогорьях Европы. Его рога растут всю жизнь и могут достигать метра.','Alpine ibex. Lives in the high mountains of Europe. Its horns grow throughout life and can reach a metre.','Alp dağ keçisi. Avrupa\'nın yüksek dağlarında yaşar. Boynuzları yaşam boyu büyür ve bir metreye ulaşabilir.')),
+qq('256',[T('Мурена средиземноморская','Mediterranean moray','Akdeniz müreni'),T('Угорь','Eel','Yılan balığı'),T('Барракуда','Barracuda','Baraküda'),T('Кальмар','Squid','Kalamar')],0,T('Мурена средиземноморская. Хищная рыба, прячется в расщелинах скал. Рот открыт не для угрозы — так она пропускает воду через жабры.','Mediterranean moray. A predatory fish hiding in rock crevices. Its open mouth is not a threat — it lets water pass over the gills.','Akdeniz müreni. Kaya yarıklarında saklanan yırtıcı bir balıktır. Açık ağzı tehdit değildir — solungaçlardan su geçirmesini sağlar.')),
+qq('257',[T('Скумбрия','Mackerel','Uskumru'),T('Тунец голубой','Bluefin tuna','Mavi yüzgeçli orkinos'),T('Сельдь','Herring','Ringa'),T('Сардина','Sardine','Sardalya')],1,T('Тунец голубой. Крупная хищная рыба Средиземного моря. Развивает скорость до 70 км/ч и способна пересекать Атлантику.','Bluefin tuna. A large predatory fish of the Mediterranean. Reaches speeds up to 70 km/h and can cross the Atlantic.','Mavi yüzgeçli orkinos. Akdeniz\'in büyük yırtıcı balığıdır. 70 km/s hıza ulaşır ve Atlantik\'i geçebilir.')),
+qq('258',[T('Баклан','Cormorant','Karabatak'),T('Пеликан','Pelican','Pelikan'),T('Хохлатый баклан','Crested cormorant','Tepeli karabatak'),T('Чомга','Grebe','Batağan')],2,T('Хохлатый баклан. Редкий средиземноморский вид. Гнездится небольшими колониями на скалистых островах, ныряет за рыбой.','Crested cormorant. A rare Mediterranean species. Nests in small colonies on rocky islands and dives for fish.','Tepeli karabatak. Nadir bir Akdeniz türüdür. Kayalık adalarda küçük koloniler halinde yuvalar ve balık için dalar.'))
+,qq('261',[T('Жук-олень','Stag beetle','Geyik böceği'),T('Жук-носорог','Rhinoceros beetle','Gergedan böceği'),T('Майский жук','May beetle','Mayıs böceği'),T('Бронзовка','Rose chafer','Altın böcek')],0,T('Жук-олень. Самцы носят большие мандибулы, похожие на рога оленя, и используют их в турнирных боях за самку.','Stag beetle. Males have large mandibles resembling deer antlers, used in fights for a female.','Geyik böceği. Erkekler geyik boynuzuna benzeyen büyük mandibullara sahiptir ve bir dişi için dövüşlerde kullanır.')),
+qq('266',[T('Оса обыкновенная','Common wasp','Bayağı yaban arısı'),T('Пчела медоносная','Honey bee','Bal arısı'),T('Шмель','Bumblebee','Bombus arısı'),T('Наездник','Ichneumon wasp','Parazit yaban arısı')],0,T('Оса обыкновенная. Хищник, охотится на других насекомых. Гнездо строит из пережёванной древесины, похожей на бумагу.','Common wasp. A predator that hunts other insects. Builds its nest from chewed wood resembling paper.','Bayağı yaban arısı. Diğer böcekleri avlar. Yuvasını kağıda benzeyen çiğnenmiş odundan yapar.')),
+qq('268',[T('Кузнечик','Grasshopper','Çekirge'),T('Сверчок','Cricket','Cırcır böceği'),T('Саранча','Locust','Çekirge'),T('Цикада','Cicada','Ağıl böceği')],3,T('Цикада. Знаменита громким стрекотанием в жаркие летние дни. Некоторые виды проводят под землёй 13 или 17 лет.','Cicada. Famous for its loud chirping on hot summer days. Some species spend 13 or 17 years underground.','Ağıl böceği. Sıcak yaz günlerinde yüksek cıvıltısıyla ünlüdür. Bazı türler yeraltında 13 veya 17 yıl geçirir.'))
+,qq('272',[T('Адмирал','Red admiral','Kırmızı amiral'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği'),T('Лимонница','Brimstone','Limon kelebeği'),T('Перламутровка','Silver-washed fritillary','Gümüş benekli kelebek')],0,T('Адмирал. Назван за чёрно-красный рисунок крыльев, напоминающий адмиральские погоны.','Red admiral. Named for its black-and-red wing pattern resembling admiral\'s epaulettes.','Kırmızı amiral. Amiral apoletlerini andıran siyah-kırmızı kanat deseni nedeniyle bu adı almıştır.')),
+qq('276',[T('Зорька','Orange tip','Turuncu uçlu kelebek'),T('Павлиний глаз','Peacock butterfly','Tavus kelebeği'),T('Репейница','Painted lady','Diken kelebeği'),T('Махаон','Swallowtail','Kırlangıçkuyruk')],2,T('Репейница. Известный мигрант: совершает перелёты на тысячи километров.','Painted lady. A famous migrant: travels thousands of kilometres.','Diken kelebeği. Ünlü bir göçmendir: binlerce kilometre yol alır.')),
+qq('278',[T('Зорька','Orange tip','Turuncu uçlu kelebek'),T('Лимонница','Brimstone','Limon kelebeği'),T('Репейница','Painted lady','Diken kelebeği'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği')],0,T('Зорька. Названа за оранжевые кончики крыльев, напоминающие зарю.','Orange tip. Named for the orange wingtips resembling sunrise colours.','Turuncu uçlu kelebek. Şafağı andıran turuncu kanat uçları nedeniyle bu adı almıştır.'))
 ]},
 '9':{regionKey:'holarctic',sub:T('Центрально-Азиатская подобласть','Central Asian subregion','Orta Asya alt bölgesi'),questions:[
 qq('110',[T('Сизокрылка','Pigeon','Güvercin'),T('Казарка','Brent goose','Yosun kazı'),T('Сизоворонка','Roller','Gökkuzgun'),T('Буревестник','Petrel','Fırtına kuşu')],2,T('Сизоворонка обыкновенная. Пристально наблюдает за обстановкой и при опасности немедленно улетает.','European roller. Watches its surroundings closely and flies off immediately at any threat.','Gökkuzgun. Çevresini dikkatle izler ve herhangi bir tehditte hemen uçar.')),
@@ -446,18 +697,17 @@ qq('112',[T('Омар чёрный','Black lobster','Siyah ıstakoz'),T('Мор�
 qq('113',[T('Кеклик','Chukar','Keklik'),T('Казарка','Brent goose','Yosun kazı'),T('Кукушка','Cuckoo','Guguk kuşu'),T('Утка-мандаринка','Mandarin duck','Mandarin ördeği')],0,T('Кеклик азиатский — маленькая птичка: средняя длина тела 35 см, вес от 350 до 800 г.','Chukar partridge is small: average length 35 cm, weight 350–800 g.','Keklik küçüktür: ortalama uzunluk 35 cm, ağırlık 350–800 g.')),
 qq('114',[T('Пони','Pony','Midilli'),T('Олень','Deer','Geyik'),T('Лошадь','Horse','At'),T('Антилопа','Antelope','Antilop')],2,T('Лошадь Пржевальского. Рост в холке — 130 см, масса — 300–350 кг.','Przewalski\'s horse. Height at withers 130 cm, weight 300–350 kg.','Przewalski atı. Omuz yüksekliği 130 cm, ağırlık 300–350 kg.')),
 qq('115',[T('Домашний паук','House spider','Ev örümceği'),T('Паук домовый','Domestic spider','Ev örümceği'),T('Длинноног','Daddy longlegs','Uzun bacaklı'),T('Мухоед','Flycatcher','Sinek avcısı')],1,T('Паук домовый обладает острым зрением и способностью улавливать колебания света.','Domestic spider has sharp eyesight and can detect fluctuations in light.','Ev örümceği keskin görüşe sahiptir ve ışıktaki dalgalanmaları algılayabilir.')),
-qq('116',[T('Фламинго','Flamingo','Flamingo'),T('Колпица','Spoonbill','Kaşıkçı'),T('Ибис','Ibis','Aynak'),T('Цапля','Heron','Balıkçıl')],3,T('Цапля рыжая. Ведет колониальный образ жизни. В полете изгибает шею буквой S.','Purple heron. Colonial; in flight it bends its neck into an S shape.','Mor balıkçıl. Kolonyal yaşar; uçuşta boynunu S şeklinde büker.')),
-qq('117',[T('Лис рыжий','Red fox','Kızıl tilki'),T('Волк красный','Red wolf','Kızıl kurt'),T('Лис пушистый','Fluffy fox','Tüylü tilki'),T('Волк рыжий','Red wolf','Kızıl kurt')],1,T('Красные волки живут семьями. Самцы остаются верными спутнице.','Red wolves live in families; males stay faithful to their mate.','Kızıl kurtlar aileler halinde yaşar; erkekler eşlerine sadık kalır.')),
-qq('118',[T('Лягушка','Frog','Kurbağa'),T('Жаба','Toad','Kara kurbağa'),T('Чесночница','Spadefoot','Toprak kurbağası'),T('Песочница','Sandbox','Kum havuzu')],2,T('Чесночница сирийская. Иногда используют норы других животных.','Syrian spadefoot. Sometimes uses other animals\' burrows.','Suriye toprak kurbağası. Bazen diğer hayvanların yuvalarını kullanır.')),
-qq('119',[T('Ибис','Ibis','Aynak'),T('Колпица','Spoonbill','Kaşıkçı'),T('Журавль','Crane','Turna'),T('Цапля','Heron','Balıkçıl')],1,T('Колпица обыкновенная. Гнездится колониями, иногда вместе с ибисами и цаплями.','Eurasian spoonbill. Nests in colonies, sometimes with ibises and herons.','Bayağı kaşıkçı. Koloniler halinde, bazen aynak ve balıkçıllarla birlikte yuvalar.')),
 qq('120',[T('Дикая кошка','Wildcat','Yaban kedisi'),T('Лис серый','Grey fox','Gri tilki'),T('Песец','Arctic fox','Kutup tilkisi'),T('Манул','Pallas\'s cat','Pallas kedisi')],3,T('Манул охотится в сумерках, ночью и на рассвете, а днем отдыхает в логове.','Pallas\'s cat hunts at dusk, night and dawn; rests in its den by day.','Pallas kedisi alacakaranlıkta, gece ve şafakta avlanır; gündüz ininde dinlenir.')),
-qq('121',[T('Гюрза','Blunt-nosed viper','Engerek'),T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Кобра','Cobra','Kobra')],0,T('Гюрза смертельно опасна. Нередко зимует на виноградниках.','Blunt-nosed viper is deadly. Often winters in vineyards.','Engerek ölümcüldür. Sıklıkla bağlarda kışlar.')),
-qq('122',[T('Ястреб','Hawk','Şahin'),T('Сокол','Falcon','Şahin'),T('Бородач','Lammergeier','Sakallı akbaba'),T('Орёл','Eagle','Kartal')],2,T('Бородачи выбирают себе пару на всю жизнь.','Lammergeiers choose a partner for life.','Sakallı akbabalar yaşam boyu eş seçer.')),
-qq('123',[T('Волк','Wolf','Kurt'),T('Шакал','Jackal','Çakal'),T('Лис','Fox','Tilki'),T('Собака динго','Dingo','Dingo')],1,T('Шакал обыкновенный. Если шакалы охотятся вдвоем, то гонят добычу друг на друга.','Golden jackal. When two jackals hunt, they chase prey towards each other.','Altın çakal. İki çakal avlanırken avı birbirlerine doğru kovalar.')),
-qq('124',[T('Саранча','Locust','Çekirge'),T('Кузнечик','Grasshopper','Çekirge'),T('Стрекоза','Dragonfly','Yusufçuk'),T('Светлячок','Firefly','Ateş böceği')],0,T('Саранча азиатская перелетная. За лето потомство одной самки съедает столько, сколько хватило бы для двух овец.','Migratory locust. In a summer, the offspring of one female eats as much as would feed two sheep.','Göçmen çekirge. Bir yazda, bir dişinin yavruları iki koyunu doyuracak kadar besin tüketir.'))
+qq('216',[T('Джейран','Goitered gazelle','Ceyran'),T('Сайгак','Saiga antelope','Sayga antilobu'),T('Дзерен','Mongolian gazelle','Mongol ceylanı'),T('Кулан','Onager','Kulan')],1,T('Сайгак. Степная антилопа с необычным мягким хоботом — им она согревает воздух зимой и фильтрует пыль летом.','Saiga antelope. A steppe antelope with an unusual soft trunk used to warm air in winter and filter dust in summer.','Sayga antilobu. Kışın havayı ısıtmak, yazın tozu süzmek için kullandığı sıra dışı yumuşak hortumu olan bir bozkır antilobu.')),
+qq('217',[T('Сайгак','Saiga antelope','Sayga antilobu'),T('Джейран','Goitered gazelle','Ceyran'),T('Импала','Impala','İmpala'),T('Серна','Chamois','Kar keçisi')],1,T('Джейран. Изящная пустынная газель с чёрными лировидными рогами. Может подолгу обходиться без воды.','Goitered gazelle. An elegant desert gazelle with black lyre-shaped horns. Can go without water for long periods.','Ceyran. Siyah lir şeklinde boynuzları olan zarif bir çöl ceylanıdır. Uzun süre susuz kalabilir.')),
+qq('218',[T('Осёл','Donkey','Eşek'),T('Кулан','Onager','Kulan'),T('Зебра','Zebra','Zebra'),T('Лошадь','Horse','At')],1,T('Кулан. Азиатский дикий осёл. Развивает скорость до 64 км/ч — быстрее многих лошадей.','Onager. The Asiatic wild ass. Reaches speeds up to 64 km/h — faster than many horses.','Kulan. Asya yabani eşeği. 64 km/s hıza ulaşır — birçok attan daha hızlıdır.')),
+qq('219',[T('Леопард','Leopard','Leopar'),T('Снежный барс','Snow leopard','Kar parsı'),T('Рысь','Lynx','Vaşak'),T('Пума','Puma','Puma')],1,T('Снежный барс, или ирбис. Горный хищник Центральной Азии. Хвост длиной почти с тело помогает балансировать на скалах и служит «одеялом» во сне.','Snow leopard. A mountain predator of Central Asia. Its tail, nearly body-length, aids balance on rocks and serves as a "blanket" while sleeping.','Kar parsı. Orta Asya\'nın dağ yırtıcısıdır. Neredeyse vücut uzunluğunda olan kuyruğu kayalarda dengeyi sağlar ve uyurken "battaniye" görevi görür.')),
+qq('220',[T('Верблюд двугорбый','Bactrian camel','İki hörgüçlü deve'),T('Дикий двугорбый верблюд','Wild Bactrian camel','Yabani çift hörgüçlü deve'),T('Лама','Llama','Lama'),T('Альпака','Alpaca','Alpaka')],1,T('Дикий двугорбый верблюд. Редчайший вид, сохранившийся только в пустыне Гоби. Отличается от домашнего меньшими размерами и более узкими горбами.','Wild Bactrian camel. An extremely rare species surviving only in the Gobi Desert. Smaller than the domestic form, with narrower humps.','Yabani çift hörgüçlü deve. Yalnızca Gobi Çölü\'nde hayatta kalan son derece nadir bir türdür. Evcil formdan daha küçük, hörgüçleri daha dardır.')),
+qq('221',[T('Дрофа','Great bustard','Toy kuşu'),T('Журавль','Crane','Turna'),T('Фазан','Pheasant','Sülün'),T('Куропатка','Partridge','Keklik')],0,T('Дрофа. Одна из самых тяжёлых летающих птиц: масса самцов может достигать 16 кг. Обитает в степях Евразии.','Great bustard. One of the heaviest flying birds: males can weigh up to 16 kg. Lives in the steppes of Eurasia.','Toy kuşu. En ağır uçan kuşlardan biridir: erkekler 16 kg\'a kadar çıkabilir. Avrasya bozkırlarında yaşar.'))
+,qq('264',[T('Саранча','Locust','Çekirge'),T('Кузнечик','Grasshopper','Çekirge'),T('Сверчок','Cricket','Cırcır böceği'),T('Цикада','Cicada','Ağıl böceği')],1,T('Кузнечик. Издаёт громкие стрекочущие звуки, потирая крылья друг о друга. Питается в основном растениями.','Grasshopper. Produces loud chirping by rubbing its wings together. Feeds mainly on plants.','Çekirge. Kanatlarını birbirine sürterek yüksek cıvıltı çıkarır. Ağırlıklı olarak bitkilerle beslenir.'))
+,qq('277',[T('Адмирал','Red admiral','Kırmızı amiral'),T('Голубянка','Common blue','Mavi kelebek'),T('Траурница','Mourning cloak','Yas kelebeği'),T('Перламутровка','Silver-washed fritillary','Gümüş benekli kelebek')],3,T('Перламутровка. Серебристые пятна на нижней стороне крыльев, похожие на перламутр.','Silver-washed fritillary. Silvery spots on the underside of the wings, resembling mother-of-pearl.','Gümüş benekli kelebek. Kanatlarının alt yüzeyindeki sedefi andıran gümüşi lekelerle tanınır.'))
 ]},
 '10':{regionKey:'holarctic',sub:T('Китайско-Гималайская подобласть','Sino-Himalayan subregion','Çin-Himalaya alt bölgesi'),questions:[
-qq('125',[T('Журавль','Crane','Turna'),T('Казарка','Brent goose','Yosun kazı'),T('Сизоворонка','Roller','Gökkuzgun'),T('Ибис','Ibis','Aynak')],0,T('Журавль черношеий. Пара строит гнездо на небольшом возвышении или прямо на воде.','Black-necked crane. The pair builds its nest on a small mound or directly on water.','Kara boyunlu turna. Çift yuvasını küçük bir tümsek üzerine ya da doğrudan suya yapar.')),
 qq('126',[T('Капибара','Capybara','Kapibara'),T('Панда','Panda','Panda'),T('Россомаха','Wolverine','Kurt adam'),T('Ленивец','Sloth','Tembel hayvan')],1,T('Панда большая. Китайское название — «медведь-кошка», хорошо лазает по деревьям.','Giant panda. Its Chinese name is "cat-bear"; it climbs trees well.','Dev panda. Çince adı "kedi ayısı"dır; ağaçlara iyi tırmanır.')),
 qq('127',[T('Сверчок','Cricket','Cırcır böceği'),T('Саранча','Locust','Çekirge'),T('Богомол','Mantis','Peygamber devesi'),T('Кузнечик','Grasshopper','Çekirge')],2,T('Богомол китайский. Подкарауливает свою добычу в засаде.','Chinese mantis. Ambushes its prey.','Çin peygamber devesi. Avını pusuya yatarak bekler.')),
 qq('128',[T('Попугай','Parrot','Papağan'),T('Казарка','Brent goose','Yosun kazı'),T('Кеклик','Chukar','Keklik'),T('Калибри','Hummingbird','Sinek kuşu')],0,T('Попугай кольчатый красноголовый. Шумная птица. Настоящий виртуоз в полете.','Red-headed lovebird. Noisy bird; a real virtuoso of flight.','Kırmızı başlı muhabbet kuşu. Gürültülü bir kuş; uçuşta gerçek bir virtüöz.')),
@@ -468,13 +718,17 @@ qq('132',[T('Осёл','Donkey','Eşek'),T('Олень','Deer','Geyik'),T('Ло�
 qq('133',[T('Карась','Crucian carp','Havuz balığı'),T('Иваси','Sardine','Sardalya'),T('Скумбрия','Mackerel','Uskumru'),T('Окунь','Perch','Levrek')],3,T('Окунь китайский отличается превосходным зрением.','Chinese perch has excellent eyesight.','Çin levreği mükemmel bir görüşe sahiptir.')),
 qq('134',[T('Цапля','Heron','Balıkçıl'),T('Колпица','Spoonbill','Kaşıkçı'),T('Журавль','Crane','Turna'),T('Аист','Stork','Leylek')],0,T('Цапля восточная рифовая гнездится большими колониями, часто с пеликанами и бакланами.','Pacific reef heron nests in large colonies, often with pelicans and cormorants.','Pasifik resif balıkçılı büyük koloniler halinde, sıklıkla pelikan ve karabataklarla yuvalar.')),
 qq('135',[T('Козёл','Goat','Keçi'),T('Буйвол','Buffalo','Manda'),T('Баран','Ram','Koç'),T('Такин','Takin','Takin')],3,T('Такин. Для питания важна соль, поэтому часто обитает неподалеку от соленых озер.','Takin. Salt is important for its diet, so it often lives near salt lakes.','Takin. Beslenmesi için tuz önemlidir, bu yüzden sıklıkla tuz göllerinin yakınında yaşar.')),
-qq('136',[T('Гюрза','Blunt-nosed viper','Engerek'),T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Кобра','Cobra','Kobra')],2,T('Полоз тонкохвостый. Маленькие змейки с первых мгновений жизни предоставлены сами себе.','Slender racer. From the first moments of life, baby snakes fend for themselves.','İnce yarışçı yılan. Yaşamın ilk anlarından itibaren yavru yılanlar kendi başlarının çaresine bakar.')),
 qq('137',[T('Попугай','Parrot','Papağan'),T('Удод','Hoopoe','İbibik'),T('Бородач','Lammergeier','Sakallı akbaba'),T('Кукушка','Cuckoo','Guguk kuşu')],1,T('Удод. Голос напоминает «уп-уп-уп» или «уд-уд-уд».','Hoopoe. Its call sounds like "oop-oop-oop" or "ud-ud-ud".','İbibik. Ötüşü "up-up-up" veya "ud-ud-ud" gibi duyulur.')),
 qq('138',[T('Обезьяна','Monkey','Maymun'),T('Горилла','Gorilla','Goril'),T('Примат','Primate','Primat'),T('Гиббон','Gibbon','Gibon')],3,T('Гиббон белорукий. Передвигается с помощью длинных сильных рук и цепких пальцев.','Lar gibbon. Moves using long strong arms and grasping fingers.','Beyaz elli gibon. Uzun güçlü kolları ve kavrayıcı parmaklarıyla hareket eder.')),
 qq('139',[T('Акула','Shark','Köpek balığı'),T('Кит','Whale','Balina'),T('Касатка','Orca','Katil balina'),T('Дельфин','Dolphin','Yunus')],0,T('Акула китовая. Не может размножаться до 30-летнего возраста.','Whale shark. Cannot reproduce until 30 years of age.','Balina köpek balığı. 30 yaşına kadar üreyemez.')),
 qq('140',[T('Казуарка','Cassowary','Kazuvar'),T('Кеклик','Chukar','Keklik'),T('Клест-еловик','Crossbill','Çaprazgaga'),T('Снегирь','Bullfinch','Şakrak kuşu')],2,T('Клест-еловик. Быстро летает, издает звуки «кэп-кэп-кэп».','Common crossbill. Flies fast; calls "kep-kep-kep".','Bayağı çaprazgaga. Hızlı uçar; "kep-kep-kep" diye seslenir.')),
 qq('141',[T('Росомаха','Wolverine','Kurt adam'),T('Медведь','Bear','Ayı'),T('Панда','Panda','Panda'),T('Пума','Puma','Puma')],1,T('Медведь гималайский. Основа рациона — листья и побеги растений.','Himalayan black bear. Diet is mainly leaves and plant shoots.','Himalaya siyah ayısı. Beslenmesi ağırlıklı olarak yaprak ve bitki sürgünlerinden oluşur.')),
-qq('142',[T('Аллигатор','Alligator','Alligator'),T('Крокодил','Crocodile','Timsah'),T('Саламандра','Salamander','Semender'),T('Ящерица','Lizard','Kertenkele')],0,T('Аллигатор китайский. После выхода из спячки долгое время греется на солнце.','Chinese alligator. After hibernation it basks in the sun for a long time.','Çin alligatoru. Kış uykusundan sonra uzun süre güneşte ısınır.'))
+qq('142',[T('Аллигатор','Alligator','Alligator'),T('Крокодил','Crocodile','Timsah'),T('Саламандра','Salamander','Semender'),T('Ящерица','Lizard','Kertenkele')],0,T('Аллигатор китайский. После выхода из спячки долгое время греется на солнце.','Chinese alligator. After hibernation it basks in the sun for a long time.','Çin alligatoru. Kış uykusundan sonra uzun süre güneşte ısınır.')),
+qq('222',[T('Волк серый','Grey wolf','Gri kurt'),T('Тибетский волк','Tibetan wolf','Tibet kurdu'),T('Шакал','Jackal','Çakal'),T('Лисица','Fox','Tilki')],1,T('Тибетский волк. Подвид серого волка, обитающий на Тибетском нагорье. Охотится на яков, сурков и пищух.','Tibetan wolf. A subspecies of the grey wolf living on the Tibetan Plateau. Hunts yaks, marmots and pikas.','Tibet kurdu. Tibet Platosu\'nda yaşayan gri kurdun bir alt türüdür. Yaban öküzü, marmot ve pika avlar.')),
+qq('223',[T('Кулан','Onager','Kulan'),T('Кианг','Kiang','Kiang'),T('Осёл','Donkey','Eşek'),T('Зебра','Zebra','Zebra')],1,T('Кианг. Тибетский дикий осёл. Живёт на высоте до 5400 м — выше, чем любое другое копытное.','Kiang. The Tibetan wild ass. Lives at altitudes up to 5400 m — higher than any other hoofed mammal.','Kiang. Tibet yabani eşeğidir. 5400 m\'ye kadar yükseklikte yaşar — diğer tüm toynaklılardan daha yüksekte.')),
+qq('224',[T('Буйвол','Buffalo','Manda'),T('Як','Yak','Yak'),T('Дикий як','Wild yak','Yabani yak'),T('Бизон','Bison','Bizon')],2,T('Дикий як. Крупный тибетский бык с густой длинной шерстью. От него произошёл домашний як.','Wild yak. A large Tibetan bovid with thick, long hair. It is the ancestor of the domestic yak.','Yabani yak. Kalın, uzun tüylü büyük bir Tibet sığırıdır. Evcil yakın atasıdır.')),
+qq('225',[T('Гималайский тар','Himalayan tahr','Himalaya tarı'),T('Снежный баран','Snow sheep','Kar koyunu'),T('Горный козёл','Mountain goat','Dağ keçisi'),T('Серна','Chamois','Kar keçisi')],0,T('Гималайский тар. Горный козёл Гималаев с короткой гривой и характерными рожками. Живёт на крутых скалах, где почти нет хищников.','Himalayan tahr. A Himalayan goat-antelope with a short mane and distinctive horns. Lives on steep cliffs where few predators reach.','Himalaya tarı. Kısa yeleli ve kendine özgü boynuzlu bir Himalaya keçi-antilobudur. Az yırtıcının ulaşabildiği dik kayalıklarda yaşar.')),
+qq('226',[T('Олень','Deer','Geyik'),T('Мунтжак','Muntjac','Muntjac'),T('Кабарга','Musk deer','Misk geyiği'),T('Лань','Fallow deer','Alageyik')],1,T('Мунтжак. Маленький олень с клыками вместо рогов. Крик его напоминает собачий лай — за это его зовут «лающим оленем».','Muntjac. A small deer with tusks instead of antlers. Its call sounds like a dog bark — hence the nickname "barking deer".','Muntjac. Boynuz yerine dişleri olan küçük bir geyiktir. Sesi köpek havlamasına benzer — bu yüzden "havlayan geyik" olarak bilinir.'))
 ]},
 '11':{regionKey:'holarctic',sub:T('Западно-Американская подобласть','Western American subregion','Batı Amerika alt bölgesi'),questions:[
 qq('143',[T('Тетерев','Grouse','Orman tavuğu'),T('Дюгонь','Dugong','Dugong'),T('Павлин','Peacock','Tavus kuşu'),T('Буревестник','Petrel','Fırtına kuşu')],0,T('Тетерев шалфейный. Основа рациона — листья полыни, семена и стебли других растений.','Sage grouse. Diet is mainly sagebrush leaves, seeds and stems of other plants.','Adaçayı orman tavuğu. Beslenmesi ağırlıklı olarak adaçayı yaprakları, tohumlar ve diğer bitkilerin saplarıdır.')),
@@ -486,6 +740,8 @@ qq('148',[T('Ящерица','Lizard','Kertenkele'),T('Змея','Snake','Yılan
 qq('149',[T('Синица','Tit','Baştankara'),T('Колпица','Spoonbill','Kaşıkçı'),T('Колибри','Hummingbird','Sinek kuşu'),T('Ибис','Ibis','Aynak')],2,T('Колибри обыкновенный. Основа рациона — нектар цветов, маленькие насекомые и пауки.','Ruby-throated hummingbird. Diet is mainly flower nectar, small insects and spiders.','Yakut boğazlı sinek kuşu. Beslenmesi ağırlıklı olarak çiçek nektarı, küçük böcekler ve örümceklerdir.')),
 qq('150',[T('Тушканчик','Jerboa','Arap tavşanı'),T('Суслик','Ground squirrel','Yer sincabı'),T('Бурундук','Chipmunk','Sincap'),T('Белка','Squirrel','Sincap')],1,T('Суслик золотистый. В период с октября по март впадает в зимнюю спячку.','Golden-mantled ground squirrel. Hibernates from October to March.','Altın sırtlı yer sincabı. Ekimden marta kadar kış uykusuna yatar.')),
 qq('151',[T('Килька','Sprat','Çaça'),T('Иваси','Sardine','Sardalya'),T('Скумбрия','Mackerel','Uskumru'),T('Горбуша','Pink salmon','Pembe somon')],3,T('Горбуша. Питается мелкими ракообразными, в частности креветками.','Pink salmon. Feeds on small crustaceans, particularly shrimp.','Pembe somon. Küçük kabuklularla, özellikle karidesle beslenir.'))
+,qq('260',[T('Махаон','Swallowtail','Kırlangıçkuyruk'),T('Павлиний глаз','Peacock butterfly','Tavus kelebeği'),T('Бабочка-монарх','Monarch butterfly','Kral kelebeği'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği')],2,T('Бабочка-монарх. Совершает миграции из Канады в Мексику — до 4000 км.','Monarch butterfly. Migrates from Canada to Mexico — up to 4000 km.','Kral kelebeği. Kanada\'dan Meksika\'ya 4000 km\'ye kadar göç eder.'))
+,qq('275',[T('Перламутровка','Silver-washed fritillary','Gümüş benekli kelebek'),T('Траурница','Mourning cloak','Yas kelebeği'),T('Крапивница','Small tortoiseshell','Küçük kaplumbağa kelebeği'),T('Лимонница','Brimstone','Limon kelebeği')],1,T('Траурница. Тёмно-бордовые крылья с белой каймой напоминают траурную одежду — отсюда название.','Mourning cloak. Dark burgundy wings with a white border resemble mourning clothes — hence the name.','Yas kelebeği. Beyaz kenarlı koyu bordo kanatları yas kıyafetlerini andırır — adı buradan gelir.'))
 ]},
 '12':{regionKey:'holarctic',sub:T('Восточно-Американская подобласть','Eastern American subregion','Doğu Amerika alt bölgesi'),questions:[
 qq('152',[T('Фламинго','Flamingo','Flamingo'),T('Журавль','Crane','Turna'),T('Змеешейка','Anhinga','Yılanboyun'),T('Тетерев','Grouse','Orman tavuğu')],2,T('Змеешейка американская. Сидя на ветке, с расправленными крыльями сушит оперение.','Anhinga. Perched on a branch with wings spread, it dries its plumage.','Yılanboyun. Bir dalda kanatları açık şekilde tüylerini kurutur.')),
@@ -497,6 +753,8 @@ qq('157',[T('Сом','Catfish','Yayın balığı'),T('Карп','Carp','Sazan'),
 qq('158',[T('Сиалия','Bluebird','Mavi kuş'),T('Колпица','Spoonbill','Kaşıkçı'),T('Ибис','Ibis','Aynak'),T('Угуису','Nightingale','Bülbül')],0,T('Сиалия восточная конкурирует с другими видами за места гнездования.','Eastern bluebird competes with other species for nesting sites.','Doğu mavi kuşu, yuvalama alanları için diğer türlerle rekabet eder.')),
 qq('159',[T('Бурундук','Chipmunk','Sincap'),T('Тушканчик','Jerboa','Arap tavşanı'),T('Суслик','Ground squirrel','Yer sincabı'),T('Собачка','Prairie dog','Çayır köpeği')],3,T('Собачка чернохвостая луговая. Живут большими колониями со сложной системой взаимоотношений.','Black-tailed prairie dog. Lives in large colonies with complex social structures.','Kara kuyruklu çayır köpeği. Karmaşık sosyal yapıya sahip büyük kolonilerde yaşar.')),
 qq('160',[T('Кит','Whale','Balina'),T('Ламантин','Manatee','Manati'),T('Тюлень','Seal','Fok'),T('Дюгонь','Dugong','Dugong')],1,T('Ламантин американский. Легко приспосабливается как к соленым, так и к пресным водам.','West Indian manatee. Adapts easily to both salt and fresh water.','Batı Hint manatisi. Hem tuzlu hem tatlı suya kolayca uyum sağlar.'))
+,qq('267',[T('Майский жук','May beetle','Mayıs böceği'),T('Светлячок','Firefly','Ateş böceği'),T('Бронзовка','Rose chafer','Altın böcek'),T('Могильщик','Burying beetle','Gömen böcek')],1,T('Светлячок. Светится благодаря биолюминесценции. Свечение помогает находить партнёров.','Firefly. Glows thanks to bioluminescence. The glow helps it find mates.','Ateş böceği. Biyolüminesans sayesinde parlar. Parıltı eş bulmasına yardımcı olur.'))
+,qq('274',[T('Голубянка','Common blue','Mavi kelebek'),T('Махаон','Swallowtail','Kırlangıçkuyruk'),T('Павлиний глаз','Peacock butterfly','Tavus kelebeği'),T('Адмирал','Red admiral','Kırmızı amiral')],0,T('Голубянка. Небольшая бабочка с голубыми крыльями. Её личинки выделяют сладкую жидкость, привлекающую муравьёв.','Common blue. A small butterfly with blue wings. Its larvae secrete a sweet liquid that attracts ants.','Mavi kelebek. Mavi kanatlı küçük bir kelebektir. Larvaları karıncaları çeken tatlı bir sıvı salgılar.'))
 ]},
 '13':{regionKey:'indomalayan',sub:T('Индийская подобласть','Indian subregion','Hint alt bölgesi'),questions:[
 qq('161',[T('Птица-носорог','Hornbill','Boynuzgaga'),T('Сиалия','Bluebird','Mavi kuş'),T('Сизоворонка','Roller','Gökkuzgun'),T('Баклан','Cormorant','Karabatak')],0,T('Птица-носорог азиатская. Ведет скрытный образ жизни.','Asian hornbill. Leads a secretive lifestyle.','Asya boynuzgagas. Gizemli bir yaşam sürer.')),
@@ -510,7 +768,14 @@ qq('168',[T('Тюлень','Seal','Fok'),T('Носорог','Rhinoceros','Gerged
 qq('169',[T('Дельфин','Dolphin','Yunus'),T('Манта','Manta ray','Manta vatozu'),T('Чесночница','Spadefoot','Toprak kurbağası'),T('Акула','Shark','Köpek balığı')],3,T('Акула мальгашская ночная. Известны случаи нападения на людей.','Night shark. There have been cases of attacks on humans.','Gece köpek balığı. İnsanlara saldırı vakaları bilinmektedir.')),
 qq('170',[T('Угуису','Nightingale','Bülbül'),T('Колпица','Spoonbill','Kaşıkçı'),T('Майна','Myna','Çiğdeci'),T('Тетерев','Grouse','Orman tavuğu')],2,T('Майна обыкновенная. В неволе её можно обучить человеческой речи.','Common myna. In captivity it can be taught human speech.','Bayağı çiğdeci. Esaret altında insan konuşması öğretilebilir.')),
 qq('171',[T('Мартышка','Macaque','Şebek'),T('Горилла','Gorilla','Goril'),T('Гиббон','Gibbon','Gibon'),T('Орангутан','Orangutan','Orangutan')],3,T('Орангутан отлично приспособлен к жизни на деревьях.','Orangutan is superbly adapted to life in trees.','Orangutan ağaç yaşamına mükemmel uyum sağlamıştır.')),
-qq('172',[T('Кит','Whale','Balina'),T('Скат','Ray','Vatoz'),T('Молот-рыба','Hammerhead shark','Çekiç balığı'),T('Медуза','Jellyfish','Denizanası')],2,T('Молот-рыба бронзовая. Несмотря на размеры, не опасна для человека.','Bronze whaler shark. Despite its size, it is not dangerous to humans.','Bronz avcı köpek balığı. Boyutuna rağmen insanlar için tehlikeli değildir.'))
+qq('172',[T('Кит','Whale','Balina'),T('Скат','Ray','Vatoz'),T('Молот-рыба','Hammerhead shark','Çekiç balığı'),T('Медуза','Jellyfish','Denizanası')],2,T('Молот-рыба бронзовая. Несмотря на размеры, не опасна для человека.','Bronze whaler shark. Despite its size, it is not dangerous to humans.','Bronz avcı köpek balığı. Boyutuna rağmen insanlar için tehlikeli değildir.')),
+qq('117',[T('Лис рыжий','Red fox','Kızıl tilki'),T('Волк красный','Red wolf','Kızıl kurt'),T('Лис пушистый','Fluffy fox','Tüylü tilki'),T('Волк рыжий','Red wolf','Kızıl kurt')],1,T('Красные волки живут семьями. Самцы остаются верными спутнице.','Red wolves live in families; males stay faithful to their mate.','Kızıl kurtlar aileler halinde yaşar; erkekler eşlerine sadık kalır.')),
+qq('121',[T('Гюрза','Blunt-nosed viper','Engerek'),T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Кобра','Cobra','Kobra')],2,T('Полоз тонкохвостый. Маленькие змейки с первых мгновений жизни предоставлены сами себе.','Slender racer. Baby snakes fend for themselves from the first moments of life.','İnce yarışçı yılan. Yavru yılanlar yaşamın ilk anlarından itibaren kendi başlarının çaresine bakar.')),
+qq('231',[T('Лев','Lion','Aslan'),T('Леопард','Leopard','Leopar'),T('Бенгальский тигр','Bengal tiger','Bengal kaplanı'),T('Гепард','Cheetah','Çita')],2,T('Бенгальский тигр. Национальное животное Индии. Полосатый рисунок уникален для каждой особи, как отпечаток пальца. Хорошо плавает.','Bengal tiger. The national animal of India. Its stripe pattern is unique to each individual, like a fingerprint. Swims well.','Bengal kaplanı. Hindistan\'ın ulusal hayvanıdır. Çizgi deseni her bireyde parmak izi gibi benzersizdir. İyi yüzer.')),
+qq('232',[T('Буйвол','Buffalo','Manda'),T('Зебу','Zebu','Zebu'),T('Гаур','Gaur','Gaur'),T('Як','Yak','Yak')],2,T('Гаур. Крупнейший дикий бык в мире: самцы достигают 3 м в длину и веса более тонны. Живёт в лесах Индии и Юго-Восточной Азии.','Gaur. The largest wild bovid in the world: males reach 3 m long and weigh over a tonne. Lives in forests of India and Southeast Asia.','Gaur. Dünyanın en büyük yabani sığırıdır: erkekler 3 m uzunluğa ve bir tondan fazla ağırlığa ulaşır. Hindistan ve Güneydoğu Asya ormanlarında yaşar.')),
+qq('233',[T('Гепард','Cheetah','Çita'),T('Дымчатый леопард','Clouded leopard','Bulutlu leopar'),T('Пума','Puma','Puma'),T('Рысь','Lynx','Vaşak')],1,T('Дымчатый леопард. Ночной хищник с крупнейшими клыками относительно тела среди всех кошачьих. Отлично лазает по деревьям и даже спускается по стволу вниз головой.','Clouded leopard. A nocturnal predator with the largest canines relative to body size among all cats. Climbs superbly and can descend a trunk headfirst.','Bulutlu leopar. Tüm kediler arasında vücuduna oranla en büyük köpek dişlerine sahip gececi bir yırtıcıdır. Mükemmel tırmanır ve bir gövdeden baş aşağı inebilir.')),
+qq('234',[T('Волк','Wolf','Kurt'),T('Дхоль','Dhole','Dhol'),T('Шакал','Jackal','Çakal'),T('Лисица','Fox','Tilki')],1,T('Дхоль, или азиатская дикая собака. Живёт стаями со сложной социальной структурой. Охотится на крупных копытных, таких как олени и гауры.','Dhole, or Asiatic wild dog. Lives in packs with a complex social structure. Hunts large ungulates such as deer and gaur.','Dhol ya da Asya yabani köpeği. Karmaşık sosyal yapıya sahip sürülerde yaşar. Geyik ve gaur gibi büyük toynaklıları avlar.')),
+qq('235',[T('Дельфин','Dolphin','Yunus'),T('Касатка','Orca','Katil balina'),T('Гангский дельфин','Ganges river dolphin','Ganj nehir yunusu'),T('Тюлень','Seal','Fok')],2,T('Гангский дельфин. Практически слепой — ориентируется в мутной воде с помощью эхолокации. Считается национальным водным животным Индии.','Ganges river dolphin. Almost blind — navigates murky water using echolocation. Considered the national aquatic animal of India.','Ganj nehir yunusu. Neredeyse kördür — bulanık suda ekolokasyonla yön bulur. Hindistan\'ın ulusal su hayvanı kabul edilir.'))
 ]},
 '14':{regionKey:'indomalayan',sub:T('Малайская подобласть','Malayan subregion','Malay alt bölgesi'),questions:[
 qq('173',[T('Горгулья','Gargoyle','Gargoyle'),T('Гарпия','Harpy eagle','Harpy kartalı'),T('Тетерев','Grouse','Orman tavuğu'),T('Сова','Owl','Baykuş')],1,T('Гарпия филиппинская. Живут и охотятся парами на обезьян.','Philippine eagle. Pairs live and hunt monkeys together.','Filipin kartalı. Çiftler birlikte maymun avlar ve yaşar.')),
@@ -527,25 +792,38 @@ qq('183',[T('Гремлин','Gremlin','Gremlin'),T('Белка-летяга','F
 qq('184',[T('Морская звезда','Starfish','Denizyıldızı'),T('Коралл','Coral','Mercan'),T('Ёж','Urchin','Deniz kestanesi'),T('Манта','Manta ray','Manta vatozu')],2,T('Еж грифельный морской.','Slate-pencil sea urchin.','Kurşunkalem deniz kestanesi.')),
 qq('185',[T('Альциона','Kingfisher','Yalıçapkını'),T('Колибри','Hummingbird','Sinek kuşu'),T('Синица','Tit','Baştankara'),T('Сизоворотка','Roller','Gökkuzgun')],0,T('Альциона белошейная. Живут парами.','Collared kingfisher. Lives in pairs.','Tasmalı yalıçapkını. Çiftler halinde yaşar.')),
 qq('186',[T('Кабан','Boar','Yaban domuzu'),T('Бабирусса','Babirusa','Babirusa'),T('Носорог','Rhinoceros','Gergedan'),T('Як','Yak','Yak')],1,T('Бабирусса. Врагами являются одичавшие собаки, серьёзную угрозу представляют браконьеры.','Babirusa. Enemies include feral dogs; poachers are a serious threat.','Babirusa. Düşmanları arasında yabanileşmiş köpekler vardır; kaçak avcılar ciddi bir tehdittir.')),
-qq('187',[T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Питон','Python','Piton'),T('Анаконда','Anaconda','Anakonda')],2,T('Питон сетчатый. Одна из самых крупных змей: длина тела достигает 10 м и более.','Reticulated python. One of the largest snakes: body length reaches 10 m and more.','Ağlı piton. En büyük yılanlardan biridir: vücut uzunluğu 10 m ve üzerine ulaşır.'))
+qq('187',[T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Питон','Python','Piton'),T('Анаконда','Anaconda','Anakonda')],2,T('Питон сетчатый. Одна из самых крупных змей: длина тела достигает 10 м и более.','Reticulated python. One of the largest snakes: body length reaches 10 m and more.','Ağlı piton. En büyük yılanlardan biridir: vücut uzunluğu 10 m ve üzerine ulaşır.')),
+qq('236',[T('Бенгальский тигр','Bengal tiger','Bengal kaplanı'),T('Индийский лев','Asiatic lion','Asya aslanı'),T('Суматранский тигр','Sumatran tiger','Sumatra kaplanı'),T('Ягуар','Jaguar','Jaguar')],2,T('Суматранский тигр. Самый маленький подвид тигра. В дикой природе осталось менее 500 особей, обитает только на острове Суматра.','Sumatran tiger. The smallest tiger subspecies. Fewer than 500 remain in the wild, only on the island of Sumatra.','Sumatra kaplanı. En küçük kaplan alt türüdür. Doğada 500\'den az birey kaldı; yalnızca Sumatra adasında yaşar.')),
+qq('237',[T('Тапир','Tapir','Tapir'),T('Малайский тапир','Malayan tapir','Malay tapiri'),T('Бегемот','Hippopotamus','Su aygırı'),T('Носорог','Rhinoceros','Gergedan')],1,T('Малайский тапир. Единственный вид тапиров в Азии. Детёныши рождаются полосатыми и пятнистыми, а взрослые становятся чёрно-белыми.','Malayan tapir. The only tapir species in Asia. Calves are born striped and spotted; adults turn black-and-white.','Malay tapiri. Asya\'daki tek tapir türüdür. Yavrular çizgili ve benekli doğar; yetişkinler siyah-beyaz olur.')),
+qq('238',[T('Бинтуронг','Binturong','Binturong'),T('Мангуст','Mongoose','Mangust'),T('Выдра','Otter','Su samuru'),T('Барсук','Badger','Porsuk')],0,T('Бинтуронг, или «кошачий медведь». Запах его мочи напоминает попкорн — так он метит территорию. Хвост цепкий, как у обезьяны.','Binturong, or "bearcat". Its urine smells like popcorn — used to mark territory. Its tail is prehensile, like a monkey\'s.','Binturong ya da "ayı kedi". İdrarının kokusu patlamış mısıra benzer — bölge işaretlemek için kullanır. Kuyruğu maymununki gibi kavrayıcıdır.')),
+qq('239',[T('Питон','Python','Piton'),T('Кобра','Cobra','Kobra'),T('Королевская кобра','King cobra','Kral kobra'),T('Мамба','Mamba','Mamba')],2,T('Королевская кобра. Самая длинная ядовитая змея в мире — до 5,5 м. Питается другими змеями. При угрозе поднимает переднюю часть тела и раздувает «капюшон».','King cobra. The longest venomous snake in the world — up to 5.5 m. Feeds on other snakes. When threatened it raises its forebody and flares its hood.','Kral kobra. Dünyanın en uzun zehirli yılanıdır — 5,5 m\'ye kadar. Diğer yılanlarla beslenir. Tehdit altında ön gövdesini kaldırır ve "başlığını" açar.')),
+qq('240',[T('Белый носорог','White rhinoceros','Beyaz gergedan'),T('Индийский носорог','Indian rhinoceros','Hint gergedanı'),T('Чёрный носорог','Black rhinoceros','Kara gergedan'),T('Суматранский носорог','Sumatran rhinoceros','Sumatra gergedanı')],3,T('Суматранский носорог. Самый маленький и самый древний из современных носорогов. Покрыт редкой шерстью — родство с шерстистыми носорогами ледникового периода.','Sumatran rhinoceros. The smallest and oldest of the living rhinos. Covered in sparse hair — a link to the woolly rhinos of the Ice Age.','Sumatra gergedanı. Yaşayan gergedanların en küçüğü ve en eskisidir. Seyrek tüylerle kaplıdır — Buzul Çağı\'nın yünlü gergedanlarıyla akrabadır.'))
 ]},
 '15':{regionKey:'ethiopian',sub:T('Восточно-Африканская подобласть','East African subregion','Doğu Afrika alt bölgesi'),questions:[
 qq('125',[T('Журавль','Crane','Turna'),T('Казарка','Brent goose','Yosun kazı'),T('Сизоворонка','Roller','Gökkuzgun'),T('Буревестник','Petrel','Fırtına kuşu')],0,T('Журавль черношеий. Пара строит гнездо на возвышении или прямо на воде.','Black-necked crane. The pair nests on a mound or directly on the water.','Kara boyunlu turna. Çift yuvasını bir tümsek veya doğrudan su üzerine yapar.')),
-qq('126',[T('Капибара','Capybara','Kapibara'),T('Панда','Panda','Panda'),T('Росомаха','Wolverine','Kurt adam'),T('Ленивец','Sloth','Tembel hayvan')],1,T('Панда большая. Хорошо лазает по деревьям.','Giant panda. Climbs trees well.','Dev panda. Ağaçlara iyi tırmanır.')),
 qq('127',[T('Омар','Lobster','Istakoz'),T('Краб','Crab','Yengeç'),T('Скорпион','Scorpion','Akrep'),T('Рак','Crayfish','Kerevit')],2,T('Скорпион. Самки заботятся о потомстве и носят малышей на себе.','Scorpion. Females care for their young and carry them on their backs.','Akrep. Dişiler yavrularına bakar ve onları sırtında taşır.')),
-qq('128',[T('Кеклик','Chukar','Keklik'),T('Казарка','Brent goose','Yosun kazı'),T('Кукушка','Cuckoo','Guguk kuşu'),T('Утка-мандаринка','Mandarin duck','Mandarin ördeği')],0,T('Кеклик азиатский — небольшая птичка.','Chukar is a small bird.','Keklik küçük bir kuştur.')),
-qq('129',[T('Пони','Pony','Midilli'),T('Панда','Panda','Panda'),T('Лошадь','Horse','At'),T('Антилопа','Antelope','Antilop')],1,T('Панда малая. Днём отдыхает в дупле, укрывшись хвостом.','Red panda. Rests in a hollow by day, wrapped in its tail.','Kızıl panda. Gündüz bir oyukta kuyruğuna sarılarak dinlenir.')),
-qq('130',[T('Паук','Spider','Örümcek'),T('Домовый паук','House spider','Ev örümceği'),T('Долгоног','Daddy longlegs','Uzun bacaklı'),T('Мухоед','Flycatcher','Sinek avcısı')],1,T('Паук домовый. Обладает острым зрением, живёт рядом с человеком.','House spider. Has sharp eyesight; lives close to humans.','Ev örümceği. Keskin bir görüşe sahiptir; insanların yanında yaşar.')),
 qq('131',[T('Утка','Duck','Ördek'),T('Колпица','Spoonbill','Kaşıkçı'),T('Ибис','Ibis','Aynak'),T('Цапля','Heron','Balıkçıl')],0,T('Цапля рыжая. В полёте изгибает шею буквой S.','Purple heron. In flight it bends its neck into an S shape.','Mor balıkçıl. Uçuşta boynunu S şeklinde büker.')),
-qq('132',[T('Лис рыжий','Red fox','Kızıl tilki'),T('Волк красный','Red wolf','Kızıl kurt'),T('Лис пушистый','Fluffy fox','Tüylü tilki'),T('Волк рыжий','Red wolf','Kızıl kurt')],1,T('Красный волк. Живут семьями, самцы верны спутнице.','Red wolf. Lives in families; males are faithful to their mate.','Kızıl kurt. Aileler halinde yaşar; erkekler eşlerine sadıktır.')),
-qq('118',[T('Лягушка','Frog','Kurbağa'),T('Жаба','Toad','Kara kurbağa'),T('Чесночница','Spadefoot','Toprak kurbağası'),T('Песочница','Sandbox','Kum havuzu')],2,T('Чесночница сирийская. Использует норы других животных.','Syrian spadefoot. Uses other animals\' burrows.','Suriye toprak kurbağası. Diğer hayvanların yuvalarını kullanır.')),
 qq('119',[T('Ибис','Ibis','Aynak'),T('Колпица','Spoonbill','Kaşıkçı'),T('Журавль','Crane','Turna'),T('Цапля','Heron','Balıkçıl')],0,T('Ибис священный. Охотится на других птиц, поедает их яйца.','Sacred ibis. Hunts other birds and eats their eggs.','Kutsal aynak. Diğer kuşları avlar ve yumurtalarını yer.')),
-qq('120',[T('Дикая кошка','Wildcat','Yaban kedisi'),T('Лис серый','Grey fox','Gri tilki'),T('Песец','Arctic fox','Kutup tilkisi'),T('Манул','Pallas\'s cat','Pallas kedisi')],3,T('Манул охотится в сумерках, ночью и на рассвете.','Pallas\'s cat hunts at dusk, night and dawn.','Pallas kedisi alacakaranlıkta, gece ve şafakta avlanır.')),
-qq('121',[T('Гюрза','Blunt-nosed viper','Engerek'),T('Уж','Grass snake','Su yılanı'),T('Полоз','Ratsnake','Yılan'),T('Кобра','Cobra','Kobra')],2,T('Полоз тонкохвостый. Змейки с первых мгновений жизни предоставлены сами себе.','Slender racer. Baby snakes fend for themselves from the first moments of life.','İnce yarışçı yılan. Yavru yılanlar yaşamın ilk anlarından itibaren kendi başlarının çaresine bakar.')),
 qq('122',[T('Ястреб','Hawk','Şahin'),T('Сокол','Falcon','Şahin'),T('Бородач','Lammergeier','Sakallı akbaba'),T('Орёл','Eagle','Kartal')],1,T('Сокол средиземноморский. Действуют сообща.','Mediterranean falcon. They act together.','Akdeniz şahini. Birlikte hareket ederler.')),
-qq('123',[T('Волк','Wolf','Kurt'),T('Шакал','Jackal','Çakal'),T('Лис','Fox','Tilki'),T('Собака динго','Dingo','Dingo')],3,T('Собака динго. Ведёт ночной образ жизни.','Dingo. Nocturnal.','Dingo. Gececidir.')),
-qq('124',[T('Саранча','Locust','Çekirge'),T('Кузнечик','Grasshopper','Çekirge'),T('Стрекоза','Dragonfly','Yusufçuk'),T('Светлячок','Firefly','Ateş böceği')],0,T('Саранча азиатская перелётная. Потомство одной самки съедает очень много.','Migratory locust. The offspring of one female consumes a huge amount.','Göçmen çekirge. Bir dişinin yavruları çok büyük miktarda besin tüketir.'))
-]}};
+qq('124',[T('Саранча','Locust','Çekirge'),T('Кузнечик','Grasshopper','Çekirge'),T('Стрекоза','Dragonfly','Yusufçuk'),T('Светлячок','Firefly','Ateş böceği')],0,T('Саранча азиатская перелётная. Потомство одной самки съедает очень много.','Migratory locust. The offspring of one female consumes a huge amount.','Göçmen çekirge. Bir dişinin yavruları çok büyük miktarda besin tüketir.')),
+qq('188',[T('Жираф','Giraffe','Zürafa'),T('Зебра','Zebra','Zebra'),T('Антилопа гну','Wildebeest','Afrika antilobu'),T('Буйвол','Buffalo','Manda')],0,T('Жираф. Самое высокое наземное животное: рост самцов достигает 5,5–6 м. Питается листьями акации, до которых никто, кроме него, не дотягивается.','Giraffe. The tallest land animal: males reach 5.5–6 m. Feeds on acacia leaves that no other herbivore can reach.','Zürafa. En uzun kara hayvanı: erkekler 5,5–6 m\'ye ulaşır. Başka hiçbir otçulun ulaşamadığı akasya yapraklarıyla beslenir.')),
+qq('189',[T('Лошадь','Horse','At'),T('Зебра','Zebra','Zebra'),T('Кулан','Onager','Kulan'),T('Осёл','Donkey','Eşek')],1,T('Зебра. Полосы уникальны, как отпечатки пальцев: по рисунку учёные различают отдельных особей.','Zebra. Stripes are unique like fingerprints: researchers identify individual zebras by their pattern.','Zebra. Çizgiler parmak izi gibi benzersizdir: araştırmacılar bireyleri desenden tanır.')),
+qq('190',[T('Носорог','Rhinoceros','Gergedan'),T('Тапир','Tapir','Tapir'),T('Бегемот','Hippopotamus','Su aygırı'),T('Буйвол','Buffalo','Manda')],2,T('Бегемот. Большую часть дня проводит в воде, а ночью выходит пастись на берег.','Hippopotamus. Spends most of the day in water; at night comes ashore to graze.','Su aygırı. Günün çoğunu suda geçirir; geceleri otlamak için kıyıya çıkar.')),
+qq('191',[T('Азиатский слон','Asian elephant','Asya fili'),T('Мамонт','Mammoth','Mamut'),T('Носорог','Rhinoceros','Gergedan'),T('Слон африканский','African elephant','Afrika fili')],3,T('Слон африканский. Самый крупный наземный зверь: масса взрослого самца может превышать 6 тонн.','African elephant. The largest land animal: an adult male can weigh over 6 tonnes.','Afrika fili. En büyük kara hayvanı: yetişkin bir erkek 6 tonu aşabilir.')),
+qq('192',[T('Леопард','Leopard','Leopar'),T('Лев','Lion','Aslan'),T('Гепард','Cheetah','Çita'),T('Тигр','Tiger','Kaplan')],1,T('Лев. Единственный вид кошачьих, живущий большими группами — прайдами.','Lion. The only cat species living in large groups called prides.','Aslan. Sürü adı verilen büyük gruplar halinde yaşayan tek kedi türü.')),
+qq('193',[T('Гепард','Cheetah','Çita'),T('Пума','Puma','Puma'),T('Ягуар','Jaguar','Jaguar'),T('Леопард','Leopard','Leopar')],0,T('Гепард. Самый быстрый наземный зверь: на коротких дистанциях развивает до 110 км/ч.','Cheetah. The fastest land animal: reaches up to 110 km/h over short distances.','Çita. En hızlı kara hayvanı: kısa mesafede 110 km/s hıza ulaşır.')),
+qq('194',[T('Белый носорог','White rhinoceros','Beyaz gergedan'),T('Чёрный носорог','Black rhinoceros','Kara gergedan'),T('Индийский носорог','Indian rhinoceros','Hint gergedanı'),T('Бегемот','Hippopotamus','Su aygırı')],1,T('Носорог чёрный. Хоть он и называется чёрным, окрас у него серый — название дано, чтобы отличать его от белого носорога по форме рта.','Black rhinoceros. Despite the name, its colour is grey — the name distinguishes it from the white rhino by mouth shape.','Kara gergedan. Adına rağmen rengi gridir — adı, ağzının şekliyle beyaz gergedandan ayırt etmek için verilmiştir.')),
+qq('195',[T('Антилопа гну','Wildebeest','Afrika antilobu'),T('Орикс','Oryx','Oriks'),T('Куду','Kudu','Kudu'),T('Импала','Impala','İmpala')],0,T('Антилопа гну. Каждый год миллионы гну совершают миграцию по Серенгети в поисках свежих пастбищ.','Wildebeest. Every year millions of them migrate across the Serengeti in search of fresh pastures.','Afrika antilobu. Her yıl milyonlarcası taze otlak arayışıyla Serengeti\'de göç eder.')),
+qq('196',[T('Нанду','Rhea','Nandu'),T('Эму','Emu','Emu'),T('Казуар','Cassowary','Kazuvar'),T('Страус африканский','Common ostrich','Bayağı deve kuşu')],3,T('Страус африканский. Самая крупная птица на Земле: рост до 2,7 м, но летать она не умеет.','Common ostrich. The largest living bird: up to 2.7 m tall, but it cannot fly.','Bayağı deve kuşu. Dünyanın en büyük kuşu: 2,7 m\'ye kadar boylanır ama uçamaz.')),
+qq('211',[T('Бизон','Bison','Bizon'),T('Африканский буйвол','African buffalo','Afrika mandası'),T('Зубр','Wisent','Visent'),T('Буйвол','Buffalo','Manda')],1,T('Африканский буйвол. Один из «большой пятёрки» Африки. Живёт большими стадами, а старые самцы держатся поодиночке и особенно опасны.','African buffalo. One of Africa\'s "Big Five". Lives in large herds; old bulls are solitary and especially dangerous.','Afrika mandası. Afrika\'nın "Büyük Beşli"sinin bir üyesidir. Büyük sürülerde yaşar; yaşlı boğalar yalnız kalır ve özellikle tehlikelidir.')),
+qq('212',[T('Гиена','Hyena','Sırtlan'),T('Шакал','Jackal','Çakal'),T('Пятнистая гиена','Spotted hyena','Benekli sırtlan'),T('Лев','Lion','Aslan')],2,T('Пятнистая гиена. Живёт матриархальными кланами. Славится мощными челюстями, способными раскалывать крупные кости.','Spotted hyena. Lives in matriarchal clans. Known for powerful jaws that can crack large bones.','Benekli sırtlan. Anaerkil klanlarda yaşar. Büyük kemikleri kırabilen güçlü çeneleriyle ünlüdür.')),
+qq('213',[T('Мангуст','Mongoose','Mangust'),T('Сурикат','Meerkat','Surikat'),T('Хорёк','Ferret','Yaban gelinciği'),T('Ласка','Weasel','Gelincik')],1,T('Сурикат. Живёт колониями в пустынях Калахари и Намиб. Один из зверьков встаёт «часовым» на задние лапы и следит за опасностью.','Meerkat. Lives in colonies in the Kalahari and Namib deserts. One member stands sentinel on its hind legs watching for danger.','Surikat. Kalahari ve Namib çöllerinde koloniler halinde yaşar. Bir birey arka bacakları üzerinde nöbet tutar ve tehlikeyi izler.')),
+qq('214',[T('Орангутан','Orangutan','Orangutan'),T('Горилла','Gorilla','Goril'),T('Шимпанзе','Chimpanzee','Şempanze'),T('Гиббон','Gibbon','Gibon')],2,T('Шимпанзе. Ближайший родственник человека. Умеет изготавливать и использовать простые орудия — например, палочки для ловли термитов.','Chimpanzee. The closest living relative of humans. Makes and uses simple tools, such as sticks to fish for termites.','Şempanze. İnsanın yaşayan en yakın akrabasıdır. Basit aletler yapar ve kullanır — örneğin termit avlamak için çubuklar.')),
+qq('215',[T('Журавль','Crane','Turna'),T('Птица-секретарь','Secretarybird','Sekreter kuşu'),T('Аист','Stork','Leylek'),T('Марабу','Marabou','Marabu')],1,T('Птица-секретарь. Хищная птица на длинных журавлиных ногах. Охотится на змей, топча их ногами и добивая клювом.','Secretarybird. A bird of prey on long crane-like legs. Hunts snakes by stomping on them and striking with its bill.','Sekreter kuşu. Uzun turna benzeri bacakları olan yırtıcı bir kuştur. Yılanları ayaklarıyla çiğneyerek ve gagasıyla vurarak avlar.'))
+,qq('265',[T('Муравей','Ant','Karınca'),T('Жук-короед','Bark beetle','Kabuk böceği'),T('Термит','Termite','Termit'),T('Проволочник','Wireworm','Tel kurdu')],2,T('Термит. Живёт огромными колониями, строит сложные термитники. Переваривает целлюлозу с помощью симбиотических микроорганизмов.','Termite. Lives in huge colonies and builds complex mounds. Digests cellulose with symbiotic microorganisms.','Termit. Devasa koloniler halinde yaşar ve karmaşık höyükler inşa eder. Selülozu simbiyotik mikroorganizmalarla sindirir.'))
+]}
+};
+
 w.ACHIEVEMENTS=[
 {id:'prog_first',cat:'progress',icon:'🎯',title:T('Первый шаг','First step','İlk adım'),desc:T('Пройдите первую викторину','Complete your first quiz','İlk testi tamamla'),check:c=>c.totalPlays>=1},
 {id:'prog_aus',cat:'progress',icon:'🌏',title:T('Открыл Австралию','Discovered Australia','Avustralya\'yı keşfettin'),desc:T('Откройте Австралийскую область','Unlock the Australian region','Avustralya bölgesinin kilidini aç'),check:c=>c.unlockedRegions.has('australian')},
@@ -619,43 +897,85 @@ w.ACH_CATEGORIES=[
 {id:'special',icon:'🎭',name:T('Особые','Special','Özel')}
 ];
 w.PHOTO_LEVELS=[
-{id:2001,icon:'🐦',name:T('Птицы','Birds','Kuşlar'),count:20,optionCount:4,pool:['1','3','8','10','13','16','17','19','22','26','28','31','33','34','37','40','41','43','46','51','56','59','62','65','68','71','74','77','80','83','86','89','92','95','98','101','105','107','110','113','116','119','122','125','128','131','134','137','140','143','146','149','152','155','158','161','164','167','170','173','176','182','185']},
-{id:2002,icon:'🐾',name:T('Звери','Mammals','Memeliler'),count:20,optionCount:4,pool:['6','7','11','14','20','25','30','35','44','45','52','53','61','64','66','67','69','70','72','75','76','78','79','81','84','87','88','90','91','93','96','102','104','108','111','114','117','120','123','126','129','132','135','138','141','144','147','150','153','156','159','160','162','163','165','168','171','174','177','180','183','186']},
-{id:2003,icon:'🦎',name:T('Рептилии','Reptiles','Sürüngenler'),count:12,optionCount:4,pool:['4','23','29','38','39','55','57','60','63','82','85','99','106','118','121','136','142','145','148','154','178','181','187']},
-{id:2004,icon:'🌊',name:T('Морские','Sea creatures','Deniz canlıları'),count:20,optionCount:4,pool:['2','5','9','12','15','21','24','27','32','36','42','45','52','54','55','58','61','64','67','70','73','76','79','91','97','99','100','103','130','133','139','151','157','160','163','166','169','172','175','184']},
-{id:2005,icon:'🦁',name:T('Хищники','Predators','Yırtıcılar'),count:20,optionCount:4,pool:['9','14','25','66','68','69','78','81','83','87','89','90','91','101','104','108','117','120','122','123','139','141','146','165','169','173','174']},
+{id:2001,icon:'🐦',name:T('Птицы','Birds','Kuşlar'),count:20,optionCount:4,pool:['1','3','8','10','13','16','17','19','22','26','28','31','33','34','37','40','41','43','46','51','56','59','62','65','68','71','74','77','80','83','86','89','92','95','96','98','101','105','107','110','113','116','119','122','125','128','131','134','137','140','143','146','149','152','155','158','161','164','167','170','173','176','182','185','197','200','202','204','205','206','207','208','210','215','221','228','229','246','250','251','252','258']},
+{id:2002,icon:'🐾',name:T('Звери','Mammals','Memeliler'),count:20,optionCount:4,pool:['241','242','243','245','247','248','249','254','255','227','230','231','232','233','234','235','236','237','238','240','211','212','213','214','216','217','218','219','220','222','223','224','225','226','6','7','11','14','20','25','30','35','44','45','52','53','61','64','66','67','69','70','72','75','76','78','79','81','84','87','88','90','91','93','96','102','104','108','111','114','117','120','123','126','129','132','135','138','141','144','147','150','153','156','159','160','162','163','165','168','171','174','177','180','183','186','188','189','190','191','192','193','194','195','198','199','203','209']},
+{id:2003,icon:'🦎',name:T('Рептилии','Reptiles','Sürüngenler'),count:15,optionCount:4,pool:['253','239','4','23','29','38','39','55','57','60','63','82','85','99','106','118','121','136','142','145','148','154','178','181','187']},
+{id:2004,icon:'🌊',name:T('Морские','Sea creatures','Deniz canlıları'),count:20,optionCount:4,pool:['241','244','245','256','257','2','5','9','12','15','21','24','27','32','36','42','45','52','54','55','58','61','64','67','70','73','76','79','91','97','99','100','103','130','133','139','151','157','160','163','166','169','172','175','184']},
+{id:2005,icon:'🦁',name:T('Хищники','Predators','Yırtıcılar'),count:20,optionCount:4,pool:['242','247','248','230','231','233','234','236','212','219','222','192','193','9','14','25','50','66','68','69','78','81','83','87','89','90','91','101','104','108','117','120','122','123','139','141','146','165','169','173','174']},
 {id:2006,icon:'🎯',name:T('Два фото','Two photos','İki fotoğraf'),count:15,optionCount:2,pool:['6','7','9','14','20','25','30','35','44','45','52','66','67','69','70','72','75','76','78','79','81','87','90','91','93','96','104','108','111','117','120','123','126','129','141','162','168','171','174','177','183','186']},
-{id:2007,icon:'🐛',name:T('Насекомые','Insects','Böcekler'),count:8,optionCount:4,pool:['18','94','109','112','115','124','127','179']},
-{id:2008,icon:'❄️',name:T('Арктика','Arctic','Arktik'),count:13,optionCount:4,pool:['41','66','67','68','69','70','71','72','74','75','76','77','79']},
-{id:2009,icon:'🐨',name:T('Австралия','Australia','Avustralya'),count:9,optionCount:4,pool:['6','7','11','14','20','25','30','35','44']},
-{id:2010,icon:'🌙',name:T('Ночные','Night hunters','Gece avcıları'),count:15,optionCount:4,pool:['6','14','25','27','35','53','57','60','63','93','96','104','108','120','156','183']},
-{id:2011,icon:'☠️',name:T('Опасные','Venomous','Zehirli'),count:12,optionCount:4,pool:['24','90','104','112','115','121','130','139','145','169','181','187']},
-{id:2012,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,optionCount:4,pool:['24','29','66','67','75','91','126','139','141','162','168','187']},
-{id:2013,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,optionCount:4,pool:['65','68','83','89','101','122','146','173']},
-{id:2014,icon:'🌴',name:T('Тропики','Tropics','Tropikal'),count:11,optionCount:4,pool:['57','138','167','168','171','176','177','180','182','183','186']},
-{id:2015,icon:'🏜️',name:T('Пустыни','Deserts','Çöller'),count:10,optionCount:4,pool:['4','23','29','108','111','112','118','120','121','145']}
+{id:2007,icon:'🐛',name:T('Насекомые','Insects','Böcekler'),count:20,optionCount:4,pool:['18','94','109','112','115','124','127','179','259','260','261','262','263','264','265','266','267','268','269','270','271','272','273','274','275','276','277','278']},
+{id:2008,icon:'❄️',name:T('Арктика','Arctic','Arktik'),count:13,optionCount:4,pool:['241','242','243','244','245','246','41','66','67','68','69','70','71','72','74','75','76','77','79']},
+{id:2009,icon:'🐨',name:T('Австралия','Australia','Avustralya'),count:20,optionCount:4,pool:['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','51','52','53','54','55','56','57','58','59','60','61','62','63','64','197','198','199','200','201','202','203','204','205','206','207','208','209','210','227','228','229','230']},
+{id:2010,icon:'🌙',name:T('Ночные','Night hunters','Gece avcıları'),count:20,optionCount:4,pool:['6','14','25','27','35','53','57','60','63','93','104','108','112','120','129','156','165','183','187','199','203','209','219','233','237','247','248','254']},
+{id:2011,icon:'☠️',name:T('Опасные','Venomous','Zehirli'),count:20,optionCount:4,pool:['24','29','89','90','104','112','115','121','122','123','124','130','139','141','145','169','173','181','187','190','191','192','193','194','211','212','219','222','224','231','232','234','236','239','240']},
+{id:2012,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,optionCount:4,pool:['232','240','211','224','188','190','191','196','24','29','66','67','75','91','126','139','141','162','168','187']},
+{id:2013,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,optionCount:4,pool:[,'215','50','65','68','83','89','101','122','146','173']},
+{id:2014,icon:'🌴',name:T('Тропики','Tropics','Tropikal'),count:20,optionCount:4,pool:['57','132','135','138','161','167','168','170','171','175','176','177','180','182','183','185','186','202','226','232','233','234','235','236','237','238','239','240','253']},
+{id:2015,icon:'🏜️',name:T('Пустыни','Deserts','Çöller'),count:15,optionCount:4,pool:['4','23','29','108','109','111','112','113','118','120','121','123','124','137','145','213','216','217','220','221','223','253']},
+{id:2016,icon:'🌍',name:T('Африка','Africa','Afrika'),count:15,optionCount:4,pool:['119','122','124','125','127','131','188','189','190','191','192','193','194','195','196','211','212','213','214','215']},
+{id:2017,icon:'🌏',name:T('Азия','Asia','Asya'),count:20,optionCount:4,pool:['110','111','112','113','114','115','120','126','127','128','129','130','132','133','134','135','137','138','139','140','141','142','161','162','163','164','165','166','167','168','169','170','171','172','173','174','175','176','177','178','179','180','181','182','183','184','185','186','187','216','217','218','219','220','221','222','223','224','225','226','231','232','233','234','235','236','237','238','239','240']},
+{id:2018,icon:'🌎',name:T('Европа и Северная Америка','Europe & North America','Avrupa ve Kuzey Amerika'),count:20,optionCount:4,pool:['65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100','101','102','103','104','105','106','107','108','109','116','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','258']},
+{id:2019,icon:'🌲',name:T('Лесные обитатели','Forest dwellers','Orman sakinleri'),count:15,optionCount:4,pool:['95','96','102','104','129','135','138','141','147','174','177','183','186','197','198','199','200','202','214','222','226','233','234','237','238','239','247','248','249','250','251','252','253','254']},
+{id:2020,icon:'🏔️',name:T('Горные','Mountain','Dağ'),count:12,optionCount:4,pool:['83','89','114','122','126','129','135','141','144','146','217','218','219','222','223','224','225','226','240','255']},
+{id:2021,icon:'🐆',name:T('Крупные кошки','Big cats','Büyük kediler'),count:7,optionCount:4,pool:['104','192','193','219','231','233','236']},
+{id:2022,icon:'🐋',name:T('Киты и дельфины','Whales & dolphins','Balinalar ve yunuslar'),count:10,optionCount:4,pool:['45','64','67','70','76','91','160','163','235','241']},
+{id:2023,icon:'🐟',name:T('Рыбы','Fish','Balıklar'),count:15,optionCount:4,pool:['2','5','9','15','21','27','32','36','97','103','130','133','139','151','157','244','256','257']},
+{id:2024,icon:'🐟',name:T('Жители коралловых рифов','Coral reef dwellers','Mercan resifi sakinleri'),count:11,optionCount:4,pool:['2','5','12','24','36','58','100','103','130','175','184']},
+{id:2025,icon:'🌊',name:T('Водные хищники','Aquatic predators','Su yırtıcıları'),count:10,optionCount:4,pool:['9','24','32','91','133','139','157','172','256','257']},
+{id:2026,icon:'🐾',name:T('Рогатые и клыкастые','Horned & tusked','Boynuzlu ve dişli'),count:12,optionCount:4,pool:['75','76','79','135','144','168','194','217','224','225','232','240','255']},
+{id:2027,icon:'🌲',name:T('Обитатели тундры и тайги','Tundra & taiga dwellers','Tundra ve tayga sakinleri'),count:12,optionCount:4,pool:['66','96','242','243','244','245','247','248','249','250','251','252']},
+{id:2028,icon:'🌺',name:T('Яркие тропические птицы','Bright tropical birds','Parlak tropikal kuşlar'),count:10,optionCount:4,pool:['1','3','19','31','128','131','167','197','202','208']},
+{id:2029,icon:'🦎',name:T('Ящерицы и амфибии','Lizards & amphibians','Kertenkeleler ve amfibiler'),count:10,optionCount:4,pool:['4','29','38','39','57','60','63','85','148','253']},
+{id:2030,icon:'🐆',name:T('Кошачьи и родственники','Cats & relatives','Kedigiller ve akrabaları'),count:10,optionCount:4,pool:['104','120','192','193','212','213','219','231','233','236','247']},
+{id:2031,icon:'🐢',name:T('Долгожители','Long-livers','Uzun yaşayanlar'),count:10,optionCount:4,pool:['38','51','67','99','139','146','162','178','190','191']},
+{id:2032,icon:'🏗️',name:T('Животные-строители','Animal builders','Hayvan mimarlar'),count:10,optionCount:4,pool:['1','18','41','51','88','109','147','159','213','227']},
+{id:2033,icon:'👥',name:T('Живут сообща','Social animals','Sosyal hayvanlar'),count:12,optionCount:4,pool:['18','19','31','176','180','188','189','195','211','214','259','265']},
+{id:2034,icon:'🎭',name:T('Мастера маскировки','Masters of disguise','Kamufle ustaları'),count:20,optionCount:4,pool:['5','8','21','23','27','32','60','63','85','108','120','130','175','209','226','233','243','253','269','270']},
+{id:2035,icon:'🐁',name:T('Грызуны и мелкие звери','Rodents & small mammals','Kemirgenler ve küçük memeliler'),count:20,optionCount:4,pool:['20','35','44','84','88','93','108','120','129','150','153','156','159','199','213','243','248','249','254']},
+{id:2036,icon:'🌾',name:T('Обитатели саванны','Savanna dwellers','Savana sakinleri'),count:20,optionCount:4,pool:['109','119','124','125','127','131','188','189','190','191','192','193','194','195','196','211','212','213','214','215']},
+{id:2037,icon:'🐆',name:T('Пятнистые и полосатые','Spotted & striped','Benekli ve çizgili'),count:20,optionCount:4,pool:['8','104','121','154','155','156','181','187','189','193','194','230','231','233','236','239','240','249','253','262']},
+{id:2038,icon:'🦌',name:T('Копытные','Hoofed animals','Toynaklılar'),count:20,optionCount:4,pool:['72','75','96','111','132','135','144','188','189','195','211','216','217','218','220','223','224','225','232','255']},
+{id:2039,icon:'🦆',name:T('Водоплавающие птицы','Waterfowl','Su kuşları'),count:20,optionCount:4,pool:['10','13','16','41','43','46','59','62','71','74','77','92','98','105','107','116','152','204','205','258']},
+{id:2040,icon:'🎵',name:T('Певчие и голосистые птицы','Singing & calling birds','Ötücü ve çağırıcı kuşlar'),count:20,optionCount:4,pool:['19','22','26','28','40','47','48','49','86','128','137','140','158','170','185','197','200','204','207','208']},
+{id:2041,icon:'🐾',name:T('Пушистые звери','Furry animals','Tüylü hayvanlar'),count:20,optionCount:4,pool:['6','7','11','14','20','25','35','44','53','66','69','84','87','90','93','96','104','108','126','129']},
+{id:2042,icon:'🥚',name:T('Заботливые родители','Caring parents','Şefkatli ebeveynler'),count:20,optionCount:4,pool:['41','51','33','17','6','1','162','192','81','193','213','234','214','171','180','227','156','174','34','28']},
+{id:2043,icon:'🎨',name:T('Яркие и красочные','Bright & colourful','Parlak ve renkli'),count:20,optionCount:4,pool:['167','131','3','31','19','197','202','260','269','276','272','273','274','277','2','36','130','12','24','175']},
+{id:2044,icon:'🦴',name:T('Древние и реликтовые','Ancient & relict','Antik ve relikt'),count:20,optionCount:4,pool:['38','30','11','51','229','178','29','154','142','237','17','33','196','191','194','186','75','240','27','21']},
+{id:2045,icon:'🏃',name:T('Чемпионы скорости и прыжков','Speed & jump champions','Hız ve zıplama şampiyonları'),count:20,optionCount:4,pool:['193','84','196','1','108','218','223','33','81','78','89','91','45','104','44','25','29','32','27','24']},
+{id:2046,icon:'🎩',name:T('Странные и необычные','Strange & unusual','Tuhaf ve sıra dışı'),count:20,optionCount:4,pool:['30','11','237','216','186','177','5','23','183','229','51','226','21','76','108','27','199','130','103','12']},
+{id:2047,icon:'👑',name:T('Королевские и величественные','Royal & majestic','Kraliyet ve görkemli'),count:20,optionCount:4,pool:['192','239','185','202','34','41','83','89','146','194','191','188','190','208','232','8','135','75','240','104']},
+{id:2048,icon:'🧊',name:T('Холодостойкие','Cold-hardy','Soğuğa dayanıklı'),count:20,optionCount:4,pool:['66','69','75','72','244','243','79','76','70','241','245','246','68','242','74','71','65','77','78','247']},
+{id:2049,icon:'💪',name:T('Тяжеловесы','Heavyweights','Ağır sıkletler'),count:20,optionCount:4,pool:['67','191','162','194','190','240','232','211','224','75','188','66','91','139','76','79','241','24','29','178']}
 ];
 w.THEMED_LEVELS=[
-{id:1001,icon:'🐦',name:T('Птицы мира','Birds of the world','Dünya kuşları'),count:20,pool:['1','3','8','10','13','16','17','19','22','26','28','31','33','34','37','40','41','43','46','51','56','59','62','65','68','71','74','77','80','83','86','89','92','95','98','101','105','107','110','113','116','119','122','125','128','131','134','137','140','143','146','149','152','155','158','161','164','167','170','173','176','182','185']},
-{id:1002,icon:'🐾',name:T('Млекопитающие','Mammals','Memeliler'),count:20,pool:['6','7','11','14','20','25','30','35','44','45','52','53','61','64','66','67','69','70','72','75','76','78','79','81','84','87','88','90','91','93','96','102','104','108','111','114','117','120','123','126','129','132','135','138','141','144','147','150','153','156','159','160','162','163','165','168','171','174','177','180','183','186']},
-{id:1003,icon:'🦎',name:T('Рептилии и амфибии','Reptiles & amphibians','Sürüngenler ve amfibiler'),count:12,pool:['4','23','29','38','39','55','57','60','63','82','85','99','106','118','121','136','142','145','148','154','178','181','187']},
-{id:1004,icon:'🌊',name:T('Обитатели морей','Sea creatures','Deniz canlıları'),count:20,pool:['2','5','9','12','15','21','24','27','32','36','42','45','52','54','55','58','61','64','67','70','73','76','79','91','97','99','100','103','130','133','139','151','157','160','163','166','169','172','175','184']},
-{id:1005,icon:'🐛',name:T('Насекомые и пауки','Insects & spiders','Böcekler ve örümcekler'),count:8,pool:['18','94','109','112','115','124','127','179']},
+{id:1001,icon:'🐦',name:T('Птицы мира','Birds of the world','Dünya kuşları'),count:20,pool:['246','250','251','252','258','1','3','8','10','13','16','17','19','22','26','28','31','33','34','37','40','41','43','46','51','56','59','62','65','68','71','74','77','80','83','86','89','92','95','98','101','105','107','110','113','116','119','122','125','128','131','134','137','140','143','146','149','152','155','158','161','164','167','170','173','176','182','185','197','200','202','204','205','206','207','208','210']},
+{id:1002,icon:'🐾',name:T('Млекопитающие','Mammals','Memeliler'),count:20,pool:['241','242','243','245','247','248','249','254','255','227','230','231','232','233','234','235','236','237','238','240','6','7','11','14','20','25','30','35','44','45','52','53','61','64','66','67','69','70','72','75','76','78','79','81','84','87','88','90','91','93','96','102','104','108','111','114','117','120','123','126','129','132','135','138','141','144','147','150','153','156','159','160','162','163','165','168','171','174','177','180','183','186','188','189','190','191','192','193','194','195','198','199','203','209','211','212','213','214','216','217','218','219','220','222','223','224','225','226']},
+{id:1003,icon:'🦎',name:T('Рептилии и амфибии','Reptiles & amphibians','Sürüngenler ve amfibiler'),count:12,pool:['253','239','4','23','29','38','39','55','57','60','63','82','85','99','106','118','121','136','142','145','148','154','178','181','187']},
+{id:1004,icon:'🌊',name:T('Обитатели морей','Sea creatures','Deniz canlıları'),count:20,pool:['241','244','245','256','257','2','5','9','12','15','21','24','27','32','36','42','45','52','54','55','58','61','64','67','70','73','76','79','91','97','99','100','103','130','133','139','151','157','160','163','166','169','172','175','184']},
+{id:1005,icon:'🐛',name:T('Насекомые и пауки','Insects & spiders','Böcekler ve örümcekler'),count:20,pool:['18','94','109','112','115','124','127','179','259','260','261','262','263','264','265','266','267','268','269','270','271','272','273','274','275','276','277','278']},
 {id:1006,icon:'🐨',name:T('Австралийские звери','Australian animals','Avustralya hayvanları'),count:9,pool:['6','7','11','14','20','25','30','35','44']},
 {id:1007,icon:'❄️',name:T('Арктика и Антарктика','Arctic & Antarctic','Arktik ve Antarktika'),count:13,pool:['41','66','67','68','69','70','71','72','74','75','76','77','79']},
-{id:1008,icon:'🦁',name:T('Хищники','Predators','Yırtıcılar'),count:20,pool:['9','14','25','66','68','69','78','81','83','87','89','90','91','101','104','108','117','120','122','123','139','141','146','165','169','173','174']},
-{id:1009,icon:'🌙',name:T('Ночные охотники','Night hunters','Gece avcıları'),count:15,pool:['6','14','25','27','35','53','57','60','63','93','96','104','108','120','156','183']},
+{id:1008,icon:'🦁',name:T('Хищники','Predators','Yırtıcılar'),count:20,pool:['242','247','248','230','231','233','234','236','212','219','222','192','193','9','14','25','50','66','68','69','78','81','83','87','89','90','91','101','104','108','117','120','122','123','139','141','146','165','169','173','174']},
+{id:1009,icon:'🌙',name:T('Ночные охотники','Night hunters','Gece avcıları'),count:15,pool:['6','14','25','27','35','53','57','60','63','93','96','104','108','120','121','156','183','199','203','209']},
 {id:1010,icon:'💍',name:T('Верные пары','Faithful pairs','Sadık çiftler'),count:10,pool:['28','34','51','80','117','122','138','142','173','185']},
-{id:1011,icon:'☠️',name:T('Ядовитые и опасные','Venomous & dangerous','Zehirli ve tehlikeli'),count:12,pool:['24','90','104','112','115','121','130','139','145','169','181','187']},
-{id:1012,icon:'🏠',name:T('Строители и архитекторы','Builders & architects','İnşaatçılar ve mimarlar'),count:9,pool:['1','18','41','51','59','88','109','147','155']},
-{id:1013,icon:'🎭',name:T('Мастера маскировки','Masters of disguise','Kamufle ustaları'),count:7,pool:['5','8','21','23','27','60','130']},
-{id:1014,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,pool:['24','29','66','67','75','91','126','139','141','162','168','187']},
-{id:1015,icon:'🏜️',name:T('Жители пустынь','Desert dwellers','Çöl sakinleri'),count:10,pool:['4','23','29','108','111','112','118','120','121','145']},
-{id:1016,icon:'🌴',name:T('Тропические леса','Tropical forests','Tropikal ormanlar'),count:11,pool:['57','138','167','168','171','176','177','180','182','183','186']},
-{id:1017,icon:'🎵',name:T('Голосистые и певчие','Singers & callers','Şarkıcılar ve çağırıcılar'),count:11,pool:['19','22','26','28','40','86','128','137','158','170','185']},
-{id:1018,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,pool:['65','68','83','89','101','122','146','173']},
-{id:1019,icon:'🐋',name:T('Морские млекопитающие','Marine mammals','Deniz memelileri'),count:10,pool:['45','61','64','67','70','76','79','91','160','163']},
-{id:1020,icon:'🐢',name:T('Долгожители','Long-livers','Uzun yaşayanlar'),count:9,pool:['19','38','51','67','99','122','146','162','178']}
+{id:1011,icon:'☠️',name:T('Ядовитые и опасные','Venomous & dangerous','Zehirli ve tehlikeli'),count:12,pool:['234','236','239','24','90','104','112','115','121','130','139','145','169','181','187']},
+{id:1012,icon:'🏠',name:T('Строители и архитекторы','Builders & architects','İnşaatçılar ve mimarlar'),count:9,pool:['227','213','1','18','41','51','59','88','109','147','155']},
+{id:1013,icon:'🎭',name:T('Мастера маскировки','Masters of disguise','Kamufle ustaları'),count:7,pool:['243','253','233','5','8','21','23','27','60','130']},
+{id:1014,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,pool:['232','240','211','224','188','190','191','196','24','29','66','67','75','91','126','139','141','162','168','187']},
+{id:1015,icon:'🏜️',name:T('Жители пустынь','Desert dwellers','Çöl sakinleri'),count:10,pool:[,'213','216','217','220','4','23','29','108','111','112','118','120','121','145']},
+{id:1016,icon:'🌴',name:T('Тропические леса','Tropical forests','Tropikal ormanlar'),count:11,pool:['232','233','234','236','237','238','239','240','57','138','167','168','171','176','177','180','182','183','186']},
+{id:1017,icon:'🎵',name:T('Голосистые и певчие','Singers & callers','Şarkıcılar ve çağırıcılar'),count:11,pool:['250','251','228','229','19','22','26','28','40','47','48','49','86','128','137','158','170','185','197','200','204','206','207','208']},
+{id:1018,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,pool:['50','65','68','83','89','101','122','146','173']},
+{id:1019,icon:'🐋',name:T('Морские млекопитающие','Marine mammals','Deniz memelileri'),count:10,pool:['241','245','235','45','61','64','67','70','76','79','91','160','163']},
+{id:1020,icon:'🐢',name:T('Долгожители','Long-livers','Uzun yaşayanlar'),count:9,pool:['19','38','51','67','99','122','146','162','178']},
+{id:1021,icon:'🌍',name:T('Африка','Africa','Afrika'),count:15,pool:['119','122','124','125','127','131','188','189','190','191','192','193','194','195','196','211','212','213','214','215']},
+{id:1022,icon:'🌏',name:T('Азия','Asia','Asya'),count:20,pool:['110','111','112','113','114','115','120','126','127','128','129','130','132','133','134','135','137','138','139','140','141','142','161','162','163','164','165','166','167','168','169','170','171','172','173','174','175','176','177','178','179','180','181','182','183','184','185','186','187','216','217','218','219','220','221','222','223','224','225','226','231','232','233','234','235','236','237','238','239','240']},
+{id:1023,icon:'🌎',name:T('Европа и Северная Америка','Europe & North America','Avrupa ve Kuzey Amerika'),count:20,pool:['65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100','101','102','103','104','105','106','107','108','109','116','143','144','145','146','147','148','149','150','151','152','153','154','155','156','157','158','159','160','241','242','243','244','245','246','247','248','249','250','251','252','253','254','255','256','257','258']},
+{id:1024,icon:'🌲',name:T('Лесные обитатели','Forest dwellers','Orman sakinleri'),count:15,pool:['95','96','102','104','129','135','138','141','147','174','177','183','186','197','198','199','200','202','214','222','226','233','234','237','238','239','247','248','249','250','251','252','253','254']},
+{id:1025,icon:'🏔️',name:T('Горные животные','Mountain animals','Dağ hayvanları'),count:12,pool:['83','89','114','122','126','129','135','141','144','146','217','218','219','222','223','224','225','226','240','255']},
+{id:1026,icon:'🐆',name:T('Крупные кошки','Big cats','Büyük kediler'),count:7,pool:['104','192','193','219','231','233','236']},
+{id:1027,icon:'🐋',name:T('Киты и дельфины','Whales & dolphins','Balinalar ve yunuslar'),count:10,pool:['45','64','67','70','76','91','160','163','235','241']},
+{id:1028,icon:'🐟',name:T('Рыбы','Fish','Balıklar'),count:15,pool:['2','5','9','15','21','27','32','36','97','103','130','133','139','151','157','244','256','257']},
 ];
 })(window);
 (function (w, d) {
@@ -1088,8 +1408,6 @@ async function top0() {
   } else {
     console.warn('⚠️ totalScore = 0, отправка пропущена');
   }
-
-  // === ОТКРЫТИЕ ТАБЛИЦЫ ===
   try {
     console.log('🏆 Открываем таблицу, user_result =', totalScore, ', global = 1');
     const lbResult = await vkSend('VKWebAppShowLeaderBoardBox', {
@@ -1833,176 +2151,17 @@ async function syncAllOnStart() {
   }
   if (__syncResolve) __syncResolve(w.__SYNCED__);
 }
-w.syncAllOnStart = syncAllOnStart;
-let __readySent = false;
-let __menuShown = false;
-
-function trySendLoadingReady() {
-  if (__readySent) return false;
-  if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false;
-  try {
-    ysdk.features.LoadingAPI.ready();
-    __readySent = true;
-    console.log('✅ Yandex LoadingAPI.ready() sent');
-    return true;
-  } catch (e) {
-    console.warn('LoadingAPI.ready() failed:', e);
-    return false;
-  }
-}
-
-function hideLoadingAndShowMenu() {
-  if (__menuShown) return;      // защита от двойного показа
-  __menuShown = true;
-
-  const loading = d.getElementById('loading-screen');
-  if (loading) {
-    loading.classList.add('hidden');
-    setTimeout(() => { loading.style.display = 'none'; }, 400);
-  }
-  d.body.classList.add('app-ready');
-  const root = d.getElementById('app-root');
-  if (root) root.classList.add('visible');
-w.__appReady = true;
-trySendLoadingReady();  
-}
-async function renderIndex() {
-  const colArr = (w.__SYNCED__ && w.__SYNCED__.collection) || [];
-  const animalId = img => (img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');
-  const allIds = new Set();
-  (w.REGIONS || []).forEach(reg => {
-    reg.levels.forEach(lvl => {
-      const qz = (w.QUIZZES || {})[lvl.id];
-      if (!qz) return;
-      qz.questions.forEach(qn => allIds.add(animalId(qn.img)));
-    });
-  });
-  const totalAnimals = allIds.size;
-  const haveAnimals = Math.min(colArr.length, totalAnimals);
-  const colEl = d.querySelector('[data-col-count]');
-  if (colEl) colEl.textContent = haveAnimals + '/' + totalAnimals;
-  const items = await w.Ach.list();
-  const opened = items.filter(i => i.unlocked).length;
-  const badge = d.getElementById('ach-badge');
-  if (badge) badge.textContent = opened;
-  await w.Ach.checkAndUnlock(true);
-  const animals = [];
-  (w.REGIONS || []).forEach(reg => {
-    reg.levels.forEach(lvl => {
-      const qz = (w.QUIZZES || {})[lvl.id];
-      if (!qz) return;
-      qz.questions.forEach(qn => {
-        animals.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description) });
-      });
-    });
-  });
-  if (animals.length) {
-    const dt = new Date();
-    const seed = dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate();
-    const item = animals[seed % animals.length];
-    const fi = d.getElementById('fact-img');
-    const fn = d.getElementById('fact-name');
-    const fd = d.getElementById('fact-desc');
-    if (fi) { fi.src = item.img; fi.alt = item.name; }
-    if (fn) fn.textContent = item.name;
-    if (fd) fd.textContent = item.desc;
-    const fb = d.getElementById('fact-block');
-    if (fb) fb.hidden = false;
-  }
-  const holder = d.getElementById('regions');
-  if (!holder) return;
-  holder.innerHTML = '';
-  const unlocked = (w.__SYNCED__ && w.__SYNCED__.unlocked) || [];
-  const unlockedSet = new Set(unlocked.map(Number));
-  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
-  const starsHtml = levelId => {
-    const s = Number(starsMap[levelId]) || 0;
-    return '<span class="stars' + (s > 0 ? ' has-stars' : '') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>';
-  };
-  const renderLevelCard = (l, qz, container) => {
-    const isOpen = unlockedSet.has(Number(l.id));
-    const el = d.createElement(isOpen ? 'a' : 'button');
-    el.className = 'level-card' + (isOpen ? '' : ' locked');
-    if (isOpen) el.href = '#/quiz/' + l.id;
-    else el.type = 'button';
-  const adTitle = escapeHtml(w.t('titleAd'));
-const actionsHtml = isOpen
-  ? '<div class="level-actions"><span class="level-open">▶</span></div>'
-  : '<div class="level-actions"><span class="level-lock">🔒</span><span class="tv-btn" title="' + adTitle + '">📺</span></div>';
-    const qCount = qz ? qz.questions.length : 0;
-    el.innerHTML = '<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml;
-    if (!isOpen) {
-      el.addEventListener('click', () => {
-        w.Gating.showUnlockModal(l.id, () => {
-          const a = d.createElement('a');
-          a.className = 'level-card';
-          a.href = '#/quiz/' + l.id;
-          a.innerHTML = '<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>';
-          el.replaceWith(a);
-        });
-      });
-    }
-    container.appendChild(el);
-  };
-  if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length) {
-    const themedSec = d.createElement('section');
-    themedSec.className = 'card';
-    const th = d.createElement('h2');
-    th.className = 'region-title';
-    th.textContent = '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler' });
-    themedSec.appendChild(th);
-    const tgrid = d.createElement('div');
-    tgrid.className = 'levels';
-    const themedSorted = [...w.THEMED_LEVELS].sort((a, b) => {
-      const ao = unlockedSet.has(Number(a.id)) ? 0 : 1;
-      const bo = unlockedSet.has(Number(b.id)) ? 0 : 1;
-      return ao - bo;
-    });
-    themedSorted.forEach(l => {
-      const qz = (w.QUIZZES || {})[l.id];
-      if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return;
-      renderLevelCard(l, qz, tgrid);
-    });
-    if (tgrid.children.length) { themedSec.appendChild(tgrid); holder.appendChild(themedSec); }
-  }
-  if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length) {
-    const pSec = d.createElement('section');
-    pSec.className = 'card';
-    const ph = d.createElement('h2');
-    ph.className = 'region-title';
-    ph.textContent = '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler' });
-    pSec.appendChild(ph);
-    const pg = d.createElement('div');
-    pg.className = 'levels';
-    const photoSorted = [...w.PHOTO_LEVELS].sort((a, b) => {
-      const ao = unlockedSet.has(Number(a.id)) ? 0 : 1;
-      const bo = unlockedSet.has(Number(b.id)) ? 0 : 1;
-      return ao - bo;
-    });
-    photoSorted.forEach(l => {
-      const qz = (w.QUIZZES || {})[l.id];
-      if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return;
-      renderLevelCard(l, qz, pg);
-    });
-    if (pg.children.length) { pSec.appendChild(pg); holder.appendChild(pSec); }
-  }
-  (w.REGIONS || []).forEach(reg => {
-    const sec = d.createElement('section');
-    sec.className = 'card';
-    const h = d.createElement('h2');
-    h.className = 'region-title';
-    h.textContent = reg.icon + ' ' + w.L(reg.name);
-    sec.appendChild(h);
-    const grid = d.createElement('div');
-    grid.className = 'levels';
-    reg.levels.forEach(l => {
-      const qz = (w.QUIZZES || {})[l.id];
-      renderLevelCard(l, qz, grid);
-    });
-    sec.appendChild(grid);
-    holder.appendChild(sec);
-  });
-}
+w.syncAllOnStart=syncAllOnStart;
+let __readySent=false;
+let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true;} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false;}}
+function hideLoadingAndShowMenu(){ if (__menuShown) return;  __menuShown=true; const loading=d.getElementById('loading-screen'); if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none';}, 400);} d.body.classList.add('app-ready'); const root=d.getElementById('app-root'); if (root) root.classList.add('visible');
+w.__appReady=true;
+trySendLoadingReady();}
+async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
+   const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); 
+const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>
+  { const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)));});});
+   const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; const items=await w.Ach.list(); const opened=items.filter(i=>i.unlocked).length; const badge=d.getElementById('ach-badge'); if (badge) badge.textContent=opened; await w.Ach.checkAndUnlock(true); const animals=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ animals.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});});}); if (animals.length){ const dt=new Date(); const seed=dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate(); const item=animals[seed % animals.length]; const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name;} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false;} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML=''; const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || []; const unlockedSet=new Set(unlocked.map(Number)); const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Number(starsMap[levelId]) || 0; return '<span class="stars' + (s >0 ? ' has-stars' : '') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>';}; const renderLevelCard=(l, qz, container)=>{ const isOpen=unlockedSet.has(Number(l.id)); const el=d.createElement(isOpen ? 'a' : 'button'); el.className='level-card' + (isOpen ? '' : ' locked'); if (isOpen) el.href='#/quiz/' + l.id; else el.type='button'; const adTitle=escapeHtml(w.t('titleAd')); const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock">🔒</span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; const qCount=qz ? qz.questions.length : 0; el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ const a=d.createElement('a'); a.className='level-card'; a.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>'; el.replaceWith(a);});});} container.appendChild(el);}; const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{};} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState));} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section'); sec.className='card collapsible'; if (openState[sectionKey]) sec.classList.add('open'); const header=d.createElement('button'); header.type='button'; header.className='region-title collapsible-header'; header.innerHTML='<span>' + titleHtml + '</span><span class="toggle-arrow">▼</span>'; header.addEventListener('click', ()=>{ sec.classList.toggle('open'); openState[sectionKey]=sec.classList.contains('open'); saveOpenState()}); const body=d.createElement('div'); body.className='collapsible-body'; const grid=d.createElement('div'); grid.className='levels'; body.appendChild(grid); sec.appendChild(header); sec.appendChild(body); return{ sec, grid}}; if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length){ const{ sec, grid}=makeSection( '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler'}), 'themed' ); const themedSorted=[...w.THEMED_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); themedSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); photoSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})}
 async function renderQuiz(levelId) {
   const nid = Number(levelId);
   if (nid >= 1000 && typeof w.__buildThemedQuizzes === 'function') {
@@ -2065,7 +2224,6 @@ async function renderQuiz(levelId) {
     state.streak = 0; state.maxStreak = 0; state.fastestCorrect = 99; state.timeouts = 0;
     state.roundCollection = new Set();
     show(quizScreen);
-    // Запускаем геймплей только здесь
     if (isYandex) yandexGameplayStart();
     renderQuestion();
   }
@@ -2263,7 +2421,65 @@ async function finishQuiz() {
   w.__currentQuizCleanup = cleanup;
   return cleanup;
 }
-async function renderCollection(){ const body=d.getElementById('col-body'); if (!body) return; const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); const list=asArray(w.__SYNCED__ && w.__SYNCED__.collection); const collected=new Set(Array.isArray(list) ? list.map(String) : []); body.innerHTML=''; const seen=new Set(); let opened=0; (w.REGIONS || []).forEach(region=>{ const animals=[]; region.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ const id=animalId(qn.img); if (!id || seen.has(id)) return; animals.push({ id, img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});}); if (!animals.length) return; animals.forEach(a=>{ if (collected.has(a.id)) opened++;}); const sec=d.createElement('section'); sec.className='col-region'; sec.innerHTML='<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>'; const grid=d.createElement('div'); grid.className='collection-grid'; animals.forEach(a=>{ const isOpen=collected.has(a.id); const item=d.createElement('button'); item.type='button'; item.className='collection-item' + (isOpen ? ' unlocked' : ' locked'); if (isOpen){ item.innerHTML='<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy">'; item.addEventListener('click', ()=>openColModal(a));} else{ item.innerHTML='<span class="col-lock">🔒</span>'; item.disabled=true;} grid.appendChild(item);}); sec.appendChild(grid); body.appendChild(sec);}); const counter=d.getElementById('col-counter'); if (counter) counter.textContent=opened + ' / ' + seen.size;}
+async function renderCollection() {
+  const body = d.getElementById('col-body');
+  if (!body) return;
+  const animalId = img => (img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');
+  const list = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
+  const collected = new Set(Array.isArray(list) ? list.map(String) : []);
+  body.innerHTML = '';
+
+  const seen = new Set();  
+  let opened = 0;
+
+  (w.REGIONS || []).forEach(region => {
+    const animals = [];
+    region.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (!qz) return;
+      qz.questions.forEach(qn => {
+        const id = animalId(qn.img);
+        if (!id || seen.has(id)) return;  
+        seen.add(id);
+        animals.push({
+          id,
+          img: qn.img,
+          name: w.L(qn.options[qn.answer]),
+          desc: w.L(qn.description)
+        });
+      });
+    });
+
+    if (!animals.length) return;          
+
+    animals.forEach(a => { if (collected.has(a.id)) opened++; });
+
+    const sec = d.createElement('section');
+    sec.className = 'col-region';
+    sec.innerHTML = '<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>';
+    const grid = d.createElement('div');
+    grid.className = 'collection-grid';
+    animals.forEach(a => {
+      const isOpen = collected.has(a.id);
+      const item = d.createElement('button');
+      item.type = 'button';
+      item.className = 'collection-item' + (isOpen ? ' unlocked' : ' locked');
+      if (isOpen) {
+        item.innerHTML = '<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy">';
+        item.addEventListener('click', () => openColModal(a));
+      } else {
+        item.innerHTML = '<span class="col-lock">🔒</span>';
+        item.disabled = true;
+      }
+      grid.appendChild(item);
+    });
+    sec.appendChild(grid);
+    body.appendChild(sec);
+  });
+
+  const counter = d.getElementById('col-counter');
+  if (counter) counter.textContent = opened + ' / ' + seen.size;
+}
 function openColModal(a) {
   const m = d.getElementById('col-modal');
   if (!m) return;
@@ -2378,8 +2594,7 @@ function bindGlobalUI() {
     } else if (d.visibilityState === 'visible') {
       console.log('Page visible — resuming audio');
       if (soundEnabled && bgStarted) Sound.startBg();
-      // НЕ запускаем геймплей автоматически при возврате — только если мы в викторине
-    }
+        }
   });
 }
 const PAGE_IDS = ['index', 'quiz', 'collection', 'igames'];
@@ -2396,6 +2611,12 @@ function parseHash() {
   if (parts[0] === 'igames') return { name: 'igames' };
   return { name: 'index' };
 }
+function withTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout ' + label + ' after ' + ms + 'ms')), ms))
+  ]);
+}
 async function navigate() {
   if (typeof currentPageCleanup === 'function') {
     try { currentPageCleanup(); } catch (e) {}
@@ -2407,7 +2628,6 @@ async function navigate() {
     if (el) el.classList.toggle('active', p === route.name);
   });
   currentPage = route.name;
-  // Если уходим с викторины, останавливаем геймплей
   if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
   try {
     if (route.name === 'index') await renderIndex();
@@ -2503,13 +2723,14 @@ async function boot() {
     try { await updateShortcutButton(); } catch (e) {}
     bindGlobalUI();
   } catch (e) { console.warn('Boot error:', e); }
-  w.addEventListener('hashchange', navigate);
-  try { await navigate(); } catch (e) { console.error('Navigate failed:', e); }
   try { hideLoadingAndShowMenu(); } catch (e) { console.error('hideLoading failed:', e); }
+  w.addEventListener('hashchange', navigate);
+ try { await withTimeout(navigate(), 5000, 'navigate'); }
+catch (e) { console.warn('Navigate timed out / failed:', e); }
 }
 setTimeout(() => {
-  if (__menuShown) return;
-  console.warn('Loading fallback triggered (30s) — showing game anyway');
+  if (d.body.classList.contains('app-ready') && d.querySelector('.page.active')) return;
+  console.warn('Boot watchdog: forcing loader hide / home page');
   try {
     hideLoadingAndShowMenu();
     if (!d.querySelector('.page.active')) {
@@ -2517,12 +2738,12 @@ setTimeout(() => {
       if (idx) idx.classList.add('active');
       try { currentPage = 'index'; } catch (_) {}
     }
+    try { Promise.resolve(renderIndex()).catch(e => console.warn('watchdog renderIndex:', e)); } catch (e) {}
   } catch (e) {
-    console.error('Loading fallback error:', e);
+    console.error('Watchdog error:', e);
   }
-}, 30000);
+}, 15000);
 w.addEventListener('pagehide', () => { if (isYandex) yandexGameplayStop(); });
-//d.addEventListener('visibilitychange', () => { if (d.visibilityState === 'hidden' && isYandex) yandexGameplayStop(); });
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
 w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, submitScore, addToTotalScore, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth };
