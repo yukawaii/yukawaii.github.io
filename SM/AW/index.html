@@ -909,7 +909,7 @@ w.PHOTO_LEVELS=[
 {id:2010,icon:'🌙',name:T('Ночные','Night hunters','Gece avcıları'),count:20,optionCount:4,pool:['6','14','25','27','35','53','57','60','63','93','104','108','112','120','129','156','165','183','187','199','203','209','219','233','237','247','248','254']},
 {id:2011,icon:'☠️',name:T('Опасные','Venomous','Zehirli'),count:20,optionCount:4,pool:['24','29','89','90','104','112','115','121','122','123','124','130','139','141','145','169','173','181','187','190','191','192','193','194','211','212','219','222','224','231','232','234','236','239','240']},
 {id:2012,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,optionCount:4,pool:['232','240','211','224','188','190','191','196','24','29','66','67','75','91','126','139','141','162','168','187']},
-{id:2013,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,optionCount:4,pool:[,'215','50','65','68','83','89','101','122','146','173']},
+{id:2013,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,optionCount:4,pool:['215','50','65','68','83','89','101','122','146','173']},
 {id:2014,icon:'🌴',name:T('Тропики','Tropics','Tropikal'),count:20,optionCount:4,pool:['57','132','135','138','161','167','168','170','171','175','176','177','180','182','183','185','186','202','226','232','233','234','235','236','237','238','239','240','253']},
 {id:2015,icon:'🏜️',name:T('Пустыни','Deserts','Çöller'),count:15,optionCount:4,pool:['4','23','29','108','109','111','112','113','118','120','121','123','124','137','145','213','216','217','220','221','223','253']},
 {id:2016,icon:'🌍',name:T('Африка','Africa','Afrika'),count:15,optionCount:4,pool:['119','122','124','125','127','131','188','189','190','191','192','193','194','195','196','211','212','213','214','215']},
@@ -962,7 +962,7 @@ w.THEMED_LEVELS=[
 {id:1012,icon:'🏠',name:T('Строители и архитекторы','Builders & architects','İnşaatçılar ve mimarlar'),count:9,pool:['227','213','1','18','41','51','59','88','109','147','155']},
 {id:1013,icon:'🎭',name:T('Мастера маскировки','Masters of disguise','Kamufle ustaları'),count:7,pool:['243','253','233','5','8','21','23','27','60','130']},
 {id:1014,icon:'🏆',name:T('Гиганты','Giants','Devler'),count:12,pool:['232','240','211','224','188','190','191','196','24','29','66','67','75','91','126','139','141','162','168','187']},
-{id:1015,icon:'🏜️',name:T('Жители пустынь','Desert dwellers','Çöl sakinleri'),count:10,pool:[,'213','216','217','220','4','23','29','108','111','112','118','120','121','145']},
+{id:1015,icon:'🏜️',name:T('Жители пустынь','Desert dwellers','Çöl sakinleri'),count:10,pool:['213','216','217','220','4','23','29','108','111','112','118','120','121','145']},
 {id:1016,icon:'🌴',name:T('Тропические леса','Tropical forests','Tropikal ormanlar'),count:11,pool:['232','233','234','236','237','238','239','240','57','138','167','168','171','176','177','180','182','183','186']},
 {id:1017,icon:'🎵',name:T('Голосистые и певчие','Singers & callers','Şarkıcılar ve çağırıcılar'),count:11,pool:['250','251','228','229','19','22','26','28','40','47','48','49','86','128','137','158','170','185','197','200','204','206','207','208']},
 {id:1018,icon:'🦅',name:T('Хищные птицы','Birds of prey','Yırtıcı kuşlar'),count:8,pool:['50','65','68','83','89','101','122','146','173']},
@@ -1323,12 +1323,7 @@ if (isVK || isOK) {
 }
   return Promise.resolve(false);
 }
-function showInterstitial() {
-  const now = Date.now();
- if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} if (currentPage==='quiz'){ console.log('Interstitial ad skipped: current page is quiz'); return;}
- __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;}
- if (isVK || isOK){ adMute(); vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 30000).then(()=>adUnmute()).catch(()=>adUnmute());}
-}
+function showInterstitial(){ const now=Date.now(); if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;} if (isVK || isOK){ adMute(); vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 30000) .then(()=>adUnmute()) .catch(()=>adUnmute());}}
 function showBanner() { if (isVK || isOK) vkSend('VKWebAppShowBannerAd', { banner_location: 'bottom' }, 5000); }
 function preloadRewardedAd() { if (isVK || isOK) vkSend('VKWebAppCheckNativeAds', { ad_format: 'reward' }, 3000); }
 function yandexGameplayStart() { if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try { ysdk.features.GameplayAPI.start(); } catch (e) {} }
@@ -1518,13 +1513,7 @@ function toggleSound() {
   applySoundState();
   storageSet('sound_on', soundEnabled).catch(() => {});
 }
-function attachSfxToUI() {
-  d.addEventListener('click', (e) => {
-    const t = e.target.closest('button, .btn, .option, .icon-btn, .level-card, .collection-item, .modal-close');
-    if (!t || t.disabled) return;
-    playClick();
-  });
-}
+function attachSfxToUI(){ d.addEventListener('click', (e)=>{ if (e.target.closest('.option')) return; const t=e.target.closest('button, .btn, .icon-btn, .level-card, .collection-item, .modal-close'); if (!t || t.disabled) return; playClick();});}
 function attachAudioUnlock() {
   const unlock = () => {
     ensureAudioCtx();
@@ -1997,15 +1986,16 @@ async function initYandex() {
       if (uid) { w.id = uid; sessionStorage.setItem('id', uid); }
     } catch (e) {}
   } catch (e) { ysdkPlayer = null; console.warn('getPlayer failed', e); }
-  try {
+try {
     ysdk.on('game_api_pause', function () {
       yandexGameplayStop();
       if (soundEnabled) Sound.stopBg();
-      if (w.__currentQuizCleanup) { try { w.__currentQuizCleanup(); } catch (e) {} }
+      if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
     });
     ysdk.on('game_api_resume', function () {
       yandexGameplayStart();
       if (soundEnabled) Sound.startBg();
+      if (w.__currentQuizResume) { try { w.__currentQuizResume(); } catch (e) {} }
     });
   } catch (e) {}
   if (w.__appReady) trySendLoadingReady();
@@ -2157,13 +2147,12 @@ let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return f
 function hideLoadingAndShowMenu(){ if (__menuShown) return;  __menuShown=true; const loading=d.getElementById('loading-screen'); if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none';}, 400);} d.body.classList.add('app-ready'); const root=d.getElementById('app-root'); if (root) root.classList.add('visible');
 w.__appReady=true;
 trySendLoadingReady();}
-async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
-   const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); 
-const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>
-  { const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)));});});
-   const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; const items=await w.Ach.list(); const opened=items.filter(i=>i.unlocked).length; const badge=d.getElementById('ach-badge'); if (badge) badge.textContent=opened; await w.Ach.checkAndUnlock(true); const animals=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ animals.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});});}); if (animals.length){ const dt=new Date(); const seed=dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate(); const item=animals[seed % animals.length]; const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name;} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false;} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML=''; const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || []; const unlockedSet=new Set(unlocked.map(Number)); const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Number(starsMap[levelId]) || 0; return '<span class="stars' + (s >0 ? ' has-stars' : '') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>';}; const renderLevelCard=(l, qz, container)=>{ const isOpen=unlockedSet.has(Number(l.id)); const el=d.createElement(isOpen ? 'a' : 'button'); el.className='level-card' + (isOpen ? '' : ' locked'); if (isOpen) el.href='#/quiz/' + l.id; else el.type='button'; const adTitle=escapeHtml(w.t('titleAd')); const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock">🔒</span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; const qCount=qz ? qz.questions.length : 0; el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ const a=d.createElement('a'); a.className='level-card'; a.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>'; el.replaceWith(a);});});} container.appendChild(el);}; const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{};} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState));} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section'); sec.className='card collapsible'; if (openState[sectionKey]) sec.classList.add('open'); const header=d.createElement('button'); header.type='button'; header.className='region-title collapsible-header'; header.innerHTML='<span>' + titleHtml + '</span><span class="toggle-arrow">▼</span>'; header.addEventListener('click', ()=>{ sec.classList.toggle('open'); openState[sectionKey]=sec.classList.contains('open'); saveOpenState()}); const body=d.createElement('div'); body.className='collapsible-body'; const grid=d.createElement('div'); grid.className='levels'; body.appendChild(grid); sec.appendChild(header); sec.appendChild(body); return{ sec, grid}}; if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length){ const{ sec, grid}=makeSection( '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler'}), 'themed' ); const themedSorted=[...w.THEMED_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); themedSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); photoSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})}
-async function renderQuiz(levelId) {
-  const nid = Number(levelId);
+async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || []; const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; await w.Ach.checkAndUnlock(true);
+const items=await w.Ach.list();
+const opened=items.filter(i=>i.unlocked).length;
+const badge=d.getElementById('ach-badge');
+if (badge) badge.textContent=opened; const animals=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ animals.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)})})})}); if (animals.length){ const dt=new Date(); const seed=dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate(); const item=animals[seed % animals.length]; const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML=''; const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || []; const unlockedSet=new Set(unlocked.map(Number)); const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Number(starsMap[levelId]) || 0; return '<span class="stars' + (s >0 ? ' has-stars' : '') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>'}; const renderLevelCard=(l, qz, container)=>{ const isOpen=unlockedSet.has(Number(l.id)); const el=d.createElement(isOpen ? 'a' : 'button'); el.className='level-card' + (isOpen ? '' : ' locked'); if (isOpen) el.href='#/quiz/' + l.id; else el.type='button'; const adTitle=escapeHtml(w.t('titleAd')); const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock">🔒</span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; const qCount=qz ? qz.questions.length : 0; el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return;} const a=d.createElement('a'); a.className='level-card'; a.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span>' + '<span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>'; el.replaceWith(a);});});} container.appendChild(el)}; const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{}} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState))} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section'); sec.className='card collapsible'; if (openState[sectionKey]) sec.classList.add('open'); const header=d.createElement('button'); header.type='button'; header.className='region-title collapsible-header'; header.innerHTML='<span>' + titleHtml + '</span><span class="toggle-arrow">▼</span>'; header.addEventListener('click', ()=>{ sec.classList.toggle('open'); openState[sectionKey]=sec.classList.contains('open'); saveOpenState()}); const body=d.createElement('div'); body.className='collapsible-body'; const grid=d.createElement('div'); grid.className='levels'; body.appendChild(grid); sec.appendChild(header); sec.appendChild(body); return{ sec, grid}}; if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length){ const{ sec, grid}=makeSection( '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler'}), 'themed' ); const themedSorted=[...w.THEMED_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); themedSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); photoSorted.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; if (!qz || !Array.isArray(qz.questions) || !qz.questions.length) return; renderLevelCard(l, qz, grid)}); if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})}
+async function renderQuiz(levelId){ const nid=Number(levelId);
   if (nid >= 1000 && typeof w.__buildThemedQuizzes === 'function') {
     try {
       const themed = w.__buildThemedQuizzes();
@@ -2172,20 +2161,7 @@ async function renderQuiz(levelId) {
   }
   const quiz = (w.QUIZZES || {})[String(levelId)];
   if (!quiz) { location.hash = '#/'; return null; }
-  const $ = (s) => d.querySelector(s);
-  const state = { order: [], index: 0, score: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, scoreSent: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set() };
-  const homeScreen = $('#home-screen');
-  const quizScreen = $('#quiz-screen');
-  const resultScreen = $('#result-screen');
-  const lockScreen = $('#lock-screen');
-  const screens = [homeScreen, quizScreen, resultScreen, lockScreen];
-  const show = el => screens.forEach(s => s && s.classList.toggle('active', s === el));
-  const animalId = img => (img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');
-  const calcStars = percent => {
-    if (percent >= 90) return 3;
-    if (percent >= 70) return 2;
-    if (percent >= 50) return 1;
-    return 0;
+ const $=(s)=>d.querySelector(s); const state={ order: [], index: 0, score: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, scoreSent: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set()}; const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId=img=>(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, ''); const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0;
   };
   const region = (w.REGIONS || []).find(r => r.id === quiz.regionKey);
   if (region) $('#home-region').textContent = w.L(region.name);
@@ -2413,14 +2389,9 @@ async function finishQuiz() {
     show(homeScreen);
   };
   $('#restart-btn').onclick = () => withLock(startQuiz);
-  $('#home-btn').onclick = () => show(homeScreen);
-  function cleanup() {
-    stopTimer();
-    if (w.__currentQuizCleanup === cleanup) w.__currentQuizCleanup = null;
-  }
-  w.__currentQuizCleanup = cleanup;
-  return cleanup;
-}
+$('#home-btn').onclick = () => { location.hash = '#/'; };
+let __pausedTimeLeft = null;
+ function pauseQuiz(){ if (!state.timerId) return; if (state.finished || state.answered) return; __pausedTimeLeft=state.timeLeft; stopTimer();} function resumeQuiz(){ if (__pausedTimeLeft==null) return; if (state.finished || state.answered) return; const remain=__pausedTimeLeft; __pausedTimeLeft=null; state.timeLeft=remain; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return;} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp();}}, 1000);} function cleanup(){ stopTimer(); if (w.__currentQuizCleanup===cleanup) w.__currentQuizCleanup=null; if (w.__currentQuizPause===pauseQuiz) w.__currentQuizPause=null; if (w.__currentQuizResume===resumeQuiz) w.__currentQuizResume=null;} w.__currentQuizCleanup=cleanup; w.__currentQuizPause=pauseQuiz; w.__currentQuizResume=resumeQuiz; return cleanup;}
 async function renderCollection() {
   const body = d.getElementById('col-body');
   if (!body) return;
@@ -2586,15 +2557,17 @@ function bindGlobalUI() {
   d.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeAchModal(); closeColModal(); closeAuthModal(); if (yandexLbModal) yandexLbModal.classList.remove('show'); }
   });
-  d.addEventListener('visibilitychange', function () {
+d.addEventListener('visibilitychange', function () {
     if (d.visibilityState === 'hidden') {
-      console.log('Page hidden — pausing audio');
+      console.log('Page hidden — pausing');
       if (soundEnabled) Sound.stopBg();
       yandexGameplayStop();
+      if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
     } else if (d.visibilityState === 'visible') {
-      console.log('Page visible — resuming audio');
+      console.log('Page visible — resuming');
       if (soundEnabled && bgStarted) Sound.startBg();
-        }
+      if (w.__currentQuizResume) { try { w.__currentQuizResume(); } catch (e) {} }
+    }
   });
 }
 const PAGE_IDS = ['index', 'quiz', 'collection', 'igames'];
@@ -2623,6 +2596,7 @@ async function navigate() {
     currentPageCleanup = null;
   }
   const route = parseHash();
+  const myHash = location.hash;
   PAGE_IDS.forEach(p => {
     const el = d.getElementById('page-' + p);
     if (el) el.classList.toggle('active', p === route.name);
@@ -2630,10 +2604,20 @@ async function navigate() {
   currentPage = route.name;
   if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
   try {
-    if (route.name === 'index') await renderIndex();
-    else if (route.name === 'quiz') currentPageCleanup = await renderQuiz(route.levelId);
-    else if (route.name === 'collection') await renderCollection();
-    else if (route.name === 'igames') await renderOtherGames();
+    if (route.name === 'index') {
+      await renderIndex();
+    } else if (route.name === 'quiz') {
+      const cleanup = await renderQuiz(route.levelId);
+      if (location.hash !== myHash) {
+        if (typeof cleanup === 'function') { try { cleanup(); } catch (e) {} }
+        return;
+      }
+      currentPageCleanup = cleanup;
+    } else if (route.name === 'collection') {
+      await renderCollection();
+    } else if (route.name === 'igames') {
+      await renderOtherGames();
+    }
   } catch (e) { console.warn('navigate error', e); }
   try { window.scrollTo(0, 0); } catch (e) {}
 }
@@ -2723,10 +2707,10 @@ async function boot() {
     try { await updateShortcutButton(); } catch (e) {}
     bindGlobalUI();
   } catch (e) { console.warn('Boot error:', e); }
-  try { hideLoadingAndShowMenu(); } catch (e) { console.error('hideLoading failed:', e); }
   w.addEventListener('hashchange', navigate);
- try { await withTimeout(navigate(), 5000, 'navigate'); }
-catch (e) { console.warn('Navigate timed out / failed:', e); }
+  try { await withTimeout(navigate(), 5000, 'navigate'); }
+  catch (e) { console.warn('Navigate timed out / failed:', e); }
+  try { hideLoadingAndShowMenu(); } catch (e) { console.error('hideLoading failed:', e); }
 }
 setTimeout(() => {
   if (d.body.classList.contains('app-ready') && d.querySelector('.page.active')) return;
