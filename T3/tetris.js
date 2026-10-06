@@ -1,569 +1,6 @@
-// ======================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ========================
-let arenaWidth = 10;
-let arenaHeight = 20;
-let arena = [];
-let soundMuted = false;
-let musicMuted = true;
-let currentMusicTrack = null;
-let isGameStarted = false;
-let isGameOver = false;
-let audioInitialized = false;
-let selectedMode = 'classic';
-let selectedDifficulty = 'medium';
-let difficultyMultiplier = 1;
-let slowDownInterval = null;
-let isSlowDownActive = false;
-let comboDisplayTimer = null;
-let dailyBonusClaimedToday = false; 
-let lastInterstitialAdTime = 0; // время последнего показа межэкранной рекламы
-//для звкков
-let pendingSlowDown = false;
-let slowDownTimerId = null;
-// ======================== ПЕРЕМЕННЫЕ ДЛЯ ПАГИНАЦИИ ========================
-let currentScrollPage = 1;
-const SCROLLS_PER_PAGE = 5;
-const TOTAL_SCROLLS = 100;
-
-let currentCollectionPage = 1;
-let currentCollectionCategory = null;
-const COLLECTION_ITEMS_PER_PAGE = 15;
-const CATEGORY_ORDER = ['blocks', 'animals', 'plants', 'space'];
-
-// ======================== БОНУСЫ ========================
-const BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};
-
-let activeBonus = null;
-let bonusSpawnCooldown = 0;
-const BONUS_SPAWN_CHANCE = 0.15;
-const BONUS_MAX_COOLDOWN = 7;
-
-// ======================== CANVAS ========================
-const canvas = document.getElementById('tetris');
-const context = canvas.getContext('2d');
-
-// ======================== ЦВЕТА ========================
-// Киберпанк-палитра (яркие неоновые цвета)
-const CYBER_COLORS = {
-    I: '#00ffff',   // циан
-    O: '#FFE138',   // оранжевый
-    T: '#ff00ff',   // маджента
-    S: '#00ff66',   // ярко-зелёный
-    Z: '#ff0055',   // ярко-красный
-    L: '#ffaa00',   // оранжево-красный
-    J: '#0066ff',   // синий
-};
-
-const colors = [
-    null,
-    CYBER_COLORS.I,  // #00ffff
-    CYBER_COLORS.O,  // #ffaa00
-    CYBER_COLORS.T,  // #ff00ff
-    CYBER_COLORS.S,  // #00ff66
-    CYBER_COLORS.Z,  // #ff0055
-    CYBER_COLORS.L,  // #ff6600
-    CYBER_COLORS.J,  // #0066ff
-];
-//const colors = [null, '#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#3877FF'];
-
-// ======================== РАЗМЕР ПОЛЯ ========================
-function calculateOptimalArenaWidth() {
-    const container = document.querySelector('.canvas-container');
-    if (!container) return 14;
-    const availableWidth = container.getBoundingClientRect().width - 12;
-    if (availableWidth <= 0) return 14;
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-        if (availableWidth >= 500) return 18;
-        if (availableWidth >= 400) return 16;
-        return 14;
-    }
-    
-    if (availableWidth >= 1000) return 24;
-    if (availableWidth >= 800) return 22;
-    if (availableWidth >= 600) return 20;
-    return 22;
-}
-
-
-function updateCanvasSize() {
-    const container = document.querySelector('.canvas-container');
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const padding = 12;
-    const maxHeight = window.innerHeight * 0.85;
-    const containerWidth = rect.width - padding;
-    const containerHeight = Math.min(rect.height - padding, maxHeight);
-    if (containerWidth <= 0 || containerHeight <= 0) return;
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
-}
-
-// ======================== ФУНКЦИИ СОЗДАНИЯ МАТРИЦ ========================
-function createMatrix(w, h) {
-    const matrix = [];
-    while (h--) matrix.push(new Array(w).fill(0));
-    return matrix;
-}
-
-function createPiece(type) {
-    switch (type) {
-        case "T": return [[0,0,0], [1,1,1], [0,1,0]];
-        case "O": return [[2,2], [2,2]];
-        case "L": return [[0,3,0], [0,3,0], [0,3,3]];
-        case "J": return [[0,4,0], [0,4,0], [4,4,0]];
-        case "I": return [[0,5,0,0], [0,5,0,0], [0,5,0,0], [0,5,0,0]];
-        case "S": return [[0,6,6], [6,6,0], [0,0,0]];
-        case "Z": return [[7,7,0], [0,7,7], [0,0,0]];
-        default: return [[0]];
-    }
-}
-
-const pieces = 'ILJOTSZ';
-
-// ======================== РЕЖИМ ТЕТРА ========================
-const tetraPieces = {
-    I: { shape: [[1, 1, 1]], color: CYBER_COLORS.I },
-    L: { shape: [[1, 0], [1, 1]], color: CYBER_COLORS.L },
-    J: { shape: [[0, 1], [1, 1]], color: CYBER_COLORS.J },
-    Z: { shape: [[1, 1, 0], [0, 1, 1]], color: CYBER_COLORS.Z },
-    S: { shape: [[0, 1, 1], [1, 1, 0]], color: CYBER_COLORS.S },
-    O: { shape: [[1, 1], [1, 1]], color: CYBER_COLORS.O },
-    T: { shape: [[0, 1, 0], [1, 1, 1], [0, 1, 0]], color: CYBER_COLORS.T }
-};
-const tetraKeys = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
-
-function createTetraPiece() {
-    const key = tetraKeys[Math.floor(Math.random() * tetraKeys.length)];
-    const piece = tetraPieces[key];
-    const matrix = piece.shape.map(row => [...row]);
-    matrix._color = piece.color;
-    matrix._key = key;
-    return matrix;
-}
-
-function rotateTetraMatrix(matrix) {
-    const key = matrix._key;
-    if (key === 'O' || key === 'T') {
-        const newMatrix = matrix.map(row => [...row]);
-        newMatrix._color = matrix._color;
-        newMatrix._key = matrix._key;
-        return newMatrix;
-    }
-    const rows = matrix.length;
-    const cols = matrix[0].length;
-    const rotated = [];
-    for (let x = 0; x < cols; x++) {
-        rotated[x] = [];
-        for (let y = rows - 1; y >= 0; y--) {
-            rotated[x].push(matrix[y][x]);
-        }
-    }
-    rotated._color = matrix._color;
-    rotated._key = matrix._key;
-    return rotated;
-}
-
-// ======================== РЕЖИМ ПЕНТА ========================
-const pentaPieces = {
-    I: { shape: [[1, 1, 1, 1, 1]], color: CYBER_COLORS.I },
-    L: { shape: [[1, 0], [1, 0], [1, 0], [1, 1]], color: CYBER_COLORS.L },
-    J: { shape: [[0, 1], [0, 1], [0, 1], [1, 1]], color: CYBER_COLORS.J },
-    Z: { shape: [[1, 1, 0], [0, 1, 0], [0, 1, 1]], color: CYBER_COLORS.Z },
-    S: { shape: [[0, 1, 1], [0, 1, 0], [1, 1, 0]], color: CYBER_COLORS.S },
-    T: { shape: [[1, 1, 1], [0, 1, 0], [0, 1, 0]], color: CYBER_COLORS.T },
-    P: { shape: [[1, 1], [1, 1], [1, 0]], color: CYBER_COLORS.O }  // P использует цвет O
-};
-const pentaKeys = ['I', 'L', 'J', 'Z', 'S', 'T', 'P'];
-
-function createPentaPiece() {
-    const key = pentaKeys[Math.floor(Math.random() * pentaKeys.length)];
-    const piece = pentaPieces[key];
-    const matrix = piece.shape.map(row => [...row]);
-    matrix._color = piece.color;
-    matrix._key = key;
-    return matrix;
-}
-
-function rotatePentaMatrix(matrix) {
-    const rows = matrix.length;
-    const cols = matrix[0].length;
-    const rotated = [];
-    for (let x = 0; x < cols; x++) {
-        rotated[x] = [];
-        for (let y = rows - 1; y >= 0; y--) {
-            rotated[x].push(matrix[y][x]);
-        }
-    }
-    rotated._color = matrix._color;
-    rotated._key = matrix._key;
-    return rotated;
-}
-
-// ======================== ИГРОК ========================
-const player = {
-    pos: { x: 5, y: 0 },
-    matrix: null,
-    nextMatrix: null,
-    score: 0,
-    lines: 0,
-    level: 1,
-    spins: 0,
-    crazySpins: false,
-    isTetraMode: false,
-    isPentaMode: false
-};
-
-// ======================== СОСТОЯНИЕ ИГРЫ ========================
-const gameState = {
-    initialized: false,
-    paused: false,
-    introSongPlayed: false,
-    gameOver: false
-};
-
-let dropCounter = 0;
-let dropInterval = 1000;
-let lastTime = 0;
-let animationFrameId = null;
-
-// ======================== АНИМАЦИЯ ПРОИГРЫША ========================
-let gameOverAnimation = {
-    active: false,
-    startTime: 0,
-    duration: 4000,
-    matrix: null,
-    pos: { x: 0, y: 0 }
-};
-
-// ======================== ФУНКЦИИ КОЛЛИЗИИ ========================
-function collide(arena, player) {
-    if (player.isTetraMode) {
-        const [m, o] = [player.matrix, player.pos];
-        for (let y = 0; y < m.length; ++y) {
-            for (let x = 0; x < m[y].length; ++x) {
-                if (m[y][x] !== 0) {
-                    const arenaY = y + o.y;
-                    const arenaX = x + o.x;
-                    if (arenaY < 0 || arenaY >= arenaHeight || arenaX < 0 || arenaX >= arenaWidth) return true;
-                    const cell = arena[arenaY]?.[arenaX];
-                    if (cell !== 0 && cell !== 'bonus') return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    const [m, o] = [player.matrix, player.pos];
-    for (let y = 0; y < m.length; ++y) {
-        for (let x = 0; x < m[y].length; ++x) {
-            if (m[y][x] !== 0) {
-                const arenaY = y + o.y;
-                const arenaX = x + o.x;
-                if (arenaY < 0 || arenaY >= arenaHeight || arenaX < 0 || arenaX >= arenaWidth) return true;
-                const cell = arena[arenaY]?.[arenaX];
-                if (cell !== 0 && cell !== 'bonus') return true;
-            }
-        }
-    }
-    return false;
-}
-
-// ======================== БОНУСЫ ========================
-function spawnBonus() {
-    if (activeBonus) return;
-    if (bonusSpawnCooldown > 0) {
-        bonusSpawnCooldown--;
-        return;
-    }
-    
-    const types = ['STAR', 'CLOVER', 'CANDY'];
-    const typeKey = types[Math.floor(Math.random() * types.length)];
-    const bonus = BONUS_TYPES[typeKey];
-    
-    let maxY;
-    if (selectedDifficulty === 'easy') maxY = arenaHeight - 5;
-    else if (selectedDifficulty === 'medium') maxY = arenaHeight - 8;
-    else maxY = 5;
-    
-    let attempts = 0;
-    let posX, posY;
-    let placed = false;
-    while (attempts < 50 && !placed) {
-        posY = Math.floor(Math.random() * maxY);
-        posX = Math.floor(Math.random() * arenaWidth);
-        if (arena[posY] && arena[posY][posX] === 0) placed = true;
-        attempts++;
-    }
-    
-    if (placed) {
-        activeBonus = {
-            type: typeKey,
-            x: posX,
-            y: posY,
-            symbol: bonus.symbol,
-            points: bonus.points,
-            color: bonus.color,
-             label: bonus.label
-        };
-        arena[posY][posX] = 'bonus';
-        console.log(`✨ Бонус появился: ${bonus.label} на (${posX}, ${posY})`);
-    }
-}
-
-function checkBonusCollision() {
-    if (!activeBonus) return false;
-    for (let y = 0; y < player.matrix.length; y++) {
-        for (let x = 0; x < player.matrix[y].length; x++) {
-            const arenaY = player.pos.y + y;
-            const arenaX = player.pos.x + x;
-            if (arena[arenaY] && arena[arenaY][arenaX] === 'bonus') {
-                const bonus = activeBonus;
-                arena[arenaY][arenaX] = 0;
-                player.score += bonus.points;
-                // ===== ОБНОВЛЯЕМ РЕКОРД =====
-        if (typeof saveVKScore === 'function') {
-            saveVKScore(player.score);
-        }
-                showBonusNotification(bonus);
-                activeBonus = null;
-                bonusSpawnCooldown = BONUS_MAX_COOLDOWN;
-                if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('levelup', 0.15);
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-function showBonusNotification(bonus) {
-    const t = window.getText || (key => key);
-    const bonusText = t('bonus') || 'Бонус!';
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed; bottom: 30px; left: 50%;
-        transform: translateX(-50%) translateY(100px);
-        background: rgba(20, 20, 30, 0.92);
-        border: 2px solid ${bonus.color || '#FFD700'};
-        border-radius: 20px; padding: 16px 30px;
-        display: flex; align-items: center; gap: 16px;
-        z-index: 99999; opacity: 0;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(20px);
-        font-family: 'Russo One', sans-serif;
-        pointer-events: none;
-    `;
-    notification.innerHTML = `
-        <span>${bonus.symbol}</span>
-        <div>
-            <span style="color: #fff; text-transform: uppercase;">${bonusText}</span>
-            <span style="color: ${bonus.color}; display: block;">${bonus.label}</span>
-        </div>
-        <span style="color: ${bonus.color}; font-weight: bold;">+${bonus.points}</span>
-    `;
-    document.body.appendChild(notification);
-    requestAnimationFrame(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateX(-50%) translateY(0)';
-    });
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(-50%) translateY(-30px)';
-        setTimeout(() => { if (notification.parentNode) notification.remove(); }, 400);
-    }, 2000);
-}
-
-// ======================== ИГРОВАЯ ЛОГИКА ========================
-function merge(arena, player) {
-    if (player.isTetraMode || player.isPentaMode) {
-        const color = player.matrix._color || '#ff0000';
-        player.matrix.forEach((row, y) => {
-            row.forEach((value, x) => {
-                if (value !== 0) {
-                    const arenaY = player.pos.y + y;
-                    const arenaX = player.pos.x + x;
-                    if (arenaY >= 0 && arenaY < arenaHeight && arenaX >= 0 && arenaX < arenaWidth) {
-                        if (arena[arenaY][arenaX] !== 'bonus') {
-                            arena[arenaY][arenaX] = color;
-                        }
-                    }
-                }
-            });
-        });
-        return;
-    }
-    player.matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-            if (value !== 0) {
-                const arenaY = player.pos.y + y;
-                const arenaX = player.pos.x + x;
-                if (arenaY >= 0 && arenaY < arenaHeight && arenaX >= 0 && arenaX < arenaWidth) {
-                    if (arena[arenaY][arenaX] !== 'bonus') {
-                        arena[arenaY][arenaX] = value;
-                    }
-                }
-            }
-        });
-    });
-}
-
-function arenaSweep() {
-    let rowsCleared = 0;
-    let rowMultiplier = 1;
-    
-    for (let y = arenaHeight - 1; y >= 0; y--) {
-        let full = true;
-        for (let x = 0; x < arenaWidth; x++) {
-            if (arena[y][x] === 0 || arena[y][x] === 'bonus') {
-                full = false;
-                break;
-            }
-        }
-        if (full) {
-            const row = arena.splice(y, 1)[0];
-            arena.unshift(new Array(arenaWidth).fill(0));
-            rowsCleared++;
-            player.lines++;
-            
-            let pointsPerLine;
-            if (selectedDifficulty === 'easy') pointsPerLine = 1;
-            else if (selectedDifficulty === 'hard') pointsPerLine = 3;
-            else pointsPerLine = 2;
-            
-            player.score += rowMultiplier * pointsPerLine;
-            rowMultiplier *= 2;
-            y++;
-        }
-    }
-    
-            // ====== ПОКАЗЫВАЕМ КОМБО ЕСЛИ ОЧИЩЕНО > 1 ЛИНИИ ======
-        if (rowsCleared > 1) {
-            showComboDisplay(rowsCleared);  // ← передаём количество линий
-        }
-    
-    // Бонусы
-    if (rowsCleared > 0) {
-        if (Math.random() < BONUS_SPAWN_CHANCE && !activeBonus) spawnBonus();
-        if (bonusSpawnCooldown > 0) bonusSpawnCooldown--;
-    }
-    
-    // Повышение уровня
-    let oldLevel = player.level;
-    if (player.lines >= 5 && player.level === 1) player.level = 2;
-    else if (player.lines >= 10 && player.level === 2) player.level = 3;
-    else if (player.lines >= 20 && player.level === 3) player.level = 4;
-    else if (player.lines >= 40 && player.level === 4) player.level = 5;
-    else if (player.lines >= 80 && player.level === 5) player.level = 6;
-    else if (player.lines >= 160 && player.level === 6) player.level = 7;
-    else if (player.lines >= 320 && player.level === 7) player.level = 8;
-    else if (player.lines >= 640 && player.level === 8) player.level = 9;
-    
-    if (oldLevel !== player.level && typeof gameAudio !== 'undefined') {
-        gameAudio.playOneShot('levelup', 0.2);
-    }
-    if (rowsCleared > 0 && typeof gameAudio !== 'undefined') {
-        gameAudio.playOneShot('sweep', 0.25);
-    }
-     // ===== ОБНОВЛЯЕМ РЕКОРД В РЕАЛЬНОМ ВРЕМЕНИ =====
-    if (typeof saveVKScore === 'function' && player && player.score !== undefined) {
-        saveVKScore(player.score);
-    }
-    return rowsCleared;
-}
-
-function playerDrop() {
-    player.pos.y++;
-    if (collide(arena, player)) {
-        player.pos.y--;
-        merge(arena, player);
-        checkBonusCollision();
-        playerReset();
-        arenaSweep();
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('collide', 0.05);
-    }
-    dropCounter = 0;
-}
-
-function playerMove(dir) {
-    player.pos.x += dir;
-    if (collide(arena, player)) player.pos.x -= dir;
-     // Добавляем звук при движении (тихо)
-    if (typeof gameAudio !== 'undefined' && !gameState.paused && isGameStarted) {
-        gameAudio.playOneShot('rotate', 0.02);
-    }
-}
-
-function rotate(matrix, dir) {
-    for (let y = 0; y < matrix.length; ++y) {
-        for (let x = 0; x < y; ++x) {
-            [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
-        }
-    }
-    if (dir > 0) matrix.forEach(row => row.reverse());
-    else matrix.reverse();
-}
-
-function playerRotate(dir) {
-    const pos = player.pos.x;
-    let offset = 1;
-    
-    if (player.isTetraMode) {
-        const originalMatrix = player.matrix.map(row => [...row]);
-        const rotatedMatrix = rotateTetraMatrix(player.matrix);
-        player.matrix = rotatedMatrix;
-        const maxX = arenaWidth - player.matrix[0].length;
-        if (player.pos.x < 0) player.pos.x = 0;
-        if (player.pos.x > maxX) player.pos.x = maxX;
-        if (collide(arena, player)) {
-            player.matrix = originalMatrix;
-            return;
-        }
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        return;
-    }
-    
-    if (player.isPentaMode) {
-        const originalMatrix = player.matrix.map(row => [...row]);
-        const rotatedMatrix = rotatePentaMatrix(player.matrix);
-        player.matrix = rotatedMatrix;
-        const maxX = arenaWidth - player.matrix[0].length;
-        if (player.pos.x < 0) player.pos.x = 0;
-        if (player.pos.x > maxX) player.pos.x = maxX;
-        if (collide(arena, player)) {
-            player.matrix = originalMatrix;
-            return;
-        }
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        return;
-    }
-    
-    rotate(player.matrix, dir);
-    while (collide(arena, player)) {
-        player.pos.x += offset;
-        offset = -(offset + (offset > 0 ? 1 : -1));
-        if (offset > player.matrix[0].length) {
-            rotate(player.matrix, -dir);
-            player.pos.x = pos;
-            return;
-        }
-    }
-    if (!player.crazySpins) {
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        player.spins++;
-    }
-   if (player.spins > 25) {
-    player.crazySpins = true;
-    if (typeof gameAudio !== 'undefined') {
-        gameAudio.playOneShot('highspins', 0.2);
-    }
-    player.spins = 0;
-    setTimeout(() => {
-        player.crazySpins = false;
-    }, 2000);
-}
-}
-
+let arenaWidth=10,arenaHeight=20,arena=[],soundMuted=!1,musicMuted=!0,currentMusicTrack=null,isGameStarted=!1,isGameOver=!1,audioInitialized=!1,selectedMode="classic",selectedDifficulty="medium",difficultyMultiplier=1,slowDownInterval=null,isSlowDownActive=!1,comboDisplayTimer=null,dailyBonusClaimedToday=!1,lastInterstitialAdTime=0,pendingSlowDown=!1,slowDownTimerId=null,currentScrollPage=1;const SCROLLS_PER_PAGE=5,TOTAL_SCROLLS=100;let currentCollectionPage=1,currentCollectionCategory=null;const COLLECTION_ITEMS_PER_PAGE=15,CATEGORY_ORDER=["blocks","animals","plants","space"],BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};let activeBonus=null,bonusSpawnCooldown=0;const BONUS_SPAWN_CHANCE=.15,BONUS_MAX_COOLDOWN=7,canvas=document.getElementById("tetris"),context=canvas.getContext("2d"),CYBER_COLORS={I:"#00ffff",O:"#FFE138",T:"#ff00ff",S:"#00ff66",Z:"#ff0055",L:"#ffaa00",J:"#0066ff"},colors=[null,CYBER_COLORS.I,CYBER_COLORS.O,CYBER_COLORS.T,CYBER_COLORS.S,CYBER_COLORS.Z,CYBER_COLORS.L,CYBER_COLORS.J];
+function calculateOptimalArenaWidth(){const n=document.querySelector(".canvas-container");if(!n)return 14;const t=n.getBoundingClientRect().width-12;if(t<=0)return 14;return/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)?t>=500?18:t>=400?16:14:t>=1e3?24:t>=800?22:t>=600?20:22}function updateCanvasSize(){const n=document.querySelector(".canvas-container");if(!n)return;const t=n.getBoundingClientRect(),e=.85*window.innerHeight,i=t.width-12,a=Math.min(t.height-12,e);i<=0||a<=0||(canvas.width=i,canvas.height=a)}
+function createMatrix(e,a){const r=[];for(;a--;)r.push(new Array(e).fill(0));return r}function createPiece(e){switch(e){case"T":return[[0,0,0],[1,1,1],[0,1,0]];case"O":return[[2,2],[2,2]];case"L":return[[0,3,0],[0,3,0],[0,3,3]];case"J":return[[0,4,0],[0,4,0],[4,4,0]];case"I":return[[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];case"S":return[[0,6,6],[6,6,0],[0,0,0]];case"Z":return[[7,7,0],[0,7,7],[0,0,0]];default:return[[0]]}}const pieces="ILJOTSZ",tetraPieces={I:{shape:[[1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[1,1,0]],color:CYBER_COLORS.S},O:{shape:[[1,1],[1,1]],color:CYBER_COLORS.O},T:{shape:[[0,1,0],[1,1,1],[0,1,0]],color:CYBER_COLORS.T}},tetraKeys=["I","L","J","Z","S","O","T"];function createTetraPiece(){const e=tetraKeys[Math.floor(Math.random()*tetraKeys.length)],a=tetraPieces[e],r=a.shape.map((e=>[...e]));return r._color=a.color,r._key=e,r}function rotateTetraMatrix(e){const a=e._key;if("O"===a||"T"===a){const a=e.map((e=>[...e]));return a._color=e._color,a._key=e._key,a}const r=e.length,o=e[0].length,t=[];for(let a=0;a<o;a++){t[a]=[];for(let o=r-1;o>=0;o--)t[a].push(e[o][a])}return t._color=e._color,t._key=e._key,t}const pentaPieces={I:{shape:[[1,1,1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,0],[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[0,1],[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[0,1,0],[1,1,0]],color:CYBER_COLORS.S},T:{shape:[[1,1,1],[0,1,0],[0,1,0]],color:CYBER_COLORS.T},P:{shape:[[1,1],[1,1],[1,0]],color:CYBER_COLORS.O}},pentaKeys=["I","L","J","Z","S","T","P"];function createPentaPiece(){const e=pentaKeys[Math.floor(Math.random()*pentaKeys.length)],a=pentaPieces[e],r=a.shape.map((e=>[...e]));return r._color=a.color,r._key=e,r}function rotatePentaMatrix(e){const a=e.length,r=e[0].length,o=[];for(let t=0;t<r;t++){o[t]=[];for(let r=a-1;r>=0;r--)o[t].push(e[r][t])}return o._color=e._color,o._key=e._key,o}const player={pos:{x:5,y:0},matrix:null,nextMatrix:null,score:0,lines:0,level:1,spins:0,crazySpins:!1,isTetraMode:!1,isPentaMode:!1},gameState={initialized:!1,paused:!1,introSongPlayed:!1,gameOver:!1};let dropCounter=0,dropInterval=1e3,lastTime=0,animationFrameId=null,gameOverAnimation={active:!1,startTime:0,duration:4e3,matrix:null,pos:{x:0,y:0}};function collide(e,a){if(a.isTetraMode){const[r,o]=[a.matrix,a.pos];for(let a=0;a<r.length;++a)for(let t=0;t<r[a].length;++t)if(0!==r[a][t]){const r=a+o.y,n=t+o.x;if(r<0||r>=arenaHeight||n<0||n>=arenaWidth)return!0;const l=e[r]?.[n];if(0!==l&&"bonus"!==l)return!0}return!1}const[r,o]=[a.matrix,a.pos];for(let a=0;a<r.length;++a)for(let t=0;t<r[a].length;++t)if(0!==r[a][t]){const r=a+o.y,n=t+o.x;if(r<0||r>=arenaHeight||n<0||n>=arenaWidth)return!0;const l=e[r]?.[n];if(0!==l&&"bonus"!==l)return!0}return!1}function spawnBonus(){if(activeBonus)return;if(bonusSpawnCooldown>0)return void bonusSpawnCooldown--;const e=["STAR","CLOVER","CANDY"],a=e[Math.floor(Math.random()*e.length)],r=BONUS_TYPES[a];let o;o="easy"===selectedDifficulty?arenaHeight-5:"medium"===selectedDifficulty?arenaHeight-8:5;let t,n,l=0,i=!1;for(;l<50&&!i;)n=Math.floor(Math.random()*o),t=Math.floor(Math.random()*arenaWidth),arena[n]&&0===arena[n][t]&&(i=!0),l++;i&&(activeBonus={type:a,x:t,y:n,symbol:r.symbol,points:r.points,color:r.color,label:r.label},arena[n][t]="bonus")}function checkBonusCollision(){if(!activeBonus)return!1;for(let e=0;e<player.matrix.length;e++)for(let a=0;a<player.matrix[e].length;a++){const r=player.pos.y+e,o=player.pos.x+a;if(arena[r]&&"bonus"===arena[r][o]){const e=activeBonus;return arena[r][o]=0,player.score+=e.points,"function"==typeof saveVKScore&&saveVKScore(player.score),showBonusNotification(e),activeBonus=null,bonusSpawnCooldown=BONUS_MAX_COOLDOWN,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.15),!0}}return!1}function showBonusNotification(e){const a=(window.getText||(e=>e))("bonus")||"Бонус!",r=document.createElement("div");r.style.cssText=`\n        position: fixed; bottom: 30px; left: 50%;\n        transform: translateX(-50%) translateY(100px);\n        background: rgba(20, 20, 30, 0.92);\n        border: 2px solid ${e.color||"#FFD700"};\n        border-radius: 20px; padding: 16px 30px;\n        display: flex; align-items: center; gap: 16px;\n        z-index: 99999; opacity: 0;\n        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);\n        backdrop-filter: blur(20px);\n        font-family: 'Russo One', sans-serif;\n        pointer-events: none;\n    `,r.innerHTML=`\n        <span>${e.symbol}</span>\n        <div>\n            <span style="color: #fff; text-transform: uppercase;">${a}</span>\n            <span style="color: ${e.color}; display: block;">${e.label}</span>\n        </div>\n        <span style="color: ${e.color}; font-weight: bold;">+${e.points}</span>\n    `,document.body.appendChild(r),requestAnimationFrame((()=>{r.style.opacity="1",r.style.transform="translateX(-50%) translateY(0)"})),setTimeout((()=>{r.style.opacity="0",r.style.transform="translateX(-50%) translateY(-30px)",setTimeout((()=>{r.parentNode&&r.remove()}),400)}),2e3)}function merge(e,a){if(a.isTetraMode||a.isPentaMode){const r=a.matrix._color||"#ff0000";a.matrix.forEach(((o,t)=>{o.forEach(((o,n)=>{if(0!==o){const o=a.pos.y+t,l=a.pos.x+n;o>=0&&o<arenaHeight&&l>=0&&l<arenaWidth&&"bonus"!==e[o][l]&&(e[o][l]=r)}}))}))}else a.matrix.forEach(((r,o)=>{r.forEach(((r,t)=>{if(0!==r){const n=a.pos.y+o,l=a.pos.x+t;n>=0&&n<arenaHeight&&l>=0&&l<arenaWidth&&"bonus"!==e[n][l]&&(e[n][l]=r)}}))}))}function arenaSweep(){let e=0,a=1;for(let r=arenaHeight-1;r>=0;r--){let o=!0;for(let e=0;e<arenaWidth;e++)if(0===arena[r][e]||"bonus"===arena[r][e]){o=!1;break}if(o){let o;arena.splice(r,1)[0],arena.unshift(new Array(arenaWidth).fill(0)),e++,player.lines++,o="easy"===selectedDifficulty?1:"hard"===selectedDifficulty?3:2,player.score+=a*o,a*=2,r++}}e>1&&showComboDisplay(e),e>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);let r=player.level;return player.lines>=5&&1===player.level?player.level=2:player.lines>=10&&2===player.level?player.level=3:player.lines>=20&&3===player.level?player.level=4:player.lines>=40&&4===player.level?player.level=5:player.lines>=80&&5===player.level?player.level=6:player.lines>=160&&6===player.level?player.level=7:player.lines>=320&&7===player.level?player.level=8:player.lines>=640&&8===player.level&&(player.level=9),r!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),e>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25),"function"==typeof saveVKScore&&player&&void 0!==player.score&&saveVKScore(player.score),e}function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merge(arena,player),checkBonusCollision(),playerReset(),arenaSweep(),"undefined"!=typeof gameAudio&&gameAudio.playOneShot("collide",.05)),dropCounter=0}function playerMove(e){player.pos.x+=e,collide(arena,player)&&(player.pos.x-=e),"undefined"!=typeof gameAudio&&!gameState.paused&&isGameStarted&&gameAudio.playOneShot("rotate",.02)}function rotate(e,a){for(let a=0;a<e.length;++a)for(let r=0;r<a;++r)[e[r][a],e[a][r]]=[e[a][r],e[r][a]];a>0?e.forEach((e=>e.reverse())):e.reverse()}function playerRotate(e){const a=player.pos.x;let r=1;if(player.isTetraMode){const e=player.matrix.map((e=>[...e])),a=rotateTetraMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}if(player.isPentaMode){const e=player.matrix.map((e=>[...e])),a=rotatePentaMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}for(rotate(player.matrix,e);collide(arena,player);)if(player.pos.x+=r,r=-(r+(r>0?1:-1)),r>player.matrix[0].length)return rotate(player.matrix,-e),void(player.pos.x=a);player.crazySpins||("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15),player.spins++),player.spins>25&&(player.crazySpins=!0,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("highspins",.2),player.spins=0,setTimeout((()=>{player.crazySpins=!1}),2e3))}
 function playerReset() {
     if (player.isTetraMode) {
         player.matrix = player.nextMatrix;
@@ -582,7 +19,6 @@ function playerReset() {
         startGameOverAnimation();
     }
 }
-
 // ======================== АНИМАЦИЯ ПРОИГРЫША ========================
 function startGameOverAnimation() {
     gameOverAnimation.active = true;
@@ -598,18 +34,14 @@ function startGameOverAnimation() {
     lastTime = 0;
     dropCounter = 0;
     update();
-
 }
-
 function drawGameOverAnimation() {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     if (!canvasWidth || !canvasHeight) return;
-    
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const topPanelHeight = isMobile ? 42 : 80;
     const gameAreaHeight = Math.max(50, canvasHeight - topPanelHeight);
-    
     let blockSize = Math.min(canvasWidth / arenaWidth, gameAreaHeight / arenaHeight);
     const FIGURE_SCALE = 1.8;
     let scaledBlockSize = blockSize * FIGURE_SCALE;
@@ -617,15 +49,12 @@ function drawGameOverAnimation() {
     if (finalBlockSize * arenaWidth > canvasWidth) finalBlockSize = canvasWidth / arenaWidth;
     if (finalBlockSize * arenaHeight > gameAreaHeight) finalBlockSize = gameAreaHeight / arenaHeight;
     blockSize = finalBlockSize;
-    
     const offsetX = (canvasWidth - (blockSize * arenaWidth)) / 2;
     const offsetY = topPanelHeight + (gameAreaHeight - (blockSize * arenaHeight)) / 2;
-    
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
     context.fillStyle = '#0a0a0f';
     context.fillRect(0, topPanelHeight, canvasWidth, gameAreaHeight);
-    
     for (let y = 0; y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
             const value = arena[y][x];
@@ -635,16 +64,13 @@ function drawGameOverAnimation() {
                 let fillColor;
                 if (typeof value === 'string' && value.startsWith('#')) fillColor = value;
                 else fillColor = colors[value] || '#FFF';
-                
                 context.fillStyle = fillColor;
                 context.fillRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
-
                 context.strokeStyle = "rgba(0,0,0,0.3)";
                 context.strokeRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
             }
         }
     }
-    
     const elapsed = Date.now() - gameOverAnimation.startTime;
     const maxDuration = gameOverAnimation.duration;
     if (elapsed < maxDuration) {
@@ -654,7 +80,6 @@ function drawGameOverAnimation() {
         const pos = gameOverAnimation.pos;
         const isTetra = player.isTetraMode;
         const isPenta = player.isPentaMode;
-        
         for (let y = 0; y < matrix.length; y++) {
             for (let x = 0; x < matrix[y].length; x++) {
                 const value = matrix[y][x];
@@ -680,7 +105,6 @@ function drawGameOverAnimation() {
                 }
             }
         }
-        
         const t = window.getText || (key => key);
         context.fillStyle = 'rgba(0,0,0,0.4)';
         context.fillRect(0, canvasHeight / 2 - 60, canvasWidth, 120);
@@ -695,7 +119,6 @@ function drawGameOverAnimation() {
         context.fillStyle = '#94a3b8';
         context.font = `${Math.min(18, canvasWidth / 20)}px Russo One`;
         context.fillText(t('gameOverBlocked') || 'Фигура не помещается', canvasWidth / 2, canvasHeight / 2 + 40);
-        
         animationFrameId = requestAnimationFrame(() => {
             if (gameOverAnimation.active) drawGameOverAnimation();
         });
@@ -704,19 +127,16 @@ function drawGameOverAnimation() {
            endGame();
           }
 }
-
 // ======================== ОТРИСОВКА ========================
 function drawGame() {
     if (!canvas || canvas.width === 0) updateCanvasSize();
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     if (canvasWidth <= 0 || canvasHeight <= 0) return;
-    
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 const isUltraSmall = window.innerWidth <= 280 || window.innerHeight <= 280;
 const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80);
     const gameAreaHeight = Math.max(50, canvasHeight - topPanelHeight);
-    
     const FIGURE_SCALE = 1.8;
     let blockSize = Math.min(canvasWidth / arenaWidth, gameAreaHeight / arenaHeight);
     let scaledBlockSize = blockSize * FIGURE_SCALE;
@@ -724,19 +144,16 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
     if (finalBlockSize * arenaWidth > canvasWidth) finalBlockSize = canvasWidth / arenaWidth;
     if (finalBlockSize * arenaHeight > gameAreaHeight) finalBlockSize = gameAreaHeight / arenaHeight;
     blockSize = finalBlockSize;
-    
     const offsetX = (canvasWidth - (blockSize * arenaWidth)) / 2;
     const offsetY = topPanelHeight + (gameAreaHeight - (blockSize * arenaHeight)) / 2;
     const arenaLeft = (canvasWidth - (blockSize * arenaWidth)) / 2;
     const arenaTop = topPanelHeight + (gameAreaHeight - (blockSize * arenaHeight)) / 2;
     const arenaWidthPx = blockSize * arenaWidth;
     const arenaHeightPx = blockSize * arenaHeight;
-    
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
     context.fillStyle = '#0a0a0f';
     context.fillRect(0, topPanelHeight, canvasWidth, gameAreaHeight);
-    
     // Обводка поля
     context.save();
     context.shadowBlur = 15;
@@ -788,7 +205,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
     context.stroke();
     context.shadowBlur = 0;
     context.restore();
-    
     // Арена
     for (let y = 0; y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
@@ -822,7 +238,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
             }
         }
     }
-    
     // Текущая фигура
     if (player && player.matrix) {
         const isTetra = player.isTetraMode;
@@ -844,22 +259,18 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
             }
         }
     }
-    
 // Статистика
 const t = window.getText || (key => key);
 context.fillStyle = '#111';
 context.fillRect(0, 0, canvasWidth, topPanelHeight);
-
 const titleFontSize = isUltraSmall 
     ? Math.min(5, canvasWidth / 40) 
     : (isMobile ? Math.min(12, canvasWidth / 25) : Math.min(22, canvasWidth / 20));
 const valueFontSize = isUltraSmall 
     ? Math.min(7, canvasWidth / 25) 
     : (isMobile ? Math.min(18, canvasWidth / 16) : Math.min(36, canvasWidth / 12));
-
 const textYTitle = isUltraSmall ? 10 : (isMobile ? 16 : 30);
 const textYValue = isUltraSmall ? 22 : (isMobile ? 36 : 65);
-
 context.textAlign = "center";
 context.fillStyle = '#888';
 context.font = `${titleFontSize}px Russo One`;
@@ -867,21 +278,18 @@ context.fillText(t('score'), canvasWidth * 0.12, textYTitle);
 context.fillStyle = '#fff';
 context.font = `${valueFontSize}px Russo One`;
 context.fillText(player ? player.score : 0, canvasWidth * 0.12, textYValue);
-
 context.fillStyle = '#888';
 context.font = `${titleFontSize * 0.8}px Russo One`;
 context.fillText(t('lines'), canvasWidth * 0.32, textYTitle);
 context.fillStyle = '#fff';
 context.font = `${valueFontSize}px Russo One`;
 context.fillText(player ? player.lines : 0, canvasWidth * 0.32, textYValue);
-
 context.fillStyle = '#888';
 context.font = `${titleFontSize * 0.8}px Russo One`;
 context.fillText(t('level'), canvasWidth * 0.52, textYTitle);
 context.fillStyle = '#fff';
 context.font = `${valueFontSize}px Russo One`;
 context.fillText(player ? player.level : 1, canvasWidth * 0.52, textYValue);
-    
     // Следующая фигура
     if (player && player.nextMatrix) {
         const nextX = canvasWidth * 0.70;
@@ -905,14 +313,12 @@ context.fillText(player ? player.level : 1, canvasWidth * 0.52, textYValue);
         }
     }
 }
-
 // ======================== ИГРОВОЙ ЦИКЛ ========================
 function update(time = 0) {
     if (gameOverAnimation.active) {
         drawGameOverAnimation();
         return;
     }
-    
     if (gameState.paused) {
         if (typeof drawGame === 'function') drawGame();
         if (canvas && context) {
@@ -929,7 +335,6 @@ function update(time = 0) {
         animationFrameId = requestAnimationFrame(update);
         return;
     }
-    
     if (isGameOver || !isGameStarted) {
         if (typeof drawGame === 'function') drawGame();
         if (isGameOver && canvas && context) {
@@ -946,7 +351,6 @@ function update(time = 0) {
         animationFrameId = requestAnimationFrame(update);
         return;
     }
-    
     const deltaTime = time - lastTime;
     lastTime = time;
     dropCounter += deltaTime;
@@ -958,8 +362,6 @@ function update(time = 0) {
     if (typeof drawGame === 'function') drawGame();
     animationFrameId = requestAnimationFrame(update);
 }
-
-
 // ======================== УПРАВЛЕНИЕ ИГРОЙ ========================
 function startGame() {
        __endGameRunning = false;  
@@ -971,13 +373,10 @@ function startGame() {
         clearTimeout(slowDownTimerId);
         slowDownTimerId = null;
     }
-
 if (selectedDifficulty === 'easy') arenaWidth = 12;
 else if (selectedDifficulty === 'hard') arenaWidth = 16;
 else arenaWidth = 14;
-
     arenaHeight = 18;
-    
     if (selectedDifficulty === 'easy') {
         difficultyMultiplier = 0.5;
         dropInterval = 1400;
@@ -988,12 +387,10 @@ else arenaWidth = 14;
         difficultyMultiplier = 1;
         dropInterval = 1000;
     }
-    
     arena = createMatrix(arenaWidth, arenaHeight);
     for (let i = 0; i < arenaHeight; i++) {
         for (let j = 0; j < arenaWidth; j++) arena[i][j] = 0;
     }
-    
     activeBonus = null;
     bonusSpawnCooldown = 0;
     isGameStarted = true;
@@ -1016,7 +413,6 @@ isSlowDownActive = false;
     player.level = 1;
     player.spins = 0;
     player.crazySpins = false;
-    
     if (selectedMode === 'tetra') {
         player.isTetraMode = true;
         player.isPentaMode = false;
@@ -1033,38 +429,30 @@ isSlowDownActive = false;
         player.matrix = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
         player.nextMatrix = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
     }
-    
     const matrixWidth = player.matrix[0].length;
     const maxX = arenaWidth - matrixWidth;
     player.pos.x = Math.floor(maxX / 2);
     player.pos.y = 0;
-      
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     lastTime = 0;
     dropCounter = 0;
     update();
 }
-
 async function startGameWithAudio() {
     console.log("startGameWithAudio вызван");
-
     if (typeof gameAudio !== 'undefined' && !gameAudio.initialized) {
         await gameAudio.init();
         console.log('✅ Аудио инициализировано');
     }
-
     if (typeof gameAudio !== 'undefined') {
         gameAudio.resumeAll();
         console.log('✅ Аудио контексты возобновлены');
-        
         // 🟢 Активируем музыкальный контекст сразу после resume
         gameAudio.ensureMusicContextActive();
         // Даём контексту время перейти в running
         await new Promise(r => setTimeout(r, 50));
     }
-
     startGame();
-
     if (typeof gameAudio !== 'undefined' && gameAudio.initialized) {
         if (!musicMuted && !soundMuted) {
             console.log('🎵 Запускаем музыку после загрузки');
@@ -1072,7 +460,6 @@ async function startGameWithAudio() {
         }
     }
 }
-
 let __endGameRunning = false;
 function endGame() {
     if (__endGameRunning) return;
@@ -1095,38 +482,29 @@ if (selectedDifficulty) savePlayedDifficulty();
     gameState.over = true;
     gameState.initialized = false;
     gameState.paused = false;
-
     // ← СОХРАНЯЕМ ОДИН РАЗ, ДО обнуления чего-либо
     const finalScore = player ? (player.score || 0) : 0;
     if (typeof saveVKScore === 'function') saveVKScore(finalScore);
     if (typeof saveTotalProgress === 'function') saveTotalProgress();
-
     if (typeof syncAllDataToVK === 'function') syncAllDataToVK();
-
     showGameOverModal(finalScore);   
     updatePauseButtonText();
     drawGame();
 }
-
 function pauseGame() {
     if (gameState.paused) return;
     gameState.paused = true;
-    
     if (typeof gameAudio !== 'undefined') {
         gameAudio.pauseAll();
         gameAudio.stopMusic();
     }
-
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
     }
-
     // ← БОЛЬШЕ НЕ СОХРАНЯЕМ НИ РЕКОРД, НИ ОБЩИЙ ПРОГРЕСС ЗДЕСЬ!
     // Прогресс сохраняется ТОЛЬКО в endGame()
-
     updatePauseButtonText();
 }
-
 function resumeGame() {
     if (!gameState.paused) return;
     if (pendingSlowDown) {
@@ -1135,18 +513,15 @@ function resumeGame() {
     }
     gameState.paused = false;
     lastTime = performance.now();
-    
     // Возобновляем аудио контексты
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
         gameAudio.resumeAll();
-        
         // Если музыка всё ещё не играет — принудительно перезапускаем
         if (!gameAudio.musicStarted && currentMusicTrack) {
             console.log('🔄 Музыка не возобновилась, перезапускаем:', currentMusicTrack);
             gameAudio.playMusic(currentMusicTrack, 0.08);
         }
     }
-    
     if (typeof window.notifyGameplayStart === 'function') {
         window.notifyGameplayStart();
     }
@@ -1154,7 +529,6 @@ function resumeGame() {
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     update();
 }
-
 function togglePauseResume() {
     const t = window.getText || (key => key);
     if (!isGameStarted) {
@@ -1181,7 +555,6 @@ function togglePauseResume() {
         if (typeof showVKFullscreenAd === 'function') showVKFullscreenAd();
     }
 }
-
 function returnToMenu() {
     if (isGameStarted && !isGameOver && !gameState.paused) pauseGame();
     if (typeof gameAudio !== 'undefined') {
@@ -1207,7 +580,6 @@ function returnToMenu() {
     const diffModal = document.getElementById('difficulty-modal');
     if (diffModal) diffModal.style.display = 'none';
 }
-
 function updatePauseButtonText() {
     const btn = document.getElementById('pause-resume-btn');
     if (!btn) return;
@@ -1220,12 +592,10 @@ function updatePauseButtonText() {
         btn.setAttribute('data-i18n', 'pause');
     }
 }
-
 // ======================== МУЗЫКА И ЗВУКИ ========================
 async function playBackgroundMusic() {
     if (musicMuted || !gameAudio || !gameAudio.initialized) return;
     if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) return;
-
     let track;
     const isClassic = selectedMode === 'classic';
     if (isClassic && selectedDifficulty === 'easy') track = '2';
@@ -1234,9 +604,7 @@ async function playBackgroundMusic() {
     else if (!isClassic && selectedDifficulty === 'easy') track = '2';
     else if (!isClassic && selectedDifficulty === 'medium') track = '1';
     else track = '1';
-
     currentMusicTrack = track;
-
     let attempts = 0;
     const maxAttempts = 40;
     while (attempts < maxAttempts) {
@@ -1250,7 +618,6 @@ async function playBackgroundMusic() {
         attempts++;
         await new Promise(resolve => setTimeout(resolve, 500));
     }
-
     // Повторная попытка через 5 секунд
     setTimeout(() => {
         if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
@@ -1259,12 +626,9 @@ async function playBackgroundMusic() {
         }
     }, 5000);
 }
-
-
 function stopSounds() {
     if (typeof gameAudio !== 'undefined') gameAudio.stopLoop();
 }
-
 function toggleSound() {
     if (typeof gameAudio === 'undefined') return;
     soundMuted = !soundMuted;
@@ -1279,7 +643,6 @@ function toggleSound() {
     }
     updateSoundIcon();
 }
-
 function toggleMusic() {
     if (typeof gameAudio === 'undefined') return;
     musicMuted = !musicMuted;
@@ -1292,7 +655,6 @@ function toggleMusic() {
         }
     }
 }
-
 function updateSoundIcon() {
     const soundIcons = document.querySelectorAll('#sound-icon, #menu-sound-icon, #sound-btn svg');
     const isMuted = soundMuted;
@@ -1304,7 +666,6 @@ function updateSoundIcon() {
         }
     });
 }
-
 function updateMusicIcon() {
     const musicIcons = document.querySelectorAll('#music-icon, #menu-music-icon, #music-btn svg');
     const isMuted = musicMuted;
@@ -1316,7 +677,6 @@ function updateMusicIcon() {
         }
     });
 }
-
 function initAudio() {
     if (typeof gameAudio === 'undefined') return;
     if (!gameAudio.initialized) {
@@ -1342,10 +702,8 @@ function initAudio() {
 function showGameOverModal(score) {
     const modal = document.getElementById('gameover-modal');
     const scoreEl = document.getElementById('gameover-score');
-    
     if (modal) {
         if (scoreEl) scoreEl.textContent = score;
-        
         // Находим или создаём контейнер для кнопок
         let buttonsContainer = modal.querySelector('.gameover-buttons-container');
         if (!buttonsContainer) {
@@ -1363,17 +721,14 @@ function showGameOverModal(score) {
                         btn.remove();
                     }
                 });
-                
                 // Создаём контейнер для кнопок
                 buttonsContainer = document.createElement('div');
                 buttonsContainer.className = 'gameover-buttons-container';
                 buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px; margin-top: 16px;';
-                
                 // Переносим существующие кнопки в контейнер
                 const existingBtns = contentDiv.querySelectorAll('button');
                 const newGameBtn = contentDiv.querySelector('button[onclick*="closeGameOverModal"]');
                 const menuBtn = contentDiv.querySelector('button[onclick*="closeGameOverModalAndMenu"]');
-                
                 // Создаём новую кнопку "Продолжить за рекламу"
                 const continueBtn = document.createElement('button');
                 continueBtn.style.cssText = `
@@ -1388,10 +743,8 @@ function showGameOverModal(score) {
                 `;
                 continueBtn.innerHTML = '🧹 Продолжить за рекламу';
                 continueBtn.onclick = handleContinueWithAd;
-                
                 // Собираем все кнопки в контейнер
                 buttonsContainer.appendChild(continueBtn);
-                
                 if (newGameBtn) {
                     // Изменяем стиль кнопки "Новая игра"
                     newGameBtn.style.cssText = `
@@ -1404,7 +757,6 @@ function showGameOverModal(score) {
                     `;
                     buttonsContainer.appendChild(newGameBtn);
                 }
-                
                 if (menuBtn) {
                     // Изменяем стиль кнопки "В меню"
                     menuBtn.style.cssText = `
@@ -1417,30 +769,25 @@ function showGameOverModal(score) {
                     `;
                     buttonsContainer.appendChild(menuBtn);
                 }
-                
                 // Добавляем контейнер в модалку
                 contentDiv.appendChild(buttonsContainer);
             }
         }
-        
         modal.style.display = 'flex';
         if (typeof updateInterfaceLanguage === 'function') updateInterfaceLanguage();
     }
 }
-
 function closeGameOverModal() {
     const modal = document.getElementById('gameover-modal');
     if (modal) modal.style.display = 'none';
     const diffModal = document.getElementById('difficulty-modal');
     if (diffModal) diffModal.style.display = 'flex';
 }
-
 function closeGameOverModalAndMenu() {
     const modal = document.getElementById('gameover-modal');
     if (modal) modal.style.display = 'none';
     if (typeof returnToMenu === 'function') returnToMenu();
 }
-
 // ======================== ВЫБОР РЕЖИМА И СЛОЖНОСТИ ========================
 function selectMode(mode) {
     selectedMode = mode;
@@ -1456,15 +803,12 @@ function selectMode(mode) {
     }
     if (diffModal) diffModal.style.display = 'flex';
 }
-
-
 function closeDifficultyModal() {
     const diffModal = document.getElementById('difficulty-modal');
     if (diffModal) diffModal.style.display = 'none';
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'flex';
 }
-
 function selectDifficulty(difficulty) {
     selectedDifficulty = difficulty;
     savePlayedDifficulty();
@@ -1473,9 +817,7 @@ function selectDifficulty(difficulty) {
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'none';
    startGameWithAudio(); // ← только один вызов
-
 }
-
 // ======================== ОБЩИЙ ПРОГРЕСС ========================
 function saveTotalProgress() {
     if (typeof player === 'undefined' || !player) return;
@@ -1484,13 +826,11 @@ function saveTotalProgress() {
     const newTotal = currentTotal + currentGameScore;
     localStorage.setItem('totalScore', newTotal);
     window.totalScore = newTotal;
-    
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_total_score_v1', newTotal);
     }
     console.log(`📊 Общий прогресс: +${currentGameScore} = ${newTotal} очков`);
 }
-
 function savePlayedDifficulty() {
     if (!selectedDifficulty) return;
     const playedDifficulties = JSON.parse(localStorage.getItem('playedDifficulties') || '[]');
@@ -1503,7 +843,6 @@ function savePlayedDifficulty() {
         console.log('✅ Сохранена сложность:', selectedDifficulty);
     }
 }
-
 // ======================== УПРАВЛЕНИЕ С КЛАВИАТУРЫ ========================
 document.addEventListener('keydown', event => {
     if (!isGameStarted || isGameOver || gameState.paused) return;
@@ -1535,7 +874,6 @@ document.addEventListener('keydown', event => {
             break;
     }
 });
-
 // ======================== МОБИЛЬНОЕ УПРАВЛЕНИЕ ========================
 function initMobileControls() {
     const btnLeft = document.getElementById('btn-left');
@@ -1543,10 +881,8 @@ function initMobileControls() {
     const btnDown = document.getElementById('btn-down');
     const btnRot = document.getElementById('btn-rot');
     if (!btnLeft) return;
-
     // Хранилище активных интервалов для удержания
     const repeatIntervals = {};
-
     /**
      * Запускает повторяющееся действие с заданным интервалом.
      * Сразу выполняет действие один раз, затем запускает setInterval.
@@ -1567,7 +903,6 @@ function initMobileControls() {
             }
         }, interval);
     }
-
     /**
      * Останавливает повторяющееся действие.
      */
@@ -1577,7 +912,6 @@ function initMobileControls() {
             delete repeatIntervals[id];
         }
     }
-
     // ---- Удержание для кнопки "Влево" ----
     function onLeftStart(e) {
         e.preventDefault();
@@ -1587,7 +921,6 @@ function initMobileControls() {
         e.preventDefault();
         stopRepeating('moveLeft');
     }
-
     // ---- Удержание для кнопки "Вправо" ----
     function onRightStart(e) {
         e.preventDefault();
@@ -1597,7 +930,6 @@ function initMobileControls() {
         e.preventDefault();
         stopRepeating('moveRight');
     }
-
     // ---- Удержание для кнопки "Вниз" (мягкий дроп) ----
     // Для ускоренного падения используем меньший интервал (50-80 мс)
     function onDownStart(e) {
@@ -1608,7 +940,6 @@ function initMobileControls() {
         e.preventDefault();
         stopRepeating('drop');
     }
-
     // ---- Обычные действия (без удержания) ----
     function onRotate(e) {
         e.preventDefault();
@@ -1616,42 +947,34 @@ function initMobileControls() {
             playerRotate(-1);
         }
     }
-
     // ----- Привязка событий -----
-
     // Левая кнопка
     btnLeft.addEventListener('touchstart', onLeftStart);
     btnLeft.addEventListener('touchend', onLeftEnd);
     btnLeft.addEventListener('touchcancel', onLeftEnd);
     btnLeft.addEventListener('mousedown', onLeftStart);
     btnLeft.addEventListener('mouseup', onLeftEnd);
-
     // Правая кнопка
     btnRight.addEventListener('touchstart', onRightStart);
     btnRight.addEventListener('touchend', onRightEnd);
     btnRight.addEventListener('touchcancel', onRightEnd);
     btnRight.addEventListener('mousedown', onRightStart);
     btnRight.addEventListener('mouseup', onRightEnd);
-
     // Кнопка "Вниз"
     btnDown.addEventListener('touchstart', onDownStart);
     btnDown.addEventListener('touchend', onDownEnd);
     btnDown.addEventListener('touchcancel', onDownEnd);
     btnDown.addEventListener('mousedown', onDownStart);
     btnDown.addEventListener('mouseup', onDownEnd);
-
     // Поворот
     btnRot.addEventListener('touchstart', onRotate);
     btnRot.addEventListener('touchcancel', (e) => e.preventDefault());
     btnRot.addEventListener('mousedown', onRotate);
 }
-
 initMobileControls();
-
 // ======================== ОБРАБОТЧИКИ СОБЫТИЙ ========================
 document.addEventListener('click', initAudio);
 document.addEventListener('touchstart', initAudio);
-
 // Следим за видимостью страницы — ставим на паузу, но НЕ снимаем автоматически!
         document.addEventListener('visibilitychange', function() {
                         if (document.hidden) {
@@ -1665,10 +988,8 @@ document.addEventListener('touchstart', initAudio);
 }
                         }            // ❌ НЕТ автоматического resume! Игрок сам нажмёт "Дальше"
                     });
-
 document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
 canvas.addEventListener('selectstart', (e) => { e.preventDefault(); return false; });
-
 let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
@@ -1678,7 +999,6 @@ window.addEventListener('resize', () => {
         if (typeof drawGame === 'function') drawGame();
     }, 100);
 });
-
 // Обработчик потери фокуса окна
 window.addEventListener('blur', function() {
     // Окно потеряло фокус (пользователь переключился на другую программу)
@@ -1687,7 +1007,6 @@ window.addEventListener('blur', function() {
         console.log('📱 Окно потеряло фокус — игра на паузе');
     }
 });
-
 // Обработчик получения фокуса — НЕ снимаем паузу автоматически!
 window.addEventListener('focus', function() {
     // Окно получило фокус, но игра остаётся на паузе
@@ -1700,12 +1019,10 @@ document.addEventListener('fullscreenchange', () => {
         if (typeof drawGame === 'function') drawGame();
     }, 50);
 });
-
 document.body.addEventListener('touchmove', (e) => {
     if (e.target.closest('.d-btn, .rotate-btn, .iksweb, .iksweb1')) return;
     e.preventDefault();
 }, { passive: false });
-
 // ======================== ИНИЦИАЛИЗАЦИЯ ========================
 setTimeout(() => {
     updateCanvasSize();
@@ -1725,7 +1042,6 @@ setTimeout(() => {
     updateDailyBonusStatus();
     // =================================================
 }, 100);
-
 window.addEventListener('load', function() {
     setTimeout(function() {
         updateCanvasSize();
@@ -1735,7 +1051,6 @@ window.addEventListener('load', function() {
         if (container) container.style.opacity = '1';
     }, 200);
 });
-
 // ======================== КОЛЛЕКЦИИ ========================
 const COLLECTION_CATEGORIES = {
     blocks: {
@@ -1755,14 +1070,12 @@ const COLLECTION_CATEGORIES = {
         requirement: 'hard', total: 50, price: 200
     }
 };
-
 function checkCategoryUnlocked(categoryId) {
     const category = COLLECTION_CATEGORIES[categoryId];
     if (!category) return false;
     const playedDifficulties = JSON.parse(localStorage.getItem('playedDifficulties') || '[]');
     return playedDifficulties.includes(category.requirement);
 }
-
 function getUnlockedCountInCategory(categoryId, totalScore) {
     const category = COLLECTION_CATEGORIES[categoryId];
     const categoryIndex = CATEGORY_ORDER.indexOf(categoryId);
@@ -1771,7 +1084,6 @@ function getUnlockedCountInCategory(categoryId, totalScore) {
     const remainingScore = totalScore - baseScore;
     return Math.min(Math.floor(remainingScore / 200), category.total);
 }
-
 function updateCollectionsProgress() {
     const progressEl = document.getElementById('collections-progress');
     if (!progressEl) return;
@@ -1787,18 +1099,14 @@ function updateCollectionsProgress() {
     progressEl.textContent = `${unlocked}/${total}`;
     window.collectionsProgress = { unlocked, total };
 }
-
 function openCollections() {
     const rewardsModal = document.getElementById('rewards-center-modal');
     if (rewardsModal) rewardsModal.style.display = 'none';
-    
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-    
 let html = `
 <div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10001; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collections-modal" onclick="if(event.target===this)closeCollections()">
 <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); border-radius: 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto; padding: 20px 15px;">
-
 <button class="modal-close-btn" onclick="closeCollections()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; font-size: 28px;">✕</button>           
      <h2 class="neon-title" style="color: #34d399; text-transform: uppercase; letter-spacing: 2px; font-family: 'Russo One', sans-serif; font-size: clamp(18px, 5vw, 28px);">🖼️ ${t('collections') || 'Коллекции'}</h2>
                 <p style="color: #64748b; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Russo One', sans-serif; font-size: clamp(12px, 2.5vw, 16px);">
@@ -1806,14 +1114,12 @@ let html = `
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
     `;
-    
     for (const [key, category] of Object.entries(COLLECTION_CATEGORIES)) {
         const name = t(category.nameKey) || category.nameKey;
         const isUnlocked = checkCategoryUnlocked(key);
         const unlockedCount = isUnlocked ? getUnlockedCountInCategory(key, savedScore) : 0;
         const total = category.total;
         const isComplete = isUnlocked && unlockedCount >= total;
-        
         let buttonStyle, onClickAction, rightText;
         if (isUnlocked) {
             buttonStyle = `color: #fff; background: ${isComplete ? 'linear-gradient(135deg, #22c55e, #16a34a)' : 'linear-gradient(135deg, #2563eb, #1d4ed8)'}; border: none; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); cursor: pointer;`;
@@ -1829,7 +1135,6 @@ let html = `
             onClickAction = `onclick="showLockedCategory('${key}')"`;
             rightText = `<span style="font-size: clamp(18px, 4vw, 24px); color: #475569; margin-left: auto;">🔒</span>`;
         }
-        
         html += `
             <button ${onClickAction}
                     style="width: 100%; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; 
@@ -1842,62 +1147,51 @@ let html = `
             </button>
         `;
     }
-    
     const oldModal = document.getElementById('collections-modal');
     if (oldModal) oldModal.remove();
     const div = document.createElement('div');
     div.innerHTML = html;
     document.body.appendChild(div.firstElementChild);
 }
-
 function closeCollections() {
     const modal = document.getElementById('collections-modal');
     if (modal) modal.remove();
     const rewardsModal = document.getElementById('rewards-center-modal');
     if (rewardsModal) rewardsModal.style.display = 'flex';
 }
-
     function openCollectionCategory(categoryId) {
         const category = COLLECTION_CATEGORIES[categoryId];
         if (!category) {
             console.error('❌ Категория не найдена:', categoryId);
             return;
         }
-        
         const t = window.getText || (key => key);
         const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-        
         if (!checkCategoryUnlocked(categoryId)) {
             showLockedCategory(categoryId);
             return;
         }
-        
         currentCollectionCategory = categoryId;
         currentCollectionPage = 1;
         renderCollectionCategory(categoryId, 1);
     }
-
 function renderCollectionCategory(categoryId, page) {
     const category = COLLECTION_CATEGORIES[categoryId];
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-
     if (!checkCategoryUnlocked(categoryId)) {
         showLockedCategory(categoryId);
         return;
     }
-
     const categoryName = t(category.nameKey) || category.nameKey;
     const totalItems = category.total;
     const totalPages = Math.ceil(totalItems / COLLECTION_ITEMS_PER_PAGE);
     const unlockedCount = getUnlockedCountInCategory(categoryId, savedScore);
     const startIndex = (page - 1) * COLLECTION_ITEMS_PER_PAGE;
     const endIndex = Math.min(startIndex + COLLECTION_ITEMS_PER_PAGE, totalItems);
-
 let html = `
 <div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.92); z-index: 10002; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(20px);" id="collection-category-modal" onclick="if(event.target===this)closeCollectionCategory()">
 <div id="collection-category-content" class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(52, 211, 153, 0.3); border-radius: 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); position: relative; text-align: center; max-height: 90vh; overflow-y: auto; padding: 15px 10px;">
-
 <button class="modal-close-btn"  onclick="closeCollectionCategory()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 10px; touch-action: manipulation; line-height: 1; z-index: 10;">✕</button>         
        <h2 style="color: #34d399; font-size: clamp(20px, 5vw, 26px); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; font-family: 'Russo One', sans-serif;">
                     ${category.icon} ${categoryName}
@@ -1907,16 +1201,13 @@ let html = `
                 </p>
                 <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 10px;">
     `;
-
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
     for (let i = startIndex + 1; i <= endIndex; i++) {
         const itemId = `${categoryId}${i}`;
         const isAvailable = i <= unlockedCount;
         const isClaimed = progress[itemId] || false;
         const imgPath = `images/${category.folder}/${i}.png`;
-
         let bgColor, borderColor, clickAction, content;
-
         if (isClaimed) {
             bgColor = 'rgba(52, 211, 153, 0.08)';
             borderColor = 'rgba(52, 211, 153, 0.4)';
@@ -1942,14 +1233,12 @@ let html = `
                 </div>
             `;
         }
-
         html += `
             <div style="aspect-ratio: 3/4; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; cursor: pointer; transition: all 0.2s; overflow: hidden;" onclick="${clickAction}">
                 ${content}
             </div>
         `;
     }
-
     html += `
                 </div>
                 <div style="display: flex; justify-content: center; align-items: center; gap: 25px; border-top: none !important;">
@@ -1960,15 +1249,12 @@ let html = `
             </div>
         </div>
     `;
-
     const oldModal = document.getElementById('collection-category-modal');
     if (oldModal) oldModal.remove();
-
     const div = document.createElement('div');
     div.innerHTML = html;
     document.body.appendChild(div.firstElementChild);
 }
-
 function changeCollectionPage(direction) {
     const category = COLLECTION_CATEGORIES[currentCollectionCategory];
     const totalPages = Math.ceil(category.total / COLLECTION_ITEMS_PER_PAGE);
@@ -1978,13 +1264,11 @@ function changeCollectionPage(direction) {
         renderCollectionCategory(currentCollectionCategory, currentCollectionPage);
     }
 }
-
 function closeCollectionCategory() {
     const modal = document.getElementById('collection-category-modal');
     if (modal) modal.remove();
     openCollections();
 }
-
 function claimCollectionItem(categoryId, index, page) {
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
@@ -1993,34 +1277,28 @@ function claimCollectionItem(categoryId, index, page) {
     const categoryIndex = CATEGORY_ORDER.indexOf(categoryId);
     const baseScore = categoryIndex * category.total * 200;
     const remainingScore = savedScore - baseScore;
-    
     if (remainingScore < index * 200) {
         showSimpleModal(t('notEnoughPoints') || 'Недостаточно очков', `${t('needMorePointsFor') || 'Нужно ещё'} ${index * 200 - remainingScore} ${t('points') || 'очков'}.`, 'info');
         return;
     }
-    
     const progress = JSON.parse(localStorage.getItem('collectionsProgress') || '{}');
     if (progress[itemId]) {
         showSimpleModal(t('alreadyClaimed') || '✅ Уже получено', t('alreadyClaimedText') || 'Эта картинка уже в вашей коллекции.', 'info');
         return;
     }
-    
     progress[itemId] = true;
     localStorage.setItem('collectionsProgress', JSON.stringify(progress));
-    
     // Синхронизация с VK Storage
     if (typeof claimCollectionItemWithSync === 'function') {
         claimCollectionItemWithSync(itemId);
     } else if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_collections_v1', progress);
     }
-    
     createConfetti(100);
     const categoryName = t(category.nameKey);
     const itemName = `${category.icon} ${categoryName} #${index}`;
     const imgPath = `images/${category.folder}/${index}.png`;
     updateCollectionCard(categoryId, index, page);
-    
     const modal = document.createElement('div');
     modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100006; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
     modal.id = 'collection-claim-modal';
@@ -2037,7 +1315,6 @@ function claimCollectionItem(categoryId, index, page) {
     `;
     document.body.appendChild(modal);
 }
-
 function updateCollectionCard(categoryId, index, page) {
     const modal = document.getElementById('collection-category-modal');
     if (!modal) return;
@@ -2063,7 +1340,6 @@ function updateCollectionCard(categoryId, index, page) {
         }
     }
 }
-
 function openFullImage(imgPath, index, categoryId) {
     const category = COLLECTION_CATEGORIES[categoryId];
     const t = window.getText || (key => key);
@@ -2081,7 +1357,6 @@ function openFullImage(imgPath, index, categoryId) {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(10px);
     `;
-    
     // Затемняющий слой для фона
     const overlay = document.createElement('div');
     overlay.style.cssText = `
@@ -2094,9 +1369,7 @@ function openFullImage(imgPath, index, categoryId) {
         z-index: 0;
     `;
     modal.appendChild(overlay);
-    
     modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-    
 modal.innerHTML = `
     <div class="full-image-modal" style="
         background: #1a1a2e; 
@@ -2116,10 +1389,8 @@ modal.innerHTML = `
         <p style="color: #e2e8f0; text-align: center; margin-top: 12px; font-family: 'Russo One', sans-serif; font-size: 14px; flex-shrink: 0;">${t(category.nameKey)} ${index}</p>
     </div>
 `;
-    
     document.body.appendChild(modal);
 }
-
 function showLockedCategory(categoryId) {
     const t = window.getText || (key => key);
     const category = COLLECTION_CATEGORIES[categoryId];
@@ -2127,7 +1398,6 @@ function showLockedCategory(categoryId) {
     const reqName = difficultyNames[category.requirement] || category.requirement;
     showSimpleModal(t('scrollLockedTitle') || '🔒 Закрыто', `${t('collectionUnlockRequirement') || 'Чтобы открыть эту коллекцию, сыграйте на сложности'} "${reqName}".`, 'info');
 }
-
 function showLockReason(categoryId, index) {
     const t = window.getText || (key => key);
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
@@ -2143,7 +1413,6 @@ function showLockReason(categoryId, index) {
     }
     showSimpleModal(t('notEnoughPoints') || 'Недостаточно очков', t('pictureNotAvailable') || 'Эта картинка пока недоступна.', 'info');
 }
-
 function showSimpleModal(title, text, icon = 'info') {
     const modal = document.createElement('div');
     modal.style.cssText = `
@@ -2169,7 +1438,6 @@ modal.innerHTML += `
 `;
     document.body.appendChild(modal);
 }
-
 // ======================== КОНФЕТТИ ========================
 function createConfetti(count = 80) {
     const colors = ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#34d399', '#f472b6', '#f59e0b'];
@@ -2191,12 +1459,10 @@ function createConfetti(count = 80) {
         setTimeout(() => confetti.remove(), 3000);
     }
 }
-
 // ======================== СВИТКИ ========================
 function getScrollsProgress() {
     return JSON.parse(localStorage.getItem('scrollsProgress') || '{}');
 }
-
 function claimScroll(scrollId) {
     const t = window.getText || (key => key);
     const playerScore = player ? player.score : 0;
@@ -2213,18 +1479,15 @@ function claimScroll(scrollId) {
     }
     progress[scrollId] = true;
     localStorage.setItem('scrollsProgress', JSON.stringify(progress));
-    
     // Синхронизация с VK Storage
     if (typeof claimScrollWithSync === 'function') {
         claimScrollWithSync(scrollId);
     } else if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_scrolls_v1', progress);
     }
-    
     renderScrolls();
     openScrollTextModal(scrollId);
 }
-
 function isScrollUnlocked(scrollId, playerScore) {
     const totalScore = Math.max(playerScore || 0, parseInt(localStorage.getItem('totalScore') || '0'));
     if (scrollId <= 50) return totalScore >= scrollId * 100;
@@ -2234,7 +1497,6 @@ function isScrollUnlocked(scrollId, playerScore) {
         return totalScore >= baseScore + additional;
     }
 }
-
 function getScrollText(id) {
     let lang = window.gameLanguage || 'ru';
     const RUSSIAN_LANGS = ['ru', 'uk', 'be', 'kk', 'uz', 'ky', 'tg', 'hy', 'az', 'ka', 'mo', 'tk'];
@@ -2249,32 +1511,26 @@ function getScrollText(id) {
     }
     return textObj[lang] || textObj['en'] || textObj['ru'] || 'Текст не найден';
 }
-
 function renderScrolls() {
     console.log('renderScrolls вызван, currentScrollPage:', currentScrollPage);
     const container = document.getElementById('scrolls-container');
     const scoreEl = document.getElementById('scrolls-player-score');
     const pageInfo = document.getElementById('scrolls-page-info');
-
     if (!container) return;
     const currentScore = player ? player.score : 0;
     const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
     const playerScore = Math.max(currentScore, savedScore);
     const progress = getScrollsProgress();
     if (scoreEl) scoreEl.textContent = formatScore(playerScore);
-
     const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
     // Убеждаемся, что текущая страница не выходит за пределы
     if (currentScrollPage > totalPages) currentScrollPage = totalPages;
     if (currentScrollPage < 1) currentScrollPage = 1;
-
     const startIndex = (currentScrollPage - 1) * SCROLLS_PER_PAGE;
     const endIndex = Math.min(startIndex + SCROLLS_PER_PAGE, TOTAL_SCROLLS);
     container.innerHTML = '';
-
     let scrollText = window.getText ? window.getText('scroll') : 'Свиток';
     if (scrollText === 'scroll') scrollText = 'Свиток';
-
     for (let i = startIndex + 1; i <= endIndex; i++) {
         const isAvailable = isScrollUnlocked(i, playerScore);
         const isClaimed = progress[i] || false;
@@ -2305,14 +1561,12 @@ function renderScrolls() {
         scrollItem.innerHTML = `<span style="color: ${isClaimed ? '#e2e8f0' : isAvailable ? '#fcd34d' : '#64748b'}; font-family: 'Russo One', sans-serif; font-size: 15px;">${scrollText} ${i}${isAvailable && !isClaimed ? ' <span style="font-size: 11px; color: #fcd34d;">✨</span>' : ''}</span><span style="font-size: 22px; transition: all 0.3s; display: flex; align-items: center;">${icon}</span>`;
         container.appendChild(scrollItem);
     }
-
     // Обновляем номер страницы
    const pageSpan = document.querySelector('#scrolls-modal .pagination-page');
 if (pageSpan) {
     pageSpan.textContent = `${currentScrollPage} / ${totalPages}`;
 }
 }
-
 function nextScrollPage() {
     const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
     if (currentScrollPage < totalPages) {
@@ -2320,14 +1574,12 @@ function nextScrollPage() {
         renderScrolls();
     }
 }
-
 function prevScrollPage() {
     if (currentScrollPage > 1) {
         currentScrollPage--;
         renderScrolls();
     }
 }
-
 function getCheckmarkSVG() {
     return `<span class="achievement-item__checkmark" style="display: inline-block; width: 24px; height: 24px; flex-shrink: 0; position: relative;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -2336,22 +1588,17 @@ function getCheckmarkSVG() {
         </svg>
     </span>`;
 }
-
-
-
 function openScrollsModal() {
     if (typeof loadTotalProgress === 'function') loadTotalProgress();
     const modal = document.getElementById('scrolls-modal');
     if (modal) { modal.style.display = 'flex'; renderScrolls(); }
 }
-
 function closeScrollsModal() {
     const scrollsModal = document.getElementById('scrolls-modal');
     if (scrollsModal) scrollsModal.style.display = 'none';
     const rewardsModal = document.getElementById('rewards-center-modal');
     if (rewardsModal) rewardsModal.style.display = 'flex';
 }
-
 function openScrollTextModal(scrollId) {
       console.log('📜 openScrollTextModal вызван для', scrollId);
     const playerScore = player ? player.score : 0;
@@ -2395,7 +1642,6 @@ if (!isAvailable) {
     const titleEl = document.getElementById('scroll-text-title');
     const contentEl = document.getElementById('scroll-text-content');
      console.log('📜 Элементы модалки:', { modal, titleEl, contentEl });
-     
     if (modal && titleEl && contentEl) {
         titleEl.textContent = `📜 ${window.getText ? window.getText('scroll') : 'Свиток'} ${scrollId}`;
         contentEl.textContent = getScrollText(scrollId);
@@ -2403,12 +1649,10 @@ if (!isAvailable) {
         if (typeof updateInterfaceLanguage === 'function') updateInterfaceLanguage();
     }
 }
-
 function closeScrollTextModal() {
     const modal = document.getElementById('scroll-text-modal');
     if (modal) modal.style.display = 'none';
 }
-
 // ======================== ЦЕНТР НАГРАД ========================
 function openRewardsCenter() {
     document.querySelectorAll('[id$="-modal"]').forEach(el => {
@@ -2434,7 +1678,6 @@ function openRewardsCenter() {
     updateCollectionsProgress();
     modal.style.display = 'flex';
 }
-
 function closeRewardsCenter() {
     const modal = document.getElementById('rewards-center-modal');
     if (modal) modal.style.display = 'none';
@@ -2445,13 +1688,11 @@ function closeRewardsCenter() {
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'flex';
 }
-
 function openScrollsFromRewards() {
     const rewardsModal = document.getElementById('rewards-center-modal');
     if (rewardsModal) rewardsModal.style.display = 'none';
     openScrollsModal();
 }
-
 function formatScore(value) {
     if (value >= 1000000) {
         const millions = value / 1000000;
@@ -2462,7 +1703,6 @@ function formatScore(value) {
     }
     return value.toString();
 }
-
 function countUnlockedScrolls(playerScore) {
     let count = 0;
     for (let i = 1; i <= TOTAL_SCROLLS; i++) {
@@ -2470,28 +1710,22 @@ function countUnlockedScrolls(playerScore) {
     }
     return count;
 }
-
 // ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
-
 function getTodayKey() {
     const today = new Date();
     return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
 }
-
 // Проверка, получал ли игрок бонус сегодня
 function isDailyBonusClaimedToday() {
     const todayKey = getTodayKey();
     const lastClaimed = localStorage.getItem('dailyBonusDate');
     return lastClaimed === todayKey;
 }
-
 // Обновляем статус бонуса в интерфейсе
 function updateDailyBonusStatus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    
     const statusEl = document.getElementById('daily-bonus-status');
     if (!statusEl) return;
-    
     if (dailyBonusClaimedToday) {
         statusEl.innerHTML = getCheckmarkSVG();
         statusEl.style.color = '#34d399';
@@ -2504,12 +1738,10 @@ function updateDailyBonusStatus() {
         statusEl.style.fontSize = '12px';
     }
 }
-
 // Открыть ежедневный бонус
 function openDailyBonus() {
     // Обновляем статус перед открытием
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    
     if (dailyBonusClaimedToday) {
         showCustomModal({
             title: '✅ Уже получено!',
@@ -2519,11 +1751,9 @@ function openDailyBonus() {
         });
         return;
     }
-    
     const t = window.getText || (key => key);
     const oldModal = document.getElementById('daily-bonus-modal');
     if (oldModal) oldModal.remove();
-    
     const modal = document.createElement('div');
     modal.id = 'daily-bonus-modal';
     modal.style.cssText = `
@@ -2539,7 +1769,6 @@ function openDailyBonus() {
         background: url('1.jpg') no-repeat center center fixed;
         background-size: cover;
     `;
-    
 modal.innerHTML += `
     <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
         <button class="modal-close-btn" onclick="this.closest('#daily-bonus-modal').remove()">✕</button>
@@ -2563,10 +1792,8 @@ modal.innerHTML += `
         </div>
     </div>
 `;
-    
     document.body.appendChild(modal);
 }
-
 // Обычный бонус (+10)
 function claimDailyBonus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
@@ -2581,41 +1808,32 @@ function claimDailyBonus() {
         });
         return;
     }
-
     const todayKey = getTodayKey(); // объявляем один раз
-
     // 1. Увеличиваем общий счёт
     let total = parseInt(localStorage.getItem('totalScore') || '0');
     total += 10;
     localStorage.setItem('totalScore', total);
     window.totalScore = total;
-
     // 2. Синхронизация с VK Storage
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_total_score_v1', total);
     }
-
     // 3. Отмечаем дату получения
     localStorage.setItem('dailyBonusDate', todayKey);
     dailyBonusClaimedToday = true;
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_daily_bonus_v1', todayKey);
     }
-
     // 4. Закрываем модалку и обновляем UI
     const modal = document.getElementById('daily-bonus-modal');
     if (modal) modal.remove();
-
     updateDailyBonusStatus();
-
     const scoreEl = document.getElementById('rewards-player-score');
     if (scoreEl) {
         scoreEl.textContent = formatScore(total);
     }
-
     showSuccessModal('🎉 Бонус получен!', '+10 очков в общую копилку!');
 }
-
 // Усиленный бонус за рекламу (+25)
 function claimEnhancedDailyBonus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
@@ -2630,41 +1848,32 @@ function claimEnhancedDailyBonus() {
         });
         return;
     }
-
     if (isGameStarted && !isGameOver && !gameState.paused) {
         pauseGame();
     }
-
     const modal = document.getElementById('daily-bonus-modal');
     if (modal) modal.remove();
-
     showRewardedAdForContinue().then((success) => {
         if (success) {
             const todayKey = getTodayKey();
-
             // Увеличиваем общий счёт
             let total = parseInt(localStorage.getItem('totalScore') || '0');
             total += 25;
             localStorage.setItem('totalScore', total);
             window.totalScore = total;
-
             if (typeof saveToVKStorage === 'function') {
                 saveToVKStorage('tetris_total_score_v1', total);
             }
-
             localStorage.setItem('dailyBonusDate', todayKey);
             dailyBonusClaimedToday = true;
             if (typeof saveToVKStorage === 'function') {
                 saveToVKStorage('tetris_daily_bonus_v1', todayKey);
             }
-
             updateDailyBonusStatus();
-
             const scoreEl = document.getElementById('rewards-player-score');
             if (scoreEl) {
                 scoreEl.textContent = formatScore(total);
             }
-
             showCustomModal({
                 title: '🎉 Усиленный бонус получен!',
                 text: '+25 очков! Спасибо за просмотр рекламы!',
@@ -2684,7 +1893,6 @@ function claimEnhancedDailyBonus() {
         }
     });
 }
-
 function showSuccessModal(title, text) {
     const modal = document.createElement('div');
     modal.style.cssText = `
@@ -2698,7 +1906,6 @@ function showSuccessModal(title, text) {
         justify-content: center;
         align-items: center;
     `;
-    
     const overlay = document.createElement('div');
     overlay.style.cssText = `
         position: absolute;
@@ -2710,7 +1917,6 @@ function showSuccessModal(title, text) {
         z-index: -1;
     `;
     modal.appendChild(overlay);
-    
     modal.innerHTML += `
         <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
@@ -2721,11 +1927,8 @@ function showSuccessModal(title, text) {
             </button>
         </div>
     `;
-    
     document.body.appendChild(modal);
 }
-
-
 //стирание рядов за рекламу
         // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
      function clearTopRows() {
@@ -2750,7 +1953,6 @@ function showSuccessModal(title, text) {
         }
         if (hasBlocks) break;
     }
-    
     if (!hasBlocks) {
         showCustomModal({
             title: '⚠️ Верхние ряды пусты',
@@ -2760,14 +1962,12 @@ function showSuccessModal(title, text) {
         });
         return false;
     }
-    
     // Удаляем верхние 7 строк (сдвигаем остальные вниз)
     arena.splice(0, rowsToClear);
     // Добавляем 7 пустых строк в начало
     for (let i = 0; i < rowsToClear; i++) {
         arena.unshift(new Array(arenaWidth).fill(0));
     }
-    
     // Удаляем бонусы, которые могли оказаться в верхних рядах
     for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
@@ -2776,46 +1976,37 @@ function showSuccessModal(title, text) {
             }
         }
     }
-    
     // Сбрасываем позицию игрока наверх (чтобы фигура начала падать)
     player.pos.y = 0;
     const maxX = arenaWidth - player.matrix[0].length;
     player.pos.x = Math.floor(maxX / 2);
-    
     // Если коллизия — пробуем поднять на 1
     if (collide(arena, player)) {
         player.pos.y = -1;
     }
-    
     console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
     return true;
 }
         // ======================== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ ========================
 let isRewardedAdLoading = false;
-
 function showRewardedAdForContinue() {
     return new Promise((resolve) => {
         if (isRewardedAdLoading) {
             resolve(false);
             return;
         }
-        
         if (!vkInitialized) {
             console.warn('⚠️ VK не инициализирован');
             resolve(false);
             return;
         }
-        
         isRewardedAdLoading = true;
-        
         // Показываем модалку загрузки
         showLoadingAdModal();
-        
         // Приостанавливаем музыку и звуки
         if (typeof gameAudio !== 'undefined') {
             gameAudio.pauseAll();
         }
-        
         // Показываем рекламу за вознаграждение
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
             .then((data) => {
@@ -2832,7 +2023,6 @@ function showRewardedAdForContinue() {
             });
     });
 }
-
 function showVKFullscreenAd() {
     const now = Date.now();
     // Если прошло меньше 35 секунд – не показываем
@@ -2852,9 +2042,6 @@ function showVKFullscreenAd() {
             console.warn('⚠️ Ошибка показа межэкранной рекламы:', error);
         });
 }
-
-
-
 // ====== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ======
 function showLoadingAdModal() {
     const modal = document.createElement('div');
@@ -2890,7 +2077,6 @@ function showLoadingAdModal() {
         </div>
     `;
     document.body.appendChild(modal);
-    
     // Добавляем стили для анимаций, если их нет
     if (!document.getElementById('ad-animation-styles')) {
         const style = document.createElement('style');
@@ -2908,12 +2094,10 @@ function showLoadingAdModal() {
         document.head.appendChild(style);
     }
 }
-
 function closeLoadingAdModal() {
     const modal = document.getElementById('loading-ad-modal');
     if (modal) modal.remove();
 }
-
     // ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПРОДОЛЖЕНИЯ ======
     function showContinueConfirmationModal() {
         return new Promise((resolve) => {
@@ -2932,7 +2116,6 @@ function closeLoadingAdModal() {
                 background: url('1.jpg') no-repeat center center fixed;
                 background-size: cover;
             `;
-            
             const overlay = document.createElement('div');
             overlay.style.cssText = `
                 position: fixed;
@@ -2944,7 +2127,6 @@ function closeLoadingAdModal() {
                 z-index: -1;
             `;
             modal.appendChild(overlay);
-            
             modal.innerHTML += `
                 <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
                     <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
@@ -2967,12 +2149,9 @@ function closeLoadingAdModal() {
                     </div>
                 </div>
             `;
-            
             document.body.appendChild(modal);
-            
             // Сохраняем resolve для использования в кнопках
             modal._resolve = resolve;
-            
             // Переопределяем кнопки с использованием сохранённого resolve
             modal.querySelectorAll('button').forEach(btn => {
                 const originalOnclick = btn.onclick;
@@ -3012,7 +2191,6 @@ async function handleContinueWithAd() {
         button: 'OK'
     });
     updatePauseButtonText();
-    
     // ✅ ПЕРЕЗАПУСКАЕМ ЦИКЛ, ЧТОБЫ ПОЯВИЛАСЬ НАДПИСЬ ПАУЗЫ
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     lastTime = 0;
@@ -3036,7 +2214,6 @@ async function handleContinueWithAd() {
         if (typeof gameAudio !== 'undefined') gameAudio.resumeAll();
     }
 }
-
 // ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ (ПРОМИС) ======
 function showContinueConfirmationModal() {
     return new Promise((resolve) => {
@@ -3055,7 +2232,6 @@ function showContinueConfirmationModal() {
             background: url('1.jpg') no-repeat center center fixed;
             background-size: cover;
         `;
-        
         const overlay = document.createElement('div');
         overlay.style.cssText = `
             position: fixed;
@@ -3067,7 +2243,6 @@ function showContinueConfirmationModal() {
             z-index: -1;
         `;
         modal.appendChild(overlay);
-        
         modal.innerHTML += `
             <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
                 <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
@@ -3090,19 +2265,15 @@ function showContinueConfirmationModal() {
                 </div>
             </div>
         `;
-        
         document.body.appendChild(modal);
-        
         document.getElementById('continue-cancel-btn').onclick = function() {
             modal.remove();
             resolve(false);
         };
-        
         document.getElementById('continue-confirm-btn').onclick = function() {
             modal.remove();
             resolve(true);
         };
-        
         // Закрытие по клику вне модалки
         modal.onclick = function(e) {
             if (e.target === modal) {
@@ -3124,7 +2295,6 @@ function showSlowDownModal() {
         });
         return;
     }
-    
     // Проверяем, не активно ли уже замедление
     if (isSlowDownActive) {
         showCustomModal({
@@ -3135,12 +2305,10 @@ function showSlowDownModal() {
         });
         return;
     }
-    
     // Ставим игру на паузу
     if (!gameState.paused) {
         pauseGame();
     }
-    
     // Показываем модалку подтверждения
     const modal = document.createElement('div');
     modal.id = 'slowdown-confirm-modal';
@@ -3157,7 +2325,6 @@ function showSlowDownModal() {
         background: url('1.jpg') no-repeat center center fixed;
         background-size: cover;
     `;
-    
     const overlay = document.createElement('div');
     overlay.style.cssText = `
         position: fixed;
@@ -3169,7 +2336,6 @@ function showSlowDownModal() {
         z-index: -1;
     `;
     modal.appendChild(overlay);
-    
     modal.innerHTML += `
         <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>
@@ -3192,21 +2358,16 @@ function showSlowDownModal() {
             </div>
         </div>
     `;
-    
     document.body.appendChild(modal);
 }
-
 function activateSlowDown() {
     // Закрываем модалку подтверждения
     const confirmModal = document.getElementById('slowdown-confirm-modal');
     if (confirmModal) confirmModal.remove();
-    
     // Показываем рекламу
     showRewardedAdForContinue().then((success) => {
         if (success) {
-          
             pendingSlowDown = true;
-            
             showCustomModal({
                 title: '🐢 Фигурки замедлятся!',
                 text: 'Падение замедлено на 15 секунд!',
@@ -3225,14 +2386,12 @@ function activateSlowDown() {
         }
     });
 }
-
 function applySlowDownEffect() {
     if (isSlowDownActive) return;
     isSlowDownActive = true;
     const originalDropInterval = dropInterval;
     dropInterval = originalDropInterval * 3;
     showSlowDownIndicator();
-    
     if (slowDownTimerId) {
         clearTimeout(slowDownTimerId);
         slowDownTimerId = null;
@@ -3244,7 +2403,6 @@ function applySlowDownEffect() {
     slowDownTimerId = null;
 }, 15000);
 }
-
 function showSlowDownIndicator() {
     // Показываем индикатор замедления над игровым полем
     let indicator = document.getElementById('slowdown-indicator');
@@ -3276,12 +2434,10 @@ function showSlowDownIndicator() {
         `;
         document.body.appendChild(indicator);
     }
-    
     // Показываем с анимацией
     setTimeout(() => {
         indicator.style.opacity = '1';
     }, 100);
-    
     // Запускаем обратный отсчёт
     let seconds = 15;
     const timerEl = document.getElementById('slowdown-timer');
@@ -3297,7 +2453,6 @@ function showSlowDownIndicator() {
         }, 1000);
     }
 }
-
 function hideSlowDownIndicator() {
     const indicator = document.getElementById('slowdown-indicator');
     if (indicator) {
@@ -3307,50 +2462,26 @@ function hideSlowDownIndicator() {
         }, 400);
     }
 }
-
 // ======================== КОМБО-СИСТЕМА ========================
 function showComboDisplay(rowsCleared) {
     // Удаляем старую надпись, если есть
     const oldDisplay = document.getElementById('combo-display');
     if (oldDisplay) oldDisplay.remove();
-    
     // Очищаем старый таймер
     if (comboDisplayTimer) {
         clearTimeout(comboDisplayTimer);
         comboDisplayTimer = null;
     }
-    
     // ====== ЗВУК КОМБО (только highspins) ======
     if (rowsCleared >= 3) {
         if (typeof gameAudio !== 'undefined') {
             gameAudio.playOneShot('highspins', 0.2);
         }
     }
-    
     // Создаём элемент
     const display = document.createElement('div');
     display.id = 'combo-display';
-    display.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.5);
-        font-family: 'Russo One', sans-serif;
-        font-size: ${rowsCleared >= 5 ? 80 : rowsCleared >= 4 ? 72 : rowsCleared >= 3 ? 60 : 48}px;
-        font-weight: bold;
-        color: #fff;
-        text-shadow: 
-            0 0 30px rgba(255, 215, 0, 0.8),
-            0 0 60px rgba(255, 215, 0, 0.4),
-            0 4px 20px rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-        pointer-events: none;
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        text-align: center;
-        line-height: 1.2;
-    `;
-    
+display.style.cssText=`\n        position: fixed;\n        top: 50%;\n        left: 50%;\n        transform: translate(-50%, -50%) scale(0.5);\n        font-family: 'Russo One', sans-serif;\n        font-size: ${rowsCleared>=5?80:rowsCleared>=4?72:rowsCleared>=3?60:48}px;\n        font-weight: bold;\n        color: #fff;\n        text-shadow: \n            0 0 30px rgba(255, 215, 0, 0.8),\n            0 0 60px rgba(255, 215, 0, 0.4),\n            0 4px 20px rgba(0, 0, 0, 0.5);\n        z-index: 9998;\n        pointer-events: none;\n        opacity: 0;\n        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);\n        text-align: center;\n        line-height: 1.2;\n    `;
     // Выбираем цвет в зависимости от количества линий
     let color = '#fcd34d';
     let glowColor = 'rgba(255, 215, 0, 0.8)';
@@ -3364,7 +2495,6 @@ function showComboDisplay(rowsCleared) {
         color = '#fcc419';
         glowColor = 'rgba(252, 196, 25, 0.8)';
     }
-    
     // Текст комбо
     let comboText = `x${rowsCleared}`;
     let subText = `${rowsCleared} линии`;
@@ -3372,7 +2502,6 @@ function showComboDisplay(rowsCleared) {
     else if (rowsCleared === 3) subText = `${rowsCleared} линии`;
     else if (rowsCleared === 4) subText = `${rowsCleared} линии`;
     else if (rowsCleared >= 5) subText = `${rowsCleared} линий`;
-    
     display.innerHTML = `
         <div style="color: ${color}; text-shadow: 0 0 40px ${glowColor}, 0 0 80px ${glowColor}40;">
             ${comboText}
@@ -3381,15 +2510,12 @@ function showComboDisplay(rowsCleared) {
             ${subText}
         </div>
     `;
-    
     document.body.appendChild(display);
-    
     // Анимация появления
     requestAnimationFrame(() => {
         display.style.opacity = '1';
         display.style.transform = 'translate(-50%, -50%) scale(1)';
     });
-    
     // ====== КОНФЕТТИ ======
     if (rowsCleared >= 3) {
         let confettiCount = 20;
@@ -3397,7 +2523,6 @@ function showComboDisplay(rowsCleared) {
         else if (rowsCleared >= 4) confettiCount = 50;
         createConfetti(confettiCount);
     }
-    
     // Автоматическое исчезновение через 1.5 секунды
     comboDisplayTimer = setTimeout(() => {
         if (display) {
@@ -3410,47 +2535,12 @@ function showComboDisplay(rowsCleared) {
         comboDisplayTimer = null;
     }, 1500);
 }
-
 // ======================== ЭКРАН ЗАГРУЗКИ ========================
 let loadingScreenVisible = false;
-
 function showLoadingScreen(message = 'Загрузка...') {
     if (loadingScreenVisible) return;
     loadingScreenVisible = true;
-    
-    const overlay = document.createElement('div');
-    overlay.id = 'loading-screen-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(10, 10, 14, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        z-index: 100000;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-family: 'Russo One', sans-serif;
-        transition: opacity 0.3s ease;
-        opacity: 1;
-    `;
-    overlay.innerHTML = `
-        <div style="text-align: center; max-width: 300px;">
-            <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1.5s linear infinite;">🎵</div>
-            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">${message}</h2>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;" id="loading-status">Подготовка музыки...</p>
-            <div style="width: 100%; height: 4px; background: #1e293b; border-radius: 4px; overflow: hidden;">
-                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #34d399, #22c55e); transition: width 0.3s ease;"></div>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(overlay);
-    
+ const overlay=document.createElement("div");overlay.id="loading-screen-overlay",overlay.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: rgba(10, 10, 14, 0.9);\n        backdrop-filter: blur(10px);\n        -webkit-backdrop-filter: blur(10px);\n        z-index: 100000;\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        align-items: center;\n        color: #fff;\n        font-family: 'Russo One', sans-serif;\n        transition: opacity 0.3s ease;\n        opacity: 1;\n    ",overlay.innerHTML=`\n        <div style="text-align: center; max-width: 300px;">\n            <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1.5s linear infinite;">🎵</div>\n            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">${message}</h2>\n            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;" id="loading-status">Подготовка музыки...</p>\n            <div style="width: 100%; height: 4px; background: #1e293b; border-radius: 4px; overflow: hidden;">\n                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #34d399, #22c55e); transition: width 0.3s ease;"></div>\n            </div>\n        </div>\n    `,document.body.appendChild(overlay);
     // Добавляем ключевые кадры для анимации спиннера, если их ещё нет
     if (!document.getElementById('loading-anim-styles')) {
         const style = document.createElement('style');
@@ -3464,29 +2554,7 @@ function showLoadingScreen(message = 'Загрузка...') {
         document.head.appendChild(style);
     }
 }
-
-function hideLoadingScreen() {
-    const overlay = document.getElementById('loading-screen-overlay');
-    if (overlay) {
-        overlay.style.opacity = '0';
-        setTimeout(() => {
-            if (overlay.parentNode) overlay.remove();
-            loadingScreenVisible = false;
-        }, 300);
-    }
-}
-
-function updateLoadingStatus(text, progress) {
-    const status = document.getElementById('loading-status');
-    if (status) status.textContent = text;
-    const bar = document.getElementById('loading-progress-bar');
-    if (bar && progress !== undefined) {
-        bar.style.width = Math.min(100, Math.max(0, progress)) + '%';
-    }
-}
-
-
-// ======================== ЭКСПОРТ ========================
+function hideLoadingScreen(){const e=document.getElementById("loading-screen-overlay");e&&(e.style.opacity="0",setTimeout((()=>{e.parentNode&&e.remove(),loadingScreenVisible=!1}),300))}function updateLoadingStatus(e,t){const n=document.getElementById("loading-status");n&&(n.textContent=e);const o=document.getElementById("loading-progress-bar");o&&void 0!==t&&(o.style.width=Math.min(100,Math.max(0,t))+"%")}
 window.selectMode = selectMode;
 window.selectDifficulty = selectDifficulty;
 window.closeDifficultyModal = closeDifficultyModal;
@@ -3512,8 +2580,6 @@ window.isGameOver = isGameOver;
 window.selectedDifficulty = selectedDifficulty;
 window.selectedMode = selectedMode;
 window.saveTotalProgress = saveTotalProgress;
-
-// Свитки
 window.openScrollsModal = openScrollsModal;
 window.closeScrollsModal = closeScrollsModal;
 window.openScrollTextModal = openScrollTextModal;
@@ -3524,8 +2590,6 @@ window.renderScrolls = renderScrolls;
 window.countUnlockedScrolls = countUnlockedScrolls;
 window.claimScroll = claimScroll;
 window.getScrollsProgress = getScrollsProgress;
-
-// Коллекции
 window.openCollections = openCollections;
 window.closeCollections = closeCollections;
 window.openCollectionCategory = openCollectionCategory;
@@ -3539,8 +2603,6 @@ window.showLockedCategory = showLockedCategory;
 window.showSimpleModal = showSimpleModal;
 window.claimCollectionItem = claimCollectionItem;
 window.updateCollectionsProgress = updateCollectionsProgress;
-
-// Центр наград
 window.openRewardsCenter = openRewardsCenter;
 window.closeRewardsCenter = closeRewardsCenter;
 window.openScrollsFromRewards = openScrollsFromRewards;
@@ -3548,21 +2610,16 @@ window.openDailyBonus = openDailyBonus;
 window.claimDailyBonus = claimDailyBonus;
 window.showSuccessModal = showSuccessModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
-// ======================== рекл за вознагр
 window.handleContinueWithAd = handleContinueWithAd;
 window.clearTopRows = clearTopRows;
 window.showContinueConfirmationModal = showContinueConfirmationModal;
-// Бонусы
 window.claimDailyBonus = claimDailyBonus;
 window.claimEnhancedDailyBonus = claimEnhancedDailyBonus;
 window.openDailyBonus = openDailyBonus;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
-
-// Замедление
 window.showSlowDownModal = showSlowDownModal;
 window.activateSlowDown = activateSlowDown;
 window.applySlowDownEffect = applySlowDownEffect;
-
 updateSoundIcon();
 updateMusicIcon();
 console.log('🔥 Тетрис Дарк загружен!');
