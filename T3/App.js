@@ -377,7 +377,7 @@ let __bannerShown = false;
 let __bannerRetryTimer = null;
 let __bannerAttempts = 0;
 const __BANNER_MAX = 3;
-const __BANNER_DELAY = 5000;
+const __BANNER_DELAY = 5 * 60 * 1000; 
 
 function showBannerWithRetry() {
     if (__bannerShown) return;
