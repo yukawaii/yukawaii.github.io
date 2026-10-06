@@ -1325,7 +1325,7 @@ if (isVK || isOK) {
 }
 function showInterstitial(){ const now=Date.now(); if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;} if (isVK || isOK){ adMute(); vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 30000) .then(()=>adUnmute()) .catch(()=>adUnmute());}}
 let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=3;
-const BANNER_RETRY_DELAY=5000; 
+const BANNER_RETRY_DELAY=5 * 60 * 1000; 
 function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return;} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo);}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo);});}
 function scheduleBannerRetry(attemptNo){ if (bannerShown) return; if (attemptNo >=BANNER_MAX_ATTEMPTS){ console.warn('⛔ Banner retry limit reached (' + BANNER_MAX_ATTEMPTS + ' attempts)'); return;} bannerRetryTimer=setTimeout(function (){ bannerRetryTimer=null; showBanner();}, BANNER_RETRY_DELAY); console.log('🔁 Banner retry in ' + (BANNER_RETRY_DELAY / 1000) + 's (next attempt #' + (attemptNo + 1) + ')');}
 function preloadRewardedAd() { if (isVK || isOK) vkSend('VKWebAppCheckNativeAds', { ad_format: 'reward' }, 3000); }
@@ -1337,121 +1337,25 @@ w.showBanner = showBanner;
 w.preloadRewardedAd = preloadRewardedAd;
 w.yandexGameplayStart = yandexGameplayStart;
 w.yandexGameplayStop = yandexGameplayStop;
-function submitScore(value) {
-  if ((isVK || isOK) && P.inIframe) {
-    let storedId = 0;
-    try { storedId = Number(sessionStorage.getItem('id')) || 0; } catch (e) {}
-    const uid = P.userId || storedId;
-    if (!uid) return;
-    vkSend('VKWebAppCallAPIMethod', {
-      method: 'secure.addAppEvent',
-      params: { client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8' }
-    }, 5000);
-  }
-  if (isYandex && ysdk) {
-    try { if (ysdk.leaderboards && ysdk.leaderboards.setScore) ysdk.leaderboards.setScore('bestscore', value).catch(() => {}); } catch (e) {}
-  }
-}
-function infr() {
-  if (isOK) { toast(w.t('inviteOK'), true); return; }
-  if (isYandex || P.isStandalone) { toast(w.t('inviteVKOnly')); return; }
-  vkSend('VKWebAppShowInviteBox');
-}
-async function top0() {
-  if (isOK) return;
-  if (!isVK) return;
-  if (!P.inIframe) { toast(w.t('topVKOnly')); return; }
-  const totalScore = Number(w.score) || Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
-  const uid = P.userId || Number(sessionStorage.getItem('id'));
-  if (!uid || isNaN(uid) || uid === 0) {
-    console.error('❌ uid невалиден! Ни один из способов не дал числовой ID. Отправка невозможна.');
-   toast(w.t('topNoId'), true);
-    try {
-      await vkSend('VKWebAppShowLeaderBoardBox', { user_result: totalScore, global: 1 }, 5000);
-    } catch (e) {}
-    return;
-  }
-  if (totalScore > 0) {
-    const lastSent = Number(localStorage.getItem('aq_lastSentScore') || '0');
-    const isImprovement = totalScore > lastSent;
-    console.log('🏆 lastSent =', lastSent, '| isImprovement =', isImprovement);
-    if (isImprovement) {
-      try {
-        const result = await vkSend('VKWebAppCallAPIMethod', {
-          method: 'secure.addAppEvent',
-          params: {
-            client_secret: '8lihTQSiEYN5qlLIW3cU',
-            user_id: uid,
-            activity_id: 2,
-            value: totalScore,
-            v: '5.131',
-            access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'
-          }
-        }, 8000);
-        console.log('🏆 secure.addAppEvent ПОЛНЫЙ ответ:', JSON.stringify(result));
-        if (result && result.error) {
-          console.error('❌ Ошибка VK API:', result.error.error_code, '-', result.error.error_msg);
-              } else if (result && result.response !== undefined) {
-          console.log('✅ Очки отправлены:', totalScore);
-          try { localStorage.setItem('aq_lastSentScore', String(totalScore)); } catch (e) {}
-        } else {
-          console.warn('⚠️ Неожиданный ответ:', result);
-        }
-      } catch (e) {
-        console.error('❌ Исключение:', e);
-      }
-    } else {
-      console.log('⏩ Рекорд не улучшен');
-    }
-  } else {
-    console.warn('⚠️ totalScore = 0, отправка пропущена');
-  }
-  try {
-    console.log('🏆 Открываем таблицу, user_result =', totalScore, ', global = 1');
-    const lbResult = await vkSend('VKWebAppShowLeaderBoardBox', {
-      user_result: totalScore,
-      global: 1
-    }, 5000);
-    console.log('🏆 Таблица открыта, ответ:', JSON.stringify(lbResult));
-  } catch (e) {
-    console.error('❌ Ошибка открытия таблицы:', e);
-   toast(w.t('topOpenError'), true);
-  }
-}
-function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
-w.submitScore = submitScore;
-w.infr = infr;
-w.top0 = top0;
-w.favor1 = favor1;
-w.myadd1 = showInterstitial;
-function toast(msg, isError, title) {
-  let el = d.getElementById('__toast');
-  if (!el) { el = d.createElement('div'); el.id = '__toast'; d.body.appendChild(el); }
-  el.className = 'toast' + (isError ? ' toast-error' : '');
-  if (title) {
-    el.innerHTML = '<div class="toast-title">' + escapeHtml(title) + '</div><div class="toast-msg">' + escapeHtml(msg) + '</div>';
-  } else el.textContent = msg;
-  requestAnimationFrame(() => el.classList.add('show'));
-  clearTimeout(el.__t);
-  el.__t = setTimeout(() => el.classList.remove('show'), 3200);
-}
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-}
-w.toast = toast;
-let soundEnabled = false;
-let adPlaying = false;
-let audioCtx = null;
-let bgAudio = null;
-let bgStarted = false;
-function ensureAudioCtx() {
-  if (!audioCtx) { try { audioCtx = new (w.AudioContext || w.webkitAudioContext)(); } catch (e) { audioCtx = null; } }
-  if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (e) {} }
-  return audioCtx;
-}
-function tone(freq, dur, type, when, peak) {
-  if (adPlaying) return;
-  try {
+function submitScore(value){ if ((isVK || isOK) && P.inIframe){ let storedId=0; try{ storedId=Number(sessionStorage.getItem('id')) || 0;} catch (e){} const uid=P.userId || storedId; if (!uid) return; vkSend('VKWebAppCallAPIMethod',{ method: 'secure.addAppEvent', params:{ client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'}}, 5000);} if (isYandex && ysdk){ try{ if (ysdk.leaderboards && ysdk.leaderboards.setScore) ysdk.leaderboards.setScore('bestscore', value).catch(()=>{});} catch (e){}}}
+function infr(){ if (isOK){ toast(w.t('inviteOK'), true); return;} if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} vkSend('VKWebAppShowInviteBox');}
+async function top0(){ if (isOK) return; if (!isVK) return; if (!P.inIframe){ toast(w.t('topVKOnly')); return} const totalScore=Number(w.score) || Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; const uid=P.userId || Number(sessionStorage.getItem('id')); if (!uid || isNaN(uid) || uid===0){ console.error('❌ uid невалиден! Ни один из способов не дал числовой ID. Отправка невозможна.'); toast(w.t('topNoId'), true); try{ await vkSend('VKWebAppShowLeaderBoardBox',{ user_result: totalScore, global: 1}, 5000)} catch (e){} return} if (totalScore >0){ const lastSent=Number(localStorage.getItem('aq_lastSentScore') || '0'); const isImprovement=totalScore >lastSent; console.log('🏆 lastSent=', lastSent, '| isImprovement=', isImprovement); if (isImprovement){ try{ const result=await vkSend('VKWebAppCallAPIMethod',{ method: 'secure.addAppEvent', params:{ client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: totalScore, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'}}, 8000); console.log('🏆 secure.addAppEvent ПОЛНЫЙ ответ:', JSON.stringify(result)); if (result && result.error){ console.error('❌ Ошибка VK API:', result.error.error_code, '-', result.error.error_msg)} else if (result && result.response !==undefined){ console.log('✅ Очки отправлены:', totalScore); try{ localStorage.setItem('aq_lastSentScore', String(totalScore))} catch (e){}} else{ console.warn('⚠️ Неожиданный ответ:', result)}} catch (e){ console.error('❌ Исключение:', e)}} else{ console.log('⏩ Рекорд не улучшен')}} else{ console.warn('⚠️ totalScore=0, отправка пропущена')} try{ console.log('🏆 Открываем таблицу, user_result=', totalScore, ', global=1'); const lbResult=await vkSend('VKWebAppShowLeaderBoardBox',{ user_result: totalScore, global: 1}, 5000); console.log('🏆 Таблица открыта, ответ:', JSON.stringify(lbResult))} catch (e){ console.error('❌ Ошибка открытия таблицы:', e); toast(w.t('topOpenError'), true)}}
+function favor1(){ if (isVK || isOK) vkSend('VKWebAppAddToFavorites');}
+w.submitScore=submitScore;
+w.infr=infr;
+w.top0=top0;
+w.favor1=favor1;
+w.myadd1=showInterstitial;
+function toast(msg, isError, title){ let el=d.getElementById('__toast'); if (!el){ el=d.createElement('div'); el.id='__toast'; d.body.appendChild(el);} el.className='toast' + (isError ? ' toast-error' : ''); if (title){ el.innerHTML='<div class="toast-title">' + escapeHtml(title) + '</div><div class="toast-msg">' + escapeHtml(msg) + '</div>';} else el.textContent=msg; requestAnimationFrame(()=>el.classList.add('show')); clearTimeout(el.__t); el.__t=setTimeout(()=>el.classList.remove('show'), 3200);}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]));}
+w.toast=toast;
+let soundEnabled=false;
+let adPlaying=false;
+let audioCtx=null;
+let bgAudio=null;
+let bgStarted=false;
+function ensureAudioCtx(){ if (!audioCtx){ try{ audioCtx=new (w.AudioContext || w.webkitAudioContext)();} catch (e){ audioCtx=null;}} if (audioCtx && audioCtx.state==='suspended'){ try{ audioCtx.resume();} catch (e){}} return audioCtx;}
+function tone(freq, dur, type, when, peak){ if (adPlaying) return; try{
     const ctx = ensureAudioCtx();
     if (!ctx) return;
     const t0 = ctx.currentTime + (when || 0);
