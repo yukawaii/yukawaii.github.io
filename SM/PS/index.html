@@ -31,7 +31,7 @@
     if (isVeryWeak) {
         document.documentElement.classList.add('weak-device');
     }
-    console.log('📊 DEVICE_PERF:', window.DEVICE_PERF);
+
 })();
 </script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
@@ -136,17 +136,12 @@ if (typeof markDirty === 'function') {
     // 7. Возобновляем игру
     resumeGame();
 }
-// Показать результат бонуса
 function showBonusResult(amount) {
     document.getElementById('bonusResultAmount').textContent = `⭐ +${amount}`;
     document.getElementById('bonusResultModal').style.display = 'flex';
 }
-// ===== УПРАВЛЕНИЕ ПАУЗОЙ =====
 function pauseGame() {
-    if (isPaused) return;          // Уже на паузе — ничего не делаем
-    isPaused = true;
-    console.log('⏸️ Игра на паузе');
-    // Останавливаем звуки (если audioCtx существует)
+    if (isPaused) return;             isPaused = true;
     if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'running') {
         audioCtx.suspend();
     }
@@ -156,7 +151,7 @@ function pauseGame() {
 function resumeGame() {
     if (!isPaused) return;         // Не на паузе — ничего не делаем
     isPaused = false;
-    console.log('▶️ Игра возобновлена');
+
     // Восстанавливаем звуки
     if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -345,9 +340,7 @@ function saveCompletedLevel(levelId, difficulty) {
     if (!completed.includes(levelId)) {
         completed.push(levelId);
         localStorage.setItem(key, JSON.stringify(completed));
-        console.log(`✅ Уровень ${levelId} (${difficulty}) сохранён!`);
-        // ✅ Начисляем звёзды (защита от NaN)
-        const starsForLevel = 5;
+            const starsForLevel = 5;
         totalStars = safeParseInt(totalStars, 0) + starsForLevel;
         localStorage.setItem('totalStars', String(totalStars));
         // ✅ Обновляем интерфейс без пересчёта
@@ -375,7 +368,7 @@ function isLevelCompleted(levelId, difficulty = 'easy') {
 }
 // Загрузка уровня по ID с учётом сложности
 function loadLevelById(levelId, difficulty = 'easy') {
-    console.log('🔧 loadLevelById вызван с ID:', levelId, 'difficulty:', difficulty);
+
     currentLevelId = levelId;
     currentDifficulty = difficulty;
     localStorage.setItem('lastDifficulty', difficulty);
@@ -652,7 +645,7 @@ function showCategoryLevelsModal(categoryId, difficulty = 'easy', isUpdate = fal
 const levelSelectBtn = document.getElementById('levelSelectBtn');
 if (levelSelectBtn) {
     levelSelectBtn.onclick = function() {
-        console.log('🖱️ Клик по levelSelectBtn');
+    
         showLevelSelectModal();
     };
 }
@@ -907,7 +900,7 @@ function showCategoryModalForDifficulty(difficulty) {
         btn.onclick = () => {
             const catId = parseInt(btn.getAttribute('data-cat'));
             const diff = btn.getAttribute('data-diff');
-            console.log('📂 Выбрана категория:', catId, 'сложность:', diff);
+  
             modalDiv.remove();
             // ✅ ИСПРАВЛЕНО: передаём catId и diff, а не categoryId и difficulty
             showCategoryLevelsModal(catId, diff);
@@ -925,7 +918,7 @@ function selectLevel(btn, levelData) {
     selectedData = levelData;
     // Добавляем класс выделения на новую кнопку
     btn.classList.add('selected-level');
-  //  console.log('✅ Выбран уровень:', levelData.levelNum, 'ID:', levelData.id);
+ 
 }
 function tryPlaceWordWithIntersections(word, tempGrid, gridSizeVal, existingWordsPositions, wordIndex, totalWords) {
     const maxAttempts = 1500; // было 800, увеличил для надёжности
@@ -1167,7 +1160,7 @@ if (cellEl && cellEl.classList.contains('found')) {
                         if (typeof currentLevelId !== 'undefined') {
                             saveCompletedLevel(currentLevelId, currentDifficulty);
                         } else {
-                            console.log('currentLevelId не определён');
+                        
                         }
                         // АКТИВИРУЕМ КНОПКУ СЛЕДУЮЩЕГО УРОВНЯ
                         const nextBtn = document.getElementById('nextLevelBtn');
@@ -1358,7 +1351,7 @@ if ('requestIdleCallback' in window) {
     // ⏰ Таймаут на 60 секунд – если синхронизация не завершилась, показываем меню
     loadingTimeout = setTimeout(() => {
         if (!loadingFinished) {
-            console.log('⏰ Таймаут загрузки (60 сек). Показываем меню без полной синхронизации.');
+          
             finishLoading();
         }
     }, 60000);
@@ -1366,7 +1359,7 @@ if ('requestIdleCallback' in window) {
     try {
         document.getElementById('loadingStatus').textContent = 'Синхронизация с космосом...';
         await loadAllDataFromVK();  // ждём завершения
-        console.log('✅ Все данные загружены и применены');
+  
     } catch (e) {
         console.warn('⚠️ Ошибка синхронизации, но продолжаем:', e);
     }
@@ -1443,7 +1436,7 @@ const galaxyBtn = document.getElementById('galaxyBtn');
 if (galaxyBtn) {
     galaxyBtn.onclick = function(e) {
         e.preventDefault();
-    //    console.log('⭐ Клик по galaxyBtn');
+
         showGalaxyMap();
     };
 }
@@ -1989,7 +1982,7 @@ function showGalaxyMap() {
 }
 function createLivingStars() {
     if (window.DEVICE_PERF && !window.DEVICE_PERF.enableStars) {
-        console.log('🚫 Живые звёзды отключены (слабое устройство)');
+  
         return;
     }
   const starCount = window.innerWidth < 768 ? 5 : 20;
@@ -2051,7 +2044,7 @@ function syncScrollsWithStars() {
         // ✅ СИНХРОНИЗИРУЕМ ВСЕ СВИТКИ СРАЗУ
         if (typeof saveToVKStorage === 'function') {
             saveToVKStorage('wordgame_scrolls_v2', unlocked);
-            console.log('📜 Все свитки синхронизированы с VK');
+      
         }
     }
     return shouldBeUnlocked;
@@ -2439,7 +2432,7 @@ function loadAllDataFromVK() {
     }
      vkLoadAttempts++;         
     vkLoadErrorCount = 0;     
-    console.log('🔄 Загрузка данных из VK Storage... попытка ' + vkLoadAttempts);
+
       return Promise.all([
         loadFromVKStorage('wordgame_completed_easy'),
         loadFromVKStorage('wordgame_completed_medium'),
@@ -2459,7 +2452,7 @@ loadFromVKStorage('wordgame_completed_japanese')
         if (themeData) {
             setTheme(themeData);
             loaded = true;
-            console.log('✅ Тема загружена из VK');
+      
         }
         // ====== ОБЩИЕ ЗВЁЗДЫ ======
           if (totalStarsData !== null && totalStarsData !== undefined) {
@@ -2469,7 +2462,7 @@ loadFromVKStorage('wordgame_completed_japanese')
                 localStorage.setItem('totalStars', String(maxTotal));
                 totalStars = maxTotal;
                 loaded = true;
-                console.log('✅ Общие звёзды обновлены: ' + localTotal + ' → ' + maxTotal);
+        
             }
         }
         // ====== ПРОЙДЕННЫЕ УРОВНИ ======
@@ -2492,7 +2485,7 @@ const diffDataMap = {
                     const keyName = `gameCompletedLevels_${diff}`;
                     localStorage.setItem(keyName, JSON.stringify(merged));
                     loaded = true;
-                    console.log('✅ Уровни ' + diff + ' объединены: ' + localCompleted.length + ' → ' + merged.length);
+     
                 }
             }
         });
@@ -2512,11 +2505,11 @@ const diffDataMap = {
                     lastBonusDate = bonusDateData;
                 }
                 loaded = true;
-                console.log('✅ Дата бонуса обновлена из VK:', bonusDateData);
+  
             }
         }
         if (loaded) {
-            console.log('✅ Данные из VK Storage загружены');
+    
             // Обновляем UI
         // ✅ Обновляем интерфейс без пересчёта (totalStars уже обновлён)
     updateStarsDisplay();
@@ -2525,12 +2518,12 @@ const diffDataMap = {
                 galaxyBtn.setAttribute('data-stars', totalStars || 0);
             }
         } else {
-            console.log('ℹ️ В VK Storage нет новых данных');
+        
         }
                 // ✅ РАЗРЕШАЕМ СИНХРОНИЗАЦИЮ ТОЛЬКО ЕСЛИ НЕ БЫЛО ОШИБОК
         if (vkLoadErrorCount === 0) {
             vkDataLoaded = true;
-            console.log('🔒 vkDataLoaded = true — синхронизация разрешена');
+      
         } else if (vkLoadAttempts < 10) {
             console.log('⚠️ Ошибки загрузки (' + vkLoadErrorCount + '), повтор через 15 сек');
             setTimeout(loadAllDataFromVK, 15000);
@@ -2550,7 +2543,7 @@ const diffDataMap = {
 }
 function loadGalaxyAndScrollsFromVK() {
     if (typeof vkBridge === 'undefined') return;
-    console.log('🔄 Фоновая загрузка галактик и свитков...');
+
     Promise.all([
         loadFromVKStorage('wordgame_galaxy_v2'),
         loadFromVKStorage('wordgame_scrolls_v2')
@@ -2581,7 +2574,7 @@ function loadGalaxyAndScrollsFromVK() {
                 if (merged) {
                     // ✅ Не пересчитываем, а просто обновляем интерфейс
     updateStarsDisplay();
-                    console.log('✅ Галактика обновлена (фоновая загрузка)');
+               
                 }
             } catch(e) {
                 console.warn('⚠️ Ошибка фоновой загрузки галактики:', e);
@@ -2592,7 +2585,7 @@ function loadGalaxyAndScrollsFromVK() {
             const mergedScrolls = [...new Set([...localScrolls, ...scrollsData])];
             if (mergedScrolls.length > localScrolls.length) {
                 localStorage.setItem('unlockedScrolls', JSON.stringify(mergedScrolls));
-                console.log('✅ Свитки обновлены (фоновая загрузка)');
+          
             }
         }
     })
@@ -2610,7 +2603,7 @@ function syncAllDataToVK() {
         }, 10000);
         return;
     }
-    console.log('🔄 Полная синхронизация с VK Storage...');
+  
     const completedEasy = getCompletedLevels('easy');
     const completedMedium = getCompletedLevels('medium');
     const completedHard = getCompletedLevels('hard');
@@ -2647,7 +2640,7 @@ const completedJapanese = getCompletedLevels('japanese');
 saveToVKStorage('wordgame_completed_french', completedFrench),
 saveToVKStorage('wordgame_completed_japanese', completedJapanese)
     ]).then(() => {
-        console.log('✅ Полная синхронизация завершена');
+   
     }).catch(e => console.warn('⚠️ Ошибка синхронизации:', e));
 }
 (function() {
@@ -2736,10 +2729,10 @@ function showConfirmModal() {
     preloadAd();
     document.getElementById('confirmWatchBtn').onclick = function() {
         modalDiv.remove();
-        console.log('🔄 Клик по "Показать", пытаемся показать рекламу...');
+     
         showRewardedAd(
             function() {
-                console.log('✅ Реклама показана, открываем слова');
+        
                 revealWordsSuccess();
             },
             function(errorMessage) {
@@ -2772,18 +2765,18 @@ function preloadAd() {
     })
     .then(function(data) {
         adPreloaded = true;
-        console.log('✅ Реклама предзагружена:', data);
+      
     })
     .catch(function(error) {
         console.warn('⚠️ Ошибка предзагрузки рекламы:', error);
     });
 }
 function showAdUnavailableModal() {
-    console.log('📢📢📢 ПОКАЗЫВАЕМ МОДАЛКУ "Реклама недоступна"');
+
     // Проверяем, нет ли уже такой модалки
     const existing = document.querySelector('.modal-window[data-modal="ad-unavailable"]');
     if (existing) {
-        console.log('ℹ️ Модалка уже открыта');
+     
         return;
     }
     const modalDiv = document.createElement('div');
@@ -2825,9 +2818,7 @@ function revealWordsSuccess() {
     showMessage('📖 Список слов открыт!', 1500);
 }
 function showRewardedAd(onSuccess, onFail) {
-    console.log('📺 showRewardedAd вызван');
-    console.log('🔍 typeof vkBridge:', typeof vkBridge);
-    console.log('🔍 navigator.onLine:', navigator.onLine);
+ 
     if (typeof vkBridge === 'undefined') {
         console.log('ℹ️ VK Bridge не доступен');
         onFail('Реклама временно недоступна');
@@ -2868,13 +2859,13 @@ function showRewardedAd(onSuccess, onFail) {
     function visibilityHandler() {
         if (document.hidden) {
             isHidden = true;
-            console.log('📱 Вкладка скрыта — таймаут приостановлен');
+     
             clearAdTimeout();
         } else {
             if (!isFinished) {
                 isHidden = false;
-                console.log('📱 Вкладка активна — таймаут возобновлён');
-                // Перезапускаем таймаут с новым временем (ещё 120 секунд)
+          
+    
                 clearAdTimeout();
                 timeoutId = setTimeout(function() {
                     if (!isFinished && !isHidden) {
@@ -2894,27 +2885,26 @@ function showRewardedAd(onSuccess, onFail) {
             finish('error', 'Реклама временно недоступна');
         } else if (!isFinished && isHidden) {
             // Если вкладка скрыта, ничего не делаем — таймаут будет перезапущен при возвращении
-            console.log('⏸️ Таймаут приостановлен из-за скрытой вкладки');
+         
         }
     }, 120000); // 120 секунд
-    console.log('📺 Проверяем готовность рекламы...');
+
     vkBridge.send('VKWebAppCheckNativeAds', {
         ad_format: 'reward'
     })
     .then(function(checkData) {
-        console.log('📺 Проверка рекламы:', checkData);
+   
         if (isFinished) return;
         // ✅ СКРЫВАЕМ ОВЕРЛЕЙ, КОГДА РЕКЛАМА ГОТОВА К ПОКАЗУ
         hideLoadingOverlay();
-        console.log('📺 Отправляем запрос VKWebAppShowNativeAds...');
+
         return vkBridge.send('VKWebAppShowNativeAds', {
             ad_format: 'reward'
         });
     })
     .then(function(showData) {
         if (isFinished) return;
-        console.log('📺 Ответ от VK Bridge:', showData);
-        console.log('📺 Результат показа:', showData?.result);
+    
         if (showData && showData.result === true) {
             adPreloaded = false;
             preloadAd();
@@ -2967,7 +2957,7 @@ function unlockLevel(categoryId, difficulty, levelNum) {
     if (!unlocked.includes(levelNum)) {
         unlocked.push(levelNum);
         localStorage.setItem(key, JSON.stringify(unlocked));
-        console.log(`✅ Уровень ${levelNum} разблокирован для категории ${categoryId}`);
+    
         // Синхронизируем с VK
         syncUnlockedLevelsToVK();
         return true;
