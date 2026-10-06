@@ -1,40 +1,81 @@
-let arenaWidth=10,arenaHeight=20,arena=[],soundMuted=!1,musicMuted=!0,currentMusicTrack=null,isGameStarted=!1,isGameOver=!1,audioInitialized=!1,selectedMode="classic",selectedDifficulty="medium",difficultyMultiplier=1,slowDownInterval=null,isSlowDownActive=!1,comboDisplayTimer=null,dailyBonusClaimedToday=!1,lastInterstitialAdTime=0,pendingSlowDown=!1,slowDownTimerId=null,currentScrollPage=1;const SCROLLS_PER_PAGE=5,TOTAL_SCROLLS=100;let currentCollectionPage=1,currentCollectionCategory=null;const COLLECTION_ITEMS_PER_PAGE=15,CATEGORY_ORDER=["blocks","animals","plants","space"],BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};let activeBonus=null,bonusSpawnCooldown=0;const BONUS_SPAWN_CHANCE=.15,BONUS_MAX_COOLDOWN=7,canvas=document.getElementById("tetris"),context=canvas.getContext("2d"),CYBER_COLORS={I:"#00ffff",O:"#FFE138",T:"#ff00ff",S:"#00ff66",Z:"#ff0055",L:"#ffaa00",J:"#0066ff"},colors=[null,CYBER_COLORS.I,CYBER_COLORS.O,CYBER_COLORS.T,CYBER_COLORS.S,CYBER_COLORS.Z,CYBER_COLORS.L,CYBER_COLORS.J];
-function calculateOptimalArenaWidth(){const n=document.querySelector(".canvas-container");if(!n)return 14;const t=n.getBoundingClientRect().width-12;if(t<=0)return 14;return/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)?t>=500?18:t>=400?16:14:t>=1e3?24:t>=800?22:t>=600?20:22}function updateCanvasSize(){const n=document.querySelector(".canvas-container");if(!n)return;const t=n.getBoundingClientRect(),e=.85*window.innerHeight,i=t.width-12,a=Math.min(t.height-12,e);i<=0||a<=0||(canvas.width=i,canvas.height=a)}
-function createMatrix(e,a){const r=[];for(;a--;)r.push(new Array(e).fill(0));return r}function createPiece(e){switch(e){case"T":return[[0,0,0],[1,1,1],[0,1,0]];case"O":return[[2,2],[2,2]];case"L":return[[0,3,0],[0,3,0],[0,3,3]];case"J":return[[0,4,0],[0,4,0],[4,4,0]];case"I":return[[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];case"S":return[[0,6,6],[6,6,0],[0,0,0]];case"Z":return[[7,7,0],[0,7,7],[0,0,0]];default:return[[0]]}}const pieces="ILJOTSZ",tetraPieces={I:{shape:[[1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[1,1,0]],color:CYBER_COLORS.S},O:{shape:[[1,1],[1,1]],color:CYBER_COLORS.O},T:{shape:[[0,1,0],[1,1,1],[0,1,0]],color:CYBER_COLORS.T}},tetraKeys=["I","L","J","Z","S","O","T"];function createTetraPiece(){const e=tetraKeys[Math.floor(Math.random()*tetraKeys.length)],a=tetraPieces[e],r=a.shape.map((e=>[...e]));return r._color=a.color,r._key=e,r}function rotateTetraMatrix(e){const a=e._key;if("O"===a||"T"===a){const a=e.map((e=>[...e]));return a._color=e._color,a._key=e._key,a}const r=e.length,o=e[0].length,t=[];for(let a=0;a<o;a++){t[a]=[];for(let o=r-1;o>=0;o--)t[a].push(e[o][a])}return t._color=e._color,t._key=e._key,t}const pentaPieces={I:{shape:[[1,1,1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,0],[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[0,1],[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[0,1,0],[1,1,0]],color:CYBER_COLORS.S},T:{shape:[[1,1,1],[0,1,0],[0,1,0]],color:CYBER_COLORS.T},P:{shape:[[1,1],[1,1],[1,0]],color:CYBER_COLORS.O}},pentaKeys=["I","L","J","Z","S","T","P"];function createPentaPiece(){const e=pentaKeys[Math.floor(Math.random()*pentaKeys.length)],a=pentaPieces[e],r=a.shape.map((e=>[...e]));return r._color=a.color,r._key=e,r}function rotatePentaMatrix(e){const a=e.length,r=e[0].length,o=[];for(let t=0;t<r;t++){o[t]=[];for(let r=a-1;r>=0;r--)o[t].push(e[r][t])}return o._color=e._color,o._key=e._key,o}const player={pos:{x:5,y:0},matrix:null,nextMatrix:null,score:0,lines:0,level:1,spins:0,crazySpins:!1,isTetraMode:!1,isPentaMode:!1},gameState={initialized:!1,paused:!1,introSongPlayed:!1,gameOver:!1};let dropCounter=0,dropInterval=1e3,lastTime=0,animationFrameId=null,gameOverAnimation={active:!1,startTime:0,duration:4e3,matrix:null,pos:{x:0,y:0}};function collide(e,a){if(a.isTetraMode){const[r,o]=[a.matrix,a.pos];for(let a=0;a<r.length;++a)for(let t=0;t<r[a].length;++t)if(0!==r[a][t]){const r=a+o.y,n=t+o.x;if(r<0||r>=arenaHeight||n<0||n>=arenaWidth)return!0;const l=e[r]?.[n];if(0!==l&&"bonus"!==l)return!0}return!1}const[r,o]=[a.matrix,a.pos];for(let a=0;a<r.length;++a)for(let t=0;t<r[a].length;++t)if(0!==r[a][t]){const r=a+o.y,n=t+o.x;if(r<0||r>=arenaHeight||n<0||n>=arenaWidth)return!0;const l=e[r]?.[n];if(0!==l&&"bonus"!==l)return!0}return!1}function spawnBonus(){if(activeBonus)return;if(bonusSpawnCooldown>0)return void bonusSpawnCooldown--;const e=["STAR","CLOVER","CANDY"],a=e[Math.floor(Math.random()*e.length)],r=BONUS_TYPES[a];let o;o="easy"===selectedDifficulty?arenaHeight-5:"medium"===selectedDifficulty?arenaHeight-8:5;let t,n,l=0,i=!1;for(;l<50&&!i;)n=Math.floor(Math.random()*o),t=Math.floor(Math.random()*arenaWidth),arena[n]&&0===arena[n][t]&&(i=!0),l++;i&&(activeBonus={type:a,x:t,y:n,symbol:r.symbol,points:r.points,color:r.color,label:r.label},arena[n][t]="bonus")}function checkBonusCollision(){if(!activeBonus)return!1;for(let e=0;e<player.matrix.length;e++)for(let a=0;a<player.matrix[e].length;a++){const r=player.pos.y+e,o=player.pos.x+a;if(arena[r]&&"bonus"===arena[r][o]){const e=activeBonus;return arena[r][o]=0,player.score+=e.points,"function"==typeof saveVKScore&&saveVKScore(player.score),showBonusNotification(e),activeBonus=null,bonusSpawnCooldown=BONUS_MAX_COOLDOWN,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.15),!0}}return!1}function showBonusNotification(e){const a=(window.getText||(e=>e))("bonus")||"Бонус!",r=document.createElement("div");r.style.cssText=`\n        position: fixed; bottom: 30px; left: 50%;\n        transform: translateX(-50%) translateY(100px);\n        background: rgba(20, 20, 30, 0.92);\n        border: 2px solid ${e.color||"#FFD700"};\n        border-radius: 20px; padding: 16px 30px;\n        display: flex; align-items: center; gap: 16px;\n        z-index: 99999; opacity: 0;\n        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);\n        backdrop-filter: blur(20px);\n        font-family: 'Russo One', sans-serif;\n        pointer-events: none;\n    `,r.innerHTML=`\n        <span>${e.symbol}</span>\n        <div>\n            <span style="color: #fff; text-transform: uppercase;">${a}</span>\n            <span style="color: ${e.color}; display: block;">${e.label}</span>\n        </div>\n        <span style="color: ${e.color}; font-weight: bold;">+${e.points}</span>\n    `,document.body.appendChild(r),requestAnimationFrame((()=>{r.style.opacity="1",r.style.transform="translateX(-50%) translateY(0)"})),setTimeout((()=>{r.style.opacity="0",r.style.transform="translateX(-50%) translateY(-30px)",setTimeout((()=>{r.parentNode&&r.remove()}),400)}),2e3)}function merge(e,a){if(a.isTetraMode||a.isPentaMode){const r=a.matrix._color||"#ff0000";a.matrix.forEach(((o,t)=>{o.forEach(((o,n)=>{if(0!==o){const o=a.pos.y+t,l=a.pos.x+n;o>=0&&o<arenaHeight&&l>=0&&l<arenaWidth&&"bonus"!==e[o][l]&&(e[o][l]=r)}}))}))}else a.matrix.forEach(((r,o)=>{r.forEach(((r,t)=>{if(0!==r){const n=a.pos.y+o,l=a.pos.x+t;n>=0&&n<arenaHeight&&l>=0&&l<arenaWidth&&"bonus"!==e[n][l]&&(e[n][l]=r)}}))}))}function arenaSweep(){let e=0,a=1;for(let r=arenaHeight-1;r>=0;r--){let o=!0;for(let e=0;e<arenaWidth;e++)if(0===arena[r][e]||"bonus"===arena[r][e]){o=!1;break}if(o){let o;arena.splice(r,1)[0],arena.unshift(new Array(arenaWidth).fill(0)),e++,player.lines++,o="easy"===selectedDifficulty?1:"hard"===selectedDifficulty?3:2,player.score+=a*o,a*=2,r++}}e>1&&showComboDisplay(e),e>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);let r=player.level;return player.lines>=5&&1===player.level?player.level=2:player.lines>=10&&2===player.level?player.level=3:player.lines>=20&&3===player.level?player.level=4:player.lines>=40&&4===player.level?player.level=5:player.lines>=80&&5===player.level?player.level=6:player.lines>=160&&6===player.level?player.level=7:player.lines>=320&&7===player.level?player.level=8:player.lines>=640&&8===player.level&&(player.level=9),r!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),e>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25),"function"==typeof saveVKScore&&player&&void 0!==player.score&&saveVKScore(player.score),e}function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merge(arena,player),checkBonusCollision(),playerReset(),arenaSweep(),"undefined"!=typeof gameAudio&&gameAudio.playOneShot("collide",.05)),dropCounter=0}function playerMove(e){player.pos.x+=e,collide(arena,player)&&(player.pos.x-=e),"undefined"!=typeof gameAudio&&!gameState.paused&&isGameStarted&&gameAudio.playOneShot("rotate",.02)}function rotate(e,a){for(let a=0;a<e.length;++a)for(let r=0;r<a;++r)[e[r][a],e[a][r]]=[e[a][r],e[r][a]];a>0?e.forEach((e=>e.reverse())):e.reverse()}function playerRotate(e){const a=player.pos.x;let r=1;if(player.isTetraMode){const e=player.matrix.map((e=>[...e])),a=rotateTetraMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}if(player.isPentaMode){const e=player.matrix.map((e=>[...e])),a=rotatePentaMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}for(rotate(player.matrix,e);collide(arena,player);)if(player.pos.x+=r,r=-(r+(r>0?1:-1)),r>player.matrix[0].length)return rotate(player.matrix,-e),void(player.pos.x=a);player.crazySpins||("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15),player.spins++),player.spins>25&&(player.crazySpins=!0,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("highspins",.2),player.spins=0,setTimeout((()=>{player.crazySpins=!1}),2e3))}
-function playerReset() {
+let arenaWidth=10,arenaHeight=20,arena=[],soundMuted=!1,musicMuted=!0,currentMusicTrack=null,isGameStarted=!1,isGameOver=!1,audioInitialized=!1,selectedMode="classic",selectedDifficulty="medium",difficultyMultiplier=1,slowDownInterval=null,isSlowDownActive=!1,comboDisplayTimer=null,dailyBonusClaimedToday=!1,lastInterstitialAdTime=0,pendingSlowDown=!1,slowDownTimerId=null,currentScrollPage=1;const SCROLLS_PER_PAGE=5,TOTAL_SCROLLS=100;let currentCollectionPage=1,currentCollectionCategory=null;const COLLECTION_ITEMS_PER_PAGE=15,CATEGORY_ORDER=["blocks","animals","plants","space"],BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};let activeBonus=null,bonusSpawnCooldown=0;const BONUS_SPAWN_CHANCE=.15,BONUS_MAX_COOLDOWN=7,canvas=document.getElementById("tetris"),context=canvas.getContext("2d"),CYBER_COLORS={I:"#00ffff",O:"#FFE138",T:"#ff00ff",S:"#00ff66",Z:"#ff0055",L:"#ffaa00",J:"#0066ff"},colors=[null,CYBER_COLORS.I,CYBER_COLORS.O,CYBER_COLORS.T,CYBER_COLORS.S,CYBER_COLORS.Z,CYBER_COLORS.L,CYBER_COLORS.J];function calculateOptimalArenaWidth(){const e=document.querySelector(".canvas-container");if(!e)return 14;const t=e.getBoundingClientRect().width-12;return t<=0?14:/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)?t>=500?18:t>=400?16:14:t>=1e3?24:t>=800?22:t>=600?20:22}function updateCanvasSize(){const e=document.querySelector(".canvas-container");if(!e)return;const t=e.getBoundingClientRect(),n=.85*window.innerHeight,o=t.width-12,a=Math.min(t.height-12,n);o<=0||a<=0||(canvas.width=o,canvas.height=a)}function createMatrix(e,t){const n=[];for(;t--;)n.push(new Array(e).fill(0));return n}function createPiece(e){switch(e){case"T":return[[0,0,0],[1,1,1],[0,1,0]];case"O":return[[2,2],[2,2]];case"L":return[[0,3,0],[0,3,0],[0,3,3]];case"J":return[[0,4,0],[0,4,0],[4,4,0]];case"I":return[[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];case"S":return[[0,6,6],[6,6,0],[0,0,0]];case"Z":return[[7,7,0],[0,7,7],[0,0,0]];default:return[[0]]}}const pieces="ILJOTSZ",tetraPieces={I:{shape:[[1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[1,1,0]],color:CYBER_COLORS.S},O:{shape:[[1,1],[1,1]],color:CYBER_COLORS.O},T:{shape:[[0,1,0],[1,1,1],[0,1,0]],color:CYBER_COLORS.T}},tetraKeys=["I","L","J","Z","S","O","T"];function createTetraPiece(){const e=tetraKeys[Math.floor(Math.random()*tetraKeys.length)],t=tetraPieces[e],n=t.shape.map((e=>[...e]));return n._color=t.color,n._key=e,n}function rotateTetraMatrix(e){const t=e._key;if("O"===t||"T"===t){const t=e.map((e=>[...e]));return t._color=e._color,t._key=e._key,t}const n=e.length,o=e[0].length,a=[];for(let t=0;t<o;t++){a[t]=[];for(let o=n-1;o>=0;o--)a[t].push(e[o][t])}return a._color=e._color,a._key=e._key,a}const pentaPieces={I:{shape:[[1,1,1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,0],[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[0,1],[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[0,1,0],[1,1,0]],color:CYBER_COLORS.S},T:{shape:[[1,1,1],[0,1,0],[0,1,0]],color:CYBER_COLORS.T},P:{shape:[[1,1],[1,1],[1,0]],color:CYBER_COLORS.O}},pentaKeys=["I","L","J","Z","S","T","P"];function createPentaPiece(){const e=pentaKeys[Math.floor(Math.random()*pentaKeys.length)],t=pentaPieces[e],n=t.shape.map((e=>[...e]));return n._color=t.color,n._key=e,n}function rotatePentaMatrix(e){const t=e.length,n=e[0].length,o=[];for(let a=0;a<n;a++){o[a]=[];for(let n=t-1;n>=0;n--)o[a].push(e[n][a])}return o._color=e._color,o._key=e._key,o}const player={pos:{x:5,y:0},matrix:null,nextMatrix:null,score:0,lines:0,level:1,spins:0,crazySpins:!1,isTetraMode:!1,isPentaMode:!1},gameState={initialized:!1,paused:!1,introSongPlayed:!1,gameOver:!1};let dropCounter=0,dropInterval=1e3,lastTime=0,animationFrameId=null,gameOverAnimation={active:!1,startTime:0,duration:4e3,matrix:null,pos:{x:0,y:0}};function collide(e,t){if(t.isTetraMode){const[n,o]=[t.matrix,t.pos];for(let t=0;t<n.length;++t)for(let a=0;a<n[t].length;++a)if(0!==n[t][a]){const n=t+o.y,r=a+o.x;if(n<0||n>=arenaHeight||r<0||r>=arenaWidth)return!0;const s=e[n]?.[r];if(0!==s&&"bonus"!==s)return!0}return!1}const[n,o]=[t.matrix,t.pos];for(let t=0;t<n.length;++t)for(let a=0;a<n[t].length;++a)if(0!==n[t][a]){const n=t+o.y,r=a+o.x;if(n<0||n>=arenaHeight||r<0||r>=arenaWidth)return!0;const s=e[n]?.[r];if(0!==s&&"bonus"!==s)return!0}return!1}function spawnBonus(){if(activeBonus)return;if(bonusSpawnCooldown>0)return void bonusSpawnCooldown--;const e=["STAR","CLOVER","CANDY"],t=e[Math.floor(Math.random()*e.length)],n=BONUS_TYPES[t];let o;o="easy"===selectedDifficulty?arenaHeight-5:"medium"===selectedDifficulty?arenaHeight-8:5;let a,r,s=0,l=!1;for(;s<50&&!l;)r=Math.floor(Math.random()*o),a=Math.floor(Math.random()*arenaWidth),arena[r]&&0===arena[r][a]&&(l=!0),s++;l&&(activeBonus={type:t,x:a,y:r,symbol:n.symbol,points:n.points,color:n.color,label:n.label},arena[r][a]="bonus")}function checkBonusCollision(){if(!activeBonus)return!1;for(let e=0;e<player.matrix.length;e++)for(let t=0;t<player.matrix[e].length;t++){const n=player.pos.y+e,o=player.pos.x+t;if(arena[n]&&"bonus"===arena[n][o]){const e=activeBonus;return arena[n][o]=0,player.score+=e.points,"function"==typeof saveVKScore&&saveVKScore(player.score),showBonusNotification(e),activeBonus=null,bonusSpawnCooldown=7,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.15),!0}}return!1}function showBonusNotification(e){const t=(window.getText||(e=>e))("bonus")||"Бонус!",n=document.createElement("div");n.style.cssText=`\n        position: fixed; bottom: 30px; left: 50%;\n        transform: translateX(-50%) translateY(100px);\n        background: rgba(20, 20, 30, 0.92);\n        border: 2px solid ${e.color||"#FFD700"};\n        border-radius: 20px; padding: 16px 30px;\n        display: flex; align-items: center; gap: 16px;\n        z-index: 99999; opacity: 0;\n        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);\n        backdrop-filter: blur(20px);\n        font-family: 'Russo One', sans-serif;\n        pointer-events: none;\n    `,n.innerHTML=`\n        <span>${e.symbol}</span>\n        <div>\n            <span style="color: #fff; text-transform: uppercase;">${t}</span>\n            <span style="color: ${e.color}; display: block;">${e.label}</span>\n        </div>\n        <span style="color: ${e.color}; font-weight: bold;">+${e.points}</span>\n    `,document.body.appendChild(n),requestAnimationFrame((()=>{n.style.opacity="1",n.style.transform="translateX(-50%) translateY(0)"})),setTimeout((()=>{n.style.opacity="0",n.style.transform="translateX(-50%) translateY(-30px)",setTimeout((()=>{n.parentNode&&n.remove()}),400)}),2e3)}function merge(e,t){if(t.isTetraMode||t.isPentaMode){const n=t.matrix._color||"#ff0000";t.matrix.forEach(((o,a)=>{o.forEach(((o,r)=>{if(0!==o){const o=t.pos.y+a,s=t.pos.x+r;o>=0&&o<arenaHeight&&s>=0&&s<arenaWidth&&"bonus"!==e[o][s]&&(e[o][s]=n)}}))}))}else t.matrix.forEach(((n,o)=>{n.forEach(((n,a)=>{if(0!==n){const r=t.pos.y+o,s=t.pos.x+a;r>=0&&r<arenaHeight&&s>=0&&s<arenaWidth&&"bonus"!==e[r][s]&&(e[r][s]=n)}}))}))}
+function arenaSweep() {
+    let rowsCleared = 0;
+    let rowMultiplier = 1;
+for(let e=arenaHeight-1;e>=0;e--){let l=!0;for(let a=0;a<arenaWidth;a++)if(0===arena[e][a]||"bonus"===arena[e][a]){l=!1;break}if(l){let l;arena.splice(e,1)[0],arena.unshift(new Array(arenaWidth).fill(0)),rowsCleared++,player.lines++,l="easy"===selectedDifficulty?1:"hard"===selectedDifficulty?3:2,player.score+=rowMultiplier*l,rowMultiplier*=2,e++}}rowsCleared>1&&showComboDisplay(rowsCleared),rowsCleared>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);let oldLevel=player.level;player.lines>=5&&1===player.level?player.level=2:player.lines>=10&&2===player.level?player.level=3:player.lines>=20&&3===player.level?player.level=4:player.lines>=40&&4===player.level?player.level=5:player.lines>=80&&5===player.level?player.level=6:player.lines>=160&&6===player.level?player.level=7:player.lines>=320&&7===player.level?player.level=8:player.lines>=640&&8===player.level&&(player.level=9),oldLevel!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),rowsCleared>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25);
+     // ===== ОБНОВЛЯЕМ РЕКОРД В РЕАЛЬНОМ ВРЕМЕНИ =====
+    if (typeof saveVKScore === 'function' && player && player.score !== undefined) {
+        saveVKScore(player.score);
+    }
+    return rowsCleared;
+}
+function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merge(arena,player),checkBonusCollision(),playerReset(),arenaSweep(),"undefined"!=typeof gameAudio&&gameAudio.playOneShot("collide",.05)),dropCounter=0}
+function playerMove(dir) {
+    player.pos.x += dir;
+    if (collide(arena, player)) player.pos.x -= dir;
+     // Добавляем звук при движении (тихо)
+    if (typeof gameAudio !== 'undefined' && !gameState.paused && isGameStarted) {
+        gameAudio.playOneShot('rotate', 0.02);
+    }
+}
+function rotate(e,r){for(let r=0;r<e.length;++r)for(let t=0;t<r;++t)[e[t][r],e[r][t]]=[e[r][t],e[t][r]];r>0?e.forEach((e=>e.reverse())):e.reverse()}
+function playerRotate(dir) {
+    const pos = player.pos.x;
+    let offset = 1;
     if (player.isTetraMode) {
-        player.matrix = player.nextMatrix;
-        player.nextMatrix = createTetraPiece();
-    } else if (player.isPentaMode) {
-        player.matrix = player.nextMatrix;
-        player.nextMatrix = createPentaPiece();
-    } else {
-        player.matrix = player.nextMatrix;
-        player.nextMatrix = createPiece(pieces[Math.floor(Math.random() * pieces.length)]);
+        const originalMatrix = player.matrix.map(row => [...row]);
+        const rotatedMatrix = rotateTetraMatrix(player.matrix);
+        player.matrix = rotatedMatrix;
+        const maxX = arenaWidth - player.matrix[0].length;
+        if (player.pos.x < 0) player.pos.x = 0;
+        if (player.pos.x > maxX) player.pos.x = maxX;
+        if (collide(arena, player)) {
+            player.matrix = originalMatrix;
+            return;
+        }
+        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
+        return;
     }
-    player.pos.y = 0;
-    const maxX = arenaWidth - player.matrix[0].length;
-    player.pos.x = Math.floor(maxX / 2);
-    if (collide(arena, player)) {
-        startGameOverAnimation();
+    if (player.isPentaMode) {
+        const originalMatrix = player.matrix.map(row => [...row]);
+        const rotatedMatrix = rotatePentaMatrix(player.matrix);
+        player.matrix = rotatedMatrix;
+        const maxX = arenaWidth - player.matrix[0].length;
+        if (player.pos.x < 0) player.pos.x = 0;
+        if (player.pos.x > maxX) player.pos.x = maxX;
+        if (collide(arena, player)) {
+            player.matrix = originalMatrix;
+            return;
+        }
+        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
+        return;
     }
+    rotate(player.matrix, dir);
+    while (collide(arena, player)) {
+        player.pos.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > player.matrix[0].length) {
+            rotate(player.matrix, -dir);
+            player.pos.x = pos;
+            return;
+        }
+    }
+    if (!player.crazySpins) {
+        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
+        player.spins++;
+    }
+   if (player.spins > 25) {
+    player.crazySpins = true;
+    if (typeof gameAudio !== 'undefined') {
+        gameAudio.playOneShot('highspins', 0.2);
+    }
+    player.spins = 0;
+    setTimeout(() => {
+        player.crazySpins = false;
+    }, 2000);
 }
-// ======================== АНИМАЦИЯ ПРОИГРЫША ========================
-function startGameOverAnimation() {
-    gameOverAnimation.active = true;
-    gameOverAnimation.startTime = Date.now();
-    gameOverAnimation.matrix = player.matrix.map(row => [...row]);
-    gameOverAnimation.pos = { x: player.pos.x, y: player.pos.y };
-    gameState.initialized = false;
-    isGameStarted = false;
-    gameState.paused = false;
-    stopSounds();
-    //if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('gameover', 0.3);
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    lastTime = 0;
-    dropCounter = 0;
-    update();
 }
+function playerReset(){player.isTetraMode?(player.matrix=player.nextMatrix,player.nextMatrix=createTetraPiece()):player.isPentaMode?(player.matrix=player.nextMatrix,player.nextMatrix=createPentaPiece()):(player.matrix=player.nextMatrix,player.nextMatrix=createPiece(pieces[Math.floor(Math.random()*pieces.length)])),player.pos.y=0;const e=arenaWidth-player.matrix[0].length;player.pos.x=Math.floor(e/2),collide(arena,player)&&startGameOverAnimation()}function startGameOverAnimation(){gameOverAnimation.active=!0,gameOverAnimation.startTime=Date.now(),gameOverAnimation.matrix=player.matrix.map((e=>[...e])),gameOverAnimation.pos={x:player.pos.x,y:player.pos.y},gameState.initialized=!1,isGameStarted=!1,gameState.paused=!1,stopSounds(),animationFrameId&&cancelAnimationFrame(animationFrameId),lastTime=0,dropCounter=0,update()}
 function drawGameOverAnimation() {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -55,22 +96,7 @@ function drawGameOverAnimation() {
     context.fillRect(0, 0, canvasWidth, canvasHeight);
     context.fillStyle = '#0a0a0f';
     context.fillRect(0, topPanelHeight, canvasWidth, gameAreaHeight);
-    for (let y = 0; y < arenaHeight; y++) {
-        for (let x = 0; x < arenaWidth; x++) {
-            const value = arena[y][x];
-            if (value !== 0 && value !== 'bonus') {
-                const posX = offsetX + x * blockSize;
-                const posY = offsetY + y * blockSize;
-                let fillColor;
-                if (typeof value === 'string' && value.startsWith('#')) fillColor = value;
-                else fillColor = colors[value] || '#FFF';
-                context.fillStyle = fillColor;
-                context.fillRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
-                context.strokeStyle = "rgba(0,0,0,0.3)";
-                context.strokeRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
-            }
-        }
-    }
+for(let t=0;t<arenaHeight;t++)for(let e=0;e<arenaWidth;e++){const o=arena[t][e];if(0!==o&&"bonus"!==o){const l=offsetX+e*blockSize,c=offsetY+t*blockSize;let i;i="string"==typeof o&&o.startsWith("#")?o:colors[o]||"#FFF",context.fillStyle=i,context.fillRect(l,c,blockSize-.5,blockSize-.5),context.strokeStyle="rgba(0,0,0,0.3)",context.strokeRect(l,c,blockSize-.5,blockSize-.5)}}
     const elapsed = Date.now() - gameOverAnimation.startTime;
     const maxDuration = gameOverAnimation.duration;
     if (elapsed < maxDuration) {
@@ -730,43 +756,52 @@ function showGameOverModal(score) {
                 const newGameBtn = contentDiv.querySelector('button[onclick*="closeGameOverModal"]');
                 const menuBtn = contentDiv.querySelector('button[onclick*="closeGameOverModalAndMenu"]');
                 // Создаём новую кнопку "Продолжить за рекламу"
-                const continueBtn = document.createElement('button');
-                continueBtn.style.cssText = `
-                    width: 100%; 
-                    font-family: 'Russo One', sans-serif; text-transform: uppercase;
-                    letter-spacing: 2px; color: #fff;
-                    background: linear-gradient(135deg, #f59e0b, #d97706);
-                    border: none; border-radius: 14px; cursor: pointer;
-                    transition: all 0.2s;
-                    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-                    display: flex; align-items: center; justify-content: center; gap: 10px;
-                `;
+const continueBtn = document.createElement('button');
+continueBtn.style.cssText = `
+    width: 100%; 
+    padding: 14px 20px;              
+    font-size: 16px;                
+    font-family: 'Russo One', sans-serif; text-transform: uppercase;
+    letter-spacing: 2px; color: #fff;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border: none; border-radius: 14px; cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 50px;              
+`;
                 continueBtn.innerHTML = '🧹 Продолжить за рекламу';
                 continueBtn.onclick = handleContinueWithAd;
                 // Собираем все кнопки в контейнер
                 buttonsContainer.appendChild(continueBtn);
                 if (newGameBtn) {
                     // Изменяем стиль кнопки "Новая игра"
-                    newGameBtn.style.cssText = `
-                        width: 100%;
-                        font-family: 'Russo One', sans-serif; text-transform: uppercase;
-                        letter-spacing: 2px; color: #fff;
-                        background: linear-gradient(135deg, #22c55e, #16a34a);
-                        border: none; border-radius: 14px; cursor: pointer;
-                        transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
-                    `;
+        newGameBtn.style.cssText = `
+    width: 100%;
+    padding: 14px 20px;             
+    font-size: 16px;              
+    font-family: 'Russo One', sans-serif; text-transform: uppercase;
+    letter-spacing: 2px; color: #fff;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border: none; border-radius: 14px; cursor: pointer;
+    transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+    min-height: 50px;              
+`;
                     buttonsContainer.appendChild(newGameBtn);
                 }
                 if (menuBtn) {
                     // Изменяем стиль кнопки "В меню"
-                    menuBtn.style.cssText = `
-                        width: 100%;
-                        font-family: 'Russo One', sans-serif; text-transform: uppercase;
-                        letter-spacing: 2px; color: #94a3b8;
-                        background: rgba(255,255,255,0.03);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 14px; cursor: pointer; transition: all 0.2s;
-                    `;
+       menuBtn.style.cssText = `
+    width: 100%;
+    padding: 10px 15px;             
+    font-size: 14px;                
+    font-family: 'Russo One', sans-serif; text-transform: uppercase;
+    letter-spacing: 2px; color: #94a3b8;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px; cursor: pointer; transition: all 0.2s;
+    min-height: 50px;               
+`;
                     buttonsContainer.appendChild(menuBtn);
                 }
                 // Добавляем контейнер в модалку
@@ -1303,7 +1338,7 @@ function claimCollectionItem(categoryId, index, page) {
     modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100006; display: flex; justify-content: center; align-items: center; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
     modal.id = 'collection-claim-modal';
     modal.innerHTML = `
-        <div class="modal-content" style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.85); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
 <button class="modal-close-btn" onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: -50px; right: -10px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8);">✕</button>
           <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('newExhibit') || 'Новый экспонат!'}</h2>
@@ -1429,7 +1464,7 @@ function showSimpleModal(title, text, icon = 'info') {
         -webkit-backdrop-filter: blur(15px);
     `;
 modal.innerHTML += `
-    <div class="modal-content" style="border: 2px solid rgba(52, 211, 153, 0.3); max-width: 400px; padding: 35px 30px;">
+    <div class="modal-content" style="border: 2px solid rgba(52, 211, 153, 0.3); max-width: 400px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px);">
         <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
         <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
         <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
@@ -1626,7 +1661,7 @@ if (!isAvailable) {
         -webkit-backdrop-filter: blur(15px);
     `;
     modal.innerHTML += `
-        <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: 35px 30px;">
+        <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px);">
             <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
             <!-- Убрали строку с замком -->
             <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('scrollLockedTitle')}</h2>
@@ -1770,7 +1805,7 @@ function openDailyBonus() {
         background-size: cover;
     `;
 modal.innerHTML += `
-    <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+    <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
         <button class="modal-close-btn" onclick="this.closest('#daily-bonus-modal').remove()">✕</button>
         <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
         <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
@@ -1918,7 +1953,7 @@ function showSuccessModal(title, text) {
     `;
     modal.appendChild(overlay);
     modal.innerHTML += `
-        <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
             <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
             <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
@@ -2098,75 +2133,6 @@ function closeLoadingAdModal() {
     const modal = document.getElementById('loading-ad-modal');
     if (modal) modal.remove();
 }
-    // ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ ПРОДОЛЖЕНИЯ ======
-    function showContinueConfirmationModal() {
-        return new Promise((resolve) => {
-            const modal = document.createElement('div');
-            modal.id = 'continue-confirm-modal';
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 100011;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background: url('1.jpg') no-repeat center center fixed;
-                background-size: cover;
-            `;
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-                z-index: -1;
-            `;
-            modal.appendChild(overlay);
-            modal.innerHTML += `
-                <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
-                    <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
-                        Продолжить эту игру!
-                    </h2>
-                    <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: 'Russo One', sans-serif; margin-bottom: 8px;">
-                        Посмотрите рекламу и <strong style="color: #fcd34d;">сотрите 7 верхних строк</strong>, чтобы продолжить этот раунд!
-                    </p>
-                    <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
-                        ⚡ Ваши очки и прогресс сохранятся
-                    </p>
-                    <div style="display: flex; gap: 12px;">
-                        <button onclick="document.getElementById('continue-confirm-modal').remove(); resolve(false);" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                            Отмена
-                        </button>
-                        <button onclick="document.getElementById('continue-confirm-modal').remove(); resolve(true);" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                            Продолжить
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            // Сохраняем resolve для использования в кнопках
-            modal._resolve = resolve;
-            // Переопределяем кнопки с использованием сохранённого resolve
-            modal.querySelectorAll('button').forEach(btn => {
-                const originalOnclick = btn.onclick;
-                btn.onclick = function(e) {
-                    if (originalOnclick) {
-                        // Вызываем оригинальный обработчик, который удалит модалку
-                        originalOnclick.call(this, e);
-                    }
-                    // Затем резолвим Promise
-                    const isConfirm = this.textContent.includes('Продолжить');
-                    modal._resolve(isConfirm);
-                };
-            });
-        });
-    }
     // ======================== ПРОДОЛЖЕНИЕ ИГРЫ ЗА РЕКЛАМУ ========================
 async function handleContinueWithAd() {
     const confirmed = await showContinueConfirmationModal();
@@ -2244,7 +2210,7 @@ function showContinueConfirmationModal() {
         `;
         modal.appendChild(overlay);
         modal.innerHTML += `
-            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+            <div style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
                 <div style="font-size: 48px; margin-bottom: 16px;">🧹</div>
                 <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
                     Продолжить эту игру!
@@ -2255,13 +2221,44 @@ function showContinueConfirmationModal() {
                 <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
                     ⚡ Ваши очки и прогресс сохранятся
                 </p>
-                <div style="display: flex; gap: 12px;">
-                    <button id="continue-cancel-btn" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                        Отмена
-                    </button>
-                    <button id="continue-confirm-btn" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                        Продолжить
-                    </button>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                   <button id="continue-cancel-btn" style="
+    flex: 1 1 130px;
+    min-width: 0;
+    padding: 14px 12px;
+    font-size: clamp(13px, 4vw, 16px);
+    letter-spacing: 1px;
+    font-family: 'Russo One', sans-serif;
+    text-transform: uppercase;
+    color: #94a3b8;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+">
+    Отмена
+</button>
+                   <button id="continue-confirm-btn" style="
+    flex: 1 1 130px;
+    min-width: 0;
+    padding: 14px 12px;
+    font-size: clamp(13px, 4vw, 16px);
+    letter-spacing: 1px;
+    font-family: 'Russo One', sans-serif;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+    white-space: nowrap;
+">
+    Продолжить
+</button>
                 </div>
             </div>
         `;
@@ -2337,7 +2334,7 @@ function showSlowDownModal() {
     `;
     modal.appendChild(overlay);
     modal.innerHTML += `
-        <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
+        <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
             <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>
             <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
                 Замедлить?
@@ -2348,7 +2345,7 @@ function showSlowDownModal() {
             <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
                 ⏱️ Идеально для сложных моментов!
             </p>
-            <div style="display: flex; gap: 12px;">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
                 <button onclick="document.getElementById('slowdown-confirm-modal').remove(); if (gameState.paused) resumeGame();" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
                     Отмена
                 </button>
@@ -2481,7 +2478,26 @@ function showComboDisplay(rowsCleared) {
     // Создаём элемент
     const display = document.createElement('div');
     display.id = 'combo-display';
-display.style.cssText=`\n        position: fixed;\n        top: 50%;\n        left: 50%;\n        transform: translate(-50%, -50%) scale(0.5);\n        font-family: 'Russo One', sans-serif;\n        font-size: ${rowsCleared>=5?80:rowsCleared>=4?72:rowsCleared>=3?60:48}px;\n        font-weight: bold;\n        color: #fff;\n        text-shadow: \n            0 0 30px rgba(255, 215, 0, 0.8),\n            0 0 60px rgba(255, 215, 0, 0.4),\n            0 4px 20px rgba(0, 0, 0, 0.5);\n        z-index: 9998;\n        pointer-events: none;\n        opacity: 0;\n        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);\n        text-align: center;\n        line-height: 1.2;\n    `;
+    display.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        font-family: 'Russo One', sans-serif;
+        font-size: ${rowsCleared >= 5 ? 80 : rowsCleared >= 4 ? 72 : rowsCleared >= 3 ? 60 : 48}px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 
+            0 0 30px rgba(255, 215, 0, 0.8),
+            0 0 60px rgba(255, 215, 0, 0.4),
+            0 4px 20px rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-align: center;
+        line-height: 1.2;
+    `;
     // Выбираем цвет в зависимости от количества линий
     let color = '#fcd34d';
     let glowColor = 'rgba(255, 215, 0, 0.8)';
@@ -2540,7 +2556,38 @@ let loadingScreenVisible = false;
 function showLoadingScreen(message = 'Загрузка...') {
     if (loadingScreenVisible) return;
     loadingScreenVisible = true;
- const overlay=document.createElement("div");overlay.id="loading-screen-overlay",overlay.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: rgba(10, 10, 14, 0.9);\n        backdrop-filter: blur(10px);\n        -webkit-backdrop-filter: blur(10px);\n        z-index: 100000;\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n        align-items: center;\n        color: #fff;\n        font-family: 'Russo One', sans-serif;\n        transition: opacity 0.3s ease;\n        opacity: 1;\n    ",overlay.innerHTML=`\n        <div style="text-align: center; max-width: 300px;">\n            <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1.5s linear infinite;">🎵</div>\n            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">${message}</h2>\n            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;" id="loading-status">Подготовка музыки...</p>\n            <div style="width: 100%; height: 4px; background: #1e293b; border-radius: 4px; overflow: hidden;">\n                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #34d399, #22c55e); transition: width 0.3s ease;"></div>\n            </div>\n        </div>\n    `,document.body.appendChild(overlay);
+    const overlay = document.createElement('div');
+    overlay.id = 'loading-screen-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 14, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 100000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-family: 'Russo One', sans-serif;
+        transition: opacity 0.3s ease;
+        opacity: 1;
+    `;
+    overlay.innerHTML = `
+        <div style="text-align: center; max-width: 300px;">
+            <div style="font-size: 48px; margin-bottom: 20px; animation: spin 1.5s linear infinite;">🎵</div>
+            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">${message}</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;" id="loading-status">Подготовка музыки...</p>
+            <div style="width: 100%; height: 4px; background: #1e293b; border-radius: 4px; overflow: hidden;">
+                <div id="loading-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #34d399, #22c55e); transition: width 0.3s ease;"></div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
     // Добавляем ключевые кадры для анимации спиннера, если их ещё нет
     if (!document.getElementById('loading-anim-styles')) {
         const style = document.createElement('style');
@@ -2554,7 +2601,25 @@ function showLoadingScreen(message = 'Загрузка...') {
         document.head.appendChild(style);
     }
 }
-function hideLoadingScreen(){const e=document.getElementById("loading-screen-overlay");e&&(e.style.opacity="0",setTimeout((()=>{e.parentNode&&e.remove(),loadingScreenVisible=!1}),300))}function updateLoadingStatus(e,t){const n=document.getElementById("loading-status");n&&(n.textContent=e);const o=document.getElementById("loading-progress-bar");o&&void 0!==t&&(o.style.width=Math.min(100,Math.max(0,t))+"%")}
+function hideLoadingScreen() {
+    const overlay = document.getElementById('loading-screen-overlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => {
+            if (overlay.parentNode) overlay.remove();
+            loadingScreenVisible = false;
+        }, 300);
+    }
+}
+function updateLoadingStatus(text, progress) {
+    const status = document.getElementById('loading-status');
+    if (status) status.textContent = text;
+    const bar = document.getElementById('loading-progress-bar');
+    if (bar && progress !== undefined) {
+        bar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+    }
+}
+// ======================== ЭКСПОРТ ========================
 window.selectMode = selectMode;
 window.selectDifficulty = selectDifficulty;
 window.closeDifficultyModal = closeDifficultyModal;
@@ -2580,6 +2645,7 @@ window.isGameOver = isGameOver;
 window.selectedDifficulty = selectedDifficulty;
 window.selectedMode = selectedMode;
 window.saveTotalProgress = saveTotalProgress;
+// Свитки
 window.openScrollsModal = openScrollsModal;
 window.closeScrollsModal = closeScrollsModal;
 window.openScrollTextModal = openScrollTextModal;
@@ -2590,6 +2656,7 @@ window.renderScrolls = renderScrolls;
 window.countUnlockedScrolls = countUnlockedScrolls;
 window.claimScroll = claimScroll;
 window.getScrollsProgress = getScrollsProgress;
+// Коллекции
 window.openCollections = openCollections;
 window.closeCollections = closeCollections;
 window.openCollectionCategory = openCollectionCategory;
@@ -2603,6 +2670,7 @@ window.showLockedCategory = showLockedCategory;
 window.showSimpleModal = showSimpleModal;
 window.claimCollectionItem = claimCollectionItem;
 window.updateCollectionsProgress = updateCollectionsProgress;
+// Центр наград
 window.openRewardsCenter = openRewardsCenter;
 window.closeRewardsCenter = closeRewardsCenter;
 window.openScrollsFromRewards = openScrollsFromRewards;
@@ -2610,13 +2678,16 @@ window.openDailyBonus = openDailyBonus;
 window.claimDailyBonus = claimDailyBonus;
 window.showSuccessModal = showSuccessModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
+// ======================== рекл за вознагр
 window.handleContinueWithAd = handleContinueWithAd;
 window.clearTopRows = clearTopRows;
 window.showContinueConfirmationModal = showContinueConfirmationModal;
+// Бонусы
 window.claimDailyBonus = claimDailyBonus;
 window.claimEnhancedDailyBonus = claimEnhancedDailyBonus;
 window.openDailyBonus = openDailyBonus;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
+// Замедление
 window.showSlowDownModal = showSlowDownModal;
 window.activateSlowDown = activateSlowDown;
 window.applySlowDownEffect = applySlowDownEffect;
