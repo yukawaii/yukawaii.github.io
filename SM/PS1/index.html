@@ -221,6 +221,7 @@ function claimBonus(amount) {
     localStorage.setItem('lastBonusDate', today);
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('wordgame_bonusDate_v2', today);
+        saveToVKStorage('wordgame_total_stars_v2', totalStars);
     }
     updateStarsDisplay(); 
 if (typeof markDirty==='function'){ markDirty();}
@@ -310,22 +311,8 @@ function hideLoadingOverlay() {
 }
 function getCompletedLevels(difficulty){ const key=`gameCompletedLevels_${difficulty || 'easy'}`; const saved=localStorage.getItem(key); return safeParseArray(saved, []);}
 let syncDirtyTimer = null;
-function markDirty(){ if (syncDirtyTimer) clearTimeout(syncDirtyTimer); syncDirtyTimer=setTimeout(syncAllDataToVK, 3000);}
-function saveCompletedLevel(levelId, difficulty) {
-    const key = `gameCompletedLevels_${difficulty || 'easy'}`;
-    const completed = getCompletedLevels(difficulty);
-    if (!completed.includes(levelId)) {
-        completed.push(levelId);
-        localStorage.setItem(key, JSON.stringify(completed));
-        const starsForLevel = 5;
-        totalStars = safeParseInt(totalStars, 0) + starsForLevel;
-        localStorage.setItem('totalStars', String(totalStars));
-        updateStarsDisplay();
-if (typeof markDirty === 'function') {
-    markDirty();
-}
-      }
-}
+function markDirty(){ if (syncDirtyTimer) clearTimeout(syncDirtyTimer); syncDirtyTimer=setTimeout(syncAllDataToVK, 3000)}
+function saveCompletedLevel(levelId, difficulty){ const key=`gameCompletedLevels_${difficulty || 'easy'}`; const completed=getCompletedLevels(difficulty); if (!completed.includes(levelId)){ completed.push(levelId); localStorage.setItem(key, JSON.stringify(completed)); const starsForLevel=5; totalStars=safeParseInt(totalStars, 0) + starsForLevel; localStorage.setItem('totalStars', String(totalStars)); updateStarsDisplay(); if (typeof saveToVKStorage==='function'){ saveToVKStorage('wordgame_completed_' + (difficulty || 'easy'), completed); saveToVKStorage('wordgame_total_stars_v2', totalStars);} if (typeof markDirty==='function'){ markDirty();}}}
 function saveLastLevel(levelId){ localStorage.setItem('lastLevelId', levelId);}
 function getLastLevel(){ const saved=localStorage.getItem('lastLevelId'); return saved ? parseInt(saved) : 1;}
 function isLevelCompleted(levelId, difficulty = 'easy') {
@@ -1892,6 +1879,7 @@ document.addEventListener('visibilitychange', function() {
         document.body.classList.remove('hidden-stars');  
     }
 });
+window.addEventListener('pagehide', function (){ if (syncDirtyTimer){ clearTimeout(syncDirtyTimer); syncDirtyTimer=null; syncAllDataToVK();}});
     init();
 </script>
 </body>
