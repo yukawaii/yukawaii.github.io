@@ -72,50 +72,60 @@
 
     // ============================================================
     // 3. АВТОПРЕФИКС VK STORAGE (для OK)
-    //    Перехватываем vkBridge.send для VKWebAppStorageSet / Get.
-    //    Ключи вида 'wordgame_total_stars_v2' автоматически станут
-    //    'ok_wordgame_total_stars_v2' — прогресс VK и OK не смешается.
+    //    Патчим vkBridge.send, как только SDK появится.
+    //    Никакого defineProperty — иначе SDK VK видит
+    //    "window.vkBridge уже существует" и не подгружается сам.
     // ============================================================
-if (storagePrefix) {
-    let _realBridge = null;
+    if (storagePrefix) {
+        let _vkStoragePatched = false;
 
-    function patchBridge(bridge) {
-        if (!bridge || bridge.__okPatched) return bridge;
-        const origSend = bridge.send.bind(bridge);
-        bridge.send = function (method, params) {
-            if (params && typeof params === 'object') {
-                if (method === 'VKWebAppStorageSet' && typeof params.key === 'string') {
-                    if (params.key.indexOf(storagePrefix) !== 0) {
-                        params = Object.assign({}, params, { key: storagePrefix + params.key });
+        function patchVKStorage() {
+            if (_vkStoragePatched) return true;
+            const bridge = window.vkBridge;
+            if (!bridge || typeof bridge.send !== 'function') return false;
+
+            const origSend = bridge.send.bind(bridge);
+
+            bridge.send = function (method, params) {
+                if (params && typeof params === 'object') {
+                    if (method === 'VKWebAppStorageSet' && typeof params.key === 'string') {
+                        if (params.key.indexOf(storagePrefix) !== 0) {
+                            params = Object.assign({}, params, { key: storagePrefix + params.key });
+                        }
+                    }
+                    if (method === 'VKWebAppStorageGet' && Array.isArray(params.keys)) {
+                        params = Object.assign({}, params, {
+                            keys: params.keys.map(function (k) {
+                                return (typeof k === 'string' && k.indexOf(storagePrefix) !== 0)
+                                    ? storagePrefix + k
+                                    : k;
+                            })
+                        });
                     }
                 }
-                if (method === 'VKWebAppStorageGet' && Array.isArray(params.keys)) {
-                    params = Object.assign({}, params, {
-                        keys: params.keys.map(function (k) {
-                            return (typeof k === 'string' && k.indexOf(storagePrefix) !== 0)
-                                ? storagePrefix + k
-                                : k;
-                        })
-                    });
+                return origSend(method, params);
+            };
+
+            _vkStoragePatched = true;
+            console.log('🔒 VK Storage: включён автопрефикс "' + storagePrefix + '"');
+            return true;
+        }
+
+        // Первая попытка — SDK уже мог загрузиться
+        if (!patchVKStorage()) {
+            // Если нет — ждём появления vkBridge (опрос каждые 100 мс, до 30 сек)
+            let _attempts = 0;
+            const _timer = setInterval(function () {
+                _attempts++;
+                if (patchVKStorage() || _attempts > 300) {
+                    clearInterval(_timer);
+                    if (_attempts > 300) {
+                        console.warn('⚠️ vkBridge так и не появился за 30 сек');
+                    }
                 }
-            }
-            return origSend(method, params);
-        };
-        bridge.__okPatched = true;
-        return bridge;
+            }, 100);
+        }
     }
-
-    Object.defineProperty(window, 'vkBridge', {
-        configurable: true,
-        get() { return _realBridge; },
-        set(v) { _realBridge = patchBridge(v); }
-    });
-
-    if (window.vkBridge) patchBridge(window.vkBridge);
-
-    console.log('🔒 VK Storage: включён автопрефикс "' + storagePrefix + '"');
-}
-
     // ============================================================
     // 4. В OK СКРЫВАЕМ НЕДОСТУПНЫЕ КНОПКИ
     //    Никаких тостов и модалок. Просто прячем элементы.
