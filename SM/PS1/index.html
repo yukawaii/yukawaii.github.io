@@ -311,26 +311,8 @@ function hideLoadingOverlay() {
 }
 function getCompletedLevels(difficulty){ const key=`gameCompletedLevels_${difficulty || 'easy'}`; const saved=localStorage.getItem(key); return safeParseArray(saved, []);}
 let syncDirtyTimer = null;
-function markDirty(){ if (syncDirtyTimer) clearTimeout(syncDirtyTimer); syncDirtyTimer=setTimeout(syncAllDataToVK, 3000);}
-function saveCompletedLevel(levelId, difficulty) {
-    const key = `gameCompletedLevels_${difficulty || 'easy'}`;
-    const completed = getCompletedLevels(difficulty);
-    if (!completed.includes(levelId)) {
-        completed.push(levelId);
-        localStorage.setItem(key, JSON.stringify(completed));
-        const starsForLevel = 5;
-        totalStars = safeParseInt(totalStars, 0) + starsForLevel;
-        localStorage.setItem('totalStars', String(totalStars));
-        updateStarsDisplay();
-        if (typeof saveToVKStorage === 'function') {
-            saveToVKStorage('wordgame_completed_' + (difficulty || 'easy'), completed);
-            saveToVKStorage('wordgame_total_stars_v2', totalStars);
-        }
-        if (typeof markDirty === 'function') {
-            markDirty();
-        }
-    }
-}
+function markDirty(){ if (syncDirtyTimer) clearTimeout(syncDirtyTimer); syncDirtyTimer=setTimeout(syncAllDataToVK, 3000)}
+function saveCompletedLevel(levelId, difficulty){ const key=`gameCompletedLevels_${difficulty || 'easy'}`; const completed=getCompletedLevels(difficulty); if (!completed.includes(levelId)){ completed.push(levelId); localStorage.setItem(key, JSON.stringify(completed)); const starsForLevel=5; totalStars=safeParseInt(totalStars, 0) + starsForLevel; localStorage.setItem('totalStars', String(totalStars)); updateStarsDisplay(); if (typeof saveToVKStorage==='function'){ saveToVKStorage('wordgame_completed_' + (difficulty || 'easy'), completed); saveToVKStorage('wordgame_total_stars_v2', totalStars);} if (typeof markDirty==='function'){ markDirty();}}}
 function saveLastLevel(levelId){ localStorage.setItem('lastLevelId', levelId);}
 function getLastLevel(){ const saved=localStorage.getItem('lastLevelId'); return saved ? parseInt(saved) : 1;}
 function isLevelCompleted(levelId, difficulty = 'easy') {
@@ -1589,85 +1571,17 @@ if (!isUnlocked) {
         loadLevelById(nextLevel.id, difficulty);
     }
 });
-async function init() {
-    // 1. Показываем загрузочный экран
-    const loadingScreen = document.getElementById('loadingScreen');
-    loadingScreen.style.display = 'flex';
-    loadingScreen.style.opacity = '1';
-    // Активируем аудио-контекст по клику
-    document.body.addEventListener('click', () => {
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }, { once: true });
-    // Загружаем сохранённую сложность
-    currentDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
-    // Загружаем общее количество звёзд из localStorage
-    const savedStars = localStorage.getItem('totalStars');
-    totalStars = safeParseInt(savedStars, 0);
-    // Добавляем класс меню на body
-    document.body.classList.add('menu-mode');
-    // Флаг, чтобы избежать двойного выполнения
-    let loadingFinished = false;
-    let loadingTimeout;
-    // Функция, которая завершает загрузку и показывает меню
-    function finishLoading() {
-        if (loadingFinished) return;
-        loadingFinished = true;
-        clearTimeout(loadingTimeout);
-        // Обновляем интерфейс
-        const menuStars = document.getElementById('menuStars');
-        if (menuStars) menuStars.textContent = totalStars || 0;
-        updateStartButtonSubtitle();
-        const theme = localStorage.getItem('theme') || 'dark';
-        setTheme(theme);
-        syncScrollsWithStars();
-        // Показываем главное меню
-        document.getElementById('startMenu').style.display = 'flex';
-        document.body.classList.add('menu-mode');
-        // Скрываем загрузочный экран с плавным исчезновением
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-        // Фоновая загрузка галактик и свитков (не блокирует)
-      //  setTimeout(loadGalaxyAndScrollsFromVK, 2000);
-      // Вместо setTimeout(loadGalaxyAndScrollsFromVK, 2000);
-if ('requestIdleCallback' in window) {
-    requestIdleCallback(function() {
-        loadGalaxyAndScrollsFromVK();
-    }, { timeout: 5000 });
-} else {
-    setTimeout(loadGalaxyAndScrollsFromVK, 2000);
-}
-    }
-    // ⏰ Таймаут на 60 секунд – если синхронизация не завершилась, показываем меню
-    loadingTimeout = setTimeout(() => {
-        if (!loadingFinished) {
-            console.log('⏰ Таймаут загрузки (60 сек). Показываем меню без полной синхронизации.');
-            finishLoading();
-        }
-    }, 60000);
-    try {
-        document.getElementById('loadingStatus').textContent = 'Синхронизация с космосом...';
-        await loadAllDataFromVK(); 
-    } catch (e) {
-        console.warn('⚠️ Ошибка синхронизации, но продолжаем:', e);
-    }
-        finishLoading();
-            preloadAd();
-}
-// Кнопка "Начать"
+async function init(){ const loadingScreen=document.getElementById('loadingScreen'); loadingScreen.style.display='flex'; loadingScreen.style.opacity='1'; document.body.addEventListener('click', ()=>{ if (audioCtx && audioCtx.state==='suspended') audioCtx.resume();},{ once: true});
+ currentDifficulty=localStorage.getItem('lastDifficulty') || 'easy'; const savedStars=localStorage.getItem('totalStars'); totalStars=safeParseInt(savedStars, 0); document.body.classList.add('menu-mode'); let loadingFinished=false; let loadingTimeout; function finishLoading(){ if (loadingFinished) return; loadingFinished=true; clearTimeout(loadingTimeout); const menuStars=document.getElementById('menuStars'); if (menuStars) menuStars.textContent=totalStars || 0; updateStartButtonSubtitle(); const theme=localStorage.getItem('theme') || 'dark'; setTheme(theme); syncScrollsWithStars(); document.getElementById('startMenu').style.display='flex'; document.body.classList.add('menu-mode'); loadingScreen.style.opacity='0'; setTimeout(()=>{ loadingScreen.style.display='none';}, 500); if ('requestIdleCallback' in window){ requestIdleCallback(function (){ loadGalaxyAndScrollsFromVK();},{ timeout: 5000});} else{ setTimeout(loadGalaxyAndScrollsFromVK, 2000);}} loadingTimeout=setTimeout(()=>{ if (!loadingFinished){ console.log('⏰ Таймаут загрузки (60 сек).'); finishLoading();}}, 60000); try{ if (typeof initVKBridge==='function'){ await initVKBridge(); console.log('🔓 VK Bridge готов — читаем VK Storage');}} catch (e){ console.warn('⚠️ VK Bridge не инициализировался:', e);} try{ document.getElementById('loadingStatus').textContent='Синхронизация с космосом...'; await loadAllDataFromVK();} catch (e){ console.warn('⚠️ Ошибка синхронизации, но продолжаем:', e);} finishLoading(); preloadAd();}
 document.getElementById('menuStartBtn').addEventListener('click', function() {
-    // Убираем класс меню
     document.body.classList.remove('menu-mode');
     document.getElementById('startMenu').style.display = 'none';
     document.getElementById('gridContainer').style.display = 'grid';
     document.querySelector('.buttons').style.display = 'flex';
     document.getElementById('infoMessage').style.display = 'block';
     document.querySelector('.words-container').style.display = 'block';
-    // ✅ Получаем последнюю сохранённую сложность
     const lastDifficulty = localStorage.getItem('lastDifficulty') || 'easy';
     currentDifficulty = lastDifficulty;
-    // Получаем все уровни для этой сложности
     const allLevels = ALL_LEVELS.filter(l => l.difficulty === lastDifficulty);
     const completed = getCompletedLevels(lastDifficulty);
     let targetLevelId = null;
@@ -1714,7 +1628,7 @@ if (menuDifficultyBtn) {
         showDifficultyModal();
     });
 }
-// Кнопка "Пригласить друзей"
+
 document.getElementById('menuInviteBtn').addEventListener('click', function() {
     if (typeof share2 === 'function') {
         share2();
@@ -1722,7 +1636,7 @@ document.getElementById('menuInviteBtn').addEventListener('click', function() {
         alert('👥 Пригласи друзей!\nПоделись ссылкой на игру!');
     }
 });
-// Кнопка галактики в топ-панели
+
 const galaxyBtn = document.getElementById('galaxyBtn');
 if (galaxyBtn) {
     galaxyBtn.onclick = function(e) {
@@ -1730,1339 +1644,110 @@ if (galaxyBtn) {
         showGalaxyMap();
     };
 }
-// Кнопка галактики в меню
-const menuGalaxyBtn = document.getElementById('menuGalaxyBtn');
-if (menuGalaxyBtn) {
-    menuGalaxyBtn.onclick = function(e) {
-        e.preventDefault();
-        const galaxyBtn = document.getElementById('galaxyBtn');
-        if (galaxyBtn) {
-            galaxyBtn.click();
-        } else {
-            showGalaxyMap();
-        }
-    };
-}
-// Модальное окно правил
-// Модальное окно - упрощённая версия
-const rulesButton = document.querySelector('#rulesBtn');
-if (rulesButton) {
-    rulesButton.onclick = function() {
-        // Создаём окно
-        let modalDiv = document.createElement('div');
-           modalDiv.className = 'modal-window';
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(3px);';
-        let contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:44px;padding:25px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s;';
-        contentDiv.className = 'galaxy-scroll';
-contentDiv.innerHTML = `
-    <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 15px;">📖 Правила</h3>
-    <ul style="text-align:left;color:var(--text-secondary, #3a3220);padding-left:20px;line-height:1.7;">
-        <li>🔍 Находи слова на поле</li>
-        <li>➡️ По горизонтали и вертикали</li>
-        <li>✨ Слова пересекаются</li>
-        <li>👆 Кликай на буквы по порядку</li>
-        <li>✅ Слово засчитывается автоматически</li>
-        <li>🏆 Найди все слова для победы</li>
-    </ul>
-    <button id="closeModalBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:50px;font-size:1rem;font-weight:bold;margin-top:15px;cursor:pointer;">Понятно!</button>
-`;
-        modalDiv.appendChild(contentDiv);
-        document.body.appendChild(modalDiv);
-        // Закрытие
-        const closeBtn = contentDiv.querySelector('#closeModalBtn');
-        closeBtn.onclick = function() {
-            modalDiv.remove();
-        };
-        modalDiv.onclick = function(e) {
-            if (e.target === modalDiv) modalDiv.remove();
-        };
-    };
-}
-function showConfetti() {
-     if (window.DEVICE_PERF && !window.DEVICE_PERF.enableConfetti) {
-             confetti({ particleCount: 4, spread: 60, origin: { y: 0.7 } });
-return;
-    }
-    // Определяем, мобильное ли устройство
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    // Определяем количество ядер процессора (если доступно)
-    const cores = navigator.hardwareConcurrency || 4; // если не определено, считаем 4
-    const isLowEnd = isMobile && cores < 4; // слабое устройство: мобильное и мало ядер
-    // Множитель: для слабых мобильных — 3, для обычных мобильных — 6, для десктопов — 18
-    let multiplier = 18; // десктоп
-    if (isMobile) {
-        multiplier = isLowEnd ? 3 : 6;
-    }
-    // Длительность анимации (мс) — для мобильных короче
-    const duration = isMobile ? 1500 : 2500;
-    const animationEnd = Date.now() + duration;
-    const defaults = {
-        startVelocity: 30,
-        spread: 360,
-        ticks: 60,
-        zIndex: 10000,
-        colors: ['#FFD700', '#FFA54D', '#6B9C3F', '#FF6B6B', '#4ECDC4']
-    };
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-    // Уменьшаем частоту обновления на мобильных (интервал 400 мс вместо 250)
-    const intervalTime = isMobile ? 400 : 250;
-    const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
-        }
-        // Количество частиц зависит от множителя и оставшегося времени
-        const particleCount = multiplier * (timeLeft / duration);
-        // Два потока конфетти (слева и справа)
-        confetti({
-            ...defaults,
-            particleCount: Math.floor(particleCount),
-            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-        });
-        confetti({
-            ...defaults,
-            particleCount: Math.floor(particleCount),
-            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-        });
-    }, intervalTime);
-}
-// Показ сюжетного окна (первый раз - полная история, потом - короткое напоминание)
+const menuGalaxyBtn=document.getElementById('menuGalaxyBtn');
+if (menuGalaxyBtn){ menuGalaxyBtn.onclick=function(e){ e.preventDefault(); const galaxyBtn=document.getElementById('galaxyBtn'); if (galaxyBtn){ galaxyBtn.click();} else{ showGalaxyMap();}};}
+const rulesButton=document.querySelector('#rulesBtn');
+if (rulesButton){ rulesButton.onclick=function(){
+     let modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:10000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(3px);'; let contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:44px;padding:25px;max-width:350px;width:85%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s;'; contentDiv.className='galaxy-scroll';
+contentDiv.innerHTML=` <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 15px;">📖 Правила</h3><ul style="text-align:left;color:var(--text-secondary, #3a3220);padding-left:20px;line-height:1.7;"><li>🔍 Находи слова на поле</li><li>➡️ По горизонтали и вертикали</li><li>✨ Слова пересекаются</li><li>👆 Кликай на буквы по порядку</li><li>✅ Слово засчитывается автоматически</li><li>🏆 Найди все слова для победы</li></ul><button id="closeModalBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:50px;font-size:1rem;font-weight:bold;margin-top:15px;cursor:pointer;">Понятно!</button>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv);
+ const closeBtn=contentDiv.querySelector('#closeModalBtn'); closeBtn.onclick=function(){ modalDiv.remove();}; modalDiv.onclick=function(e){ if (e.target===modalDiv) modalDiv.remove();};};}
+function showConfetti(){ if (window.DEVICE_PERF && !window.DEVICE_PERF.enableConfetti){ confetti({ particleCount: 4, spread: 60, origin:{ y: 0.7}});
+return;}
+ const isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent); const cores=navigator.hardwareConcurrency || 4; const isLowEnd=isMobile && cores < 4; let multiplier=18; // десктоп if (isMobile){ multiplier=isLowEnd ? 3 : 6;}
+ const duration=isMobile ? 1500 : 2500; const animationEnd=Date.now() + duration; const defaults={ startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000, colors: ['#FFD700', '#FFA54D', '#6B9C3F', '#FF6B6B', '#4ECDC4']}; function randomInRange(min, max){ return Math.random() * (max - min) + min;} const intervalTime=isMobile ? 400 : 250; const interval=setInterval(function(){ const timeLeft=animationEnd - Date.now(); if (timeLeft <=0){ return clearInterval(interval);} const particleCount=multiplier * (timeLeft / duration); confetti({ ...defaults, particleCount: Math.floor(particleCount), origin:{ x: randomInRange(0.1, 0.3), y: Math.random() - 0.2}}); confetti({ ...defaults, particleCount: Math.floor(particleCount), origin:{ x: randomInRange(0.7, 0.9), y: Math.random() - 0.2}});}, intervalTime);}
 function showWelcomeStory() {
     const hasSeenFullStory = localStorage.getItem('hasSeenFullStory');
-    // Если полную историю ещё не видел - показываем 4 слайда
     if (!hasSeenFullStory) {
         let currentSlide = 0;
-        const slides = [
-            {
-                icon: "🌌",
-                title: "Галактика в опасности!",
-                text: "Звёзды меркнут, созвездия исчезают... Тёмная энергия поглощает космос!",
-                button: "🌠Что случилось?"
-            },
-            {
-                icon: "🔍",
-                title: "Потерянные слова",
-                text: "Древние руны-слова, хранившие баланс, рассыпались по всей вселенной. Без них галактика погибнет!",
-                button: "📖Как помочь?"
-            },
-            {
-                icon: "✨",
-                title: "Твоя миссия",
-                text: "Каждый день находи спрятанные слова в филвордах. Каждое найденное слово возвращает звезду на небо!",
-                button: "⭐Что я получу?"
-            },
-            {
-                icon: "🏆",
-                title: "Спаси галактику!",
-                text: "Собирай слова ежедневно, восстанавливай созвездия и становись Хранителем Вселенной! 🌟",
-                button: "🚀Спасти галактику!"
-            }
-        ];
+ const slides=[ { icon: "🌌", title: "Галактика в опасности!", text: "Звёзды меркнут, созвездия исчезают... Тёмная энергия поглощает космос!", button: "🌠Что случилось?"}, { icon: "🔍", title: "Потерянные слова", text: "Древние руны-слова, хранившие баланс, рассыпались по всей вселенной. Без них галактика погибнет!", button: "📖Как помочь?"}, { icon: "✨", title: "Твоя миссия", text: "Каждый день находи спрятанные слова в филвордах. Каждое найденное слово возвращает звезду на небо!", button: "⭐Что я получу?"}, { icon: "🏆", title: "Спаси галактику!", text: "Собирай слова ежедневно, восстанавливай созвездия и становись Хранителем Вселенной! 🌟", button: "🚀Спасти галактику!"} ];
         const modalDiv = document.createElement('div');
         modalDiv.className = 'modal-window';
         modalDiv.id = 'storyModal';
         modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
         const contentDiv = document.createElement('div');
         contentDiv.className = 'story-modal-content galaxy-scroll';
-        // ✅ ИСПОЛЬЗУЕМ CSS-ПЕРЕМЕННЫЕ
-        contentDiv.style.cssText = 'background:var(--bg-card);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.3s ease;';
-        function updateSlide() {
-            const slide = slides[currentSlide];
-            contentDiv.innerHTML = `
-                <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div>
-                <h3 style="color:var(--text-primary);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3>
-                <p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">
-                    ${currentSlide > 0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 #5a3a1a;">◀ Назад</button>' : '<div style="width:70px;"></div>'}
-                    <div style="display:flex;gap:6px;">${slides.map((_, i) => `<span style="width:8px;height:8px;border-radius:50%;background:${i === currentSlide ? 'var(--accent-color)' : 'var(--border-color)'};display:inline-block;"></span>`).join('')}</div>
-                    <button id="storyNextBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 var(--btn-primary-shadow);">${currentSlide === slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button>
-                </div>
-            `;
+ contentDiv.style.cssText='background:var(--bg-card);border-radius:48px;padding:25px 30px;max-width:380px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.3s ease;'; function updateSlide(){ const slide=slides[currentSlide]; contentDiv.innerHTML=` <div style="font-size:4rem;margin-bottom:10px;">${slide.icon}</div><h3 style="color:var(--text-primary);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3><p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p><div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;">${currentSlide >0 ? '<button id="storyPrevBtn" style="background:var(--btn-secondary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 #5a3a1a;">◀ Назад</button>' : '<div style="width:70px;"></div>'} <div style="display:flex;gap:6px;">${slides.map((_, i)=>`<span style="width:8px;height:8px;border-radius:50%;background:${i===currentSlide ? 'var(--accent-color)' : 'var(--border-color)'};display:inline-block;"></span>`).join('')}</div><button id="storyNextBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:40px;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 var(--btn-primary-shadow);">${currentSlide===slides.length - 1 ? '🎮 Играть!' : 'Далее ▶'}</button></div>`;
             const nextBtn = contentDiv.querySelector('#storyNextBtn');
-            if (nextBtn) {
-                nextBtn.onclick = () => {
-                    if (currentSlide === slides.length - 1) {
-                        modalDiv.remove();
-                        localStorage.setItem('hasSeenFullStory', 'true');
-                    } else {
-                        currentSlide++;
-                        updateSlide();
-                    }
-                };
-            }
-            const prevBtn = contentDiv.querySelector('#storyPrevBtn');
-            if (prevBtn) {
-                prevBtn.onclick = () => {
-                    if (currentSlide > 0) {
-                        currentSlide--;
-                        updateSlide();
-                    }
-                };
-            }
-        }
-        updateSlide();
-        modalDiv.appendChild(contentDiv);
-        document.body.appendChild(modalDiv);
-        modalDiv.onclick = (e) => {
-            if (e.target === modalDiv && currentSlide === slides.length - 1) {
-                modalDiv.remove();
-                localStorage.setItem('hasSeenFullStory', 'true');
-            }
-        };
-        return;
-    }
-    // ---------- КОРОТКОЕ ОКНО ДЛЯ ПОВТОРНЫХ ЗАПУСКОВ ----------
+ if (nextBtn){ nextBtn.onclick=()=>{ if (currentSlide===slides.length - 1){ modalDiv.remove(); localStorage.setItem('hasSeenFullStory', 'true');} else{ currentSlide++; updateSlide();}};} const prevBtn=contentDiv.querySelector('#storyPrevBtn'); if (prevBtn){ prevBtn.onclick=()=>{ if (currentSlide >0){ currentSlide--; updateSlide();}};}} updateSlide(); modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); modalDiv.onclick=(e)=>{ if (e.target===modalDiv && currentSlide===slides.length - 1){ modalDiv.remove(); localStorage.setItem('hasSeenFullStory', 'true');}}; return;}
     const shortModal = document.createElement('div');
     shortModal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20000;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     const shortContent = document.createElement('div');
     shortContent.className = 'story-modal-content';
-    // ✅ ИСПОЛЬЗУЕМ CSS-ПЕРЕМЕННЫЕ
-    shortContent.style.cssText = 'background:var(--bg-card);border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.2s ease;';
-    shortContent.innerHTML = `
-        <div style="font-size:4rem;margin-bottom:10px;">🚀</div>
-        <h3 style="color:var(--text-primary);font-size:1.5rem;margin:0 0 10px;">Снова в деле!</h3>
-        <p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;">Галактика ждёт твоего спасения!<br>Находи слова и возвращай звёзды ✨</p>
-        <button id="shortStartBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:50px;padding:12px 30px;font-size:1.1rem;font-weight:bold;margin-top:20px;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow);">Вперёд! ⭐</button>
-    `;
-    shortModal.appendChild(shortContent);
-    document.body.appendChild(shortModal);
-    const startBtn = shortContent.querySelector('#shortStartBtn');
-    startBtn.onclick = () => shortModal.remove();
-    shortModal.onclick = (e) => { if (e.target === shortModal) shortModal.remove(); };
-}
-//================конец приветственного сюжета
+ shortContent.style.cssText='background:var(--bg-card);border-radius:48px;padding:30px;max-width:350px;width:85%;text-align:center;border:2px solid var(--accent-color);animation:zoomIn 0.2s ease;'; shortContent.innerHTML=` <div style="font-size:4rem;margin-bottom:10px;">🚀</div><h3 style="color:var(--text-primary);font-size:1.5rem;margin:0 0 10px;">Снова в деле!</h3><p style="color:var(--text-secondary);font-size:1rem;line-height:1.5;">Галактика ждёт твоего спасения!<br>Находи слова и возвращай звёзды ✨</p><button id="shortStartBtn" style="background:var(--btn-primary);color:var(--text-light);border:none;border-radius:50px;padding:12px 30px;font-size:1.1rem;font-weight:bold;margin-top:20px;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow);">Вперёд! ⭐</button>`; shortModal.appendChild(shortContent); document.body.appendChild(shortModal); const startBtn=shortContent.querySelector('#shortStartBtn'); startBtn.onclick=()=>shortModal.remove(); shortModal.onclick=(e)=>{ if (e.target===shortModal) shortModal.remove();};}
 function getGalaxyStars() {
     const stars = {};
     const difficulties = ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'];
     difficulties.forEach(diff => {
         const completedLevels = getCompletedLevels(diff);
-        // ✅ ИСПРАВЛЕНИЕ: получаем категории ДЛЯ КАЖДОЙ сложности отдельно
         const categories = getCategoriesForDifficulty(diff);
         categories.forEach(cat => {
-            // ✅ ИСПРАВЛЕНИЕ: получаем уровни с учётом сложности
-            const categoryLevels = getLevelsByCategoryAndDifficulty(cat.id, diff);
-            let completedCount = 0;
-            categoryLevels.forEach(level => {
-                const levelId = getLevelId(cat.id, level.levelNum, diff);
-                if (completedLevels.includes(levelId)) {
-                    completedCount++;
-                }
-            });
-            const key = `${cat.id}_${diff}`;
-            stars[key] = {
-                categoryId: cat.id,
-                difficulty: diff,
-                totalStars: completedCount * 5,
-                maxStars: categoryLevels.length * 5,
-                completedLevels: completedCount,
-                totalLevels: categoryLevels.length
-            };
-        });
-    });
-    return stars;
-}
-function showDifficultyModal() {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-window';
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-  contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:90vh;overflow-y:auto;';
-contentDiv.className = 'galaxy-scroll diff-modal-content';
-    let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`;
-    // Основные сложности (большие кнопки)
-    html += `<div class="diff-main-buttons" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">`;
-    const mainDifficulties = DIFFICULTIES.filter(d => !['english','french','japanese'].includes(d.id));
-    mainDifficulties.forEach(diff => {
-        html += `<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 20px;border-radius:40px;font-size:0.8rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);max-width:280px;width:70%;margin:0 auto;">${diff.label}</button>`;
-    });
-    html += `</div>`;
- // --- Языковые сложности (круглые кнопки с флагами) ---
-html += `<div class="diff-lang-buttons"  style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px;">`;
-const langDifficulties = DIFFICULTIES.filter(d => ['english','french','japanese'].includes(d.id));
-langDifficulties.forEach(diff => {
-    let style = 'border:none;border-radius:50%;width:55px;height:55px;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;display:flex;align-items:center;justify-content:center;font-weight:bold!important;font-size:0.8rem;color:#333;';
-    let bg = '';
-    if (diff.id === 'english') {
-        // Флаг Англии (белый фон + красный крест)
-        bg = 'background: white !important; background-image: linear-gradient(to right, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%), linear-gradient(to bottom, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%) !important;';
-        style += 'color: #C8102E;';
-    } else if (diff.id === 'french') {
-        // Франция (синий-белый-красный)
-        bg = 'background: linear-gradient(to right, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%) !important;';
-        style += 'color: #0055A4;';
-    } else if (diff.id === 'japanese') {
-        // Япония (белый фон + красный круг)
-        bg = 'background: radial-gradient(circle at center, #BC002D 35%, #FFFFFF 35%) !important;';
-        style += 'color: #BC002D;';
-    }
-    const label = diff.id === 'english' ? 'EN' : (diff.id === 'french' ? 'FR' : 'JP');
-    html += `<button class="lang-select-btn" data-diff="${diff.id}" style="${style} ${bg}">${label}</button>`;
-});
-html += `</div>`;
-    html += `<button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:10px;">Закрыть</button>`;
-    contentDiv.innerHTML = html;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    // Обработчики для основных кнопок (как было)
-    document.querySelectorAll('.diff-select-btn').forEach(btn => {
-        btn.onclick = () => {
-            const diff = btn.getAttribute('data-diff');
-            modalDiv.remove();
-            localStorage.setItem('lastDifficulty', diff);
-            updateStartButtonSubtitle();
-            showDifficultyStory(diff);
-        };
-    });
-    // Обработчики для языковых кнопок
-    document.querySelectorAll('.lang-select-btn').forEach(btn => {
-        btn.onclick = () => {
-            const diff = btn.getAttribute('data-diff');
-            modalDiv.remove();
-            localStorage.setItem('lastDifficulty', diff);
-            updateStartButtonSubtitle();
-            showDifficultyStory(diff); // можно использовать ту же функцию
-        };
-    });
-    document.getElementById('closeDiffModal').onclick = () => modalDiv.remove();
-    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
-}
-function showDifficultyStory(difficulty) {
-    const hasSeenKey = `hasSeenStory_${difficulty}`;
-    const hasSeen = localStorage.getItem(hasSeenKey);
-    const story = window.DIFFICULTY_STORIES ? window.DIFFICULTY_STORIES[difficulty] : null;
-    // Если сюжета нет - показываем категории без сюжета
-    if (!story) {
-        showCategoryModalForDifficulty(difficulty);
-        return;
-    }
-    const isFirstTime = !hasSeen;
-    const slide = isFirstTime ? story.long : story.short;
-    // ✅ Добавляем иконку в зависимости от сложности
-    const icons = {
-        easy: '🌳',
-        medium: '✨',
-        hard: '🌀',
-        expert: '🚀'
-    };
-    const icon = icons[difficulty] || '🌟';
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-window'; 
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:20002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'story-modal-content galaxy-scroll';
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;';
-    contentDiv.innerHTML = `
-        <div style="font-size:4rem;margin-bottom:10px;">${icon}</div>
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3>
-        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p>
-        <button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>
-    `;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    document.getElementById('storyContinueBtn').onclick = () => {
-        modalDiv.remove();
-        if (isFirstTime) {
-            localStorage.setItem(hasSeenKey, 'true');
-        }
-        showCategoryModalForDifficulty(difficulty);
-    };
-    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
-}
-// ===== ПОКАЗ ДЕТАЛЕЙ ГАЛАКТИКИ =====
-function showGalaxyDetails(categoryId, difficulty) {
-    // Находим категорию
-    let category = null;
-    ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => { 
-        const found = getCategoriesForDifficulty(diff).find(c => c.id === categoryId);
-        if (found) category = found;
-    });
-    if (!category) {
-        console.error('❌ Категория не найдена:', categoryId);
-        return;
-    }
-    const stars = getGalaxyStars();
-   let totalStars = 0;
-let maxStars = 0;
-let completedLevels = 0;
-let totalLevels = 0;
-// Получаем название и иконку выбранной категории
-const categoryTitle = category.title;
-const categoryIcon = category.icon;
-// Проходим по всем сложностям и ищем категорию с таким же названием и иконкой
-['easy', 'medium', 'hard', 'expert'].forEach(diff => {
-    const categories = getCategoriesForDifficulty(diff);
-    const matchedCat = categories.find(c => c.title === categoryTitle && c.icon === categoryIcon);
-    if (matchedCat) {
-        const key = `${matchedCat.id}_${diff}`;
-        if (stars[key]) {
-            totalStars += stars[key].totalStars;
-            maxStars += stars[key].maxStars;
-            completedLevels += stars[key].completedLevels;
-            totalLevels += stars[key].totalLevels;
-        }
-    }
-});
-    const starData = { totalStars, maxStars, completedLevels, totalLevels };
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-window';
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'galaxy-scroll'; 
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;max-height:80vh;overflow-y:auto;';
-    // Генерация звёзд
-    let starsHtml = '';
-    const totalStarsCount = starData.maxStars;
-    const earnedStars = starData.totalStars;
-    for (let i = 0; i < totalStarsCount; i++) {
-        if (i < earnedStars) {
-            starsHtml += '<span style="font-size:1rem;color:#ffd700;">⭐</span>';
-        } else {
-            starsHtml += '<span style="font-size:1.3rem;color:#d4c3a4;">☆</span>';
-        }
-        if ((i + 1) % 10 === 0) starsHtml += '<br>';
-    }
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;">${category.icon}</div>
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:5px 0;">${category.title}</h3>
-        <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;margin:15px 0;">
-            <div style="font-size:2rem;color:var(--accent-color, #ffa54d);">⭐ ${starData.totalStars} / ${starData.maxStars}</div>
-            <div style="font-size:0.9rem;color:var(--text-secondary, #6B5B4E);">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div>
-        </div>
-        <div id="starsContainer" style="max-height:150px;overflow-y:auto;padding:8px;border-radius:16px;background:rgba(255,255,255,0.03);">
-            ${starsHtml}
-        </div>
-        <button id="closeDetailBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>
-    `;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    document.getElementById('closeDetailBtn').onclick = () => {
-        modalDiv.remove();
-        showGalaxyMap();
-    };
-    modalDiv.onclick = (e) => {
-        if (e.target === modalDiv) {
-            modalDiv.remove();
-            showGalaxyMap();
-        }
-    };
-}
-function showGalaxyMap() {
-    try {
-        const stars = getGalaxyStars();
-        // Собираем все категории со всех сложностей и группируем по названию
-        const categoriesMap = new Map();
-      ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => {
-            const categories = getCategoriesForDifficulty(diff);
-            categories.forEach(cat => {
-                // Ключ группировки - название категории
-                const key = cat.title;
-                if (!categoriesMap.has(key)) {
-                    categoriesMap.set(key, {
-                        id: cat.id,
-                        icon: cat.icon,
-                        title: cat.title,
-                        themeIndex: cat.themeIndex,
-                        difficulties: [diff]
-                    });
-                } else {
-                    const existing = categoriesMap.get(key);
-                    if (!existing.difficulties.includes(diff)) {
-                        existing.difficulties.push(diff);
-                    }
-                }
-            });
-        });
-        // Преобразуем Map в массив
-        const allCategories = Array.from(categoriesMap.values());
-        // Сортируем по названию
-        allCategories.sort((a, b) => a.title.localeCompare(b.title));
-        // ===== ПАГИНАЦИЯ =====
-        const totalPages = Math.ceil(allCategories.length / GALAXIES_PER_PAGE);
-        if (currentGalaxyPage >= totalPages) currentGalaxyPage = totalPages - 1;
-        if (currentGalaxyPage < 0) currentGalaxyPage = 0;
-        const startIdx = currentGalaxyPage * GALAXIES_PER_PAGE;
-        const endIdx = Math.min(startIdx + GALAXIES_PER_PAGE, allCategories.length);
-        const pageCategories = allCategories.slice(startIdx, endIdx);
-        const modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-window';
-        modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-        const contentDiv = document.createElement('div');
-        contentDiv.style.cssText = 'margin-bottom: 10px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-        contentDiv.className = 'galaxy-scroll';
-        let galaxiesHtml = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-                <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3>
-                <button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-            </div>
-        `;
-        pageCategories.forEach(cat => {
-            let totalStars = 0;
-            let maxStars = 0;
-            let completedLevels = 0;
-            let totalLevels = 0;
-            // Суммируем звёзды по всем сложностям для этой категории
-            cat.difficulties.forEach(diff => {
-                const key = `${cat.id}_${diff}`;
-                if (stars[key]) {
-                    totalStars += stars[key].totalStars || 0;
-                    maxStars += stars[key].maxStars || 0;
-                    completedLevels += stars[key].completedLevels || 0;
-                    totalLevels += stars[key].totalLevels || 0;
-                }
-            });
-            const percent = maxStars > 0 ? (totalStars / maxStars) * 100 : 0;
-            galaxiesHtml += `
-                <div class="galaxy-item" data-cat-id="${cat.id}" data-title="${cat.title}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent === 100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};margin-bottom:8px;">
-                    <div style="display:flex;align-items:center;justify-content:space-between;">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <span style="font-size:2rem;">${cat.icon}</span>
-                            <div style="text-align:left;">
-                                <div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${cat.title}</div>
-                                <div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div>
-                                <div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div>
-                            </div>
-                        </div>
-                        <div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div>
-                    </div>
-                    <div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;">
-                        <div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div>
-                    </div>
-                </div>
-            `;
-        });
-        // ===== КНОПКИ ПАГИНАЦИИ =====
-        galaxiesHtml += `
-            <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
-                <button id="galaxyPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === 0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button>
-                <span style="color:#6B5B4E;font-size:0.9rem;">${currentGalaxyPage + 1} / ${totalPages}</span>
-                <button id="galaxyNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage === totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button>
-            </div>
-            <button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>
-        `;
-        contentDiv.innerHTML = galaxiesHtml;
-        modalDiv.appendChild(contentDiv);
-        document.body.appendChild(modalDiv);
-        // Обработчики для галактик - используем существующую функцию showGalaxyDetails
-        document.querySelectorAll('.galaxy-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const catId = parseInt(item.getAttribute('data-cat-id'));
-                // Ищем первую попавшуюся сложность для этой категории
-                let diff = 'easy';
-                ['easy', 'medium', 'hard', 'expert'].forEach(d => {
-                    const found = getCategoriesForDifficulty(d).find(c => c.id === catId);
-                    if (found) diff = d;
-                });
-                modalDiv.remove();
-                // Используем существующую функцию
-                showGalaxyDetails(catId, diff);
-            });
-        });
-        // Пагинация
-        const prevBtn = document.getElementById('galaxyPrevPage');
-        if (prevBtn) {
-            prevBtn.onclick = () => {
-                if (currentGalaxyPage > 0) {
-                    currentGalaxyPage--;
-                    modalDiv.remove();
-                    showGalaxyMap();
-                }
-            };
-        }
-        const nextBtn = document.getElementById('galaxyNextPage');
-        if (nextBtn) {
-            nextBtn.onclick = () => {
-                if (currentGalaxyPage < totalPages - 1) {
-                    currentGalaxyPage++;
-                    modalDiv.remove();
-                    showGalaxyMap();
-                }
-            };
-        }
-        const closeBtn = document.getElementById('closeGalaxyBtn');
-        if (closeBtn) {
-            closeBtn.onclick = (e) => {
-                e.stopPropagation();
-                modalDiv.remove();
-            };
-        }
-        const crossBtn = document.getElementById('closeGalaxyCross');
-        if (crossBtn) {
-            crossBtn.onclick = (e) => {
-                e.stopPropagation();
-                modalDiv.remove();
-            };
-        }
-        modalDiv.onclick = (e) => { 
-            if (e.target === modalDiv) modalDiv.remove(); 
-        };
-    } catch (e) {
-        console.error('❌ Ошибка в showGalaxyMap:', e);
-    }
-}
-// Создаём живые звёзды на фоне
-function createLivingStars() {
-    if (window.DEVICE_PERF && !window.DEVICE_PERF.enableStars) {
-        console.log('🚫 Живые звёзды отключены (слабое устройство)');
-        return;
-    }
-  const starCount = window.innerWidth < 768 ? 5 : 20;
-    const container = document.body;
-    // Цвета для звёзд
-    const colors = [
-        'rgba(255, 255, 255, 1)',
-        'rgba(255, 235, 200, 1)',
-        'rgba(200, 230, 255, 1)',
-        'rgba(255, 200, 180, 1)',
-        'rgba(220, 255, 220, 1)',
-        'rgba(255, 220, 255, 1)'
-    ];
-    for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        const size = Math.random() * 3 + 1;
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-        const twinkleDuration = Math.random() * 2 + 1;
-        const delay = Math.random() * 3;
-        const driftDuration = Math.random() * 8 + 5;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-star.style.cssText = `
-    width: ${size}px;
-    height: ${size}px;
-    left: ${x}%;
-    top: ${y}%;
-    background: ${color};
-    animation: 
-        twinkle ${twinkleDuration}s ease-in-out ${delay}s infinite alternate,
-        float ${driftDuration}s ease-in-out infinite alternate;
-    box-shadow: 0 0 ${size * 2}px ${color};
-    opacity: ${Math.random() * 0.5 + 0.5};
-    will-change: transform, opacity;
-`;
-        container.appendChild(star);
-    }
-}
-// Получить количество открытых свитков
-function getUnlockedScrolls() {
-    const saved = localStorage.getItem('unlockedScrolls');
-    return safeParseArray(saved, []);
-}
-// Проверить, открыт ли свиток
-function isScrollUnlocked(scrollId) {
-    return getUnlockedScrolls().includes(scrollId);
-}
-// Рассчитать, сколько свитков должно быть открыто по звёздам
-function calculateUnlockedScrolls() {
-    const stars = totalStars || 0;
-    return Math.min(Math.floor(stars / 50), WISDOM_SCROLLS.length);
-}
-// Синхронизировать открытые свитки со звёздами
-function syncScrollsWithStars() {
-    const shouldBeUnlocked = calculateUnlockedScrolls();
-    const unlocked = getUnlockedScrolls();
-    let changed = false;
-    for (let i = 1; i <= shouldBeUnlocked; i++) {
-        if (!unlocked.includes(i)) {
-            unlocked.push(i);
-            changed = true;
-        }
-    }
-    if (changed) {
-        localStorage.setItem('unlockedScrolls', JSON.stringify(unlocked));
-        // ✅ СИНХРОНИЗИРУЕМ ВСЕ СВИТКИ СРАЗУ
-        if (typeof saveToVKStorage === 'function') {
-            saveToVKStorage('wordgame_scrolls_v2', unlocked);
-            console.log('📜 Все свитки синхронизированы с VK');
-        }
-    }
-    return shouldBeUnlocked;
-}
-let currentScrollPage = 0;
-const SCROLLS_PER_PAGE = 10;
-// ПАГИНАЦИЯ ДЛЯ ГАЛАКТИК
-let currentGalaxyPage = 0;
-const GALAXIES_PER_PAGE = 4;
-function showScrollsModal() {
-    // Синхронизируем свитки со звёздами
-    syncScrollsWithStars();
-    const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10005;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:450px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;';
-    contentDiv.className = 'galaxy-scroll';
-    const unlockedCount = getUnlockedScrolls().length;
-    const totalStars = safeParseInt(localStorage.getItem('totalStars'), 0);
-    const nextStarThreshold = Math.ceil((unlockedCount + 1) * 50);
-    const totalPages = Math.ceil(WISDOM_SCROLLS.length / SCROLLS_PER_PAGE);
-    if (currentScrollPage >= totalPages) currentScrollPage = totalPages - 1;
-    if (currentScrollPage < 0) currentScrollPage = 0;
-    const startIdx = currentScrollPage * SCROLLS_PER_PAGE;
-    const endIdx = Math.min(startIdx + SCROLLS_PER_PAGE, WISDOM_SCROLLS.length);
-    const pageScrolls = WISDOM_SCROLLS.slice(startIdx, endIdx);
-let html = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">📜 Свитки мудрости</h3>
-        <button id="closeScrollsModal" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button>
-    </div>
-<div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:12px;margin-bottom:15px;">
-    <span style="font-weight:bold;color:var(--text-primary, #2c3e2b);">⭐ ${totalStars} звёзд</span>
-    <span style="color:var(--text-secondary, #6B5B4E);margin-left:10px;">|</span>
-    <span style="color:var(--text-secondary, #6B5B4E);">📜 ${unlockedCount} / ${WISDOM_SCROLLS.length} открыто</span>
-    ${unlockedCount < WISDOM_SCROLLS.length ? `<div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-top:5px;">🔒 Следующий свиток откроется на ${nextStarThreshold} звёздах</div>` : '<div style="font-size:0.8rem;color:var(--btn-primary, #517a2f);margin-top:5px;">🌟 Все свитки открыты! Ты — хранитель мудрости!</div>'}
-</div>
-`;
-pageScrolls.forEach(scroll => {
-    const unlocked = isScrollUnlocked(scroll.id);
-    html += `
-        <div class="scroll-item" data-id="${scroll.id}" style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            padding:10px 15px;
-            margin:4px 0;
-            background:${unlocked ? 'var(--bg-card, #fff8ec)' : 'var(--bg-card-light, #f0ebe0)'};
-            border-radius:12px;
-            border-left:4px solid ${unlocked ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};
-            cursor:${unlocked ? 'pointer' : 'default'};
-            transition:0.1s;
-        ">
-            <div style="display:flex;align-items:center;gap:12px;">
-                <span style="font-size:1.2rem;">${unlocked ? '📜' : '🔒'}</span>
-                <span style="color:var(--text-primary, #2c3e2b);font-weight:${unlocked ? 'bold' : 'normal'};">Свиток ${scroll.id}</span>
-            </div>
-            <div>
-                ${unlocked ? '<span style="color:var(--btn-primary, #517a2f);font-size:1rem;">✓</span>' : '<span style="color:var(--text-secondary, #8a7a6a);font-size:0.7rem;">закрыт</span>'}
-            </div>
-        </div>
-    `;
-});
-    html += `
-        </div>
-        <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;">
-            <button id="scrollPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentScrollPage === 0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button>
-            <span style="color:#6B5B4E;font-size:0.9rem;">${currentScrollPage + 1} / ${totalPages}</span>
-            <button id="scrollNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentScrollPage === totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button>
-        </div>
-    `;
-    contentDiv.innerHTML = html;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    // Обработчики клика по свиткам
-    document.querySelectorAll('.scroll-item').forEach(item => {
-        const id = parseInt(item.getAttribute('data-id'));
-        const unlocked = isScrollUnlocked(id);
-        item.onclick = () => {
-            if (unlocked) {
-                modalDiv.remove();
-                showScrollDetail(id);
-            }
-        };
-    });
-    // Пагинация
-    document.getElementById('scrollPrevPage').onclick = () => {
-        if (currentScrollPage > 0) {
-            currentScrollPage--;
-            modalDiv.remove();
-            showScrollsModal();
-        }
-    };
-    document.getElementById('scrollNextPage').onclick = () => {
-        if (currentScrollPage < totalPages - 1) {
-            currentScrollPage++;
-            modalDiv.remove();
-            showScrollsModal();
-        }
-    };
-    document.getElementById('closeScrollsModal').onclick = () => modalDiv.remove();
-    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
-}
-// Просмотр свитка
-function showScrollDetail(scrollId) {
-    const scroll = WISDOM_SCROLLS.find(s => s.id === scrollId);
-    if (!scroll) return;
-    const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:10006;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;';
-    contentDiv.className = 'galaxy-scroll';
-contentDiv.innerHTML = `
-    <div style="font-size:3rem;margin-bottom:5px;">📜</div>
-    <div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-bottom:10px;">Свиток №${scroll.id}</div>
-    <div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:20px;margin:10px 0;">
-        <p style="color:var(--text-primary, #2c3e2b);font-size:1.1rem;line-height:1.5;margin:0;font-style:italic;">${scroll.text}</p>
-    </div>
-    <button id="closeScrollDetail" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐Прочитано!</button>
-`;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    document.getElementById('closeScrollDetail').onclick = () => {
-        modalDiv.remove();
-        showScrollsModal();
-    };
-    modalDiv.onclick = (e) => { if (e.target === modalDiv) modalDiv.remove(); };
-}
-// Перестраиваем меню при повороте экрана
-window.addEventListener('orientationchange', function() {
-    // Просто перезапускаем анимацию/перерисовку, если нужно
-    const menu = document.getElementById('startMenu');
-    if (menu && menu.style.display !== 'none') {
-        menu.style.display = 'none';
-        setTimeout(() => { menu.style.display = 'flex'; }, 10);
-    }
-});
-// Кнопка свитков в меню
-document.getElementById('menuScrollsBtn').addEventListener('click', showScrollsModal); 
-// Запускаем звёзды при загрузке
-createLivingStars();
-// Перерисовка сетки при изменении размера окна
-let resizeTimeout = null;
-window.addEventListener('resize', function() {
-    // 🐢 На слабом устройстве — debounce 250 мс, чтобы не перерисовывать сетку 10 раз в секунду
-    if (window.DEVICE_PERF && window.DEVICE_PERF.isWeak) {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            const isGameActive = document.getElementById('gridContainer').style.display !== 'none';
-            if (isGameActive && grid && grid.length > 0) {
-                renderGrid();
-                updateFoundCellsColor();
-                highlightCurrentChain();
-                renderWordsList();
-            }
-        }, 250);
-        return;
-    }
-    // ===== ПК и нормальные мобильные: как было =====
-    if (resizeRAF) {
-        cancelAnimationFrame(resizeRAF);
-        resizeRAF = null;
-    }
-    resizeRAF = requestAnimationFrame(function() {
-     const isGameVisible = document.getElementById('gridContainer').style.display !== 'none';
-        if (isGameVisible && grid && grid.length > 0) {
-            renderGrid();
-            updateFoundCellsColor();
-            highlightCurrentChain();
-            renderWordsList();
-        }
-        resizeRAF = null;
-    });
-});
-// Обновить подзаголовок внутри кнопки "Начать"
-function updateStartButtonSubtitle() {
-    const diff = localStorage.getItem('lastDifficulty') || 'easy';
-    const diffData = DIFFICULTIES.find(d => d.id === diff);
-    const subtitle = document.getElementById('menuStartSubtitle');
-    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-    if (subtitle && diffData) {
-        subtitle.textContent = ` ${diffData.label}`;
-        // ✅ Цвета для разных тем и сложностей
-        let color = '#fff';
-         if (theme === 'dark') {
-            const colors = {
-                'easy': '#81C784',
-                'medium': '#00AAFF',
-                'hard': '#E57373',
-                'expert': '#CE93D8'
-            };
-            color = colors[diff] || '#fff';
-        } else if (theme === 'blue') {
-            const colors = {
-                'easy': '#00FF66',
-                'medium': '#00FFFF',
-                'hard': '#ac0039',
-                'expert': '#7000FF'
-            };
-            color = colors[diff] || '#fff';
-        } else if (theme === 'teal') {
-            const colors = {
-                'easy': '#00FF66',
-                'medium': '#00FFFF',
-                'hard': '#ac0039',
-                'expert': '#9C27B0'
-            };
-            color = colors[diff] || '#fff';
-        } else if (theme === 'sun') {
-            const sunColors = {
-                'easy': '#00FF66',
-                'medium': '#1565C0',
-                'hard': '#ac0039',
-                'expert': '#9C27B0'
-            };
-            color = sunColors[diff] || '#fff';
-          }        
-        subtitle.style.color = color;
-    }
-}
-// Текущая тема
-let currentTheme = localStorage.getItem('theme') || 'dark';
-function setTheme(themeName) {
-    currentTheme = themeName;
-    document.documentElement.setAttribute('data-theme', themeName);
-    localStorage.setItem('theme', themeName);
-    // Обновляем иконку кнопки темы
-    const themeBtn = document.querySelector('#menuThemeBtn');
-    if (themeBtn) {
-        const icons = {
-            'dark': '🌌',
-            'blue': '💙',
-            'teal': '💚',
-            'sun': '☀️'
-        };
-        themeBtn.textContent = icons[themeName] || '🎨';
-    }
-    // ✅ Синхронизация с VK (только если функция уже определена)
-    if (typeof saveToVKStorage === 'function') {
-        saveToVKStorage('wordgame_theme_v2', themeName);
-    }
-     updateStartButtonSubtitle(); 
-}
-// При загрузке применяем сохранённую тему
+         const categoryLevels=getLevelsByCategoryAndDifficulty(cat.id, diff); let completedCount=0; categoryLevels.forEach(level=>{ const levelId=getLevelId(cat.id, level.levelNum, diff); if (completedLevels.includes(levelId)){ completedCount++;}}); const key=`${cat.id}_${diff}`; stars[key]={ categoryId: cat.id, difficulty: diff, totalStars: completedCount * 5, maxStars: categoryLevels.length * 5, completedLevels: completedCount, totalLevels: categoryLevels.length};});}); return stars;}
+function showDifficultyModal(){ const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:20001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:90vh;overflow-y:auto;';
+contentDiv.className='galaxy-scroll diff-modal-content'; let html=`<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0 0 15px;">🎯 Выбери сложность</h3>`; html +=`<div class="diff-main-buttons" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">`; const mainDifficulties=DIFFICULTIES.filter(d=>!['english','french','japanese'].includes(d.id)); mainDifficulties.forEach(diff=>{ html +=`<button class="diff-select-btn" data-diff="${diff.id}" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 20px;border-radius:40px;font-size:0.8rem;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);max-width:280px;width:70%;margin:0 auto;">${diff.label}</button>`;}); html +=`</div>`;
+html +=`<div class="diff-lang-buttons" style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:15px;">`;
+const langDifficulties=DIFFICULTIES.filter(d=>['english','french','japanese'].includes(d.id));
+langDifficulties.forEach(diff=>{ let style='border:none;border-radius:50%;width:55px;height:55px;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;display:flex;align-items:center;justify-content:center;font-weight:bold!important;font-size:0.8rem;color:#333;'; let bg=''; if (diff.id==='english'){ bg='background: white !important; background-image: linear-gradient(to right, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%), linear-gradient(to bottom, transparent 40%, #C8102E 40%, #C8102E 60%, transparent 60%) !important;'; style +='color: #C8102E;'} else if (diff.id==='french'){ bg='background: linear-gradient(to right, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%) !important;'; style +='color: #0055A4;'} else if (diff.id==='japanese'){ bg='background: radial-gradient(circle at center, #BC002D 35%, #FFFFFF 35%) !important;'; style +='color: #BC002D;'} const label=diff.id==='english' ? 'EN' : (diff.id==='french' ? 'FR' : 'JP'); html +=`<button class="lang-select-btn" data-diff="${diff.id}" style="${style} ${bg}">${label}</button>`;});
+html +=`</div>`; html +=`<button id="closeDiffModal" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:10px;">Закрыть</button>`; contentDiv.innerHTML=html; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.querySelectorAll('.diff-select-btn').forEach(btn=>{ btn.onclick=()=>{ const diff=btn.getAttribute('data-diff'); modalDiv.remove(); localStorage.setItem('lastDifficulty', diff); updateStartButtonSubtitle(); showDifficultyStory(diff)}}); document.querySelectorAll('.lang-select-btn').forEach(btn=>{ btn.onclick=()=>{ const diff=btn.getAttribute('data-diff'); modalDiv.remove(); localStorage.setItem('lastDifficulty', diff); updateStartButtonSubtitle(); showDifficultyStory(diff)}}); document.getElementById('closeDiffModal').onclick=()=>modalDiv.remove(); modalDiv.onclick=(e)=>{ if (e.target===modalDiv) modalDiv.remove()}}
+function showDifficultyStory(difficulty){ const hasSeenKey=`hasSeenStory_${difficulty}`; const hasSeen=localStorage.getItem(hasSeenKey); const story=window.DIFFICULTY_STORIES ? window.DIFFICULTY_STORIES[difficulty] : null; if (!story){ showCategoryModalForDifficulty(difficulty); return} const isFirstTime=!hasSeen; const slide=isFirstTime ? story.long : story.short; const icons={ easy: '🌳', medium: '✨', hard: '🌀', expert: '🚀'}; const icon=icons[difficulty] || '🌟'; const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:20002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.className='story-modal-content galaxy-scroll'; contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.3s ease;'; contentDiv.innerHTML=` <div style="font-size:4rem;margin-bottom:10px;">${icon}</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.6rem;margin:0 0 10px;font-weight:bold;">${slide.title}</h3><p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:15px 0;">${slide.text}</p><button id="storyContinueBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1.1rem;font-weight:bold;cursor:pointer;margin-top:15px;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">${slide.button}</button>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.getElementById('storyContinueBtn').onclick=()=>{ modalDiv.remove(); if (isFirstTime){ localStorage.setItem(hasSeenKey, 'true')} showCategoryModalForDifficulty(difficulty)}; modalDiv.onclick=(e)=>{ if (e.target===modalDiv) modalDiv.remove()}}
+function showGalaxyDetails(categoryId, difficulty){ let category=null; ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff=>{ const found=getCategoriesForDifficulty(diff).find(c=>c.id===categoryId); if (found) category=found}); if (!category){ console.error('❌ Категория не найдена:', categoryId); return} const stars=getGalaxyStars(); let totalStars=0;
+let maxStars=0;
+let completedLevels=0;
+let totalLevels=0;
+const categoryTitle=category.title;
+const categoryIcon=category.icon;
+['easy', 'medium', 'hard', 'expert'].forEach(diff=>{ const categories=getCategoriesForDifficulty(diff); const matchedCat=categories.find(c=>c.title===categoryTitle && c.icon===categoryIcon); if (matchedCat){ const key=`${matchedCat.id}_${diff}`; if (stars[key]){ totalStars +=stars[key].totalStars; maxStars +=stars[key].maxStars; completedLevels +=stars[key].completedLevels; totalLevels +=stars[key].totalLevels}}}); const starData={ totalStars, maxStars, completedLevels, totalLevels}; const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:10004;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.className='galaxy-scroll'; contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:25px;max-width:400px;width:90%;text-align:center;border:2px solid #ffa54d;margin-bottom: 90px;max-height:80vh;overflow-y:auto;'; let starsHtml=''; const totalStarsCount=starData.maxStars; const earnedStars=starData.totalStars; for (let i=0; i < totalStarsCount; i++){ if (i < earnedStars){ starsHtml +='<span style="font-size:1rem;color:#ffd700;">⭐</span>'} else{ starsHtml +='<span style="font-size:1.3rem;color:#d4c3a4;">☆</span>'} if ((i + 1) % 10===0) starsHtml +='<br>'} contentDiv.innerHTML=` <div style="font-size:3rem;">${category.icon}</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:5px 0;">${category.title}</h3><div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;margin:15px 0;"><div style="font-size:2rem;color:var(--accent-color, #ffa54d);">⭐ ${starData.totalStars} / ${starData.maxStars}</div><div style="font-size:0.9rem;color:var(--text-secondary, #6B5B4E);">Пройдено уровней: ${starData.completedLevels} / ${starData.totalLevels}</div></div><div id="starsContainer" style="max-height:150px;overflow-y:auto;padding:8px;border-radius:16px;background:rgba(255,255,255,0.03);">${starsHtml} </div><button id="closeDetailBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:1rem;cursor:pointer;margin-top:15px;">Вернуться к карте</button>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.getElementById('closeDetailBtn').onclick=()=>{ modalDiv.remove(); showGalaxyMap()}; modalDiv.onclick=(e)=>{ if (e.target===modalDiv){ modalDiv.remove(); showGalaxyMap()}}}
+function showGalaxyMap(){ try{ const stars=getGalaxyStars(); const categoriesMap=new Map(); ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff=>{ const categories=getCategoriesForDifficulty(diff); categories.forEach(cat=>{ const key=cat.title; if (!categoriesMap.has(key)){ categoriesMap.set(key,{ id: cat.id, icon: cat.icon, title: cat.title, themeIndex: cat.themeIndex, difficulties: [diff]})} else{ const existing=categoriesMap.get(key); if (!existing.difficulties.includes(diff)){ existing.difficulties.push(diff)}}})}); const allCategories=Array.from(categoriesMap.values()); allCategories.sort((a, b)=>a.title.localeCompare(b.title)); const totalPages=Math.ceil(allCategories.length / GALAXIES_PER_PAGE); if (currentGalaxyPage >=totalPages) currentGalaxyPage=totalPages - 1; if (currentGalaxyPage < 0) currentGalaxyPage=0; const startIdx=currentGalaxyPage * GALAXIES_PER_PAGE; const endIdx=Math.min(startIdx + GALAXIES_PER_PAGE, allCategories.length); const pageCategories=allCategories.slice(startIdx, endIdx); const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:10003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='margin-bottom: 10px;background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:500px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;'; contentDiv.className='galaxy-scroll'; let galaxiesHtml=` <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;"><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">🌌 Галактики 🌌</h3><button id="closeGalaxyCross" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button></div>`; pageCategories.forEach(cat=>{ let totalStars=0; let maxStars=0; let completedLevels=0; let totalLevels=0; cat.difficulties.forEach(diff=>{ const key=`${cat.id}_${diff}`; if (stars[key]){ totalStars +=stars[key].totalStars || 0; maxStars +=stars[key].maxStars || 0; completedLevels +=stars[key].completedLevels || 0; totalLevels +=stars[key].totalLevels || 0}}); const percent=maxStars >0 ? (totalStars / maxStars) * 100 : 0; galaxiesHtml +=` <div class="galaxy-item" data-cat-id="${cat.id}" data-title="${cat.title}" style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:15px;cursor:pointer;transition:0.1s;border:2px solid ${percent===100 ? '#ffd700' : 'var(--border-color, #d4c3a4)'};margin-bottom:8px;"><div style="display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:12px;"><span style="font-size:2rem;">${cat.icon}</span><div style="text-align:left;"><div style="font-weight:bold;color:var(--text-primary, #2c3e2b);">${cat.title}</div><div style="font-size:0.8rem;color:var(--text-secondary, #6B5B4E);">⭐ ${totalStars} / ${maxStars} звёзд</div><div style="font-size:0.7rem;color:var(--text-secondary, #6B5B4E);">📚 ${completedLevels} / ${totalLevels} уровней</div></div></div><div style="font-size:1.5rem;color:var(--text-secondary, #6B5B4E);">➡️</div></div><div style="background:var(--bg-progress, #d4c3a4);border-radius:20px;height:8px;margin-top:10px;overflow:hidden;"><div style="width:${percent}%;background:var(--accent-color, #ffa54d);height:100%;border-radius:20px;"></div></div></div>`}); galaxiesHtml +=` <div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;"><button id="galaxyPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage===0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button><span style="color:#6B5B4E;font-size:0.9rem;">${currentGalaxyPage + 1} / ${totalPages}</span><button id="galaxyNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentGalaxyPage===totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button></div><button id="closeGalaxyBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:10px 25px;border-radius:40px;font-size:0.9rem;cursor:pointer;margin-top:15px;">Закрыть</button>`; contentDiv.innerHTML=galaxiesHtml; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.querySelectorAll('.galaxy-item').forEach(item=>{ item.addEventListener('click', (e)=>{ e.stopPropagation(); const catId=parseInt(item.getAttribute('data-cat-id')); let diff='easy'; ['easy', 'medium', 'hard', 'expert'].forEach(d=>{ const found=getCategoriesForDifficulty(d).find(c=>c.id===catId); if (found) diff=d}); modalDiv.remove(); showGalaxyDetails(catId, diff)})}); const prevBtn=document.getElementById('galaxyPrevPage'); if (prevBtn){ prevBtn.onclick=()=>{ if (currentGalaxyPage >0){ currentGalaxyPage--; modalDiv.remove(); showGalaxyMap()}}} const nextBtn=document.getElementById('galaxyNextPage'); if (nextBtn){ nextBtn.onclick=()=>{ if (currentGalaxyPage < totalPages - 1){ currentGalaxyPage++; modalDiv.remove(); showGalaxyMap()}}} const closeBtn=document.getElementById('closeGalaxyBtn'); if (closeBtn){ closeBtn.onclick=(e)=>{ e.stopPropagation(); modalDiv.remove()}} const crossBtn=document.getElementById('closeGalaxyCross'); if (crossBtn){ crossBtn.onclick=(e)=>{ e.stopPropagation(); modalDiv.remove()}} modalDiv.onclick=(e)=>{ if (e.target===modalDiv) modalDiv.remove()}} catch (e){ console.error('❌ Ошибка в showGalaxyMap:', e)}} function createLivingStars(){ if (window.DEVICE_PERF && !window.DEVICE_PERF.enableStars){ console.log('🚫 Живые звёзды отключены (слабое устройство)'); return} const starCount=window.innerWidth < 768 ? 5 : 20; const container=document.body; const colors=[ 'rgba(255, 255, 255, 1)', 'rgba(255, 235, 200, 1)', 'rgba(200, 230, 255, 1)', 'rgba(255, 200, 180, 1)', 'rgba(220, 255, 220, 1)', 'rgba(255, 220, 255, 1)' ]; for (let i=0; i < starCount; i++){ const star=document.createElement('div'); star.className='star'; const size=Math.random() * 3 + 1; const x=Math.random() * 100; const y=Math.random() * 100; const twinkleDuration=Math.random() * 2 + 1; const delay=Math.random() * 3; const driftDuration=Math.random() * 8 + 5; const color=colors[Math.floor(Math.random() * colors.length)];
+star.style.cssText=` width: ${size}px; height: ${size}px; left: ${x}%; top: ${y}%; background: ${color}; animation: twinkle ${twinkleDuration}s ease-in-out ${delay}s infinite alternate, float ${driftDuration}s ease-in-out infinite alternate; box-shadow: 0 0 ${size * 2}px ${color}; opacity: ${Math.random() * 0.5 + 0.5}; will-change: transform, opacity;
+`; container.appendChild(star)}} function getUnlockedScrolls(){ const saved=localStorage.getItem('unlockedScrolls'); return safeParseArray(saved, [])} function isScrollUnlocked(scrollId){ return getUnlockedScrolls().includes(scrollId)} function calculateUnlockedScrolls(){ const stars=totalStars || 0; return Math.min(Math.floor(stars / 50), WISDOM_SCROLLS.length)} function syncScrollsWithStars(){ const shouldBeUnlocked=calculateUnlockedScrolls(); const unlocked=getUnlockedScrolls(); let changed=false; for (let i=1; i <=shouldBeUnlocked; i++){ if (!unlocked.includes(i)){ unlocked.push(i); changed=true}} if (changed){ localStorage.setItem('unlockedScrolls', JSON.stringify(unlocked)); if (typeof saveToVKStorage==='function'){ saveToVKStorage('wordgame_scrolls_v2', unlocked); console.log('📜 Все свитки синхронизированы с VK')}} return shouldBeUnlocked}
+let currentScrollPage=0;
+const SCROLLS_PER_PAGE=10;
+let currentGalaxyPage=0;
+const GALAXIES_PER_PAGE=4;
+function showScrollsModal(){ syncScrollsWithStars(); const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:10005;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:20px;max-width:450px;width:90%;text-align:center;border:2px solid #ffa54d;max-height:80vh;overflow-y:auto;'; contentDiv.className='galaxy-scroll'; const unlockedCount=getUnlockedScrolls().length; const totalStars=safeParseInt(localStorage.getItem('totalStars'), 0); const nextStarThreshold=Math.ceil((unlockedCount + 1) * 50); const totalPages=Math.ceil(WISDOM_SCROLLS.length / SCROLLS_PER_PAGE); if (currentScrollPage >=totalPages) currentScrollPage=totalPages - 1; if (currentScrollPage < 0) currentScrollPage=0; const startIdx=currentScrollPage * SCROLLS_PER_PAGE; const endIdx=Math.min(startIdx + SCROLLS_PER_PAGE, WISDOM_SCROLLS.length); const pageScrolls=WISDOM_SCROLLS.slice(startIdx, endIdx);
+let html=` <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;"><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.5rem;margin:0;">📜 Свитки мудрости</h3><button id="closeScrollsModal" style="background:transparent;border:none;font-size:1.8rem;cursor:pointer;color:var(--text-secondary, #8b5a2a);padding:0;width:35px;height:35px;display:flex;align-items:center;justify-content:center;">✕</button></div><div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:12px;margin-bottom:15px;"><span style="font-weight:bold;color:var(--text-primary, #2c3e2b);">⭐ ${totalStars} звёзд</span><span style="color:var(--text-secondary, #6B5B4E);margin-left:10px;">|</span><span style="color:var(--text-secondary, #6B5B4E);">📜 ${unlockedCount} / ${WISDOM_SCROLLS.length} открыто</span>${unlockedCount < WISDOM_SCROLLS.length ? `<div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-top:5px;">🔒 Следующий свиток откроется на ${nextStarThreshold} звёздах</div>` : '<div style="font-size:0.8rem;color:var(--btn-primary, #517a2f);margin-top:5px;">🌟 Все свитки открыты! Ты — хранитель мудрости!</div>'}
+</div>`;
+pageScrolls.forEach(scroll=>{ const unlocked=isScrollUnlocked(scroll.id); html +=` <div class="scroll-item" data-id="${scroll.id}" style=" display:flex; align-items:center; justify-content:space-between; padding:10px 15px; margin:4px 0; background:${unlocked ? 'var(--bg-card, #fff8ec)' : 'var(--bg-card-light, #f0ebe0)'}; border-radius:12px; border-left:4px solid ${unlocked ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'}; cursor:${unlocked ? 'pointer' : 'default'}; transition:0.1s; "><div style="display:flex;align-items:center;gap:12px;"><span style="font-size:1.2rem;">${unlocked ? '📜' : '🔒'}</span><span style="color:var(--text-primary, #2c3e2b);font-weight:${unlocked ? 'bold' : 'normal'};">Свиток ${scroll.id}</span></div><div>${unlocked ? '<span style="color:var(--btn-primary, #517a2f);font-size:1rem;">✓</span>' : '<span style="color:var(--text-secondary, #8a7a6a);font-size:0.7rem;">закрыт</span>'} </div></div>`;}); html +=` </div><div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-top:15px;"><button id="scrollPrevPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentScrollPage===0 ? 'opacity:0.3;cursor:default;' : ''}">◀ Назад</button><span style="color:#6B5B4E;font-size:0.9rem;">${currentScrollPage + 1} / ${totalPages}</span><button id="scrollNextPage" style="background:#8b5a2a;color:white;border:none;padding:8px 16px;border-radius:40px;font-size:0.9rem;cursor:pointer;${currentScrollPage===totalPages - 1 ? 'opacity:0.3;cursor:default;' : ''}">Вперёд ▶</button></div>`; contentDiv.innerHTML=html; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.querySelectorAll('.scroll-item').forEach(item=>{ const id=parseInt(item.getAttribute('data-id')); const unlocked=isScrollUnlocked(id); item.onclick=()=>{ if (unlocked){ modalDiv.remove(); showScrollDetail(id);}};}); document.getElementById('scrollPrevPage').onclick=()=>{ if (currentScrollPage >0){ currentScrollPage--; modalDiv.remove(); showScrollsModal();}}; document.getElementById('scrollNextPage').onclick=()=>{ if (currentScrollPage < totalPages - 1){ currentScrollPage++; modalDiv.remove(); showScrollsModal();}}; document.getElementById('closeScrollsModal').onclick=()=>modalDiv.remove(); modalDiv.onclick=(e)=>{ if (e.target===modalDiv) modalDiv.remove();};}
+function showScrollDetail(scrollId){ const scroll=WISDOM_SCROLLS.find(s=>s.id===scrollId); if (!scroll) return; const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:10006;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:380px;width:90%;text-align:center;border:2px solid #ffa54d;'; contentDiv.className='galaxy-scroll';
+contentDiv.innerHTML=` <div style="font-size:3rem;margin-bottom:5px;">📜</div><div style="font-size:0.8rem;color:var(--btn-secondary, #8b5a2a);margin-bottom:10px;">Свиток №${scroll.id}</div><div style="background:var(--bg-card-light, #ede1ca);border-radius:30px;padding:20px;margin:10px 0;"><p style="color:var(--text-primary, #2c3e2b);font-size:1.1rem;line-height:1.5;margin:0;font-style:italic;">${scroll.text}</p></div><button id="closeScrollDetail" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:15px;">⭐Прочитано!</button>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.getElementById('closeScrollDetail').onclick=()=>{ modalDiv.remove(); showScrollsModal();}; modalDiv.onclick=(e)=>{ if (e.target===modalDiv) modalDiv.remove();};}
+window.addEventListener('orientationchange', function(){ const menu=document.getElementById('startMenu'); if (menu && menu.style.display !=='none'){ menu.style.display='none'; setTimeout(()=>{ menu.style.display='flex'}, 10)}});
+document.getElementById('menuScrollsBtn').addEventListener('click', showScrollsModal); createLivingStars();
+let resizeTimeout=null;
+window.addEventListener('resize', function(){ if (window.DEVICE_PERF && window.DEVICE_PERF.isWeak){ if (resizeTimeout) clearTimeout(resizeTimeout); resizeTimeout=setTimeout(function(){ const isGameActive=document.getElementById('gridContainer').style.display !=='none'; if (isGameActive && grid && grid.length >0){ renderGrid(); updateFoundCellsColor(); highlightCurrentChain(); renderWordsList()}}, 250); return} if (resizeRAF){ cancelAnimationFrame(resizeRAF); resizeRAF=null} resizeRAF=requestAnimationFrame(function(){ const isGameVisible=document.getElementById('gridContainer').style.display !=='none'; if (isGameVisible && grid && grid.length >0){ renderGrid(); updateFoundCellsColor(); highlightCurrentChain(); renderWordsList()} resizeRAF=null;});});
+function updateStartButtonSubtitle(){ const diff=localStorage.getItem('lastDifficulty') || 'easy'; const diffData=DIFFICULTIES.find(d=>d.id===diff); const subtitle=document.getElementById('menuStartSubtitle'); const theme=document.documentElement.getAttribute('data-theme') || 'dark'; if (subtitle && diffData){ subtitle.textContent=` ${diffData.label}`; let color='#fff'; if (theme==='dark'){ const colors={ 'easy': '#81C784', 'medium': '#00AAFF', 'hard': '#E57373', 'expert': '#CE93D8'}; color=colors[diff] || '#fff'} else if (theme==='blue'){ const colors={ 'easy': '#00FF66', 'medium': '#00FFFF', 'hard': '#ac0039', 'expert': '#7000FF'}; color=colors[diff] || '#fff'} else if (theme==='teal'){ const colors={ 'easy': '#00FF66', 'medium': '#00FFFF', 'hard': '#ac0039', 'expert': '#9C27B0'}; color=colors[diff] || '#fff'} else if (theme==='sun'){ const sunColors={ 'easy': '#00FF66', 'medium': '#1565C0', 'hard': '#ac0039', 'expert': '#9C27B0'}; color=sunColors[diff] || '#fff'} subtitle.style.color=color}}
+let currentTheme=localStorage.getItem('theme') || 'dark';
+function setTheme(themeName){ currentTheme=themeName; document.documentElement.setAttribute('data-theme', themeName); localStorage.setItem('theme', themeName); const themeBtn=document.querySelector('#menuThemeBtn'); if (themeBtn){ const icons={ 'dark': '🌌', 'blue': '💙', 'teal': '💚', 'sun': '☀️'}; themeBtn.textContent=icons[themeName] || '🎨';} if (typeof saveToVKStorage==='function'){ saveToVKStorage('wordgame_theme_v2', themeName)} updateStartButtonSubtitle();}
 setTheme(localStorage.getItem('theme') || 'dark');
-function showThemeSelector() {
-    // Удаляем старую модалку если есть
-    const oldModal = document.getElementById('themeModal');
-    if (oldModal) oldModal.remove();
-    const modalDiv = document.createElement('div');
-     modalDiv.className = 'modal-window'; 
-    modalDiv.id = 'themeModal';
-    modalDiv.style.cssText = `
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-               z-index:99999;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        backdrop-filter:blur(5px);
-    `;
-    const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = `
-        background:var(--bg-card, #fff8ec);
-        border-radius:48px;
-        padding:25px;
-        max-width:380px;
-        width:90%;
-        text-align:center;
-        border:2px solid #ffa54d;
-        position:relative;
-        z-index:100000;
-        pointer-events:auto;
-    `;
-    const themes = [
-        { id: 'dark', icon: '🌌', name: 'Космос' },
-        { id: 'blue', icon: '💙', name: 'Голубая' },
-        { id: 'teal', icon: '💚', name: 'Бирюза' },
-        { id: 'sun', icon: '☀️', name: 'Солнце' }
-    ];
-   let html = `<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 15px;">🎨 Выбери тему</h3>`;
-html += `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;">`;
-themes.forEach(theme => {
-    const isActive = currentTheme === theme.id;
-    html += `
-        <div class="theme-btn" data-theme="${theme.id}" style="
-            background:${isActive ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'};
-            border:2px solid ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'transparent'};
-            border-radius:50%;
-            width:70px;
-            height:70px;
-            font-size:2rem;
-            cursor:pointer;
-            box-shadow:0 3px 0 ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'var(--border-color, #9b6e42)'};
-            transition:0.05s linear;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:center;
-            gap:2px;
-            pointer-events:auto;
-            position:relative;
-            user-select:none;
-        ">
-            <div>${theme.icon}</div>
-            <span style="font-size:0.5rem;color:var(--text-secondary, #3a3220);">${theme.name}</span>
-        </div>
-    `;
-});
-html += `</div>
-    <button id="closeThemeModalBtn" style="
-        background:var(--btn-secondary, #8b5a2a);
-        color:var(--text-light, white);
-        border:none;
-        padding:10px 25px;
-        border-radius:40px;
-        font-size:0.9rem;
-        cursor:pointer;
-        margin-top:15px;
-        pointer-events:auto;
-        position:relative;
-        z-index:100001;
-    ">Закрыть</button>`;
-    contentDiv.innerHTML = html;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-    // Обработчик для кнопок тем
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const themeId = this.getAttribute('data-theme');
-            setTheme(themeId);
-            modalDiv.remove();
-            showThemeSelector();
-        });
-    });
-    // Обработчик для кнопки закрытия
-    const closeBtn = document.getElementById('closeThemeModalBtn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            modalDiv.remove();
-        });
-    }
-    // Закрытие по клику на фон
-    modalDiv.addEventListener('click', function(e) {
-        if (e.target === modalDiv) {
-            modalDiv.remove();
-        }
-    });
-}
-// Обработчик кнопки темы
+function showThemeSelector(){ const oldModal=document.getElementById('themeModal'); if (oldModal) oldModal.remove(); const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.id='themeModal'; modalDiv.style.cssText=` position:fixed; top:0; left:0; width:100%; height:100%; z-index:99999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px); `; const contentDiv=document.createElement('div'); contentDiv.style.cssText=` background:var(--bg-card, #fff8ec); border-radius:48px; padding:25px; max-width:380px; width:90%; text-align:center; border:2px solid #ffa54d; position:relative; z-index:100000; pointer-events:auto; `; const themes=[{ id: 'dark', icon: '🌌', name: 'Космос'},{ id: 'blue', icon: '💙', name: 'Голубая'},{ id: 'teal', icon: '💚', name: 'Бирюза'},{ id: 'sun', icon: '☀️', name: 'Солнце'} ]; let html=`<h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 15px;">🎨 Выбери тему</h3>`;
+html +=`<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:15px;">`;
+themes.forEach(theme=>{ const isActive=currentTheme===theme.id; html +=` <div class="theme-btn" data-theme="${theme.id}" style=" background:${isActive ? 'var(--accent-color, #ffa54d)' : 'var(--border-color, #d4c3a4)'}; border:2px solid ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'transparent'}; border-radius:50%; width:70px; height:70px; font-size:2rem; cursor:pointer; box-shadow:0 3px 0 ${isActive ? 'var(--btn-secondary, #8b5a2a)' : 'var(--border-color, #9b6e42)'}; transition:0.05s linear; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; pointer-events:auto; position:relative; user-select:none; "><div>${theme.icon}</div><span style="font-size:0.5rem;color:var(--text-secondary, #3a3220);">${theme.name}</span></div>`});
+html +=`</div><button id="closeThemeModalBtn" style=" background:var(--btn-secondary, #8b5a2a); color:var(--text-light, white); border:none; padding:10px 25px; border-radius:40px; font-size:0.9rem; cursor:pointer; margin-top:15px; pointer-events:auto; position:relative; z-index:100001; ">Закрыть</button>`; contentDiv.innerHTML=html; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); document.querySelectorAll('.theme-btn').forEach(btn=>{ btn.addEventListener('click', function(e){ e.stopPropagation(); const themeId=this.getAttribute('data-theme'); setTheme(themeId); modalDiv.remove(); showThemeSelector()})}); const closeBtn=document.getElementById('closeThemeModalBtn'); if (closeBtn){ closeBtn.addEventListener('click', function(e){ e.stopPropagation(); e.preventDefault(); modalDiv.remove();});} modalDiv.addEventListener('click', function(e){ if (e.target===modalDiv){ modalDiv.remove();}});}
 document.getElementById('menuThemeBtn').addEventListener('click', showThemeSelector);
-// ====== VK STORAGE СИНХРОНИЗАЦИЯ ======
-// Сохранение в VK Storage
-function saveToVKStorage(key, value) {
-    if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен');
-        return Promise.resolve();
-    }
-    return vkBridge.send('VKWebAppStorageSet', {
-        key: key,
-        value: typeof value === 'string' ? value : JSON.stringify(value)
-    })
-    .then(() => console.log(`✅ Сохранено в VK Storage: ${key}`))
-    .catch((error) => console.warn(`❌ Ошибка сохранения ${key}:`, error));
-}
-// Загрузка из VK Storage
-function loadFromVKStorage(key) {
-    if (typeof vkBridge === 'undefined') {
-        return Promise.resolve(null);
-    }
-    return vkBridge.send('VKWebAppStorageGet', { keys: [key] })
-        .then((data) => {
-            if (data && data.keys && Array.isArray(data.keys) && data.keys.length > 0) {
-                const value = data.keys[0].value;
-                try { return JSON.parse(value); } catch { return value; }
-            }
-            return null;
-        })
-        .catch((error) => {
-            console.warn(`❌ Ошибка загрузки ${key}:`, error);
-             vkLoadErrorCount++; 
-            return null;
-        });
-}
-function loadAllDataFromVK() {
-    if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен');
-          vkDataLoaded = true;  
-        return Promise.resolve();
-    }
-     vkLoadAttempts++;         
-    vkLoadErrorCount = 0;     
-    // ✅ Загружаем ТОЛЬКО НЕОБХОДИМЫЕ ДАННЫЕ (без galaxy и scrolls, они тяжелые)
-    return Promise.all([
-        loadFromVKStorage('wordgame_completed_easy'),
-        loadFromVKStorage('wordgame_completed_medium'),
-        loadFromVKStorage('wordgame_completed_hard'),
-        loadFromVKStorage('wordgame_completed_expert'),
-        loadFromVKStorage('wordgame_unlocked_levels_v2'),
-        loadFromVKStorage('wordgame_theme_v2'),
-        loadFromVKStorage('wordgame_total_stars_v2'),
-        loadFromVKStorage('wordgame_bonusDate_v2'),         
-        loadFromVKStorage('wordgame_completed_english'),
+function saveToVKStorage(key, value){ if (typeof vkBridge==='undefined'){ console.log('ℹ️ VK Bridge не доступен'); return Promise.resolve()} return vkBridge.send('VKWebAppStorageSet',{ key: key, value: typeof value==='string' ? value : JSON.stringify(value)}) .then(()=>console.log(`✅ Сохранено в VK Storage: ${key}`)) .catch((error)=>console.warn(`❌ Ошибка сохранения ${key}:`, error))}
+function loadFromVKStorage(key){ if (typeof vkBridge==='undefined'){ return Promise.resolve(null);} return vkBridge.send('VKWebAppStorageGet',{ keys: [key]}) .then((data)=>{ if (data && data.keys && Array.isArray(data.keys) && data.keys.length >0){ const value=data.keys[0].value; try{ return JSON.parse(value);} catch{ return value;}} return null;}) .catch((error)=>{ console.warn(`❌ Ошибка загрузки ${key}:`, error); vkLoadErrorCount++; return null;});}
+function loadAllDataFromVK(){ if (typeof vkBridge==='undefined'){ console.log('ℹ️ VK Bridge не доступен'); vkDataLoaded=true; return Promise.resolve()} vkLoadAttempts++; vkLoadErrorCount=0; return Promise.all([ loadFromVKStorage('wordgame_completed_easy'), loadFromVKStorage('wordgame_completed_medium'), loadFromVKStorage('wordgame_completed_hard'), loadFromVKStorage('wordgame_completed_expert'), loadFromVKStorage('wordgame_unlocked_levels_v2'), loadFromVKStorage('wordgame_theme_v2'), loadFromVKStorage('wordgame_total_stars_v2'), loadFromVKStorage('wordgame_bonusDate_v2'), loadFromVKStorage('wordgame_completed_english'),
 loadFromVKStorage('wordgame_completed_french'),
-loadFromVKStorage('wordgame_completed_japanese')
-    ])
-    .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData, bonusDateData, englishData, frenchData, japaneseData]) => {
-        let loaded = false;
-        // ====== ТЕМА ======
-        if (themeData) {
-            setTheme(themeData);
-            loaded = true;
-           }
-          if (totalStarsData !== null && totalStarsData !== undefined) {
-            const localTotal = safeParseInt(localStorage.getItem('totalStars'), 0);
-            const maxTotal = Math.max(localTotal, totalStarsData);
-            if (maxTotal > localTotal) {
-                localStorage.setItem('totalStars', String(maxTotal));
-                totalStars = maxTotal;
-                loaded = true;
-            }
-        }
-       const diffKeys = ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'];
-const diffDataMap={ easy: easyData, medium: mediumData, hard: hardData, expert: expertData, english: englishData, french: frenchData, japanese: japaneseData};
-        diffKeys.forEach(diff => {
-            const vkData = diffDataMap[diff];
-            if (vkData && Array.isArray(vkData)) {
-                const localCompleted = getCompletedLevels(diff);
-                const merged = [...new Set([...localCompleted, ...vkData])];
-                if (merged.length > localCompleted.length) {
-                    const keyName = `gameCompletedLevels_${diff}`;
-                    localStorage.setItem(keyName, JSON.stringify(merged));
-                    loaded = true;
-                }
-            }
-        });
-        if (unlockedLevelsData) {
-            loadUnlockedLevelsFromVK(unlockedLevelsData);
-            loaded = true;
-        }
-        if (bonusDateData) {
-            const localDate = localStorage.getItem('lastBonusDate');
-            if (!localDate || bonusDateData > localDate) {
-                localStorage.setItem('lastBonusDate', bonusDateData);
-                if (typeof lastBonusDate !== 'undefined') {
-                    lastBonusDate = bonusDateData;
-                }
-                loaded = true;
-            }
-        }
-        if (loaded) {
-    updateStarsDisplay();
-            const galaxyBtn = document.getElementById('galaxyBtn');
-            if (galaxyBtn) {
-                galaxyBtn.setAttribute('data-stars', totalStars || 0);
-            }
-        } else {
-        }
-if (vkLoadErrorCount === 0) {
-    vkDataLoaded = true;
-    console.log('🔓 vkDataLoaded = true — синхронизация разрешена');
-} else if (vkLoadAttempts < 10) {
-    console.log('⚠️ Ошибки загрузки (' + vkLoadErrorCount + '), повтор через 15 сек');
-    setTimeout(loadAllDataFromVK, 15000);
-} else {
-    console.warn('❌ Слишком много ошибок загрузки');
-}
-        return Promise.resolve();
-    })
-    .catch(e => {
-        console.warn('⚠️ Ошибка загрузки из VK:', e);
-        if (vkLoadAttempts < 10) {
-            setTimeout(loadAllDataFromVK, 15000);
-        }
-        return Promise.resolve();
-    });
-}
-
-function loadGalaxyAndScrollsFromVK() {
-    if (typeof vkBridge === 'undefined') return;
-    Promise.all([
-        loadFromVKStorage('wordgame_galaxy_v2'),
-        loadFromVKStorage('wordgame_scrolls_v2')
-    ])
-    .then(([galaxyData, scrollsData]) => {
-        if (galaxyData) {
-            try {
-                const currentStars = getGalaxyStars();
-                let merged = false;
-                for (const key in galaxyData) {
-                    if (galaxyData[key]) {
-                        const vkStars = galaxyData[key].totalStars || 0;
-                        const localStars = currentStars[key]?.totalStars || 0;
-                        if (vkStars > localStars) {
-                            const catId = galaxyData[key].categoryId;
-                            const diff = galaxyData[key].difficulty;
-                            const levels = getLevelsByCategoryAndDifficulty(catId, diff);
-                            const completed = [];
-                            for (let i = 0; i < levels.length && i < galaxyData[key].completedLevels; i++) {
-                                completed.push(levels[i].id);
-                            }
-                            const keyName = `gameCompletedLevels_${diff}`;
-                            localStorage.setItem(keyName, JSON.stringify(completed));
-                            merged = true;
-                        }
-                    }
-                }
-                if (merged) {
-                    // ✅ Не пересчитываем, а просто обновляем интерфейс
-    updateStarsDisplay();
-                }
-            } catch(e) {
-                console.warn('⚠️ Ошибка фоновой загрузки галактики:', e);
-            }
-        }
-        if (scrollsData && Array.isArray(scrollsData)) {
-            const localScrolls = getUnlockedScrolls();
-            const mergedScrolls = [...new Set([...localScrolls, ...scrollsData])];
-            if (mergedScrolls.length > localScrolls.length) {
-                localStorage.setItem('unlockedScrolls', JSON.stringify(mergedScrolls));
-            }
-        }
-    })
-    .catch(e => console.warn('⚠️ Ошибка фоновой загрузки:', e));
-}
-// Полная синхронизация всех данных
-function syncAllDataToVK() {
-    if (typeof vkBridge === 'undefined') return;
-  // ✅ ГЛАВНАЯ ЗАЩИТА: не пишем в VK, пока не прочитали оттуда
-    if (!vkDataLoaded) {
-        if (syncRetryTimer) return;   // уже запланировано — выходим
-        console.log('⏳ Синхронизация отложена — данные VK ещё не загружены, повтор через 10 сек');
-        syncRetryTimer = setTimeout(function() {
-            syncRetryTimer = null;
-            syncAllDataToVK();
-        }, 10000);
-        return;
-    }
-    const completedEasy = getCompletedLevels('easy');
-    const completedMedium = getCompletedLevels('medium');
-    const completedHard = getCompletedLevels('hard');
-    const completedExpert = getCompletedLevels('expert');
-    const completedEnglish = getCompletedLevels('english');
-const completedFrench = getCompletedLevels('french');
-const completedJapanese = getCompletedLevels('japanese');
-    const stars = getGalaxyStars();
-    const scrolls = getUnlockedScrolls();
-     const total = totalStars;  
-    const theme = currentTheme || localStorage.getItem('theme') || 'dark';
-    const allUnlocked = {};
-   ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => {
-        const categories = getCategoriesForDifficulty(diff);
-        categories.forEach(cat => {
-            const key = `unlocked_levels_${cat.id}_${diff}`;
-            const unlocked = getUnlockedLevels(cat.id, diff);
-            if (unlocked.length > 0) {
-                allUnlocked[`${cat.id}_${diff}`] = unlocked;
-            }
-        });
-    });
-    Promise.all([
-        saveToVKStorage('wordgame_theme_v2', theme),
-        saveToVKStorage('wordgame_galaxy_v2', stars),
-        saveToVKStorage('wordgame_scrolls_v2', scrolls),
-        saveToVKStorage('wordgame_total_stars_v2', total),
-        saveToVKStorage('wordgame_completed_easy', completedEasy),
-        saveToVKStorage('wordgame_completed_medium', completedMedium),
-        saveToVKStorage('wordgame_completed_hard', completedHard),
-        saveToVKStorage('wordgame_completed_expert', completedExpert),
-        saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked),
-        saveToVKStorage('wordgame_completed_english', completedEnglish),
+loadFromVKStorage('wordgame_completed_japanese') ]) .then(([easyData, mediumData, hardData, expertData, unlockedLevelsData, themeData, totalStarsData, bonusDateData, englishData, frenchData, japaneseData])=>{ let loaded=false; if (themeData){ setTheme(themeData); loaded=true} if (totalStarsData !==null && totalStarsData !==undefined){ const localTotal=safeParseInt(localStorage.getItem('totalStars'), 0); const maxTotal=Math.max(localTotal, totalStarsData); if (maxTotal >localTotal){ localStorage.setItem('totalStars', String(maxTotal)); totalStars=maxTotal; loaded=true}} const diffKeys=['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'];
+const diffDataMap={ easy: easyData, medium: mediumData, hard: hardData, expert: expertData, english: englishData, french: frenchData, japanese: japaneseData}; diffKeys.forEach(diff=>{ const vkData=diffDataMap[diff]; if (vkData && Array.isArray(vkData)){ const localCompleted=getCompletedLevels(diff); const merged=[...new Set([...localCompleted, ...vkData])]; if (merged.length >localCompleted.length) { const keyName=`gameCompletedLevels_${diff}`; localStorage.setItem(keyName, JSON.stringify(merged)); loaded=true}}}); if (unlockedLevelsData){ loadUnlockedLevelsFromVK(unlockedLevelsData); loaded=true} if (bonusDateData){ const localDate=localStorage.getItem('lastBonusDate'); if (!localDate || bonusDateData >localDate){ localStorage.setItem('lastBonusDate', bonusDateData); if (typeof lastBonusDate !=='undefined'){ lastBonusDate=bonusDateData} loaded=true}} if (loaded){ updateStarsDisplay(); const galaxyBtn=document.getElementById('galaxyBtn'); if (galaxyBtn){ galaxyBtn.setAttribute('data-stars', totalStars || 0)}} else{} if (vkLoadErrorCount===0){ vkDataLoaded=true; console.log('🔓 vkDataLoaded=true — синхронизация разрешена')} else if (vkLoadAttempts < 10){ console.log('⚠️ Ошибки загрузки (' + vkLoadErrorCount + '), повтор через 15 сек'); setTimeout(loadAllDataFromVK, 15000)} else{ console.warn('❌ Слишком много ошибок загрузки')} return Promise.resolve()}) .catch(e=>{ console.warn('⚠️ Ошибка загрузки из VK:', e); if (vkLoadAttempts < 10){ setTimeout(loadAllDataFromVK, 15000)} return Promise.resolve()})} function loadGalaxyAndScrollsFromVK(){ if (typeof vkBridge==='undefined') return; Promise.all([ loadFromVKStorage('wordgame_galaxy_v2'), loadFromVKStorage('wordgame_scrolls_v2') ]) .then(([galaxyData, scrollsData])=>{ if (galaxyData){ try{ const currentStars=getGalaxyStars(); let merged=false; for (const key in galaxyData){ if (galaxyData[key]){ const vkStars=galaxyData[key].totalStars || 0; const localStars=currentStars[key]?.totalStars || 0; if (vkStars >localStars){ const catId=galaxyData[key].categoryId; const diff=galaxyData[key].difficulty; const levels=getLevelsByCategoryAndDifficulty(catId, diff); const completed=[]; for (let i=0; i < levels.length && i < galaxyData[key].completedLevels; i++){ completed.push(levels[i].id)} const keyName=`gameCompletedLevels_${diff}`; localStorage.setItem(keyName, JSON.stringify(completed)); merged=true}}} if (merged){ updateStarsDisplay()}} catch(e){ console.warn('⚠️ Ошибка фоновой загрузки галактики:', e)}} if (scrollsData && Array.isArray(scrollsData)){ const localScrolls=getUnlockedScrolls(); const mergedScrolls=[...new Set([...localScrolls, ...scrollsData])]; if (mergedScrolls.length >localScrolls.length){ localStorage.setItem('unlockedScrolls', JSON.stringify(mergedScrolls))}}}) .catch(e=>console.warn('⚠️ Ошибка фоновой загрузки:', e))}
+function syncAllDataToVK(){ if (typeof vkBridge==='undefined') return; if (!vkDataLoaded){ if (syncRetryTimer) return; console.log('⏳ Синхронизация отложена — данные VK ещё не загружены, повтор через 10 сек'); syncRetryTimer=setTimeout(function(){ syncRetryTimer=null; syncAllDataToVK()}, 10000); return} const completedEasy=getCompletedLevels('easy'); const completedMedium=getCompletedLevels('medium'); const completedHard=getCompletedLevels('hard'); const completedExpert=getCompletedLevels('expert'); const completedEnglish=getCompletedLevels('english');
+const completedFrench=getCompletedLevels('french');
+const completedJapanese=getCompletedLevels('japanese'); const stars=getGalaxyStars(); const scrolls=getUnlockedScrolls(); const total=totalStars; const theme=currentTheme || localStorage.getItem('theme') || 'dark'; const allUnlocked={}; ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff=>{ const categories=getCategoriesForDifficulty(diff); categories.forEach(cat=>{ const key=`unlocked_levels_${cat.id}_${diff}`; const unlocked=getUnlockedLevels(cat.id, diff); if (unlocked.length >0){ allUnlocked[`${cat.id}_${diff}`]=unlocked;}});}); Promise.all([ saveToVKStorage('wordgame_theme_v2', theme), saveToVKStorage('wordgame_galaxy_v2', stars), saveToVKStorage('wordgame_scrolls_v2', scrolls), saveToVKStorage('wordgame_total_stars_v2', total), saveToVKStorage('wordgame_completed_easy', completedEasy), saveToVKStorage('wordgame_completed_medium', completedMedium), saveToVKStorage('wordgame_completed_hard', completedHard), saveToVKStorage('wordgame_completed_expert', completedExpert), saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked), saveToVKStorage('wordgame_completed_english', completedEnglish),
 saveToVKStorage('wordgame_completed_french', completedFrench),
-saveToVKStorage('wordgame_completed_japanese', completedJapanese)
-    ]).then(() => {
-    }).catch(e => console.warn('⚠️ Ошибка синхронизации:', e));
-}
-// Запуск синхронизации при старте
+saveToVKStorage('wordgame_completed_japanese', completedJapanese) ]).then(()=>{}).catch(e=>console.warn('⚠️ Ошибка синхронизации:', e));}
 (function() {
-    if (typeof vkBridge !== 'undefined') {
-        // ✅ Убираем задержку — данные загружаются сразу после инициализации
-        // задержка теперь в init()
-      //  setInterval(syncAllDataToVK, 60000);
-      // Вместо setInterval(syncAllDataToVK, 60000);
-setInterval(function() {
-    if ('requestIdleCallback' in window) {
-        requestIdleCallback(function() {
-            syncAllDataToVK();
-        }, { timeout: 1000 });
-    } else {
-        syncAllDataToVK();
-    }
-}, 60000);
-    }
-})();
-// ===== РАЗМЕЩЕНИЕ СЛОВА ПО ДИАГОНАЛИ =====
-function tryPlaceDiagonalWord(word, tempGrid, gridSizeVal) {
-    const maxAttempts = 1000;
-    const directions = [
-        { dr: 1, dc: 1 },   // вправо-вниз
-        { dr: 1, dc: -1 },  // влево-вниз
-        { dr: -1, dc: 1 },  // вправо-вверх
-        { dr: -1, dc: -1 }  // влево-вверх
-    ];
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const dir = directions[Math.floor(Math.random() * directions.length)];
-        const startRow = Math.floor(Math.random() * gridSizeVal);
-        const startCol = Math.floor(Math.random() * gridSizeVal);
-        if (tempGrid[startRow][startCol] !== null) continue;
-        let canPlace = true;
-        const coords = [];
-        for (let i = 0; i < word.length; i++) {
-            const r = startRow + i * dir.dr;
-            const c = startCol + i * dir.dc;
-            if (r < 0 || r >= gridSizeVal || c < 0 || c >= gridSizeVal) {
-                canPlace = false;
-                break;
-            }
-            if (tempGrid[r][c] !== null && tempGrid[r][c] !== word[i]) {
-                canPlace = false;
-                break;
-            }
-            coords.push([r, c]);
-        }
-        if (canPlace) {
-            for (let i = 0; i < coords.length; i++) {
-                const [r, c] = coords[i];
-                if (tempGrid[r][c] === null) {
-                    tempGrid[r][c] = word[i];
-                }
-            }
-            return { coords, direction: 'D' }; // D = Diagonal
-        }
-    }
-    return null;
-}
-// ===== МОНЕТИЗАЦИЯ: СКРЫТИЕ СПИСКА СЛОВ =====
-// Состояние: открыт ли список слов для текущего уровня
+ if (typeof vkBridge !=='undefined'){ setInterval(function(){ if ('requestIdleCallback' in window){ requestIdleCallback(function(){ syncAllDataToVK()},{ timeout: 1000})} else{ syncAllDataToVK()}}, 60000)}})(); function tryPlaceDiagonalWord(word, tempGrid, gridSizeVal){ const maxAttempts=1000; const directions=[{ dr: 1, dc: 1},{ dr: 1, dc: -1},{ dr: -1, dc: 1},{ dr: -1, dc: -1} ]; for (let attempt=0; attempt < maxAttempts; attempt++){ const dir=directions[Math.floor(Math.random() * directions.length)]; const startRow=Math.floor(Math.random() * gridSizeVal); const startCol=Math.floor(Math.random() * gridSizeVal); if (tempGrid[startRow][startCol] !==null) continue; let canPlace=true; const coords=[]; for (let i=0; i < word.length; i++){ const r=startRow + i * dir.dr; const c=startCol + i * dir.dc; if (r < 0 || r >=gridSizeVal || c < 0 || c >=gridSizeVal){ canPlace=false; break;} if (tempGrid[r][c] !==null && tempGrid[r][c] !==word[i]){ canPlace=false; break;} coords.push([r, c]);} if (canPlace){ for (let i=0; i < coords.length; i++){ const [r, c]=coords[i]; if (tempGrid[r][c]===null){ tempGrid[r][c]=word[i];}} return{ coords, direction: 'D'};}} return null;}
 let isWordsRevealed = false;
-// Кнопка показа слов
 const revealWordsBtn = document.getElementById('revealWordsBtn');
-// ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ =====
 function showConfirmModal() {
     const modalDiv = document.createElement('div');
     modalDiv.className = 'modal-window';
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:30001;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;margin-bottom:10px;">📖</div>
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Показать слова!</h3>
-        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">
-            Посмотрите короткую рекламу, чтобы открыть список слов!⏱️
-        </p>
-        <div style="display:flex;gap:12px;justify-content:center;">
-            <button id="confirmWatchBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);flex:1;">
-                🎬 Показать
-            </button>
-            <button id="confirmCancelBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;flex:1;">
-                ❌ Отмена
-            </button>
-        </div>
-    `;
+ contentDiv.innerHTML=` <div style="font-size:3rem;margin-bottom:10px;">📖</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Показать слова!</h3><p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">Посмотрите короткую рекламу, чтобы открыть список слов!⏱️ </p><div style="display:flex;gap:12px;justify-content:center;"><button id="confirmWatchBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);flex:1;">🎬 Показать </button><button id="confirmCancelBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;flex:1;">❌ Отмена </button></div>`;
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
-   // ✅ ПРЕДЗАГРУЗКА РЕКЛАМЫ СРАЗУ ПРИ ОТКРЫТИИ МОДАЛКИ
     preloadAd();
-    document.getElementById('confirmWatchBtn').onclick = function() {
-        modalDiv.remove();
-        showRewardedAd(
-            function() {
-                       revealWordsSuccess();
-            },
-            function(errorMessage) {
-                console.log('❌ Ошибка:', errorMessage);
-                showAdUnavailableModal();
-            }
-        );
-    };
+ document.getElementById('confirmWatchBtn').onclick=function(){ modalDiv.remove(); showRewardedAd( function(){ revealWordsSuccess();}, function(errorMessage){ console.log('❌ Ошибка:', errorMessage); showAdUnavailableModal();} );};
     document.getElementById('confirmCancelBtn').onclick = function() {
         modalDiv.remove();
         showMessage('❌ Отменено', 1000);
@@ -3071,40 +1756,9 @@ function showConfirmModal() {
         if (e.target === modalDiv) modalDiv.remove(); 
     };
 }
-// ===== ПРЕДЗАГРУЗКА РЕКЛАМЫ =====
-let adPreloaded = false;
-let adPreloadInFlight = false;
-function preloadAd() {
-    if (typeof vkBridge === 'undefined') {
-        return;
-    }
-    if (adPreloaded) return;
-    if (adPreloadInFlight) return;
-    adPreloadInFlight = true;
-    console.log('📺 Предзагрузка рекламы...');
-    vkBridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-        .then(function (data) {
-            adPreloadInFlight = false;
-            const ok = data && (
-                data.result === true ||
-                data.result === 1 ||
-                data.result === 'ok'
-            );
-            if (ok) {
-                adPreloaded = true;
-                console.log('✅ Реклама предзагружена:', data);
-            } else {
-                adPreloaded = false;
-                console.log('⏳ Реклама ещё не готова:', data);
-            }
-        })
-        .catch(function (error) {
-            adPreloadInFlight = false;
-            adPreloaded = false;
-            console.warn('⚠️ Ошибка предзагрузки рекламы:', error);
-        });
-}
-// ===== МОДАЛКА "РЕКЛАМА НЕДОСТУПНА" =====
+let adPreloaded=false;
+let adPreloadInFlight=false;
+function preloadAd(){ if (typeof vkBridge==='undefined'){ return;} if (adPreloaded) return; if (adPreloadInFlight) return; adPreloadInFlight=true; console.log('📺 Предзагрузка рекламы...'); vkBridge.send('VKWebAppCheckNativeAds',{ ad_format: 'reward'}) .then(function (data){ adPreloadInFlight=false; const ok=data && ( data.result===true || data.result===1 || data.result==='ok' ); if (ok){ adPreloaded=true; console.log('✅ Реклама предзагружена:', data);} else{ adPreloaded=false; console.log('⏳ Реклама ещё не готова:', data);}}) .catch(function (error){ adPreloadInFlight=false; adPreloaded=false; console.warn('⚠️ Ошибка предзагрузки рекламы:', error);});}
 function showAdUnavailableModal() {
     const existing = document.querySelector('.modal-window[data-modal="ad-unavailable"]');
     if (existing) {
@@ -3116,17 +1770,7 @@ function showAdUnavailableModal() {
     modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:30002;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
     const contentDiv = document.createElement('div');
     contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Реклама недоступна</h3>
-        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">
-            Рекламы сейчас нет.<br>
-            Попробуйте зайти позже! 🕐
-        </p>
-        <button id="adUnavailableOkBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">
-            OK 👌
-        </button>
-    `;
+ contentDiv.innerHTML=` <div style="font-size:3rem;margin-bottom:10px;">⚠️</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Реклама недоступна</h3><p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">Рекламы сейчас нет.<br>Попробуйте зайти позже! 🕐 </p><button id="adUnavailableOkBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 30px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);">OK 👌 </button>`;
     modalDiv.appendChild(contentDiv);
     document.body.appendChild(modalDiv);
     document.getElementById('adUnavailableOkBtn').onclick = function() {
@@ -3137,284 +1781,17 @@ function showAdUnavailableModal() {
         if (e.target === modalDiv) modalDiv.remove(); 
     };
 }
-// ===== ФУНКЦИЯ УСПЕШНОГО ОТКРЫТИЯ СЛОВ =====
-function revealWordsSuccess() {
-    isWordsRevealed = true;    
-    // Показываем список слов
-    wordsListContainer.style.display = 'flex';    
-    // СКРЫВАЕМ заголовок и кнопку
-    const wordsHeader = document.getElementById('wordsHeader');
-    if (wordsHeader) {
-        wordsHeader.style.display = 'none';
-    }    
-    showMessage('📖 Список слов открыт!', 1500);
-}
-// ===== ФУНКЦИЯ ПОКАЗА РЕКЛАМЫ =====
-function showRewardedAd(onSuccess, onFail, onCancel) {
-    if (typeof vkBridge === 'undefined') {
-        console.log('ℹ️ VK Bridge не доступен');
-        onFail('Реклама временно недоступна');
-        return;
-    }
-    if (!navigator.onLine) {
-        console.log('ℹ️ Нет интернета');
-        onFail('Реклама временно недоступна');
-        return;
-    }
-    showLoadingOverlay(function () {
-        console.log('❌ Пользователь отменил загрузку рекламы');
-        finish('cancel');
-    });
-    let isFinished = false;
-    let timeoutId = null;
-    let isHidden = false;
-    function clearAdTimeout() {
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
-        }
-    }
-    function finish(result, errorMessage) {
-        if (isFinished) return;
-        isFinished = true;
-        clearAdTimeout();
-        hideLoadingOverlay();
-        document.removeEventListener('visibilitychange', visibilityHandler);
-        if (result === 'success') {
-            onSuccess();
-        } else if (result === 'cancel') {
-            if (typeof onCancel === 'function') onCancel();
-        } else {
-            onFail(errorMessage || 'Реклама временно недоступна');
-        }
-    }
-    function visibilityHandler() {
-        if (document.hidden) {
-            isHidden = true;
-            clearAdTimeout();
-        } else {
-            if (!isFinished) {
-                isHidden = false;
-                          clearAdTimeout();
-                timeoutId = setTimeout(function() {
-                    if (!isFinished && !isHidden) {
-                        console.log('⏰ Таймаут! Реклама не отвечает');
-                        finish('error', 'Реклама временно недоступна');
-                    }
-                }, 180000);
-            }
-        }
-    }
+function revealWordsSuccess(){ isWordsRevealed=true; wordsListContainer.style.display='flex'; const wordsHeader=document.getElementById('wordsHeader'); if (wordsHeader){ wordsHeader.style.display='none';} showMessage('📖 Список слов открыт!', 1500);}
+function showRewardedAd(onSuccess, onFail, onCancel){ if (typeof vkBridge==='undefined'){ console.log('ℹ️ VK Bridge не доступен'); onFail('Реклама временно недоступна'); return;} if (!navigator.onLine){ console.log('ℹ️ Нет интернета'); onFail('Реклама временно недоступна'); return;} showLoadingOverlay(function (){ console.log('❌ Пользователь отменил загрузку рекламы'); finish('cancel');}); let isFinished=false; let timeoutId=null; let isHidden=false; function clearAdTimeout(){ if (timeoutId){ clearTimeout(timeoutId); timeoutId=null;}} function finish(result, errorMessage){ if (isFinished) return; isFinished=true; clearAdTimeout(); hideLoadingOverlay(); document.removeEventListener('visibilitychange', visibilityHandler); if (result==='success'){ onSuccess();} else if (result==='cancel'){ if (typeof onCancel==='function') onCancel();} else{ onFail(errorMessage || 'Реклама временно недоступна');}} function visibilityHandler(){ if (document.hidden){ isHidden=true; clearAdTimeout();} else{ if (!isFinished){ isHidden=false; clearAdTimeout(); timeoutId=setTimeout(function(){ if (!isFinished && !isHidden){ console.log('⏰ Таймаут! Реклама не отвечает'); finish('error', 'Реклама временно недоступна');}}, 180000);}}}
     document.addEventListener('visibilitychange', visibilityHandler);
-    // ⏰ 180 секунд (было 120) — запас для медленного интернета
-    timeoutId = setTimeout(function() {
-        if (!isFinished && !isHidden) {
-            console.log('⏰ Таймаут! Реклама не отвечает');
-            finish('error', 'Реклама временно недоступна');
-        }
-    }, 180000);
-    let checkAttempts = 0;
-    const MAX_CHECK_ATTEMPTS = 6;
-    const CHECK_RETRY_DELAY = 3000;
-    function requestAd() {
-        if (isFinished) return;
-        checkAttempts++;
-        vkBridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
-            .then(function(checkData) {
-                if (isFinished) return null;
-                const isReady = checkData && (
-                    checkData.result === true ||
-                    checkData.result === 1 ||
-                    checkData.result === 'ok'
-                );
-                if (!isReady && checkAttempts < MAX_CHECK_ATTEMPTS) {
-                    console.log('⏳ Реклама ещё не готова, повтор через ' + (CHECK_RETRY_DELAY / 1000) + ' сек...');
-                    setTimeout(requestAd, CHECK_RETRY_DELAY);
-                    return null; // прерываем цепочку, ничего не показываем
-                }
-                hideLoadingOverlay();
-                return vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
-            })
-            .then(function(showData) {
-                if (isFinished || !showData) return;
-                               console.log('📺 Результат показа:', showData.result);
-                const isSuccess = showData && (
-                    showData.result === true ||
-                    showData.result === 1 ||
-                    showData.result === 'ok' ||
-                    showData.result === 'success'
-                );
-                if (isSuccess) {
-                    adPreloaded = false;
-                    preloadAd();
-                    finish('success');
-                } else {
-                    console.log('ℹ️ Реклама не показана (result: false)');
-                    finish('error', 'Реклама не показана');
-                }
-            })
-            .catch(function(error) {
-                if (isFinished) return;
-                console.warn('❌ Ошибка показа рекламы:', error);
-                console.warn('❌ error_type:', error && error.error_type);
-                console.warn('❌ error_data:', error && error.error_data);
-                finish('error', 'Реклама временно недоступна');
-            });
-    }
-    requestAd();
-}
-// ===== ОБРАБОТЧИК КНОПКИ "ПОКАЗАТЬ СЛОВА" =====
-function handleRevealWords() {
-    // Если слова уже открыты - ничего не делаем
-    if (isWordsRevealed) {
-        showMessage('📖 Слова уже открыты', 1000);
-        return;    }    
-    // Показываем модалку подтверждения
-    showConfirmModal();
-}
-// Обработчик кнопки
-if (revealWordsBtn) {
-    revealWordsBtn.addEventListener('click', handleRevealWords);
-}
-// При загрузке нового уровня - скрываем список слов
-function resetWordsVisibility() {
-    isWordsRevealed = false;
-    if (wordsListContainer) {
-        wordsListContainer.style.display = 'none';    }
-    // ПОКАЗЫВАЕМ заголовок и кнопку обратно
-    const wordsHeader = document.getElementById('wordsHeader');
-    if (wordsHeader) {
-        wordsHeader.style.display = 'flex';    }
-    if (revealWordsBtn) {
-        revealWordsBtn.textContent = '📖 Показать слова';
-        revealWordsBtn.style.background = 'var(--accent-color, #ffa54d)';
-    }
-}
-// Переопределяем loadLevelById, чтобы скрывать слова при загрузке уровня
-/*const originalLoadLevelById2 = loadLevelById;
-loadLevelById = function(levelId, difficulty = 'easy') {
-    isGameActive = true;
-    // Вызываем оригинальную функцию
-    originalLoadLevelById2(levelId, difficulty);
-    // Скрываем список слов
-    setTimeout(resetWordsVisibility, 100);
-};*/
-//конец сокрытия списка слов 
-// ===== РАЗБЛОКИРОВКА УРОВНЕЙ =====
-// Получить список разблокированных уровней для категории и сложности
-function getUnlockedLevels(categoryId, difficulty) {
-    const key = `unlocked_levels_${categoryId}_${difficulty}`;
-    const saved = localStorage.getItem(key);
-    return safeParseArray(saved, []);
-}
-// Сохранить разблокированный уровень
-function unlockLevel(categoryId, difficulty, levelNum) {
-    const key = `unlocked_levels_${categoryId}_${difficulty}`;
-    const unlocked = getUnlockedLevels(categoryId, difficulty);
-    if (!unlocked.includes(levelNum)) {
-        unlocked.push(levelNum);
-        localStorage.setItem(key, JSON.stringify(unlocked));
-        syncUnlockedLevelsToVK();
-        return true;
-    }
-    return false;
-}
-// Проверить, разблокирован ли уровень
-function isLevelUnlocked(categoryId, difficulty, levelNum) {
-    // ✅ Проверяем, есть ли уровень в исключениях
-    if (OPEN_LEVELS_EXCEPTIONS.includes(levelNum)) {
-        return true;  // Всегда открыт
-    }    
-    // Уровни 1-10 всегда открыты
-    if (levelNum <= FREE_LEVELS_COUNT) return true;    
-    // Остальные проверяем по разблокировке
-    const unlocked = getUnlockedLevels(categoryId, difficulty);
-    return unlocked.includes(levelNum);
-}
-// Синхронизация разблокированных уровней с VK
-function syncUnlockedLevelsToVK() {
-    if (typeof vkBridge === 'undefined') return;
-     if (!vkDataLoaded) {
-        // Не пишем сразу — попросим общую синхронизацию, она сработает после загрузки
-        syncAllDataToVK();
-        return;
-    }
-    // Собираем все разблокировки
-    const allUnlocked = {};
-    ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff => { 
-        const categories = getCategoriesForDifficulty(diff);
-        categories.forEach(cat => {
-            const key = `unlocked_levels_${cat.id}_${diff}`;
-            const unlocked = getUnlockedLevels(cat.id, diff);
-            if (unlocked.length > 0) {
-                allUnlocked[`${cat.id}_${diff}`] = unlocked;
-            }
-        });
-    });
-    saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked);
-}
-// Загрузка разблокировок из VK и объединение
-function loadUnlockedLevelsFromVK(data) {
-    if (!data) return;
-    let changed = false;
-    for (const key in data) {
-        const [categoryId, difficulty] = key.split('_');
-        if (!categoryId || !difficulty) continue;
-        const vkUnlocked = data[key] || [];
-        const localUnlocked = getUnlockedLevels(parseInt(categoryId), difficulty);
-        // Объединяем: берём все уникальные уровни из обоих списков
-        const merged = [...new Set([...localUnlocked, ...vkUnlocked])];
-        if (merged.length > localUnlocked.length) {
-            const storageKey = `unlocked_levels_${categoryId}_${difficulty}`;
-            localStorage.setItem(storageKey, JSON.stringify(merged));
-            changed = true;
-                  }
-    }
-    if (changed) {
-        // Пересохраняем в VK, чтобы там были все данные
-        syncUnlockedLevelsToVK();
-    }
-}
-// ===== МОДАЛКА РАЗБЛОКИРОВКИ УРОВНЯ =====
+   timeoutId=setTimeout(function(){ if (!isFinished && !isHidden){ console.log('⏰ Таймаут! Реклама не отвечает'); finish('error', 'Реклама временно недоступна');}}, 180000); let checkAttempts=0; const MAX_CHECK_ATTEMPTS=6; const CHECK_RETRY_DELAY=3000; function requestAd(){ if (isFinished) return; checkAttempts++; vkBridge.send('VKWebAppCheckNativeAds',{ ad_format: 'reward'}) .then(function(checkData){ if (isFinished) return null; const isReady=checkData && ( checkData.result===true || checkData.result===1 || checkData.result==='ok' ); if (!isReady && checkAttempts < MAX_CHECK_ATTEMPTS){ console.log('⏳ Реклама ещё не готова, повтор через ' + (CHECK_RETRY_DELAY / 1000) + ' сек...'); setTimeout(requestAd, CHECK_RETRY_DELAY); return null;}
+ hideLoadingOverlay(); return vkBridge.send('VKWebAppShowNativeAds',{ ad_format: 'reward'})}) .then(function(showData){ if (isFinished || !showData) return; console.log('📺 Результат показа:', showData.result); const isSuccess=showData && ( showData.result===true || showData.result===1 || showData.result==='ok' || showData.result==='success' ); if (isSuccess){ adPreloaded=false; preloadAd(); finish('success')} else{ console.log('ℹ️ Реклама не показана (result: false)'); finish('error', 'Реклама не показана')}}) .catch(function(error){ if (isFinished) return; console.warn('❌ Ошибка показа рекламы:', error); console.warn('❌ error_type:', error && error.error_type); console.warn('❌ error_data:', error && error.error_data); finish('error', 'Реклама временно недоступна')})} requestAd()} function handleRevealWords(){ if (isWordsRevealed){ showMessage('📖 Слова уже открыты', 1000); return;} showConfirmModal();} if (revealWordsBtn){ revealWordsBtn.addEventListener('click', handleRevealWords);}
+function resetWordsVisibility(){ isWordsRevealed=false; if (wordsListContainer){ wordsListContainer.style.display='none'} const wordsHeader=document.getElementById('wordsHeader'); if (wordsHeader){ wordsHeader.style.display='flex'} if (revealWordsBtn){ revealWordsBtn.textContent='📖 Показать слова'; revealWordsBtn.style.background='var(--accent-color, #ffa54d)'}}
+function getUnlockedLevels(categoryId, difficulty){ const key=`unlocked_levels_${categoryId}_${difficulty}`; const saved=localStorage.getItem(key); return safeParseArray(saved, [])}
+function unlockLevel(categoryId, difficulty, levelNum){ const key=`unlocked_levels_${categoryId}_${difficulty}`; const unlocked=getUnlockedLevels(categoryId, difficulty); if (!unlocked.includes(levelNum)){ unlocked.push(levelNum); localStorage.setItem(key, JSON.stringify(unlocked)); syncUnlockedLevelsToVK(); return true} return false} function isLevelUnlocked(categoryId, difficulty, levelNum){ if (OPEN_LEVELS_EXCEPTIONS.includes(levelNum)){ return true} if (levelNum <=FREE_LEVELS_COUNT) return true; const unlocked=getUnlockedLevels(categoryId, difficulty); return unlocked.includes(levelNum)} function syncUnlockedLevelsToVK(){ if (typeof vkBridge==='undefined') return; if (!vkDataLoaded){ syncAllDataToVK(); return} const allUnlocked={}; ['easy', 'medium', 'hard', 'expert', 'english', 'french', 'japanese'].forEach(diff=>{ const categories=getCategoriesForDifficulty(diff); categories.forEach(cat=>{ const key=`unlocked_levels_${cat.id}_${diff}`; const unlocked=getUnlockedLevels(cat.id, diff); if (unlocked.length >0){ allUnlocked[`${cat.id}_${diff}`]=unlocked;}});}); saveToVKStorage('wordgame_unlocked_levels_v2', allUnlocked);}
+function loadUnlockedLevelsFromVK(data){ if (!data) return; let changed=false; for (const key in data){ const [categoryId, difficulty]=key.split('_'); if (!categoryId || !difficulty) continue; const vkUnlocked=data[key] || []; const localUnlocked=getUnlockedLevels(parseInt(categoryId), difficulty); const merged=[...new Set([...localUnlocked, ...vkUnlocked])]; if (merged.length >localUnlocked.length){ const storageKey=`unlocked_levels_${categoryId}_${difficulty}`; localStorage.setItem(storageKey, JSON.stringify(merged)); changed=true;}} if (changed){ syncUnlockedLevelsToVK();}}
 function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal-window';
-    modalDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:30003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);';
-    const contentDiv = document.createElement('div');
-    contentDiv.style.cssText = 'background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;';
-    contentDiv.innerHTML = `
-        <div style="font-size:3rem;margin-bottom:10px;">🔓</div>
-        <h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Открыть уровень ${levelNum}?</h3>
-        <p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">
-            Посмотрите короткую рекламу, чтобы разблокировать этот уровень! ⏱️
-        </p>
-        <div style="display:flex;gap:12px;justify-content:center;">
-            <button id="unlockWatchBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);flex:1;">
-                🎬 Посмотреть
-            </button>
-            <button id="unlockCancelBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;flex:1;">
-                ❌ Отмена
-            </button>
-        </div>
-    `;
-    modalDiv.appendChild(contentDiv);
-    document.body.appendChild(modalDiv);
-     // ✅ ПРЕДЗАГРУЗКА РЕКЛАМЫ СРАЗУ ПРИ ОТКРЫТИИ МОДАЛКИ
-    preloadAd();
-    document.getElementById('unlockWatchBtn').onclick = function() {
-        modalDiv.remove();
-        showRewardedAd(
-            function() {
-                       unlockLevel(categoryId, difficulty, levelNum);
-                if (onSuccess) onSuccess();
-                showMessage(`🔓 Уровень ${levelNum} разблокирован!`, 2000);
-            },
-            function(errorMessage) {
-                console.log('❌ Ошибка:', errorMessage);
-                showAdUnavailableModal();
-            }
-        );
-    };
+   const modalDiv=document.createElement('div'); modalDiv.className='modal-window'; modalDiv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:30003;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(5px);'; const contentDiv=document.createElement('div'); contentDiv.style.cssText='background:var(--bg-card, #fff8ec);border-radius:48px;padding:30px;max-width:340px;width:90%;text-align:center;border:2px solid #ffa54d;animation:zoomIn 0.2s ease;'; contentDiv.innerHTML=` <div style="font-size:3rem;margin-bottom:10px;">🔓</div><h3 style="color:var(--text-primary, #2c3e2b);font-size:1.4rem;margin:0 0 10px;">Открыть уровень ${levelNum}?</h3><p style="color:var(--text-secondary, #3a3220);font-size:1rem;line-height:1.5;margin:10px 0 20px;">Посмотрите короткую рекламу, чтобы разблокировать этот уровень! ⏱️ </p><div style="display:flex;gap:12px;justify-content:center;"><button id="unlockWatchBtn" style="background:var(--btn-primary, #517a2f);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 var(--btn-primary-shadow, #2e4a1a);flex:1;">🎬 Посмотреть </button><button id="unlockCancelBtn" style="background:var(--btn-secondary, #8b5a2a);color:var(--text-light, white);border:none;padding:12px 25px;border-radius:50px;font-size:1rem;font-weight:bold;cursor:pointer;box-shadow:0 3px 0 #5a3a1a;flex:1;">❌ Отмена </button></div>`; modalDiv.appendChild(contentDiv); document.body.appendChild(modalDiv); preloadAd(); document.getElementById('unlockWatchBtn').onclick=function(){ modalDiv.remove(); showRewardedAd( function(){ unlockLevel(categoryId, difficulty, levelNum); if (onSuccess) onSuccess(); showMessage(`🔓 Уровень ${levelNum} разблокирован!`, 2000);}, function(errorMessage){ console.log('❌ Ошибка:', errorMessage); showAdUnavailableModal();} );};
     document.getElementById('unlockCancelBtn').onclick = function() {
         modalDiv.remove();
         showMessage('❌ Отменено', 1000);
@@ -3423,8 +1800,6 @@ function showUnlockLevelModal(categoryId, difficulty, levelNum, onSuccess) {
         if (e.target === modalDiv) modalDiv.remove(); 
     };
 }
-//конец разблокировки уровней
-// Обработчик потери/возврата фокуса для браузерной версии
 document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
         pauseGame();
