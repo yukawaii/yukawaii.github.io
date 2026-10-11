@@ -1,11 +1,8 @@
-const vkBridge = window.vkBridge || {
-    send: (event, data) => console.log('[VK Bridge]', event, data),
-    sendPromise: (event, data) => {
-        console.log('[VK Bridge]', event, data);
-        return Promise.resolve({ result: true });
-    },
-    subscribe: () => {}
-};
+if (!window.vkBridge || typeof window.vkBridge.send !== 'function') {
+    console.error('❌ НАСТОЯЩИЙ vkBridge НЕ загружен с CDN!');
+} else {
+    console.log('✅ Настоящий vkBridge загружен, всё ок');
+}
 function getLaunchParams() {
     const result = {};
     try {
@@ -51,7 +48,7 @@ class AdManager {
     }
     checkAndShowBanner() {
         if (void 0 === vkBridge) return void this.scheduleBannerRetry();
-        (vkBridge.sendPromise || vkBridge.send)
+        (window.vkBridge.sendPromise || window.vkBridge)
             .call(vkBridge, "VKWebAppCheckBannerAd", {})
             .then((e) => {
                 if (e && e.result) {
@@ -65,7 +62,7 @@ class AdManager {
     showBannerDirect() {
         if (this.bannerPending) return;
         this.bannerPending = true;
-        (vkBridge.sendPromise || vkBridge.send)
+        (window.vkBridge.sendPromise || window.vkBridge)
             .call(vkBridge, "VKWebAppShowBannerAd", { banner_location: "bottom" })
             .then((e) => {
                 this.bannerPending = false;
@@ -81,7 +78,7 @@ class AdManager {
         if (this.bannerPending) return;
         this.bannerRetryCount++;
         this.bannerPending = true;
-        (vkBridge.sendPromise || vkBridge.send)
+        (window.vkBridge.sendPromise || window.vkBridge)
             .call(vkBridge, "VKWebAppShowBannerAd", { banner_location: "bottom" })
             .then((e) => {
                 this.bannerPending = false;
@@ -111,7 +108,7 @@ class AdManager {
         return new Promise((e) => {
             const t = setTimeout(() => { e(!1); }, 12e4);
             if (void 0 === vkBridge) return clearTimeout(t), void e(!1);
-            (vkBridge.sendPromise || vkBridge.send)
+            (window.vkBridge.sendPromise || window.vkBridge)
                 .call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
                 .then((s) => {
                     if (clearTimeout(t), s) {
@@ -130,7 +127,7 @@ class AdManager {
     }
     preloadRewardedAd() {
         if (void 0 === vkBridge) return;
-        (vkBridge.sendPromise || vkBridge.send)
+        (window.vkBridge.sendPromise || window.vkBridge)
             .call(vkBridge, "VKWebAppCheckNativeAds", { ad_format: "reward" })
             .then((e) => { e && e.result })
             .catch((e) => {});
@@ -433,7 +430,11 @@ checkSeven(number) {7===number&&(this.sevenCount++,this.sevenCount>=7&&this.unlo
 checkComeback() { this.gameErrors>=3&&this.unlockAchievement("comeback");}
 
 setupVKBridge() {
-    vkBridge.subscribe((e) => {
+        if (!window.vkBridge || typeof window.vkBridge.subscribe !== 'function') {
+        console.warn('⚠️ vkBridge.subscribe недоступен');
+        return;
+    }
+    window.vkBridge.subscribe((e) => {
         const t = (e && e.detail && e.detail.type) || e.type;
         if (t === "VKWebAppViewHide") {
             this.sound.ctx && "running" === this.sound.ctx.state && this.sound.ctx.suspend();
@@ -850,7 +851,7 @@ showLeaderboard() {
         return;
     }
     this.syncLeaderboard();
-    vkBridge.send('VKWebAppShowLeaderBoardBox', {
+   window.vkBridge.send('VKWebAppShowLeaderBoardBox', {
         user_result: this.currentDiamonds,
         global: 1
     })
@@ -884,7 +885,7 @@ syncLeaderboard() {
     }
     localStorage.setItem('sudoku_lastLeaderboardAttempt', String(now));
     console.log(`📤 Отправка рекорда ${this.currentDiamonds} для пользователя ${this.vkUserId}`);
-    return vkBridge.send('VKWebAppCallAPIMethod', {
+    return window.vkBridge.send('VKWebAppCallAPIMethod', {
         method: 'secure.addAppEvent',
         params: {
             client_secret: 'jsQlTSHEiXcTe3UyBBnY',
@@ -911,7 +912,7 @@ inviteFriends() {
         this.showGlobalToast('❌ Приглашение друзей недоступно в Одноклассниках', true);
         return;
     }
-    const sendMethod = vkBridge.sendPromise || vkBridge.send;
+    const sendMethod = window.vkBridge.sendPromise || vkBridge.send;
     sendMethod.call(vkBridge, 'VKWebAppShowInviteBox', {});
 }
 checkStreak() {
@@ -1029,7 +1030,7 @@ if (!window.vkBridge || !window.vkBridge.send) {
         `${prefix}totalGameTime`,
         `${prefix}totalGames`
     ];
-    return vkBridge.send('VKWebAppStorageGet', { keys })
+    return window.vkBridge.send('VKWebAppStorageGet', { keys })
         .then((data) => {
             if (data && data.keys) {
                 data.keys.forEach(item => {
@@ -1318,7 +1319,7 @@ claimBonus(amount) {
         localStorage.setItem(`${prefix}sudoku_bonusDate`, this.lastBonusDate);
     } catch (e) {}
     if (this.userId && this.vkInitialized) {
-        vkBridge.send('VKWebAppStorageSet', {
+        window.vkBridge.send('VKWebAppStorageSet', {
             key: `${prefix}bonusDate`,
             value: this.lastBonusDate
         }).catch(err => console.warn('Ошибка сохранения даты бонуса:', err));
