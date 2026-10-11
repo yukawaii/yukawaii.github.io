@@ -17,8 +17,9 @@ function getLaunchParams() {
 const launchParams = getLaunchParams();
 const platform = launchParams.vk_client === 'ok' ? 'ok' : 'vk';
 const userId = parseInt(
-    launchParams.vk_ok_user_id ||  
-    launchParams.viewer_id || 
+    launchParams.vk_user_id ||      
+    launchParams.vk_ok_user_id ||   
+    launchParams.viewer_id ||      
     launchParams.user_id || 
     '0'
 );
