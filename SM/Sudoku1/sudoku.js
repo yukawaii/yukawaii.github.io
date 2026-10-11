@@ -219,7 +219,8 @@ this.achievements = {};
 this.achievementsPage = 0;
 this.achievementsPerPage = this._calcAchievementsPerPage();
         this.currentDiamonds = 0;        
-this.lastBonusDate = null;        
+this.lastBonusDate = null;     
+this.syncedWithVK = false;    
 this.diamondsAwardedForCurrentGame = false; 
 this.vkInitialized = false;
 this.vkUserId = null;
@@ -789,7 +790,7 @@ loadDiamonds() {
                     value: String(localDiamonds)
                 }).catch(() => {});
             }
-
+    this.syncedWithVK = true; 
             this.saveDiamonds();
             this.updateDiamondUI();
             this.syncLeaderboard();
@@ -811,13 +812,19 @@ loadDiamondsLocal() {
     this.updateDiamondUI();
 }
 saveDiamonds() {
-      try {
+    try {
         const prefix = this.platform === 'ok' ? 'ok_' : '';
         localStorage.setItem(`${prefix}sudoku_diamonds`, String(this.currentDiamonds));
         if (this.lastBonusDate) {
             localStorage.setItem(`${prefix}sudoku_bonusDate`, this.lastBonusDate);
         }
     } catch (e) {}
+    if (this.currentDiamonds === 0 && !this.syncedWithVK) {
+        console.warn('🛡 Пропуск записи 0 в VK — данные ещё не загружены');
+        this.updateDiamondUI();
+        return;
+    }
+
     if (window.vkBridge && window.vkBridge.send) {
         const prefix = this.platform === 'ok' ? 'ok_' : '';
         window.vkBridge.send('VKWebAppStorageSet', {
@@ -1096,6 +1103,8 @@ if (!window.vkBridge || !window.vkBridge.send) {
                     }
                 });
             }
+
+            this.syncedWithVK = true;
             this.checkAchievements();
             this.saveAchievements();
         })
