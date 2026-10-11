@@ -692,6 +692,12 @@ async initVK() {
         return;
     }
     try {
+          try {
+            await vkBridge.send('VKWebAppInit');
+        } catch (e) {
+            console.warn('VKWebAppInit error:', e);
+        }
+
         if (this.userId) {
             this.vkUserId = this.userId;
             this.vkInitialized = true;
