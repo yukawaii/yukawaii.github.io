@@ -700,7 +700,12 @@ async initVK() {
         this.updateDiamondUI();
         this.initAdBanner();
     };
-    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
+    console.log('🔍 vkBridge:', typeof window.vkBridge, 'userId:', this.userId,
+                'platform:', this.platform, 'search:', window.location.search,
+                'hash:', window.location.hash);
+
+    if (!window.vkBridge || !window.vkBridge.send) {
+        console.warn('❌ vkBridge не загрузился! Работаем только с localStorage.');
         this.loadDiamondsLocal();
         await this.loadAchievements();
         finishLoading();
@@ -708,42 +713,39 @@ async initVK() {
     }
     try {
         try {
-            await vkBridge.send('VKWebAppInit');
+            await window.vkBridge.send('VKWebAppInit');
             console.log('✅ VKWebAppInit OK');
-        } catch (e) {
-            console.warn('⚠️ VKWebAppInit error:', e);
-        }
-        if (this.userId && this.userId > 0) {
+        } catch (e) { console.warn('⚠️ VKWebAppInit:', e); }
+        if (this.userId > 0) {
             this.vkUserId = this.userId;
             this.vkInitialized = true;
-            console.log('✅ userId из launch-параметров:', this.userId);
         } else {
             try {
-                const userInfo = await vkBridge.send('VKWebAppGetUserInfo', {});
+                const userInfo = await window.vkBridge.send('VKWebAppGetUserInfo', {});
                 console.log('👤 VKWebAppGetUserInfo:', userInfo);
                 if (userInfo && userInfo.id) {
                     this.vkUserId = userInfo.id;
                     this.userId = userInfo.id;
                     this.vkInitialized = true;
                 }
-            } catch (e) {
-                console.warn('⚠️ VKWebAppGetUserInfo error:', e);
-            }
+            } catch (e) { console.warn('⚠️ GetUserInfo:', e); }
         }
-        console.log('🔄 Загружаем данные из VK Storage...');
+        console.log('🔄 Загружаем из VK Storage...');
         await Promise.all([
             this.loadDiamonds(),
             this.loadAchievements()
         ]);
-        console.log('📊 Итог загрузки:', {
+
+        console.log('📊 После синхронизации:', {
             diamonds: this.currentDiamonds,
-            achievements: Object.keys(this.achievements).filter(k => this.achievements[k]).length,
+            achievementsUnlocked: Object.values(this.achievements).filter(v => v === true).length,
             userId: this.userId,
             vkInitialized: this.vkInitialized
         });
+
         finishLoading();
     } catch (err) {
-        console.warn('❌ Ошибка инициализации VK:', err);
+        console.warn('❌ Ошибка initVK:', err);
         this.loadDiamondsLocal();
         await this.loadAchievements();
         finishLoading();
@@ -751,28 +753,42 @@ async initVK() {
 }
 loadDiamonds() {
     this.loadDiamondsLocal();
-    if (typeof vkBridge === 'undefined' || !vkBridge.send) {
+
+    if (!window.vkBridge || !window.vkBridge.send) {
+        console.log('❌ vkBridge недоступен в loadDiamonds');
         return Promise.resolve();
     }
+
     const prefix = this.platform === 'ok' ? 'ok_' : '';
     const keys = [`${prefix}diamonds`, `${prefix}bonusDate`];
-    return vkBridge.send('VKWebAppStorageGet', { keys })
+    const localDiamonds = this.currentDiamonds;
+    const localBonusDate = this.lastBonusDate;
+
+    return window.vkBridge.send('VKWebAppStorageGet', { keys })
         .then((data) => {
-            console.log('💎 VK Storage diamonds response:', data);
+            console.log('💎 VK Storage GET diamonds:', data);
+
+            let vkDiamonds = 0;
+            let vkBonusDate = null;
             if (data && data.keys) {
                 data.keys.forEach(item => {
-                    if (item.key === `${prefix}diamonds`) {
-                        const vkVal = parseInt(item.value) || 0;
-                                     this.currentDiamonds = Math.max(this.currentDiamonds, vkVal);
-                    }
-                    if (item.key === `${prefix}bonusDate`) {
-                        const vkDate = item.value || null;
-                        if (vkDate && (!this.lastBonusDate || vkDate > this.lastBonusDate)) {
-                            this.lastBonusDate = vkDate;
-                        }
-                    }
+                    if (item.key === `${prefix}diamonds`)  vkDiamonds  = parseInt(item.value) || 0;
+                    if (item.key === `${prefix}bonusDate`) vkBonusDate = item.value || null;
                 });
             }
+
+            this.currentDiamonds = Math.max(localDiamonds, vkDiamonds);
+            if (vkBonusDate && (!localBonusDate || vkBonusDate > localBonusDate)) {
+                this.lastBonusDate = vkBonusDate;
+            }
+            if (localDiamonds > vkDiamonds) {
+                console.log(`📤 Локально больше (${localDiamonds} > ${vkDiamonds}), синхронизируем вверх`);
+                window.vkBridge.send('VKWebAppStorageSet', {
+                    key: `${prefix}diamonds`,
+                    value: String(localDiamonds)
+                }).catch(() => {});
+            }
+
             this.saveDiamonds();
             this.updateDiamondUI();
             this.syncLeaderboard();
@@ -794,25 +810,27 @@ loadDiamondsLocal() {
     this.updateDiamondUI();
 }
 saveDiamonds() {
-    try {
+      try {
         const prefix = this.platform === 'ok' ? 'ok_' : '';
         localStorage.setItem(`${prefix}sudoku_diamonds`, String(this.currentDiamonds));
         if (this.lastBonusDate) {
             localStorage.setItem(`${prefix}sudoku_bonusDate`, this.lastBonusDate);
         }
     } catch (e) {}
-    if (this.userId && this.vkInitialized) {
+    if (window.vkBridge && window.vkBridge.send) {
         const prefix = this.platform === 'ok' ? 'ok_' : '';
-        vkBridge.send('VKWebAppStorageSet', {
+        window.vkBridge.send('VKWebAppStorageSet', {
             key: `${prefix}diamonds`,
             value: String(this.currentDiamonds)
-        }).catch(err => console.warn('Ошибка сохранения diamonds:', err));
+        }).then(() => {
+            console.log('💎 VK Storage SET diamonds =', this.currentDiamonds);
+        }).catch(err => console.warn('❌ StorageSet diamonds:', err));
 
         if (this.lastBonusDate) {
-            vkBridge.send('VKWebAppStorageSet', {
+            window.vkBridge.send('VKWebAppStorageSet', {
                 key: `${prefix}bonusDate`,
                 value: this.lastBonusDate
-            }).catch(err => console.warn('Ошибка сохранения bonusDate:', err));
+            }).catch(err => console.warn('❌ StorageSet bonusDate:', err));
         }
     }
     this.updateDiamondUI();
@@ -989,9 +1007,10 @@ loadAchievements() {
         const perfectWins = localStorage.getItem(`${prefix}sudoku_perfectWins`);
         if (perfectWins) { try { this.perfectWins = JSON.parse(perfectWins); } catch(e) {} }
     } catch (e) {}
-if (typeof vkBridge === 'undefined' || !vkBridge.send) {
-    this.checkAchievements(); 
-    this.saveAchievements();  
+if (!window.vkBridge || !window.vkBridge.send) {
+    console.log('❌ vkBridge недоступен в loadAchievements');
+    this.checkAchievements();
+    this.saveAchievements();
     return Promise.resolve();
 }
     const prefix = this.platform === 'ok' ? 'ok_' : '';
@@ -1102,24 +1121,27 @@ saveAchievements() {
         localStorage.setItem(`${prefix}sudoku_totalPlaced`, String(this.totalPlaced));
         localStorage.setItem(`${prefix}sudoku_totalGameTime`, String(this.totalGameTime));
     } catch (e) {}
-    if (this.userId && this.vkInitialized) {
-        const sets = [
-            { key: `${prefix}achievements`, value: JSON.stringify(this.achievements) },
-            { key: `${prefix}totalWins`, value: String(this.totalWins) },
-            { key: `${prefix}totalHints`, value: String(this.totalHintsUsed) },
-            { key: `${prefix}totalBonuses`, value: String(this.totalBonuses) },
-            { key: `${prefix}totalGames`, value: String(this.totalGames) },
-            { key: `${prefix}winStreak`, value: String(this.winStreak) },
-            { key: `${prefix}maxWinStreak`, value: String(this.maxWinStreak) },
-            { key: `${prefix}winsByLevel`, value: JSON.stringify(this.winsByLevel) },
-            { key: `${prefix}noHintWins`, value: String(this.noHintWins) },
-            { key: `${prefix}perfectWins`, value: JSON.stringify(this.perfectWins) },
-            { key: `${prefix}totalChecks`, value: String(this.totalChecks) },
-            { key: `${prefix}totalPlaced`, value: String(this.totalPlaced) },
-            { key: `${prefix}totalGameTime`, value: String(this.totalGameTime) }
-        ];
-sets.forEach((({key:e,value:a})=>{vkBridge.send("VKWebAppStorageSet",{key:e,value:a}).catch((e=>{}))}));
-    }
+if (window.vkBridge && window.vkBridge.send) {
+    const sets = [
+        { key: `${prefix}achievements`,  value: JSON.stringify(this.achievements) },
+        { key: `${prefix}totalWins`,     value: String(this.totalWins) },
+        { key: `${prefix}totalHints`,    value: String(this.totalHintsUsed) },
+        { key: `${prefix}totalBonuses`,  value: String(this.totalBonuses) },
+        { key: `${prefix}totalGames`,    value: String(this.totalGames) },
+        { key: `${prefix}winStreak`,     value: String(this.winStreak) },
+        { key: `${prefix}maxWinStreak`,  value: String(this.maxWinStreak) },
+        { key: `${prefix}winsByLevel`,   value: JSON.stringify(this.winsByLevel) },
+        { key: `${prefix}noHintWins`,    value: String(this.noHintWins) },
+        { key: `${prefix}perfectWins`,   value: JSON.stringify(this.perfectWins) },
+        { key: `${prefix}totalChecks`,   value: String(this.totalChecks) },
+        { key: `${prefix}totalPlaced`,   value: String(this.totalPlaced) },
+        { key: `${prefix}totalGameTime`, value: String(this.totalGameTime) }
+    ];
+    sets.forEach(({ key, value }) => {
+        window.vkBridge.send('VKWebAppStorageSet', { key, value })
+            .catch(e => console.warn('❌ StorageSet', key, e));
+    });
+}
 }
 unlockAchievement(id) {
     if (!this.achievements[id]) {
