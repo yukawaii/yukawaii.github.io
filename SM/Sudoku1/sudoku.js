@@ -705,7 +705,7 @@ async initVK() {
         } else {
             const userInfo = await vkBridge.send('VKWebAppGetUserInfo', {});
             if (userInfo && userInfo.id) {
-               // this.vkUserId = userInfo.id;
+                this.vkUserId = userInfo.id;
                  this.userId = userInfo.id; 
                 this.vkInitialized = true;
             } else {
