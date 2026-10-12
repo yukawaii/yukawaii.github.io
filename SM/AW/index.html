@@ -344,7 +344,6 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
         <span class="btn-icon-emoji">🏅</span>
         <span class="btn-icon-count" id="ach-badge">0</span>
       </button>
-      <button class="btn btn-ghost btn-icon" onclick="top0()" data-vk-only data-i18n-title="titleTop">🏆</button>
       <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
       <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
       <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
@@ -389,7 +388,6 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
         </div>
         <button class="btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button>
         <div class="home-actions">
-          <button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button>
           <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
           <button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button>
           <a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a>
@@ -436,8 +434,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
         <div class="result-actions">
           <button class="btn btn-primary" id="restart-btn" data-i18n="playAgain">Играть ещё</button>
           <a class="btn btn-ghost" href="#/collection" data-i18n="collection">📔 Коллекция</a>
-          <button class="btn btn-ghost" onclick="top0()" data-vk-only><span data-i18n="top">Топ</span></button>
-          <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
+               <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
           <button class="btn btn-ghost" id="home-btn" data-i18n="backHome">🏠 В начало</button>
           <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
         </div>
@@ -1232,100 +1229,15 @@ w.storageSet = storageSet;
 w.vkSend = vkSend;
 let __lastRewardedAdTime = 0;let __lastInterstitialTime = 0; 
 const REWARDED_AD_COOLDOWN = 31000;const INTERSTITIAL_AD_COOLDOWN = 300000;
-function showRewardedAd() {
-  if (P.isStandalone && !isYandex && typeof YaGames === 'undefined') return Promise.resolve(true);
-  const yandexActive = isYandex || (typeof YaGames !== 'undefined' && !isVK && !isOK);
-  if (yandexActive) {
-    return new Promise(resolve => {
-      const now = Date.now();
-      if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false);
-      const runAd = (sdk) => {
-        if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !== 'function') {
-          console.warn('Yandex adv API unavailable');
-          return resolve(false);
-        }
-        __lastRewardedAdTime = Date.now();
-        yandexGameplayStop();
-        adMute();
-        let rewarded = false;
-        let finished = false;
-        const finish = (result) => {
-          if (finished) return;
-          finished = true;
-          adUnmute();
-          yandexGameplayStart();
-          resolve(result);
-        };
-        try {
-          sdk.adv.showRewardedVideo({
-            callbacks: {
-              onRewarded: () => { rewarded = true; },
-              onClose: () => { finish(rewarded); },
-              onError: (e) => { console.warn('Yandex ad error:', e); finish(false); }
-            }
-          });
-        } catch (e) { console.warn('Yandex showRewardedVideo exception:', e); finish(false); }
-      };
-      if (ysdk && ysdk.adv) {
-        runAd(ysdk);
-      } else if (typeof YaGames !== 'undefined') {
-        YaGames.init().then(sdk => {
-          ysdk = sdk;
-          if (!isYandex) {
-            isYandex = true;
-            platform = 'yandex';
-            P.isYandex = true;
-            P.platform = 'yandex';
-            P.isStandalone = false;
-          }
-          if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p => { ysdkPlayer = p; }).catch(() => {});
-          runAd(sdk);
-        }).catch(err => { console.warn('YaGames re-init failed:', err); resolve(false); });
-      } else resolve(false);
-    });
-  }
-if (isVK || isOK) {
-  if (w.__rewardAdInFlight) return w.__rewardAdInFlight;
-  let resolveOuter;
-  w.__rewardAdInFlight = new Promise(res => { resolveOuter = res; });
-  adMute();
-  const bridge = w.vkBridge;
-  const promise = new Promise(resolve => {
-    let finished = false;
-    let adTimeout = null;
-    const done = (result, reason) => {
-      if (finished) return;
-      finished = true;
-      if (adTimeout) { clearTimeout(adTimeout); adTimeout = null; }
-      try { if (!d.hidden) adUnmute(); else adPlaying = false; } catch (e) { adUnmute(); }
-      console.log('VK reward ad →', reason, '| result =', result);
-      w.__rewardAdInFlight = null;
-      resolve(result);
-      resolveOuter(result);
-    };
-    adTimeout = setTimeout(() => done(false, 'timeout-60s'), 60000);
-    if (!bridge || typeof bridge.send !== 'function') return done(false, 'no-bridge');
-    try {
-      bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' }).then(data => {
-        if (data == null) return done(false, 'null-response');
-        const ok = data.result === true || data.result === 1 || data.result === 'true' || data.success === true;
-        try { bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' }).catch(() => {}); } catch (e) {}
-        if (ok) done(true, 'watched');
-        else done(false, 'not-completed:' + JSON.stringify(data));
-      }).catch(err => {
-        done(false, 'error:' + ((err && err.message) || err));
-      });
-    } catch (e) {
-      done(false, 'exception:' + ((e && e.message) || e));
-    }
-  });
-  return promise;
-}
-  return Promise.resolve(false);
-}
+async function waitForRewardAdAvailable(maxWaitMs, pollIntervalMs){ maxWaitMs=maxWaitMs || 12000; pollIntervalMs=pollIntervalMs || 900; const startWait=Date.now(); while (Date.now() - startWait < maxWaitMs){ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); if (chk && chk.result===true) return true; await new Promise(r=>setTimeout(r, pollIntervalMs));} return false;}
+let __adPreloadTimer = null;
+function preloadRewardedAd(){ if (!(isVK || isOK)) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); if (__adPreloadTimer) return; __adPreloadTimer=setInterval(()=>{ if (adPlaying) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 45000);}
+function showRewardedAd() {  if (P.isStandalone && !isYandex && typeof YaGames==='undefined') return Promise.resolve(true); const yandexActive=isYandex || (typeof YaGames !=='undefined' && !isVK && !isOK);
+ if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false);} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result);}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true;}, onClose: ()=>{ finish(rewarded);}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false);}}});} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false);}}; if (ysdk && ysdk.adv){ runAd(ysdk);} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false;} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p;}).catch(()=>{}); runAd(sdk);}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false);});} else resolve(false);});} 
+ if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res;}); adMute(); const promise=(async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK reward ad →', reason, '| result=', result); try{ adUnmute();} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result);}; try{ const available=await waitForRewardAdAvailable(12000, 900); if (!available){ await new Promise(r=>setTimeout(r, 1500)); const retry=await vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); if (!(retry && retry.result===true)){ return finish(false, 'not-available-after-wait');}} const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward'}, 90000); if (data==null) return finish(false, 'null-response'); const ok=data.result===true || data.result===1 || data.result==='true' || data.success===true; setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); finish(ok, ok ? 'watched' : 'not-completed:' + JSON.stringify(data));} catch (e){ finish(false, 'error:' + ((e && e.message) || e));}})(); return promise;} return Promise.resolve(false);}
 function showInterstitial(){ const now=Date.now(); if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;} if (isVK || isOK){ adMute(); vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 30000) .then(()=>adUnmute()) .catch(()=>adUnmute());}}
 let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=3;
-const BANNER_RETRY_DELAY=5 * 60 * 1000; 
+const BANNER_RETRY_DELAY=5000; 
 function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return;} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo);}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo);});}
 function scheduleBannerRetry(attemptNo){ if (bannerShown) return; if (attemptNo >=BANNER_MAX_ATTEMPTS){ console.warn('⛔ Banner retry limit reached (' + BANNER_MAX_ATTEMPTS + ' attempts)'); return;} bannerRetryTimer=setTimeout(function (){ bannerRetryTimer=null; showBanner();}, BANNER_RETRY_DELAY); console.log('🔁 Banner retry in ' + (BANNER_RETRY_DELAY / 1000) + 's (next attempt #' + (attemptNo + 1) + ')');}
 function preloadRewardedAd() { if (isVK || isOK) vkSend('VKWebAppCheckNativeAds', { ad_format: 'reward' }, 3000); }
@@ -1337,25 +1249,58 @@ w.showBanner = showBanner;
 w.preloadRewardedAd = preloadRewardedAd;
 w.yandexGameplayStart = yandexGameplayStart;
 w.yandexGameplayStop = yandexGameplayStop;
-function submitScore(value){ if ((isVK || isOK) && P.inIframe){ let storedId=0; try{ storedId=Number(sessionStorage.getItem('id')) || 0;} catch (e){} const uid=P.userId || storedId; if (!uid) return; vkSend('VKWebAppCallAPIMethod',{ method: 'secure.addAppEvent', params:{ client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'}}, 5000);} if (isYandex && ysdk){ try{ if (ysdk.leaderboards && ysdk.leaderboards.setScore) ysdk.leaderboards.setScore('bestscore', value).catch(()=>{});} catch (e){}}}
-function infr(){ if (isOK){ toast(w.t('inviteOK'), true); return;} if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} vkSend('VKWebAppShowInviteBox');}
-async function top0(){ if (isOK) return; if (!isVK) return; if (!P.inIframe){ toast(w.t('topVKOnly')); return} const totalScore=Number(w.score) || Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; const uid=P.userId || Number(sessionStorage.getItem('id')); if (!uid || isNaN(uid) || uid===0){ console.error('❌ uid невалиден! Ни один из способов не дал числовой ID. Отправка невозможна.'); toast(w.t('topNoId'), true); try{ await vkSend('VKWebAppShowLeaderBoardBox',{ user_result: totalScore, global: 1}, 5000)} catch (e){} return} if (totalScore >0){ const lastSent=Number(localStorage.getItem('aq_lastSentScore') || '0'); const isImprovement=totalScore >lastSent; console.log('🏆 lastSent=', lastSent, '| isImprovement=', isImprovement); if (isImprovement){ try{ const result=await vkSend('VKWebAppCallAPIMethod',{ method: 'secure.addAppEvent', params:{ client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: totalScore, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8'}}, 8000); console.log('🏆 secure.addAppEvent ПОЛНЫЙ ответ:', JSON.stringify(result)); if (result && result.error){ console.error('❌ Ошибка VK API:', result.error.error_code, '-', result.error.error_msg)} else if (result && result.response !==undefined){ console.log('✅ Очки отправлены:', totalScore); try{ localStorage.setItem('aq_lastSentScore', String(totalScore))} catch (e){}} else{ console.warn('⚠️ Неожиданный ответ:', result)}} catch (e){ console.error('❌ Исключение:', e)}} else{ console.log('⏩ Рекорд не улучшен')}} else{ console.warn('⚠️ totalScore=0, отправка пропущена')} try{ console.log('🏆 Открываем таблицу, user_result=', totalScore, ', global=1'); const lbResult=await vkSend('VKWebAppShowLeaderBoardBox',{ user_result: totalScore, global: 1}, 5000); console.log('🏆 Таблица открыта, ответ:', JSON.stringify(lbResult))} catch (e){ console.error('❌ Ошибка открытия таблицы:', e); toast(w.t('topOpenError'), true)}}
-function favor1(){ if (isVK || isOK) vkSend('VKWebAppAddToFavorites');}
-w.submitScore=submitScore;
-w.infr=infr;
-w.top0=top0;
-w.favor1=favor1;
-w.myadd1=showInterstitial;
-function toast(msg, isError, title){ let el=d.getElementById('__toast'); if (!el){ el=d.createElement('div'); el.id='__toast'; d.body.appendChild(el);} el.className='toast' + (isError ? ' toast-error' : ''); if (title){ el.innerHTML='<div class="toast-title">' + escapeHtml(title) + '</div><div class="toast-msg">' + escapeHtml(msg) + '</div>';} else el.textContent=msg; requestAnimationFrame(()=>el.classList.add('show')); clearTimeout(el.__t); el.__t=setTimeout(()=>el.classList.remove('show'), 3200);}
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]));}
-w.toast=toast;
-let soundEnabled=false;
-let adPlaying=false;
-let audioCtx=null;
-let bgAudio=null;
-let bgStarted=false;
-function ensureAudioCtx(){ if (!audioCtx){ try{ audioCtx=new (w.AudioContext || w.webkitAudioContext)();} catch (e){ audioCtx=null;}} if (audioCtx && audioCtx.state==='suspended'){ try{ audioCtx.resume();} catch (e){}} return audioCtx;}
-function tone(freq, dur, type, when, peak){ if (adPlaying) return; try{
+function submitScore(value) {
+  if ((isVK || isOK) && P.inIframe) {
+    let storedId = 0;
+    try { storedId = Number(sessionStorage.getItem('id')) || 0; } catch (e) {}
+    const uid = P.userId || storedId;
+    if (!uid) return;
+    vkSend('VKWebAppCallAPIMethod', {
+      method: 'secure.addAppEvent',
+      params: { client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8' }
+    }, 5000);
+  }
+  if (isYandex && ysdk) {
+    try { if (ysdk.leaderboards && ysdk.leaderboards.setScore) ysdk.leaderboards.setScore('bestscore', value).catch(() => {}); } catch (e) {}
+  }
+}
+function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname);} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname);}
+async function infr(){ if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} if (!(isVK || isOK)){ toast(w.t('inviteVKOnly')); return;} const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res);} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true);}}
+async function top0(){ toast(w.t('topVKOnly'), true);}
+function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
+w.submitScore = submitScore;
+w.infr = infr;
+w.top0 = top0;
+w.favor1 = favor1;
+w.myadd1 = showInterstitial;
+function toast(msg, isError, title) {
+  let el = d.getElementById('__toast');
+  if (!el) { el = d.createElement('div'); el.id = '__toast'; d.body.appendChild(el); }
+  el.className = 'toast' + (isError ? ' toast-error' : '');
+  if (title) {
+    el.innerHTML = '<div class="toast-title">' + escapeHtml(title) + '</div><div class="toast-msg">' + escapeHtml(msg) + '</div>';
+  } else el.textContent = msg;
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => el.classList.remove('show'), 3200);
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+w.toast = toast;
+let soundEnabled = false;
+let adPlaying = false;
+let audioCtx = null;
+let bgAudio = null;
+let bgStarted = false;
+function ensureAudioCtx() {
+  if (!audioCtx) { try { audioCtx = new (w.AudioContext || w.webkitAudioContext)(); } catch (e) { audioCtx = null; } }
+  if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (e) {} }
+  return audioCtx;
+}
+function tone(freq, dur, type, when, peak) {
+  if (adPlaying) return;
+  try {
     const ctx = ensureAudioCtx();
     if (!ctx) return;
     const t0 = ctx.currentTime + (when || 0);
