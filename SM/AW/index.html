@@ -1301,26 +1301,10 @@ w.showBanner = showBanner;
 w.preloadRewardedAd = preloadRewardedAd;
 w.yandexGameplayStart = yandexGameplayStart;
 w.yandexGameplayStop = yandexGameplayStop;
-function submitScore(value) {
-  if ((isVK || isOK) && P.inIframe) {
-    let storedId = 0;
-    try { storedId = Number(sessionStorage.getItem('id')) || 0; } catch (e) {}
-    const uid = P.userId || storedId;
-    if (!uid) return;
-    vkSend('VKWebAppCallAPIMethod', {
-      method: 'secure.addAppEvent',
-      params: { client_secret: '8lihTQSiEYN5qlLIW3cU', user_id: uid, activity_id: 2, value: value, v: '5.131', access_token: 'b12c5b82b12c5b82b12c5b82b6b2687cfabb12cb12c5b82db910a67c8f03f89d20ac8e8' }
-    }, 5000);
-  }
-  if (isYandex && ysdk) {
-    try { if (ysdk.leaderboards && ysdk.leaderboards.setScore) ysdk.leaderboards.setScore('bestscore', value).catch(() => {}); } catch (e) {}
-  }
-}
 function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname);} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname);}
 async function infr(){ if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} if (!(isVK || isOK)){ toast(w.t('inviteVKOnly')); return;} const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res);} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true);}}
 async function top0(){ toast(w.t('topVKOnly'), true);}
 function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
-w.submitScore = submitScore;
 w.infr = infr;
 w.top0 = top0;
 w.favor1 = favor1;
@@ -2272,7 +2256,7 @@ try{ const [mapRaw, colRaw, totalRaw]=await Promise.all([ w.storageGet('stars'),
  let map=(mapRaw && typeof mapRaw==='object' && !Array.isArray(mapRaw)) ? mapRaw :{}; let colList=Array.isArray(colRaw) ? colRaw : []; let total=(typeof totalRaw==='number' && !isNaN(totalRaw)) ? totalRaw : 0; const prevStars=Number(map[levelId]) || 0; if (earnedStars >prevStars) map[levelId]=earnedStars; const colBefore=colList.length;
   state.roundCollection.forEach(id => { if (!colList.includes(id)) colList.push(id); });
  total +=state.score; await Promise.all([ w.storageSet('stars', map), w.storageSet('collection', colList), w.storageSet('total', total) ]);
- if (w.__SYNCED__){ w.__SYNCED__.stars=map; w.__SYNCED__.collection=colList; w.__SYNCED__.total=total} w.score=total; w.updateTotalScoreUI(total)} catch (e){ console.warn('finishQuiz save failed:', e)} if (!state.scoreSent){ state.scoreSent=true; try{ w.submitScore(state.score);} catch (e){}} try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts});}
+ if (w.__SYNCED__){ w.__SYNCED__.stars=map; w.__SYNCED__.collection=colList; w.__SYNCED__.total=total} w.score=total; w.updateTotalScoreUI(total)} catch (e){ console.warn('finishQuiz save failed:', e)}  try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts});}
 } catch (e){} setTimeout(()=>{ try{ w.showInterstitial();} catch (e){}}, 400);}
   $('#start-btn').onclick = () => withLock(startQuiz);
   $('#next-btn').onclick = () => withLock(nextQuestion);
@@ -2623,7 +2607,7 @@ w.addEventListener('pagehide', () => {
 });
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
-w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, submitScore, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth };
+w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth };
 })(window, document);
 </script>
 </body>
