@@ -322,187 +322,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
 </style>
 </head>
 <body>
-<div id="loading-screen" class="loading-screen">
-  <div class="loading-inner">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Loading…</div>
-  </div>
-</div>
-<div class="app" id="app-root">
-  <div class="page" id="page-index">
-    <header class="hero">
-      <h1 class="hero-title" data-i18n="appTitle">Угадай животное!</h1>
-      <p class="hero-sub" data-i18n="appSub">Викторина о фауне всех континентов</p>
-    </header>
-    <div class="hero-actions">
-      <span class="btn btn-ghost btn-lg score-chip" data-i18n-title="totalScore" title="Total score">
-        ⭐ <span data-total-score>0</span>
-      </span>
-      <button class="btn btn-primary btn-lg" id="yandex-auth-btn" style="display:none" onclick="openAuthModal()" data-i18n="login">🔑 Войти</button>
-      <a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a>
-      <a class="btn btn-ghost btn-icon" href="#/collection" data-i18n-title="titleCollection">
-        <span class="btn-icon-emoji">📔</span>
-        <span class="btn-icon-count" data-col-count>0/0</span>
-      </a>
-      <button class="btn btn-ghost btn-icon" onclick="Ach.openModal()" data-i18n-title="titleAchievements">
-        <span class="btn-icon-emoji">🏅</span>
-        <span class="btn-icon-count" id="ach-badge">0</span>
-      </button>
-      <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
-      <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
-      <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
-      <a class="btn btn-ghost btn-icon" href="#/igames" data-i18n-title="titleMoreGames">🎲</a>
-      <button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button>
-      <button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-    </div>
-    <section class="card fact-card" id="fact-block" hidden>
-      <h2 class="fact-heading" data-i18n="knownTitle">💡 Знаете ли вы?</h2>
-      <div class="fact-body">
-        <img class="fact-img" id="fact-img" alt="">
-        <div class="fact-text">
-          <div class="fact-name" id="fact-name"></div>
-          <p class="fact-desc" id="fact-desc"></p>
-        </div>
-      </div>
-    </section>
-    <main id="regions"></main>
-  </div>
-  <div class="page" id="page-quiz">
-    <section class="screen" id="lock-screen">
-      <div class="card home-card">
-        <div class="lock-big">🔒</div>
-        <h1 class="home-title" data-i18n="levelLocked">Уровень закрыт</h1>
-        <p class="home-sub" data-i18n="levelLockedSub">Посмотрите рекламу, чтобы открыть его навсегда</p>
-        <button class="btn btn-primary btn-lg" id="lock-watch-btn" data-i18n="watchAd">📺 Смотреть</button>
-        <div class="home-actions">
-          <a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a>
-          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-        </div>
-      </div>
-    </section>
-    <section class="screen" id="home-screen">
-      <div class="card home-card">
-        <div class="badge" id="home-region"></div>
-        <h1 class="home-title" id="home-title"></h1>
-        <div class="home-stars" id="home-stars"></div>
-        <p class="home-sub" data-i18n="tenSeconds">10 секунд на каждый вопрос</p>
-        <div class="home-meta">
-          <div class="meta-item"><span class="num" id="home-count">0</span><span data-i18n="questions">вопросов</span></div>
-   <div class="meta-item"><span class="num" data-i18n="tenSecondsShort">10с</span><span data-i18n="timeOnAnswer">на ответ</span></div>
-        </div>
-        <button class="btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button>
-        <div class="home-actions">
-          <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
-          <button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button>
-          <a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a>
-          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-        </div>
-      </div>
-    </section>
-    <section class="screen" id="quiz-screen">
-      <div class="topbar">
-        <button class="icon-btn" id="quit-btn" aria-label="quit">✕</button>
-        <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="score-pill"><span id="score-val">0</span></div>
-        <button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-      </div>
-      <div class="question-meta">
-        <span class="counter" id="counter">1 / 1</span>
-        <div class="timer" id="timer">
-          <span id="timer-val">10</span>
-          <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
-        </div>
-      </div>
-      <div class="quiz-body">
-        <div class="card question-card">
-          <img class="question-img" id="question-img" alt="">
-          <div class="question-text" id="question-text" hidden></div>
-        </div>
-        <div class="quiz-right">
-          <div class="options" id="options"></div>
-          <div class="description" id="description" hidden></div>
-          <button class="btn btn-primary next-btn" id="next-btn" hidden></button>
-        </div>
-      </div>
-    </section>
-    <section class="screen" id="result-screen">
-      <div class="card result-card">
-        <h1 class="result-title" data-i18n="resTitle">Результат</h1>
-        <div class="result-stars" id="res-stars"></div>
-        <div class="result-percent" id="res-percent">0%</div>
-        <div class="result-grid">
-          <div class="result-cell"><span class="v" id="res-total">0</span><span class="l" data-i18n="resQuestions">вопросов</span></div>
-          <div class="result-cell ok"><span class="v" id="res-correct">0</span><span class="l" data-i18n="resCorrect">верно</span></div>
-          <div class="result-cell bad"><span class="v" id="res-wrong">0</span><span class="l" data-i18n="resWrong">ошибок</span></div>
-        </div>
-        <div class="result-actions">
-          <button class="btn btn-primary" id="restart-btn" data-i18n="playAgain">Играть ещё</button>
-          <a class="btn btn-ghost" href="#/collection" data-i18n="collection">📔 Коллекция</a>
-               <button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
-          <button class="btn btn-ghost" id="home-btn" data-i18n="backHome">🏠 В начало</button>
-          <button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div class="page" id="page-collection">
-    <header class="col-header">
-      <a class="icon-btn" href="#/" aria-label="back" data-i18n="back">←</a>
-      <h1 class="col-title" data-i18n="colTitle">📔 Коллекция</h1>
-      <div class="col-counter" id="col-counter">0 / 0</div>
-      <button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-    </header>
-    <main id="col-body"></main>
-  </div>
-  <div class="page" id="page-igames">
-    <div class="modal modal-inline show">
-      <div class="modal-content">
-        <a class="modal-close" href="#/" aria-label="close">×</a>
-        <h2 class="modal-title" data-i18n="modalOtherTitle">🎲 Другие игры</h2>
-        <button class="modal-close" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound" style="right:50px;font-size:18px;">🔊</button>
-        <div class="games-grid" id="games-grid"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal" id="auth-modal">
-  <div class="modal-content modal-narrow">
-    <button class="modal-close" aria-label="close">×</button>
-    <div class="modal-emoji">🔑</div>
-    <h2 class="modal-title" data-i18n="authTitle">Войти в аккаунт</h2>
-    <p class="modal-text" data-i18n="authText">Войдите, чтобы прогресс синхронизировался.</p>
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="doYandexAuth()" data-i18n="authYandex">Войти через Яндекс</button>
-      <button class="btn btn-ghost" onclick="closeAuthModal()" data-i18n="authSkip">Продолжить без входа</button>
-    </div>
-  </div>
-</div>
-<div class="modal" id="ach-modal">
-  <div class="modal-content">
-    <button class="modal-back" aria-label="back" data-i18n="back">←</button>
-    <button class="modal-close" aria-label="close">×</button>
-    <h2 class="modal-title" data-i18n="achievements">🏅 Достижения</h2>
-    <div class="ach-total"><span data-i18n="achOpened">Открыто:</span> <span id="ach-counter">0 / 0</span></div>
-    <div id="ach-body" class="ach-body"></div>
-  </div>
-</div>
-<div class="modal" id="col-modal">
-  <div class="modal-content">
-       <button class="modal-back" aria-label="back" data-i18n="back">←</button>
-    <button class="modal-close" aria-label="close">×</button>
-    <h2 class="modal-title" id="modal-title"></h2>
-    <img class="modal-img" id="modal-img" alt="">
-    <p class="modal-desc" id="modal-desc"></p>
-  </div>
-</div>
-<div class="modal" id="yandex-leaderboard-modal">
-  <div class="modal-content">
-    <button class="modal-close" aria-label="close">×</button>
-    <h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2>
-    <div id="yandex-leaderboard-body" class="ach-body"></div>
-  </div>
-</div>
-<script>
+<div id="loading-screen" class="loading-screen"><div class="loading-inner"><div class="loading-spinner"></div><div class="loading-text">Loading…</div></div></div><div class="app" id="app-root"><div class="page" id="page-index"><header class="hero"><h1 class="hero-title" data-i18n="appTitle">Угадай животное!</h1><p class="hero-sub" data-i18n="appSub">Викторина о фауне всех континентов</p></header><div class="hero-actions"><span class="btn btn-ghost btn-lg score-chip" data-i18n-title="totalScore" title="Total score">⭐ <span data-total-score>0</span></span><button class="btn btn-primary btn-lg" id="yandex-auth-btn" style="display:none" onclick="openAuthModal()" data-i18n="login">🔑 Войти</button><a class="btn btn-primary btn-lg" href="#/quiz/1001" data-i18n="play">🎮 Играть</a><a class="btn btn-ghost btn-icon" href="#/collection" data-i18n-title="titleCollection"><span class="btn-icon-emoji">📔</span><span class="btn-icon-count" data-col-count>0/0</span></a><button class="btn btn-ghost btn-icon" onclick="Ach.openModal()" data-i18n-title="titleAchievements"><span class="btn-icon-emoji">🏅</span><span class="btn-icon-count" id="ach-badge">0</span></button><button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button><button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button><button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button><button class="btn btn-ghost btn-icon" onclick="openOtherGamesModal()" data-i18n-title="titleMoreGames">🎲</button><button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button><button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div><section class="card fact-card" id="fact-block" hidden><h2 class="fact-heading" data-i18n="knownTitle">💡 Знаете ли вы?</h2><div class="fact-body"><img class="fact-img" id="fact-img" alt=""><div class="fact-text"><div class="fact-name" id="fact-name"></div><p class="fact-desc" id="fact-desc"></p></div></div></section><main id="regions"></main></div><div class="page" id="page-quiz"><section class="screen" id="lock-screen"><div class="card home-card"><div class="lock-big">🔒</div><h1 class="home-title" data-i18n="levelLocked">Уровень закрыт</h1><p class="home-sub" data-i18n="levelLockedSub">Посмотрите рекламу, чтобы открыть его навсегда</p><button class="btn btn-primary btn-lg" id="lock-watch-btn" data-i18n="watchAd">📺 Смотреть</button><div class="home-actions"><a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section><section class="screen" id="home-screen"><div class="card home-card"><div class="badge" id="home-region"></div><h1 class="home-title" id="home-title"></h1><div class="home-stars" id="home-stars"></div><p class="home-sub" data-i18n="tenSeconds">10 секунд на каждый вопрос</p><div class="home-meta"><div class="meta-item"><span class="num" id="home-count">0</span><span data-i18n="questions">вопросов</span></div><div class="meta-item"><span class="num" data-i18n="tenSecondsShort">10с</span><span data-i18n="timeOnAnswer">на ответ</span></div></div><button class="btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button><div class="home-actions"><button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button><button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button><a class="btn btn-ghost" href="#/" data-i18n="backHome">🏠 В начало</a><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section><section class="screen" id="quiz-screen"><div class="topbar"><button class="icon-btn" id="quit-btn" aria-label="quit">✕</button><div class="progress"><div class="progress-fill" id="progress-fill"></div></div><div class="score-pill"><span id="score-val">0</span></div><button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div><div class="question-meta"><span class="counter" id="counter">1 / 1</span><div class="timer" id="timer"><span id="timer-val">10</span><div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div></div></div><div class="quiz-body"><div class="card question-card"><img class="question-img" id="question-img" alt=""><div class="question-text" id="question-text" hidden></div></div><div class="quiz-right"><div class="options" id="options"></div><div class="description" id="description" hidden></div><button class="btn btn-primary next-btn" id="next-btn" hidden></button></div></div></section><section class="screen" id="result-screen"><div class="card result-card"><h1 class="result-title" data-i18n="resTitle">Результат</h1><div class="result-stars" id="res-stars"></div><div class="result-percent" id="res-percent">0%</div><div class="result-grid"><div class="result-cell"><span class="v" id="res-total">0</span><span class="l" data-i18n="resQuestions">вопросов</span></div><div class="result-cell ok"><span class="v" id="res-correct">0</span><span class="l" data-i18n="resCorrect">верно</span></div><div class="result-cell bad"><span class="v" id="res-wrong">0</span><span class="l" data-i18n="resWrong">ошибок</span></div></div><div class="result-actions"><button class="btn btn-primary" id="restart-btn" data-i18n="playAgain">Играть ещё</button><a class="btn btn-ghost" href="#/collection" data-i18n="collection">📔 Коллекция</a><button class="btn btn-ghost" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button><button class="btn btn-ghost" id="home-btn" data-i18n="backHome">🏠 В начало</button><button class="btn btn-ghost" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></div></div></section></div><div class="page" id="page-collection"><header class="col-header"><a class="icon-btn" href="#/" aria-label="back" data-i18n="back">←</a><h1 class="col-title" data-i18n="colTitle">📔 Коллекция</h1><div class="col-counter" id="col-counter">0 / 0</div><button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button></header><main id="col-body"></main></div><div class="modal" id="igames-modal"><div class="modal-content"><button class="modal-back" aria-label="back" data-i18n="back">←</button><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" data-i18n="modalOtherTitle">🎲 Другие игры</h2><div class="games-grid" id="games-grid"></div></div></div></div><div class="modal" id="auth-modal"><div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji">🔑</div><h2 class="modal-title" data-i18n="authTitle">Войти в аккаунт</h2><p class="modal-text" data-i18n="authText">Войдите, чтобы прогресс синхронизировался.</p><div class="modal-actions"><button class="btn btn-primary" onclick="doYandexAuth()" data-i18n="authYandex">Войти через Яндекс</button><button class="btn btn-ghost" onclick="closeAuthModal()" data-i18n="authSkip">Продолжить без входа</button></div></div></div><div class="modal" id="ach-modal"><div class="modal-content"><button class="modal-back" aria-label="back" data-i18n="back">←</button><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" data-i18n="achievements">🏅 Достижения</h2><div class="ach-total"><span data-i18n="achOpened">Открыто:</span><span id="ach-counter">0 / 0</span></div><div id="ach-body" class="ach-body"></div></div></div><div class="modal" id="col-modal"><div class="modal-content"><button class="modal-back" aria-label="back" data-i18n="back">←</button><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" id="modal-title"></h2><img class="modal-img" id="modal-img" alt=""><p class="modal-desc" id="modal-desc"></p></div></div><div class="modal" id="yandex-leaderboard-modal"><div class="modal-content"><button class="modal-close" aria-label="close">×</button><h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2><div id="yandex-leaderboard-body" class="ach-body"></div></div></div><script>
 (function (w) {
 'use strict';
 w.I18N={
@@ -826,7 +646,6 @@ qq('215',[T('Журавль','Crane','Turna'),T('Птица-секретарь',
 ,qq('265',[T('Муравей','Ant','Karınca'),T('Жук-короед','Bark beetle','Kabuk böceği'),T('Термит','Termite','Termit'),T('Проволочник','Wireworm','Tel kurdu')],2,T('Термит. Живёт огромными колониями, строит сложные термитники. Переваривает целлюлозу с помощью симбиотических микроорганизмов.','Termite. Lives in huge colonies and builds complex mounds. Digests cellulose with symbiotic microorganisms.','Termit. Devasa koloniler halinde yaşar ve karmaşık höyükler inşa eder. Selülozu simbiyotik mikroorganizmalarla sindirir.'))
 ]}
 };
-
 w.ACHIEVEMENTS=[
 {id:'prog_first',cat:'progress',icon:'🎯',title:T('Первый шаг','First step','İlk adım'),desc:T('Пройдите первую викторину','Complete your first quiz','İlk testi tamamla'),check:c=>c.totalPlays>=1},
 {id:'prog_aus',cat:'progress',icon:'🌏',title:T('Открыл Австралию','Discovered Australia','Avustralya\'yı keşfettin'),desc:T('Откройте Австралийскую область','Unlock the Australian region','Avustralya bölgesinin kilidini aç'),check:c=>c.unlockedRegions.has('australian')},
@@ -981,23 +800,23 @@ w.THEMED_LEVELS=[
 {id:1028,icon:'🐟',name:T('Рыбы','Fish','Balıklar'),count:15,pool:['2','5','9','15','21','27','32','36','97','103','130','133','139','151','157','244','256','257']},
 ];
 })(window);
-(function (w, d) {
+(function (w, d){
 'use strict';
-const sp = new URLSearchParams(location.search);
-const launchParams = {};
-for (const [k, v] of sp) launchParams[k] = v;
-const vkOK = launchParams.vk_client === 'ok';
-const hasVKParams = !!(launchParams.vk_app_id || launchParams.vk_client_id || launchParams.vk_platform || launchParams.vk_user_id || launchParams.vk_client);
-const hasYaGames = typeof YaGames !== 'undefined';
-const yaEnv = w.YandexGamesSDKEnvironment;
-const hasYaEnv = !!(yaEnv && (yaEnv.appId || yaEnv.clipId));
-let isVK = false, isOK = false, isYandex = false, platform = 'standalone';
-if (hasVKParams) { isOK = vkOK; isVK = !vkOK; platform = isOK ? 'ok' : 'vk'; }
-else if (hasYaGames && hasYaEnv) { isYandex = true; platform = 'yandex'; }
-const userId = parseInt(launchParams.vk_user_id || launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0');
-const storagePrefix = isOK ? 'ok_' : '';
-const P = {isVK, isOK, isYandex, platform, userId, storagePrefix, launchParams, isStandalone: platform === 'standalone', inIframe: (() => { try { return w.self !== w.top; } catch (e) { return true; } })()};
-w.__PLATFORM = P;
+const sp=new URLSearchParams(location.search);
+const launchParams={};
+for (const [k, v] of sp) launchParams[k]=v;
+const vkOK=launchParams.vk_client==='ok';
+const hasVKParams=!!(launchParams.vk_app_id || launchParams.vk_client_id || launchParams.vk_platform || launchParams.vk_user_id || launchParams.vk_client);
+const hasYaGames=typeof YaGames !=='undefined';
+const yaEnv=w.YandexGamesSDKEnvironment;
+const hasYaEnv=!!(yaEnv && (yaEnv.appId || yaEnv.clipId));
+let isVK=false, isOK=false, isYandex=false, platform='standalone';
+if (hasVKParams){ isOK=vkOK; isVK=!vkOK; platform=isOK ? 'ok' : 'vk';}
+else if (hasYaGames && hasYaEnv){ isYandex=true; platform='yandex';}
+const userId=parseInt(launchParams.vk_user_id || launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0');
+const storagePrefix=isOK ? 'ok_' : '';
+const P={isVK, isOK, isYandex, platform, userId, storagePrefix, launchParams, isStandalone: platform==='standalone', inIframe: (()=>{ try{ return w.self !==w.top;} catch (e){ return true;}})()};
+w.__PLATFORM=P;
 const cls=d.documentElement.classList;
 cls.toggle('is-vk', isVK);
 cls.toggle('is-ok', isOK);
@@ -1011,279 +830,69 @@ function normalizeLang(l){ l=String(l || '').toLowerCase(); if (l.startsWith('ru
 function initialLang(){ if (isVK || isOK) return normalizeLang(launchParams.vk_language || 'ru'); if (launchParams.vk_language) return normalizeLang(launchParams.vk_language); return normalizeLang(navigator.language || navigator.userLanguage || 'ru');}
 let LANG=initialLang();
 w.LANG=LANG;
-w.t = function (key) {
-  const cur = (w.I18N && w.I18N[w.LANG]) || {};
-  const fb = (w.I18N && w.I18N.ru) || {};
-  return cur[key] != null ? cur[key] : (fb[key] != null ? fb[key] : key);
-};
-w.L = function (obj) {
-  if (obj == null) return '';
-  if (typeof obj === 'string') return obj;
-  return obj[w.LANG] || obj.ru || '';
-};
-function applyStaticI18n() {
-  d.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = w.t(el.dataset.i18n); });
-  d.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = w.t(el.dataset.i18nTitle); });
-  const lt = d.querySelector('.loading-text');
-  if (lt) lt.textContent = w.t('loading');
-  d.documentElement.lang = LANG;
-}
+w.t=function (key){ const cur=(w.I18N && w.I18N[w.LANG]) ||{}; const fb=(w.I18N && w.I18N.ru) ||{}; return cur[key] !=null ? cur[key] : (fb[key] !=null ? fb[key] : key);};
+w.L=function (obj){ if (obj==null) return ''; if (typeof obj==='string') return obj; return obj[w.LANG] || obj.ru || '';};
+function applyStaticI18n(){ d.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=w.t(el.dataset.i18n);}); d.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.title=w.t(el.dataset.i18nTitle);}); const lt=d.querySelector('.loading-text'); if (lt) lt.textContent=w.t('loading'); d.documentElement.lang=LANG;}
 let ysdk = null, ysdkPlayer = null;
-function vkSend(method, params, timeoutMs) {
-  timeoutMs = timeoutMs || 2000;
-  if (!(isVK || isOK)) return Promise.resolve(null);
-  const trySend = () => {
-    const bridge = w.vkBridge;
-    if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
-    let settled = false;
-    let timerId = null;
-    const call = new Promise(resolve => {
-      try {
-        bridge.send(method, params || {}).then(r => {
-          if (!settled) { settled = true; clearTimeout(timerId); resolve(r); }
-        })
-        .catch(err => {
-        console.error('VK Bridge ' + method + ' ошибка:', JSON.stringify(err, null, 2) || err);
-          if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
-        });
-      } catch (e) {
-        console.error(`VK Bridge ${method} исключение:`, e);
-        if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
-      }
-    });
-    const timer = new Promise(res => {
-      timerId = setTimeout(() => {
-        if (!settled) { settled = true; resolve(null); }
-      }, timeoutMs);
-    });
-    return Promise.race([call, timer]);
-  };
-  if (w.__vkBridgeReady && !w.vkBridge) {
-    return w.__vkBridgeReady.then(() => trySend());
-  }
-  return trySend();
-}
-let __actionLock = false;
-async function withLock(fn) {
-  if (__actionLock) return;
-  __actionLock = true;
-  try { await fn(); } finally { setTimeout(() => { __actionLock = false; }, 300); }
-}
-async function safeCall(fn, fallback = null, label = '') {
-  try { return await fn(); }
-  catch (e) { console.warn('safeCall' + (label ? ' [' + label + ']' : '') + ':', e); return fallback; }
-}
-function storageKey(name) { return storagePrefix + 'aq_' + name; }
-function mergeValues(localVal, remoteVal) {
-  if (localVal == null) return remoteVal;
-  if (remoteVal == null) return localVal;
-  if (Array.isArray(localVal) && Array.isArray(remoteVal)) return Array.from(new Set([...localVal, ...remoteVal]));
-  if (typeof localVal === 'object' && typeof remoteVal === 'object' && !Array.isArray(localVal) && !Array.isArray(remoteVal)) {
-    const merged = { ...localVal };
-    for (const k in remoteVal) {
-      const lv = Number(merged[k]);
-      const rv = Number(remoteVal[k]);
-      if (isNaN(lv) && isNaN(rv)) merged[k] = remoteVal[k];
-      else merged[k] = Math.max(isNaN(lv) ? 0 : lv, isNaN(rv) ? 0 : rv);
-    }
-    return merged;
-  }
-  return localVal;
-}
-function deepMergeMetrics(local, remote) {
-  if (local == null) return remote;
-  if (remote == null) return local;
-  if (typeof local !== 'object' || typeof remote !== 'object') return local;
-  const out = { ...local };
-  const keys = new Set([...Object.keys(local), ...Object.keys(remote)]);
-  for (const k of keys) {
-    const lv = local[k];
-    const rv = remote[k];
-    if (lv === undefined) { out[k] = rv; continue; }
-    if (rv === undefined) { out[k] = lv; continue; }
-    if (Array.isArray(lv) || Array.isArray(rv)) {
-      const a = Array.isArray(lv) ? lv : [];
-      const b = Array.isArray(rv) ? rv : [];
-      out[k] = Array.from(new Set([...a, ...b]));
-      continue;
-    }
-    if (typeof lv === 'object' && typeof rv === 'object') { out[k] = deepMergeMetrics(lv, rv); continue; }
-    if (typeof lv === 'boolean' || typeof rv === 'boolean') { out[k] = !!(lv || rv); continue; }
-    if (typeof lv === 'number' || typeof rv === 'number') {
-      const ln = Number(lv), rn = Number(rv);
-      if (!isNaN(ln) && !isNaN(rn)) {
-        if (k === 'fastestCorrect') out[k] = Math.min(ln, rn);
-        else out[k] = Math.max(ln, rn);
-        continue;
-      }
-    }
-    if (typeof lv === 'string' && typeof rv === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}/.test(lv) && /^\d{4}-\d{2}-\d{2}/.test(rv)) { out[k] = lv > rv ? lv : rv; continue; }
-    }
-    out[k] = lv;
-  }
-  return out;
-}
-async function remoteGet(name) {
-  const key = storageKey(name); 
-  if (isYandex) {
-    if (!ysdkPlayer) return null;
-    try {
-      const data = await ysdkPlayer.getData([key]);
-      const raw = data && data[key];
-      if (raw == null) return null;
-      try { return JSON.parse(raw); } catch { return raw; }
-    } catch (e) { return null; }
-  }
-  if (isVK || isOK) {
-    const data = await vkSend('VKWebAppStorageGet', { keys: [key] }, 1500);
-    const raw = data && data.keys && data.keys[0] && data.keys[0].value;
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch { return raw; }
-  }
-  return null;
-}
-async function remoteSet(name, valueStr) {
-  const key = storageKey(name);
-  if (isYandex) {
-    if (!ysdkPlayer) return false;
-    try { await ysdkPlayer.setData({ [key]: valueStr }, true); return true; } catch (e) { return false; }
-  }
-  if (isVK || isOK) {
-    const r = await vkSend('VKWebAppStorageSet', { key, value: valueStr }, 2500);
-    return r !== null;
-  }
-  return false;
-}
-function safeLocalGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-function safeLocalSet(key, value) {
-  try { localStorage.setItem(key, value); return true; }
-  catch (e) {
-    console.warn('localStorage.setItem failed:', e);
-    try {
-      const keys = Object.keys(localStorage);
-      keys.filter(k => k.startsWith('aq_') && !k.includes('unlocked') && !k.includes('collection')).forEach(k => localStorage.removeItem(k));
-      localStorage.setItem(key, value);
-      return true;
-    } catch (e2) { return false; }
-  }
-}
-function asArray(val, fallback = []) { return Array.isArray(val) ? val : fallback; }
-function asNumber(val, fallback = 0) { const n = Number(val); return isNaN(n) ? fallback : n; }
-function asObject(val, fallback = {}) { return (val && typeof val === 'object' && !Array.isArray(val)) ? val : fallback; }
-function storageGet(name) {
-  const key = storageKey(name);
-  let localVal = null;
-  try {
-    const raw = safeLocalGet(key);
-    if (raw !== null) { try { localVal = JSON.parse(raw); } catch { localVal = raw; } }
-  } catch (e) {}
-  if (P.isStandalone) return Promise.resolve(localVal);
-  if (isYandex) {
-    if (!ysdkPlayer) return Promise.resolve(localVal);
-    return (async () => {
-      try {
-        const data = await ysdkPlayer.getData([key]);
-        const raw = data && data[key];
-        if (raw == null) return localVal;
-        let remoteVal;
-        try { remoteVal = JSON.parse(raw); } catch { remoteVal = raw; }
-        const merged = mergeValues(localVal, remoteVal);
-        try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {}
-        return merged;
-      } catch (e) { console.warn('Cloud getData failed for', key, e); return localVal; }
-    })();
-  }
-  if (isVK || isOK) {
-    return remoteGet(name).then(remoteVal => {
-      const merged = mergeValues(localVal, remoteVal);
-      if (merged != null) { try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {} }
-      return merged;
-    });
-  }
-  return Promise.resolve(localVal);
-}
-function storageSet(name, value) {
-  const key = storageKey(name);
-  const str = typeof value === 'string' ? value : JSON.stringify(value);
-  safeLocalSet(key, str);
-  if (P.isStandalone) return Promise.resolve();
-  if (isYandex) {
-    if (!ysdkPlayer) return Promise.resolve();
-    return (async () => {
-      try { await ysdkPlayer.setData({ [key]: str }, true); } catch (e) { console.warn('Cloud setData failed for', key, e); }
-    })();
-  }
-  if (isVK || isOK) return remoteSet(name, str).catch(() => {});
-  return Promise.resolve();
-}
-w.storageGet = storageGet;
-w.storageSet = storageSet;
-w.vkSend = vkSend;
-let __lastRewardedAdTime = 0;let __lastInterstitialTime = 0; 
-const REWARDED_AD_COOLDOWN = 31000;const INTERSTITIAL_AD_COOLDOWN = 300000;
-async function waitForAdsAvailable(maxWaitMs, pollIntervalMs, adFormat){ maxWaitMs=maxWaitMs || 8000; pollIntervalMs=pollIntervalMs || 700; adFormat=adFormat || 'reward'; const startWait=Date.now(); while (Date.now() - startWait < maxWaitMs){ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: adFormat}, 3000); if (chk && chk.result===true) return true; await new Promise(r=>setTimeout(r, pollIntervalMs));} return false;}
-let __adPreloadTimer = null;
-function preloadRewardedAd(){ if (!(isVK || isOK)) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000); if (__adPreloadTimer) return; __adPreloadTimer=setInterval(()=>{ if (adPlaying) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000);}, 45000);}
-function showRewardedAd(){ if (P.isStandalone && !isYandex && typeof YaGames==='undefined') return Promise.resolve(true); const yandexActive=isYandex || (typeof YaGames !=='undefined' && !isVK && !isOK); if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false)} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result)}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true}, onClose: ()=>{ finish(rewarded)}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false)}}})} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false)}}; if (ysdk && ysdk.adv){ runAd(ysdk)} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p}).catch(()=>{}); runAd(sdk)}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false)})} else{ resolve(false)}})} if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res}); adMute(); (async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK ad flow →', reason, '| result=', result); try{ adUnmute()} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result)}; try{ const rewardReady=await waitForAdsAvailable(8000, 700, 'reward'); if (rewardReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000)}, 500); return finish(ok, ok ? 'reward-watched' : 'reward-not-completed:' + JSON.stringify(data))} console.log('Reward ads unavailable → trying interstitial fallback'); const interReady=await waitForAdsAvailable(4000, 700, 'interstitial'); if (interReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000)}, 500); return finish(ok, ok ? 'interstitial-watched' : 'interstitial-not-completed:' + JSON.stringify(data))} return finish(false, 'no-ads-at-all')} catch (e){ finish(false, 'error:' + ((e && e.message) || e))}})(); return w.__rewardAdInFlight} return Promise.resolve(false)} function showInterstitial(){ const now=Date.now(); if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;} if (isVK || isOK){ (async ()=>{ try{ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000); if (!chk || chk.result !==true){ console.log('Interstitial skipped: no ads'); return;} adMute(); await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 60000);} catch (e){ console.warn('Interstitial failed:', e);} finally{ try{ adUnmute();} catch (e){}}})();}} let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=5;
-const BANNER_RETRY_DELAY=10000; 
-function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return;} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo);}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo);});}
-function scheduleBannerRetry(attemptNo){ if (bannerShown) return; if (attemptNo >=BANNER_MAX_ATTEMPTS){ console.warn('⛔ Banner retry limit reached (' + BANNER_MAX_ATTEMPTS + ' attempts)'); return;} bannerRetryTimer=setTimeout(function (){ bannerRetryTimer=null; showBanner();}, BANNER_RETRY_DELAY); console.log('🔁 Banner retry in ' + (BANNER_RETRY_DELAY / 1000) + 's (next attempt #' + (attemptNo + 1) + ')');}
-function yandexGameplayStart() { if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try { ysdk.features.GameplayAPI.start(); } catch (e) {} }
-function yandexGameplayStop() { if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try { ysdk.features.GameplayAPI.stop(); } catch (e) {} }
-w.showRewardedAd = showRewardedAd;
-w.showInterstitial = showInterstitial;
-w.showBanner = showBanner;
-w.preloadRewardedAd = preloadRewardedAd;
-w.yandexGameplayStart = yandexGameplayStart;
-w.yandexGameplayStop = yandexGameplayStop;
-function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname);} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname);}
-async function infr(){ if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} if (!(isVK || isOK)){ toast(w.t('inviteVKOnly')); return;} const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res);} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true);}}
-async function top0(){ toast(w.t('topVKOnly'), true);}
-function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
-w.infr = infr;
-w.top0 = top0;
-w.favor1 = favor1;
-w.myadd1 = showInterstitial;
-const __toastQueue = [];
-let __toastActive = false;
+function vkSend(method, params, timeoutMs){ timeoutMs=timeoutMs || 2000; if (!(isVK || isOK)) return Promise.resolve(null); const trySend=()=>{ const bridge=w.vkBridge; if (!bridge || typeof bridge.send !=='function') return Promise.resolve(null); let settled=false; let timerId=null; const call=new Promise(resolve=>{ try{ bridge.send(method, params ||{}).then(r=>{ if (!settled){ settled=true; clearTimeout(timerId); resolve(r);}}) .catch(err=>{ console.error('VK Bridge ' + method + ' ошибка:', JSON.stringify(err, null, 2) || err); if (!settled){ settled=true; clearTimeout(timerId); resolve(null);}});} catch (e){ console.error(`VK Bridge ${method} исключение:`, e); if (!settled){ settled=true; clearTimeout(timerId); resolve(null);}}}); const timer=new Promise(res=>{ timerId=setTimeout(()=>{ if (!settled){ settled=true; resolve(null);}}, timeoutMs);}); return Promise.race([call, timer]);}; if (w.__vkBridgeReady && !w.vkBridge){ return w.__vkBridgeReady.then(()=>trySend());} return trySend();}
+let __actionLock=false;
+async function withLock(fn){ if (__actionLock) return; __actionLock=true; try{ await fn();} finally{ setTimeout(()=>{ __actionLock=false;}, 300);}}
+async function safeCall(fn, fallback=null, label=''){ try{ return await fn();} catch (e){ console.warn('safeCall' + (label ? ' [' + label + ']' : '') + ':', e); return fallback;}}
+function storageKey(name){ return storagePrefix + 'aq_' + name;}
+function mergeValues(localVal, remoteVal){ if (localVal==null) return remoteVal; if (remoteVal==null) return localVal; if (Array.isArray(localVal) && Array.isArray(remoteVal)) return Array.from(new Set([...localVal, ...remoteVal])); if (typeof localVal==='object' && typeof remoteVal==='object' && !Array.isArray(localVal) && !Array.isArray(remoteVal)){ const merged={ ...localVal}; for (const k in remoteVal){ const lv=Number(merged[k]); const rv=Number(remoteVal[k]); if (isNaN(lv) && isNaN(rv)) merged[k]=remoteVal[k]; else merged[k]=Math.max(isNaN(lv) ? 0 : lv, isNaN(rv) ? 0 : rv);} return merged;} return localVal;}
+function deepMergeMetrics(local, remote){ if (local==null) return remote; if (remote==null) return local; if (typeof local !=='object' || typeof remote !=='object') return local; const out={ ...local}; const keys=new Set([...Object.keys(local), ...Object.keys(remote)]); for (const k of keys){ const lv=local[k]; const rv=remote[k]; if (lv===undefined){ out[k]=rv; continue;} if (rv===undefined){ out[k]=lv; continue;} if (Array.isArray(lv) || Array.isArray(rv)){ const a=Array.isArray(lv) ? lv : []; const b=Array.isArray(rv) ? rv : []; out[k]=Array.from(new Set([...a, ...b])); continue;} if (typeof lv==='object' && typeof rv==='object'){ out[k]=deepMergeMetrics(lv, rv); continue;} if (typeof lv==='boolean' || typeof rv==='boolean'){ out[k]=!!(lv || rv); continue;} if (typeof lv==='number' || typeof rv==='number'){ const ln=Number(lv), rn=Number(rv); if (!isNaN(ln) && !isNaN(rn)){ if (k==='fastestCorrect') out[k]=Math.min(ln, rn); else out[k]=Math.max(ln, rn); continue;}} if (typeof lv==='string' && typeof rv==='string'){ if (/^\d{4}-\d{2}-\d{2}/.test(lv) && /^\d{4}-\d{2}-\d{2}/.test(rv)){ out[k]=lv >rv ? lv : rv; continue;}} out[k]=lv;} return out;}
+async function remoteGet(name){ const key=storageKey(name); if (isYandex){ if (!ysdkPlayer) return null; try{ const data=await ysdkPlayer.getData([key]); const raw=data && data[key]; if (raw==null) return null; try{ return JSON.parse(raw);} catch{ return raw;}} catch (e){ return null;}} if (isVK || isOK){ const data=await vkSend('VKWebAppStorageGet',{ keys: [key]}, 1500); const raw=data && data.keys && data.keys[0] && data.keys[0].value; if (!raw) return null; try{ return JSON.parse(raw);} catch{ return raw;}} return null;}
+async function remoteSet(name, valueStr){ const key=storageKey(name); if (isYandex){ if (!ysdkPlayer) return false; try{ await ysdkPlayer.setData({ [key]: valueStr}, true); return true;} catch (e){ return false;}} if (isVK || isOK){ const r=await vkSend('VKWebAppStorageSet',{ key, value: valueStr}, 2500); return r !==null;} return false;}
+function safeLocalGet(key){ try{ return localStorage.getItem(key);} catch (e){ return null;}}
+function safeLocalSet(key, value){ try{ localStorage.setItem(key, value); return true;} catch (e){ console.warn('localStorage.setItem failed:', e); try{ const keys=Object.keys(localStorage); keys.filter(k=>k.startsWith('aq_') && !k.includes('unlocked') && !k.includes('collection')).forEach(k=>localStorage.removeItem(k)); localStorage.setItem(key, value); return true;} catch (e2){ return false;}}}
+function asArray(val, fallback=[]){ return Array.isArray(val) ? val : fallback;}
+function asNumber(val, fallback=0){ const n=Number(val); return isNaN(n) ? fallback : n;}
+function asObject(val, fallback={}){ return (val && typeof val==='object' && !Array.isArray(val)) ? val : fallback;}
+function storageGet(name){ const key=storageKey(name); let localVal=null; try{ const raw=safeLocalGet(key); if (raw !==null){ try{ localVal=JSON.parse(raw);} catch{ localVal=raw;}}} catch (e){} if (P.isStandalone) return Promise.resolve(localVal); if (isYandex){ if (!ysdkPlayer) return Promise.resolve(localVal); return (async ()=>{ try{ const data=await ysdkPlayer.getData([key]); const raw=data && data[key]; if (raw==null) return localVal; let remoteVal; try{ remoteVal=JSON.parse(raw);} catch{ remoteVal=raw;} const merged=mergeValues(localVal, remoteVal); try{ localStorage.setItem(key, JSON.stringify(merged));} catch (e){} return merged;} catch (e){ console.warn('Cloud getData failed for', key, e); return localVal;}})();} if (isVK || isOK){ return remoteGet(name).then(remoteVal=>{ const merged=mergeValues(localVal, remoteVal); if (merged !=null){ try{ localStorage.setItem(key, JSON.stringify(merged));} catch (e){}} return merged;});} return Promise.resolve(localVal);}
+function storageSet(name, value){ const key=storageKey(name); const str=typeof value==='string' ? value : JSON.stringify(value); safeLocalSet(key, str); if (P.isStandalone) return Promise.resolve(); if (isYandex){ if (!ysdkPlayer) return Promise.resolve(); return (async ()=>{ try{ await ysdkPlayer.setData({ [key]: str}, true);} catch (e){ console.warn('Cloud setData failed for', key, e);}})();} if (isVK || isOK) return remoteSet(name, str).catch(()=>{}); return Promise.resolve();}
+w.storageGet=storageGet;
+w.storageSet=storageSet;
+w.vkSend=vkSend;
+let __lastRewardedAdTime=0;let __lastInterstitialTime=0; const REWARDED_AD_COOLDOWN=31000;const INTERSTITIAL_AD_COOLDOWN=300000;
+async function waitForAdsAvailable(maxWaitMs, pollIntervalMs, adFormat){ maxWaitMs=maxWaitMs || 8000; pollIntervalMs=pollIntervalMs || 700; adFormat=adFormat || 'reward'; const startWait=Date.now(); while (Date.now() - startWait < maxWaitMs){ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: adFormat}, 3000); if (chk && chk.result===true) return true; await new Promise(r=>setTimeout(r, pollIntervalMs))} return false}
+let __adPreloadTimer=null;
+function preloadRewardedAd(){ if (!(isVK || isOK)) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000); if (__adPreloadTimer) return; __adPreloadTimer=setInterval(()=>{ if (adPlaying) return; vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000)}, 45000)}
+function showRewardedAd(){ if (P.isStandalone && !isYandex && typeof YaGames==='undefined') return Promise.resolve(true); const yandexActive=isYandex || (typeof YaGames !=='undefined' && !isVK && !isOK); if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false)} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result)}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true}, onClose: ()=>{ finish(rewarded)}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false)}}})} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false)}}; if (ysdk && ysdk.adv){ runAd(ysdk)} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p}).catch(()=>{}); runAd(sdk)}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false)})} else{ resolve(false)}})} if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res}); adMute(); (async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK ad flow →', reason, '| result=', result); try{ adUnmute()} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result)}; try{ const rewardReady=await waitForAdsAvailable(8000, 700, 'reward'); if (rewardReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000)}, 500); return finish(ok, ok ? 'reward-watched' : 'reward-not-completed:' + JSON.stringify(data))} console.log('Reward ads unavailable → trying interstitial fallback'); const interReady=await waitForAdsAvailable(4000, 700, 'interstitial'); if (interReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000)}, 500); return finish(ok, ok ? 'interstitial-watched' : 'interstitial-not-completed:' + JSON.stringify(data))} return finish(false, 'no-ads-at-all')} catch (e){ finish(false, 'error:' + ((e && e.message) || e))}})(); return w.__rewardAdInFlight} return Promise.resolve(false)} function showInterstitial(){ const now=Date.now(); if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN){ console.log('Interstitial ad skipped: cooldown active'); return;} const quizScreenActive=document.querySelector('#quiz-screen.active'); if (quizScreenActive){ console.log('Interstitial ad skipped: quiz is active'); return;} __lastInterstitialTime=now; if (isYandex){ if (!ysdk) return; yandexGameplayStop(); adMute(); try{ ysdk.adv.showFullscreenAdv({ callbacks:{ onClose: ()=>{ adUnmute(); yandexGameplayStart();}, onError: ()=>{ adUnmute(); yandexGameplayStart();}}});} catch (e){ adUnmute(); yandexGameplayStart();} return;} if (isVK || isOK){ (async ()=>{ try{ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000); if (!chk || chk.result !==true){ console.log('Interstitial skipped: no ads'); return;} adMute(); await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 60000);} catch (e){ console.warn('Interstitial failed:', e);} finally{ try{ adUnmute();} catch (e){}}})();}}
+ let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=5;
+const BANNER_RETRY_DELAY=10000; function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo)}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo)})}
+function scheduleBannerRetry(attemptNo){ if (bannerShown) return; if (attemptNo >=BANNER_MAX_ATTEMPTS){ console.warn('⛔ Banner retry limit reached (' + BANNER_MAX_ATTEMPTS + ' attempts)'); return} bannerRetryTimer=setTimeout(function (){ bannerRetryTimer=null; showBanner()}, BANNER_RETRY_DELAY); console.log('🔁 Banner retry in ' + (BANNER_RETRY_DELAY / 1000) + 's (next attempt #' + (attemptNo + 1) + ')')}
+function yandexGameplayStart(){ if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try{ ysdk.features.GameplayAPI.start();} catch (e){}}
+function yandexGameplayStop(){ if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try{ ysdk.features.GameplayAPI.stop();} catch (e){}}
+w.showRewardedAd=showRewardedAd;
+w.showInterstitial=showInterstitial;
+w.showBanner=showBanner;
+w.preloadRewardedAd=preloadRewardedAd;
+w.yandexGameplayStart=yandexGameplayStart;
+w.yandexGameplayStop=yandexGameplayStop;
+function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname)} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname)}
+async function infr(){ if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return} if (!(isVK || isOK)){ toast(w.t('inviteVKOnly')); return} const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res)} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true)}}
+async function top0(){ toast(w.t('topVKOnly'), true)}
+function favor1(){ if (isVK || isOK) vkSend('VKWebAppAddToFavorites');}
+w.infr=infr;
+w.top0=top0;
+w.favor1=favor1;
+w.myadd1=showInterstitial;
+const __toastQueue=[];
+let __toastActive=false;
 function __showNextToast(){ if (!__toastQueue.length){ __toastActive=false; return;} __toastActive=true; const{ msg, isError, title}=__toastQueue.shift(); let el=d.getElementById('__toast'); if (!el){ el=d.createElement('div'); el.id='__toast'; d.body.appendChild(el);} el.className='toast' + (isError ? ' toast-error' : ''); if (title){ el.innerHTML='<div class="toast-title">' + escapeHtml(title) + '</div><div class="toast-msg">' + escapeHtml(msg) + '</div>';} else{ el.textContent=msg;} requestAnimationFrame(()=>el.classList.add('show')); clearTimeout(el.__t); el.__t=setTimeout(()=>{ el.classList.remove('show'); setTimeout(__showNextToast, 350);}, 3000);}
 function toast(msg, isError, title){ __toastQueue.push({ msg, isError, title}); if (!__toastActive) __showNextToast();} function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[m]));}
 w.toast=toast;
-let soundEnabled = false;
-let adPlaying = false;
-let audioCtx = null;
-let bgAudio = null;
-let bgStarted = false;
-function ensureAudioCtx() {
-  if (!audioCtx) { try { audioCtx = new (w.AudioContext || w.webkitAudioContext)(); } catch (e) { audioCtx = null; } }
-  if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume(); } catch (e) {} }
-  return audioCtx;
-}
-function tone(freq, dur, type, when, peak) {
-  if (adPlaying) return;
-  try {
-    const ctx = ensureAudioCtx();
-    if (!ctx) return;
-    const t0 = ctx.currentTime + (when || 0);
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = type || 'sine';
-    osc.frequency.setValueAtTime(freq, t0);
-    gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(peak == null ? 0.15 : peak, t0 + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur * 1.6);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(t0);
-    osc.stop(t0 + dur + 0.05);
-    osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch (e) {} };
-  } catch (e) { console.warn('Audio error:', e); }
-}
-let __lastClickSound = 0;
-function playClick(){ if (!soundEnabled) return; const now=Date.now(); if (now - __lastClickSound < 60) return; __lastClickSound=now; tone(587, 0.03, 'sine', 0, 0.02); tone(784, 0.05, 'sine', 0.02, 0.018);}
-function playCorrect() { if (!soundEnabled) return; tone(660, 0.12, 'sine', 0, 0.16); tone(880, 0.16, 'sine', 0.10, 0.16); tone(1320, 0.22, 'sine', 0.22, 0.14); }
-function playWrong() { if (!soundEnabled) return; tone(240, 0.18, 'sawtooth', 0, 0.05); tone(170, 0.30, 'sawtooth', 0.10, 0.05); }
+let soundEnabled=false;
+let adPlaying=false;
+let audioCtx=null;
+let bgAudio=null;
+let bgStarted=false;
+function ensureAudioCtx(){ if (!audioCtx){ try{ audioCtx=new (w.AudioContext || w.webkitAudioContext)();} catch (e){ audioCtx=null;}} if (audioCtx && audioCtx.state==='suspended'){ try{ audioCtx.resume();} catch (e){}} return audioCtx;}
+function tone(freq, dur, type, when, peak){ if (adPlaying) return; try{ const ctx=ensureAudioCtx(); if (!ctx) return; const t0=ctx.currentTime + (when || 0); const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.type=type || 'sine'; osc.frequency.setValueAtTime(freq, t0); gain.gain.setValueAtTime(0.0001, t0); gain.gain.exponentialRampToValueAtTime(peak==null ? 0.15 : peak, t0 + 0.015); gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur * 1.6); osc.connect(gain); gain.connect(ctx.destination); osc.start(t0); osc.stop(t0 + dur + 0.05); osc.onended=()=>{ try{ osc.disconnect(); gain.disconnect();} catch (e){}};} catch (e){ console.warn('Audio error:', e);}}
+let __lastClickSound=0;
+function playClick(){ if (!soundEnabled) return; const now=Date.now(); if (now - __lastClickSound < 60) return; __lastClickSound=now; tone(587, 0.03, 'sine', 0, 0.02); tone(784, 0.05, 'sine', 0.02, 0.018)}
+function playCorrect(){ if (!soundEnabled) return; tone(660, 0.12, 'sine', 0, 0.16); tone(880, 0.16, 'sine', 0.10, 0.16); tone(1320, 0.22, 'sine', 0.22, 0.14);}
+function playWrong(){ if (!soundEnabled) return; tone(240, 0.18, 'sawtooth', 0, 0.05); tone(170, 0.30, 'sawtooth', 0.10, 0.05);}
 function playFanfare(){ if (!soundEnabled) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i)=>tone(f, 0.30, 'triangle', i * 0.12, 0.15)); [523.25, 659.25, 783.99, 1046.5].forEach(f=>tone(f, 0.75, 'sine', 0.55, 0.13));}
 function ensureBgAudio(){ if (bgAudio) return bgAudio; try{ bgAudio=new Audio('music.ogg'); bgAudio.loop=true; bgAudio.volume=0.25; bgAudio.preload='auto'; bgAudio.addEventListener('error', ()=>{ console.warn('Background music failed to load'); bgAudio=null;});} catch (e){ console.warn('Audio creation failed:', e); bgAudio=null;} return bgAudio;}
 function startBgMusic(){ if (!soundEnabled || adPlaying) return; const audio=ensureBgAudio(); if (!audio) return; audio.play().then(()=>{ bgStarted=true;}).catch(()=>{});}
@@ -1296,76 +905,24 @@ function attachSfxToUI(){ d.addEventListener('click', (e)=>{ if (e.target.closes
 function attachAudioUnlock(){ const unlock=()=>{ ensureAudioCtx(); if (soundEnabled && !bgStarted) startBgMusic(); d.removeEventListener('click', unlock, true); d.removeEventListener('touchstart', unlock, true); d.removeEventListener('keydown', unlock, true);}; d.addEventListener('click', unlock, true); d.addEventListener('touchstart', unlock, true); d.addEventListener('keydown', unlock, true);}
 function adMute(){ adPlaying=true; if (soundEnabled) Sound.stopBg();}
 function adUnmute(){ adPlaying=false; if (soundEnabled && bgStarted) Sound.startBg();}
-w.Sound = { playClick, playCorrect, playWrong, playFanfare, toggle: toggleSound, apply: applySoundState, startBg: startBgMusic, stopBg: stopBgMusic, mute: adMute, unmute: adUnmute };
-const THEME_KEY = 'theme_dark';
-function updateThemeColorMeta() {
-  let meta = d.querySelector('meta[name="theme-color"]');
-  if (!meta) { meta = d.createElement('meta'); meta.name = 'theme-color'; d.head.appendChild(meta); }
-  meta.content = darkEnabled ? '#3d2233' : '#fff6ef';
-}
-function applyTheme() {
-  cls.toggle('is-dark', darkEnabled);
-  d.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-    btn.textContent = darkEnabled ? '☀️' : '🌙';
- btn.title = darkEnabled ? w.t('themeLightTitle') : w.t('themeDarkTitle');
-btn.setAttribute('aria-label', btn.title);
-  });
-  updateThemeColorMeta();
-}
-async function loadTheme() {
-  try { const saved = await storageGet(THEME_KEY); darkEnabled = (saved === true); } catch (e) { darkEnabled = false; }
-  applyTheme();
-}
-async function toggleTheme() {
-  darkEnabled = !darkEnabled;
-  try { await storageSet(THEME_KEY, darkEnabled); } catch (e) {}
-  applyTheme();
-}
+w.Sound={ playClick, playCorrect, playWrong, playFanfare, toggle: toggleSound, apply: applySoundState, startBg: startBgMusic, stopBg: stopBgMusic, mute: adMute, unmute: adUnmute};
+const THEME_KEY='theme_dark';
+function updateThemeColorMeta(){ let meta=d.querySelector('meta[name="theme-color"]'); if (!meta){ meta=d.createElement('meta'); meta.name='theme-color'; d.head.appendChild(meta);} meta.content=darkEnabled ? '#3d2233' : '#fff6ef';}
+function applyTheme(){ cls.toggle('is-dark', darkEnabled); d.querySelectorAll('[data-theme-toggle]').forEach(btn=>{ btn.textContent=darkEnabled ? '☀️' : '🌙'; btn.title=darkEnabled ? w.t('themeLightTitle') : w.t('themeDarkTitle');
+btn.setAttribute('aria-label', btn.title);}); updateThemeColorMeta();}
+async function loadTheme(){ try{ const saved=await storageGet(THEME_KEY); darkEnabled=(saved===true);} catch (e){ darkEnabled=false;} applyTheme();}
+async function toggleTheme(){ darkEnabled=!darkEnabled; try{ await storageSet(THEME_KEY, darkEnabled);} catch (e){} applyTheme();}
 w.Theme = { toggle: toggleTheme, apply: applyTheme, load: loadTheme, isDark: () => darkEnabled };
 function updateTotalScoreUI(value){ const v=Number(value) || 0; const locale=LANG==='ru' ? 'ru-RU' : LANG==='tr' ? 'tr-TR' : 'en-US'; const text=v.toLocaleString(locale); d.querySelectorAll('[data-total-score]').forEach(el=>{ el.textContent=text;});}
 w.updateTotalScoreUI = updateTotalScoreUI;
 const METRICS_KEY = 'ach_metrics', UNLOCKED_KEY = 'ach_unlocked';
 let metrics = null, unlockedSet = null;
-function todayStr() {
-  const dt = new Date();
-  return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
-}
-function yesterdayStr() {
-  const dt = new Date(); dt.setDate(dt.getDate() - 1);
-  return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
-}
-async function loadMetrics() {
-  let local = null;
-  try {
-    const raw = safeLocalGet(storageKey(METRICS_KEY));
-    if (raw != null) { try { local = JSON.parse(raw); } catch { local = raw; } }
-  } catch (e) {}
-  let remote = null;
-  try { remote = await remoteGet(METRICS_KEY); } catch (e) {}
-  let merged = null;
-  if (local && remote) merged = deepMergeMetrics(local, remote);
-  else merged = local || remote || null;
-  if (!merged || typeof merged !== 'object' || Array.isArray(merged)) merged = {};
-  const dflt = { totalPlays: 0, playsToday: 0, lastPlayDate: '', maxStreak: 0, fastestCorrect: 99, noMistakeRuns: 0, zeroLossStreak: 0, hasZeroScore: false, allTimeouts: false, playedAtNight: false, playedEarlyMorning: false, dailyStreak: 0, maxDailyStreak: 0, lastActiveDate: '', playedLevels: [], lastPercent: 0 };
-  metrics = { ...dflt, ...merged };
-  try { await storageSet(METRICS_KEY, metrics); } catch (e) {}
-  return metrics;
-}
-async function loadUnlocked() {
-  let local = null;
-  try {
-    const raw = safeLocalGet(storageKey(UNLOCKED_KEY));
-    if (raw != null) { try { local = JSON.parse(raw); } catch { local = raw; } }
-  } catch (e) {}
-  let remote = null;
-  try { remote = await remoteGet(UNLOCKED_KEY); } catch (e) {}
-  const a = Array.isArray(local) || Array.isArray(remote) ? Array.from(new Set([...(Array.isArray(local) ? local : []), ...(Array.isArray(remote) ? remote : [])])) : [];
-  unlockedSet = new Set(a);
-  try { await storageSet(UNLOCKED_KEY, a); } catch (e) {}
-  return unlockedSet;
-}
-async function saveMetrics() { await storageSet(METRICS_KEY, metrics); }
-async function saveUnlocked() { await storageSet(UNLOCKED_KEY, Array.from(unlockedSet)); }
+function todayStr(){ const dt=new Date(); return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');}
+function yesterdayStr(){ const dt=new Date(); dt.setDate(dt.getDate() - 1); return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');}
+async function loadMetrics(){ let local=null; try{ const raw=safeLocalGet(storageKey(METRICS_KEY)); if (raw !=null){ try{ local=JSON.parse(raw);} catch{ local=raw;}}} catch (e){} let remote=null; try{ remote=await remoteGet(METRICS_KEY);} catch (e){} let merged=null; if (local && remote) merged=deepMergeMetrics(local, remote); else merged=local || remote || null; if (!merged || typeof merged !=='object' || Array.isArray(merged)) merged={}; const dflt={ totalPlays: 0, playsToday: 0, lastPlayDate: '', maxStreak: 0, fastestCorrect: 99, noMistakeRuns: 0, zeroLossStreak: 0, hasZeroScore: false, allTimeouts: false, playedAtNight: false, playedEarlyMorning: false, dailyStreak: 0, maxDailyStreak: 0, lastActiveDate: '', playedLevels: [], lastPercent: 0}; metrics={ ...dflt, ...merged}; try{ await storageSet(METRICS_KEY, metrics);} catch (e){} return metrics;}
+async function loadUnlocked(){ let local=null; try{ const raw=safeLocalGet(storageKey(UNLOCKED_KEY)); if (raw !=null){ try{ local=JSON.parse(raw);} catch{ local=raw;}}} catch (e){} let remote=null; try{ remote=await remoteGet(UNLOCKED_KEY);} catch (e){} const a=Array.isArray(local) || Array.isArray(remote) ? Array.from(new Set([...(Array.isArray(local) ? local : []), ...(Array.isArray(remote) ? remote : [])])) : []; unlockedSet=new Set(a); try{ await storageSet(UNLOCKED_KEY, a);} catch (e){} return unlockedSet;}
+async function saveMetrics(){ await storageSet(METRICS_KEY, metrics);}
+async function saveUnlocked(){ await storageSet(UNLOCKED_KEY, Array.from(unlockedSet));}
 function updateDailyStreak(){ const t=todayStr(); if (metrics.lastActiveDate===t) return; if (metrics.lastActiveDate===yesterdayStr()) metrics.dailyStreak++; else metrics.dailyStreak=1; metrics.lastActiveDate=t; if (metrics.dailyStreak >metrics.maxDailyStreak) metrics.maxDailyStreak=metrics.dailyStreak;}
 function buildAchContext(){ const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const collection=asArray(w.__SYNCED__ && w.__SYNCED__.collection); const unlockedLvls=(w.__SYNCED__ && w.__SYNCED__.unlocked) || []; const unlockedLvlSet=new Set(unlockedLvls.map(Number)); let totalStars=0, threeStarsCount=0; for (const k in starsMap){ const v=Number(starsMap[k]) || 0; totalStars +=v; if (v >=3) threeStarsCount++;} const unlockedRegions=new Set(); let totalLevels=0; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(l=>{ totalLevels++; if (unlockedLvlSet.has(Number(l.id))) unlockedRegions.add(reg.id);});}); let themedTotal=0, themedUnlocked=0, themedPlayed=0, themed3Stars=0; (w.THEMED_LEVELS || []).forEach(l=>{ const id=Number(l.id); themedTotal++; if (unlockedLvlSet.has(id)) themedUnlocked++; if (starsMap[id] !=null) themedPlayed++; if (Number(starsMap[id]) >=3) themed3Stars++;}); let photoTotal=0, photoUnlocked=0, photoPlayed=0, photo3Stars=0; (w.PHOTO_LEVELS || []).forEach(l=>{ const id=Number(l.id); photoTotal++; if (unlockedLvlSet.has(id)) photoUnlocked++; if (starsMap[id] !=null) photoPlayed++; if (Number(starsMap[id]) >=3) photo3Stars++;});
 const animalId=w.getAnimalId; const collectionSet=new Set(collection); let collectionTotal=0; const seenGlobal=new Set(), regionFull=new Set(); (w.REGIONS || []).forEach(reg=>{ const regSet=new Set(); reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ const id=animalId(qn.img); regSet.add(id); if (!seenGlobal.has(id)){ seenGlobal.add(id); collectionTotal++;}});}); const allInReg=regSet.size >0 && Array.from(regSet).every(id=>collectionSet.has(id)); if (allInReg) regionFull.add(reg.id);}); return{ ...metrics, totalStars, threeStarsCount, collectionCount: collection.length, collectionTotal, unlockedRegions, regionFull, totalLevels, playedLevels: new Set(metrics.playedLevels || []), themedTotal, themedUnlocked, themedPlayed, themed3Stars, photoTotal, photoUnlocked, photoPlayed, photo3Stars, stars: starsMap};}
@@ -1375,261 +932,67 @@ async function recordRound(data){ if (!metrics) await loadMetrics(); updateDaily
 async function achList(){ if (!unlockedSet) await loadUnlocked(); return (w.ACHIEVEMENTS || []).map(a=>({ ...a, unlocked: unlockedSet.has(a.id)}));}
 async function renderAchModal(){ const body=d.getElementById('ach-body'); if (!body) return; const items=await achList(); const totalUnlocked=items.filter(i=>i.unlocked).length; const counter=d.getElementById('ach-counter'); if (counter) counter.textContent=totalUnlocked + ' / ' + items.length; body.innerHTML=''; (w.ACH_CATEGORIES || []).forEach(cat=>{ const group=items.filter(i=>i.cat===cat.id); if (!group.length) return; const sec=d.createElement('section'); sec.className='ach-group'; const h=d.createElement('h3'); h.className='ach-group-title'; h.textContent=cat.icon + ' ' + w.L(cat.name) + ' (' + group.filter(g=>g.unlocked).length + '/' + group.length + ')'; sec.appendChild(h); const grid=d.createElement('div'); grid.className='ach-grid'; group.forEach(a=>{ const el=d.createElement('div'); el.className='ach-item' + (a.unlocked ? ' unlocked' : ''); el.innerHTML='<div class="ach-icon">' + a.icon + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(w.L(a.title)) + '</div><div class="ach-desc">' + escapeHtml(w.L(a.desc)) + '</div></div>' + (a.unlocked ? '<div class="ach-check">✓</div>' : ''); grid.appendChild(el);}); sec.appendChild(grid); body.appendChild(sec);});}
 function openAchModal(){ const m=d.getElementById('ach-modal'); if (!m) return; renderAchModal(); m.classList.add('show');}
-function closeAchModal(){ const m=d.getElementById('ach-modal'); if (m) m.classList.remove('show');}
+function closeAchModal() { const m = d.getElementById('ach-modal'); if (m) m.classList.remove('show'); }
 w.Ach={ loadMetrics, recordVisit, recordRound, checkAndUnlock, list: achList, openModal: openAchModal, closeModal: closeAchModal, renderModal: renderAchModal};
-function getAnimalId(img){ return String(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '')}
+function openOtherGamesModal(){ const m=d.getElementById('igames-modal'); if (!m) return; renderOtherGames(); m.classList.add('show');}
+function closeOtherGamesModal(){ const m=d.getElementById('igames-modal'); if (m) m.classList.remove('show');}
+w.openOtherGamesModal = openOtherGamesModal;
+w.closeOtherGamesModal = closeOtherGamesModal;
+function getAnimalId(img){ return String(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');}
 w.getAnimalId = getAnimalId;
 let __animalMapCache = null;
 function getAnimalMap(){ if (__animalMapCache) return __animalMapCache; const byId={}; (w.REGIONS || []).forEach(reg=>{ (reg.levels || []).forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz || !Array.isArray(qz.questions)) return; qz.questions.forEach(qn=>{ const id=getAnimalId(qn.img); if (!id || byId[id]) return; if (!Array.isArray(qn.options)) return; const ansOpt=qn.options[qn.answer]; if (!ansOpt) return; byId[id]={ id, img: qn.img, name: ansOpt, desc: qn.description};});});}); __animalMapCache=byId; return byId;}
 w.getAnimalMap = getAnimalMap;
 function shuffleInPlace(arr){ const a=arr.slice(); for (let i=a.length - 1; i >0; i--){ const j=Math.floor(Math.random() * (i + 1)); const tmp=a[i]; a[i]=a[j]; a[j]=tmp;} return a;}
 const __poolCache = new Map();
-function getPoolAnimals(pool){ const key=pool.join(','); if (__poolCache.has(key)) return __poolCache.get(key); const byId=getAnimalMap(); const arr=pool.map(id=>byId[id]).filter(Boolean); __poolCache.set(key, arr); return arr;}
+function getPoolAnimals(pool){ const key=pool.join(','); if (__poolCache.has(key)) return __poolCache.get(key); const byId=getAnimalMap(); const arr=pool.map(id=>byId[id]).filter(Boolean); __poolCache.set(key, arr); return arr}
 function buildSingleThemedQuiz(levelId){ const nid=Number(levelId); const themedDef=(w.THEMED_LEVELS || []).find(l=>Number(l.id)===nid); if (themedDef){ const animals=getPoolAnimals(themedDef.pool || []); if (animals.length < 4) return null; const count=Math.min(themedDef.count || animals.length, animals.length); const picked=shuffleInPlace(animals).slice(0, count); const questions=picked.map(correct=>{ const others=shuffleInPlace(animals.filter(a=>a.id !==correct.id)).slice(0, 3); const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id); return{ animalId: correct.id, img: correct.img, options: opts.map(o=>o.name), answer, description: correct.desc}}); return{ regionKey: 'themed', mode: 'text', sub: themedDef.name, questions}} const photoDef=(w.PHOTO_LEVELS || []).find(l=>Number(l.id)===nid); if (photoDef){ const animals=getPoolAnimals(photoDef.pool || []); const need=Math.max(2, Math.min(4, photoDef.optionCount || 4)); if (animals.length < need) return null; const count=Math.min(photoDef.count || animals.length, animals.length); const picked=shuffleInPlace(animals).slice(0, count); const questions=picked.map(correct=>{ const others=shuffleInPlace(animals.filter(a=>a.id !==correct.id)).slice(0, need - 1); const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id); return{ animalId: correct.id, name: correct.name, images: opts.map(o=>o.img), answer, description: correct.desc}}); return{ regionKey: 'photo', mode: 'photo', optionCount: need, sub: photoDef.name, questions}} return null} w.buildSingleThemedQuiz=buildSingleThemedQuiz;
-const DEFAULT_UNLOCKED=[2006, 1001, 1006, 1010, 1012];
-const CURRENT_GATING_VER=5;
-let gatingCache=null;
-async function gatingLoad(forceReload) {
-  if (gatingCache && !forceReload) return gatingCache;
-  try {
-    const storedVer = asNumber(await storageGet('unlocked_v'), 0);
-    let arr = await storageGet('unlocked');
-    if (!Array.isArray(arr)) arr = [];
-    if (storedVer < CURRENT_GATING_VER) {
-      const storedUnlocked = arr.map(Number).filter(n => !isNaN(n) && n > 0);
-      arr = Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked]));
-      await storageSet('unlocked', arr);
-      await storageSet('unlocked_v', CURRENT_GATING_VER);
-      console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);
-    } else {
-      const merged = Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)]));
-      if (merged.length !== arr.length) await storageSet('unlocked', merged);
-      arr = merged;
-    }
-    gatingCache = arr;
-    if (w.__SYNCED__) w.__SYNCED__.unlocked = arr.slice();
-    return arr;
-  } catch (e) {
-    console.warn('gatingLoad failed:', e);
-    gatingCache = DEFAULT_UNLOCKED.slice();
-    return gatingCache;
-  }
-}
-async function isUnlocked(levelId) {
-  const list = await gatingLoad();
-  return list.includes(Number(levelId));
-}
-async function unlockLevel(levelId) {
-  const list = await gatingLoad();
-  const n = Number(levelId);
-  if (!list.includes(n)) {
-    list.push(n); gatingCache = list;
-    await storageSet('unlocked', list);
-    if (w.__SYNCED__) w.__SYNCED__.unlocked = list.slice();
-  }
-  return true;
-}
-async function unlockViaAd(levelId) {
-  const ok = await showRewardedAd();
-  if (ok) { await unlockLevel(levelId); return true; }
-  return false;
-}
-function buildUnlockModal() {
-  let m = d.getElementById('__unlockModal');
-  if (m) return m;
-  m = d.createElement('div');
-  m.id = '__unlockModal';
-  m.className = 'modal';
-  m.innerHTML = '<div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji">🔒</div><h2 class="modal-title"></h2><p class="modal-text"></p><div class="modal-actions"><button class="btn btn-primary" data-act="watch"></button><button class="btn btn-ghost" data-act="cancel"></button></div></div>';
-  d.body.appendChild(m);
-  return m;
-}
-function showUnlockModal(levelId, onUnlocked) {
-  const m = buildUnlockModal();
-  m.querySelector('.modal-title').textContent = w.t('unlockTitle');
-  m.querySelector('.modal-text').textContent = w.t('unlockText');
-  m.querySelector('[data-act="watch"]').textContent = w.t('watchAd');
-  m.querySelector('[data-act="cancel"]').textContent = w.t('cancel');
-  m.classList.add('show');
-  const $w = m.querySelector('[data-act="watch"]');
-  const $c = m.querySelector('[data-act="cancel"]');
-  const $x = m.querySelector('.modal-close');
-  const cleanup = () => { m.classList.remove('show'); $w.onclick = $c.onclick = $x.onclick = null; };
-  $w.onclick = () => withLock(async () => {
-    $w.disabled = true; $w.textContent = w.t('loadingAd');
-    const ok = await unlockViaAd(levelId);
-    $w.disabled = false; $w.textContent = w.t('watchAd');
-    if (ok) {
-      toast(w.t('levelOpened'));
-      cleanup();
-      if (typeof onUnlocked === 'function') onUnlocked(levelId);
-    } else toast(w.t('adUnavailable'), true);
-  });
-  $c.onclick = cleanup;
-  $x.onclick = cleanup;
-}
-w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, unlockViaAd, showUnlockModal, _invalidate: () => { gatingCache = null; } };
-async function initVK() {
-  console.log('🔑 initVK(): старт');
-  if (!w.vkBridge) {
-    console.warn('🔑 vkBridge не найден, инициализация VK пропущена');
-    return;
-  }
-  console.log('🔑 P.userId (из URL):', P.userId, '| launchParams.vk_user_id:', launchParams.vk_user_id, '| viewer_id:', launchParams.viewer_id);
-  await vkSend('VKWebAppInit', {}, 3000);
-  let uid = P.userId;
-  if (!uid) {
-    const info = await vkSend('VKWebAppGetUserInfo', {}, 3000);
-    console.log('🔑 VKWebAppGetUserInfo ответ:', info);
-    if (info && info.id) {
-      uid = info.id;
-      w.id = info.id;
-      try { sessionStorage.setItem('id', info.id); } catch (e) {}
-    }
-  }
-  if (!uid) {
-    const sp = new URLSearchParams(location.search);
-    const viewerId = sp.get('viewer_id');
-    if (viewerId) {
-      uid = parseInt(viewerId);
-      w.id = uid;
-      try { sessionStorage.setItem('id', uid); } catch (e) {}
-    }
-  }
-  if (!uid) console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid!');
-if (uid) P.userId = uid;
-  console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId =', P.userId);
-  showBanner();
-  preloadRewardedAd();
-}
-async function initYandex() {
-  const sdkReady = await new Promise(resolve => {
-    if (typeof YaGames !== 'undefined') return resolve(true);
-    let waited = 0;
-    const iv = setInterval(() => {
-      waited += 200;
-      if (typeof YaGames !== 'undefined') { clearInterval(iv); resolve(true); }
-      else if (waited >= 10000) { clearInterval(iv); console.warn('Yandex Games SDK not loaded within 10s'); resolve(false); }
-    }, 200);
-  });
-  if (!sdkReady || typeof YaGames === 'undefined') { console.warn('YaGames is not available — skipping Yandex init'); return; }
-  if (!isYandex) {
-    isYandex = true;
-    platform = 'yandex';
-    P.isYandex = true;
-    P.platform = 'yandex';
-    P.isStandalone = false;
-    cls.toggle('is-yandex', true);
-    cls.toggle('is-standalone', false);
-  }
-  try {
-    const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('YaGames.init timeout')), 7000));
-    ysdk = await Promise.race([YaGames.init(), timeout]);
-  } catch (e) { console.warn('YaGames.init failed', e); return; }
-  try {
-    const sdkLang = ysdk.environment.i18n.lang || 'ru';
-    const normalized = normalizeLang(sdkLang);
-    if (SUPPORTED.includes(normalized) && normalized !== LANG) {
-      LANG = normalized;
-      w.LANG = LANG;
-      applyStaticI18n();
-      refreshLocalization();
-      console.log('Yandex lang override →', LANG);
-    }
-    d.documentElement.lang = LANG;
-  } catch (e) {}
-  try {
-    const t = new Promise((_, rej) => setTimeout(() => rej(new Error('getPlayer timeout')), 5000));
-    ysdkPlayer = await Promise.race([ysdk.getPlayer(), t]);
-    try {
-      const uid = ysdkPlayer.getUniqueID && ysdkPlayer.getUniqueID();
-      if (uid) { w.id = uid; sessionStorage.setItem('id', uid); }
-    } catch (e) {}
-  } catch (e) { ysdkPlayer = null; console.warn('getPlayer failed', e); }
-try {
-    ysdk.on('game_api_pause', function () {
-      yandexGameplayStop();
-      if (soundEnabled) Sound.stopBg();
-      if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
-    });
-    ysdk.on('game_api_resume', function () {
-      yandexGameplayStart();
-      if (soundEnabled) Sound.startBg();
-      if (w.__currentQuizResume) { try { w.__currentQuizResume(); } catch (e) {} }
-    });
-  } catch (e) {}
-  if (w.__appReady) trySendLoadingReady();
-}
-async function updateAuthButton() {
-  const btns = d.querySelectorAll('#yandex-auth-btn');
-  if (!btns.length) return;
-  if (!isYandex || !ysdk) { btns.forEach(b => b.style.display = 'none'); return; }
- try{ let p=ysdkPlayer; if (!p && ysdk.getPlayer){ p=await ysdk.getPlayer(); ysdkPlayer=p;
-    }
-    let authorized = false;
-    if (p && typeof p.isAuthorized === 'function') authorized = p.isAuthorized();
-    else if (p && typeof p.getMode === 'function') authorized = p.getMode() !== 'lite';
-    btns.forEach(b => b.style.display = authorized ? 'none' : '');
-  } catch (e) { 
-    btns.forEach(b => b.style.display = ''); 
-  }
-}
-function openAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.add('show'); }
-function closeAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.remove('show'); }
-async function doYandexAuth() {
-  closeAuthModal();
-  if (!isYandex || !ysdk) { toast(w.t('authUnavail2'), true); return; }
-  let available = false;
-  try { available = await ysdk.isAvailableMethod('auth.openAuthDialog'); } catch (e) {}
-  if (!available) { toast(w.t('authUnavail'), true); return; }
-  const ok = await safeCall(async () => {
-    await ysdk.auth.openAuthDialog();
-    ysdkPlayer = await safeCall(() => ysdk.getPlayer(), null, 'getPlayer');
-    await syncAllOnStart();
-    updateAuthButton();
-    return true;
-  }, false, 'openAuthDialog');
-  if (ok) toast(w.t('authOk')); else toast(w.t('authFail'));
-}
-async function canShowShortcut() {
-  if (!isYandex || !ysdk || !ysdk.shortcut) return false;
-  const p = await safeCall(() => ysdk.shortcut.canShowPrompt(), null, 'canShowPrompt');
-  return !!(p && p.canShow);
-}
-async function showShortcut() {
-  if (!isYandex || !ysdk || !ysdk.shortcut) { toast(w.t('shortcutYa'), true); return; }
-  try {
-    const r = await ysdk.shortcut.showPrompt();
-    if (r && r.outcome === 'accepted') toast(w.t('shortcutOk'));
-  } catch (e) { toast(w.t('shortcutFail'), true); }
-}
+const DEFAULT_UNLOCKED = [2006, 1001, 1006, 1010, 1012];
+const CURRENT_GATING_VER = 5;
+let gatingCache = null;
+async function gatingLoad(forceReload){ if (gatingCache && !forceReload) return gatingCache; try{ const storedVer=asNumber(await storageGet('unlocked_v'), 0); let arr=await storageGet('unlocked'); if (!Array.isArray(arr)) arr=[]; if (storedVer < CURRENT_GATING_VER){ const storedUnlocked=arr.map(Number).filter(n=>!isNaN(n) && n >0); arr=Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked])); await storageSet('unlocked', arr); await storageSet('unlocked_v', CURRENT_GATING_VER); console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);} else{ const merged=Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)])); if (merged.length !==arr.length) await storageSet('unlocked', merged); arr=merged;} gatingCache=arr; if (w.__SYNCED__) w.__SYNCED__.unlocked=arr.slice(); return arr;} catch (e){ console.warn('gatingLoad failed:', e); gatingCache=DEFAULT_UNLOCKED.slice(); return gatingCache;}}
+async function isUnlocked(levelId){ const list=await gatingLoad(); return list.includes(Number(levelId));}
+async function unlockLevel(levelId){ const list=await gatingLoad(); const n=Number(levelId); if (!list.includes(n)){ list.push(n); gatingCache=list; await storageSet('unlocked', list); if (w.__SYNCED__) w.__SYNCED__.unlocked=list.slice();} return true;}
+async function unlockViaAd(levelId){ const ok=await showRewardedAd(); if (ok){ await unlockLevel(levelId); return true;} return false;}
+function buildUnlockModal(){ let m=d.getElementById('__unlockModal'); if (m) return m; m=d.createElement('div'); m.id='__unlockModal'; m.className='modal'; m.innerHTML='<div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji">🔒</div><h2 class="modal-title"></h2><p class="modal-text"></p><div class="modal-actions"><button class="btn btn-primary" data-act="watch"></button><button class="btn btn-ghost" data-act="cancel"></button></div></div>'; d.body.appendChild(m); return m;}
+function showUnlockModal(levelId, onUnlocked){ const m=buildUnlockModal(); m.querySelector('.modal-title').textContent=w.t('unlockTitle'); m.querySelector('.modal-text').textContent=w.t('unlockText'); m.querySelector('[data-act="watch"]').textContent=w.t('watchAd'); m.querySelector('[data-act="cancel"]').textContent=w.t('cancel'); m.classList.add('show'); const $w=m.querySelector('[data-act="watch"]'); const $c=m.querySelector('[data-act="cancel"]'); const $x=m.querySelector('.modal-close'); const cleanup=()=>{ m.classList.remove('show'); $w.onclick=$c.onclick=$x.onclick=null;}; $w.onclick=()=>withLock(async ()=>{ $w.disabled=true; $w.textContent=w.t('loadingAd'); const ok=await unlockViaAd(levelId); $w.disabled=false; $w.textContent=w.t('watchAd'); if (ok){ toast(w.t('levelOpened')); cleanup(); if (typeof onUnlocked==='function') onUnlocked(levelId);} else toast(w.t('adUnavailable'), true);}); $c.onclick=cleanup; $x.onclick=cleanup;}
+w.Gating={ DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, unlockViaAd, showUnlockModal, _invalidate: ()=>{ gatingCache=null;}};
+async function initVK(){ console.log('🔑 initVK(): старт'); if (!w.vkBridge){ console.warn('🔑 vkBridge не найден, инициализация VK пропущена'); return;} console.log('🔑 P.userId (из URL):', P.userId, '| launchParams.vk_user_id:', launchParams.vk_user_id, '| viewer_id:', launchParams.viewer_id); await vkSend('VKWebAppInit',{}, 3000); let uid=P.userId; if (!uid){ const info=await vkSend('VKWebAppGetUserInfo',{}, 3000); console.log('🔑 VKWebAppGetUserInfo ответ:', info); if (info && info.id){ uid=info.id; w.id=info.id; try{ sessionStorage.setItem('id', info.id);} catch (e){}}} if (!uid){ const sp=new URLSearchParams(location.search); const viewerId=sp.get('viewer_id'); if (viewerId){ uid=parseInt(viewerId); w.id=uid; try{ sessionStorage.setItem('id', uid);} catch (e){}}} if (!uid) console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid!');
+if (uid) P.userId=uid; console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId=', P.userId); showBanner(); preloadRewardedAd();}
+async function initYandex(){ const sdkReady=await new Promise(resolve=>{ if (typeof YaGames !=='undefined') return resolve(true); let waited=0; const iv=setInterval(()=>{ waited +=200; if (typeof YaGames !=='undefined'){ clearInterval(iv); resolve(true);} else if (waited >=10000){ clearInterval(iv); console.warn('Yandex Games SDK not loaded within 10s'); resolve(false);}}, 200);}); if (!sdkReady || typeof YaGames==='undefined'){ console.warn('YaGames is not available — skipping Yandex init'); return;} if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false; cls.toggle('is-yandex', true); cls.toggle('is-standalone', false);} try{ const timeout=new Promise((_, rej)=>setTimeout(()=>rej(new Error('YaGames.init timeout')), 7000)); ysdk=await Promise.race([YaGames.init(), timeout]);} catch (e){ console.warn('YaGames.init failed', e); return;} try{ const sdkLang=ysdk.environment.i18n.lang || 'ru'; const normalized=normalizeLang(sdkLang); if (SUPPORTED.includes(normalized) && normalized !==LANG){ LANG=normalized; w.LANG=LANG; applyStaticI18n(); refreshLocalization(); console.log('Yandex lang override →', LANG);} d.documentElement.lang=LANG;} catch (e){} try{ const t=new Promise((_, rej)=>setTimeout(()=>rej(new Error('getPlayer timeout')), 5000)); ysdkPlayer=await Promise.race([ysdk.getPlayer(), t]); try{ const uid=ysdkPlayer.getUniqueID && ysdkPlayer.getUniqueID(); if (uid){ w.id=uid; sessionStorage.setItem('id', uid);}} catch (e){}} catch (e){ ysdkPlayer=null; console.warn('getPlayer failed', e);}
+try{ ysdk.on('game_api_pause', function (){ yandexGameplayStop(); if (soundEnabled) Sound.stopBg(); if (w.__currentQuizPause){ try{ w.__currentQuizPause();} catch (e){}}}); ysdk.on('game_api_resume', function (){ yandexGameplayStart(); if (soundEnabled) Sound.startBg(); if (w.__currentQuizResume){ try{ w.__currentQuizResume();} catch (e){}}});} catch (e){} if (w.__appReady) trySendLoadingReady();}
+async function updateAuthButton(){ const btns=d.querySelectorAll('#yandex-auth-btn'); if (!btns.length) return; if (!isYandex || !ysdk){ btns.forEach(b=>b.style.display='none'); return;} try{ let p=ysdkPlayer; if (!p && ysdk.getPlayer){ p=await ysdk.getPlayer(); ysdkPlayer=p;} let authorized=false; if (p && typeof p.isAuthorized==='function') authorized=p.isAuthorized(); else if (p && typeof p.getMode==='function') authorized=p.getMode() !=='lite'; btns.forEach(b=>b.style.display=authorized ? 'none' : '');} catch (e){ btns.forEach(b=>b.style.display='');}}
+function openAuthModal(){ const m=d.getElementById('auth-modal'); if (m) m.classList.add('show');}
+function closeAuthModal(){ const m=d.getElementById('auth-modal'); if (m) m.classList.remove('show');}
+async function doYandexAuth(){ closeAuthModal(); if (!isYandex || !ysdk){ toast(w.t('authUnavail2'), true); return;} let available=false; try{ available=await ysdk.isAvailableMethod('auth.openAuthDialog');} catch (e){} if (!available){ toast(w.t('authUnavail'), true); return;} const ok=await safeCall(async ()=>{ await ysdk.auth.openAuthDialog(); ysdkPlayer=await safeCall(()=>ysdk.getPlayer(), null, 'getPlayer'); await syncAllOnStart(); updateAuthButton(); return true;}, false, 'openAuthDialog'); if (ok) toast(w.t('authOk')); else toast(w.t('authFail'));}
+async function canShowShortcut(){ if (!isYandex || !ysdk || !ysdk.shortcut) return false; const p=await safeCall(()=>ysdk.shortcut.canShowPrompt(), null, 'canShowPrompt'); return !!(p && p.canShow);}
+async function showShortcut(){ if (!isYandex || !ysdk || !ysdk.shortcut){ toast(w.t('shortcutYa'), true); return;} try{ const r=await ysdk.shortcut.showPrompt(); if (r && r.outcome==='accepted') toast(w.t('shortcutOk'));} catch (e){ toast(w.t('shortcutFail'), true);}}
 async function updateShortcutButton(){ const btns=d.querySelectorAll('#yandex-shortcut-btn'); if (!btns.length) return; if (!isYandex){ btns.forEach(b=>b.style.display='none'); return;} const can=await canShowShortcut(); btns.forEach(b=>b.style.display=can ? '' : 'none');}
 async function openYandexLeaderboard(){ if (!isYandex || !ysdk){ toast(w.t('topVKOnly')); return;} const modal=d.getElementById('yandex-leaderboard-modal'); const body=d.getElementById('yandex-leaderboard-body'); if (!modal || !body) return; body.innerHTML='<p class="modal-text">' + w.t('leaderboardLoading') + '</p>'; modal.classList.add('show'); try{ const entries=await ysdk.leaderboards.getEntries('bestscore',{ quantityTop: 10, includeUser: true, quantityAround: 3}); if (!entries || !entries.entries || entries.entries.length===0){ body.innerHTML='<p class="modal-text">' + w.t('leaderboardEmpty') + '</p>'; return;} let html='<div class="ach-group"><div class="ach-grid">';
 entries.entries.forEach(e=>{ const name=e.player.publicName || w.t('leaderboardPlayer'); const row=w.t('leaderboardRow') .replace('{rank}', e.rank) .replace('{score}', e.score); html +='<div class="ach-item unlocked"><div class="ach-icon">' + (e.rank <=3 ? '🏅' : '👤') + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(name) + '</div><div class="ach-desc">' + escapeHtml(row) + '</div></div></div>';}); html +='</div></div>'; body.innerHTML=html;} catch (e){ console.warn('Yandex leaderboard error:', e); body.innerHTML='<p class="modal-text" style="color:var(--danger);">' + w.t('leaderboardError') + '</p>';}}
-w.openYandexLeaderboard = openYandexLeaderboard;
+w.openYandexLeaderboard=openYandexLeaderboard;
 async function getAllGames(){ if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.GamesAPI) return []; const data=await safeCall(()=>ysdk.features.GamesAPI.getAllGames(), null, 'getAllGames'); return (data && Array.isArray(data.games)) ? data.games : [];}
 async function getGameByID(appID){ if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.GamesAPI) return null; const data=await safeCall(()=>ysdk.features.GamesAPI.getGameByID(appID), null, 'getGameByID'); return (data && data.isAvailable && data.game) ? data.game : null;}
-w.openAuthModal=openAuthModal;
-w.closeAuthModal=closeAuthModal;
-w.doYandexAuth=doYandexAuth;
-w.updateAuthButton=updateAuthButton;
-w.showShortcut=showShortcut;
-w.canShowShortcut=canShowShortcut;
-w.updateShortcutButton=updateShortcutButton;
+w.openAuthModal = openAuthModal;
+w.closeAuthModal = closeAuthModal;
+w.doYandexAuth = doYandexAuth;
+w.updateAuthButton = updateAuthButton;
+w.showShortcut = showShortcut;
+w.canShowShortcut = canShowShortcut;
+w.updateShortcutButton = updateShortcutButton;
 w.getAllGames=getAllGames;
 w.getGameByID=getGameByID;
 let __syncResolve;
-w.whenReady = new Promise(res => { __syncResolve = res; });
+w.whenReady=new Promise(res=>{ __syncResolve=res;});
 async function syncAllOnStart(){ try{ const DEFAULT_LVL=(w.Gating && w.Gating.DEFAULT_UNLOCKED) || [2006, 1001, 1006, 1010, 1012]; const [unlockedRaw, collectionRaw, starsRaw, totalRaw, gatingVerRaw]=await Promise.all([ storageGet('unlocked'), storageGet('collection'), storageGet('stars'), storageGet('total'), storageGet('unlocked_v') ]); const storedVer=asNumber(gatingVerRaw, 0); const CURRENT_VER=5; let unlocked; if (storedVer < CURRENT_VER){ const storedUnlocked=asArray(unlockedRaw).map(Number).filter(n=>!isNaN(n) && n >0); unlocked=Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked])); try{ await storageSet('unlocked', unlocked);} catch (e){} try{ await storageSet('unlocked_v', CURRENT_VER);} catch (e){} if (w.Gating && w.Gating._invalidate) w.Gating._invalidate(); console.log('Gating upgrade → v' + CURRENT_VER, unlocked);} else{ const storedUnlocked=asArray(unlockedRaw).map(Number).filter(n=>!isNaN(n) && n >0); unlocked=Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked])); if (storedUnlocked.length !==unlocked.length){ try{ await storageSet('unlocked', unlocked);} catch (e){}}} const collection=asArray(collectionRaw).filter(x=>typeof x==='string'); const stars=asObject(starsRaw); for (const k in stars){ const v=asNumber(stars[k], 0); stars[k]=Math.max(0, Math.min(3, v));} const total=asNumber(totalRaw, 0); w.__SYNCED__={ unlocked, collection, stars, total}; if (w.Gating && w.Gating.loadUnlocked){ try{ await w.Gating.loadUnlocked(true);} catch (e){}} updateTotalScoreUI(total); console.log('Sync complete:', w.__SYNCED__);} catch (e){ console.warn('Sync failed:', e); w.__SYNCED__={ unlocked: [2006, 1001, 1006, 1010, 1012], collection: [], stars:{}, total: 0};} if (__syncResolve) __syncResolve(w.__SYNCED__);}
 w.syncAllOnStart=syncAllOnStart;
 let __readySent=false;
-let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true;} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false;}}
-function hideLoadingAndShowMenu(){ if (__menuShown) return;  __menuShown=true; const loading=d.getElementById('loading-screen'); if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none';}, 400);} d.body.classList.add('app-ready'); const root=d.getElementById('app-root'); if (root) root.classList.add('visible');
+let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false}}
+function hideLoadingAndShowMenu(){ if (__menuShown) return; __menuShown=true; const loading=d.getElementById('loading-screen'); if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none'}, 400)} d.body.classList.add('app-ready'); const root=d.getElementById('app-root'); if (root) root.classList.add('visible');
 w.__appReady=true;
-trySendLoadingReady();}
+trySendLoadingReady()}
 let __factListCache=null;
-function getFactList(){ if (__factListCache) return __factListCache; const list=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz || !Array.isArray(qz.questions)) return; qz.questions.forEach(qn=>{ list.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});});}); __factListCache=list; return list;}
-async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
+function getFactList(){ if (__factListCache) return __factListCache; const list=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz || !Array.isArray(qz.questions)) return; qz.questions.forEach(qn=>{ list.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)})})})}); __factListCache=list; return list} async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId=w.getAnimalId; const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; await w.Ach.checkAndUnlock(true);
 const items=await w.Ach.list();
 const opened=items.filter(i=>i.unlocked).length;
@@ -1641,196 +1004,31 @@ const item=animals[seed % animals.length]; const fi=d.getElementById('fact-img')
 el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return} const a=d.createElement('a'); a.className='level-card'; a.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span>' + '<span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>'; el.replaceWith(a)})})} container.appendChild(el)}; const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{}} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState))} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section'); sec.className='card collapsible'; if (openState[sectionKey]) sec.classList.add('open'); const header=d.createElement('button'); header.type='button'; header.className='region-title collapsible-header'; header.innerHTML='<span>' + titleHtml + '</span><span class="toggle-arrow">▼</span>'; header.addEventListener('click', ()=>{ sec.classList.toggle('open'); openState[sectionKey]=sec.classList.contains('open'); saveOpenState()}); const body=d.createElement('div'); body.className='collapsible-body'; const grid=d.createElement('div'); grid.className='levels'; body.appendChild(grid); sec.appendChild(header); sec.appendChild(body); return{ sec, grid}}; if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length){ const{ sec, grid}=makeSection( '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler'}), 'themed' ); const themedSorted=[...w.THEMED_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo});
 themedSorted.forEach(l=>{ renderLevelCard(l, (w.QUIZZES ||{})[l.id], grid)}); if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo}); photoSorted.forEach(l=>{ renderLevelCard(l, (w.QUIZZES ||{})[l.id], grid)}); if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})}
 async function renderQuiz(levelId){ const nid=Number(levelId);
-if (nid >=1000){ const single=buildSingleThemedQuiz(nid); if (single) w.QUIZZES[nid]=single} const quiz=(w.QUIZZES ||{})[String(levelId)]; if (!quiz){ location.hash='#/'; return null} const $=(s)=>d.querySelector(s); const state={ order: [], index: 0, score: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, scoreSent: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set()}; const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId=w.getAnimalId; const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0}; const region=(w.REGIONS || []).find(r=>r.id===quiz.regionKey); if (region) $('#home-region').textContent=w.L(region.name); else $('#home-region').textContent=''; $('#home-title').textContent=quiz.sub ? w.L(quiz.sub) : ''; $('#home-count').textContent=quiz.questions.length; const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsCount=Number(starsMap[levelId]) || 0; const hStars=$('#home-stars'); if (hStars){ hStars.textContent='★'.repeat(starsCount) + '☆'.repeat(3 - starsCount); hStars.classList.toggle('has-stars', starsCount >0)} const gateUnlocked=await w.Gating.isUnlocked(levelId); show(gateUnlocked ? homeScreen : lockScreen); $('#lock-watch-btn').onclick=()=>withLock(async ()=>{ const btn=$('#lock-watch-btn'); btn.disabled=true; btn.textContent=w.t('loadingAd'); const ok=await w.Gating.unlockViaAd(levelId); btn.disabled=false; btn.textContent=w.t('watchAd'); if (ok){ toast(w.t('levelOpened')); show(homeScreen)} else toast(w.t('adUnavailable'), true)}); const shuffle=arr=>{ const r=arr.slice(); for (let i=r.length - 1; i >0; i--){ const j=Math.floor(Math.random() * (i + 1)); [r[i], r[j]]=[r[j], r[i]]} return r}; function startQuiz(){ if (Number(levelId) >=1000){ const fresh=buildSingleThemedQuiz(Number(levelId)); if (fresh && Array.isArray(fresh.questions) && fresh.questions.length){ quiz.questions=fresh.questions}} state.order=shuffle(quiz.questions.map((_, i)=>i)); state.index=0; state.score=0; state.answers=0; state.answered=false; state.finished=false; state.scoreSent=false; state.streak=0; state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0; state.roundCollection=new Set(); show(quizScreen); if (isYandex) yandexGameplayStart(); renderQuestion()} function renderQuestion(){ state.answered=false; const cur=quiz.questions[state.order[state.index]]; if (!cur){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; return renderQuestion()} $('#counter').textContent=(state.index + 1) + ' / ' + quiz.questions.length; $('#score-val').textContent=state.score; $('#progress-fill').style.width=(state.index / quiz.questions.length * 100) + '%'; const imgEl=$('#question-img'); const txtEl=$('#question-text'); const box=$('#options'); if (!box) return; box.innerHTML=''; const isPhoto=quiz.mode==='photo'; const bodyEl=d.querySelector('.quiz-body'); if (bodyEl) bodyEl.classList.toggle('photo-mode', isPhoto); if (isPhoto){ if (imgEl){ imgEl.hidden=true; imgEl.removeAttribute('src');} if (txtEl){ txtEl.hidden=false; txtEl.textContent=w.L(cur.name) || '—';} box.classList.add('photo-options'); box.classList.toggle('cols-2', (cur.images || []).length===2); if (!Array.isArray(cur.images) || cur.images.length===0){ console.warn('Photo question has no images'); state.answers++; state.timeouts++; return finishQuestion();} cur.images.forEach((src, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option photo-option'; b.dataset.i=i; const im=d.createElement('img'); im.src=src; im.alt='';
-im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; b.appendChild(im); b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b);});} else{ if (txtEl){ txtEl.hidden=true; txtEl.textContent=''} if (imgEl){ imgEl.hidden=false; imgEl.style.opacity=''; imgEl.src=cur.img || ''; imgEl.alt=''; imgEl.onerror=function (){ this.style.opacity='.25'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; imgEl.onload=function (){ this.style.opacity=''}} box.classList.remove('photo-options', 'cols-2'); const opts=Array.isArray(cur.options) ? cur.options : []; opts.forEach((opt, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option'; b.textContent=w.L(opt) || '—'; b.dataset.i=i; b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b)})} const desc=$('#description'); if (desc){ desc.hidden=true; desc.textContent='';} const nb=$('#next-btn'); if (nb){ nb.hidden=true; nb.textContent=(state.index >=quiz.questions.length - 1) ? w.t('results') : w.t('next')} try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src})} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img}}}} catch (e){} startTimer();} function startTimer(){ stopTimer(); state.timeLeft=10; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return;} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp();}}, 1000);}
- function updateTimer(){ const val=Math.max(0, Math.min(10, state.timeLeft)); const valEl=document.getElementById('timer-val'); const fillEl=document.getElementById('timer-fill'); const timerEl=document.getElementById('timer'); if (valEl) valEl.textContent=val; if (fillEl) fillEl.style.width=(val / 10) * 100 + '%'; if (timerEl) timerEl.classList.toggle('warning', val <=5)} function stopTimer(){ if (state.timerId){ clearInterval(state.timerId); state.timerId=null;}} async function selectOption(i){ if (state.answered) return; state.answered=true; stopTimer(); const cur=quiz.questions[state.order[state.index]]; const correct=cur.answer; const optCount=quiz.mode==='photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0); if (typeof correct !=='number' || optCount===0 || correct < 0 || correct >=optCount){ console.warn('Invalid answer index:', correct); state.answers++; finishQuestion(); return} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); const idx=+o.dataset.i; if (idx===correct) o.classList.add('correct'); else if (idx===i) o.classList.add('wrong');}); try{ (i===correct) ? w.Sound.playCorrect() : w.Sound.playWrong();} catch (e){} if (i===correct){ state.score++; $('#score-val').textContent=state.score; const id=cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || ''); if (id) state.roundCollection.add(id); const timeSpent=10 - Math.max(0, state.timeLeft); if (timeSpent < state.fastestCorrect) state.fastestCorrect=timeSpent; state.streak++; if (state.streak >state.maxStreak) state.maxStreak=state.streak;} else state.streak=0; state.answers++; finishQuestion();}
- function timeUp(){ if (state.answered) return; state.answered=true; const cur=quiz.questions[state.order[state.index]]; const optCount=quiz.mode==='photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0); if (!cur || typeof cur.answer !=='number' || optCount===0 || cur.answer < 0 || cur.answer >=optCount){ console.warn('Invalid answer index in timeUp'); state.answers++; state.timeouts++; finishQuestion(); return} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); if (+o.dataset.i===cur.answer) o.classList.add('correct')}); try{ w.Sound.playWrong()} catch (e){} state.answers++; state.timeouts++; finishQuestion()} function finishQuestion(){ const cur=quiz.questions[state.order[state.index]]; if (cur.description){ const dEl=$('#description'); dEl.textContent=w.L(cur.description); dEl.hidden=false;} $('#next-btn').hidden=false;} function nextQuestion(){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; renderQuestion();}
-async function finishQuiz() {
-  if (state.finished) return;
-  state.finished = true;
-  stopTimer();
-  try { w.Sound.playFanfare(); } catch (e) {}
-  show(resultScreen);
-  if (isYandex) yandexGameplayStop();
-  const total = quiz.questions.length;
-  const pct = Math.round((state.score / total) * 100);
-  const earnedStars = calcStars(pct);
-  $('#res-total').textContent = total;
-  $('#res-correct').textContent = state.score;
-  $('#res-wrong').textContent = state.answers - state.score;
-  $('#res-percent').textContent = pct + '%';
- const starsEl=$('#res-stars'); if (starsEl){ starsEl.textContent='★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars); starsEl.classList.toggle('has-stars', earnedStars >0)}
-try{ const [mapRaw, colRaw, totalRaw]=await Promise.all([ w.storageGet('stars'), w.storageGet('collection'), w.storageGet('total') ]); let map=(mapRaw && typeof mapRaw==='object' && !Array.isArray(mapRaw)) ? mapRaw :{}; let colList=Array.isArray(colRaw) ? colRaw : []; let total=(typeof totalRaw==='number' && !isNaN(totalRaw)) ? totalRaw : 0; const prevStars=Number(map[levelId]) || 0; if (earnedStars >prevStars) map[levelId]=earnedStars; const colBefore=colList.length; state.roundCollection.forEach(id=>{ if (!colList.includes(id)) colList.push(id);}); total +=state.score; await Promise.all([ w.storageSet('stars', map), w.storageSet('collection', colList), w.storageSet('total', total) ]); if (w.__SYNCED__){ w.__SYNCED__.stars=map; w.__SYNCED__.collection=colList; w.__SYNCED__.total=total} w.score=total; w.updateTotalScoreUI(total)} catch (e){ console.warn('finishQuiz save failed:', e)} try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts})}} catch (e){} setTimeout(()=>{ try{ w.showInterstitial()} catch (e){}}, 400)} $('#start-btn').onclick=()=>withLock(startQuiz); $('#next-btn').onclick=()=>withLock(nextQuestion); $('#quit-btn').onclick=()=>{ stopTimer(); if (isYandex) yandexGameplayStop(); show(homeScreen)}; $('#restart-btn').onclick=()=>withLock(startQuiz);
+if (nid >=1000){ const single=buildSingleThemedQuiz(nid); if (single) w.QUIZZES[nid]=single} const quiz=(w.QUIZZES ||{})[String(levelId)]; if (!quiz){ location.hash='#/'; return null} const $=(s)=>d.querySelector(s); const state={ order: [], index: 0, score: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, scoreSent: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set()}; const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId=w.getAnimalId; const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0}; const region=(w.REGIONS || []).find(r=>r.id===quiz.regionKey); if (region) $('#home-region').textContent=w.L(region.name); else $('#home-region').textContent=''; $('#home-title').textContent=quiz.sub ? w.L(quiz.sub) : ''; $('#home-count').textContent=quiz.questions.length; const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsCount=Number(starsMap[levelId]) || 0; const hStars=$('#home-stars'); if (hStars){ hStars.textContent='★'.repeat(starsCount) + '☆'.repeat(3 - starsCount); hStars.classList.toggle('has-stars', starsCount >0)} const gateUnlocked=await w.Gating.isUnlocked(levelId); show(gateUnlocked ? homeScreen : lockScreen); $('#lock-watch-btn').onclick=()=>withLock(async ()=>{ const btn=$('#lock-watch-btn'); btn.disabled=true; btn.textContent=w.t('loadingAd'); const ok=await w.Gating.unlockViaAd(levelId); btn.disabled=false; btn.textContent=w.t('watchAd'); if (ok){ toast(w.t('levelOpened')); show(homeScreen)} else toast(w.t('adUnavailable'), true)}); const shuffle=arr=>{ const r=arr.slice(); for (let i=r.length - 1; i >0; i--){ const j=Math.floor(Math.random() * (i + 1)); [r[i], r[j]]=[r[j], r[i]]} return r}; function startQuiz(){ if (Number(levelId) >=1000){ const fresh=buildSingleThemedQuiz(Number(levelId)); if (fresh && Array.isArray(fresh.questions) && fresh.questions.length){ quiz.questions=fresh.questions}} state.order=shuffle(quiz.questions.map((_, i)=>i)); state.index=0; state.score=0; state.answers=0; state.answered=false; state.finished=false; state.scoreSent=false; state.streak=0; state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0; state.roundCollection=new Set(); show(quizScreen); if (isYandex) yandexGameplayStart(); renderQuestion()} function renderQuestion(){ state.answered=false; const cur=quiz.questions[state.order[state.index]]; if (!cur){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; return renderQuestion()} $('#counter').textContent=(state.index + 1) + ' / ' + quiz.questions.length; $('#score-val').textContent=state.score; $('#progress-fill').style.width=(state.index / quiz.questions.length * 100) + '%'; const imgEl=$('#question-img'); const txtEl=$('#question-text'); const box=$('#options'); if (!box) return; box.innerHTML=''; const isPhoto=quiz.mode==='photo'; const bodyEl=d.querySelector('.quiz-body'); if (bodyEl) bodyEl.classList.toggle('photo-mode', isPhoto); if (isPhoto){ if (imgEl){ imgEl.hidden=true; imgEl.removeAttribute('src')} if (txtEl){ txtEl.hidden=false; txtEl.textContent=w.L(cur.name) || '—'} box.classList.add('photo-options'); box.classList.toggle('cols-2', (cur.images || []).length===2); if (!Array.isArray(cur.images) || cur.images.length===0){ console.warn('Photo question has no images'); state.answers++; state.timeouts++; return finishQuestion()} cur.images.forEach((src, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option photo-option'; b.dataset.i=i; const im=d.createElement('img'); im.src=src; im.alt='';
+im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; b.appendChild(im); b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b)})} else{ if (txtEl){ txtEl.hidden=true; txtEl.textContent=''} if (imgEl){ imgEl.hidden=false; imgEl.style.opacity=''; imgEl.src=cur.img || ''; imgEl.alt=''; imgEl.onerror=function (){ this.style.opacity='.25'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; imgEl.onload=function (){ this.style.opacity=''}} box.classList.remove('photo-options', 'cols-2'); const opts=Array.isArray(cur.options) ? cur.options : []; opts.forEach((opt, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option'; b.textContent=w.L(opt) || '—'; b.dataset.i=i; b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b)})} const desc=$('#description'); if (desc){ desc.hidden=true; desc.textContent=''} const nb=$('#next-btn'); if (nb){ nb.hidden=true; nb.textContent=(state.index >=quiz.questions.length - 1) ? w.t('results') : w.t('next')} try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src})} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img}}}} catch (e){} startTimer()} function startTimer(){ stopTimer(); state.timeLeft=10; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp()}}, 1000)} function updateTimer(){ const val=Math.max(0, Math.min(10, state.timeLeft)); const valEl=document.getElementById('timer-val'); const fillEl=document.getElementById('timer-fill'); const timerEl=document.getElementById('timer'); if (valEl) valEl.textContent=val; if (fillEl) fillEl.style.width=(val / 10) * 100 + '%'; if (timerEl) timerEl.classList.toggle('warning', val <=5)} function stopTimer(){ if (state.timerId){ clearInterval(state.timerId); state.timerId=null}} async function selectOption(i){ if (state.answered) return; state.answered=true; stopTimer(); const cur=quiz.questions[state.order[state.index]]; const correct=cur.answer; const optCount=quiz.mode==='photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0); if (typeof correct !=='number' || optCount===0 || correct < 0 || correct >=optCount){ console.warn('Invalid answer index:', correct); state.answers++; finishQuestion(); return} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); const idx=+o.dataset.i; if (idx===correct) o.classList.add('correct'); else if (idx===i) o.classList.add('wrong')}); try{ (i===correct) ? w.Sound.playCorrect() : w.Sound.playWrong()} catch (e){} if (i===correct){ state.score++; $('#score-val').textContent=state.score; const id=cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || ''); if (id) state.roundCollection.add(id); const timeSpent=10 - Math.max(0, state.timeLeft); if (timeSpent < state.fastestCorrect) state.fastestCorrect=timeSpent; state.streak++; if (state.streak >state.maxStreak) state.maxStreak=state.streak} else state.streak=0; state.answers++; finishQuestion()} function timeUp(){ if (state.answered) return; state.answered=true; const cur=quiz.questions[state.order[state.index]]; const optCount=quiz.mode==='photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0); if (!cur || typeof cur.answer !=='number' || optCount===0 || cur.answer < 0 || cur.answer >=optCount){ console.warn('Invalid answer index in timeUp'); state.answers++; state.timeouts++; finishQuestion(); return} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); if (+o.dataset.i===cur.answer) o.classList.add('correct')}); try{ w.Sound.playWrong()} catch (e){} state.answers++; state.timeouts++; finishQuestion()} function finishQuestion(){ const cur=quiz.questions[state.order[state.index]]; if (cur.description){ const dEl=$('#description'); dEl.textContent=w.L(cur.description); dEl.hidden=false} $('#next-btn').hidden=false} function nextQuestion(){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; renderQuestion()}
+async function finishQuiz(){ if (state.finished) return; state.finished=true; stopTimer(); try{ w.Sound.playFanfare()} catch (e){} show(resultScreen); if (isYandex) yandexGameplayStop(); const total=quiz.questions.length; const pct=Math.round((state.score / total) * 100); const earnedStars=calcStars(pct); $('#res-total').textContent=total; $('#res-correct').textContent=state.score; $('#res-wrong').textContent=state.answers - state.score; $('#res-percent').textContent=pct + '%'; const starsEl=$('#res-stars'); if (starsEl){ starsEl.textContent='★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars); starsEl.classList.toggle('has-stars', earnedStars >0)}
+try{ const [mapRaw, colRaw, totalRaw]=await Promise.all([ w.storageGet('stars'), w.storageGet('collection'), w.storageGet('total') ]); let map=(mapRaw && typeof mapRaw==='object' && !Array.isArray(mapRaw)) ? mapRaw :{}; let colList=Array.isArray(colRaw) ? colRaw : []; let total=(typeof totalRaw==='number' && !isNaN(totalRaw)) ? totalRaw : 0; const prevStars=Number(map[levelId]) || 0; if (earnedStars >prevStars) map[levelId]=earnedStars; const colBefore=colList.length; state.roundCollection.forEach(id=>{ if (!colList.includes(id)) colList.push(id)}); total +=state.score; await Promise.all([ w.storageSet('stars', map), w.storageSet('collection', colList), w.storageSet('total', total) ]); if (w.__SYNCED__){ w.__SYNCED__.stars=map; w.__SYNCED__.collection=colList; w.__SYNCED__.total=total} w.score=total; w.updateTotalScoreUI(total)} catch (e){ console.warn('finishQuiz save failed:', e)} try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts})}} catch (e){} setTimeout(()=>{ try{ w.showInterstitial()} catch (e){}}, 400)} $('#start-btn').onclick=()=>withLock(startQuiz); $('#next-btn').onclick=()=>withLock(nextQuestion); $('#quit-btn').onclick=()=>{ stopTimer(); if (isYandex) yandexGameplayStop(); show(homeScreen)}; $('#restart-btn').onclick=()=>withLock(startQuiz);
 $('#home-btn').onclick=()=>{ location.hash='#/'};
 let __pausedTimeLeft=null; function pauseQuiz(){ if (!state.timerId) return; if (state.finished || state.answered) return; __pausedTimeLeft=state.timeLeft; stopTimer()} function resumeQuiz(){ if (__pausedTimeLeft==null) return; if (state.finished || state.answered) return; const remain=__pausedTimeLeft; __pausedTimeLeft=null; state.timeLeft=remain; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp()}}, 1000)} function cleanup(){ stopTimer(); if (w.__currentQuizCleanup===cleanup) w.__currentQuizCleanup=null; if (w.__currentQuizPause===pauseQuiz) w.__currentQuizPause=null; if (w.__currentQuizResume===resumeQuiz) w.__currentQuizResume=null} w.__currentQuizCleanup=cleanup; w.__currentQuizPause=pauseQuiz; w.__currentQuizResume=resumeQuiz; return cleanup}
 async function renderCollection(){ const body=d.getElementById('col-body'); if (!body) return;
-const animalId=w.getAnimalId; const list=asArray(w.__SYNCED__ && w.__SYNCED__.collection); const collected=new Set(Array.isArray(list) ? list.map(String) : []); body.innerHTML=''; const seen=new Set(); let opened=0; (w.REGIONS || []).forEach(region=>{ const animals=[]; region.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ const id=animalId(qn.img); if (!id || seen.has(id)) return; seen.add(id); animals.push({ id, img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)})})}); if (!animals.length) return; animals.forEach(a=>{ if (collected.has(a.id)) opened++}); const sec=d.createElement('section'); sec.className='col-region'; sec.innerHTML='<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>'; const grid=d.createElement('div'); grid.className='collection-grid'; animals.forEach(a=>{ const isOpen=collected.has(a.id); const item=d.createElement('button'); item.type='button'; item.className='collection-item' + (isOpen ? ' unlocked' : ' locked'); if (isOpen){ item.innerHTML='<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy" onerror="this.style.opacity=\'.3\';this.style.background=\'linear-gradient(135deg,#ffe3ef,#e6e1ff)\'">'; item.addEventListener('click', ()=>openColModal(a))} else{ item.innerHTML='<span class="col-lock">🔒</span>'; item.disabled=true} grid.appendChild(item)}); sec.appendChild(grid); body.appendChild(sec)}); const counter=d.getElementById('col-counter'); if (counter) counter.textContent=opened + ' / ' + seen.size}
-function openColModal(a){ const m=d.getElementById('col-modal'); if (!m) return; d.getElementById('modal-img').src=a.img; d.getElementById('modal-img').alt=a.name; d.getElementById('modal-title').textContent=a.name; d.getElementById('modal-desc').textContent=a.desc; m.classList.add('show')}
+const animalId=w.getAnimalId; const list=asArray(w.__SYNCED__ && w.__SYNCED__.collection); const collected=new Set(Array.isArray(list) ? list.map(String) : []); body.innerHTML=''; const seen=new Set(); let opened=0; (w.REGIONS || []).forEach(region=>{ const animals=[]; region.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>{ const id=animalId(qn.img); if (!id || seen.has(id)) return; seen.add(id); animals.push({ id, img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});}); if (!animals.length) return; animals.forEach(a=>{ if (collected.has(a.id)) opened++;}); const sec=d.createElement('section'); sec.className='col-region'; sec.innerHTML='<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>'; const grid=d.createElement('div'); grid.className='collection-grid'; animals.forEach(a=>{ const isOpen=collected.has(a.id); const item=d.createElement('button'); item.type='button'; item.className='collection-item' + (isOpen ? ' unlocked' : ' locked'); if (isOpen){ item.innerHTML='<img src="' + a.img + '" alt="' + escapeHtml(a.name) + '" loading="lazy" onerror="this.style.opacity=\'.3\';this.style.background=\'linear-gradient(135deg,#ffe3ef,#e6e1ff)\'">'; item.addEventListener('click', ()=>openColModal(a));} else{ item.innerHTML='<span class="col-lock">🔒</span>'; item.disabled=true;} grid.appendChild(item);}); sec.appendChild(grid); body.appendChild(sec);}); const counter=d.getElementById('col-counter'); if (counter) counter.textContent=opened + ' / ' + seen.size;}
+function openColModal(a){ const m=d.getElementById('col-modal'); if (!m) return; d.getElementById('modal-img').src=a.img; d.getElementById('modal-img').alt=a.name; d.getElementById('modal-title').textContent=a.name; d.getElementById('modal-desc').textContent=a.desc; m.classList.add('show');}
 function closeColModal(){ const m=d.getElementById('col-modal'); if (m) m.classList.remove('show');}
 let currentPage=null;
-function refreshLocalization(){ applyStaticI18n(); if (w.Sound && w.Sound.apply) w.Sound.apply(); if (w.Theme && w.Theme.apply) w.Theme.apply(); if (currentPage==='index') renderIndex(); else if (currentPage==='collection') renderCollection(); else if (currentPage==='igames') renderOtherGames(); console.log('Localization refreshed →', LANG);}
-async function renderOtherGames(){ const grid=d.getElementById('games-grid'); if (!grid) return; grid.innerHTML=''; if (isYandex){ let games=[]; try{ games=await w.getAllGames()} catch (e){} if (!games.length){ try{ const g=await w.getGameByID(535101); if (g) games.push(g)} catch (e){}} if (!games.length){ grid.innerHTML='<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>'; return} games.forEach(g=>{ const a=d.createElement('a'); a.className='game-card'; a.href=g.url; a.target='_blank'; a.rel='noopener'; const iconHtml=g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>'; a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>'; grid.appendChild(a)}); return} function renderCard(opts){ const a=d.createElement('a'); a.className='game-card'; a.href=opts.url; a.target='_blank'; a.rel='noopener'; const iconHtml=opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : ''); a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>'; grid.appendChild(a);} const VK_GAMES=[ { href: 'https://vk.com/app54634418', emoji: '💭', name: 'Словарекс'}, { href: 'https://vk.com/app54636699', emoji: '🍎', name: 'Найди слова'}, { href: 'https://vk.ru/app51399364', emoji: '9️', name: 'Судоку для самых умных'}, { href: 'https://vk.com/app54620141', emoji: '🧩', name: 'ТЕТРА'}, { href: 'https://vk.ru/tetrisc', emoji: '🕹️', name: 'Весёлый тетрис'}, { href: 'https://vk.com/app54678489', emoji: '🎨', name: 'Раскраска'} ]; const OK_GAMES=[ { href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: 'ТЕТРА'}, { href: 'https://ok.ru/app/512005390848', emoji: '9️', name: 'Судоку для самых умных'}, { href: 'https://ok.ru/app/512005443175', emoji: '💭', name: 'Словарекс'} ]; const list=isOK ? OK_GAMES : VK_GAMES; list.forEach(g=>renderCard({ url: g.href, title: g.name, emoji: g.emoji}));}
-function bindGlobalUI(){ d.addEventListener('contextmenu', e=>e.preventDefault()); d.addEventListener('dragstart', e=>e.preventDefault()); d.addEventListener('selectstart', e=>{ const tag=(e.target && e.target.tagName) || ''; if (tag==='INPUT' || tag==='TEXTAREA') return; e.preventDefault()}); const achModal=d.getElementById('ach-modal'); if (achModal){ achModal.querySelectorAll('.modal-close, .modal-back, [data-act="close"]') .forEach(b=>b.addEventListener('click', closeAchModal)); achModal.addEventListener('click', e=>{ if (e.target===achModal) closeAchModal();});} const colModal=d.getElementById('col-modal'); if (colModal){ colModal.querySelectorAll('.modal-close, .modal-back') .forEach(b=>b.addEventListener('click', closeColModal)); colModal.addEventListener('click', e=>{ if (e.target===colModal) closeColModal();});} const authModal=d.getElementById('auth-modal'); if (authModal){ authModal.querySelectorAll('.modal-close, [data-act="close"]') .forEach(b=>b.addEventListener('click', closeAuthModal)); authModal.addEventListener('click', e=>{ if (e.target===authModal) closeAuthModal();});} const yandexLbModal=d.getElementById('yandex-leaderboard-modal'); if (yandexLbModal){ yandexLbModal.querySelectorAll('.modal-close') .forEach(b=>b.addEventListener('click', ()=>yandexLbModal.classList.remove('show'))); yandexLbModal.addEventListener('click', e=>{ if (e.target===yandexLbModal) yandexLbModal.classList.remove('show');});} d.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeAchModal(); closeColModal(); closeAuthModal(); if (yandexLbModal) yandexLbModal.classList.remove('show')}}); d.addEventListener('visibilitychange', function (){ if (d.visibilityState==='hidden'){ console.log('Page hidden — pausing'); if (soundEnabled) Sound.stopBg(); yandexGameplayStop(); if (w.__currentQuizPause){ try{ w.__currentQuizPause()} catch (e){}}} else if (d.visibilityState==='visible'){ console.log('Page visible — resuming'); if (soundEnabled && bgStarted) Sound.startBg(); if (w.__currentQuizResume){ try{ w.__currentQuizResume()} catch (e){}}}});}
-const PAGE_IDS = ['index', 'quiz', 'collection', 'igames'];
-let currentPageCleanup = null;
-function parseHash() {
-  const h = (location.hash || '#/').replace(/^#\/?/, '');
-  const parts = h.split('/').filter(Boolean);
-  if (!parts.length) return { name: 'index' };
-  if (parts[0] === 'quiz') {
-    const id = parseInt(parts[1], 10);
-    return { name: 'quiz', levelId: isNaN(id) || id < 1 ? 1 : id };
-  }
-  if (parts[0] === 'collection') return { name: 'collection' };
-  if (parts[0] === 'igames') return { name: 'igames' };
-  return { name: 'index' };
-}
-function withTimeout(promise, ms, label) {
-  return Promise.race([
-    promise,
-    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout ' + label + ' after ' + ms + 'ms')), ms))
-  ]);
-}
-async function navigate() {
-  if (typeof currentPageCleanup === 'function') {
-    try { currentPageCleanup(); } catch (e) {}
-    currentPageCleanup = null;
-  }
-  const route = parseHash();
-  const myHash = location.hash;
-  PAGE_IDS.forEach(p => {
-    const el = d.getElementById('page-' + p);
-    if (el) el.classList.toggle('active', p === route.name);
-  });
-  currentPage = route.name;
-  if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
-  try {
-    if (route.name === 'index') {
-      await renderIndex();
-    } else if (route.name === 'quiz') {
-      const cleanup = await renderQuiz(route.levelId);
-      if (location.hash !== myHash) {
-        if (typeof cleanup === 'function') { try { cleanup(); } catch (e) {} }
-        return;
-      }
-      currentPageCleanup = cleanup;
-    } else if (route.name === 'collection') {
-      await renderCollection();
-    } else if (route.name === 'igames') {
-      await renderOtherGames();
-    }
-  } catch (e) { console.warn('navigate error', e); }
-  try { window.scrollTo(0, 0); } catch (e) {}
-}
-async function boot() {
-  w.addEventListener('error', function (e) {
-    console.error('Global error:', e && e.message, e && e.filename, e && e.lineno);
-  });
-  w.addEventListener('unhandledrejection', function (e) {
-    console.error('Unhandled promise rejection:', e && e.reason);
-    e.preventDefault();
-  });
-  try {
-    applyStaticI18n();
-    await w.Theme.load();
-    try {
-      const saved = await storageGet('sound_on');
-      soundEnabled = saved === true;
-    } catch (e) { soundEnabled = false; }
-    applySoundState();
-    attachAudioUnlock();
-    attachSfxToUI();
-    if (isVK || isOK) {
-      try {
-        if (window.__vkBridgeReady) await window.__vkBridgeReady;
-      } catch (e) {}
-      if (window.vkBridge) {
-        await initVK();
-        try {
-          window.vkBridge.subscribe(function (event) {
-            const type = event && event.detail && event.detail.type;
-            if (type === 'VKWebAppViewHide') {
-              console.log('VK ViewHide');
-              if (!adPlaying && soundEnabled) Sound.stopBg();
-            }
-            if (type === 'VKWebAppViewRestore') {
-              console.log('VK ViewRestore');
-              if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();
-            }
-          });
-        } catch (e) { console.warn('VK subscribe failed', e); }
-      } else {
-        console.warn('VK Bridge unavailable — running in fallback mode');
-      }
-    } else {
-      const hasYa = isYandex || typeof YaGames !== 'undefined' || w.__YANDEX_SDK_LOADED__ === true;
-      if (hasYa) {
-        if (!isYandex) {
-          isYandex = true;
-          platform = 'yandex';
-          P.isYandex = true;
-          P.platform = 'yandex';
-          P.isStandalone = false;
-          cls.toggle('is-yandex', true);
-          cls.toggle('is-standalone', false);
-          console.log('Yandex detected at runtime');
-        }
-        await initYandex();
-      }
-      w.addEventListener('yandex-sdk-ready', async () => {
-        if (isYandex) return;
-        isYandex = true;
-        platform = 'yandex';
-        P.isYandex = true;
-        P.platform = 'yandex';
-        P.isStandalone = false;
-        cls.toggle('is-yandex', true);
-        cls.toggle('is-standalone', false);
-        console.log('Yandex detected (late load)');
-        try { await initYandex(); } catch (e) { console.warn(e); }
-        try { await syncAllOnStart(); } catch (e) {}
-        try { await updateAuthButton(); } catch (e) {}
-        try { await updateShortcutButton(); } catch (e) {}
-        try { renderIndex(); } catch (e) {}
-          if (w.__appReady) trySendLoadingReady();
-      });
-    }
-    await syncAllOnStart();
-    try { await w.Ach.loadMetrics(); } catch (e) {}
-    try { await loadUnlocked(); } catch (e) {}
-    if (w.Ach && w.Ach.recordVisit) { try { await w.Ach.recordVisit(); } catch (e) {} }
-    try { await updateAuthButton(); } catch (e) {}
-    try { await updateShortcutButton(); } catch (e) {}
-    bindGlobalUI();
-  } catch (e) { console.warn('Boot error:', e); }
-  w.addEventListener('hashchange', navigate);
-  try { await withTimeout(navigate(), 5000, 'navigate'); }
-  catch (e) { console.warn('Navigate timed out / failed:', e); }
-  try { hideLoadingAndShowMenu(); } catch (e) { console.error('hideLoading failed:', e); }
-}
-setTimeout(() => {
-  if (d.body.classList.contains('app-ready') && d.querySelector('.page.active')) return;
-  console.warn('Boot watchdog: forcing loader hide / home page');
-  try {
-    hideLoadingAndShowMenu();
-    if (!d.querySelector('.page.active')) {
-      const idx = d.getElementById('page-index');
-      if (idx) idx.classList.add('active');
-      try { currentPage = 'index'; } catch (_) {}
-    }
-    try { Promise.resolve(renderIndex()).catch(e => console.warn('watchdog renderIndex:', e)); } catch (e) {}
-  } catch (e) {
-    console.error('Watchdog error:', e);
-  }
-}, 15000);
-w.addEventListener('pagehide', () => {
-  if (isYandex) yandexGameplayStop();
-  if (soundEnabled) { try { Sound.stopBg(); } catch (e) {} }
-  if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
-});
+function refreshLocalization(){ applyStaticI18n(); if (w.Sound && w.Sound.apply) w.Sound.apply(); if (w.Theme && w.Theme.apply) w.Theme.apply(); if (currentPage==='index') renderIndex(); else if (currentPage==='collection') renderCollection(); const igm=d.getElementById('igames-modal'); if (igm && igm.classList.contains('show')) renderOtherGames();}
+async function renderOtherGames(){ const grid=d.getElementById('games-grid'); if (!grid) return; grid.innerHTML=''; if (isYandex){ let games=[]; try{ games=await w.getAllGames();} catch (e){} if (!games.length){ try{ const g=await w.getGameByID(535101); if (g) games.push(g);} catch (e){}} if (!games.length){ grid.innerHTML='<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>'; return;} games.forEach(g=>{ const a=d.createElement('a'); a.className='game-card'; a.href=g.url; a.target='_blank'; a.rel='noopener'; const iconHtml=g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>'; a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>'; grid.appendChild(a);}); return;} function renderCard(opts){ const a=d.createElement('a'); a.className='game-card'; a.href=opts.url; a.target='_blank'; a.rel='noopener'; const iconHtml=opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : ''); a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>'; grid.appendChild(a);} const VK_GAMES=[{ href: 'https://vk.com/app54634418', emoji: '💭', name: 'Словарекс'},{ href: 'https://vk.com/app54636699', emoji: '🍎', name: 'Найди слова'},{ href: 'https://vk.ru/app51399364', emoji: '9️', name: 'Судоку для самых умных'},{ href: 'https://vk.com/app54620141', emoji: '🧩', name: 'ТЕТРА'},{ href: 'https://vk.ru/tetrisc', emoji: '🕹️', name: 'Весёлый тетрис'},{ href: 'https://vk.com/app54678489', emoji: '🎨', name: 'Раскраска'} ]; const OK_GAMES=[{ href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: 'ТЕТРА'},{ href: 'https://ok.ru/app/512005390848', emoji: '9️', name: 'Судоку для самых умных'},{ href: 'https://ok.ru/app/512005443175', emoji: '💭', name: 'Словарекс'} ]; const list=isOK ? OK_GAMES : VK_GAMES; list.forEach(g=>renderCard({ url: g.href, title: g.name, emoji: g.emoji}));}
+function bindGlobalUI(){ d.addEventListener('contextmenu', e=>e.preventDefault()); d.addEventListener('dragstart', e=>e.preventDefault()); d.addEventListener('selectstart', e=>{ const tag=(e.target && e.target.tagName) || ''; if (tag==='INPUT' || tag==='TEXTAREA') return; e.preventDefault();}); const achModal=d.getElementById('ach-modal'); if (achModal){ achModal.querySelectorAll('.modal-close, .modal-back, [data-act="close"]') .forEach(b=>b.addEventListener('click', closeAchModal)); achModal.addEventListener('click', e=>{ if (e.target===achModal) closeAchModal();});} const colModal=d.getElementById('col-modal'); if (colModal){ colModal.querySelectorAll('.modal-close, .modal-back') .forEach(b=>b.addEventListener('click', closeColModal)); colModal.addEventListener('click', e=>{ if (e.target===colModal) closeColModal();});} const authModal=d.getElementById('auth-modal'); if (authModal){ authModal.querySelectorAll('.modal-close, [data-act="close"]') .forEach(b=>b.addEventListener('click', closeAuthModal)); authModal.addEventListener('click', e=>{ if (e.target===authModal) closeAuthModal();});} const yandexLbModal=d.getElementById('yandex-leaderboard-modal'); if (yandexLbModal){ yandexLbModal.querySelectorAll('.modal-close') .forEach(b=>b.addEventListener('click', ()=>yandexLbModal.classList.remove('show'))); yandexLbModal.addEventListener('click', e=>{ if (e.target===yandexLbModal) yandexLbModal.classList.remove('show');});} const igamesModal=d.getElementById('igames-modal'); if (igamesModal){ igamesModal.querySelectorAll('.modal-close, .modal-back') .forEach(b=>b.addEventListener('click', closeOtherGamesModal)); igamesModal.addEventListener('click', e=>{ if (e.target===igamesModal) closeOtherGamesModal();});} d.addEventListener('keydown', e=>{ if (e.key==='Escape'){ closeAchModal(); closeColModal(); closeAuthModal(); closeOtherGamesModal(); if (yandexLbModal) yandexLbModal.classList.remove('show');}}); d.addEventListener('visibilitychange', function (){ if (d.visibilityState==='hidden'){ console.log('Page hidden — pausing'); if (soundEnabled) Sound.stopBg(); yandexGameplayStop(); if (w.__currentQuizPause){ try{ w.__currentQuizPause();} catch (e){}}} else if (d.visibilityState==='visible'){ console.log('Page visible — resuming'); if (soundEnabled && bgStarted) Sound.startBg(); if (w.__currentQuizResume){ try{ w.__currentQuizResume();} catch (e){}}}});}
+const PAGE_IDS=['index', 'quiz', 'collection'];
+let currentPageCleanup=null;
+function parseHash(){ const h=(location.hash || '#/').replace(/^#\/?/, ''); const parts=h.split('/').filter(Boolean); if (!parts.length) return{ name: 'index'}; if (parts[0]==='quiz'){ const id=parseInt(parts[1], 10); return{ name: 'quiz', levelId: isNaN(id) || id < 1 ? 1 : id};} if (parts[0]==='collection') return{ name: 'collection'}; return{ name: 'index'};}
+function withTimeout(promise, ms, label){ return Promise.race([ promise, new Promise((_, rej)=>setTimeout(()=>rej(new Error('timeout ' + label + ' after ' + ms + 'ms')), ms)) ]);}
+async function navigate(){ if (typeof currentPageCleanup==='function'){ try{ currentPageCleanup();} catch (e){} currentPageCleanup=null;} const route=parseHash(); const myHash=location.hash; PAGE_IDS.forEach(p=>{ const el=d.getElementById('page-' + p); if (el) el.classList.toggle('active', p===route.name);}); currentPage=route.name; if (route.name !=='quiz' && isYandex) yandexGameplayStop(); try{ if (route.name==='index'){ await renderIndex();} else if (route.name==='quiz'){ const cleanup=await renderQuiz(route.levelId); if (location.hash !==myHash){ if (typeof cleanup==='function'){ try{ cleanup();} catch (e){}} return;} currentPageCleanup=cleanup;} else if (route.name==='collection'){ await renderCollection();}} catch (e){ console.warn('navigate error', e);} try{ window.scrollTo(0, 0);} catch (e){}}
+async function boot(){ w.addEventListener('error', function (e){ console.error('Global error:', e && e.message, e && e.filename, e && e.lineno);}); w.addEventListener('unhandledrejection', function (e){ console.error('Unhandled promise rejection:', e && e.reason); e.preventDefault();}); try{ applyStaticI18n(); await w.Theme.load(); try{ const saved=await storageGet('sound_on'); soundEnabled=saved===true;} catch (e){ soundEnabled=false;} applySoundState(); attachAudioUnlock(); attachSfxToUI(); if (isVK || isOK){ try{ if (window.__vkBridgeReady) await window.__vkBridgeReady;} catch (e){} if (window.vkBridge){ await initVK(); try{ window.vkBridge.subscribe(function (event){ const type=event && event.detail && event.detail.type; if (type==='VKWebAppViewHide'){ console.log('VK ViewHide'); if (!adPlaying && soundEnabled) Sound.stopBg();} if (type==='VKWebAppViewRestore'){ console.log('VK ViewRestore'); if (!adPlaying && soundEnabled && bgStarted) Sound.startBg();}});} catch (e){ console.warn('VK subscribe failed', e);}} else{ console.warn('VK Bridge unavailable — running in fallback mode');}} else{ const hasYa=isYandex || typeof YaGames !=='undefined' || w.__YANDEX_SDK_LOADED__===true; if (hasYa){ if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false; cls.toggle('is-yandex', true); cls.toggle('is-standalone', false); console.log('Yandex detected at runtime');} await initYandex();} w.addEventListener('yandex-sdk-ready', async ()=>{ if (isYandex) return; isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false; cls.toggle('is-yandex', true); cls.toggle('is-standalone', false); console.log('Yandex detected (late load)'); try{ await initYandex();} catch (e){ console.warn(e);} try{ await syncAllOnStart();} catch (e){} try{ await updateAuthButton();} catch (e){} try{ await updateShortcutButton();} catch (e){} try{ renderIndex();} catch (e){} if (w.__appReady) trySendLoadingReady();});} await syncAllOnStart(); try{ await w.Ach.loadMetrics();} catch (e){} try{ await loadUnlocked();} catch (e){} if (w.Ach && w.Ach.recordVisit){ try{ await w.Ach.recordVisit();} catch (e){}} try{ await updateAuthButton();} catch (e){} try{ await updateShortcutButton();} catch (e){} bindGlobalUI();} catch (e){ console.warn('Boot error:', e);} w.addEventListener('hashchange', navigate); try{ await withTimeout(navigate(), 5000, 'navigate');} catch (e){ console.warn('Navigate timed out / failed:', e);} try{ hideLoadingAndShowMenu();} catch (e){ console.error('hideLoading failed:', e);}}
+setTimeout(()=>{ if (d.body.classList.contains('app-ready') && d.querySelector('.page.active')) return; console.warn('Boot watchdog: forcing loader hide / home page'); try{ hideLoadingAndShowMenu(); if (!d.querySelector('.page.active')){ const idx=d.getElementById('page-index'); if (idx) idx.classList.add('active'); try{ currentPage='index';} catch (_){}} try{ Promise.resolve(renderIndex()).catch(e=>console.warn('watchdog renderIndex:', e));} catch (e){}} catch (e){ console.error('Watchdog error:', e);}}, 15000);
+w.addEventListener('pagehide', ()=>{ if (isYandex) yandexGameplayStop(); if (soundEnabled){ try{ Sound.stopBg();} catch (e){}} if (w.__currentQuizPause){ try{ w.__currentQuizPause();} catch (e){}}});
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
-w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth };
+w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal };
 })(window, document);
 </script>
 </body>
