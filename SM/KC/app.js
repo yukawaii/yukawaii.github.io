@@ -1,1 +1,2776 @@
-!function(){"use strict";const e=window.__PLATFORM&&window.__PLATFORM.storagePrefix||"",t=!(!window.__PLATFORM||!window.__PLATFORM.isOK),n=["animals"];let o=null,r=!1,i=0;function s(e,t){return function(...t){try{const n=e.apply(this,t);return n&&"function"==typeof n.catch&&n.catch((e=>{})),n}catch(e){try{he("Что-то пошло не так. Попробуйте ещё раз")}catch(e){}}}}function l(e,t){if(!e||"function"!=typeof t)return;if(e.__tapBound)return void(e.__tapHandler=t);e.__tapBound=!0,e.__tapHandler=t;let n=0,o=0,r=0,i=!1;e.addEventListener("touchstart",(function(e){if(e.touches.length>1)return void(i=!0);const t=e.touches[0];t&&(o=t.clientX,r=t.clientY,i=!1)}),{passive:!0}),e.addEventListener("touchmove",(function(e){if(i)return;const t=e.touches[0];t&&(Math.abs(t.clientX-o)>10||Math.abs(t.clientY-r)>10)&&(i=!0)}),{passive:!0}),e.addEventListener("touchend",(function(t){if(i)return;if(!(t.changedTouches&&t.changedTouches[0]))return;if(n=Date.now(),t.cancelable)try{t.preventDefault()}catch(e){}const o=e.__tapHandler;"function"==typeof o&&o.call(e,t)}),{passive:!1}),e.addEventListener("click",(function(t){if(Date.now()-n<450)return;const o=e.__tapHandler;"function"==typeof o&&o.call(e,t)}))}const c={SCORE:e+"cw_score_v1",SOLVED_THEMES:e+"cw_themes_v1",THEME:e+"cw_theme_v1",SOUND:e+"cw_sound_v1",ACH:e+"cw_ach_v1",DAILY:e+"cw_daily_v1",CAT_UNLOCKS:e+"cw_cat_unlocks_v1",STREAK:e+"cw_streak_v1",LAST_PUZZLE:e+"cw_last_puzzle_v1"},a={SCORE:e+"cw_score_v2",SOLVED_THEMES:e+"cw_themes_v2",THEME:e+"cw_theme_v2",SOUND:e+"cw_sound_v2",ACH:e+"cw_ach_v2",DAILY:e+"cw_daily_v2",CAT_UNLOCKS:e+"cw_cat_unlocks_v2",STREAK:e+"cw_streak_v2",LAST_PUZZLE:e+"cw_last_puzzle_v2"},d={score:0,solvedThemes:{},catUnlocks:{},theme:"light",sound:!0,ach:{},daily:null,currentPuzzle:null,currentPuzzleMeta:null,userGrid:null,cells:[],selected:null,timer:null,startTime:0,solvedFlag:!1,hintsUsed:0,puzzleToken:0,noMistakeStreak:0,mistakesThisPuzzle:0,lastSavedPuzzle:null};let u=!1;const f=[{id:"first",icon:"🎬",name:"Первое решение",desc:"Решить первый кроссворд"},{id:"ten",icon:"🎯",name:"Десятка",desc:"Решить 10 кроссвордов"},{id:"fifty",icon:"🏅",name:"Полтинник",desc:"Решить 50 кроссвордов"},{id:"hundred",icon:"🏆",name:"Сотка",desc:"Решить 100 кроссвордов"},{id:"daily1",icon:"☀️",name:"День сурка",desc:"Решить кроссворд дня"},{id:"speed",icon:"⚡",name:"Скорость",desc:"Решить кроссворд за 60 сек"},{id:"flash",icon:"💥",name:"Молния",desc:"Решить кроссворд за 30 сек"},{id:"nohint",icon:"🧠",name:"Без подсказок",desc:"Решить кроссворд без подсказок"},{id:"hint5",icon:"💡",name:"Всезнайка",desc:"Использовать 5 подсказок"},{id:"alltheme",icon:"🌈",name:"Путешественник",desc:"Решить кроссворд каждой темы"},{id:"night",icon:"🌙",name:"Полуночник",desc:"Решить кроссворд ночью"},{id:"streak3",icon:"🔥",name:"Три подряд",desc:"Решить 3 кроссворда без ошибок"}],h=e=>document.getElementById(e),m=e=>document.querySelectorAll(e);function g(){const e=new Date;return`${e.getFullYear()}-${String(e.getMonth()+1).padStart(2,"0")}-${String(e.getDate()).padStart(2,"0")}`}function y(e){const t=Math.floor(e/60),n=Math.floor(e%60);return`${String(t).padStart(2,"0")}:${String(n).padStart(2,"0")}`}function w(e){return String(e).replace(/[&<>"']/g,(e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e])))}let p=null;function v(){if(p){if("suspended"===p.state)try{p.resume()}catch(e){}}else try{p=new(window.AudioContext||window.webkitAudioContext)}catch(e){}}function _(e,t=.15,n="sine",o=.15){if(d.sound&&p)try{const r=p.createOscillator(),i=p.createGain();r.type=n,r.frequency.value=e,r.connect(i),i.connect(p.destination),i.gain.value=o,i.gain.exponentialRampToValueAtTime(1e-5,p.currentTime+t),r.start(),r.stop(p.currentTime+t)}catch(e){}}const k=()=>_(880,.05,"sine",.08),z=()=>_(1200,.05,"sine",.06),S=()=>{_(660,.1),setTimeout((()=>_(880,.1)),100),setTimeout((()=>_(1320,.15)),200)},M=()=>_(200,.15,"sawtooth",.08),T=()=>{[523,659,784,1046].forEach(((e,t)=>setTimeout((()=>_(e,.2,"sine",.15)),120*t)))},L=()=>_(1046,.12,"sine",.1);let b,C,A=0;function E(){b&&(b.width=window.innerWidth,b.height=window.innerHeight)}function P(e,t){try{const n=localStorage.getItem(e);return null===n?t:JSON.parse(n)}catch(e){return t}}function D(e,t){try{localStorage.setItem(e,JSON.stringify(t))}catch(e){}}const x="pako:";function U(e){let t="string"==typeof e?e:JSON.stringify(e);if(null==t&&(t=""),""===t)return"";if(!window.pako||"function"!=typeof window.pako.deflate)return t;try{const e=window.pako.deflate(t);let n="";const o=32768;for(let t=0;t<e.length;t+=o)n+=String.fromCharCode.apply(null,e.subarray(t,t+o));const r=x+btoa(n);return r.length<t.length?r:t}catch(e){return t}}const O={};function G(e,t){if("undefined"==typeof vkBridge)return;let n;try{n=JSON.stringify(t)}catch(e){n=String(t)}O[e]!==n&&(O[e]=n,B(e,t).then((t=>{t||O[e]!==n||delete O[e]})))}function B(e,t,n=3e3){if("undefined"==typeof vkBridge)return Promise.resolve(!1);let o;try{o=U(t)}catch(e){o=""}let r=null;const i=new Promise((e=>{r=setTimeout((()=>e(!1)),n)})),s=()=>{r&&(clearTimeout(r),r=null)};let l;try{l=vkBridge.send("VKWebAppStorageSet",{key:e,value:o}).then((()=>!0)).catch((()=>!1))}catch(e){return s(),Promise.resolve(!1)}return l.then(s,s),Promise.race([l,i])}function R(e,t=3e3){if("undefined"==typeof vkBridge)return Promise.resolve(null);let n=null;const o=new Promise((e=>{n=setTimeout((()=>e(null)),t)})),r=()=>{n&&(clearTimeout(n),n=null)};let i;try{i=vkBridge.send("VKWebAppStorageGet",{keys:[e]}).then((e=>{if(e&&e.keys&&e.keys.length){const t=e.keys[0].value;return""===t||null==t?null:function(e){if(null==e||""===e)return null;if("string"!=typeof e)return e;if(0===e.indexOf(x)){if(!window.pako||"function"!=typeof window.pako.inflate)return null;try{const t=atob(e.slice(x.length)),n=new Uint8Array(t.length);for(let e=0;e<t.length;e++)n[e]=t.charCodeAt(e);const o=window.pako.inflate(n,{to:"string"});try{return JSON.parse(o)}catch(e){return o}}catch(e){return null}}try{return JSON.parse(e)}catch(t){return e}}(t)}return null})).catch((()=>null))}catch(e){return r(),Promise.resolve(null)}return i.then(r,r),Promise.race([i,o])}let I=0;let H=null;function N(e=!1){if(!u)return;const t=()=>{try{D(c.SCORE,d.score),D(c.SOLVED_THEMES,d.solvedThemes),D(c.THEME,d.theme),D(c.SOUND,d.sound),D(c.ACH,d.ach),D(c.DAILY,d.daily),D(c.CAT_UNLOCKS,d.catUnlocks),D(c.STREAK,d.noMistakeStreak)}catch(e){}if(d.currentPuzzle&&!d.solvedFlag){const e=function(){if(!d.currentPuzzle||!d.currentPuzzleMeta)return null;if(d.solvedFlag)return null;if(!d.userGrid||0===Object.keys(d.userGrid).length)return null;const e=d.currentPuzzleMeta,t=d.currentPuzzle,n=[];for(let e=0;e<t.words.length;e++){const o=t.words[e];n.push(o.answer+","+o.row+","+o.col+","+o.dir+","+(o.number||0))}const o={savedAt:Date.now(),date:g(),mode:e.mode||(e.isDaily?"daily":"category"),seed:"number"==typeof e.seed?e.seed:0,category:e.category||null,difficulty:e.difficulty||null,theme:e.theme||"Кроссворд",icon:e.icon||"🧩",isDaily:!!e.isDaily,rows:t.rows,cols:t.cols,words:n.join(";"),userGrid:d.userGrid?Object.assign({},d.userGrid):{},elapsedSec:Math.max(0,Math.floor((Date.now()-d.startTime)/1e3)),hintsUsed:d.hintsUsed||0,mistakesThisPuzzle:d.mistakesThisPuzzle||0};try{const e=3800,t=()=>U(o);let n=t();if(n.length>e&&(delete o.mistakesThisPuzzle,n=t()),n.length>e&&(delete o.hintsUsed,n=t()),n.length>e&&(delete o.elapsedSec,n=t()),n.length>e)return null}catch(e){}return o}();if(e){d.lastSavedPuzzle=e;try{D(c.LAST_PUZZLE,e)}catch(e){}}else if(d.lastSavedPuzzle){d.lastSavedPuzzle=null;try{localStorage.removeItem(c.LAST_PUZZLE)}catch(e){}"undefined"!=typeof vkBridge&&(O[a.LAST_PUZZLE]=null,B(a.LAST_PUZZLE,""))}}if("undefined"==typeof vkBridge)return;const t=Date.now();if(e||!(t-I<8e3)){I=t;try{G(a.SCORE,d.score),G(a.SOLVED_THEMES,d.solvedThemes),G(a.THEME,d.theme),G(a.SOUND,d.sound),G(a.ACH,d.ach),G(a.DAILY,d.daily),G(a.CAT_UNLOCKS,d.catUnlocks),G(a.STREAK,d.noMistakeStreak),d.lastSavedPuzzle&&G(a.LAST_PUZZLE,d.lastSavedPuzzle)}catch(e){}}};if(e)return H&&(clearTimeout(H),H=null),void t();H||(H=setTimeout((()=>{H=null,t()}),1500))}function W(e){"light"!==e&&"dark"!==e&&(e="light"),d.theme=e,document.documentElement.setAttribute("data-theme",e),m(".theme-item[data-theme]").forEach((t=>t.classList.toggle("active",t.dataset.theme===e))),D(c.THEME,e),N()}function j(){d.sound=!d.sound;const e=h("soundBtn");e&&(e.textContent=d.sound?"🔊":"🔇");const t=h("soundBtnMenu");t&&(t.textContent=d.sound?"🔊":"🔇"),D(c.SOUND,d.sound),N(),d.sound&&(v(),k())}function K(e){let t=e>>>0||1;return function(){return t=Math.imul(t,1664525)+1013904223>>>0,t/4294967296}}function F(e,t){const n=(t=t||{}).minWords||5,o=t.maxWords||20,r=t.maxAttempts||40,i=void 0!==t.seed?K(t.seed):Math.random,s=[],l=new Set;for(const t of e){if(!t||!t.a||!t.q)continue;const e=String(t.a).toUpperCase().replace(/Ё/g,"Е");/^[А-Я]+$/.test(e)&&(e.length<3||e.length>12||l.has(e)||(l.add(e),s.push({answer:e,clue:t.q})))}if(s.length<2)return null;const c=Math.min(n,s.length),a=!!t.deterministic,d=Date.now(),u=a?1/0:"number"==typeof t.softLimitMs?t.softLimitMs:3500,f=a?1/0:"number"==typeof t.hardDeadline?t.hardDeadline:d+9e3;let h=null;for(let e=0;e<r;e++){if(!a){const e=Date.now();if(e>f)break;if(h&&e-d>u)break}const e=s.slice();for(let t=e.length-1;t>0;t--){const n=Math.floor(i()*(t+1)),o=e[t];e[t]=e[n],e[n]=o}e.sort(((e,t)=>t.answer.length-e.answer.length));const t=V(e,c,o,i);if(t&&((!h||t.placed.length>h.placed.length)&&(h=t),t.placed.length===Math.min(e.length,o)))break}if(!h){const e=s.slice();for(let t=e.length-1;t>0;t--){const n=Math.floor(i()*(t+1)),o=e[t];e[t]=e[n],e[n]=o}return Z(function(e,t){const n=[],o=Math.min(t,e.length);for(let t=0;t<o;t++){const o=e[t];n.push({answer:o.answer,clue:o.clue,row:t,col:0,dir:"h"})}return n}(e,o))}return Z(h.placed)}function V(e,t,n,o){const r=new Map,i=[],s=(e,t)=>r.get(e+","+t);let l=0,c=0,a=0,d=0;function u(e,t,n,o){const r="v"===o?1:0,i="h"===o?1:0;if(void 0!==s(t-r,n-i))return!1;if(void 0!==s(t+e.length*r,n+e.length*i))return!1;let l=0;for(let c=0;c<e.length;c++){const a=t+c*r,d=n+c*i,u=s(a,d);if(void 0!==u){if(u!==e[c])return!1;l++}else if("h"===o){if(void 0!==s(a-1,d))return!1;if(void 0!==s(a+1,d))return!1}else{if(void 0!==s(a,d-1))return!1;if(void 0!==s(a,d+1))return!1}}return l>0}function f(e,t,n,o){const i="v"===o?1:0,s="h"===o?1:0;for(let o=0;o<e.length;o++)r.set(t+o*i+","+(n+o*s),e[o])}function h(e,t,n,o){const r=e+(o-1)*("v"===n?1:0),i=t+(o-1)*("h"===n?1:0),s=e<r?e:r,u=e>r?e:r,f=t<i?t:i,h=t>i?t:i;s<l&&(l=s),u>c&&(c=u),f<a&&(a=f),h>d&&(d=h)}function m(e,t,n,o){const r=e+(o-1)*("v"===n?1:0),i=t+(o-1)*("h"===n?1:0),s=e<r?e:r,u=e>r?e:r,f=t<i?t:i,h=t>i?t:i,m=(d>h?d:h)-(a<f?a:f)+1,g=(c>u?c:u)-(l<s?l:s)+1;return-m*g-20*((m>g?m:g)/(m<g?m:g))}const g=e[0];f(g.answer,0,0,"h"),i.push({...g,row:0,col:0,dir:"h"}),l=0,c=0,a=0,d=g.answer.length-1;const y=e.slice(1);let w=0;for(;y.length&&w++<300&&!(i.length>=n);){let e=0;for(let t=0;t<y.length&&!(i.length>=n);t++){const n=y[t],r=[];for(const e of i)for(let t=0;t<e.answer.length;t++)for(let o=0;o<n.answer.length;o++){if(e.answer[t]!==n.answer[o])continue;let i,s,l;"h"===e.dir?(l="v",i=e.row-o,s=e.col+t):(l="h",i=e.row+t,s=e.col-o),u(n.answer,i,s,l)&&r.push({row:i,col:s,dir:l,score:m(i,s,l,n.answer.length)})}if(r.length){r.sort(((e,t)=>t.score-e.score));const s=r.length<3?r.length:3,l=r[Math.floor(o()*s)];f(n.answer,l.row,l.col,l.dir),h(l.row,l.col,l.dir,n.answer.length),i.push({...n,row:l.row,col:l.col,dir:l.dir}),y.splice(t,1),t--,e++}}if(!e)break}return i.length<t?null:{placed:i}}function Z(e){let t=1/0,n=1/0,o=-1/0,r=-1/0;for(const i of e){const e="v"===i.dir?1:0,s="h"===i.dir?1:0,l=i.row+(i.answer.length-1)*e,c=i.col+(i.answer.length-1)*s;i.row<t&&(t=i.row),l>o&&(o=l),i.col<n&&(n=i.col),c>r&&(r=c)}const i=o-t+1,s=r-n+1,l=Array.from({length:i},(()=>Array(s).fill(null))),c=e.map((e=>({...e,row:e.row-t,col:e.col-n})));for(const e of c){const t="v"===e.dir?1:0,n="h"===e.dir?1:0;for(let o=0;o<e.answer.length;o++)l[e.row+o*t][e.col+o*n]=e.answer[o]}const a=c.slice().sort(((e,t)=>e.row-t.row||e.col-t.col)),d=new Map;let u=1;for(const e of a){const t=e.row+","+e.col;d.has(t)||d.set(t,u++),e.number=d.get(t)}return{grid:l,words:c,rows:i,cols:s}}function $(e,t){t=t||{};const n=window.CROSSWORD_DB;if(!n)return null;const o=Object.keys(n);if(!o.length)return null;const r="number"==typeof t.maxMs&&t.maxMs>0?t.maxMs:15e3,i=Date.now()+r;if("daily"===e){const e=function(e){let t=2166136261;for(let n=0;n<e.length;n++)t^=e.charCodeAt(n),t=Math.imul(t,16777619);return t>>>0}(g()),t=[];for(const r of o){const o=n[r];for(const n of["easy","hard"]){const i=o[n];if(!i||!i.length)continue;const s=new Set;let l=(e^31*r.length^("hard"===n?777:0))>>>0;const c=Math.min(2,i.length);let a=0;for(;s.size<c&&a++<50;)l=Math.imul(l,1103515245)+12345>>>0,s.add(l%i.length);for(const e of s)t.push(i[e])}}if(t.length>=3){let n=null;for(const o of[10,8,6,5,4,3])if(n=F(t,{minWords:o,maxWords:20,maxAttempts:60,seed:e,deterministic:!0}),n)break;if(n||(n=F(t,{minWords:3,maxWords:20,maxAttempts:400,seed:e,deterministic:!0})),n)return{id:"daily_"+g(),puzzle:n,theme:"Кроссворд дня",icon:"☀️",isDaily:!0,mode:"daily",seed:e}}}const s="number"==typeof t.seed?t.seed>>>0:4294967295*Math.random()>>>0,l=K(s);let c=t.category,a=t.difficulty||"easy";if(!c){const e=o.filter((e=>je(e))),t=e.length?e:o.includes("animals")?["animals"]:o;c=t[Math.floor(l()*t.length)]}n[c]||(c=o[0]),n[c][a]||(a="easy");let d=n[c][a];if(!d||d.length<3){const e=o.find((e=>n[e]&&n[e].easy&&n[e].easy.length>=3));if(!e)return null;c=e,a="easy",d=n[c].easy}const u="hard"===a?20:15,f=d.slice();for(let e=f.length-1;e>0;e--){const t=Math.floor(l()*(e+1)),n=f[e];f[e]=f[t],f[t]=n}const h=f.slice(0,30);let m=null;for(const e of[10,8,6,5,4,3])if(!(e>u)){if(Date.now()>i)break;if(m=F(h,{minWords:e,maxWords:u,maxAttempts:40,seed:s,hardDeadline:i}),m)break}return m||(m=F(h,{minWords:3,maxWords:u,maxAttempts:400,seed:s,hardDeadline:Date.now()+3e4,softLimitMs:3e4})),m?{id:`puzzle_${c}_${a}_${s}`,puzzle:m,theme:n[c].name,icon:n[c].icon,category:c,difficulty:a,mode:"category",seed:s}:null}function q(e){if(!e||"object"!=typeof e)return null;if(!e.rows||!e.cols)return null;if("string"!=typeof e.words||!e.words)return null;const t=0|e.rows,n=0|e.cols;if(t<=0||n<=0||t>100||n>100)return null;const o=function(){if(window.__ANSWER_INDEX)return window.__ANSWER_INDEX;const e={},t=window.CROSSWORD_DB||{};for(const n in t){const o=t[n];if(o&&"object"==typeof o)for(const t in o){if("name"===t||"icon"===t)continue;const n=o[t];if(Array.isArray(n))for(const t of n){if(!t||!t.a)continue;const n=String(t.a).toUpperCase().replace(/Ё/g,"Е");e[n]||(e[n]=t.q||"")}}}return window.__ANSWER_INDEX=e,e}(),r=[];for(let e=0;e<t;e++){const e=new Array(n);for(let t=0;t<n;t++)e[t]=null;r.push(e)}const i=[],s=e.words.split(";");for(let e=0;e<s.length;e++){const l=s[e];if(!l)continue;const c=l.split(",");if(c.length<4)continue;const a=c[0],d=parseInt(c[1],10),u=parseInt(c[2],10),f=c[3],h=c[4]?parseInt(c[4],10):0;if(!a||"h"!==f&&"v"!==f)continue;if(isNaN(d)||isNaN(u))continue;if(d<0||u<0||d>=t||u>=n)continue;const m="v"===f?1:0,g="h"===f?1:0,y=d+(a.length-1)*m,w=u+(a.length-1)*g;if(!(y<0||y>=t||w<0||w>=n)){for(let e=0;e<a.length;e++)r[d+e*m][u+e*g]=a[e];i.push({answer:a,clue:o[a]||"—",row:d,col:u,dir:f,number:h})}}return i.length?{grid:r,words:i,rows:t,cols:n}:null}function Y(){d.lastSavedPuzzle=null;try{localStorage.removeItem(c.LAST_PUZZLE)}catch(e){}"undefined"!=typeof vkBridge&&(O[a.LAST_PUZZLE]=null,B(a.LAST_PUZZLE,""))}function J(e){return!(!e||"object"!=typeof e)&&(!!e.savedAt&&(!(!e.userGrid||"object"!=typeof e.userGrid)&&(0!==Object.keys(e.userGrid).length&&("daily"!==e.mode&&!e.isDaily||e.date===g()))))}function X(){if(d._startingGame)return;const e=d.lastSavedPuzzle;if(!J(e))return he("Сохранённый кроссворд недоступен",!0),Y(),void me();if("category"===e.mode&&e.category&&!je(e.category))return he("Категория больше не открыта",!0),Y(),void me();d._startingGame=!0;try{let t=null;const n=q(e);if(n)t={id:"restored_"+(e.savedAt||Date.now()),puzzle:n,theme:e.theme||"Кроссворд",icon:e.icon||"🧩",category:e.category||null,difficulty:e.difficulty||null,isDaily:!!e.isDaily,mode:e.mode||(e.isDaily?"daily":"category"),seed:"number"==typeof e.seed?e.seed:0};else{if(!window.CROSSWORD_DB)return he("База кроссвордов не загрузилась",!0),void(d._startingGame=!1);const n="daily"===e.mode?"daily":"category",o={};"number"==typeof e.seed&&(o.seed=e.seed),e.category&&(o.category=e.category),e.difficulty&&(o.difficulty=e.difficulty);try{t=$(n,Object.assign({},o,{maxMs:12e3}))}catch(e){}if(!(t&&t.puzzle&&t.puzzle.words&&t.puzzle.words.length))return he("Не удалось восстановить кроссворд",!0),Y(),me(),void(d._startingGame=!1)}d.timer&&(clearInterval(d.timer),d.timer=null),d.currentPuzzle=t.puzzle,d.currentPuzzleMeta=t,d.userGrid=e.userGrid&&"object"==typeof e.userGrid?Object.assign({},e.userGrid):{},d.cells=[],d._highlightedCells=[],d._lastClueKey=null,d.selected=null,d.solvedFlag=!1,d.hintsUsed=e.hintsUsed||0,d.mistakesThisPuzzle=e.mistakesThisPuzzle||0,d.startTime=Date.now()-1e3*(e.elapsedSec||0),d.puzzleToken++;const o=h("gameTitle");o&&(o.textContent=(t.icon?t.icon+" ":"")+(t.theme||"Кроссворд")),Q(t.puzzle),ee();for(const e in d.userGrid){const t=e.split(","),n=parseInt(t[0],10),o=parseInt(t[1],10),r=d.cells[n],i=r&&r[o];if(!i){delete d.userGrid[e];continue}const s=i.querySelector(".cell-letter");s&&(s.textContent=d.userGrid[e])}for(const e of t.puzzle.words)le(e,!0,!0);try{ce()}catch(e){}ye("game"),d.timer=setInterval((function(){const e=Math.floor((Date.now()-d.startTime)/1e3),t=h("timerVal");t&&(t.textContent=y(e))}),1e3);const r=h("timerVal");r&&(r.textContent=y(e.elapsedSec||0)),ne();const i=h("cluePanel");i&&(i.innerHTML='<span class="clue-placeholder">Нажмите на клетку, чтобы увидеть вопрос</span>');const s=h("gridWrapper");s&&(s.scrollLeft=0,s.scrollTop=0),requestAnimationFrame(we),he("▶️ Продолжаем кроссворд")}catch(e){he("Ошибка восстановления кроссворда",!0)}finally{d._startingGame=!1}}function Q(e){const t=h("grid");if(!t)return;t.innerHTML="";const{grid:n,rows:o,cols:r,words:i}=e;t.style.setProperty("--cols",String(r)),t.style.setProperty("--rows",String(o));const s=new Map;for(const e of i)s.set(e.row+","+e.col,e.number);const l=[],c=document.createDocumentFragment();for(let e=0;e<o;e++){l[e]=[];for(let t=0;t<r;t++){const o=document.createElement("div");if(n[e][t]){o.className="cell";const n=s.get(e+","+t);if(n){const e=document.createElement("span");e.className="cell-num",e.textContent=n,o.appendChild(e)}const r=document.createElement("span");r.className="cell-letter",o.appendChild(r),o.dataset.row=e,o.dataset.col=t}else o.className="cell cell-empty";c.appendChild(o),l[e][t]=o}}t.appendChild(c),d.cells=l,d._highlightedCells=[],requestAnimationFrame(we)}function ee(){const e=h("keyboard");if(e&&"1"!==e.dataset.rendered)try{e.innerHTML="";const t=[["Й","Ц","У","К","Е","Н","Г","Ш","Щ","З","Х","Ъ"],["Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э"],["⌫","Я","Ч","С","М","И","Т","Ь","Б","Ю","Ё"]];for(const n of t){const t=document.createElement("div");t.className="kb-row";for(const e of n){const n=document.createElement("button");n.className="kb-key"+("⌫"===e?" kb-key-w":""),n.textContent=e,n.dataset.letter=e,t.appendChild(n)}e.appendChild(t)}e.dataset.rendered="1"}catch(e){}}function te(e,t,n){const o=d.currentPuzzle.words;for(const r of o){if(r.dir!==n)continue;const o="v"===r.dir?1:0,i="h"===r.dir?1:0;for(let n=0;n<r.answer.length;n++)if(r.row+n*o===e&&r.col+n*i===t)return{word:r,offset:n}}return null}function ne(){if(d._highlightedCells&&d._highlightedCells.length)for(const e of d._highlightedCells)e&&e.classList.remove("selected","in-word");if(d._highlightedCells=[],!d.selected||!d.currentPuzzle)return;const{row:e,col:t,dir:n}=d.selected,o=te(e,t,n);if(!o)return;const r=o.word,i="v"===r.dir?1:0,s="h"===r.dir?1:0,l=[];for(let e=0;e<r.answer.length;e++){const t=r.row+e*i,n=r.col+e*s,o=d.cells[t],c=o&&o[n];c&&(c.classList.add("in-word"),l.push(c))}const c=d.cells[e],a=c&&c[t];if(a&&(a.classList.add("selected"),-1===l.indexOf(a)&&l.push(a)),d._highlightedCells=l,a){const e=h("gridWrapper");if(e){const t=e.getBoundingClientRect(),n=a.getBoundingClientRect(),o=24;n.top<t.top+o?e.scrollTop-=t.top+o-n.top:n.bottom>t.bottom-o&&(e.scrollTop+=n.bottom-(t.bottom-o)),n.left<t.left+o?e.scrollLeft-=t.left+o-n.left:n.right>t.right-o&&(e.scrollLeft+=n.right-(t.right-o))}}}function oe(){if(!d.selected||!d.currentPuzzle)return;const{row:e,col:t,dir:n}=d.selected,o=te(e,t,n);if(!o)return;const r=o.word,i=r.number+"_"+r.dir;if(d._lastClueKey===i)return;d._lastClueKey=i;const s=h("cluePanel");s&&(s.innerHTML='<span class="clue-mark"><span class="clue-num">'+r.number+'</span><span class="clue-dir">'+("h"===r.dir?"→":"↓")+'</span></span><span class="clue-text">'+w(r.clue)+"</span>")}function re(e){if(d.solvedFlag)return;if(!d.selected||!d.currentPuzzle)return;"Ё"===e&&(e="Е");const{row:t,col:n,dir:o}=d.selected,r=te(t,n,o);if(!r)return;const i=r.word,s="v"===i.dir?1:0,l="h"===i.dir?1:0,c=i.row+r.offset*s,a=i.col+r.offset*l,u=d.cells[c],f=u&&u[a];if(!f)return;const h=f.querySelector(".cell-letter");if(!h)return;const m=c+","+a;d.userGrid&&d.userGrid[m]===i.answer[r.offset]?ie(c,a,s,l,i):(d.userGrid||(d.userGrid={}),d.userGrid[m]=e,h.textContent=e,f.classList.remove("correct","wrong"),z(),le(i),ie(c,a,s,l,i),N())}function ie(e,t,n,o,r){if(d.solvedFlag)return;if(!d.cells)return;const i=e+n,s=t+o,l=(i-r.row)*n+(s-r.col)*o,c=l>=0&&l<r.answer.length,a=d.cells[i],u=a&&a[s];if(c&&u&&!u.classList.contains("cell-empty"))d.selected={row:i,col:s,dir:d.selected.dir};else{let e=null;for(let t=0;t<r.answer.length;t++){const i=r.row+t*n,s=r.col+t*o,l=i+","+s;if(!d.userGrid||!d.userGrid[l]){e={row:i,col:s};break}}e&&(d.selected={row:e.row,col:e.col,dir:d.selected.dir})}ne(),oe()}function se(){if(d.solvedFlag)return;if(!d.selected||!d.currentPuzzle)return;const{row:e,col:t,dir:n}=d.selected,o=te(e,t,n);if(!o)return;const r=o.word,i="v"===r.dir?1:0,s="h"===r.dir?1:0,l=e+","+t;let c={row:e,col:t};if(!d.userGrid||!d.userGrid[l]){const n=e-i,o=t-s,r=d.cells[n],l=r&&r[o];l&&!l.classList.contains("cell-empty")&&(c={row:n,col:o})}const a=d.cells[c.row],u=a&&a[c.col];if(!u)return;const f=u.querySelector(".cell-letter");f&&(f.textContent=""),d.userGrid&&delete d.userGrid[c.row+","+c.col],d.selected={row:c.row,col:c.col,dir:d.selected.dir},le(r);try{const e="h"===r.dir?"v":"h",t=te(c.row,c.col,e);t&&t.word!==r&&le(t.word)}catch(e){}ne(),oe(),k(),N()}function le(e,t,n){if(!e||!d.cells)return;const o="v"===e.dir?1:0,r="h"===e.dir?1:0;let i=0,s=0;for(let t=0;t<e.answer.length;t++){const n=e.row+t*o,l=e.col+t*r,c=n+","+l,a=d.userGrid?d.userGrid[c]:null,u=d.cells[n],f=u&&u[l];f&&(f.classList.remove("correct","wrong"),a&&(i++,a===e.answer[t]&&s++))}if(i===e.answer.length){if(s===e.answer.length){for(let t=0;t<e.answer.length;t++){const n=e.row+t*o,i=e.col+t*r,s=d.cells[n],l=s&&s[i];l&&l.classList.add("correct")}return t||S(),void(n||ce())}t||(d.mistakesThisPuzzle=1,M());for(let t=0;t<e.answer.length;t++){const n=e.row+t*o,i=e.col+t*r,s=n+","+i,l=d.cells[n],c=l&&l[i],a=d.userGrid?d.userGrid[s]:null;c&&a&&a!==e.answer[t]&&c.classList.add("wrong")}}}function ce(){if(!d.currentPuzzle)return;const e=d.currentPuzzle.words;for(const t of e){const e="v"===t.dir?1:0,n="h"===t.dir?1:0;for(let o=0;o<t.answer.length;o++){const r=t.row+o*e+","+(t.col+o*n);if((d.userGrid?d.userGrid[r]:null)!==t.answer[o])return}}!function(){if(d.solvedFlag)return;if(!d.currentPuzzle)return;d.solvedFlag=!0;let e=0;try{Y(),d.timer&&(clearInterval(d.timer),d.timer=null),e=Math.floor((Date.now()-d.startTime)/1e3);const t=d.currentPuzzleMeta&&d.currentPuzzleMeta.isDaily,n=document.documentElement.classList.contains("weak-device"),o=window.innerWidth<768;let r=25;if(n?r=4:o&&(r=12),function(e){if(!C)return;const t=["#ffd166","#ff6b6b","#4ecdc4","#a855f7","#f97316","#06d6a0","#f72585"],n=[];for(let o=0;o<e;o++)n.push({x:Math.random()*b.width,y:-20-100*Math.random(),vx:4*(Math.random()-.5),vy:2+4*Math.random(),size:6+8*Math.random(),color:t[Math.random()*t.length|0],rot:Math.random()*Math.PI*2,rotV:.3*(Math.random()-.5)});let o=0;cancelAnimationFrame(A),function e(){C.clearRect(0,0,b.width,b.height);for(const e of n)e.x+=e.vx,e.y+=e.vy,e.vy+=.08,e.rot+=e.rotV,C.save(),C.translate(e.x,e.y),C.rotate(e.rot),C.fillStyle=e.color,C.fillRect(-e.size/2,-e.size/2,e.size,e.size),C.restore();o++,o<220?A=requestAnimationFrame(e):C.clearRect(0,0,b.width,b.height)}()}(r),T(),t){const t=g();d.daily&&d.daily.date===t||(d.daily={date:t,timeSec:e},d.score+=1)}else{d.score+=1;const e=d.currentPuzzleMeta&&d.currentPuzzleMeta.category;e&&(d.solvedThemes[e]=!0)}0===d.mistakesThisPuzzle?d.noMistakeStreak=(d.noMistakeStreak||0)+1:d.noMistakeStreak=0;try{!function(e,t){d.score>=1&&Se("first");d.score>=10&&Se("ten");d.score>=50&&Se("fifty");d.score>=100&&Se("hundred");t&&Se("daily1");e<=60&&Se("speed");e<=30&&Se("flash");0===d.hintsUsed&&Se("nohint");d.hintsUsed>=5&&Se("hint5");const n=(new Date).getHours();n>=0&&n<5&&Se("night");d.noMistakeStreak>=3&&Se("streak3");const o=Object.keys(window.CROSSWORD_DB||{}),r=Object.keys(d.solvedThemes).length;o.length&&r>=o.length&&Se("alltheme")}(e,t)}catch(e){}try{N(!0)}catch(e){}try{me()}catch(e){}}catch(e){}const t=d.puzzleToken;setTimeout((()=>{if(t!==d.puzzleToken)return;if(!d.solvedFlag)return;const n=h("gameScreen");if(n&&"none"!==n.style.display)try{!function(e){const t=d.currentPuzzleMeta&&d.currentPuzzleMeta.isDaily,n=h("winTitle"),o=h("winTime"),r=h("winScore"),i=h("winModal");if(!(n&&o&&r&&i))return;n.textContent=t?"☀️ Кроссворд дня решён!":"🎉 Отлично!",o.innerHTML=`⏱️ Время: <b>${y(e)}</b>`,r.innerHTML=t?"☀️ Результат дня!":`⭐ +1 к прогрессу (всего решено: <b>${d.score}</b>)`,i.classList.add("show")}(e)}catch(e){}}),600)}()}function ae(){if(!d.currentPuzzle)return void he("Откройте кроссворд");if(d.solvedFlag)return void he("Кроссворд уже решён");if(!d.selected)return void he("Выберите слово");const e=h("hintAdConfirm");e&&(e.disabled=!1,e.textContent="🎁 Открыть букву"),Ne("hintAdModal")}function de(){We("hintAdModal")}function ue(){if(!d.currentPuzzle||d.solvedFlag)return void We("hintAdModal");const e=h("hintAdConfirm");e&&(e.disabled=!0,e.textContent="⏳ Загрузка рекламы…");const t=d.puzzleToken;Re().then((n=>{e&&(e.disabled=!1,e.textContent="🎁 Открыть букву");const o=h("hintAdModal");if(o&&o.classList.contains("show")&&We("hintAdModal"),t!==d.puzzleToken)return;if(!d.currentPuzzle||d.solvedFlag)return;if(!n)return void he("Реклама недоступна. Попробуйте позже",!0);(function(){if(!d.selected)return!1;const{row:e,col:t,dir:n}=d.selected,o=te(e,t,n);if(!o)return!1;const r=o.word,i="v"===r.dir?1:0,s="h"===r.dir?1:0;let l=null;for(let e=0;e<r.answer.length;e++){const t=r.row+e*i,n=r.col+e*s,o=t+","+n;if((d.userGrid?d.userGrid[o]:null)!==r.answer[e]){l={row:t,col:n,letter:r.answer[e]};break}}if(!l)return he("Слово уже собрано"),!1;d.userGrid||(d.userGrid={});d.userGrid[l.row+","+l.col]=l.letter;const c=d.cells[l.row]&&d.cells[l.row][l.col];if(c){const e=c.querySelector(".cell-letter");e&&(e.textContent=l.letter),c.classList.remove("wrong")}if(d.hintsUsed=(d.hintsUsed||0)+1,d.hintsUsed>=5)try{Se("hint5")}catch(e){}return L(),le(r),N(),!0})()&&he("💡 Буква открыта!")}))}let fe=null;function he(e,t=!1){const n=h("toast");n&&(n.textContent=e,n.style.background=t?"var(--danger, #ef4444)":"var(--toast-bg, #1f2937)",n.classList.add("show"),clearTimeout(fe),fe=setTimeout((()=>n.classList.remove("show")),2500))}function me(){const e=h("menuScore");e&&(e.textContent=d.score);const t=h("continueBtn");if(t){const e=d.lastSavedPuzzle;if(J(e)){t.style.display="flex";e.icon;const n=e.theme||"Кроссворд";t.textContent="▶️ Продолжить: "+n}else t.style.display="none"}const n=h("dailyBadge");if(!n)return;const o=g();d.daily&&d.daily.date===o?(n.classList.add("daily-badge--done"),n.innerHTML=`\n            <div class="daily-badge__icon">🏆</div>\n            <div class="daily-badge__info">\n                <div class="daily-badge__title">Кроссворд дня пройден!</div>\n                <div class="daily-badge__time">Время: ${y(d.daily.timeSec||0)}</div>\n            </div>\n        `):(n.classList.remove("daily-badge--done"),n.innerHTML='\n            <div class="daily-badge__icon">☀️</div>\n            <div class="daily-badge__info">\n                <div class="daily-badge__title">Кроссворд дня</div>\n                <div class="daily-badge__sub">Ещё не пройден — реши и покажи рекорд!</div>\n            </div>\n        ')}function ge(){return window.matchMedia("(min-width: 900px), (orientation: landscape)").matches}function ye(e){const t=h("menuScreen"),n=h("gameScreen");t&&(t.style.display="menu"===e?"flex":"none"),n&&(n.style.display="game"===e?ge()?"grid":"flex":"none")}function we(){try{const e=h("gridWrapper"),t=h("grid");if(!e||!t)return;const n=parseInt(t.style.getPropertyValue("--cols"),10),o=parseInt(t.style.getPropertyValue("--rows"),10);if(!n||!o)return;if(!ge())return void t.style.removeProperty("--cell-size");const r=24,i=2,s=e.clientWidth-r,l=e.clientHeight-r;if(s<=0||l<=0)return;const c=(s-(n-1)*i)/n,a=(l-(o-1)*i)/o,d=Math.max(20,Math.min(48,Math.floor(Math.min(c,a))));t.style.setProperty("--cell-size",d+"px")}catch(e){}}let pe=null;function ve(e,t){if(d._startingGame)return;if(d._startingGame=!0,t=t||{},!window.CROSSWORD_DB)return d._startingGame=!1,void he("База кроссвордов не загрузилась",!0);if("category"===e&&t.category&&!je(t.category))return d._startingGame=!1,void Ke(t.category);he("🧩 Собираем кроссворд…");const n=setInterval((()=>he("🧩 Собираем кроссворд…")),2e3);let o=!1;function r(e){if(!o){o=!0,clearInterval(n);try{if(!(e&&e.puzzle&&e.puzzle.words&&e.puzzle.words.length))return void he("Не удалось собрать кроссворд, попробуйте ещё раз",!0);d.timer&&(clearInterval(d.timer),d.timer=null),d.currentPuzzle=e.puzzle,d.currentPuzzleMeta=e,d.userGrid={},d.cells=[],d._highlightedCells=[],d._lastClueKey=null,d.selected=null,d.solvedFlag=!1,d.hintsUsed=0,d.mistakesThisPuzzle=0,d.startTime=Date.now(),d.puzzleToken++;const t=h("gameTitle");t&&(t.textContent=(e.icon?e.icon+" ":"")+(e.theme||"Кроссворд")),Q(e.puzzle),ee(),ye("game"),d.timer=setInterval((function(){const e=Math.floor((Date.now()-d.startTime)/1e3),t=h("timerVal");t&&(t.textContent=y(e))}),1e3);const n=h("timerVal");n&&(n.textContent="00:00"),ne();const o=h("cluePanel");o&&(o.innerHTML='<span class="clue-placeholder">Нажмите на клетку, чтобы увидеть вопрос</span>');const r=h("gridWrapper");r&&(r.scrollLeft=0,r.scrollTop=0),requestAnimationFrame(we),N(!0)}catch(e){he("Ошибка запуска кроссворда",!0)}finally{d._startingGame=!1}}}setTimeout((()=>{o||(o=!0,clearInterval(n),d._startingGame=!1,he("Не удалось запустить игру. Попробуйте ещё раз",!0))}),2e4),setTimeout((function(){let n=null;try{n=$(e,Object.assign({},t,{maxMs:3500}))}catch(e){}n?r(n):setTimeout((function(){let n=null;try{n=$(e,Object.assign({},t,{maxMs:12e3}))}catch(e){}r(n)}),30)}),0)}function _e(){o=null,d.puzzleToken++,N(!0),d.timer&&(clearInterval(d.timer),d.timer=null),d.currentPuzzle=null,d.currentPuzzleMeta=null,d.userGrid=null,d.cells=[],d._highlightedCells=[],d._lastClueKey=null,d.selected=null,d.solvedFlag=!1,ye("menu"),me(),setTimeout((()=>s(Ge)()),500)}window.addEventListener("resize",(function(){pe&&clearTimeout(pe),pe=setTimeout((function(){const e=h("gameScreen");e&&"none"!==e.style.display&&(e.style.display=ge()?"grid":"flex",we())}),150)})),window.addEventListener("orientationchange",(()=>{setTimeout(we,150)}));let ke=[],ze=!1;function Se(e){if(d.ach[e])return;const t=f.find((t=>t.id===e));t&&(d.ach[e]=!0,N(),ke.push(t),ze||Me())}function Me(){if(!ke.length)return void(ze=!1);if(!h("achGetModal"))return void(ze=!1);ze=!0;const e=ke.shift();T();const t=h("achGetIcon"),n=h("achGetName"),o=h("achGetDesc");t&&(t.textContent=e.icon),n&&(n.textContent=e.name),o&&(o.textContent=e.desc),Ne("achGetModal")}const Te=[{href:"https://vk.com/app54634418",emoji:"💭",name:"Словарекс"},{href:"https://vk.com/app54636699",emoji:"🍎",name:"Найди слова"},{href:"https://vk.ru/app51399364",emoji:"🎯",name:"Судоку для самых умных"},{href:"https://vk.com/app54620141",emoji:"🧩",name:"ТЕТРА"},{href:"https://vk.ru/tetrisc",emoji:"🕹️",name:"Весёлый тетрис"},{href:"https://vk.com/app54678489",emoji:"🎨",name:"Раскраска"}],Le=[{href:"https://ok.ru/app/512005107616",emoji:"🧩",name:"ТЕТРА"},{href:"https://ok.ru/app/512005390848",emoji:"🎯",name:"Судоку для самых умных"},{href:"https://ok.ru/app/512005443175",emoji:"💭",name:"Словарекс"}];function be(){!function(){const e=h("otherGamesList");if(!e)return;const n=t?Le:Te;let o="";for(const e of n)o+='<a href="'+e.href+'" target="_blank" rel="noopener noreferrer" class="other-game-item"><span class="other-game-item__emoji">'+e.emoji+'</span><span class="other-game-item__name">'+w(e.name)+'</span><span class="other-game-item__arrow">→</span></a>';e.innerHTML=o}(),Ne("otherGamesModal")}let Ce=0;let Ae=!1,Ee=null;function Pe(){let e=!1;const t=t=>{e||(e=!0,Ae=!1,t?(document.body.classList.add("has-vk-banner"),Ee&&(clearTimeout(Ee),Ee=null),Ce=0):function(){if(Ee)return;let e;Ce>=5?(Ce=0,e=3e5):(Ce++,e=1e4),Ee=setTimeout((()=>{Ee=null,Ae||(Ae=!0,Pe())}),e)}())};setTimeout((()=>t(!1)),1e4);try{vkBridge.send("VKWebAppShowBannerAd",{banner_location:"bottom"}).then((e=>{const n=e&&(!0===e.result||1===e.result);t(n)})).catch((()=>t(!1)))}catch(e){t(!1)}}let De=0;function xe(){const e=Date.now();e-De<500||(De=e,N(!0))}let Ue=!1;function Oe(){Ue||(Ue=!0,setTimeout((()=>{Ue=!1,s(Ge)()}),500))}function Ge(){if("undefined"==typeof vkBridge)return;if(Ae||Ee)return;Ae=!0;let e=!1;const t=t=>{e||(e=!0,t?(document.body.classList.add("has-vk-banner"),Ae=!1,Ce=0):Pe())};setTimeout((()=>t(!1)),8e3);try{vkBridge.send("VKWebAppCheckBannerAd",{}).then((e=>t(!(!e||!e.result)))).catch((()=>t(!1)))}catch(e){t(!1)}}function Be(){if("undefined"==typeof vkBridge)return;if(!r)return;let e=!1;setTimeout((()=>{e=!0}),8e3);try{vkBridge.send("VKWebAppCheckNativeAds",{ad_format:"reward"}).then((t=>{e||(e=!0)})).catch((()=>{e=!0}))}catch(e){}}function Re(){return"undefined"==typeof vkBridge?Promise.resolve(!1):new Promise((e=>{let t=!1;const n=n=>{t||(t=!0,e(n))};setTimeout((()=>n(!1)),6e4);try{vkBridge.send("VKWebAppShowNativeAds",{ad_format:"reward"}).then((e=>{const t=!(!e||!0!==e.result&&1!==e.result&&!0!==e.success);t&&setTimeout(s(Be),500),n(t)})).catch((()=>n(!1)))}catch(e){n(!1)}}))}function Ie(){const e=t?"https://ok.ru/app/512005642105":"https://vk.com/app54817252";if("undefined"!=typeof vkBridge)try{vkBridge.send("VKWebAppShare",{link:e}).catch((()=>{he("Не удалось поделиться",!0)}))}catch(e){}else navigator.share&&navigator.share({title:"Кроссворды",text:"Играй в кроссворды!",url:e}).catch((()=>{}))}let He=100;function Ne(e){const t=h(e);t&&(He++,t.style.zIndex=String(He),t.classList.add("show"))}function We(e){const t=h(e);t&&(t.classList.remove("show"),t.style.zIndex="",He>500&&(He=100))}function je(e){if(!e)return!0;if(-1!==n.indexOf(e))return!0;return(d.catUnlocks[e]||0)>Date.now()}function Ke(e){o=e;const t=(window.CROSSWORD_DB||{})[e],n=t&&t.name||e,r=t&&t.icon||"📚",i=h("catUnlockTitle"),s=h("catUnlockText");i&&(i.textContent=`${r} ${n}`),s&&(s.innerHTML=`Категория «${w(n)}» откроется на <b>24 часа</b> за просмотр рекламы.`);const l=h("catUnlockConfirm");l&&(l.disabled=!1,l.textContent="📺 Открыть на 24 часа"),Ne("catUnlockModal")}function Fe(){const e=o;if(!e)return void We("catUnlockModal");const t=h("catUnlockConfirm");t&&(t.disabled=!0,t.textContent="⏳ Загрузка рекламы…"),Re().then((n=>{t&&(t.disabled=!1,t.textContent="📺 Открыть на 24 часа"),n?(d.catUnlocks[e]=Date.now()+864e5,N(!0),T(),he("🎉 Категория открыта на 24 часа!"),Ve()):he("Реклама недоступна. Попробуйте позже",!0),o===e&&(o=null);const r=h("catUnlockModal");r&&r.classList.contains("show")&&We("catUnlockModal")}))}function Ve(){const e=h("catGrid");if(!e)return;const t=window.CROSSWORD_DB;if(t&&Object.keys(t).length){e.innerHTML="";for(const n of Object.keys(t)){const o=t[n],r=je(n),i=document.createElement("button");i.className="cat-item"+(r?"":" cat-item--locked"),i.innerHTML=`\n            <span class="cat-item__icon">${o.icon||"📚"}</span>\n            <span class="cat-item__name">${o.name}</span>\n            ${r?"":'<span class="cat-item__lock">🔒</span>'}\n        `,l(i,(()=>{if(!r)return void Ke(n);const e=h("diffTitle");e&&(e.textContent=(o.icon||"📚")+" "+o.name),m("#diffModal [data-diff]").forEach((e=>e.dataset.cat=n)),Ne("diffModal")})),e.appendChild(i)}}else e.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--text-muted);">Категории не загружены. Проверьте соединение и перезапустите игру.</div>'}function Ze(e,t){if(!d.selected)return;const n=d.selected.row+e,o=d.selected.col+t;if(!d.cells[n]||!d.cells[n][o])return;if(d.cells[n][o].classList.contains("cell-empty"))return;let r=d.selected.dir;if(!te(n,o,r)){const e="h"===r?"v":"h";if(!te(n,o,e))return;r=e}d.selected.row=n,d.selected.col=o,d.selected.dir=r,ne(),oe()}function $e(){const e=h("loadingOverlay");e&&(e.classList.contains("loading-overlay--hidden")||(e.classList.add("loading-overlay--hidden"),setTimeout((()=>{e.style.display="none"}),500)))}function qe(){let e=!1;const t=()=>{e||(e=!0,v(),document.removeEventListener("click",t),document.removeEventListener("touchstart",t))};document.addEventListener("click",t),document.addEventListener("touchstart",t,{passive:!0}),b=h("confetti"),b&&(C=b.getContext("2d"),E(),window.addEventListener("resize",E)),ee();const n=h("grid");n&&l(n,s((function(e){const t=e.target&&e.target.closest?e.target.closest(".cell"):null;if(!t||t.classList.contains("cell-empty"))return;const n=parseInt(t.dataset.row,10),o=parseInt(t.dataset.col,10);isNaN(n)||isNaN(o)||function(e,t){if(d.solvedFlag)return;if(!d.currentPuzzle)return;const{grid:n}=d.currentPuzzle;if(!n[e]||!n[e][t])return;const o=d.currentPuzzle.words;let r=d.selected&&"h"===d.selected.dir?"h":"v";var i;d.selected&&d.selected.row===e&&d.selected.col===t&&(r="h"===r?"v":"h"),i=r,o.some((n=>{if(n.dir!==i)return!1;const o="v"===n.dir?1:0,r="h"===n.dir?1:0;for(let i=0;i<n.answer.length;i++)if(n.row+i*o===e&&n.col+i*r===t)return!0;return!1}))||(r="h"===r?"v":"h"),d.selected={row:e,col:t,dir:r},ne(),k(),oe()}(n,o)})));const r=h("keyboard");r&&l(r,s((function(e){const t=e.target&&e.target.closest?e.target.closest(".kb-key"):null;if(!t)return;const n=t.dataset.letter;"⌫"===n?se():re(n)})));const i=h("achGetClose");i&&l(i,s((function(){We("achGetModal"),setTimeout(Me,350)})));const c=(e,t)=>{const n=h(e);n&&l(n,s(t))};c("continueBtn",X),c("playRandomBtn",(()=>ve("random"))),c("dailyBtn",(()=>{const e=g();if(d.daily&&d.daily.date===e){Ne("dailyInfoModal");const e=h("dailyInfoText");e&&(e.innerHTML=`Вы уже прошли кроссворд дня!<br>Время: <b>${y(d.daily.timeSec||0)}</b><br><br>Возвращайтесь завтра за новым! ☀️`)}else ve("daily")})),c("dailyBadge",(()=>{const e=h("dailyBtn");e&&e.click()})),c("categoriesBtn",(()=>{Ve(),Ne("catModal")})),c("difficultyBtn",(()=>{m("#diffModal [data-diff]").forEach((e=>e.dataset.cat="")),Ne("diffModal")})),c("achBtn",(()=>{!function(){const e=h("achGrid");if(e){e.innerHTML="";for(const t of f){const n=!!d.ach[t.id],o=document.createElement("div");o.className="ach-item"+(n?" ach-item--got":""),o.innerHTML=`\n            <div class="ach-item__icon">${n?t.icon:"🔒"}</div>\n            <div class="ach-item__name">${t.name}</div>\n            <div class="ach-item__desc">${t.desc}</div>\n        `,e.appendChild(o)}}}(),Ne("achModal")})),c("themeBtn",(()=>Ne("themeModal"))),c("soundBtnMenu",j),c("soundBtn",j),c("otherGamesBtn",be),c("backBtn",(()=>{d.solvedFlag?_e():Ne("exitModal")})),c("hintBtn",ae),c("hintAdConfirm",ue),c("hintAdCancel",de),c("winClose",(()=>{We("winModal"),_e()})),c("winShareBtn",Ie),c("exitConfirm",(()=>{We("exitModal"),_e()})),c("exitCancel",(()=>We("exitModal"))),c("achClose",(()=>We("achModal"))),c("catClose",(()=>We("catModal"))),c("diffClose",(()=>We("diffModal"))),c("themeClose",(()=>We("themeModal"))),c("dailyInfoClose",(()=>We("dailyInfoModal"))),c("otherGamesClose",(()=>We("otherGamesModal"))),c("catUnlockConfirm",Fe),c("catUnlockCancel",(()=>{o=null,We("catUnlockModal")})),c("catUnlockClose",(()=>{o=null,We("catUnlockModal")})),m("#diffModal [data-diff]").forEach((e=>{l(e,s((()=>{const t=e.dataset.cat||"",n=e.dataset.diff;!t||je(t)?(We("diffModal"),We("catModal"),ve("category",t?{category:t,difficulty:n}:{difficulty:n})):Ke(t)})))})),m(".theme-item[data-theme]").forEach((e=>{l(e,s((()=>{W(e.dataset.theme),k()})))})),m(".modal-overlay").forEach((e=>{"achGetModal"!==e.id&&l(e,(t=>{if(t.target===e){if("winModal"===e.id)return We("winModal"),void _e();"catUnlockModal"===e.id&&(o=null),We(e.id)}}))})),document.addEventListener("keydown",(e=>{if("Escape"===e.key)return o&&(o=null),void m(".modal-overlay.show").forEach((e=>{if("achGetModal"===e.id){const e=h("achGetClose");e?e.click():We("achGetModal")}else We(e.id)}));const t=h("gameScreen");if(!t||"none"===t.style.display)return;if(!d.selected)return;if(d.solvedFlag)return;const n=(e.key||"").toUpperCase();/^[А-ЯЁ]$/.test(n)?(e.preventDefault(),re("Ё"===n?"Е":n)):"Backspace"===e.key?(e.preventDefault(),se()):"ArrowRight"===e.key?(e.preventDefault(),d.selected.dir="h",Ze(0,1)):"ArrowLeft"===e.key?(e.preventDefault(),d.selected.dir="h",Ze(0,-1)):"ArrowDown"===e.key?(e.preventDefault(),d.selected.dir="v",Ze(1,0)):"ArrowUp"===e.key&&(e.preventDefault(),d.selected.dir="v",Ze(-1,0))})),window.addEventListener("beforeunload",(()=>N(!0))),document.addEventListener("visibilitychange",(()=>{"hidden"===document.visibilityState?xe():Oe()}))}async function Ye(){let e=null;try{!function(){try{if(document.documentElement.classList.contains("weak-device"))return;const e=navigator.userAgent||"",t=/Mobi|Android|iPhone|iPad|iPod/i.test(e),n=/iPhone|iPad|iPod/i.test(e),o="number"==typeof navigator.deviceMemory,r=navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4,i=o&&navigator.deviceMemory<=4;let s=!1;t&&(r||i||n&&!o&&r||/Android [4-7]\./i.test(e))&&(s=!0),s&&document.documentElement.classList.add("weak-device")}catch(e){}}();try{qe()}catch(e){}(window.__VK_BRIDGE_READY||Promise.resolve("undefined"!=typeof vkBridge)).then((function(){"undefined"!=typeof vkBridge&&(!function(){if("undefined"!=typeof vkBridge&&!r)try{!i&&window.__PLATFORM&&window.__PLATFORM.userId&&(i=window.__PLATFORM.userId);let e=!1;const t=t=>{e||(e=!0,r=!0,t&&s(Be)())};setTimeout((()=>t(!1)),5e3),vkBridge.send("VKWebAppInit",{}).then((()=>{t(!0)})).catch((()=>t(!1))),window.getVKUserId&&window.getVKUserId().then((e=>{e&&(i=e)})).catch((()=>{})),vkBridge.subscribe((e=>{try{const t=e.detail.type;"VKWebAppViewHide"===t&&xe(),"VKWebAppViewRestore"===t&&Oe()}catch(e){}}))}catch(e){}}(),setTimeout((function(){s(Ge)()}),800))})).catch((function(){})),function(e){const t=h("loadingText");t&&(t.textContent=e)}("Загрузка прогресса…"),e=setTimeout((function(){try{me(),ye("menu"),$e()}catch(e){}}),1e4);let t=!1;const n=new Promise((function(e){setTimeout((function(){t=!0,e("timeout")}),15e3)})),o=Promise.resolve().then((function(){return async function(){if(d.score=P(c.SCORE,0)||0,d.solvedThemes=P(c.SOLVED_THEMES,{})||{},d.catUnlocks=P(c.CAT_UNLOCKS,{})||{},d.theme=P(c.THEME,"light")||"light",d.sound=P(c.SOUND,!0),d.ach=P(c.ACH,{})||{},d.daily=P(c.DAILY,null),d.noMistakeStreak=P(c.STREAK,0)||0,d.lastSavedPuzzle=P(c.LAST_PUZZLE,null),"undefined"==typeof navigator||!1!==navigator.onLine){try{const e=Date.now(),t=Object.keys(d.catUnlocks);for(let n=0;n<t.length;n++){const o=t[n];(!d.catUnlocks[o]||d.catUnlocks[o]<e)&&delete d.catUnlocks[o]}}catch(e){}if(window.__VK_BRIDGE_READY)try{await window.__VK_BRIDGE_READY}catch(e){}if("undefined"!=typeof vkBridge)try{const e=await Promise.all([R(a.SCORE),R(a.SOLVED_THEMES),R(a.THEME),R(a.SOUND),R(a.ACH),R(a.DAILY),R(a.CAT_UNLOCKS),R(a.STREAK),R(a.LAST_PUZZLE)]),[t,n,o,r,i,s,l,u,f]=e;if("number"==typeof t&&isFinite(t)&&t>=0&&t>d.score&&(d.score=t),l&&"object"==typeof l){const e={...d.catUnlocks};for(const t in l){const n=+l[t]||0;(!e[t]||n>e[t])&&(e[t]=n)}d.catUnlocks=e}try{const e=Date.now(),t=Object.keys(d.catUnlocks);for(let n=0;n<t.length;n++){const o=t[n];(!d.catUnlocks[o]||d.catUnlocks[o]<e)&&delete d.catUnlocks[o]}}catch(e){}if(n&&"object"==typeof n&&(d.solvedThemes={...n,...d.solvedThemes}),"string"!=typeof o||"light"!==o&&"dark"!==o||(d.theme=o),"boolean"==typeof r&&(d.sound=r),i&&"object"==typeof i&&(d.ach={...i,...d.ach}),"number"==typeof u&&u>d.noMistakeStreak&&(d.noMistakeStreak=u),s&&"object"==typeof s&&s.date){const e=d.daily;(!e||!e.date||e.date<s.date||e.date===s.date&&s.timeSec&&(!e.timeSec||s.timeSec<e.timeSec))&&(d.daily=s)}if(f&&"object"==typeof f&&f.savedAt){const e=d.lastSavedPuzzle;(!e||!e.savedAt||f.savedAt>e.savedAt)&&(d.lastSavedPuzzle=f)}if(d.lastSavedPuzzle&&D(c.LAST_PUZZLE,d.lastSavedPuzzle),D(c.SCORE,d.score),D(c.SOLVED_THEMES,d.solvedThemes),D(c.THEME,d.theme),D(c.SOUND,d.sound),D(c.ACH,d.ach),D(c.DAILY,d.daily),D(c.CAT_UNLOCKS,d.catUnlocks),D(c.STREAK,d.noMistakeStreak),("number"!=typeof d.score||!isFinite(d.score)||d.score<0)&&(d.score=0),d.score=Math.floor(d.score),d.lastSavedPuzzle&&!J(d.lastSavedPuzzle)){d.lastSavedPuzzle=null;try{localStorage.removeItem(c.LAST_PUZZLE)}catch(e){}try{"undefined"!=typeof vkBridge&&B(a.LAST_PUZZLE,"")}catch(e){}}}catch(e){}}}()})).then((function(){return"ok"})).catch((function(e){return"error"}));o.then((function(){if(t)try{W(d.theme||"light"),me()}catch(e){}}));await Promise.race([o,n]);if(u=!0,W(d.theme||"light"),me(),!d.sound){const e=h("soundBtn");e&&(e.textContent="🔇");const t=h("soundBtnMenu");t&&(t.textContent="🔇")}ye("menu"),setTimeout((function(){$e()}),250),e&&clearTimeout(e)}catch(t){e&&clearTimeout(e);try{me()}catch(e){}try{ye("menu")}catch(e){}try{$e()}catch(e){}}}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",Ye):Ye()}();
+(function () {
+'use strict';
+const PREFIX = (window.__PLATFORM && window.__PLATFORM.storagePrefix) || '';
+const IS_OK  = !!(window.__PLATFORM && window.__PLATFORM.isOK);
+const ALWAYS_FREE_CATS = ['animals'];
+const CAT_UNLOCK_DURATION = 24 * 60 * 60 * 1000;
+const VALID_THEMES = ['peach', 'blue', 'emerald', 'sunset', 'violet', 'night'];
+let _pendingCatUnlock = null;
+let vkInitialized = false;
+let vkUserId = 0;
+function safe(fn, label) {
+    return function (...args) {
+        try {
+            const r = fn.apply(this, args);
+            if (r && typeof r.catch === 'function') {
+                r.catch(e => console.error('❌ Async в ' + (label || 'op') + ':', e));
+            }
+            return r;
+        } catch (e) {
+            console.error('❌ Синхронная ошибка в ' + (label || 'op') + ':', e);
+            try { toast('Что-то пошло не так. Попробуйте ещё раз'); } catch (_) {}
+        }
+    };
+}
+
+function bindTap(el, handler) {
+    if (!el || typeof handler !== 'function') return;
+    if (el.__tapBound) {
+        el.__tapHandler = handler;
+        return;
+    }
+    el.__tapBound = true;
+    el.__tapHandler = handler;
+    let lastTouchTime = 0;
+    let startX = 0, startY = 0;
+    let moved = false;
+    const MOVE_THRESHOLD   = 10;    
+    const DOUBLE_GUARD_MS  = 450;   
+    el.addEventListener('touchstart', function (e) {
+        if (e.touches.length > 1) { moved = true; return; } 
+        const t = e.touches[0];
+        if (!t) return;
+        startX = t.clientX;
+        startY = t.clientY;
+        moved = false;
+    }, { passive: true });
+    el.addEventListener('touchmove', function (e) {
+        if (moved) return;
+        const t = e.touches[0];
+        if (!t) return;
+        if (Math.abs(t.clientX - startX) > MOVE_THRESHOLD ||
+            Math.abs(t.clientY - startY) > MOVE_THRESHOLD) {
+            moved = true;
+        }
+    }, { passive: true });
+    el.addEventListener('touchend', function (e) {
+        if (moved) return;
+        const t = e.changedTouches && e.changedTouches[0];
+        if (!t) return;
+        lastTouchTime = Date.now();
+        if (e.cancelable) {
+            try { e.preventDefault(); } catch (_) {}
+        }
+        const h = el.__tapHandler;
+        if (typeof h === 'function') h.call(el, e);
+    }, { passive: false });  
+    el.addEventListener('click', function (e) {
+        if (Date.now() - lastTouchTime < DOUBLE_GUARD_MS) return;
+        const h = el.__tapHandler;
+        if (typeof h === 'function') h.call(el, e);
+    });
+}
+
+const K = {
+    SCORE:         PREFIX + 'cw_score_v1',
+    SOLVED_THEMES: PREFIX + 'cw_themes_v1',
+    THEME:         PREFIX + 'cw_theme_v1',
+    SOUND:         PREFIX + 'cw_sound_v1',
+    ACH:           PREFIX + 'cw_ach_v1',
+    DAILY:         PREFIX + 'cw_daily_v1',
+    CAT_UNLOCKS:   PREFIX + 'cw_cat_unlocks_v1',
+    STREAK:        PREFIX + 'cw_streak_v1',
+    LAST_PUZZLE:   PREFIX + 'cw_last_puzzle_v1'
+};
+const VK_KEYS = {
+    SCORE:         PREFIX + 'cw_score_v2',
+    SOLVED_THEMES: PREFIX + 'cw_themes_v2',
+    THEME:         PREFIX + 'cw_theme_v2',
+    SOUND:         PREFIX + 'cw_sound_v2',
+    ACH:           PREFIX + 'cw_ach_v2',
+    DAILY:         PREFIX + 'cw_daily_v2',
+    CAT_UNLOCKS:   PREFIX + 'cw_cat_unlocks_v2',
+    STREAK:        PREFIX + 'cw_streak_v2',
+    LAST_PUZZLE:   PREFIX + 'cw_last_puzzle_v2'
+};
+
+// ====== СОСТОЯНИЕ ======
+const state = {
+    score: 0,
+    solvedThemes: {},
+    catUnlocks: {},     
+theme: 'peach',
+    sound: true,
+    ach: {},
+    daily: null,
+    currentPuzzle: null,
+    currentPuzzleMeta: null,
+    userGrid: null,
+    cells: [],
+    selected: null,
+    timer: null,
+    startTime: 0,
+    solvedFlag: false,
+      hintsUsed: 0,
+    puzzleToken: 0,
+       noMistakeStreak: 0,
+    mistakesThisPuzzle: 0,
+    lastSavedPuzzle: null
+};
+
+
+let _dataLoaded = false;
+// ====== ДОСТИЖЕНИЯ ======
+const ACHIEVEMENTS = [
+    { id:'first',    icon:'🎬', name:'Первое решение', desc:'Решить первый кроссворд' },
+    { id:'ten',      icon:'🎯', name:'Десятка',        desc:'Решить 10 кроссвордов' },
+    { id:'fifty',    icon:'🏅', name:'Полтинник',      desc:'Решить 50 кроссвордов' },
+    { id:'hundred',  icon:'🏆', name:'Сотка',          desc:'Решить 100 кроссвордов' },
+    { id:'daily1',   icon:'☀️', name:'День сурка',     desc:'Решить кроссворд дня' },
+    { id:'speed',    icon:'⚡', name:'Скорость',       desc:'Решить кроссворд за 60 сек' },
+    { id:'flash',    icon:'💥', name:'Молния',         desc:'Решить кроссворд за 30 сек' },
+    { id:'nohint',   icon:'🧠', name:'Без подсказок',  desc:'Решить кроссворд без подсказок' },
+    { id:'hint5',    icon:'💡', name:'Всезнайка',      desc:'Использовать 5 подсказок' },
+    { id:'alltheme', icon:'🌈', name:'Путешественник', desc:'Решить кроссворд каждой темы' },
+    { id:'night',    icon:'🌙', name:'Полуночник',     desc:'Решить кроссворд ночью' },
+    { id:'streak3',  icon:'🔥', name:'Три подряд',     desc:'Решить 3 кроссворда без ошибок' }
+];
+
+// ====== УТИЛИТЫ ======
+const $ = id => document.getElementById(id);
+const qsa = sel => document.querySelectorAll(sel);
+
+function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function hashStr(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+}
+function fmtTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ====== ЗВУК ======
+let audioCtx = null;
+function initAudio() {
+    if (audioCtx) {
+        if (audioCtx.state === 'suspended') {
+            try { audioCtx.resume(); } catch(e) {}
+        }
+        return;
+    }
+    try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) { console.warn('Audio недоступен'); }
+}
+
+function playTone(freq, dur = 0.15, type = 'sine', vol = 0.15) {
+    if (!state.sound || !audioCtx) return;
+    try {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type;
+        o.frequency.value = freq;
+        o.connect(g); g.connect(audioCtx.destination);
+        g.gain.value = vol;
+        g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + dur);
+        o.start(); o.stop(audioCtx.currentTime + dur);
+    } catch(e) {}
+}
+const sound = {
+    click:   () => playTone(880, 0.05, 'sine', 0.08),
+    letter:  () => playTone(1200, 0.05, 'sine', 0.06),
+    correct: () => { playTone(660,0.1); setTimeout(()=>playTone(880,0.1),100); setTimeout(()=>playTone(1320,0.15),200); },
+    wrong:   () => playTone(200, 0.15, 'sawtooth', 0.08),
+    win:     () => { [523,659,784,1046].forEach((f,i)=>setTimeout(()=>playTone(f,0.2,'sine',0.15),i*120)); },
+    hint:    () => playTone(1046, 0.12, 'sine', 0.1)
+};
+
+// ====== КОНФЕТТИ ======
+let confettiCanvas, confettiCtx, confettiRAF = 0;
+function initConfetti() {
+    confettiCanvas = $('confetti');
+    if (!confettiCanvas) return;
+    confettiCtx = confettiCanvas.getContext('2d');
+    resizeConfetti();
+    window.addEventListener('resize', resizeConfetti);
+}
+function resizeConfetti() {
+    if (!confettiCanvas) return;
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+}
+function launchConfetti(count) {
+    if (!confettiCtx) return;
+    const colors = ['#ffd166','#ff6b6b','#4ecdc4','#a855f7','#f97316','#06d6a0','#f72585'];
+    const parts = [];
+    for (let i = 0; i < count; i++) {
+        parts.push({
+            x: Math.random() * confettiCanvas.width,
+            y: -20 - Math.random() * 100,
+            vx: (Math.random() - 0.5) * 4,
+            vy: 2 + Math.random() * 4,
+            size: 6 + Math.random() * 8,
+            color: colors[(Math.random() * colors.length) | 0],
+            rot: Math.random() * Math.PI * 2,
+            rotV: (Math.random() - 0.5) * 0.3
+        });
+    }
+    let frame = 0;
+    cancelAnimationFrame(confettiRAF);
+    function tick() {
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        for (const p of parts) {
+            p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.rot += p.rotV;
+            confettiCtx.save();
+            confettiCtx.translate(p.x, p.y);
+            confettiCtx.rotate(p.rot);
+            confettiCtx.fillStyle = p.color;
+            confettiCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+            confettiCtx.restore();
+        }
+        frame++;
+        if (frame < 220) confettiRAF = requestAnimationFrame(tick);
+        else confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    }
+    tick();
+}
+
+// ====== ХРАНИЛИЩЕ ======
+function lsGet(key, def) {
+    try {
+        const v = localStorage.getItem(key);
+        return v === null ? def : JSON.parse(v);
+    } catch(e) { return def; }
+}
+function lsSet(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+
+// ====== СЖАТИЕ VK STORAGE (pako) ======
+const VK_PACK_PREFIX = 'pako:';
+
+function packForVK(value) {
+    let json = typeof value === 'string' ? value : JSON.stringify(value);
+    if (json == null) json = '';
+    if (json === '') return '';
+    if (!window.pako || typeof window.pako.deflate !== 'function') return json;
+
+    try {
+        const bytes = window.pako.deflate(json);
+        let bin = '';
+        const CHUNK = 0x8000;
+        for (let i = 0; i < bytes.length; i += CHUNK) {
+            bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+        }
+        const packed = VK_PACK_PREFIX + btoa(bin);
+        // Если сжатие не уменьшило — сохраняем как есть (для мелких значений)
+        return packed.length < json.length ? packed : json;
+    } catch (e) {
+        console.warn('⚠️ pako deflate failed:', e);
+        return json;
+    }
+}
+
+function unpackFromVK(raw) {
+    if (raw == null || raw === '') return null;
+    if (typeof raw !== 'string') return raw;
+
+    if (raw.indexOf(VK_PACK_PREFIX) === 0) {
+        if (!window.pako || typeof window.pako.inflate !== 'function') {
+            console.warn('⚠️ pako не загружен — значение потеряно');
+            return null;
+        }
+        try {
+            const bin = atob(raw.slice(VK_PACK_PREFIX.length));
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            const json = window.pako.inflate(bytes, { to: 'string' });
+            try { return JSON.parse(json); } catch (_) { return json; }
+        } catch (e) {
+            console.warn('⚠️ pako inflate failed:', e);
+            return null;
+        }
+    }
+    // Мелкие значения без сжатия — обычный JSON/строка
+    try { return JSON.parse(raw); } catch (_) { return raw; }
+}
+
+// Кэш последних УСПЕШНО отправленных значений.
+// Если значение не изменилось — в VK Storage не пишем.
+const __vkLastSaved = {};
+
+function vkSaveIfChanged(key, value) {
+    if (typeof vkBridge === 'undefined') return;
+    let serialized;
+    try { serialized = JSON.stringify(value); } catch (e) { serialized = String(value); }
+    if (__vkLastSaved[key] === serialized) return;  
+    __vkLastSaved[key] = serialized;
+    vkSave(key, value).then(ok => {
+        if (!ok && __vkLastSaved[key] === serialized) {
+            delete __vkLastSaved[key];
+        }
+    });
+}
+
+function vkSave(key, value, timeoutMs = 3000) {
+    if (typeof vkBridge === 'undefined') return Promise.resolve(false);
+    let packed;
+    try { packed = packForVK(value); } catch (e) { packed = ''; }
+
+    let timer = null;
+    const timeoutPromise = new Promise(r => { timer = setTimeout(() => r(false), timeoutMs); });
+    const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
+
+    let p;
+    try {
+        p = vkBridge.send('VKWebAppStorageSet', { key, value: packed })
+            .then(() => true)
+            .catch(() => false);
+    } catch (e) {
+        clearTimer();
+        return Promise.resolve(false);
+    }
+    p.then(clearTimer, clearTimer);
+    return Promise.race([p, timeoutPromise]);
+}
+
+function vkLoad(key, timeoutMs = 3000) {
+    if (typeof vkBridge === 'undefined') return Promise.resolve(null);
+    let timer = null;
+    const timeoutPromise = new Promise(r => { timer = setTimeout(() => r(null), timeoutMs); });
+    const clearTimer = () => { if (timer) { clearTimeout(timer); timer = null; } };
+
+    let p;
+    try {
+        p = vkBridge.send('VKWebAppStorageGet', { keys: [key] })
+            .then(data => {
+                if (data && data.keys && data.keys.length) {
+                    const v = data.keys[0].value;
+                    if (v === '' || v === undefined || v === null) return null;
+                    return unpackFromVK(v);
+                }
+                return null;
+            })
+            .catch(() => null);
+    } catch (e) {
+        clearTimer();
+        return Promise.resolve(null);
+    }
+    p.then(clearTimer, clearTimer);
+    return Promise.race([p, timeoutPromise]);
+}
+
+let __lastVKSync = 0;
+const VK_SYNC_MIN_INTERVAL = 8000;
+let saveTimer = null;
+function saveAll(immediate = false) {
+    if (!_dataLoaded) return;
+    const doSave = () => {
+        try {
+            lsSet(K.SCORE,         state.score);
+            lsSet(K.SOLVED_THEMES, state.solvedThemes);
+            lsSet(K.THEME,         state.theme);
+            lsSet(K.SOUND,         state.sound);
+            lsSet(K.ACH,           state.ach);
+            lsSet(K.DAILY,         state.daily);
+            lsSet(K.CAT_UNLOCKS,   state.catUnlocks);
+            lsSet(K.STREAK,        state.noMistakeStreak);
+        } catch(e) {}
+
+        if (state.currentPuzzle && !state.solvedFlag) {
+            const snapshot = captureLastPuzzleSnapshot();
+            if (snapshot) {
+                state.lastSavedPuzzle = snapshot;
+                try { lsSet(K.LAST_PUZZLE, snapshot); } catch(e) {}
+            } else if (state.lastSavedPuzzle) {
+                            state.lastSavedPuzzle = null;
+                try { localStorage.removeItem(K.LAST_PUZZLE); } catch(e) {}
+                if (typeof vkBridge !== 'undefined') {
+                    __vkLastSaved[VK_KEYS.LAST_PUZZLE] = null;
+                    vkSave(VK_KEYS.LAST_PUZZLE, '');
+                }
+            }
+        }
+
+        if (typeof vkBridge === 'undefined') return;
+        const now = Date.now();
+        if (!immediate && (now - __lastVKSync) < VK_SYNC_MIN_INTERVAL) return;
+        __lastVKSync = now;
+
+try {
+    vkSaveIfChanged(VK_KEYS.SCORE,         state.score);
+    vkSaveIfChanged(VK_KEYS.SOLVED_THEMES, state.solvedThemes);
+    vkSaveIfChanged(VK_KEYS.THEME,         state.theme);
+    vkSaveIfChanged(VK_KEYS.SOUND,         state.sound);
+    vkSaveIfChanged(VK_KEYS.ACH,           state.ach);
+    vkSaveIfChanged(VK_KEYS.DAILY,         state.daily);
+    vkSaveIfChanged(VK_KEYS.CAT_UNLOCKS,   state.catUnlocks);
+    vkSaveIfChanged(VK_KEYS.STREAK,        state.noMistakeStreak);
+    if (state.lastSavedPuzzle) {
+        vkSaveIfChanged(VK_KEYS.LAST_PUZZLE, state.lastSavedPuzzle);
+    }
+} catch(e) {}
+    };
+    if (immediate) {
+        if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+        doSave();
+        return;
+    }
+    if (saveTimer) return;
+    saveTimer = setTimeout(() => {
+        saveTimer = null;
+        doSave();
+    }, 1500);
+}
+async function loadAll() {
+    state.score        = lsGet(K.SCORE,  0) || 0;
+    state.solvedThemes = lsGet(K.SOLVED_THEMES, {}) || {};
+    state.catUnlocks   = lsGet(K.CAT_UNLOCKS, {}) || {};
+state.theme        = lsGet(K.THEME,  'peach') || 'peach';
+    state.sound        = lsGet(K.SOUND,  true);
+    state.ach          = lsGet(K.ACH,    {}) || {};
+    state.daily        = lsGet(K.DAILY,  null);
+    state.noMistakeStreak = lsGet(K.STREAK, 0) || 0;
+    state.lastSavedPuzzle = lsGet(K.LAST_PUZZLE, null);
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        console.log('ℹ️ Нет сети — работаем только с локальными данными');
+        return;
+    }
+try {
+    const __now = Date.now();
+    const __keys = Object.keys(state.catUnlocks);
+    for (let __i = 0; __i < __keys.length; __i++) {
+        const __k = __keys[__i];
+        if (!state.catUnlocks[__k] || state.catUnlocks[__k] < __now) {
+            delete state.catUnlocks[__k];
+        }
+    }
+} catch (_) {}
+    if (window.__VK_BRIDGE_READY) {
+        try { await window.__VK_BRIDGE_READY; } catch (e) {}
+    }
+
+    if (typeof vkBridge === 'undefined') {
+        console.log('ℹ️ VK Bridge недоступен — работаем на локальных данных');
+        return;
+    }
+
+    try {
+        const results = await Promise.all([
+            vkLoad(VK_KEYS.SCORE),
+            vkLoad(VK_KEYS.SOLVED_THEMES),
+            vkLoad(VK_KEYS.THEME),
+            vkLoad(VK_KEYS.SOUND),
+            vkLoad(VK_KEYS.ACH),
+            vkLoad(VK_KEYS.DAILY),
+            vkLoad(VK_KEYS.CAT_UNLOCKS),
+            vkLoad(VK_KEYS.STREAK),
+            vkLoad(VK_KEYS.LAST_PUZZLE)
+        ]);
+        const [vkScore, vkThemes, vkTheme, vkSound, vkAch, vkDaily, vkCatUnlocks, vkStreak, vkLastPuzzle] = results;
+
+if (typeof vkScore === 'number' && isFinite(vkScore) && vkScore >= 0 && vkScore > state.score) {
+    state.score = vkScore;
+}
+
+        if (vkCatUnlocks && typeof vkCatUnlocks === 'object') {
+            const merged = { ...state.catUnlocks };
+            for (const k in vkCatUnlocks) {
+                const t = +vkCatUnlocks[k] || 0;
+                if (!merged[k] || t > merged[k]) merged[k] = t;
+            }
+            state.catUnlocks = merged;
+        }
+try {
+    const __now2 = Date.now();
+    const __keys2 = Object.keys(state.catUnlocks);
+    for (let __i2 = 0; __i2 < __keys2.length; __i2++) {
+        const __k2 = __keys2[__i2];
+        if (!state.catUnlocks[__k2] || state.catUnlocks[__k2] < __now2) {
+            delete state.catUnlocks[__k2];
+        }
+    }
+} catch (_) {}
+        if (vkThemes && typeof vkThemes === 'object') {
+            state.solvedThemes = { ...vkThemes, ...state.solvedThemes };
+        }
+if (typeof vkTheme === 'string' && VALID_THEMES.indexOf(vkTheme) !== -1) state.theme = vkTheme;
+        if (typeof vkSound === 'boolean') state.sound = vkSound;
+        if (vkAch && typeof vkAch === 'object') state.ach = { ...vkAch, ...state.ach };
+        if (typeof vkStreak === 'number' && vkStreak > state.noMistakeStreak) {
+            state.noMistakeStreak = vkStreak;
+        }
+        if (vkDaily && typeof vkDaily === 'object' && vkDaily.date) {
+            const local = state.daily;
+            if (!local || !local.date || local.date < vkDaily.date) {
+                state.daily = vkDaily;
+            } else if (local.date === vkDaily.date) {
+                if (vkDaily.timeSec && (!local.timeSec || vkDaily.timeSec < local.timeSec)) {
+                    state.daily = vkDaily;
+                }
+            }
+        }
+
+        if (vkLastPuzzle && typeof vkLastPuzzle === 'object' && vkLastPuzzle.savedAt) {
+            const local = state.lastSavedPuzzle;
+            if (!local || !local.savedAt || vkLastPuzzle.savedAt > local.savedAt) {
+                state.lastSavedPuzzle = vkLastPuzzle;
+            }
+        }
+        if (state.lastSavedPuzzle) {
+            lsSet(K.LAST_PUZZLE, state.lastSavedPuzzle);
+        }
+
+        lsSet(K.SCORE,         state.score);
+        lsSet(K.SOLVED_THEMES, state.solvedThemes);
+        lsSet(K.THEME,         state.theme);
+        lsSet(K.SOUND,         state.sound);
+        lsSet(K.ACH,           state.ach);
+        lsSet(K.DAILY,         state.daily);
+        lsSet(K.CAT_UNLOCKS,   state.catUnlocks);
+               lsSet(K.STREAK,        state.noMistakeStreak);
+               if (typeof state.score !== 'number' || !isFinite(state.score) || state.score < 0) {
+    state.score = 0;
+}
+state.score = Math.floor(state.score);
+
+if (state.lastSavedPuzzle && !isSavedPuzzleValid(state.lastSavedPuzzle)) {
+    state.lastSavedPuzzle = null;
+    try { localStorage.removeItem(K.LAST_PUZZLE); } catch (e) {}
+    try {
+        if (typeof vkBridge !== 'undefined') vkSave(VK_KEYS.LAST_PUZZLE, '');
+    } catch (_) {}
+}
+    } catch (e) {
+        console.warn('⚠️ Ошибка загрузки VK Storage:', e);
+    }
+}
+
+function applyTheme(t) {
+    if (VALID_THEMES.indexOf(t) === -1) t = 'peach';
+    state.theme = t;
+    document.documentElement.setAttribute('data-theme', t);
+    qsa('.theme-item[data-theme]').forEach(el => el.classList.toggle('active', el.dataset.theme === t));
+    lsSet(K.THEME, t);
+    saveAll();
+}
+function toggleSound() {
+    state.sound = !state.sound;
+    const b1 = $('soundBtn'); if (b1) b1.textContent = state.sound ? '🔊' : '🔇';
+    const b2 = $('soundBtnMenu'); if (b2) b2.textContent = state.sound ? '🔊' : '🔇';
+    lsSet(K.SOUND, state.sound);
+    saveAll();
+    if (state.sound) { initAudio(); sound.click(); }
+}
+
+// ====== ПСЕВДОСЛУЧАЙНЫЙ ГЕНЕРАТОР (детерминированный seed) ======
+function makeRandom(seed) {
+    let s = (seed >>> 0) || 1;
+    return function () {
+        s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+        return s / 4294967296;
+    };
+}
+
+function buildLinearPuzzle(words, maxWords) {
+    const placed = [];
+    const limit = Math.min(maxWords, words.length);
+    for (let i = 0; i < limit; i++) {
+        const w = words[i];
+        placed.push({
+            answer: w.answer,
+            clue: w.clue,
+            row: i,
+            col: 0,
+            dir: 'h'
+        });
+    }
+    return placed;
+}
+
+function generateCrossword(wordList, opts) {
+    opts = opts || {};
+    const minWords = opts.minWords || 5;
+    const maxWords = opts.maxWords || 20;
+    const maxAttempts = opts.maxAttempts || 40;
+    const rng = (opts.seed !== undefined) ? makeRandom(opts.seed) : Math.random;
+
+    const raw = [];
+    const seen = new Set();
+    for (const w of wordList) {
+        if (!w || !w.a || !w.q) continue;
+        const ans = String(w.a).toUpperCase().replace(/Ё/g, 'Е');
+        if (!/^[А-Я]+$/.test(ans)) continue;
+        if (ans.length < 3 || ans.length > 12) continue;
+        if (seen.has(ans)) continue;
+        seen.add(ans);
+        raw.push({ answer: ans, clue: w.q });
+    }
+    if (raw.length < 2) return null;
+
+    const effectiveMin = Math.min(minWords, raw.length);
+    const deterministic = !!opts.deterministic;
+    const startedAt = Date.now();
+    const softLimitMs = deterministic
+        ? Infinity
+        : (typeof opts.softLimitMs === 'number' ? opts.softLimitMs : 3500);
+    const hardDeadline = deterministic
+        ? Infinity
+        : (typeof opts.hardDeadline === 'number' ? opts.hardDeadline : (startedAt + 9000));
+
+    let best = null;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        if (!deterministic) {
+            const now = Date.now();
+            if (now > hardDeadline) break;
+            if (best && (now - startedAt) > softLimitMs) break;
+        }
+
+        const words = raw.slice();
+        for (let i = words.length - 1; i > 0; i--) {
+            const j = Math.floor(rng() * (i + 1));
+            const t = words[i]; words[i] = words[j]; words[j] = t;
+        }
+        words.sort((a, b) => b.answer.length - a.answer.length);
+
+        const built = tryBuildPuzzle(words, effectiveMin, maxWords, rng);
+        if (built) {
+            if (!best || built.placed.length > best.placed.length) {
+                best = built;
+            }
+            if (built.placed.length === Math.min(words.length, maxWords)) break;
+        }
+    }
+
+    if (!best) {
+        const shuffled = raw.slice();
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(rng() * (i + 1));
+            const t = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = t;
+        }
+        return normalizePuzzle(buildLinearPuzzle(shuffled, maxWords));
+    }
+    return normalizePuzzle(best.placed);
+}
+
+function tryBuildPuzzle(words, minWords, maxWords, rng) {
+    const grid = new Map();
+    const placed = [];
+    const get = (r, c) => grid.get(r + ',' + c);
+
+    let bMinR = 0, bMaxR = 0, bMinC = 0, bMaxC = 0;
+
+    function canPlace(answer, r, c, dir) {
+        const dr = dir === 'v' ? 1 : 0;
+        const dc = dir === 'h' ? 1 : 0;
+        if (get(r - dr, c - dc) !== undefined) return false;
+        if (get(r + answer.length * dr, c + answer.length * dc) !== undefined) return false;
+        let crossings = 0;
+        for (let i = 0; i < answer.length; i++) {
+            const cr = r + i * dr, cc = c + i * dc;
+            const cur = get(cr, cc);
+            if (cur !== undefined) {
+                if (cur !== answer[i]) return false;
+                crossings++;
+            } else {
+                if (dir === 'h') {
+                    if (get(cr - 1, cc) !== undefined) return false;
+                    if (get(cr + 1, cc) !== undefined) return false;
+                } else {
+                    if (get(cr, cc - 1) !== undefined) return false;
+                    if (get(cr, cc + 1) !== undefined) return false;
+                }
+            }
+        }
+        return crossings > 0;
+    }
+
+    function place(answer, r, c, dir) {
+        const dr = dir === 'v' ? 1 : 0;
+        const dc = dir === 'h' ? 1 : 0;
+        for (let i = 0; i < answer.length; i++) {
+            grid.set((r + i * dr) + ',' + (c + i * dc), answer[i]);
+        }
+    }
+
+    function extendBounds(r, c, dir, len) {
+        const dr = dir === 'v' ? 1 : 0;
+        const dc = dir === 'h' ? 1 : 0;
+        const endR = r + (len - 1) * dr;
+        const endC = c + (len - 1) * dc;
+        const wMinR = r < endR ? r : endR;
+        const wMaxR = r > endR ? r : endR;
+        const wMinC = c < endC ? c : endC;
+        const wMaxC = c > endC ? c : endC;
+        if (wMinR < bMinR) bMinR = wMinR;
+        if (wMaxR > bMaxR) bMaxR = wMaxR;
+        if (wMinC < bMinC) bMinC = wMinC;
+        if (wMaxC > bMaxC) bMaxC = wMaxC;
+    }
+
+    function placementScore(r, c, dir, len) {
+        const dr = dir === 'v' ? 1 : 0;
+        const dc = dir === 'h' ? 1 : 0;
+        const endR = r + (len - 1) * dr;
+        const endC = c + (len - 1) * dc;
+        const wMinR = r < endR ? r : endR;
+        const wMaxR = r > endR ? r : endR;
+        const wMinC = c < endC ? c : endC;
+        const wMaxC = c > endC ? c : endC;
+        const minR = bMinR < wMinR ? bMinR : wMinR;
+        const maxR = bMaxR > wMaxR ? bMaxR : wMaxR;
+        const minC = bMinC < wMinC ? bMinC : wMinC;
+        const maxC = bMaxC > wMaxC ? bMaxC : wMaxC;
+        const width = maxC - minC + 1;
+        const height = maxR - minR + 1;
+        const aspect = (width > height ? width : height) / (width < height ? width : height);
+        return -(width * height) - aspect * 20;
+    }
+
+    const first = words[0];
+    place(first.answer, 0, 0, 'h');
+    placed.push({ ...first, row: 0, col: 0, dir: 'h' });
+    bMinR = 0; bMaxR = 0; bMinC = 0; bMaxC = first.answer.length - 1;
+
+    const remaining = words.slice(1);
+    let safety = 0;
+
+    while (remaining.length && safety++ < 300) {
+        if (placed.length >= maxWords) break;
+        let placedThisRound = 0;
+
+        for (let wi = 0; wi < remaining.length; wi++) {
+            if (placed.length >= maxWords) break;
+
+            const w = remaining[wi];
+            const placements = [];
+
+            for (const p of placed) {
+                for (let pi = 0; pi < p.answer.length; pi++) {
+                    for (let ii = 0; ii < w.answer.length; ii++) {
+                        if (p.answer[pi] !== w.answer[ii]) continue;
+                        let nr, nc, nd;
+                        if (p.dir === 'h') {
+                            nd = 'v'; nr = p.row - ii; nc = p.col + pi;
+                        } else {
+                            nd = 'h'; nr = p.row + pi; nc = p.col - ii;
+                        }
+                        if (canPlace(w.answer, nr, nc, nd)) {
+                            placements.push({
+                                row: nr, col: nc, dir: nd,
+                                score: placementScore(nr, nc, nd, w.answer.length)
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (placements.length) {
+                placements.sort((a, b) => b.score - a.score);
+                const topN = placements.length < 3 ? placements.length : 3;
+                const chosen = placements[Math.floor(rng() * topN)];
+                place(w.answer, chosen.row, chosen.col, chosen.dir);
+                extendBounds(chosen.row, chosen.col, chosen.dir, w.answer.length);
+                placed.push({ ...w, row: chosen.row, col: chosen.col, dir: chosen.dir });
+                remaining.splice(wi, 1);
+                wi--;
+                placedThisRound++;
+            }
+        }
+
+        if (!placedThisRound) break;
+    }
+
+    if (placed.length < minWords) return null;
+    return { placed };
+}
+
+
+// ====== НОРМАЛИЗАЦИЯ И НУМЕРАЦИЯ ======
+function normalizePuzzle(placed) {
+    let minR = Infinity, minC = Infinity, maxR = -Infinity, maxC = -Infinity;
+    for (const p of placed) {
+        const dr = p.dir === 'v' ? 1 : 0;
+        const dc = p.dir === 'h' ? 1 : 0;
+        const endR = p.row + (p.answer.length - 1) * dr;
+        const endC = p.col + (p.answer.length - 1) * dc;
+        if (p.row < minR) minR = p.row;
+        if (endR > maxR) maxR = endR;
+        if (p.col < minC) minC = p.col;
+        if (endC > maxC) maxC = endC;
+    }
+    const rows = maxR - minR + 1;
+    const cols = maxC - minC + 1;
+    const result = Array.from({ length: rows }, () => Array(cols).fill(null));
+
+    const shifted = placed.map(p => ({
+        ...p,
+        row: p.row - minR,
+        col: p.col - minC
+    }));
+
+    for (const p of shifted) {
+        const dr = p.dir === 'v' ? 1 : 0;
+        const dc = p.dir === 'h' ? 1 : 0;
+        for (let i = 0; i < p.answer.length; i++) {
+            result[p.row + i * dr][p.col + i * dc] = p.answer[i];
+        }
+    }
+
+    const starts = shifted.slice().sort((a, b) => a.row - b.row || a.col - b.col);
+    const numMap = new Map();
+    let num = 1;
+    for (const p of starts) {
+        const key = p.row + ',' + p.col;
+        if (!numMap.has(key)) numMap.set(key, num++);
+        p.number = numMap.get(key);
+    }
+
+    return { grid: result, words: shifted, rows, cols };
+}
+
+function buildAnswerIndex() {
+    if (window.__ANSWER_INDEX) return window.__ANSWER_INDEX;
+    const idx = {};
+    const db = window.CROSSWORD_DB || {};
+    for (const cat in db) {
+        const catObj = db[cat];
+        if (!catObj || typeof catObj !== 'object') continue;
+        for (const key in catObj) {
+            if (key === 'name' || key === 'icon') continue;
+            const list = catObj[key];
+            if (!Array.isArray(list)) continue;
+            for (const w of list) {
+                if (!w || !w.a) continue;
+                const norm = String(w.a).toUpperCase().replace(/Ё/g, 'Е');
+                if (!idx[norm]) idx[norm] = w.q || '';
+            }
+        }
+    }
+    window.__ANSWER_INDEX = idx;
+    return idx;
+}
+
+function pickPuzzle(mode, opts) {
+    opts = opts || {};
+    const db = window.CROSSWORD_DB;
+    if (!db) return null;
+    const categories = Object.keys(db);
+    if (!categories.length) return null;
+
+    const maxMs = (typeof opts.maxMs === 'number' && opts.maxMs > 0) ? opts.maxMs : 15000;
+    const pickDeadline = Date.now() + maxMs;
+
+    if (mode === 'daily') {
+        const dateSeed = hashStr(todayStr());
+
+        const pool = [];
+        for (const cat of categories) {
+            const catObj = db[cat];
+            for (const diff of ['easy', 'hard']) {
+                const list = catObj[diff];
+                if (!list || !list.length) continue;
+                const idxs = new Set();
+                let s = (dateSeed ^ (cat.length * 31) ^ (diff === 'hard' ? 777 : 0)) >>> 0;
+                const need = Math.min(2, list.length);
+                let guard = 0;
+                while (idxs.size < need && guard++ < 50) {
+                    s = (Math.imul(s, 1103515245) + 12345) >>> 0;
+                    idxs.add(s % list.length);
+                }
+                for (const i of idxs) pool.push(list[i]);
+            }
+        }
+
+        if (pool.length >= 3) {
+            let puzzle = null;
+            for (const mw of [10, 8, 6, 5, 4, 3]) {
+                puzzle = generateCrossword(pool, {
+                    minWords: mw,
+                    maxWords: 20,
+                    maxAttempts: 60,
+                    seed: dateSeed,
+                    deterministic: true
+                });
+                if (puzzle) break;
+            }
+            if (!puzzle) {
+                puzzle = generateCrossword(pool, {
+                    minWords: 3,
+                    maxWords: 20,
+                    maxAttempts: 400,
+                    seed: dateSeed,
+                    deterministic: true
+                });
+            }
+            if (puzzle) {
+                return {
+                    id: 'daily_' + todayStr(),
+                    puzzle: puzzle,
+                    theme: 'Кроссворд дня',
+                    icon: '☀️',
+                    isDaily: true,
+                    mode: 'daily',
+                    seed: dateSeed
+                };
+            }
+        }
+        console.warn('⚠️ Не удалось собрать кроссворд дня, используем обычный');
+    }
+
+    const seed = (typeof opts.seed === 'number')
+        ? (opts.seed >>> 0)
+        : ((Math.random() * 0xFFFFFFFF) >>> 0);
+    const rng = makeRandom(seed);
+
+    let cat = opts.category;
+    let diff = opts.difficulty || 'easy';
+    if (!cat) {
+        let pool = categories;
+        if (mode !== 'random') {
+            const unlocked = categories.filter(c => isCategoryUnlocked(c));
+            pool = unlocked.length ? unlocked : (categories.includes('animals') ? ['animals'] : categories);
+        }
+        cat = pool[Math.floor(rng() * pool.length)];
+    }
+    if (!db[cat]) cat = categories[0];
+    if (!db[cat][diff]) diff = 'easy';
+
+    let list = db[cat][diff];
+    if (!list || list.length < 3) {
+        const alt = categories.find(c => db[c] && db[c].easy && db[c].easy.length >= 3);
+        if (!alt) return null;
+        cat = alt;
+        diff = 'easy';
+        list = db[cat].easy;
+    }
+    const maxWords = diff === 'hard' ? 20 : 15;
+    const arr = list.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    const shuffled = arr.slice(0, 30);
+    if (mode === 'category' && !opts.category) {
+        const allPool = [];
+        for (const c of categories) {
+            for (const d of ['easy', 'hard']) {
+                const lst = db[c] && db[c][d];
+                if (!lst || !lst.length) continue;
+                for (let k = 0; k < lst.length; k++) allPool.push(lst[k]);
+            }
+        }
+        if (allPool.length) {
+            const existing = new Set();
+            for (let i = 0; i < shuffled.length; i++) {
+                const w = shuffled[i];
+                if (w && w.a) existing.add(String(w.a).toUpperCase().replace(/Ё/g, 'Е'));
+            }
+            let added = 0;
+            let guard = 0;
+            while (added < 3 && guard++ < 60) {
+                const w = allPool[Math.floor(rng() * allPool.length)];
+                if (!w || !w.a || !w.q) continue;
+                const norm = String(w.a).toUpperCase().replace(/Ё/g, 'Е');
+                if (!/^[А-Я]+$/.test(norm)) continue;
+                if (norm.length < 3 || norm.length > 12) continue;
+                if (existing.has(norm)) continue;
+                existing.add(norm);
+                shuffled.push(w);
+                added++;
+            }
+        }
+    }
+
+    let puzzle = null;
+    for (const mw of [10, 8, 6, 5, 4, 3]) {
+        if (mw > maxWords) continue;
+        if (Date.now() > pickDeadline) break;
+        puzzle = generateCrossword(shuffled, {
+            minWords: mw,
+            maxWords: maxWords,
+            maxAttempts: 40,
+            seed: seed,
+            hardDeadline: pickDeadline
+        });
+        if (puzzle) break;
+    }
+    if (!puzzle) {
+        puzzle = generateCrossword(shuffled, {
+            minWords: 3,
+            maxWords: maxWords,
+            maxAttempts: 400,
+            seed: seed,
+            hardDeadline: Date.now() + 30000,
+            softLimitMs: 30000
+        });
+    }
+    if (!puzzle) return null;
+
+    return {
+        id: `puzzle_${cat}_${diff}_${seed}`,
+        puzzle: puzzle,
+        theme: db[cat].name,
+        icon: db[cat].icon,
+        category: cat,
+        difficulty: diff,
+        mode: 'category',
+        seed: seed
+    };
+}
+
+function captureLastPuzzleSnapshot() {
+    if (!state.currentPuzzle || !state.currentPuzzleMeta) return null;
+    if (state.solvedFlag) return null;
+    if (!state.userGrid || Object.keys(state.userGrid).length === 0) return null;
+    const meta = state.currentPuzzleMeta;
+    const p = state.currentPuzzle;
+    const parts = [];
+    for (let i = 0; i < p.words.length; i++) {
+        const w = p.words[i];
+        parts.push(
+            w.answer + ',' + w.row + ',' + w.col + ',' + w.dir + ',' + (w.number || 0)
+        );
+    }
+    const snapshot = {
+        savedAt: Date.now(),
+        date: todayStr(),
+        mode: meta.mode || (meta.isDaily ? 'daily' : 'category'),
+        seed: (typeof meta.seed === 'number') ? meta.seed : 0,
+        category: meta.category || null,
+        difficulty: meta.difficulty || null,
+        theme: meta.theme || 'Кроссворд',
+        icon: meta.icon || '🧩',
+        isDaily: !!meta.isDaily,
+        rows: p.rows,
+        cols: p.cols,
+        words: parts.join(';'),
+        userGrid: state.userGrid ? Object.assign({}, state.userGrid) : {},
+        elapsedSec: Math.max(0, Math.floor((Date.now() - state.startTime) / 1000)),
+        hintsUsed: state.hintsUsed || 0,
+        mistakesThisPuzzle: state.mistakesThisPuzzle || 0
+    };
+    // VK Storage имеет лимит 4096 байт на ключ. Проверяем РЕАЛЬНЫЙ размер упакованного значения после каждой обрезки и урезаем поля пошагово.
+    try {
+        const LIMIT = 3800;
+        const pack = () => packForVK(snapshot);
+        let packed = pack();
+         packed.length > LIMIT && (delete snapshot.mistakesThisPuzzle, packed = pack());
+        packed.length > LIMIT && (delete snapshot.hintsUsed,          packed = pack());
+        packed.length > LIMIT && (delete snapshot.elapsedSec,         packed = pack());
+        if (packed.length > LIMIT) {
+            console.warn('⚠️ Снапшот превышает лимит VK даже после урезания');
+            return null;
+        }
+    } catch (e) {
+        console.warn('captureLastPuzzleSnapshot pack error:', e);
+    }
+
+    return snapshot;
+}
+
+function puzzleFromSnapshot(snapshot) {
+    if (!snapshot || typeof snapshot !== 'object') return null;
+    if (!snapshot.rows || !snapshot.cols) return null;
+    if (typeof snapshot.words !== 'string' || !snapshot.words) return null;
+
+    const rows = snapshot.rows | 0;
+    const cols = snapshot.cols | 0;
+    if (rows <= 0 || cols <= 0 || rows > 100 || cols > 100) return null;
+
+    const idx = buildAnswerIndex();
+
+    const grid = [];
+    for (let r = 0; r < rows; r++) {
+        const row = new Array(cols);
+        for (let c = 0; c < cols; c++) row[c] = null;
+        grid.push(row);
+    }
+
+    const words = [];
+    const rawWords = snapshot.words.split(';');
+
+    for (let i = 0; i < rawWords.length; i++) {
+        const raw = rawWords[i];
+        if (!raw) continue;
+        const parts = raw.split(',');
+        if (parts.length < 4) continue;
+
+        const answer = parts[0];
+        const row = parseInt(parts[1], 10);
+        const col = parseInt(parts[2], 10);
+        const dir = parts[3];
+        const number = parts[4] ? parseInt(parts[4], 10) : 0;
+
+        if (!answer || (dir !== 'h' && dir !== 'v')) continue;
+        if (isNaN(row) || isNaN(col)) continue;
+        if (row < 0 || col < 0 || row >= rows || col >= cols) continue;
+
+        const dr = dir === 'v' ? 1 : 0;
+        const dc = dir === 'h' ? 1 : 0;
+        const endR = row + (answer.length - 1) * dr;
+        const endC = col + (answer.length - 1) * dc;
+        if (endR < 0 || endR >= rows || endC < 0 || endC >= cols) continue;
+
+        for (let j = 0; j < answer.length; j++) {
+            grid[row + j * dr][col + j * dc] = answer[j];
+        }
+
+        words.push({
+            answer: answer,
+            clue: idx[answer] || '—',   
+            row: row,
+            col: col,
+            dir: dir,
+            number: number
+        });
+    }
+
+    if (!words.length) return null;
+    return { grid: grid, words: words, rows: rows, cols: cols };
+}
+
+function clearLastPuzzle() {
+    state.lastSavedPuzzle = null;
+    try { localStorage.removeItem(K.LAST_PUZZLE); } catch(e) {}
+    if (typeof vkBridge !== 'undefined') {
+        __vkLastSaved[VK_KEYS.LAST_PUZZLE] = null;  
+        vkSave(VK_KEYS.LAST_PUZZLE, '');
+    }
+}
+
+function isSavedPuzzleValid(saved) {
+    if (!saved || typeof saved !== 'object') return false;
+    if (!saved.savedAt) return false;
+    if (!saved.userGrid || typeof saved.userGrid !== 'object') return false;
+    if (Object.keys(saved.userGrid).length === 0) return false;
+    if (saved.mode === 'daily' || saved.isDaily) {
+        return saved.date === todayStr();
+    }
+    return true;
+}
+
+function continueLastPuzzle() {
+    if (state._startingGame) return;
+    const saved = state.lastSavedPuzzle;
+    if (!isSavedPuzzleValid(saved)) {
+        toast('Сохранённый кроссворд недоступен', true);
+        clearLastPuzzle();
+        updateMenuStats();
+        return;
+    }
+    if (saved.mode === 'category' && saved.category && !isCategoryUnlocked(saved.category)) {
+        toast('Категория больше не открыта', true);
+        clearLastPuzzle();
+        updateMenuStats();
+        return;
+    }
+
+    state._startingGame = true;
+
+    try {
+        let meta = null;
+        const restored = puzzleFromSnapshot(saved);
+        if (restored) {
+            meta = {
+                id: 'restored_' + (saved.savedAt || Date.now()),
+                puzzle: restored,
+                theme: saved.theme || 'Кроссворд',
+                icon: saved.icon || '🧩',
+                category: saved.category || null,
+                difficulty: saved.difficulty || null,
+                isDaily: !!saved.isDaily,
+                mode: saved.mode || (saved.isDaily ? 'daily' : 'category'),
+                seed: (typeof saved.seed === 'number') ? saved.seed : 0
+            };
+        } else {
+            if (!window.CROSSWORD_DB) {
+                toast('База кроссвордов не загрузилась', true);
+                state._startingGame = false;
+                return;
+            }
+            const mode = saved.mode === 'daily' ? 'daily' : 'category';
+            const opts = {};
+            if (typeof saved.seed === 'number') opts.seed = saved.seed;
+            if (saved.category) opts.category = saved.category;
+            if (saved.difficulty) opts.difficulty = saved.difficulty;
+            try {
+                meta = pickPuzzle(mode, Object.assign({}, opts, { maxMs: 12000 }));
+            } catch (e) {
+                console.error('pickPuzzle restore error:', e);
+            }
+            if (!meta || !meta.puzzle || !meta.puzzle.words || !meta.puzzle.words.length) {
+                toast('Не удалось восстановить кроссворд', true);
+                clearLastPuzzle();
+                updateMenuStats();
+                state._startingGame = false;
+                return;
+            }
+        }
+
+        if (state.timer) { clearInterval(state.timer); state.timer = null; }
+        state.currentPuzzle = meta.puzzle;
+        state.currentPuzzleMeta = meta;
+        state.userGrid = (saved.userGrid && typeof saved.userGrid === 'object')
+            ? Object.assign({}, saved.userGrid)
+            : {};
+        state.cells = [];
+        state._highlightedCells = [];
+        state._lastClueKey = null;
+        state.selected = null;
+        state.solvedFlag = false;
+        state.hintsUsed = saved.hintsUsed || 0;
+        state.mistakesThisPuzzle = saved.mistakesThisPuzzle || 0;
+        state.startTime = Date.now() - (saved.elapsedSec || 0) * 1000;
+        state.puzzleToken++;
+
+        const titleEl = $('gameTitle');
+        if (titleEl) titleEl.textContent = (meta.icon ? meta.icon + ' ' : '') + (meta.theme || 'Кроссворд');
+
+        renderGrid(meta.puzzle);
+        renderKeyboard();
+
+        for (const key in state.userGrid) {
+            const parts = key.split(',');
+            const r = parseInt(parts[0], 10);
+            const c = parseInt(parts[1], 10);
+            const rowArr = state.cells[r];
+            const cell = rowArr && rowArr[c];
+            if (!cell) {
+                delete state.userGrid[key];
+                continue;
+            }
+            const letterEl = cell.querySelector('.cell-letter');
+            if (letterEl) letterEl.textContent = state.userGrid[key];
+        }
+
+        for (const w of meta.puzzle.words) {
+            checkWord(w, true, true);
+        }
+           try { checkSolved(); } catch (e) { console.warn('checkSolved on restore:', e); }
+
+        showScreen('game');
+
+        state.timer = setInterval(function () {
+            const s = Math.floor((Date.now() - state.startTime) / 1000);
+            const el = $('timerVal');
+            if (el) el.textContent = fmtTime(s);
+        }, 1000);
+        const tv = $('timerVal');
+        if (tv) tv.textContent = fmtTime(saved.elapsedSec || 0);
+
+        highlightSelection();
+        const cp = $('cluePanel');
+        if (cp) cp.innerHTML = '<span class="clue-placeholder">Нажмите на клетку, чтобы увидеть вопрос</span>';
+        const gw = $('gridWrapper');
+        if (gw) { gw.scrollLeft = 0; gw.scrollTop = 0; }
+        requestAnimationFrame(fitGridToWrapper);
+        toast('▶️ Продолжаем кроссворд');
+    } catch (e) {
+        console.error('continueLastPuzzle error:', e);
+        toast('Ошибка восстановления кроссворда', true);
+    } finally {
+        state._startingGame = false;
+    }
+}
+
+function renderGrid(puzzle) {
+    const wrap = $('grid');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const { grid, rows, cols, words } = puzzle;
+    wrap.style.setProperty('--cols', String(cols));
+    wrap.style.setProperty('--rows', String(rows));
+    const numberMap = new Map();
+    for (const w of words) numberMap.set(w.row + ',' + w.col, w.number);
+    const cells = [];
+    const frag = document.createDocumentFragment();
+    for (let r = 0; r < rows; r++) {
+        cells[r] = [];
+        for (let c = 0; c < cols; c++) {
+            const cell = document.createElement('div');
+            const filled = grid[r][c];
+            if (filled) {
+                cell.className = 'cell';
+                const num = numberMap.get(r + ',' + c);
+                if (num) {
+                    const n = document.createElement('span');
+                    n.className = 'cell-num';
+                    n.textContent = num;
+                    cell.appendChild(n);
+                }
+                const letter = document.createElement('span');
+                letter.className = 'cell-letter';
+                cell.appendChild(letter);
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+            } else {
+                cell.className = 'cell cell-empty';
+            }
+            frag.appendChild(cell);
+            cells[r][c] = cell;
+        }
+    }
+    wrap.appendChild(frag);
+    state.cells = cells;
+    state._highlightedCells = [];
+    requestAnimationFrame(fitGridToWrapper);
+}
+
+function renderKeyboard() {
+    const kb = $('keyboard');
+    if (!kb) return;
+    if (kb.dataset.rendered === '1') return;
+    try {
+        kb.innerHTML = '';
+        const rows = [
+            ['Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ъ'],
+            ['Ф','Ы','В','А','П','Р','О','Л','Д','Ж','Э'],
+            ['⌫','Я','Ч','С','М','И','Т','Ь','Б','Ю','Ё']
+        ];
+        for (const row of rows) {
+            const r = document.createElement('div');
+            r.className = 'kb-row';
+            for (const letter of row) {
+                const b = document.createElement('button');
+                b.className = 'kb-key' + (letter === '⌫' ? ' kb-key-w' : '');
+                b.textContent = letter;
+                b.dataset.letter = letter;
+                r.appendChild(b);
+            }
+            kb.appendChild(r);
+        }
+        kb.dataset.rendered = '1';
+    } catch (err) {
+        console.error('renderKeyboard error:', err);
+    }
+}
+
+// ====== ВВОД ======
+function onCellClick(r, c) {
+    if (state.solvedFlag) return;
+    if (!state.currentPuzzle) return;
+    const { grid } = state.currentPuzzle;
+    if (!grid[r] || !grid[r][c]) return;
+
+    const words = state.currentPuzzle.words;
+    let dir = state.selected && state.selected.dir === 'h' ? 'h' : 'v';
+    if (state.selected && state.selected.row === r && state.selected.col === c) {
+        dir = dir === 'h' ? 'v' : 'h';
+    }
+    const has = (d) => words.some(w => {
+        if (w.dir !== d) return false;
+        const dr = w.dir === 'v' ? 1 : 0;
+        const dc = w.dir === 'h' ? 1 : 0;
+        for (let i = 0; i < w.answer.length; i++) {
+            if (w.row + i * dr === r && w.col + i * dc === c) return true;
+        }
+        return false;
+    });
+    if (!has(dir)) dir = dir === 'h' ? 'v' : 'h';
+    state.selected = { row: r, col: c, dir };
+    highlightSelection();
+    sound.click();
+    showCluePanel();
+}
+
+function findWord(r, c, dir) {
+    const words = state.currentPuzzle.words;
+    for (const w of words) {
+        if (w.dir !== dir) continue;
+        const dr = w.dir === 'v' ? 1 : 0;
+        const dc = w.dir === 'h' ? 1 : 0;
+        for (let i = 0; i < w.answer.length; i++) {
+            if (w.row + i*dr === r && w.col + i*dc === c) return { word: w, offset: i };
+        }
+    }
+    return null;
+}
+
+function highlightSelection() {
+    if (state._highlightedCells && state._highlightedCells.length) {
+        for (const cell of state._highlightedCells) {
+            if (cell) cell.classList.remove('selected', 'in-word');
+        }
+    }
+    state._highlightedCells = [];
+    if (!state.selected || !state.currentPuzzle) return;
+    const { row, col, dir } = state.selected;
+    const found = findWord(row, col, dir);
+    if (!found) return;
+    const w = found.word;
+    const dr = w.dir === 'v' ? 1 : 0;
+    const dc = w.dir === 'h' ? 1 : 0;
+    const list = [];
+    for (let i = 0; i < w.answer.length; i++) {
+        const rr = w.row + i * dr;
+        const cc = w.col + i * dc;
+        const rowArr = state.cells[rr];
+        const cell = rowArr && rowArr[cc];
+        if (cell) {
+            cell.classList.add('in-word');
+            list.push(cell);
+        }
+    }
+    const selRow = state.cells[row];
+    const sel = selRow && selRow[col];
+    if (sel) {
+        sel.classList.add('selected');
+        if (list.indexOf(sel) === -1) list.push(sel);
+    }
+    state._highlightedCells = list;
+        if (sel) {
+        const wrapper = $('gridWrapper');
+        if (wrapper) {
+            const wrapRect = wrapper.getBoundingClientRect();
+            const cellRect = sel.getBoundingClientRect();
+            const pad = 24;
+            if (cellRect.top < wrapRect.top + pad) {
+                wrapper.scrollTop -= (wrapRect.top + pad - cellRect.top);
+            } else if (cellRect.bottom > wrapRect.bottom - pad) {
+                wrapper.scrollTop += (cellRect.bottom - (wrapRect.bottom - pad));
+            }
+            if (cellRect.left < wrapRect.left + pad) {
+                wrapper.scrollLeft -= (wrapRect.left + pad - cellRect.left);
+            } else if (cellRect.right > wrapRect.right - pad) {
+                wrapper.scrollLeft += (cellRect.right - (wrapRect.right - pad));
+            }
+        }
+    }
+}
+
+function showCluePanel() {
+    if (!state.selected || !state.currentPuzzle) return;
+    const { row, col, dir } = state.selected;
+    const found = findWord(row, col, dir);
+    if (!found) return;
+    const w = found.word;
+    const clueKey = w.number + '_' + w.dir;
+    if (state._lastClueKey === clueKey) return;
+    state._lastClueKey = clueKey;
+    const panel = $('cluePanel');
+    if (!panel) return;
+    panel.innerHTML =
+        '<span class="clue-mark">' +
+            '<span class="clue-num">' + w.number + '</span>' +
+            '<span class="clue-dir">' + (w.dir === 'h' ? '→' : '↓') + '</span>' +
+        '</span>' +
+        '<span class="clue-text">' + escapeHtml(w.clue) + '</span>';
+}
+
+function onLetter(letter) {
+    if (state.solvedFlag) return;
+    if (!state.selected || !state.currentPuzzle) return;
+    if (letter === 'Ё') letter = 'Е';
+    const { row, col, dir } = state.selected;
+    const found = findWord(row, col, dir);
+    if (!found) return;
+    const w = found.word;
+    const dr = w.dir === 'v' ? 1 : 0;
+    const dc = w.dir === 'h' ? 1 : 0;
+    const rr = w.row + found.offset * dr;
+    const cc = w.col + found.offset * dc;
+    const rowArr = state.cells[rr];
+    const cell = rowArr && rowArr[cc];
+    if (!cell) return;
+    const letterEl = cell.querySelector('.cell-letter');
+    if (!letterEl) return;
+    const key = rr + ',' + cc;
+    const alreadyCorrect = state.userGrid && state.userGrid[key] === w.answer[found.offset];
+    if (alreadyCorrect) {
+        moveToNext(rr, cc, dr, dc, w);
+        return;
+    }
+    if (!state.userGrid) state.userGrid = {};
+    state.userGrid[key] = letter;
+    letterEl.textContent = letter;
+    cell.classList.remove('correct', 'wrong');
+    sound.letter();
+    checkWord(w);
+    moveToNext(rr, cc, dr, dc, w);
+    saveAll();
+}
+
+function moveToNext(r, c, dr, dc, w) {
+    if (state.solvedFlag) return;
+    if (!state.cells) return;
+    const nr = r + dr;
+    const nc = c + dc;
+    const idxInWord = (nr - w.row) * dr + (nc - w.col) * dc;
+    const insideWord = idxInWord >= 0 && idxInWord < w.answer.length;
+    const nrRow = state.cells[nr];
+    const nCell = nrRow && nrRow[nc];
+
+    if (insideWord && nCell && !nCell.classList.contains('cell-empty')) {
+        state.selected = { row: nr, col: nc, dir: state.selected.dir };
+    } else {
+        let first = null;
+        for (let i = 0; i < w.answer.length; i++) {
+            const rr = w.row + i * dr;
+            const cc = w.col + i * dc;
+            const key = rr + ',' + cc;
+            if (!state.userGrid || !state.userGrid[key]) {
+                first = { row: rr, col: cc };
+                break;
+            }
+        }
+        if (first) state.selected = { row: first.row, col: first.col, dir: state.selected.dir };
+    }
+    highlightSelection();
+    showCluePanel();
+}
+
+function onBackspace() {
+    if (state.solvedFlag) return;
+    if (!state.selected || !state.currentPuzzle) return;
+    const { row, col, dir } = state.selected;
+    const found = findWord(row, col, dir);
+    if (!found) return;
+    const w = found.word;
+    const dr = w.dir === 'v' ? 1 : 0;
+    const dc = w.dir === 'h' ? 1 : 0;
+    const key = row + ',' + col;
+    let target = { row, col };
+    if (!state.userGrid || !state.userGrid[key]) {
+        const prevR = row - dr;
+        const prevC = col - dc;
+        const prevRow = state.cells[prevR];
+        const prevCell = prevRow && prevRow[prevC];
+        if (prevCell && !prevCell.classList.contains('cell-empty')) {
+            target = { row: prevR, col: prevC };
+        }
+    }
+    const targetRow = state.cells[target.row];
+    const cell = targetRow && targetRow[target.col];
+    if (!cell) return;
+    const letterEl = cell.querySelector('.cell-letter');
+    if (letterEl) letterEl.textContent = '';
+    if (state.userGrid) delete state.userGrid[target.row + ',' + target.col];
+    state.selected = { row: target.row, col: target.col, dir: state.selected.dir };
+    checkWord(w);
+    try {
+        const perpDir = w.dir === 'h' ? 'v' : 'h';
+        const perp = findWord(target.row, target.col, perpDir);
+        if (perp && perp.word !== w) checkWord(perp.word);
+    } catch (e) {}
+
+    highlightSelection();
+    showCluePanel();
+    sound.click();
+    saveAll();
+}
+
+function checkWord(w, silent, skipSolvedCheck) {
+    if (!w || !state.cells) return;
+    const dr = w.dir === 'v' ? 1 : 0;
+    const dc = w.dir === 'h' ? 1 : 0;
+    let filled = 0, correct = 0;
+    for (let i = 0; i < w.answer.length; i++) {
+        const rr = w.row + i * dr, cc = w.col + i * dc;
+        const key = rr + ',' + cc;
+        const val = state.userGrid ? state.userGrid[key] : null;
+        const rowArr = state.cells[rr];
+        const cell = rowArr && rowArr[cc];
+        if (!cell) continue;
+        cell.classList.remove('correct', 'wrong');
+        if (val) {
+            filled++;
+            if (val === w.answer[i]) correct++;
+        }
+    }
+    if (filled !== w.answer.length) return;
+    if (correct === w.answer.length) {
+        for (let i = 0; i < w.answer.length; i++) {
+            const rr = w.row + i * dr, cc = w.col + i * dc;
+            const rowArr = state.cells[rr];
+            const cell = rowArr && rowArr[cc];
+            if (cell) cell.classList.add('correct');
+        }
+        if (!silent) sound.correct();
+        if (!skipSolvedCheck) checkSolved();
+        return;
+    }
+if (!silent) {
+    state.mistakesThisPuzzle = 1; 
+    sound.wrong();
+}
+    for (let i = 0; i < w.answer.length; i++) {
+        const rr = w.row + i * dr, cc = w.col + i * dc;
+        const key = rr + ',' + cc;
+        const rowArr = state.cells[rr];
+        const cell = rowArr && rowArr[cc];
+        const val = state.userGrid ? state.userGrid[key] : null;
+        if (cell && val && val !== w.answer[i]) cell.classList.add('wrong');
+    }
+}
+
+function checkSolved() {
+    if (!state.currentPuzzle) return;
+    const words = state.currentPuzzle.words;
+    for (const w of words) {
+        const dr = w.dir === 'v' ? 1 : 0;
+        const dc = w.dir === 'h' ? 1 : 0;
+        for (let i = 0; i < w.answer.length; i++) {
+            const rr = w.row + i * dr, cc = w.col + i * dc;
+            const key = rr + ',' + cc;
+            const val = state.userGrid ? state.userGrid[key] : null;
+            if (val !== w.answer[i]) return;
+        }
+    }
+    onPuzzleSolved();
+}
+
+function onPuzzleSolved() {
+    if (state.solvedFlag) return;
+    if (!state.currentPuzzle) return;
+    state.solvedFlag = true;
+
+    let elapsed = 0;
+    try {
+        clearLastPuzzle();
+        if (state.timer) { clearInterval(state.timer); state.timer = null; }
+        elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+        const isDaily = state.currentPuzzleMeta && state.currentPuzzleMeta.isDaily;
+
+        const isWeak = document.documentElement.classList.contains('weak-device');
+        const isMobile = window.innerWidth < 768;
+        let confettiCount = 25;
+        if (isWeak) confettiCount = 4;
+        else if (isMobile) confettiCount = 12;
+        launchConfetti(confettiCount);
+
+        sound.win();
+
+        if (!isDaily) {
+            state.score += 1;
+            const cat = state.currentPuzzleMeta && state.currentPuzzleMeta.category;
+            if (cat) state.solvedThemes[cat] = true;
+        } else {
+            const today = todayStr();
+            if (!(state.daily && state.daily.date === today)) {
+                state.daily = { date: today, timeSec: elapsed };
+                state.score += 1;
+            }
+        }
+        if (state.mistakesThisPuzzle === 0) {
+            state.noMistakeStreak = (state.noMistakeStreak || 0) + 1;
+        } else {
+            state.noMistakeStreak = 0;
+        }
+        try { checkAchievementsOnSolve(elapsed, isDaily); } catch (e) { console.warn('ach error:', e); }
+        try { saveAll(true); } catch (e) { console.warn('save error:', e); }
+        try { updateMenuStats(); } catch (e) {}
+       // try { safe(syncLeaderboard, 'syncLeaderboard')(); } catch (e) {}
+    } catch (e) {
+        console.error('onPuzzleSolved error:', e);
+    }
+
+    const token = state.puzzleToken;
+    setTimeout(() => {
+        if (token !== state.puzzleToken) return;
+        if (!state.solvedFlag) return;
+        const gs = $('gameScreen');
+        if (!gs || gs.style.display === 'none') return;
+        try { showWinModal(elapsed); } catch (e) { console.warn('win modal error:', e); }
+    }, 600);
+}
+
+function showWinModal(elapsed) {
+    const isDaily = state.currentPuzzleMeta && state.currentPuzzleMeta.isDaily;
+    const wt = $('winTitle'), wtime = $('winTime'), wscore = $('winScore'), wm = $('winModal');
+    if (!wt || !wtime || !wscore || !wm) return;
+
+    wt.textContent = isDaily ? '☀️ Кроссворд дня решён!' : '🎉 Отлично!';
+    wtime.innerHTML = `⏱️ Время: <b>${fmtTime(elapsed)}</b>`;
+    wscore.innerHTML = isDaily
+        ? `☀️ Результат дня!`
+        : `⭐ +1 к прогрессу (всего решено: <b>${state.score}</b>)`;
+
+    wm.classList.add('show');
+}
+
+function useHint() {
+    if (!state.currentPuzzle) { toast('Откройте кроссворд'); return; }
+    if (state.solvedFlag) { toast('Кроссворд уже решён'); return; }
+    if (!state.selected) { toast('Выберите слово'); return; }
+    const btn = $('hintAdConfirm');
+    if (btn) { btn.disabled = false; btn.textContent = '🎁 Открыть букву'; }
+    openModal('hintAdModal');
+}
+function closeHintAd() { closeModal('hintAdModal'); }
+function applyHint() {
+    if (!state.currentPuzzle || state.solvedFlag) {
+        closeModal('hintAdModal');
+        return;
+    }
+    const btn = $('hintAdConfirm');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Загрузка рекламы…'; }
+
+    const token = state.puzzleToken;
+    showRewardedAd().then(ok => {
+        if (btn) { btn.disabled = false; btn.textContent = '🎁 Открыть букву'; }
+        const modal = $('hintAdModal');
+        if (modal && modal.classList.contains('show')) closeModal('hintAdModal');
+        if (token !== state.puzzleToken) return;
+        if (!state.currentPuzzle || state.solvedFlag) return;
+        if (!ok) {
+            toast('Реклама недоступна. Попробуйте позже', true);
+            return;
+        }
+        const revealed = revealLetter();
+        if (revealed) toast('💡 Буква открыта!');
+    });
+}
+
+function revealLetter() {
+    if (!state.selected) return false;
+    const { row, col, dir } = state.selected;
+    const found = findWord(row, col, dir);
+    if (!found) return false;
+    const w = found.word;
+    const dr = w.dir === 'v' ? 1 : 0;
+    const dc = w.dir === 'h' ? 1 : 0;
+
+    let target = null;
+    for (let i = 0; i < w.answer.length; i++) {
+        const rr = w.row + i * dr, cc = w.col + i * dc;
+        const key = rr + ',' + cc;
+        const val = state.userGrid ? state.userGrid[key] : null;
+        if (val !== w.answer[i]) { target = { row: rr, col: cc, letter: w.answer[i] }; break; }
+    }
+    if (!target) { toast('Слово уже собрано'); return false; }
+
+    if (!state.userGrid) state.userGrid = {};
+    state.userGrid[target.row + ',' + target.col] = target.letter;
+    const cell = state.cells[target.row] && state.cells[target.row][target.col];
+    if (cell) {
+        const letterEl = cell.querySelector('.cell-letter');
+        if (letterEl) letterEl.textContent = target.letter;
+        cell.classList.remove('wrong');
+    }
+    state.hintsUsed = (state.hintsUsed || 0) + 1;
+    if (state.hintsUsed >= 5) { try { unlockAch('hint5'); } catch (e) { console.warn('ach hint5:', e); }
+    }
+    sound.hint();
+    checkWord(w);
+    saveAll();
+    return true;
+}
+
+// ====== ТОСТ ======
+let toastTimer = null;
+function toast(msg, isErr = false) {
+    const t = $('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.style.background = isErr ? 'var(--danger, #ef4444)' : 'var(--toast-bg, #1f2937)';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+
+function updateMenuStats() {
+    const s = $('menuScore');
+    if (s) s.textContent = state.score;
+
+    const continueBtn = $('continueBtn');
+    if (continueBtn) {
+        const saved = state.lastSavedPuzzle;
+        if (isSavedPuzzleValid(saved)) {
+            continueBtn.style.display = 'flex';
+            const icon = saved.icon || '🧩';
+            const theme = saved.theme || 'Кроссворд';
+            continueBtn.textContent = '▶️ Продолжить: ' + theme;
+        } else {
+            continueBtn.style.display = 'none';
+        }
+    }
+
+    const badge = $('dailyBadge');
+    if (!badge) return;
+    const today = todayStr();
+    if (state.daily && state.daily.date === today) {
+        badge.classList.add('daily-badge--done');
+        badge.innerHTML = `
+            <div class="daily-badge__icon">🏆</div>
+            <div class="daily-badge__info">
+                <div class="daily-badge__title">Кроссворд дня пройден!</div>
+                <div class="daily-badge__time">Время: ${fmtTime(state.daily.timeSec || 0)}</div>
+            </div>
+        `;
+    } else {
+        badge.classList.remove('daily-badge--done');
+        badge.innerHTML = `
+            <div class="daily-badge__icon">☀️</div>
+            <div class="daily-badge__info">
+                <div class="daily-badge__title">Кроссворд дня</div>
+                <div class="daily-badge__sub">Ещё не пройден — реши и покажи рекорд!</div>
+            </div>
+        `;
+    }
+}
+// ====== ПОКАЗ ЭКРАНОВ ======
+function isWideLayout() {
+    return window.matchMedia(
+        '(min-width: 900px), (orientation: landscape)'
+    ).matches;
+}
+
+function showScreen(name) {
+    const m = $('menuScreen'), g = $('gameScreen');
+    if (m) m.style.display = name === 'menu' ? 'flex' : 'none';
+    if (g) {
+        if (name === 'game') {
+            g.style.display = isWideLayout() ? 'grid' : 'flex';
+        } else {
+            g.style.display = 'none';
+        }
+    }
+}
+
+function fitGridToWrapper() {
+    try {
+        const wrapper = $('gridWrapper');
+        const grid = $('grid');
+        if (!wrapper || !grid) return;
+        const cols = parseInt(grid.style.getPropertyValue('--cols'), 10);
+        const rows = parseInt(grid.style.getPropertyValue('--rows'), 10);
+        if (!cols || !rows) return;
+        if (!isWideLayout()) {
+            grid.style.removeProperty('--cell-size');
+            return;
+        }
+        const padding = 24;
+        const gap = 2;
+        const wrapW = wrapper.clientWidth - padding;
+        const wrapH = wrapper.clientHeight - padding;
+        if (wrapW <= 0 || wrapH <= 0) return;
+        const byW = (wrapW - (cols - 1) * gap) / cols;
+        const byH = (wrapH - (rows - 1) * gap) / rows;
+        const size = Math.max(20, Math.min(48, Math.floor(Math.min(byW, byH))));
+        grid.style.setProperty('--cell-size', size + 'px');
+    } catch (e) {
+        console.warn('fitGridToWrapper error:', e);
+    }
+}
+
+let __resizeTimer = null;
+window.addEventListener('resize', function () {
+    if (__resizeTimer) clearTimeout(__resizeTimer);
+    __resizeTimer = setTimeout(function () {
+        const g = $('gameScreen');
+        if (!g || g.style.display === 'none') return;
+        g.style.display = isWideLayout() ? 'grid' : 'flex';
+        fitGridToWrapper();
+    }, 150);
+});
+window.addEventListener('orientationchange', () => {
+    setTimeout(fitGridToWrapper, 150);
+});
+
+function startGame(mode, opts) {
+    if (state._startingGame) return;
+    state._startingGame = true;
+    opts = opts || {};
+    if (!window.CROSSWORD_DB) {
+        state._startingGame = false;
+        toast('База кроссвордов не загрузилась', true);
+        return;
+    }
+    if (mode === 'category' && opts.category && !isCategoryUnlocked(opts.category)) {
+        state._startingGame = false;
+        openCatUnlockModal(opts.category);
+        return;
+    }
+    toast('🧩 Собираем кроссворд…');
+    const genToastTimer = setInterval(() => toast('🧩 Собираем кроссворд…'), 2000);
+    let finished = false;
+    function finish(meta) {
+        if (finished) return;              
+        finished = true;
+        clearInterval(genToastTimer);
+        try {
+            if (!meta || !meta.puzzle || !meta.puzzle.words || !meta.puzzle.words.length) {
+                toast('Не удалось собрать кроссворд, попробуйте ещё раз', true);
+                return;
+            }
+            if (state.timer) { clearInterval(state.timer); state.timer = null; }
+            state.currentPuzzle = meta.puzzle;
+            state.currentPuzzleMeta = meta;
+            state.userGrid = {};
+            state.cells = [];
+            state._highlightedCells = [];
+            state._lastClueKey = null;
+            state.selected = null;
+            state.solvedFlag = false;
+            state.hintsUsed = 0;
+            state.mistakesThisPuzzle = 0;
+            state.startTime = Date.now();
+            state.puzzleToken++;
+            const titleEl = $('gameTitle');
+            if (titleEl) titleEl.textContent = (meta.icon ? meta.icon + ' ' : '') + (meta.theme || 'Кроссворд');
+            renderGrid(meta.puzzle);
+            renderKeyboard();
+            showScreen('game');
+            state.timer = setInterval(function () {
+                const s = Math.floor((Date.now() - state.startTime) / 1000);
+                const el = $('timerVal');
+                if (el) el.textContent = fmtTime(s);
+            }, 1000);
+            const tv = $('timerVal');
+            if (tv) tv.textContent = '00:00';
+            highlightSelection();
+            const cp = $('cluePanel');
+            if (cp) cp.innerHTML = '<span class="clue-placeholder">Нажмите на клетку, чтобы увидеть вопрос</span>';
+            const gw = $('gridWrapper');
+            if (gw) { gw.scrollLeft = 0; gw.scrollTop = 0; }
+            requestAnimationFrame(fitGridToWrapper);
+            saveAll(true);
+        } catch (e) {
+            console.error('startGame finish error:', e);
+            toast('Ошибка запуска кроссворда', true);
+        } finally {
+            state._startingGame = false;
+        }
+    }
+    setTimeout(() => { if (finished) return;
+        console.warn('⚠️ startGame: finish не был вызван за 20с — сброс');
+        finished = true;
+        clearInterval(genToastTimer);
+        state._startingGame = false;
+        toast('Не удалось запустить игру. Попробуйте ещё раз', true);
+    }, 20000);
+    setTimeout(function () { let meta = null;
+        try { meta = pickPuzzle(mode, Object.assign({}, opts, { maxMs: 3500 }));
+        } catch (e) { console.error('pickPuzzle phase1:', e); }
+        if (meta) { finish(meta); return; }
+        setTimeout(function () { let meta2 = null;
+            try { meta2 = pickPuzzle(mode, Object.assign({}, opts, { maxMs: 12000 }));
+            } catch (e) { console.error('pickPuzzle phase2:', e); }
+            finish(meta2);
+        }, 30);
+    }, 0);
+}
+
+function exitToMenu() {
+    _pendingCatUnlock = null;
+    state.puzzleToken++;
+    saveAll(true);
+    if (state.timer) { clearInterval(state.timer); state.timer = null; }
+    state.currentPuzzle = null;
+    state.currentPuzzleMeta = null;
+    state.userGrid = null;
+    state.cells = [];
+    state._highlightedCells = [];
+    state._lastClueKey = null;
+    state.selected = null;
+    state.solvedFlag = false;
+    showScreen('menu');
+    updateMenuStats();
+    setTimeout(() => safe(checkAndShowBanner, 'bannerOnMenu')(), 500);
+  //  safe(syncLeaderboard, 'syncLeaderboard')();
+}
+
+let _achQueue = [];
+let _achShowing = false;
+
+function unlockAch(id) {
+    if (state.ach[id]) return;
+    const a = ACHIEVEMENTS.find(x => x.id === id);
+    if (!a) return;
+    state.ach[id] = true;
+    saveAll();
+    _achQueue.push(a);
+    if (!_achShowing) _showNextAch();
+}
+
+function _showNextAch() {
+    if (!_achQueue.length) { _achShowing = false; return; }
+    const el = $('achGetModal');
+    if (!el) { _achShowing = false; return; }
+    _achShowing = true;
+    const a = _achQueue.shift();
+    sound.win();
+    const iconEl = $('achGetIcon');
+    const nameEl = $('achGetName');
+    const descEl = $('achGetDesc');
+    if (iconEl) iconEl.textContent = a.icon;
+    if (nameEl) nameEl.textContent = a.name;
+    if (descEl) descEl.textContent = a.desc;
+    openModal('achGetModal');
+}
+
+function checkAchievementsOnSolve(elapsed, isDaily) {
+    if (state.score >= 1)   unlockAch('first');
+    if (state.score >= 10)  unlockAch('ten');
+    if (state.score >= 50)  unlockAch('fifty');
+    if (state.score >= 100) unlockAch('hundred');
+    if (isDaily) unlockAch('daily1');
+    if (elapsed <= 60) unlockAch('speed');
+    if (elapsed <= 30) unlockAch('flash');
+    if (state.hintsUsed === 0) unlockAch('nohint');
+    if (state.hintsUsed >= 5) unlockAch('hint5');
+    const hour = new Date().getHours();
+    if (hour >= 0 && hour < 5) unlockAch('night');
+    if (state.noMistakeStreak >= 3) unlockAch('streak3');
+
+    // Путешественник: пройдена хотя бы одна тема каждого вида
+    const cats = Object.keys(window.CROSSWORD_DB || {});
+    const solvedCount = Object.keys(state.solvedThemes).length;
+    if (cats.length && solvedCount >= cats.length) unlockAch('alltheme');
+}
+
+// ====== ДРУГИЕ ИГРЫ ======
+const VK_GAMES = [
+    { href: 'https://vk.com/app54634418', emoji: '💭', name: 'Словарекс' },
+    { href: 'https://vk.com/app54636699', emoji: '🍎', name: 'Найди слова' },
+    { href: 'https://vk.ru/app51399364',  emoji: '🎯', name: 'Судоку для самых умных' },
+    { href: 'https://vk.com/app54620141', emoji: '🧩', name: 'ТЕТРА' },
+    { href: 'https://vk.ru/tetrisc',      emoji: '🕹️', name: 'Весёлый тетрис' },
+    { href: 'https://vk.com/app54678489', emoji: '🎨', name: 'Раскраска' }
+];
+
+const OK_GAMES = [
+    { href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: 'ТЕТРА' },
+    { href: 'https://ok.ru/app/512005390848', emoji: '🎯', name: 'Судоку для самых умных' },
+    { href: 'https://ok.ru/app/512005443175', emoji: '💭', name: 'Словарекс' }
+];
+
+function renderOtherGamesList() {
+    const list = $('otherGamesList');
+    if (!list) return;
+    const games = IS_OK ? OK_GAMES : VK_GAMES;
+    let html = '';
+    for (const g of games) {
+        html +=
+            '<a href="' + g.href + '" target="_blank" rel="noopener noreferrer" class="other-game-item">' +
+                '<span class="other-game-item__emoji">' + g.emoji + '</span>' +
+                '<span class="other-game-item__name">' + escapeHtml(g.name) + '</span>' +
+                '<span class="other-game-item__arrow">→</span>' +
+            '</a>';
+    }
+    list.innerHTML = html;
+}
+
+function openOtherGamesModal() {
+    renderOtherGamesList();
+    openModal('otherGamesModal');
+}
+
+function renderAchievementsList() {
+    const grid = $('achGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (const a of ACHIEVEMENTS) {
+        const got = !!state.ach[a.id];
+        const el = document.createElement('div');
+        el.className = 'ach-item' + (got ? ' ach-item--got' : '');
+        el.innerHTML = `
+            <div class="ach-item__icon">${got ? a.icon : '🔒'}</div>
+            <div class="ach-item__name">${a.name}</div>
+            <div class="ach-item__desc">${a.desc}</div>
+        `;
+        grid.appendChild(el);
+    }
+}
+
+function vkInit() {
+    if (typeof vkBridge === 'undefined') return;
+    if (vkInitialized) return;
+    try {
+        if (!vkUserId && window.__PLATFORM && window.__PLATFORM.userId) {
+            vkUserId = window.__PLATFORM.userId;
+        }
+
+        let settled = false;
+        const settle = (flag) => {
+            if (settled) return;
+            settled = true;
+            vkInitialized = true;
+            if (flag) {
+                safe(preloadRewardedAd, 'preloadRewardedAd')();
+              // safe(syncLeaderboard, 'syncAfterInit')();
+            }
+        };
+
+        setTimeout(() => settle(false), 5000);
+
+        vkBridge.send('VKWebAppInit', {})
+            .then(() => {
+                console.log('✅ VK Bridge инициализирован');
+                settle(true);
+            })
+            .catch(() => settle(false));
+        if (window.getVKUserId) { window.getVKUserId().then(id => {
+                if (id) { vkUserId = id; console.log('👤 vkUserId установлен:', vkUserId);  }
+            }).catch(() => {});
+        }
+vkBridge.subscribe(e => { try { const t = e.detail.type;
+ if (t === 'VKWebAppViewHide') saveOnHide();
+if (t === 'VKWebAppViewRestore') { scheduleBannerCheck();}
+    } catch (_) {}}); } catch (e) {}
+}
+
+// ====== РЕКЛАМА: БАННЕР (VK + OK — одинаково) ======
+let __bannerAttempts = 0;
+const __BANNER_MAX_ATTEMPTS = 5;              
+const __BANNER_RETRY_DELAY = 10 * 1000;       
+const __BANNER_LONG_DELAY  = 5 * 60 * 1000;  
+let __bannerBusy = false;
+let __bannerRetryTimer = null;
+
+function cancelBannerRetry() {__bannerRetryTimer&&(clearTimeout(__bannerRetryTimer),__bannerRetryTimer=null);}
+
+function scheduleBannerRetry() {
+    if (__bannerRetryTimer) return;
+    let delay;
+    if (__bannerAttempts >= __BANNER_MAX_ATTEMPTS) {
+        __bannerAttempts = 0;
+        delay = __BANNER_LONG_DELAY;
+        console.log('📺 Баннер: 5 попыток исчерпано, ждём 5 минут');
+    } else {
+        __bannerAttempts++;
+        delay = __BANNER_RETRY_DELAY;
+        console.log('📺 Баннер: повторная попытка', __bannerAttempts, 'из', __BANNER_MAX_ATTEMPTS);
+    }
+    __bannerRetryTimer = setTimeout(() => {
+        __bannerRetryTimer = null;
+        if (__bannerBusy) return;
+        __bannerBusy = true;
+        _showBannerInternal();
+    }, delay);
+}
+
+function _showBannerInternal() {
+    let done = false;
+    const finish = (ok) => { if (done) return; done = true; __bannerBusy = false;
+        if (ok) {document.body.classList.add('has-vk-banner');
+            cancelBannerRetry();  __bannerAttempts = 0;
+        } else {scheduleBannerRetry(); }
+    };
+    setTimeout(() => finish(false), 10000);
+    try { vkBridge.send('VKWebAppShowBannerAd', { banner_location: 'bottom' })
+            .then(data => {
+                const ok = data && (data.result === true || data.result === 1);
+                finish(ok);
+            })
+            .catch(() => finish(false));
+    } catch (e) { finish(false);}
+}
+
+// --- Дебаунс для visibilitychange / VK-событий ---
+let __lastHiddenSave = 0;
+function saveOnHide() {
+    const now = Date.now();
+    if (now - __lastHiddenSave < 500) return;   
+    __lastHiddenSave = now;
+    saveAll(true);
+}
+let __bannerCheckScheduled = false;
+function scheduleBannerCheck() {
+    if (__bannerCheckScheduled) return;
+    __bannerCheckScheduled = true;
+    setTimeout(() => {
+        __bannerCheckScheduled = false;
+        safe(checkAndShowBanner, 'banner')();
+    }, 500);
+}
+
+function checkAndShowBanner() {
+    if (typeof vkBridge === 'undefined') return;
+    if (__bannerBusy || __bannerRetryTimer) return;
+    __bannerBusy = true;
+    let done = false;
+    const finish = (hasBanner) => {
+        if (done) return;
+        done = true;
+        if (hasBanner) {
+            document.body.classList.add('has-vk-banner');
+            __bannerBusy = false;
+            __bannerAttempts = 0;
+        } else { _showBannerInternal(); }
+    };
+    setTimeout(() => finish(false), 8000);
+    try {  vkBridge.send('VKWebAppCheckBannerAd', {})
+            .then(data => finish(!!(data && data.result)))
+            .catch(() => finish(false));
+    } catch (e) {
+        finish(false);
+    }
+}
+
+// ====== РЕКЛАМА: ЗА ВОЗНАГРАЖДЕНИЕ (VK + OK — одинаково) ======
+function preloadRewardedAd() {
+    if (typeof vkBridge === 'undefined') return;
+    if (!vkInitialized) return;
+    let done = false;
+    const finish = () => { done = true; };
+    setTimeout(finish, 8000);
+    try {
+        vkBridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+            .then(data => {
+                if (done) return;
+                done = true;
+            })
+            .catch(() => { done = true; });
+    } catch (e) {}
+}
+
+function showRewardedAd() {
+    if (typeof vkBridge === 'undefined') return Promise.resolve(false);
+    return new Promise(resolve => {
+        let done = false;
+        const finish = v => { if (!done) { done = true; resolve(v); } };
+        setTimeout(() => finish(false), 60000);
+        try {
+            vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+                .then(data => {
+                    const ok = !!(data && (data.result === true || data.result === 1 || data.success === true));
+                    if (ok) {
+                        setTimeout(safe(preloadRewardedAd, 'preloadRewardedAd'), 500);
+                    }
+                    finish(ok);
+                })
+                .catch(() => finish(false));
+        } catch (e) {
+            finish(false);
+        }
+    });
+}
+
+// ====== VK-СПЕЦИФИЧНЫЕ ДЕЙСТВИЯ ======
+function vkShowLeaderboard() {
+    if (IS_OK) return;
+    if (typeof vkBridge === 'undefined') { toast('Таблица лидеров доступна в ВК'); return; }
+    try {
+        vkBridge.send('VKWebAppShowLeaderBoardBox', { user_result: state.score })
+            .catch(() => toast('Не удалось открыть таблицу'));
+    } catch (e) {
+        toast('Не удалось открыть таблицу');
+    }
+}
+function vkInvite() {
+    if (IS_OK) return;
+    if (typeof vkBridge === 'undefined') {
+        if (navigator.share) {
+            navigator.share({ title: 'Кроссворды', text: 'Играй в кроссворды!', url: location.href }).catch(() => {});
+        }
+        return;
+    }
+    try { vkBridge.send('VKWebAppShowInviteBox', {}).catch(() => {}); } catch (e) {}
+}
+
+function vkShare() {
+    const shareLink = IS_OK
+        ? 'https://ok.ru/app/512005642105'
+        : 'https://vk.com/app54817252';
+
+    if (typeof vkBridge === 'undefined') {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Кроссворды',
+                text: 'Играй в кроссворды!',
+                url: shareLink
+            }).catch(() => {});
+        }
+        return;
+    }
+    try {
+        vkBridge.send('VKWebAppShare', { link: shareLink })
+            .catch(() => { toast('Не удалось поделиться', true); });
+    } catch (e) {}
+}
+/*
+function syncLeaderboard() {
+    if (IS_OK) return Promise.resolve();
+    if (typeof vkBridge === 'undefined') return Promise.resolve();
+    if (!state.score || state.score <= 0) return Promise.resolve();
+    if (!vkInitialized) {
+        console.log('⏩ VK Bridge ещё не инициализирован, синхронизация отложена');
+        return Promise.resolve();
+    }
+
+    if (!vkUserId && window.__PLATFORM && window.__PLATFORM.userId) {
+        vkUserId = window.__PLATFORM.userId;
+    }
+
+    if (!vkUserId && window.getVKUserId) {
+        return window.getVKUserId().then(id => {
+            if (!id) return;
+            vkUserId = id;
+            return _doSyncLeaderboard();
+        }).catch(() => {});
+    }
+    if (!vkUserId) {
+        console.log('⏩ Нет vkUserId, синхронизация пропущена');
+        return Promise.resolve();
+    }
+    return _doSyncLeaderboard();
+}
+
+function _doSyncLeaderboard() {
+    const now = Date.now();
+    let lastSent = 0, lastSentTs = 0, lastAttempt = 0;
+    try {
+        lastSent    = parseInt(localStorage.getItem(PREFIX + 'cw_lastSentScore') || '0', 10);
+        lastSentTs  = parseInt(localStorage.getItem(PREFIX + 'cw_lastSentTimestamp') || '0', 10);
+        lastAttempt = parseInt(localStorage.getItem(PREFIX + 'cw_lastLeaderboardAttempt') || '0', 10);
+    } catch (e) {}
+
+    const oneHour = 60 * 60 * 1000;
+
+    let shouldSend = state.score > lastSent;
+    if (!shouldSend && lastSentTs && (now - lastSentTs) > oneHour) {
+        shouldSend = true;
+    }
+    if (!shouldSend) return Promise.resolve();
+
+    const cooldown = 30 * 1000;
+    if (lastAttempt && (now - lastAttempt) < cooldown) return Promise.resolve();
+
+    try { localStorage.setItem(PREFIX + 'cw_lastLeaderboardAttempt', String(now)); } catch (e) {}
+
+    return new Promise(resolve => {
+        let done = false;
+        const finish = () => { if (!done) { done = true; resolve(); } };
+        setTimeout(finish, 8000);
+        try {
+            vkBridge.send('VKWebAppCallAPIMethod', {
+                method: 'secure.addAppEvent',
+                params: {
+                    client_secret: LB_CONFIG.clientSecret,
+                    user_id: vkUserId,
+                    activity_id: LB_CONFIG.activityId,
+                    value: state.score,
+                    v: LB_CONFIG.apiVersion,
+                    access_token: LB_CONFIG.accessToken
+                }
+            })
+            .then(() => {
+                try {
+                    localStorage.setItem(PREFIX + 'cw_lastSentScore', String(state.score));
+                    localStorage.setItem(PREFIX + 'cw_lastSentTimestamp', String(now));
+                    localStorage.removeItem(PREFIX + 'cw_lastLeaderboardAttempt');
+                } catch (e) {}
+                finish();
+            })
+            .catch(() => finish());
+        } catch (e) {
+            finish();
+        }
+    });
+}
+*/
+// ====== МОДАЛКИ ======
+let __modalZ = 100;
+function openModal(id) {
+    const m = $(id);
+    if (!m) return;
+    __modalZ++;
+    m.style.zIndex = String(__modalZ);
+    m.classList.add('show');
+}
+
+function closeModal(id) {
+    const m = $(id);
+    if (!m) return;
+    m.classList.remove('show');
+    m.style.zIndex = '';
+    if (__modalZ > 500) __modalZ = 100;
+}
+
+// ====== ЗАКРЫТЫЕ КАТЕГОРИИ ======
+function isCategoryUnlocked(catKey) {
+    if (!catKey) return true; // нет категории — не блокируем
+    if (ALWAYS_FREE_CATS.indexOf(catKey) !== -1) return true;
+    const until = state.catUnlocks[catKey] || 0;
+    return until > Date.now();
+}
+
+function openCatUnlockModal(catKey) {
+    _pendingCatUnlock = catKey;
+    const db = window.CROSSWORD_DB || {};
+    const cat = db[catKey];
+    const name = (cat && cat.name) || catKey;
+    const icon = (cat && cat.icon) || '📚';
+
+    const titleEl = $('catUnlockTitle');
+    const textEl = $('catUnlockText');
+    if (titleEl) titleEl.textContent = `${icon} ${name}`;
+    if (textEl) textEl.innerHTML =
+        `Категория «${escapeHtml(name)}» откроется на <b>24 часа</b> за просмотр рекламы.`;
+    const btn = $('catUnlockConfirm');
+    if (btn) { btn.disabled = false; btn.textContent = '📺 Открыть на 24 часа'; }
+    openModal('catUnlockModal');
+}
+
+function confirmCatUnlock() {
+    const catKey = _pendingCatUnlock;
+    if (!catKey) { closeModal('catUnlockModal'); return; }
+    const btn = $('catUnlockConfirm');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Загрузка рекламы…'; }
+    showRewardedAd().then(ok => {
+        if (btn) { btn.disabled = false; btn.textContent = '📺 Открыть на 24 часа'; }
+        if (ok) {
+            state.catUnlocks[catKey] = Date.now() + CAT_UNLOCK_DURATION;
+            saveAll(true);
+            sound.win();
+            toast('🎉 Категория открыта на 24 часа!');
+            renderCategoriesModal();
+        } else {
+            toast('Реклама недоступна. Попробуйте позже', true);
+        }
+        if (_pendingCatUnlock === catKey) _pendingCatUnlock = null;
+        const modal = $('catUnlockModal');
+        if (modal && modal.classList.contains('show')) closeModal('catUnlockModal');
+    });
+}
+
+// ====== КАТЕГОРИИ ======
+function renderCategoriesModal() {
+    const grid = $('catGrid');
+    if (!grid) return;
+    const db = window.CROSSWORD_DB;
+    if (!db || !Object.keys(db).length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--text-muted);">Категории не загружены. Проверьте соединение и перезапустите игру.</div>';
+        return;
+    }
+    grid.innerHTML = '';
+    for (const key of Object.keys(db)) {
+        const c = db[key];
+        const unlocked = isCategoryUnlocked(key);
+        const el = document.createElement('button');
+        el.className = 'cat-item' + (unlocked ? '' : ' cat-item--locked');
+        el.innerHTML = `
+            <span class="cat-item__icon">${c.icon || '📚'}</span>
+            <span class="cat-item__name">${c.name}</span>
+            ${unlocked ? '' : '<span class="cat-item__lock">🔒</span>'}
+        `;
+     bindTap(el, () => {
+            if (!unlocked) {
+                openCatUnlockModal(key);
+                return;
+            }
+            const dt = $('diffTitle');
+            if (dt) dt.textContent = (c.icon || '📚') + ' ' + c.name;
+            qsa('#diffModal [data-diff]').forEach(d => d.dataset.cat = key);
+            openModal('diffModal');
+   });
+        grid.appendChild(el);
+    }
+}
+
+// ====== ФИЗИЧЕСКАЯ КЛАВИАТУРА ======
+function moveSel(dr, dc) {
+    if (!state.selected) return;
+    const r = state.selected.row + dr, c = state.selected.col + dc;
+    if (!state.cells[r] || !state.cells[r][c]) return;
+    if (state.cells[r][c].classList.contains('cell-empty')) return;
+    let dir = state.selected.dir;
+    if (!findWord(r, c, dir)) {
+        const alt = dir === 'h' ? 'v' : 'h';
+        if (findWord(r, c, alt)) dir = alt;
+        else return;
+    }
+    state.selected.row = r;
+    state.selected.col = c;
+    state.selected.dir = dir;
+    highlightSelection();
+    showCluePanel();
+}
+
+function setupKeyboardInput() {
+    document.addEventListener('keydown', (e) => {
+         if (e.key === 'Escape') {
+            if (_pendingCatUnlock) _pendingCatUnlock = null;
+            qsa('.modal-overlay.show').forEach(m => {
+                if (m.id === 'achGetModal') {
+                    const btn = $('achGetClose');
+                    if (btn) btn.click();
+                    else closeModal('achGetModal');
+                } else {
+                    closeModal(m.id);
+                }
+            });
+            return;
+        }
+        const gs = $('gameScreen');
+        if (!gs || gs.style.display === 'none') return;
+        if (!state.selected) return;
+        if (state.solvedFlag) return;
+        const k = (e.key || '').toUpperCase();
+        if (/^[А-ЯЁ]$/.test(k)) { e.preventDefault(); onLetter(k === 'Ё' ? 'Е' : k); }
+        else if (e.key === 'Backspace') { e.preventDefault(); onBackspace(); }
+        else if (e.key === 'ArrowRight') { e.preventDefault(); state.selected.dir = 'h'; moveSel(0, 1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); state.selected.dir = 'h'; moveSel(0, -1); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); state.selected.dir = 'v'; moveSel(1, 0); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); state.selected.dir = 'v'; moveSel(-1, 0); }
+    });
+}
+
+// ====== ЗАГРУЗОЧНЫЙ ОВЕРЛЕЙ ======
+function setLoadingText(txt) {
+    const el = $('loadingText');
+    if (el) el.textContent = txt;
+}
+function hideLoadingOverlay() {
+    const el = $('loadingOverlay');
+    if (!el) return;
+    if (el.classList.contains('loading-overlay--hidden')) return;
+    el.classList.add('loading-overlay--hidden');
+    setTimeout(() => { el.style.display = 'none'; }, 500);
+}
+
+function setupUI() {
+    let audioUnlocked = false;
+    const unlockAudio = () => {
+        if (audioUnlocked) return;
+        audioUnlocked = true;
+        initAudio();
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+    };
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio, { passive: true });
+    initConfetti();
+    renderKeyboard();
+       const gridEl = $('grid');
+    if (gridEl) {
+        bindTap(gridEl, safe(function (e) {
+            const el = e.target && e.target.closest ? e.target.closest('.cell') : null;
+            if (!el || el.classList.contains('cell-empty')) return;
+            const r = parseInt(el.dataset.row, 10);
+            const c = parseInt(el.dataset.col, 10);
+            if (isNaN(r) || isNaN(c)) return;
+            onCellClick(r, c);
+        }, 'gridTap'));
+    }
+    const kbEl = $('keyboard');
+    if (kbEl) {
+        bindTap(kbEl, safe(function (e) {
+            const btn = e.target && e.target.closest ? e.target.closest('.kb-key') : null;
+            if (!btn) return;
+            const letter = btn.dataset.letter;
+            if (letter === '⌫') onBackspace();
+            else onLetter(letter);
+        }, 'kbTap'));
+    }
+    const achBtn = $('achGetClose');
+    if (achBtn) {
+        bindTap(achBtn, safe(function () {
+            closeModal('achGetModal');
+            setTimeout(_showNextAch, 350);
+        }, 'achGetClose'));
+    }
+    const setClick = (id, fn) => {
+        const el = $(id);
+        if (el) bindTap(el, safe(fn, id));
+    };
+
+    setClick('continueBtn', continueLastPuzzle);
+    setClick('playRandomBtn', () => startGame('random'));
+    setClick('dailyBtn', () => {
+        const today = todayStr();
+        if (state.daily && state.daily.date === today) {
+            openModal('dailyInfoModal');
+            const it = $('dailyInfoText');
+            if (it) it.innerHTML = `Вы уже прошли кроссворд дня!<br>Время: <b>${fmtTime(state.daily.timeSec || 0)}</b><br><br>Возвращайтесь завтра за новым! ☀️`;
+            return;
+        }
+        startGame('daily');
+    });
+    setClick('dailyBadge', () => {
+        const btn = $('dailyBtn');
+        if (btn) btn.click();
+    });
+    setClick('categoriesBtn', () => { renderCategoriesModal(); openModal('catModal'); });
+    setClick('difficultyBtn', () => {
+        qsa('#diffModal [data-diff]').forEach(d => d.dataset.cat = '');
+        openModal('diffModal');
+    });
+    setClick('achBtn', () => { renderAchievementsList(); openModal('achModal'); });
+    setClick('themeBtn', () => openModal('themeModal'));
+    setClick('soundBtnMenu', toggleSound);
+    setClick('soundBtn', toggleSound);
+    setClick('otherGamesBtn', openOtherGamesModal);
+    setClick('backBtn', () => {
+        if (state.solvedFlag) { exitToMenu(); return; }
+        openModal('exitModal');
+    });
+    setClick('hintBtn', useHint);
+    setClick('hintAdConfirm', applyHint);
+    setClick('hintAdCancel', closeHintAd);
+    setClick('winClose', () => { closeModal('winModal'); exitToMenu(); });
+    setClick('winShareBtn', vkShare);
+    setClick('exitConfirm', () => { closeModal('exitModal'); exitToMenu(); });
+    setClick('exitCancel', () => closeModal('exitModal'));
+    setClick('achClose', () => closeModal('achModal'));
+    setClick('catClose', () => closeModal('catModal'));
+    setClick('diffClose', () => closeModal('diffModal'));
+    setClick('themeClose', () => closeModal('themeModal'));
+    setClick('dailyInfoClose', () => closeModal('dailyInfoModal'));
+    setClick('otherGamesClose', () => closeModal('otherGamesModal'));
+    setClick('catUnlockConfirm', confirmCatUnlock);
+    setClick('catUnlockCancel', () => { _pendingCatUnlock = null; closeModal('catUnlockModal'); });
+    setClick('catUnlockClose',  () => { _pendingCatUnlock = null; closeModal('catUnlockModal'); });
+
+    qsa('#diffModal [data-diff]').forEach(el => {
+        bindTap(el, safe(() => {
+            const cat = el.dataset.cat || '';
+            const diff = el.dataset.diff;
+            if (cat && !isCategoryUnlocked(cat)) {
+                openCatUnlockModal(cat);
+                return;
+            }
+            closeModal('diffModal');
+            closeModal('catModal');
+            if (cat) startGame('category', { category: cat, difficulty: diff });
+            else     startGame('category', { difficulty: diff });
+        }, 'diffPick'));
+    });
+
+    qsa('.theme-item[data-theme]').forEach(el => {
+        bindTap(el, safe(() => { applyTheme(el.dataset.theme); sound.click(); }, 'themePick'));
+    });
+
+    qsa('.modal-overlay').forEach(m => {
+        if (m.id === 'achGetModal') return;
+        bindTap(m, (e) => {
+            if (e.target !== m) return;
+            if (m.id === 'winModal') {
+                closeModal('winModal');
+                exitToMenu();
+                return;
+            }
+            if (m.id === 'catUnlockModal') {
+                _pendingCatUnlock = null;
+            }
+            closeModal(m.id);
+        });
+    });
+
+    setupKeyboardInput();
+    window.addEventListener('beforeunload', () => saveAll(true));
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            saveOnHide();
+        } else {
+           // safe(syncLeaderboard, 'syncLeaderboard')();
+            scheduleBannerCheck();
+        }
+    });
+}
+
+// ====== ИНИЦИАЛИЗАЦИЯ ======
+function detectWeakDevice() {
+    try {
+        if (document.documentElement.classList.contains('weak-device')) return;
+        const ua = navigator.userAgent || '';
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        const hasDeviceMemory = typeof navigator.deviceMemory === 'number';
+        const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        const lowRAM  = hasDeviceMemory && navigator.deviceMemory <= 4;
+        let weak = false;
+        if (isMobile) {
+            if (weakCPU || lowRAM) weak = true;
+            else if (isIOS && !hasDeviceMemory && weakCPU) weak = true;
+            else if (/Android [4-7]\./i.test(ua)) weak = true;
+        }
+        if (weak) document.documentElement.classList.add('weak-device');
+    } catch (_) {}
+}
+
+async function boot() {
+    let hardFallback = null;
+    try {
+        detectWeakDevice();
+        try {
+            setupUI();
+        } catch (uiErr) {
+            console.error('setupUI error:', uiErr);
+        }
+
+        const bridgeReady = window.__VK_BRIDGE_READY || Promise.resolve(typeof vkBridge !== 'undefined');
+bridgeReady.then(function () {
+    if (typeof vkBridge === 'undefined') return;
+    vkInit();
+    setTimeout(function () { safe(checkAndShowBanner, 'bannerInit')(); }, 800);
+}).catch(function () {});
+
+        setLoadingText('Загрузка прогресса…');
+
+        hardFallback = setTimeout(function () {
+            console.warn('⏰ Резервный таймаут загрузки — принудительно показываем меню');
+            try {
+                updateMenuStats();
+                showScreen('menu');
+                hideLoadingOverlay();
+            } catch (_) {}
+        }, 10000);
+
+        let timedOut = false;
+        const syncTimeout = new Promise(function (resolve) {
+            setTimeout(function () { timedOut = true; resolve('timeout'); }, 15000);
+        });
+
+        const syncTask = Promise.resolve()
+            .then(function () { return loadAll(); })
+            .then(function () { return 'ok'; })
+            .catch(function (err) { console.warn('⚠️ Sync error:', err); return 'error'; });
+
+        syncTask.then(function () {
+            if (!timedOut) return;
+            try {
+  applyTheme(state.theme || 'peach');
+                updateMenuStats();
+            } catch (_) {}
+        });
+
+        const result = await Promise.race([syncTask, syncTimeout]);
+        console.log('🔄 Синхронизация:', result, timedOut ? '(таймаут)' : '');
+
+        _dataLoaded = true;
+
+applyTheme(state.theme || 'peach');
+
+        updateMenuStats();
+        if (!state.sound) {
+            const b1 = $('soundBtn');     if (b1) b1.textContent = '🔇';
+            const b2 = $('soundBtnMenu'); if (b2) b2.textContent = '🔇';
+        }
+
+        showScreen('menu');
+
+        setTimeout(function () { hideLoadingOverlay(); }, 250);
+        if (hardFallback) clearTimeout(hardFallback);
+    } catch (e) {
+        console.error('boot error:', e);
+        if (hardFallback) clearTimeout(hardFallback);
+        try { updateMenuStats(); } catch (_) {}
+        try { showScreen('menu'); } catch (_) {}
+        try { hideLoadingOverlay(); } catch (_) {}
+    }
+}
+// ====== СТАРТ ======
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+} else {
+    boot();
+}
+
+})();
