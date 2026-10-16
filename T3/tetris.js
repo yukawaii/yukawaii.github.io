@@ -3,7 +3,6 @@ function arenaSweep() {
     let rowsCleared = 0;
     let rowMultiplier = 1;
 for(let e=arenaHeight-1;e>=0;e--){let l=!0;for(let a=0;a<arenaWidth;a++)if(0===arena[e][a]||"bonus"===arena[e][a]){l=!1;break}if(l){let l;arena.splice(e,1)[0],arena.unshift(new Array(arenaWidth).fill(0)),rowsCleared++,player.lines++,l="easy"===selectedDifficulty?1:"hard"===selectedDifficulty?3:2,player.score+=rowMultiplier*l,rowMultiplier*=2,e++}}rowsCleared>1&&showComboDisplay(rowsCleared),rowsCleared>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);let oldLevel=player.level;player.lines>=5&&1===player.level?player.level=2:player.lines>=10&&2===player.level?player.level=3:player.lines>=20&&3===player.level?player.level=4:player.lines>=40&&4===player.level?player.level=5:player.lines>=80&&5===player.level?player.level=6:player.lines>=160&&6===player.level?player.level=7:player.lines>=320&&7===player.level?player.level=8:player.lines>=640&&8===player.level&&(player.level=9),oldLevel!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),rowsCleared>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25);
-     // ===== ОБНОВЛЯЕМ РЕКОРД В РЕАЛЬНОМ ВРЕМЕНИ =====
     if (typeof saveVKScore === 'function' && player && player.score !== undefined) {
         saveVKScore(player.score);
     }
@@ -13,7 +12,6 @@ function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merg
 function playerMove(dir) {
     player.pos.x += dir;
     if (collide(arena, player)) player.pos.x -= dir;
-     // Добавляем звук при движении (тихо)
     if (typeof gameAudio !== 'undefined' && !gameState.paused && isGameStarted) {
         gameAudio.playOneShot('rotate', 0.02);
     }
@@ -153,7 +151,6 @@ for(let t=0;t<arenaHeight;t++)for(let e=0;e<arenaWidth;e++){const o=arena[t][e];
            endGame();
           }
 }
-// ======================== ОТРИСОВКА ========================
 function drawGame() {
     if (!canvas || canvas.width === 0) updateCanvasSize();
     const canvasWidth = canvas.width;
@@ -180,7 +177,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
     context.fillRect(0, 0, canvasWidth, canvasHeight);
     context.fillStyle = '#0a0a0f';
     context.fillRect(0, topPanelHeight, canvasWidth, gameAreaHeight);
-    // Обводка поля
     context.save();
     context.shadowBlur = 15;
     context.shadowColor = '#22c55e';
@@ -231,7 +227,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
     context.stroke();
     context.shadowBlur = 0;
     context.restore();
-    // Арена
     for (let y = 0; y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
             const value = arena[y][x];
@@ -264,7 +259,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
             }
         }
     }
-    // Текущая фигура
     if (player && player.matrix) {
         const isTetra = player.isTetraMode;
         const isPenta = player.isPentaMode;
@@ -285,7 +279,6 @@ const topPanelHeight = isUltraSmall ? (isMobile ? 28 : 50) : (isMobile ? 42 : 80
             }
         }
     }
-// Статистика
 const t = window.getText || (key => key);
 context.fillStyle = '#111';
 context.fillRect(0, 0, canvasWidth, topPanelHeight);
@@ -316,7 +309,6 @@ context.fillText(t('level'), canvasWidth * 0.52, textYTitle);
 context.fillStyle = '#fff';
 context.font = `${valueFontSize}px Russo One`;
 context.fillText(player ? player.level : 1, canvasWidth * 0.52, textYValue);
-    // Следующая фигура
     if (player && player.nextMatrix) {
         const nextX = canvasWidth * 0.70;
         const nextY = isMobile ? 5 : 12;
@@ -339,7 +331,6 @@ context.fillText(player ? player.level : 1, canvasWidth * 0.52, textYValue);
         }
     }
 }
-// ======================== ИГРОВОЙ ЦИКЛ ========================
 function update(time = 0) {
     if (gameOverAnimation.active) {
         drawGameOverAnimation();
@@ -388,10 +379,8 @@ function update(time = 0) {
     if (typeof drawGame === 'function') drawGame();
     animationFrameId = requestAnimationFrame(update);
 }
-// ======================== УПРАВЛЕНИЕ ИГРОЙ ========================
 function startGame() {
        __endGameRunning = false;  
-      // ===== СБРОС ЧЕРЕПАХИ =====
     hideSlowDownIndicator();
     isSlowDownActive = false;
     pendingSlowDown = false;
@@ -426,14 +415,12 @@ else arenaWidth = 14;
     gameState.initialized = true;
     gameState.introSongPlayed = false;
     updatePauseButtonText();
-//вдля выкючения звуков и муз
     pendingSlowDown = false;
 if (slowDownTimerId) {
     clearTimeout(slowDownTimerId);
     slowDownTimerId = null;
 }
 isSlowDownActive = false;
-    // конец
     player.score = 0;
     player.lines = 0;
     player.level = 1;
@@ -473,9 +460,7 @@ async function startGameWithAudio() {
     if (typeof gameAudio !== 'undefined') {
         gameAudio.resumeAll();
         console.log('✅ Аудио контексты возобновлены');
-        // 🟢 Активируем музыкальный контекст сразу после resume
         gameAudio.ensureMusicContextActive();
-        // Даём контексту время перейти в running
         await new Promise(r => setTimeout(r, 50));
     }
     startGame();
@@ -491,7 +476,6 @@ function endGame() {
     if (__endGameRunning) return;
     if (gameOverAnimation.active) return;
     __endGameRunning = true;
-      // ===== СБРОС ЧЕРЕПАХИ =====
     if (slowDownTimerId) {
         clearTimeout(slowDownTimerId);
         slowDownTimerId = null;
@@ -499,7 +483,6 @@ function endGame() {
     isSlowDownActive = false;
     pendingSlowDown = false;
     hideSlowDownIndicator();
-    // ===========================
 if (selectedDifficulty) savePlayedDifficulty();
     isGameOver = true;
     updateRecordText();
@@ -508,7 +491,6 @@ if (selectedDifficulty) savePlayedDifficulty();
     gameState.over = true;
     gameState.initialized = false;
     gameState.paused = false;
-    // ← СОХРАНЯЕМ ОДИН РАЗ, ДО обнуления чего-либо
     const finalScore = player ? (player.score || 0) : 0;
     if (typeof saveVKScore === 'function') saveVKScore(finalScore);
     if (typeof saveTotalProgress === 'function') saveTotalProgress();
@@ -527,8 +509,6 @@ function pauseGame() {
     if (typeof window.notifyGameplayStop === 'function') {
         window.notifyGameplayStop();
     }
-    // ← БОЛЬШЕ НЕ СОХРАНЯЕМ НИ РЕКОРД, НИ ОБЩИЙ ПРОГРЕСС ЗДЕСЬ!
-    // Прогресс сохраняется ТОЛЬКО в endGame()
     updatePauseButtonText();
 }
 function resumeGame() {
@@ -539,10 +519,8 @@ function resumeGame() {
     }
     gameState.paused = false;
     lastTime = performance.now();
-    // Возобновляем аудио контексты
     if (typeof gameAudio !== 'undefined' && gameAudio.audioContext) {
         gameAudio.resumeAll();
-        // Если музыка всё ещё не играет — принудительно перезапускаем
         if (!gameAudio.musicStarted && currentMusicTrack) {
             console.log('🔄 Музыка не возобновилась, перезапускаем:', currentMusicTrack);
             gameAudio.playMusic(currentMusicTrack, 0.08);
@@ -584,9 +562,8 @@ function togglePauseResume() {
 function returnToMenu() {
     if (isGameStarted && !isGameOver && !gameState.paused) pauseGame();
     if (typeof gameAudio !== 'undefined') {
-        gameAudio.stopAll(); // полностью останавливаем музыку и звуки
+        gameAudio.stopAll(); 
     }
-    // stopSounds() убран, так как stopAll() уже всё сделал
     if (slowDownTimerId) {
         clearTimeout(slowDownTimerId);
         slowDownTimerId = null;
@@ -618,7 +595,6 @@ function updatePauseButtonText() {
         btn.setAttribute('data-i18n', 'pause');
     }
 }
-// ======================== МУЗЫКА И ЗВУКИ ========================
 async function playBackgroundMusic() {
     if (musicMuted || !gameAudio || !gameAudio.initialized) return;
     if (gameAudio.musicStarted && gameAudio.currentMusicTrack === currentMusicTrack) return;
@@ -635,7 +611,6 @@ async function playBackgroundMusic() {
     const maxAttempts = 40;
     while (attempts < maxAttempts) {
         if (gameAudio.buffers[track]) {
-            // 🟢 Активируем музыкальный контекст непосредственно перед запуском
             gameAudio.ensureMusicContextActive();
             await new Promise(r => setTimeout(r, 30));
             gameAudio.playMusic(track, 0.08);
@@ -644,7 +619,6 @@ async function playBackgroundMusic() {
         attempts++;
         await new Promise(resolve => setTimeout(resolve, 500));
     }
-    // Повторная попытка через 5 секунд
     setTimeout(() => {
         if (!gameAudio.musicStarted && gameAudio.buffers[track]) {
             gameAudio.ensureMusicContextActive();
@@ -661,7 +635,6 @@ function toggleSound() {
     if (typeof gameAudio.setMuted === 'function') {
         gameAudio.setMuted(soundMuted);
     } else {
-        // fallback – напрямую управляем громкостью
         if (gameAudio.sfxGain) {
             gameAudio.sfxGain.gain.value = soundMuted ? 0 : 0.3;
         }
@@ -674,7 +647,6 @@ function toggleMusic() {
     musicMuted = !musicMuted;
     gameAudio.setMusicMuted(musicMuted);
     updateMusicIcon();    
-    // Если музыка только что включена и игра активна – запускаем её, если она не играет
     if (!musicMuted && isGameStarted && !isGameOver && !gameState.paused) {
         if (!gameAudio.musicStarted) {
             playBackgroundMusic();
@@ -709,14 +681,12 @@ function initAudio() {
         gameAudio.init().then(() => {
             gameAudio.resumeAll();
             audioInitialized = true;
-            // Если игра уже активна, попробовать запустить музыку
             if (!musicMuted && !soundMuted && isGameStarted && !isGameOver && !gameState.paused) {
                 playBackgroundMusic();
             }
         }).catch(e => console.warn('Ошибка инициализации аудио:', e));
         return;
     }
-    // Если уже инициализировано – просто возобновляем
     if (gameAudio.audioContext && gameAudio.audioContext.state === 'suspended') {
         gameAudio.resumeAll();
     }
@@ -724,38 +694,29 @@ function initAudio() {
         playBackgroundMusic();
     }
 }
-// ======================== МОДАЛКИ ========================
 function showGameOverModal(score) {
     const modal = document.getElementById('gameover-modal');
     const scoreEl = document.getElementById('gameover-score');
     if (modal) {
         if (scoreEl) scoreEl.textContent = score;
-        // Находим или создаём контейнер для кнопок
         let buttonsContainer = modal.querySelector('.gameover-buttons-container');
         if (!buttonsContainer) {
-            // Если контейнера нет — создаём
             const contentDiv = modal.querySelector('div[style*="border: 2px solid rgba(239, 68, 68, 0.4)"]');
             if (contentDiv) {
-                // Удаляем старые кнопки, если они есть
                 const oldBtns = contentDiv.querySelectorAll('button');
                 oldBtns.forEach(btn => {
-                    // Сохраняем только кнопку "Новая игра" и "В меню", если они есть
                     const text = btn.textContent.trim();
                     if (text.includes('Новая игра') || text.includes('В меню')) {
-                        // оставляем
                     } else {
                         btn.remove();
                     }
                 });
-                // Создаём контейнер для кнопок
                 buttonsContainer = document.createElement('div');
                 buttonsContainer.className = 'gameover-buttons-container';
                 buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px; margin-top: 16px;';
-                // Переносим существующие кнопки в контейнер
                 const existingBtns = contentDiv.querySelectorAll('button');
                 const newGameBtn = contentDiv.querySelector('button[onclick*="closeGameOverModal"]');
                 const menuBtn = contentDiv.querySelector('button[onclick*="closeGameOverModalAndMenu"]');
-                // Создаём новую кнопку "Продолжить за рекламу"
 const continueBtn = document.createElement('button');
 continueBtn.style.cssText = `
     width: 100%; 
@@ -772,10 +733,8 @@ continueBtn.style.cssText = `
 `;
                 continueBtn.innerHTML = '🧹 Продолжить за рекламу';
                 continueBtn.onclick = handleContinueWithAd;
-                // Собираем все кнопки в контейнер
                 buttonsContainer.appendChild(continueBtn);
                 if (newGameBtn) {
-                    // Изменяем стиль кнопки "Новая игра"
         newGameBtn.style.cssText = `
     width: 100%;
     padding: 14px 20px;             
@@ -790,7 +749,6 @@ continueBtn.style.cssText = `
                     buttonsContainer.appendChild(newGameBtn);
                 }
                 if (menuBtn) {
-                    // Изменяем стиль кнопки "В меню"
        menuBtn.style.cssText = `
     width: 100%;
     padding: 10px 15px;             
@@ -804,7 +762,6 @@ continueBtn.style.cssText = `
 `;
                     buttonsContainer.appendChild(menuBtn);
                 }
-                // Добавляем контейнер в модалку
                 contentDiv.appendChild(buttonsContainer);
             }
         }
@@ -823,7 +780,6 @@ function closeGameOverModalAndMenu() {
     if (modal) modal.style.display = 'none';
     if (typeof returnToMenu === 'function') returnToMenu();
 }
-// ======================== ВЫБОР РЕЖИМА И СЛОЖНОСТИ ========================
 function selectMode(mode) {
     selectedMode = mode;
     const menu = document.getElementById('main-menu-modal');
@@ -851,9 +807,8 @@ function selectDifficulty(difficulty) {
     if (diffModal) diffModal.style.display = 'none';
     const menu = document.getElementById('main-menu-modal');
     if (menu) menu.style.display = 'none';
-   startGameWithAudio(); // ← только один вызов
+   startGameWithAudio(); 
 }
-// ======================== ОБЩИЙ ПРОГРЕСС ========================
 function saveTotalProgress() {
     if (typeof player === 'undefined' || !player) return;
     const currentGameScore = player.score || 0;
@@ -878,7 +833,6 @@ function savePlayedDifficulty() {
         console.log('✅ Сохранена сложность:', selectedDifficulty);
     }
 }
-// ======================== УПРАВЛЕНИЕ С КЛАВИАТУРЫ ========================
 document.addEventListener('keydown', event => {
     if (!isGameStarted || isGameOver || gameState.paused) return;
     switch (event.code) {
@@ -909,45 +863,30 @@ document.addEventListener('keydown', event => {
             break;
     }
 });
-// ======================== МОБИЛЬНОЕ УПРАВЛЕНИЕ ========================
 function initMobileControls() {
     const btnLeft = document.getElementById('btn-left');
     const btnRight = document.getElementById('btn-right');
     const btnDown = document.getElementById('btn-down');
     const btnRot = document.getElementById('btn-rot');
     if (!btnLeft) return;
-    // Хранилище активных интервалов для удержания
     const repeatIntervals = {};
-    /**
-     * Запускает повторяющееся действие с заданным интервалом.
-     * Сразу выполняет действие один раз, затем запускает setInterval.
-     * @param {string} id - уникальный идентификатор действия (например, 'moveLeft')
-     * @param {Function} action - функция, которую нужно повторять
-     * @param {number} interval - задержка между повторами (мс)
-     */
     function startRepeating(id, action, interval = 150) {
-        if (repeatIntervals[id]) return; // уже активен
-        // Выполнить сразу
+        if (repeatIntervals[id]) return; 
         if (isGameStarted && !isGameOver && !gameState.paused) {
             action();
         }
-        // Запустить интервал
         repeatIntervals[id] = setInterval(() => {
             if (isGameStarted && !isGameOver && !gameState.paused) {
                 action();
             }
         }, interval);
     }
-    /**
-     * Останавливает повторяющееся действие.
-     */
     function stopRepeating(id) {
         if (repeatIntervals[id]) {
             clearInterval(repeatIntervals[id]);
             delete repeatIntervals[id];
         }
     }
-    // ---- Удержание для кнопки "Влево" ----
     function onLeftStart(e) {
         e.preventDefault();
         startRepeating('moveLeft', () => playerMove(-1), 150);
@@ -956,7 +895,6 @@ function initMobileControls() {
         e.preventDefault();
         stopRepeating('moveLeft');
     }
-    // ---- Удержание для кнопки "Вправо" ----
     function onRightStart(e) {
         e.preventDefault();
         startRepeating('moveRight', () => playerMove(1), 150);
@@ -965,63 +903,52 @@ function initMobileControls() {
         e.preventDefault();
         stopRepeating('moveRight');
     }
-    // ---- Удержание для кнопки "Вниз" (мягкий дроп) ----
-    // Для ускоренного падения используем меньший интервал (50-80 мс)
     function onDownStart(e) {
         e.preventDefault();
-        startRepeating('drop', () => playerDrop(), 70); // 70 мс между падениями
+        startRepeating('drop', () => playerDrop(), 70); 
     }
     function onDownEnd(e) {
         e.preventDefault();
         stopRepeating('drop');
     }
-    // ---- Обычные действия (без удержания) ----
     function onRotate(e) {
         e.preventDefault();
         if (isGameStarted && !isGameOver && !gameState.paused) {
             playerRotate(-1);
         }
     }
-    // ----- Привязка событий -----
-    // Левая кнопка
     btnLeft.addEventListener('touchstart', onLeftStart);
     btnLeft.addEventListener('touchend', onLeftEnd);
     btnLeft.addEventListener('touchcancel', onLeftEnd);
     btnLeft.addEventListener('mousedown', onLeftStart);
     btnLeft.addEventListener('mouseup', onLeftEnd);
-    // Правая кнопка
     btnRight.addEventListener('touchstart', onRightStart);
     btnRight.addEventListener('touchend', onRightEnd);
     btnRight.addEventListener('touchcancel', onRightEnd);
     btnRight.addEventListener('mousedown', onRightStart);
     btnRight.addEventListener('mouseup', onRightEnd);
-    // Кнопка "Вниз"
     btnDown.addEventListener('touchstart', onDownStart);
     btnDown.addEventListener('touchend', onDownEnd);
     btnDown.addEventListener('touchcancel', onDownEnd);
     btnDown.addEventListener('mousedown', onDownStart);
     btnDown.addEventListener('mouseup', onDownEnd);
-    // Поворот
     btnRot.addEventListener('touchstart', onRotate);
     btnRot.addEventListener('touchcancel', (e) => e.preventDefault());
     btnRot.addEventListener('mousedown', onRotate);
 }
 initMobileControls();
-// ======================== ОБРАБОТЧИКИ СОБЫТИЙ ========================
 document.addEventListener('click', initAudio);
 document.addEventListener('touchstart', initAudio);
-// Следим за видимостью страницы — ставим на паузу, но НЕ снимаем автоматически!
         document.addEventListener('visibilitychange', function() {
                         if (document.hidden) {
-                            // Вкладка скрыта (свернута или другая вкладка)
                             if (isGameStarted && !isGameOver && !gameState.paused) {
                                 pauseGame();
                                 console.log('📱 Вкладка скрыта — игра на паузе. Нажмите "Дальше" чтобы продолжить.');
-                            }       // Останавливаем аудио
+                            }       
                           if (typeof gameAudio !== 'undefined') {
     gameAudio.pauseAll();
 }
-                        }            // ❌ НЕТ автоматического resume! Игрок сам нажмёт "Дальше"
+                        }            
                     });
 document.addEventListener('contextmenu', (e) => { e.preventDefault(); return false; });
 canvas.addEventListener('selectstart', (e) => { e.preventDefault(); return false; });
@@ -1030,23 +957,17 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
         updateCanvasSize();
-       // resizeGameField();
         if (typeof drawGame === 'function') drawGame();
     }, 100);
 });
-// Обработчик потери фокуса окна
 window.addEventListener('blur', function() {
-    // Окно потеряло фокус (пользователь переключился на другую программу)
     if (isGameStarted && !isGameOver && !gameState.paused) {
         pauseGame();
         console.log('📱 Окно потеряло фокус — игра на паузе');
     }
 });
-// Обработчик получения фокуса — НЕ снимаем паузу автоматически!
 window.addEventListener('focus', function() {
-    // Окно получило фокус, но игра остаётся на паузе
     console.log('📱 Окно получило фокус — игра на паузе, нажмите "Дальше"');
-    // ❌ НЕ вызываем resumeGame()!
 });
 document.addEventListener('fullscreenchange', () => {
     setTimeout(() => {
@@ -1058,7 +979,6 @@ document.body.addEventListener('touchmove', (e) => {
     if (e.target.closest('.d-btn, .rotate-btn, .iksweb, .iksweb1')) return;
     e.preventDefault();
 }, { passive: false });
-// ======================== ИНИЦИАЛИЗАЦИЯ ========================
 setTimeout(() => {
     updateCanvasSize();
     arena = createMatrix(arenaWidth, arenaHeight);
@@ -1072,21 +992,17 @@ setTimeout(() => {
         setTimeout(() => { container.style.opacity = '1'; }, 200);
     }
     update();
-     // ====== ЗАГРУЖАЕМ СТАТУС ЕЖЕДНЕВНОГО БОНУСА ======
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     updateDailyBonusStatus();
-    // =================================================
 }, 100);
 window.addEventListener('load', function() {
     setTimeout(function() {
         updateCanvasSize();
-       // resizeGameField();
         drawGame();
         const container = document.querySelector('.canvas-container');
         if (container) container.style.opacity = '1';
     }, 200);
 });
-// ======================== КОЛЛЕКЦИИ ========================
 const COLLECTION_CATEGORIES = {
     blocks: {
         id: 'blocks', nameKey: 'collectionBlocks', icon: '🧱', folder: 'blocks',
@@ -1323,7 +1239,6 @@ function claimCollectionItem(categoryId, index, page) {
     }
     progress[itemId] = true;
     localStorage.setItem('collectionsProgress', JSON.stringify(progress));
-    // Синхронизация с VK Storage
     if (typeof claimCollectionItemWithSync === 'function') {
         claimCollectionItemWithSync(itemId);
     } else if (typeof saveToVKStorage === 'function') {
@@ -1392,7 +1307,6 @@ function openFullImage(imgPath, index, categoryId) {
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(10px);
     `;
-    // Затемняющий слой для фона
     const overlay = document.createElement('div');
     overlay.style.cssText = `
         position: absolute;
@@ -1473,7 +1387,6 @@ modal.innerHTML += `
 `;
     document.body.appendChild(modal);
 }
-// ======================== КОНФЕТТИ ========================
 function createConfetti(count = 80) {
     const colors = ['#FF0D72', '#0DC2FF', '#0DFF72', '#F538FF', '#FF8E0D', '#FFE138', '#34d399', '#f472b6', '#f59e0b'];
     for (let i = 0; i < count; i++) {
@@ -1494,7 +1407,6 @@ function createConfetti(count = 80) {
         setTimeout(() => confetti.remove(), 3000);
     }
 }
-// ======================== СВИТКИ ========================
 function getScrollsProgress() {
     return JSON.parse(localStorage.getItem('scrollsProgress') || '{}');
 }
@@ -1514,7 +1426,6 @@ function claimScroll(scrollId) {
     }
     progress[scrollId] = true;
     localStorage.setItem('scrollsProgress', JSON.stringify(progress));
-    // Синхронизация с VK Storage
     if (typeof claimScrollWithSync === 'function') {
         claimScrollWithSync(scrollId);
     } else if (typeof saveToVKStorage === 'function') {
@@ -1558,7 +1469,6 @@ function renderScrolls() {
     const progress = getScrollsProgress();
     if (scoreEl) scoreEl.textContent = formatScore(playerScore);
     const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
-    // Убеждаемся, что текущая страница не выходит за пределы
     if (currentScrollPage > totalPages) currentScrollPage = totalPages;
     if (currentScrollPage < 1) currentScrollPage = 1;
     const startIndex = (currentScrollPage - 1) * SCROLLS_PER_PAGE;
@@ -1596,7 +1506,6 @@ function renderScrolls() {
         scrollItem.innerHTML = `<span style="color: ${isClaimed ? '#e2e8f0' : isAvailable ? '#fcd34d' : '#64748b'}; font-family: 'Russo One', sans-serif; font-size: 15px;">${scrollText} ${i}${isAvailable && !isClaimed ? ' <span style="font-size: 11px; color: #fcd34d;">✨</span>' : ''}</span><span style="font-size: 22px; transition: all 0.3s; display: flex; align-items: center;">${icon}</span>`;
         container.appendChild(scrollItem);
     }
-    // Обновляем номер страницы
    const pageSpan = document.querySelector('#scrolls-modal .pagination-page');
 if (pageSpan) {
     pageSpan.textContent = `${currentScrollPage} / ${totalPages}`;
@@ -1688,7 +1597,6 @@ function closeScrollTextModal() {
     const modal = document.getElementById('scroll-text-modal');
     if (modal) modal.style.display = 'none';
 }
-// ======================== ЦЕНТР НАГРАД ========================
 function openRewardsCenter() {
     document.querySelectorAll('[id$="-modal"]').forEach(el => {
         if (el.id !== 'rewards-center-modal' && el.id !== 'scroll-text-modal') {
@@ -1745,18 +1653,15 @@ function countUnlockedScrolls(playerScore) {
     }
     return count;
 }
-// ======================== ЕЖЕДНЕВНЫЙ БОНУС ========================
 function getTodayKey() {
     const today = new Date();
     return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
 }
-// Проверка, получал ли игрок бонус сегодня
 function isDailyBonusClaimedToday() {
     const todayKey = getTodayKey();
     const lastClaimed = localStorage.getItem('dailyBonusDate');
     return lastClaimed === todayKey;
 }
-// Обновляем статус бонуса в интерфейсе
 function updateDailyBonusStatus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     const statusEl = document.getElementById('daily-bonus-status');
@@ -1773,9 +1678,7 @@ function updateDailyBonusStatus() {
         statusEl.style.fontSize = '12px';
     }
 }
-// Открыть ежедневный бонус
 function openDailyBonus() {
-    // Обновляем статус перед открытием
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     if (dailyBonusClaimedToday) {
         showCustomModal({
@@ -1829,7 +1732,6 @@ modal.innerHTML += `
 `;
     document.body.appendChild(modal);
 }
-// Обычный бонус (+10)
 function claimDailyBonus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     if (dailyBonusClaimedToday) {
@@ -1843,23 +1745,19 @@ function claimDailyBonus() {
         });
         return;
     }
-    const todayKey = getTodayKey(); // объявляем один раз
-    // 1. Увеличиваем общий счёт
+    const todayKey = getTodayKey(); 
     let total = parseInt(localStorage.getItem('totalScore') || '0');
     total += 10;
     localStorage.setItem('totalScore', total);
     window.totalScore = total;
-    // 2. Синхронизация с VK Storage
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_total_score_v1', total);
     }
-    // 3. Отмечаем дату получения
     localStorage.setItem('dailyBonusDate', todayKey);
     dailyBonusClaimedToday = true;
     if (typeof saveToVKStorage === 'function') {
         saveToVKStorage('tetris_daily_bonus_v1', todayKey);
     }
-    // 4. Закрываем модалку и обновляем UI
     const modal = document.getElementById('daily-bonus-modal');
     if (modal) modal.remove();
     updateDailyBonusStatus();
@@ -1869,7 +1767,6 @@ function claimDailyBonus() {
     }
     showSuccessModal('🎉 Бонус получен!', '+10 очков в общую копилку!');
 }
-// Усиленный бонус за рекламу (+25)
 function claimEnhancedDailyBonus() {
     dailyBonusClaimedToday = isDailyBonusClaimedToday();
     if (dailyBonusClaimedToday) {
@@ -1891,7 +1788,6 @@ function claimEnhancedDailyBonus() {
     showRewardedAdForContinue().then((success) => {
         if (success) {
             const todayKey = getTodayKey();
-            // Увеличиваем общий счёт
             let total = parseInt(localStorage.getItem('totalScore') || '0');
             total += 25;
             localStorage.setItem('totalScore', total);
@@ -1964,10 +1860,7 @@ function showSuccessModal(title, text) {
     `;
     document.body.appendChild(modal);
 }
-//стирание рядов за рекламу
-        // ======================== СТИРАНИЕ ВЕРХНИХ РЯДОВ ========================
      function clearTopRows() {
-         // ===== СБРОС ЧЕРЕПАХИ =====
     hideSlowDownIndicator();
     isSlowDownActive = false;
     if (slowDownTimerId) {
@@ -1975,9 +1868,7 @@ function showSuccessModal(title, text) {
         slowDownTimerId = null;
     }
     pendingSlowDown = false;
-    // ===========================
     const rowsToClear = 7;
-    // Проверяем наличие блоков в верхних рядах
     let hasBlocks = false;
     for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
@@ -1997,13 +1888,10 @@ function showSuccessModal(title, text) {
         });
         return false;
     }
-    // Удаляем верхние 7 строк (сдвигаем остальные вниз)
     arena.splice(0, rowsToClear);
-    // Добавляем 7 пустых строк в начало
     for (let i = 0; i < rowsToClear; i++) {
         arena.unshift(new Array(arenaWidth).fill(0));
     }
-    // Удаляем бонусы, которые могли оказаться в верхних рядах
     for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
         for (let x = 0; x < arenaWidth; x++) {
             if (arena[y][x] === 'bonus') {
@@ -2011,18 +1899,15 @@ function showSuccessModal(title, text) {
             }
         }
     }
-    // Сбрасываем позицию игрока наверх (чтобы фигура начала падать)
     player.pos.y = 0;
     const maxX = arenaWidth - player.matrix[0].length;
     player.pos.x = Math.floor(maxX / 2);
-    // Если коллизия — пробуем поднять на 1
     if (collide(arena, player)) {
         player.pos.y = -1;
     }
     console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
     return true;
 }
-        // ======================== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ ========================
 let isRewardedAdLoading = false;
 function showRewardedAdForContinue() {
     return new Promise((resolve) => {
@@ -2036,13 +1921,10 @@ function showRewardedAdForContinue() {
             return;
         }
         isRewardedAdLoading = true;
-        // Показываем модалку загрузки
         showLoadingAdModal();
-        // Приостанавливаем музыку и звуки
         if (typeof gameAudio !== 'undefined') {
             gameAudio.pauseAll();
         }
-        // Показываем рекламу за вознаграждение
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
             .then((data) => {
                 console.log('✅ Реклама за вознаграждение показана:', data);
@@ -2060,7 +1942,6 @@ function showRewardedAdForContinue() {
 }
 function showVKFullscreenAd() {
     const now = Date.now();
-    // Если прошло меньше 35 секунд – не показываем
     if (now - lastInterstitialAdTime < 35000) {
         console.log('⏳ Межэкранная реклама: прошло менее 30 секунд, пропускаем');
         return;
@@ -2069,7 +1950,7 @@ function showVKFullscreenAd() {
     vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'interstitial' })
         .then((data) => {
             if (data.result) {
-                lastInterstitialAdTime = now; // запоминаем время успешного показа
+                lastInterstitialAdTime = now; 
                 console.log('✅ Межэкранная реклама показана');
             }
         })
@@ -2077,7 +1958,6 @@ function showVKFullscreenAd() {
             console.warn('⚠️ Ошибка показа межэкранной рекламы:', error);
         });
 }
-// ====== МОДАЛКА ЗАГРУЗКИ РЕКЛАМЫ ======
 function showLoadingAdModal() {
     const modal = document.createElement('div');
     modal.id = 'loading-ad-modal';
@@ -2112,7 +1992,6 @@ function showLoadingAdModal() {
         </div>
     `;
     document.body.appendChild(modal);
-    // Добавляем стили для анимаций, если их нет
     if (!document.getElementById('ad-animation-styles')) {
         const style = document.createElement('style');
         style.id = 'ad-animation-styles';
@@ -2133,7 +2012,6 @@ function closeLoadingAdModal() {
     const modal = document.getElementById('loading-ad-modal');
     if (modal) modal.remove();
 }
-    // ======================== ПРОДОЛЖЕНИЕ ИГРЫ ЗА РЕКЛАМУ ========================
 async function handleContinueWithAd() {
     const confirmed = await showContinueConfirmationModal();
     if (!confirmed) return;
@@ -2142,7 +2020,7 @@ async function handleContinueWithAd() {
     if (adShown) {
         const cleared = clearTopRows();
      if (cleared) {
-          hideSlowDownIndicator(); // удаление черепахи
+          hideSlowDownIndicator(); 
     isGameOver = false;
     gameState.over = false;
     gameState.initialized = true;
@@ -2157,11 +2035,10 @@ async function handleContinueWithAd() {
         button: 'OK'
     });
     updatePauseButtonText();
-    // ✅ ПЕРЕЗАПУСКАЕМ ЦИКЛ, ЧТОБЫ ПОЯВИЛАСЬ НАДПИСЬ ПАУЗЫ
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
     lastTime = 0;
     dropCounter = 0;
-    update(); // ← теперь отобразится "ПАУЗА"
+    update(); 
 } else {
             showCustomModal({
                 title: '⚠️ Верхние ряды пусты',
@@ -2180,7 +2057,6 @@ async function handleContinueWithAd() {
         if (typeof gameAudio !== 'undefined') gameAudio.resumeAll();
     }
 }
-// ====== МОДАЛКА ПОДТВЕРЖДЕНИЯ (ПРОМИС) ======
 function showContinueConfirmationModal() {
     return new Promise((resolve) => {
         const modal = document.createElement('div');
@@ -2271,7 +2147,6 @@ function showContinueConfirmationModal() {
             modal.remove();
             resolve(true);
         };
-        // Закрытие по клику вне модалки
         modal.onclick = function(e) {
             if (e.target === modal) {
                 modal.remove();
@@ -2280,9 +2155,7 @@ function showContinueConfirmationModal() {
         };
     });
 }
-// ======================== ЗАМЕДЛЕНИЕ ПАДЕНИЯ (ЧЕРЕПАШКА) ========================
 function showSlowDownModal() {
-    // Проверяем, что игра идёт
     if (!isGameStarted || isGameOver) {
         showCustomModal({
             title: '⚠️ Игра не активна',
@@ -2292,7 +2165,6 @@ function showSlowDownModal() {
         });
         return;
     }
-    // Проверяем, не активно ли уже замедление
     if (isSlowDownActive) {
         showCustomModal({
             title: '🐢 Замедление уже активно!',
@@ -2302,11 +2174,9 @@ function showSlowDownModal() {
         });
         return;
     }
-    // Ставим игру на паузу
     if (!gameState.paused) {
         pauseGame();
     }
-    // Показываем модалку подтверждения
     const modal = document.createElement('div');
     modal.id = 'slowdown-confirm-modal';
     modal.style.cssText = `
@@ -2358,10 +2228,8 @@ function showSlowDownModal() {
     document.body.appendChild(modal);
 }
 function activateSlowDown() {
-    // Закрываем модалку подтверждения
     const confirmModal = document.getElementById('slowdown-confirm-modal');
     if (confirmModal) confirmModal.remove();
-    // Показываем рекламу
     showRewardedAdForContinue().then((success) => {
         if (success) {
             pendingSlowDown = true;
@@ -2373,7 +2241,6 @@ function activateSlowDown() {
                 timer: 2000
             });                   
         } else {
-            // Реклама не показана
             showCustomModal({
                 title: '❌ Реклама недоступна',
                 text: 'Попробуйте позже.',
@@ -2401,7 +2268,6 @@ function applySlowDownEffect() {
 }, 15000);
 }
 function showSlowDownIndicator() {
-    // Показываем индикатор замедления над игровым полем
     let indicator = document.getElementById('slowdown-indicator');
     if (!indicator) {
         indicator = document.createElement('div');
@@ -2431,11 +2297,9 @@ function showSlowDownIndicator() {
         `;
         document.body.appendChild(indicator);
     }
-    // Показываем с анимацией
     setTimeout(() => {
         indicator.style.opacity = '1';
     }, 100);
-    // Запускаем обратный отсчёт
     let seconds = 15;
     const timerEl = document.getElementById('slowdown-timer');
     if (timerEl) {
@@ -2459,23 +2323,18 @@ function hideSlowDownIndicator() {
         }, 400);
     }
 }
-// ======================== КОМБО-СИСТЕМА ========================
 function showComboDisplay(rowsCleared) {
-    // Удаляем старую надпись, если есть
     const oldDisplay = document.getElementById('combo-display');
     if (oldDisplay) oldDisplay.remove();
-    // Очищаем старый таймер
     if (comboDisplayTimer) {
         clearTimeout(comboDisplayTimer);
         comboDisplayTimer = null;
     }
-    // ====== ЗВУК КОМБО (только highspins) ======
     if (rowsCleared >= 3) {
         if (typeof gameAudio !== 'undefined') {
             gameAudio.playOneShot('highspins', 0.2);
         }
     }
-    // Создаём элемент
     const display = document.createElement('div');
     display.id = 'combo-display';
     display.style.cssText = `
@@ -2498,7 +2357,6 @@ function showComboDisplay(rowsCleared) {
         text-align: center;
         line-height: 1.2;
     `;
-    // Выбираем цвет в зависимости от количества линий
     let color = '#fcd34d';
     let glowColor = 'rgba(255, 215, 0, 0.8)';
     if (rowsCleared >= 5) {
@@ -2511,7 +2369,6 @@ function showComboDisplay(rowsCleared) {
         color = '#fcc419';
         glowColor = 'rgba(252, 196, 25, 0.8)';
     }
-    // Текст комбо
     let comboText = `x${rowsCleared}`;
     let subText = `${rowsCleared} линии`;
     if (rowsCleared === 2) subText = `${rowsCleared} линии`;
@@ -2527,19 +2384,16 @@ function showComboDisplay(rowsCleared) {
         </div>
     `;
     document.body.appendChild(display);
-    // Анимация появления
     requestAnimationFrame(() => {
         display.style.opacity = '1';
         display.style.transform = 'translate(-50%, -50%) scale(1)';
     });
-    // ====== КОНФЕТТИ ======
     if (rowsCleared >= 3) {
         let confettiCount = 20;
         if (rowsCleared >= 5) confettiCount = 80;
         else if (rowsCleared >= 4) confettiCount = 50;
         createConfetti(confettiCount);
     }
-    // Автоматическое исчезновение через 1.5 секунды
     comboDisplayTimer = setTimeout(() => {
         if (display) {
             display.style.opacity = '0';
@@ -2551,7 +2405,6 @@ function showComboDisplay(rowsCleared) {
         comboDisplayTimer = null;
     }, 1500);
 }
-// ======================== ЭКРАН ЗАГРУЗКИ ========================
 let loadingScreenVisible = false;
 function showLoadingScreen(message = 'Загрузка...') {
     if (loadingScreenVisible) return;
@@ -2588,7 +2441,6 @@ function showLoadingScreen(message = 'Загрузка...') {
         </div>
     `;
     document.body.appendChild(overlay);
-    // Добавляем ключевые кадры для анимации спиннера, если их ещё нет
     if (!document.getElementById('loading-anim-styles')) {
         const style = document.createElement('style');
         style.id = 'loading-anim-styles';
@@ -2619,7 +2471,6 @@ function updateLoadingStatus(text, progress) {
         bar.style.width = Math.min(100, Math.max(0, progress)) + '%';
     }
 }
-// ======================== ЭКСПОРТ ========================
 window.selectMode = selectMode;
 window.selectDifficulty = selectDifficulty;
 window.closeDifficultyModal = closeDifficultyModal;
@@ -2645,7 +2496,6 @@ window.isGameOver = isGameOver;
 window.selectedDifficulty = selectedDifficulty;
 window.selectedMode = selectedMode;
 window.saveTotalProgress = saveTotalProgress;
-// Свитки
 window.openScrollsModal = openScrollsModal;
 window.closeScrollsModal = closeScrollsModal;
 window.openScrollTextModal = openScrollTextModal;
@@ -2656,7 +2506,6 @@ window.renderScrolls = renderScrolls;
 window.countUnlockedScrolls = countUnlockedScrolls;
 window.claimScroll = claimScroll;
 window.getScrollsProgress = getScrollsProgress;
-// Коллекции
 window.openCollections = openCollections;
 window.closeCollections = closeCollections;
 window.openCollectionCategory = openCollectionCategory;
@@ -2670,7 +2519,6 @@ window.showLockedCategory = showLockedCategory;
 window.showSimpleModal = showSimpleModal;
 window.claimCollectionItem = claimCollectionItem;
 window.updateCollectionsProgress = updateCollectionsProgress;
-// Центр наград
 window.openRewardsCenter = openRewardsCenter;
 window.closeRewardsCenter = closeRewardsCenter;
 window.openScrollsFromRewards = openScrollsFromRewards;
@@ -2678,16 +2526,13 @@ window.openDailyBonus = openDailyBonus;
 window.claimDailyBonus = claimDailyBonus;
 window.showSuccessModal = showSuccessModal;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
-// ======================== рекл за вознагр
 window.handleContinueWithAd = handleContinueWithAd;
 window.clearTopRows = clearTopRows;
 window.showContinueConfirmationModal = showContinueConfirmationModal;
-// Бонусы
 window.claimDailyBonus = claimDailyBonus;
 window.claimEnhancedDailyBonus = claimEnhancedDailyBonus;
 window.openDailyBonus = openDailyBonus;
 window.updateDailyBonusStatus = updateDailyBonusStatus;
-// Замедление
 window.showSlowDownModal = showSlowDownModal;
 window.activateSlowDown = activateSlowDown;
 window.applySlowDownEffect = applySlowDownEffect;

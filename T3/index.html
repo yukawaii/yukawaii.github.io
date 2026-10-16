@@ -66,20 +66,14 @@
         </button>
     </div>
 </div>
-    <!-- МОДАЛКА ВЫБОРА СЛОЖНОСТИ -->
     <div id="difficulty-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 14, 0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);"><div class="modal-content" style="background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 30px; padding: 35px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; text-align: center;"><button class="modal-close-btn" onclick="closeDifficultyModal()" style="position: absolute; top: 10px; right: 20px; background: none; border: none; color: #64748b; font-size: 28px; cursor: pointer; transition: all 0.2s; font-family: 'Russo One', sans-serif; padding: 12px; touch-action: manipulation; line-height: 1;">✕</button><p style="color: #64748b; font-size: 13px; letter-spacing: 1px; margin-bottom: 30px; font-family: 'Russo One', sans-serif;">Режим: <span id="difficulty-mode-name" style="color: #fff;">Классика</span></p><div style="display: flex; flex-direction: column; gap: 12px;"><button onclick="selectDifficulty('easy')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">🟢 Легко <span style="display: block; font-size: 11px; color: #86efac; margin-top: 4px;">Медленнее</span></button><button onclick="selectDifficulty('medium')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);">🟡 Средне <span style="display: block; font-size: 11px; color: #93c5fd; margin-top: 4px;">Стандарт</span></button><button onclick="selectDifficulty('hard')" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 1.5px; color: #fff; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);">🔴 Сложно <span style="display: block; font-size: 11px; color: #fca5a5; margin-top: 4px;">Быстрее</span></button></div></div></div>
-<script>// Запрещаем скролл на всех тач-событиях
+<script>
 document.addEventListener('touchmove', function(e) {
-    // Разрешаем скролл только внутри модалок с классом modal-overlay__content
-    if (e.target.closest('.modal-overlay__content')) {
-        return;
-    }
+ if (e.target.closest('.modal-overlay__content')){ return;}
     e.preventDefault();
 }, { passive: false });
 document.addEventListener('touchstart', function(e) {
-    if (e.target.closest('.modal-overlay__content')) {
-        return;
-    }
+   if (e.target.closest('.modal-overlay__content')){ return;}
     const touch = e.touches[0];
     const startY = touch.clientY;
     const handleMove = function(e2) {
@@ -96,14 +90,7 @@ window.__vkBridgeReady = new Promise(function (resolve) {
     if (window.vkBridge) return resolve(window.vkBridge);
     let tries = 0;
     const iv = setInterval(function () {
-        if (window.vkBridge) {
-            clearInterval(iv);
-            resolve(window.vkBridge);
-        } else if (++tries > 100) {   // 10 секунд
-            clearInterval(iv);
-            console.warn('VK Bridge так и не загрузился');
-            resolve(null);
-        }
+ if (window.vkBridge){ clearInterval(iv); resolve(window.vkBridge);} else if (++tries >100){ clearInterval(iv); console.warn('VK Bridge так и не загрузился'); resolve(null);}
     }, 100);
 });
 </script>
