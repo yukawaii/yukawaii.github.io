@@ -2,26 +2,21 @@ body {
 	margin: 0 auto;
 	font-family: Arial;
 }
-
 h3 {
 	background: rgba(255, 223, 211, 0.5); 
 }
-
 input::-moz-focus-inner { 
   border: 0; 
 }
-
 a {
    outline: 0;
 }
-
 .myclass1 {
 text-align: center;
 }
 .myclass2 {
 	text-align: right;
 	}
-	  
 .submit-button {
 	margin-top: 20px;
 	width: 280px;
@@ -31,7 +26,7 @@ text-align: center;
 	text-align: center;
 	padding-top: 20px; 
 	background: rgba(255, 223, 211, 0.5); 
- 	height: 600px; /* розовая область с игрой и кнопками*/
+ 	height: 600px; 
     width: 500px;
 	position: right, bottom;
 }
@@ -53,7 +48,6 @@ text-align: center;
 	margin-top: 10px;
 	padding: 10px
 }
-
 .grid-box, .green-player, .red-player {
 	font-size: 35px;
 	padding: 5px 5px;
@@ -71,7 +65,6 @@ text-align: center;
 	background-color: red;
 	color: #FFF;
 }
-
 .score-card {
 	font-weight: bold;
 	line-height: 25px;
