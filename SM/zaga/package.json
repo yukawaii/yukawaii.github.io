@@ -1,0 +1,17 @@
+{
+  "name": "zaga",
+  "version": "1.0.0",
+  "description": "",
+  "main": "App.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "terser": "^5.51.2"
+  }
+}
