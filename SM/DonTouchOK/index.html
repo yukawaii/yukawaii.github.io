@@ -3932,20 +3932,6 @@ function showCountdownNotification(text) {
     
     isSoundEnabled = true;
     
-    // ===== 2. ПОКАЗЫВАЕМ РЕКЛАМУ =====
-   /* if (typeof vkBridge !== 'undefined') {
-        var now = Date.now();
-        if ((now - lastAdTime) >= adCooldown) {
-            lastAdTime = now;
-            vkBridge.send("VKWebAppShowNativeAds", { ad_format: "interstitial" })
-                .then(function() {
-                    console.log('📱 Реклама показана');
-                })
-                .catch(function(e) {
-                    console.log('⚠️ Ошибка рекламы:', e);
-                });
-        }
-    }*/
     
     // ===== 3. ЗАПУСКАЕМ АНИМАЦИЮ ПУЗЫРЕЙ И НОВУЮ ИГРУ =====
     startBubbleTransition(function() {
@@ -6137,7 +6123,7 @@ function getShieldsViaAd() {
     
     // Пытаемся показать рекламу за вознаграждение
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
-    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" , use_waterfall: true})
         .then(function(data) {
             adShown = true;
             clearTimeout(adTimeout);
@@ -6326,7 +6312,7 @@ function getRepairViaAd() {
     
     // Пытаемся показать рекламу за вознаграждение
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
-    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true })
         .then(function(data) {
             adShown = true;
             clearTimeout(adTimeout);

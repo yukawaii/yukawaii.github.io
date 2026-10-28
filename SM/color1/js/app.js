@@ -646,7 +646,7 @@ function watchAdForBrushUnlock() {
                 showToast('⚠️ Реклама недоступна, но кисть открыта!');
                 return;
             }
-            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+            return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' , use_waterfall: true});
         })
         .then((showData) => {
             clearTimeout(timeoutId);
@@ -1273,7 +1273,7 @@ function showRewardedAd() {
                     reject('Ad not available');
                     return;
                 }
-                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+                return bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward', use_waterfall: true });
             })
             .then((showData) => {
                 if (resolved) return;

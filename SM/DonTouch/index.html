@@ -4272,7 +4272,7 @@ function getShieldsViaAd() {
     }
     // Пытаемся показать рекламу за вознаграждение
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
-    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true })
         .then(function(data) {
             adShown = true;
             clearTimeout(adTimeout);
@@ -4404,7 +4404,7 @@ function getRepairViaAd() {
         return;
     }
     var sendMethod = vkBridge.sendPromise || vkBridge.send;
-    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+    sendMethod.call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" , use_waterfall: true})
         .then(function(data) {
             adShown = true;
             clearTimeout(adTimeout);
