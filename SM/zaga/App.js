@@ -163,13 +163,18 @@ let _rewardBusy = false;
 function checkAdsAvailable(adFormat) {
     if (typeof vkBridge === 'undefined') return Promise.resolve(false);
     return vkBridge.send('VKWebAppCheckNativeAds', { ad_format: adFormat })
-        .then((data) => !!(data && data.result === true))
-        .catch(() => false);
+        .then((data) => {
+            console.log('[Check ' + adFormat + ']', data);
+            return !!(data && data.result === true);
+        })
+        .catch((err) => {
+            console.warn('[Check ' + adFormat + ' ERROR]', err);
+            return false;
+        });
 }
 
 function preloadRewardedAd() {
     if (typeof vkBridge === 'undefined') return;
-    // Проверяем готовность reward и interstitial, не блокируя UI
     checkAdsAvailable('reward');
     checkAdsAvailable('interstitial');
 }
@@ -182,18 +187,20 @@ function showRewardedAd() {
     const tryShow = (format) => new Promise((resolve) => {
         let settled = false;
         const timer = setTimeout(() => {
-            if (!settled) { settled = true; resolve(false); }
-        }, 90000); // 90 сек таймаут на показ
+            if (!settled) { settled = true; console.warn('[Show ' + format + ' TIMEOUT]'); resolve(false); }
+        }, 90000);
 
         vkBridge.send('VKWebAppShowNativeAds', { ad_format: format, use_waterfall: true })
             .then((data) => {
+                console.log('[Show ' + format + ']', data);
                 if (!settled) {
                     settled = true;
                     clearTimeout(timer);
                     resolve(!!(data && (data.result === true || data.result === 1)));
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.warn('[Show ' + format + ' ERROR]', err);
                 if (!settled) {
                     settled = true;
                     clearTimeout(timer);
@@ -203,7 +210,6 @@ function showRewardedAd() {
     });
 
     return (async () => {
-        // 1) Ждём готовности reward до 8 сек
         let ready = false;
         const start = Date.now();
         while (Date.now() - start < 8000) {
@@ -211,18 +217,15 @@ function showRewardedAd() {
             await new Promise(r => setTimeout(r, 700));
         }
 
-        // 2) Если reward готов — показываем
         if (ready) {
             const ok = await tryShow('reward');
             if (ok) {
-                // ✅ Успешный показ — сразу предзагружаем следующую
                 preloadRewardedAd();
                 _rewardBusy = false;
                 return true;
             }
         }
 
-        // 3) Fallback: interstitial
         const interReady = await checkAdsAvailable('interstitial');
         if (interReady) {
             const ok = await tryShow('interstitial');
@@ -243,17 +246,10 @@ let _bannerVisible = false;
 
 function showBannerAd() {
     if (typeof vkBridge === 'undefined') return;
-    // Проверяем, поддерживается ли баннер на платформе
-    if (typeof vkBridge.supports === 'function' && !vkBridge.supports('VKWebAppShowBannerAd')) {
-        console.warn('Banner ads not supported on this platform');
-        return;
-    }
 
+    // ✅ ПРОСТО ВЫЗЫВАЕМ МЕТОД:
     vkBridge.send('VKWebAppShowBannerAd', {
-        // Для мобильных клиентов можно указать позицию
-        // layout_type: 'resize',
-        // height_type: 'auto',
-        // orientation: 'vertical'
+        // Здесь можно указать параметры, если нужно
     })
     .then((data) => {
         if (data && data.result === true) {
@@ -265,6 +261,8 @@ function showBannerAd() {
     })
     .catch((err) => {
         console.warn('Banner show error:', err);
+        // Для отладки можно вывести подробности:
+        // console.warn('Banner error details:', err.error_data || err);
         _bannerVisible = false;
     });
 }
