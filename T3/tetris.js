@@ -1925,7 +1925,7 @@ function showRewardedAdForContinue() {
         if (typeof gameAudio !== 'undefined') {
             gameAudio.pauseAll();
         }
-        vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+        vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward', use_waterfall: true  })
             .then((data) => {
                 console.log('✅ Реклама за вознаграждение показана:', data);
                 closeLoadingAdModal();
