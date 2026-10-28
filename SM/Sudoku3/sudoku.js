@@ -88,7 +88,7 @@ class AdManager {
             const t = setTimeout(() => { e(!1); }, 12e4);
             if (void 0 === vkBridge) return clearTimeout(t), void e(!1);
             (window.vkBridge.sendPromise || window.vkBridge)
-                .call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward" })
+                .call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true  })
                 .then((s) => {
                     if (clearTimeout(t), s) {
                         if (!0 === s.result || !0 === s.success || "success" === s.status)
