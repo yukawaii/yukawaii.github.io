@@ -138,10 +138,8 @@
 </style>
     <title>Словарекс — составь слова из букв</title>
     <meta name="description" content="Составь как можно больше слов из заданных букв. Развивай словарный запас и скорость мышления.">
-   <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="responsive.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
- <script src = "./App.js"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="style.min.css">
 </head>
 
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
@@ -572,7 +570,6 @@
         console.log('✅ VK Bridge найден');
     })();
 </script>
-<script src="words.js"></script><script src="game.js"></script>
 <script>
     // ============================================================
     // Скрытие VK-специфичных элементов для платформы OK
@@ -622,5 +619,6 @@
         setTimeout(hideOKOnlyElements, 500);
     })();
 </script>
+    <script src="game.min.js"></script>
 </body>
 </html>
