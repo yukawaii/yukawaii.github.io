@@ -181,6 +181,7 @@
             <button class="start-screen__icon-btn" id="startThemeBtn" title="Сменить тему">🎨</button>
             <button class="start-screen__icon-btn" id="startAchievementsBtn" title="Достижения">🏆</button>
                <button class="start-screen__icon-btn" id="startGalaxyBtn" title="Галактика">🌌</button> 
+               <button class="start-screen__icon-btn" id="startMapBtn" title="Карта пути">🗺️</button>
             <button class="start-screen__icon-btn" id="startShareBtn" title="Пригласить друзей">👥</button>
             <button class="start-screen__icon-btn" id="startSoundBtn" title="Звук">🔊</button>
             <button class="start-screen__icon-btn" id="startOtherGamesBtn" title="Другие игры">🕹️</button>
@@ -393,8 +394,7 @@
             <div class="action-buttons">
                 <button class="action-btn" id="hintBtn" title="Подсказка">💡 <span id="hintCount">5</span></button>
                 <button class="action-btn" id="soundBtn" title="Звук">🔊</button>
-             <!--     <button class="action-btn" id="leaderboardBtn" title="Таблица лидеров">🏆</button>-->
-                    <button class="action-btn" id="shareBtn" title="Пригласить">📤</button>
+        <button class="action-btn" id="gameMapBtn" title="Карта пути">🗺️</button>
                 <button class="action-btn" id="restartBtn" title="Начать заново">🔄</button>
                     <button class="action-btn" id="menuBtn" title="В меню">🏠</button> 
             </div>
@@ -548,6 +548,17 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="progressMapModal">
+  <div class="modal-overlay__content modal-overlay__content--map">
+    <button class="modal-overlay__close" id="progressMapClose">✕</button>
+    <h2>🗺️ Ваш путь</h2>
+    <div class="map-wrap">
+      <img src="map.jpg" class="map-img" alt="">
+      <img src="player.png" class="map-player" id="mapPlayer" alt="">
+    </div>
+  </div>
+</div>
+
 <script>
     // Проверяем, доступен ли VK Bridge
     (function() {
@@ -584,7 +595,7 @@
                 return;
             }
             
-            const ids = ['startShareBtn', 'shareBtn'];
+            const ids = ['startShareBtn'];
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
