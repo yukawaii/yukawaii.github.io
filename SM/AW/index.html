@@ -76,9 +76,6 @@ body.app-ready .app{opacity:1}
 .screen{display:none;flex-direction:column;gap:var(--gap);flex:1;min-height:0}
 .screen.active{display:flex}
 .hero{text-align:center;padding-top:var(--gap)}
-
-
-
 .hero-actions{display:flex;flex-wrap:wrap;gap:var(--gap-sm);justify-content:center}
 .region-title{font-size:var(--f-lg);margin:0 0 var(--gap-sm);display:flex;align-items:center;gap:6px}
 .levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--gap-sm)}
@@ -130,7 +127,6 @@ body.app-ready .app{opacity:1}
   letter-spacing:.2px;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s,transform .1s,box-shadow .2s;text-align:center;box-shadow:0 2px 6px rgba(15,23,42,.05);-webkit-tap-highlight-color:transparent;user-select:none;overflow-wrap:anywhere;word-break:normal}
 .option:hover:not(.disabled){background:#f8faff;border-color:#a5b4fc;transform:translateY(-2px);box-shadow:0 6px 16px rgba(102,126,234,.18)}
 .option.disabled{pointer-events:none;opacity:.85}
-
 .option.correct{background:var(--success-l);border-color:var(--success);color:#052e16;font-weight:600}
 .option.wrong{background:var(--danger-l);border-color:var(--danger);color:#450a0a;font-weight:600}
 .description{position:relative;font-size:clamp(16px,2.6vmin,20px);line-height:1.5;color:#1f2937;background:#ffffff;border:1px solid rgba(123,92,255,.18);border-radius:12px;padding:20px 16px 14px;margin-top:10px;box-shadow:0 6px 20px rgba(123,92,255,.18)}
@@ -358,7 +354,6 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
 .particle-md { width: 4px; height: 4px; }
 .particle-lg { width: 6px; height: 6px; }
 .particle-xl { width: 8px; height: 8px; }
-
 @keyframes particleFloat {
     0%   { transform: translateY(0) translateX(0) scale(.5);   opacity: 0; }
     10%  { opacity: .8; transform: translateY(-20px) translateX(10px) scale(1); }
@@ -366,7 +361,6 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
     90%  { opacity: .8; transform: translateY(-100px) translateX(20px) scale(.8); }
     100% { transform: translateY(-120px) translateX(0) scale(.3); opacity: 0; }
 }
-
 html.is-dark .particle-blue   { background: radial-gradient(circle, rgba(150,220,255,.9), rgba(50,150,255,.2)); }
 html.is-dark .particle-pink   { background: radial-gradient(circle, rgba(255,180,220,.9), rgba(200,50,150,.2)); }
 html.is-dark .particle-purple { background: radial-gradient(circle, rgba(200,140,255,.9), rgba(100,50,200,.2)); }
@@ -425,7 +419,6 @@ html.is-dark .question-text{ background: linear-gradient(135deg,#a29bfe,#c8b6ff)
 .col-counter,
 .badge{ background: #f3f4f6 !important; color: #7c3aed !important; border: 1px solid #e5e7eb !important; box-shadow: none !important; font-weight: 700 !important; pointer-events: none !important; cursor: default !important; border-radius: 10px !important; padding: 6px 14px !important; display: inline-flex !important; align-items: center !important; gap: 4px !important; font-size: 14px !important;}
 .badge{ font-size: 11px !important; padding: 4px 10px !important; border-radius: 8px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;}
-
 .btn-icon-count{ background: transparent !important; border: none !important; color: #7c3aed !important; padding: 0 !important; font-weight: 700 !important; font-size: 14px !important;} 
 html.is-dark .vkuiButton--mode-primary{ background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%) !important; box-shadow: 0 4px 16px rgba(108, 92, 231, 0.45) !important;}
 html.is-dark .vkuiButton--mode-primary:hover{ background: linear-gradient(135deg, #7d6ff0 0%, #b3adff 100%) !important; box-shadow: 0 8px 22px rgba(108, 92, 231, 0.6) !important;}
@@ -455,7 +448,6 @@ html:not(.is-dark) .vkuiButton--mode-tertiary:hover{ background: #afe0f7 !import
 html:not(.is-dark) .vkuiButton--mode-secondary:active,
 html:not(.is-dark) .vkuiButton--mode-tertiary:active{ background: #afe0f7 !important;} html:not(.is-dark) .vkuiButton--mode-secondary .btn-icon-count,
 html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !important; background: transparent !important;} html.weak-device .particle{ display: none !important;}
-
 #page-collection.active {
     display: flex;
     flex-direction: column;
@@ -463,10 +455,7 @@ html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !i
     border-radius: var(--r);
     background: var(--card);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-
 }
-
-
 #page-collection .col-header {
     background: var(--card) !important;
     border-bottom: 1px solid var(--card-b) !important;
@@ -477,8 +466,6 @@ html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !i
     top: 0;
     z-index: 10;
 }
-
-
 #page-collection #col-body {
     background: var(--bg-light);
     padding: var(--gap);
@@ -516,33 +503,26 @@ html.is-dark .hero-title {
     -webkit-text-fill-color: transparent !important;
 }
 html.is-dark .hero-sub { color: #f5e6d3 !important; }
-
 #page-collection #col-body {
     background: var(--bg-light);
     padding: var(--gap);
     flex: 1;
     border-radius: 0 0 var(--r) var(--r);
 }
-
 html:not(.is-dark) .timer {
     color: #22c55e !important;   
 }
 html:not(.is-dark) .timer.warning {
     color: #f87171 !important;  
 }
-
 html:not(.is-dark) .progress-fill {
     background: linear-gradient(90deg, #16a34a 0%, #22c55e 50%, #4ade80 100%) !important;
 }
-
-
 #ach-modal .modal-content {
     align-items: stretch !important;
     padding: 0 !important;
     gap: 0 !important;
 }
-
-
 #ach-modal .ach-sticky-head {
     position: sticky;
     top: 0;
@@ -555,8 +535,6 @@ html:not(.is-dark) .progress-fill {
     flex-direction: column;
     gap: 4px;
 }
-
-
 #ach-modal .ach-head-row {
     display: flex;
     align-items: center;
@@ -564,8 +542,6 @@ html:not(.is-dark) .progress-fill {
     gap: var(--gap-sm);
     width: 100%;
 }
-
-
 #ach-modal .ach-head-row .modal-back,
 #ach-modal .ach-head-row .modal-close {
     position: static !important;
@@ -579,8 +555,6 @@ html:not(.is-dark) .progress-fill {
     font-size: 20px !important;
     flex-shrink: 0;
 }
-
-
 #ach-modal .ach-head-row .modal-title {
     flex: 1;
     margin: 0 !important;
@@ -590,8 +564,6 @@ html:not(.is-dark) .progress-fill {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-
 #ach-modal .ach-sticky-head .ach-total {
     margin: 0 !important;
     font-size: var(--f-sm);
@@ -599,12 +571,9 @@ html:not(.is-dark) .progress-fill {
     text-align: center;
     font-weight: 600;
 }
-
-
 #ach-modal #ach-body {
     padding: var(--gap-lg);
 }
-
 /* ============ RESULT SCREEN — redesign ============ */
 .result-card{
   gap: var(--gap-sm) !important;
@@ -623,7 +592,6 @@ html:not(.is-dark) .progress-fill {
   z-index:0;
 }
 .result-card > *{position: relative; z-index: 1;}
-
 .result-hero{
   display:flex;
   flex-direction:column;
@@ -643,7 +611,6 @@ html:not(.is-dark) .progress-fill {
   55%  { transform: scale(1.2) rotate(10deg); opacity: 1; }
   100% { transform: scale(1) rotate(0); opacity: 1; }
 }
-
 .result-title{
   font-size: var(--f-sm) !important;
   color: var(--muted) !important;
@@ -652,7 +619,6 @@ html:not(.is-dark) .progress-fill {
   text-transform: uppercase;
   margin: 0 !important;
 }
-
 .result-percent{
   font-size: clamp(52px, 15vmin, 88px) !important;
   font-weight: 900 !important;
@@ -661,14 +627,12 @@ html:not(.is-dark) .progress-fill {
   filter: drop-shadow(0 4px 14px rgba(255,95,162,.3));
   margin: 0 !important;
 }
-
 .result-stars{
   font-size: clamp(26px, 5.5vmin, 42px) !important;
   letter-spacing: 6px !important;
   margin: 0 !important;
   text-shadow: 0 2px 10px rgba(255,200,0,.45);
 }
-
 .result-grid{
   grid-template-columns: repeat(3, 1fr) !important;
   gap: var(--gap-sm) !important;
@@ -693,9 +657,7 @@ html:not(.is-dark) .progress-fill {
   font-weight: 600 !important;
   opacity: .8;
 }
-
 .result-actions{ margin-top: var(--gap-sm); }
-
 html.is-dark .result-cell{
   background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
   border-color: rgba(255,255,255,.08) !important;
@@ -704,7 +666,6 @@ html.is-dark .result-cell{
 html.is-dark .result-card::before{
   background: radial-gradient(ellipse at center, rgba(255,95,162,.14) 0%, rgba(156,125,255,.08) 45%, transparent 72%);
 }
-
 html.weak-device .modal {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -739,7 +700,6 @@ html:not(.is-dark) .modal-close:hover {
     background: #93d4f0 !important;
     color: #1e5f8a !important;
 }
-
 @media (min-width:720px),
        (orientation:landscape) and (min-width:480px) and (max-height:600px) {
     .description {
@@ -750,7 +710,6 @@ html:not(.is-dark) .modal-close:hover {
         top: -7px;            
     }
 }
-
 .emoji-icon {
   display: inline-flex;
   align-items: center;
@@ -768,8 +727,6 @@ html:not(.is-dark) .modal-close:hover {
   display: block;
   overflow: visible;
 }
-
-
 .modal-title .emoji-icon,
 .col-title .emoji-icon {
   width: 1em;
@@ -781,13 +738,9 @@ html:not(.is-dark) .modal-close:hover {
   transform: scale(1.25);
   transform-origin: center;
 }
-
-
 .btn-icon .emoji-icon > svg {
   transform: scale(1.15);
 }
-
-
 .modal-title .emoji-icon > svg,
 .col-title .emoji-icon > svg {
   transform: none;
@@ -1365,7 +1318,6 @@ qq('215',[T('Журавль','Crane','Turna'),T('Птица-секретарь',
 ,qq('265',[T('Муравей','Ant','Karınca'),T('Жук-короед','Bark beetle','Kabuk böceği'),T('Термит','Termite','Termit'),T('Проволочник','Wireworm','Tel kurdu')],2,T('Термит. Живёт огромными колониями, строит сложные термитники. Переваривает целлюлозу с помощью симбиотических микроорганизмов.','Termite. Lives in huge colonies and builds complex mounds. Digests cellulose with symbiotic microorganisms.','Termit. Devasa koloniler halinde yaşar ve karmaşık höyükler inşa eder. Selülozu simbiyotik mikroorganizmalarla sindirir.'))
 ]}
 };
-
 w.ACHIEVEMENTS=[
 {id:'prog_first',cat:'progress',icon:'🎯',title:T('Первый шаг','First step','İlk adım'),desc:T('Пройдите первую викторину','Complete your first quiz','İlk testi tamamla'),check:c=>c.totalPlays>=1},
 {id:'prog_aus',cat:'progress',icon:'🌏',title:T('Открыл Австралию','Discovered Australia','Avustralya\'yı keşfettin'),desc:T('Откройте Австралийскую область','Unlock the Australian region','Avustralya bölgesinin kilidini aç'),check:c=>c.unlockedRegions.has('australian')},
@@ -1555,225 +1507,38 @@ const SVG_ICONS = {
   key: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -0.5 41 41"><title>key</title><g fill="none" stroke-miterlimit="10"><path fill="#ffe236" stroke="#231f20" d="M35 3.23c-1.74-1.74-4.19-2.1-14.67 8.38c-2.45 2.39-4.28 4.39-5.66 6.07a10.37 10.37 0 1 0 5.86 5.86c1.42-1.19 3.1-2.73 5.08-4.67q.461.6 1 1.13c1.35 1.35 3.52 2.76 4.63 2.35a5.6 5.6 0 0 0 1.94-1a1.5 1.5 0 0 0 .44-2a17.7 17.7 0 0 0-1.84-2.5c.37-.34.75-.69 1.11-1.06s.72-.74 1.06-1.11a17.7 17.7 0 0 0 2.5 1.84a1.5 1.5 0 0 0 2-.44a5.6 5.6 0 0 0 1-1.94c.41-1.11-1-3.28-2.35-4.63a11.6 11.6 0 0 0-2-1.61c1.35-2.55.83-3.73-.1-4.67Z"/><path fill="#fff" stroke="#231f20" d="M6.43 27.33a4.45 4.45 0 1 0 8.9 0a4.45 4.45 0 0 0-8.9 0Z"/><path stroke="#fff" stroke-linecap="round" d="M26.72 9.69c3.14-3.38 5.22-4.19 5.22-4.19"/></g></svg>',
   confetti: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title>party-confetti</title><g fill="none"><path fill="#ffbfc5" d="M8.174 7.696a2.391 2.391 0 1 0 0-4.783a2.391 2.391 0 0 0 0 4.783"/><path fill="#c2f3ff" d="M19.652 6.26a1.913 1.913 0 1 0 0-3.825a1.913 1.913 0 0 0 0 3.826"/><path fill="#c9f7ca" d="M19.173 15.826a1.913 1.913 0 1 0 0-3.826a1.913 1.913 0 0 0 0 3.826"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M16.288 12.207a4.75 4.75 0 0 1 6.711 0M11.778 7.713a4.743 4.743 0 0 0 0-6.713m6.032 7.412l3.357-1.117m-5.594-1.118l1.12-3.358M8.14 5.085a.24.24 0 0 1 .24.24m-.48-.001a.24.24 0 0 1 .24-.239m0 .479a.24.24 0 0 1-.24-.24"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M8.38 5.324a.24.24 0 0 1-.24.24m7.174 2.391a.24.24 0 0 1 .24.239m-.479 0a.24.24 0 0 1 .239-.24"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M15.314 8.433a.24.24 0 0 1-.24-.24m.479.001a.24.24 0 0 1-.239.239m3.826 5.261a.24.24 0 0 1 .239.239m-.479 0a.24.24 0 0 1 .24-.24m0 .479a.24.24 0 0 1-.24-.239m.479 0a.24.24 0 0 1-.24.24m.479-10.044a.24.24 0 0 1 .24.239m-.479 0a.24.24 0 0 1 .239-.24m0 .479a.24.24 0 0 1-.24-.24m.479.001a.24.24 0 0 1-.239.239"/><path fill="#ffef5e" d="m15.008 16.376l-12.11 6.472a1.29 1.29 0 0 1-1.745-1.746l6.471-12.11z"/><path fill="#fff9bf" d="M11.316 12.684L7.624 8.992l-6.47 12.11a1.29 1.29 0 0 0 .229 1.52z"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="m15.008 16.376l-12.11 6.472a1.29 1.29 0 0 1-1.745-1.746l6.471-12.11"/><path fill="#ffbc44" stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M15.242 16.197c.934-.934.026-3.357-2.029-5.411s-4.477-2.963-5.41-2.03c-.935.934-.026 3.357 2.028 5.411c2.055 2.055 4.477 2.963 5.411 2.03"/></g></svg>'
 };
-const cls = d.documentElement.classList;
+const cls=d.documentElement.classList;
 cls.toggle('is-vk', isVK);
 cls.toggle('is-ok', isOK);
 cls.toggle('is-yandex', isYandex);
-cls.toggle('is-standalone', platform === 'standalone');
-let darkEnabled = false;
-try {
-  const raw = localStorage.getItem(storagePrefix + 'aq_theme_dark');
-  if (raw === 'true' || raw === true) { darkEnabled = true; cls.add('is-dark'); }
-} catch (e) {}
+cls.toggle('is-standalone', platform==='standalone');
+let darkEnabled=false;
+try{ const raw=localStorage.getItem(storagePrefix + 'aq_theme_dark'); if (raw==='true' || raw===true){ darkEnabled=true; cls.add('is-dark');}} catch (e){}
 console.log('%c🎮 ' + platform.toUpperCase(), 'color:#e94560;font-weight:bold', '| userId=' + userId + ' | prefix="' + (storagePrefix || '(none)') + '"');
-const SUPPORTED = ['ru', 'en', 'tr'];
-function normalizeLang(l) {
-  l = String(l || '').toLowerCase();
-  if (l.startsWith('ru')) return 'ru';
-  if (l.startsWith('en')) return 'en';
-  if (l.startsWith('tr')) return 'tr';
-  return 'ru';
-}
-function initialLang() {
-  if (isVK || isOK) return normalizeLang(launchParams.vk_language || 'ru');
-  if (launchParams.vk_language) return normalizeLang(launchParams.vk_language);
-  return normalizeLang(navigator.language || navigator.userLanguage || 'ru');
-}
-let LANG = initialLang();
-w.LANG = LANG;
-w.t = function (key) {
-  const cur = (w.I18N && w.I18N[w.LANG]) || {};
-  const fb = (w.I18N && w.I18N.ru) || {};
-  return cur[key] != null ? cur[key] : (fb[key] != null ? fb[key] : key);
-};
-w.L = function (obj) {
-  if (obj == null) return '';
-  if (typeof obj === 'string') return obj;
-  return obj[w.LANG] || obj.ru || '';
-};
-function applyStaticI18n() {
-  d.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = w.t(el.dataset.i18n); });
-  d.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = w.t(el.dataset.i18nTitle); });
-  const lt = d.querySelector('.loading-text');
-  if (lt) lt.textContent = w.t('loading');
-  d.documentElement.lang = LANG;
-}
+const SUPPORTED=['ru', 'en', 'tr'];
+function normalizeLang(l){ l=String(l || '').toLowerCase(); if (l.startsWith('ru')) return 'ru'; if (l.startsWith('en')) return 'en'; if (l.startsWith('tr')) return 'tr'; return 'ru';}
+function initialLang(){ if (isVK || isOK) return normalizeLang(launchParams.vk_language || 'ru'); if (launchParams.vk_language) return normalizeLang(launchParams.vk_language); return normalizeLang(navigator.language || navigator.userLanguage || 'ru');}
+let LANG=initialLang();
+w.LANG=LANG;
+w.t=function (key){ const cur=(w.I18N && w.I18N[w.LANG]) ||{}; const fb=(w.I18N && w.I18N.ru) ||{}; return cur[key] !=null ? cur[key] : (fb[key] !=null ? fb[key] : key);};
+w.L=function (obj){ if (obj==null) return ''; if (typeof obj==='string') return obj; return obj[w.LANG] || obj.ru || '';};
+function applyStaticI18n(){ d.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=w.t(el.dataset.i18n);}); d.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.title=w.t(el.dataset.i18nTitle);}); const lt=d.querySelector('.loading-text'); if (lt) lt.textContent=w.t('loading'); d.documentElement.lang=LANG;}
 let ysdk = null, ysdkPlayer = null;
-function vkSend(method, params, timeoutMs) {
-  timeoutMs = timeoutMs || 2000;
-  if (!(isVK || isOK)) return Promise.resolve(null);
-  const trySend = () => {
-    const bridge = w.vkBridge;
-    if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
-    let settled = false;
-    let timerId = null;
-    const call = new Promise(resolve => {
-      try {
-        bridge.send(method, params || {}).then(r => {
-          if (!settled) { settled = true; clearTimeout(timerId); resolve(r); }
-        })
-        .catch(err => {
-        console.error('VK Bridge ' + method + ' ошибка:', JSON.stringify(err, null, 2) || err);
-          if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
-        });
-      } catch (e) {
-        console.error(`VK Bridge ${method} исключение:`, e);
-        if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
-      }
-    });
-    const timer = new Promise(res => {
-      timerId = setTimeout(() => {
-        if (!settled) { settled = true; resolve(null); }
-      }, timeoutMs);
-    });
-    return Promise.race([call, timer]);
-  };
-  if (w.__vkBridgeReady && !w.vkBridge) {
-    return w.__vkBridgeReady.then(() => trySend());
-  }
-  return trySend();
-}
-
-let __actionLock = false;
-async function withLock(fn) {
-  if (__actionLock) return;
-  __actionLock = true;
-  try { await fn(); } finally { setTimeout(() => { __actionLock = false; }, 300); }
-}
-async function safeCall(fn, fallback = null, label = '') {
-  try { return await fn(); }
-  catch (e) { console.warn('safeCall' + (label ? ' [' + label + ']' : '') + ':', e); return fallback; }
-}
-function storageKey(name) { return storagePrefix + 'aq_' + name; }
-function mergeValues(localVal, remoteVal) {
-  if (localVal == null) return remoteVal;
-  if (remoteVal == null) return localVal;
-  if (Array.isArray(localVal) && Array.isArray(remoteVal)) return Array.from(new Set([...localVal, ...remoteVal]));
-  if (typeof localVal === 'object' && typeof remoteVal === 'object' && !Array.isArray(localVal) && !Array.isArray(remoteVal)) {
-    const merged = { ...localVal };
-    for (const k in remoteVal) {
-      const lv = Number(merged[k]);
-      const rv = Number(remoteVal[k]);
-      if (isNaN(lv) && isNaN(rv)) merged[k] = remoteVal[k];
-      else merged[k] = Math.max(isNaN(lv) ? 0 : lv, isNaN(rv) ? 0 : rv);
-    }
-    return merged;
-  }
-  return localVal;
-}
-function deepMergeMetrics(local, remote) {
-  if (local == null) return remote;
-  if (remote == null) return local;
-  if (typeof local !== 'object' || typeof remote !== 'object') return local;
-  const out = { ...local };
-  const keys = new Set([...Object.keys(local), ...Object.keys(remote)]);
-  for (const k of keys) {
-    const lv = local[k];
-    const rv = remote[k];
-    if (lv === undefined) { out[k] = rv; continue; }
-    if (rv === undefined) { out[k] = lv; continue; }
-    if (Array.isArray(lv) || Array.isArray(rv)) {
-      const a = Array.isArray(lv) ? lv : [];
-      const b = Array.isArray(rv) ? rv : [];
-      out[k] = Array.from(new Set([...a, ...b]));
-      continue;
-    }
-    if (typeof lv === 'object' && typeof rv === 'object') { out[k] = deepMergeMetrics(lv, rv); continue; }
-    if (typeof lv === 'boolean' || typeof rv === 'boolean') { out[k] = !!(lv || rv); continue; }
-    if (typeof lv === 'number' || typeof rv === 'number') {
-      const ln = Number(lv), rn = Number(rv);
-      if (!isNaN(ln) && !isNaN(rn)) {
-        if (k === 'fastestCorrect') out[k] = Math.min(ln, rn);
-        else out[k] = Math.max(ln, rn);
-        continue;
-      }
-    }
-    if (typeof lv === 'string' && typeof rv === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}/.test(lv) && /^\d{4}-\d{2}-\d{2}/.test(rv)) { out[k] = lv > rv ? lv : rv; continue; }
-    }
-    out[k] = lv;
-  }
-  return out;
-}
-async function remoteGet(name) {
-  const key = storageKey(name); 
-  if (isYandex) {
-    if (!ysdkPlayer) return null;
-    try {
-      const data = await ysdkPlayer.getData([key]);
-      const raw = data && data[key];
-      if (raw == null) return null;
-      try { return JSON.parse(raw); } catch { return raw; }
-    } catch (e) { return null; }
-  }
-  if (isVK || isOK) {
-    const data = await vkSend('VKWebAppStorageGet', { keys: [key] }, 1500);
-    const raw = data && data.keys && data.keys[0] && data.keys[0].value;
-    if (!raw) return null;
-    try { return JSON.parse(raw); } catch { return raw; }
-  }
-  return null;
-}
-async function remoteSet(name, valueStr) {
-  const key = storageKey(name);
-  if (isYandex) {
-    if (!ysdkPlayer) return false;
-    try { await ysdkPlayer.setData({ [key]: valueStr }, true); return true; } catch (e) { return false; }
-  }
-  if (isVK || isOK) {
-    const r = await vkSend('VKWebAppStorageSet', { key, value: valueStr }, 2500);
-    return r !== null;
-  }
-  return false;
-}
-function safeLocalGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-function safeLocalSet(key, value) {
-  try { localStorage.setItem(key, value); return true; }
-  catch (e) {
-    console.warn('localStorage.setItem failed:', e);
-    try {
-      const keys = Object.keys(localStorage);
-      keys.filter(k => k.startsWith('aq_') && !k.includes('unlocked') && !k.includes('collection')).forEach(k => localStorage.removeItem(k));
-      localStorage.setItem(key, value);
-      return true;
-    } catch (e2) { return false; }
-  }
-}
-function asArray(val, fallback = []) { return Array.isArray(val) ? val : fallback; }
-function asNumber(val, fallback = 0) { const n = Number(val); return isNaN(n) ? fallback : n; }
-function asObject(val, fallback = {}) { return (val && typeof val === 'object' && !Array.isArray(val)) ? val : fallback; }
-function storageGet(name) {
-  const key = storageKey(name);
-  let localVal = null;
-  try {
-    const raw = safeLocalGet(key);
-    if (raw !== null) { try { localVal = JSON.parse(raw); } catch { localVal = raw; } }
-  } catch (e) {}
-  if (P.isStandalone) return Promise.resolve(localVal);
-  if (isYandex) {
-    if (!ysdkPlayer) return Promise.resolve(localVal);
-    return (async () => {
-      try {
-        const data = await ysdkPlayer.getData([key]);
-        const raw = data && data[key];
-        if (raw == null) return localVal;
-        let remoteVal;
-        try { remoteVal = JSON.parse(raw); } catch { remoteVal = raw; }
-        const merged = mergeValues(localVal, remoteVal);
-        try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {}
-        return merged;
-      } catch (e) { console.warn('Cloud getData failed for', key, e); return localVal; }
-    })();
-  }
-  if (isVK || isOK) {
-    return remoteGet(name).then(remoteVal => {
-      const merged = mergeValues(localVal, remoteVal);
-      if (merged != null) { try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {} }
-      return merged;
-    });
-  }
-  return Promise.resolve(localVal);
-}
+function vkSend(method, params, timeoutMs){ timeoutMs=timeoutMs || 2000; if (!(isVK || isOK)) return Promise.resolve(null); const trySend=()=>{ const bridge=w.vkBridge; if (!bridge || typeof bridge.send !=='function') return Promise.resolve(null); let settled=false; let timerId=null; const call=new Promise(resolve=>{ try{ bridge.send(method, params ||{}).then(r=>{ if (!settled){ settled=true; clearTimeout(timerId); resolve(r);}}) .catch(err=>{ console.error('VK Bridge ' + method + ' ошибка:', JSON.stringify(err, null, 2) || err); if (!settled){ settled=true; clearTimeout(timerId); resolve(null);}});} catch (e){ console.error(`VK Bridge ${method} исключение:`, e); if (!settled){ settled=true; clearTimeout(timerId); resolve(null);}}}); const timer=new Promise(res=>{ timerId=setTimeout(()=>{ if (!settled){ settled=true; resolve(null);}}, timeoutMs);}); return Promise.race([call, timer]);}; if (w.__vkBridgeReady && !w.vkBridge){ return w.__vkBridgeReady.then(()=>trySend());} return trySend();}
+let __actionLock=false;
+async function withLock(fn){ if (__actionLock) return; __actionLock=true; try{ await fn();} finally{ setTimeout(()=>{ __actionLock=false;}, 300);}}
+async function safeCall(fn, fallback=null, label=''){ try{ return await fn();} catch (e){ console.warn('safeCall' + (label ? ' [' + label + ']' : '') + ':', e); return fallback;}}
+function storageKey(name){ return storagePrefix + 'aq_' + name;}
+function mergeValues(localVal, remoteVal){ if (localVal==null) return remoteVal; if (remoteVal==null) return localVal; if (Array.isArray(localVal) && Array.isArray(remoteVal)) return Array.from(new Set([...localVal, ...remoteVal])); if (typeof localVal==='object' && typeof remoteVal==='object' && !Array.isArray(localVal) && !Array.isArray(remoteVal)){ const merged={ ...localVal}; for (const k in remoteVal){ const lv=Number(merged[k]); const rv=Number(remoteVal[k]); if (isNaN(lv) && isNaN(rv)) merged[k]=remoteVal[k]; else merged[k]=Math.max(isNaN(lv) ? 0 : lv, isNaN(rv) ? 0 : rv);} return merged;} return localVal;}
+function deepMergeMetrics(local, remote){ if (local==null) return remote; if (remote==null) return local; if (typeof local !=='object' || typeof remote !=='object') return local; const out={ ...local}; const keys=new Set([...Object.keys(local), ...Object.keys(remote)]); for (const k of keys){ const lv=local[k]; const rv=remote[k]; if (lv===undefined){ out[k]=rv; continue;} if (rv===undefined){ out[k]=lv; continue;} if (Array.isArray(lv) || Array.isArray(rv)){ const a=Array.isArray(lv) ? lv : []; const b=Array.isArray(rv) ? rv : []; out[k]=Array.from(new Set([...a, ...b])); continue;} if (typeof lv==='object' && typeof rv==='object'){ out[k]=deepMergeMetrics(lv, rv); continue;} if (typeof lv==='boolean' || typeof rv==='boolean'){ out[k]=!!(lv || rv); continue;} if (typeof lv==='number' || typeof rv==='number'){ const ln=Number(lv), rn=Number(rv); if (!isNaN(ln) && !isNaN(rn)){ if (k==='fastestCorrect') out[k]=Math.min(ln, rn); else out[k]=Math.max(ln, rn); continue;}} if (typeof lv==='string' && typeof rv==='string'){ if (/^\d{4}-\d{2}-\d{2}/.test(lv) && /^\d{4}-\d{2}-\d{2}/.test(rv)){ out[k]=lv >rv ? lv : rv; continue;}} out[k]=lv;} return out;}
+async function remoteGet(name){ const key=storageKey(name); if (isYandex){ if (!ysdkPlayer) return null; try{ const data=await ysdkPlayer.getData([key]); const raw=data && data[key]; if (raw==null) return null; try{ return JSON.parse(raw);} catch{ return raw;}} catch (e){ return null;}} if (isVK || isOK){ const data=await vkSend('VKWebAppStorageGet',{ keys: [key]}, 1500); const raw=data && data.keys && data.keys[0] && data.keys[0].value; if (!raw) return null; try{ return JSON.parse(raw);} catch{ return raw;}} return null;}
+async function remoteSet(name, valueStr){ const key=storageKey(name); if (isYandex){ if (!ysdkPlayer) return false; try{ await ysdkPlayer.setData({ [key]: valueStr}, true); return true;} catch (e){ return false;}} if (isVK || isOK){ const r=await vkSend('VKWebAppStorageSet',{ key, value: valueStr}, 2500); return r !==null;} return false;}
+function safeLocalGet(key){ try{ return localStorage.getItem(key);} catch (e){ return null;}}
+function safeLocalSet(key, value){ try{ localStorage.setItem(key, value); return true;} catch (e){ console.warn('localStorage.setItem failed:', e); try{ const keys=Object.keys(localStorage); keys.filter(k=>k.startsWith('aq_') && !k.includes('unlocked') && !k.includes('collection')).forEach(k=>localStorage.removeItem(k)); localStorage.setItem(key, value); return true;} catch (e2){ return false;}}}
+function asArray(val, fallback=[]){ return Array.isArray(val) ? val : fallback;}
+function asNumber(val, fallback=0){ const n=Number(val); return isNaN(n) ? fallback : n;}
+function asObject(val, fallback={}){ return (val && typeof val==='object' && !Array.isArray(val)) ? val : fallback;}
+function storageGet(name){ const key=storageKey(name); let localVal=null; try{ const raw=safeLocalGet(key); if (raw !==null){ try{ localVal=JSON.parse(raw);} catch{ localVal=raw;}}} catch (e){} if (P.isStandalone) return Promise.resolve(localVal); if (isYandex){ if (!ysdkPlayer) return Promise.resolve(localVal); return (async ()=>{ try{ const data=await ysdkPlayer.getData([key]); const raw=data && data[key]; if (raw==null) return localVal; let remoteVal; try{ remoteVal=JSON.parse(raw);} catch{ remoteVal=raw;} const merged=mergeValues(localVal, remoteVal); try{ localStorage.setItem(key, JSON.stringify(merged));} catch (e){} return merged;} catch (e){ console.warn('Cloud getData failed for', key, e); return localVal;}})();} if (isVK || isOK){ return remoteGet(name).then(remoteVal=>{ const merged=mergeValues(localVal, remoteVal); if (merged !=null){ try{ localStorage.setItem(key, JSON.stringify(merged));} catch (e){}} return merged;});} return Promise.resolve(localVal);}
 function storageSet(name, value) {
   const key = storageKey(name);
   const str = typeof value === 'string' ? value : JSON.stringify(value);
@@ -1802,7 +1567,6 @@ function showRewardedAd(){
  if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false);} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result);}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true;}, onClose: ()=>{ finish(rewarded);}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false);}}});} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false);}}; if (ysdk && ysdk.adv){ runAd(ysdk);} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false;} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p;}).catch(()=>{}); runAd(sdk);}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false);});} else{ resolve(false);}});}
  if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res;}); adMute(); (async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK ad flow →', reason, '| result=', result); try{ adUnmute();} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result);}; try{ const rewardReady=await waitForAdsAvailable(8000, 700, 'reward'); if (rewardReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward', use_waterfall: true }, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'reward-watched' : 'reward-not-completed:' + JSON.stringify(data));} console.log('Reward ads unavailable → trying interstitial fallback'); const interReady=await waitForAdsAvailable(4000, 700, 'interstitial'); if (interReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'interstitial-watched' : 'interstitial-not-completed:' + JSON.stringify(data));} return finish(false, 'no-ads-at-all');} catch (e){ finish(false, 'error:' + ((e && e.message) || e));}})(); return w.__rewardAdInFlight;}
  return Promise.resolve(false);}
-
 function showInterstitial(){
   const now = Date.now();
   if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN) {
@@ -1815,7 +1579,6 @@ function showInterstitial(){
     return;
   }
   __lastInterstitialTime = now;
-
   if (isYandex) {
     if (!ysdk) return;
     yandexGameplayStop();
@@ -1833,7 +1596,6 @@ function showInterstitial(){
     }
     return;
   }
-
   if (isVK || isOK) {
     (async () => {
       try {
@@ -1852,7 +1614,6 @@ function showInterstitial(){
     })();
   }
 }
-
  let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=5;
 const BANNER_RETRY_DELAY=10000; 
 function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return;} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo);}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo);});}
@@ -1902,7 +1663,6 @@ function toast(msg, isError, title) {
   __toastQueue.push({ msg, isError, title });
   if (!__toastActive) __showNextToast();
 }
-
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
@@ -1946,73 +1706,21 @@ function playFanfare() {
   [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.30, 'triangle', i * 0.12, 0.15));
   [523.25, 659.25, 783.99, 1046.5].forEach(f => tone(f, 0.75, 'sine', 0.55, 0.13));
 }
-function ensureBgAudio() {
-  if (bgAudio) return bgAudio;
-  try {
-    bgAudio = new Audio('music.ogg');
-    bgAudio.loop = true;
-    bgAudio.volume = 0.25;
-    bgAudio.preload = 'auto';
-    bgAudio.addEventListener('error', () => { console.warn('Background music failed to load'); bgAudio = null; });
-  } catch (e) { console.warn('Audio creation failed:', e); bgAudio = null; }
-  return bgAudio;
-}
-function startBgMusic() {
-  if (!soundEnabled || adPlaying) return;
-  const audio = ensureBgAudio();
-  if (!audio) return;
-  audio.play().then(() => { bgStarted = true; }).catch(() => {});
-}
-function stopBgMusic() {
-  if (bgAudio) { try { bgAudio.__savedTime = bgAudio.currentTime; bgAudio.pause(); } catch (e) {} }
-}
-function applySoundState() {
-  d.querySelectorAll('[data-sound-toggle]').forEach(btn => {
-btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + (soundEnabled ? SVG_ICONS.muted : SVG_ICONS.music) + '</span>';
-btn.title = soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle');
-btn.setAttribute('aria-label', soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle'));
-  });
-  if (!soundEnabled) stopBgMusic();
-}
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  if (soundEnabled) {
-    ensureAudioCtx();
-    startBgMusic();
-  } else {
-    stopBgMusic();
-  }
-  applySoundState();
-  storageSet('sound_on', soundEnabled).catch(() => {});
-}
-function attachSfxToUI(){ d.addEventListener('click', (e)=>{ if (e.target.closest('.option')) return; const t=e.target.closest('button, .btn, .icon-btn, .level-card, .collection-item, .modal-close'); if (!t || t.disabled) return; playClick();});}
-function attachAudioUnlock() {
-  const unlock = () => {
-    ensureAudioCtx();
-    if (!soundEnabled) {
-      soundEnabled = true;
-      applySoundState();
-      storageSet('sound_on', true).catch(() => {});
-    }
-    if (soundEnabled && !bgStarted) startBgMusic();
-    d.removeEventListener('click', unlock, true);
-    d.removeEventListener('touchstart', unlock, true);
-    d.removeEventListener('keydown', unlock, true);
-  };
-  d.addEventListener('click', unlock, true);
-  d.addEventListener('touchstart', unlock, true);
-  d.addEventListener('keydown', unlock, true);
-}
-
-function adMute() { adPlaying = true; if (soundEnabled) Sound.stopBg(); }
-function adUnmute() { adPlaying = false; if (soundEnabled && bgStarted) Sound.startBg(); }
-w.Sound = { playClick, playCorrect, playWrong, playFanfare, toggle: toggleSound, apply: applySoundState, startBg: startBgMusic, stopBg: stopBgMusic, mute: adMute, unmute: adUnmute };
-const THEME_KEY = 'theme_dark';
-function updateThemeColorMeta() {
-  let meta = d.querySelector('meta[name="theme-color"]');
-  if (!meta) { meta = d.createElement('meta'); meta.name = 'theme-color'; d.head.appendChild(meta); }
-  meta.content = darkEnabled ? '#3d2233' : '#fff6ef';
-}
+function ensureBgAudio(){ if (bgAudio) return bgAudio; try{ bgAudio=new Audio('music.ogg'); bgAudio.loop=true; bgAudio.volume=0.25; bgAudio.preload='auto'; bgAudio.addEventListener('error', ()=>{ console.warn('Background music failed to load'); bgAudio=null;});} catch (e){ console.warn('Audio creation failed:', e); bgAudio=null;} return bgAudio;}
+function startBgMusic(){ if (!soundEnabled || adPlaying) return; const audio=ensureBgAudio(); if (!audio) return; audio.play().then(()=>{ bgStarted=true;}).catch(()=>{});}
+function stopBgMusic(){ if (bgAudio){ try{ bgAudio.__savedTime=bgAudio.currentTime; bgAudio.pause();} catch (e){}}}
+function applySoundState(){ d.querySelectorAll('[data-sound-toggle]').forEach(btn=>{
+btn.innerHTML='<span class="emoji-icon" aria-hidden="true">' + (soundEnabled ? SVG_ICONS.muted : SVG_ICONS.music) + '</span>';
+btn.title=soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle');
+btn.setAttribute('aria-label', soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle'));}); if (!soundEnabled) stopBgMusic();}
+function toggleSound(){ soundEnabled=!soundEnabled; if (soundEnabled){ ensureAudioCtx(); startBgMusic();} else{ stopBgMusic();} applySoundState(); storageSet('sound_on', soundEnabled).catch(()=>{});}
+function attachSfxToUI(){ d.addEventListener('click', (e)=>{ if (e.target.closest('.option')) return; const t=e.target.closest('button, .btn, .icon-btn, .level-card, .collection-item, .modal-close'); if (!t || t.disabled) return; playClick()})}
+function attachAudioUnlock(){ const unlock=()=>{ ensureAudioCtx(); if (!soundEnabled){ soundEnabled=true; applySoundState(); storageSet('sound_on', true).catch(()=>{});} if (soundEnabled && !bgStarted) startBgMusic(); d.removeEventListener('click', unlock, true); d.removeEventListener('touchstart', unlock, true); d.removeEventListener('keydown', unlock, true);}; d.addEventListener('click', unlock, true); d.addEventListener('touchstart', unlock, true); d.addEventListener('keydown', unlock, true);}
+function adMute(){ adPlaying=true; if (soundEnabled) Sound.stopBg();}
+function adUnmute(){ adPlaying=false; if (soundEnabled && bgStarted) Sound.startBg();}
+w.Sound={ playClick, playCorrect, playWrong, playFanfare, toggle: toggleSound, apply: applySoundState, startBg: startBgMusic, stopBg: stopBgMusic, mute: adMute, unmute: adUnmute};
+const THEME_KEY='theme_dark';
+function updateThemeColorMeta(){ let meta=d.querySelector('meta[name="theme-color"]'); if (!meta){ meta=d.createElement('meta'); meta.name='theme-color'; d.head.appendChild(meta);} meta.content=darkEnabled ? '#3d2233' : '#fff6ef';}
 function applyTheme() {
   cls.toggle('is-dark', darkEnabled);
   d.querySelectorAll('[data-theme-toggle]').forEach(btn => {
@@ -2063,29 +1771,10 @@ async function loadMetrics() {
   try { await storageSet(METRICS_KEY, metrics); } catch (e) {}
   return metrics;
 }
-async function loadUnlocked() {
-  let local = null;
-  try {
-    const raw = safeLocalGet(storageKey(UNLOCKED_KEY));
-    if (raw != null) { try { local = JSON.parse(raw); } catch { local = raw; } }
-  } catch (e) {}
-  let remote = null;
-  try { remote = await remoteGet(UNLOCKED_KEY); } catch (e) {}
-  const a = Array.isArray(local) || Array.isArray(remote) ? Array.from(new Set([...(Array.isArray(local) ? local : []), ...(Array.isArray(remote) ? remote : [])])) : [];
-  unlockedSet = new Set(a);
-  try { await storageSet(UNLOCKED_KEY, a); } catch (e) {}
-  return unlockedSet;
-}
-async function saveMetrics() { await storageSet(METRICS_KEY, metrics); }
-async function saveUnlocked() { await storageSet(UNLOCKED_KEY, Array.from(unlockedSet)); }
-function updateDailyStreak() {
-  const t = todayStr();
-  if (metrics.lastActiveDate === t) return;
-  if (metrics.lastActiveDate === yesterdayStr()) metrics.dailyStreak++;
-  else metrics.dailyStreak = 1;
-  metrics.lastActiveDate = t;
-  if (metrics.dailyStreak > metrics.maxDailyStreak) metrics.maxDailyStreak = metrics.dailyStreak;
-}
+async function loadUnlocked(){ let local=null; try{ const raw=safeLocalGet(storageKey(UNLOCKED_KEY)); if (raw !=null){ try{ local=JSON.parse(raw);} catch{ local=raw;}}} catch (e){} let remote=null; try{ remote=await remoteGet(UNLOCKED_KEY);} catch (e){} const a=Array.isArray(local) || Array.isArray(remote) ? Array.from(new Set([...(Array.isArray(local) ? local : []), ...(Array.isArray(remote) ? remote : [])])) : []; unlockedSet=new Set(a); try{ await storageSet(UNLOCKED_KEY, a);} catch (e){} return unlockedSet;}
+async function saveMetrics(){ await storageSet(METRICS_KEY, metrics);}
+async function saveUnlocked(){ await storageSet(UNLOCKED_KEY, Array.from(unlockedSet));}
+function updateDailyStreak(){ const t=todayStr(); if (metrics.lastActiveDate===t) return; if (metrics.lastActiveDate===yesterdayStr()) metrics.dailyStreak++; else metrics.dailyStreak=1; metrics.lastActiveDate=t; if (metrics.dailyStreak >metrics.maxDailyStreak) metrics.maxDailyStreak=metrics.dailyStreak;}
 function buildAchContext() {
   const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
   const collection = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
@@ -2141,60 +1830,10 @@ const animalId = w.getAnimalId;
   });
   return { ...metrics, totalStars, threeStarsCount, collectionCount: collection.length, collectionTotal, unlockedRegions, regionFull, totalLevels, playedLevels: new Set(metrics.playedLevels || []), themedTotal, themedUnlocked, themedPlayed, themed3Stars, photoTotal, photoUnlocked, photoPlayed, photo3Stars, stars: starsMap };
 }
-async function checkAndUnlock(silent) {
-  if (!metrics) await loadMetrics();
-  if (!unlockedSet) await loadUnlocked();
-  if (!w.__SYNCED__ && w.whenReady) { try { await w.whenReady; } catch (e) {} }
-  const ctx = buildAchContext();
-  const newly = [];
-  for (const ach of (w.ACHIEVEMENTS || [])) {
-    if (unlockedSet.has(ach.id)) continue;
-    let ok = false;
-    try { ok = !!ach.check(ctx); } catch (e) { ok = false; }
-    if (ok) { unlockedSet.add(ach.id); newly.push(ach); }
-  }
-  if (newly.length) {
-    await saveUnlocked();
-    if (isYandex && ysdk && ysdk.features && ysdk.features.Achievements) {
-      for (const a of newly) { try { await ysdk.features.Achievements.unlock(a.id); } catch (e) {} }
-    }
- if (!silent) {
-  newly.forEach((a) => { w.toast(w.L(a.title), false, a.icon + ' ' + w.t('achUnlocked')); });
-}
-  }
-  return newly;
-}
-async function recordVisit() {
-  if (!metrics) await loadMetrics();
-  updateDailyStreak();
-  await saveMetrics();
-  return checkAndUnlock(true);
-}
-async function recordRound(data) {
-  if (!metrics) await loadMetrics();
-  updateDailyStreak();
-  metrics.totalPlays++;
-  const t = todayStr();
-  if (metrics.lastPlayDate === t) metrics.playsToday++;
-  else { metrics.playsToday = 1; metrics.lastPlayDate = t; }
-  if (typeof data.fastestCorrect === 'number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect = data.fastestCorrect;
-  if (typeof data.maxStreak === 'number' && data.maxStreak > metrics.maxStreak) metrics.maxStreak = data.maxStreak;
-  if (data.total > 0 && data.mistakes === 0) metrics.noMistakeRuns++;
-  if (data.total > 0 && data.score === 0) { metrics.hasZeroScore = true; metrics.zeroLossStreak++; } else metrics.zeroLossStreak = 0;
-  if (data.total > 0 && data.timeouts === data.total) metrics.allTimeouts = true;
-  const h = new Date().getHours();
-  if (h >= 2 && h <= 4) metrics.playedAtNight = true;
-  if (h >= 5 && h <= 7) metrics.playedEarlyMorning = true;
-  metrics.lastPercent = data.percent;
-  const lvl = Number(data.levelId);
-  if (lvl && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl);
-  await saveMetrics();
-  return checkAndUnlock(false);
-}
-async function achList() {
-  if (!unlockedSet) await loadUnlocked();
-  return (w.ACHIEVEMENTS || []).map(a => ({ ...a, unlocked: unlockedSet.has(a.id) }));
-}
+async function checkAndUnlock(silent){ if (!metrics) await loadMetrics(); if (!unlockedSet) await loadUnlocked(); if (!w.__SYNCED__ && w.whenReady){ try{ await w.whenReady;} catch (e){}} const ctx=buildAchContext(); const newly=[]; for (const ach of (w.ACHIEVEMENTS || [])){ if (unlockedSet.has(ach.id)) continue; let ok=false; try{ ok=!!ach.check(ctx);} catch (e){ ok=false;} if (ok){ unlockedSet.add(ach.id); newly.push(ach);}} if (newly.length){ await saveUnlocked(); if (isYandex && ysdk && ysdk.features && ysdk.features.Achievements){ for (const a of newly){ try{ await ysdk.features.Achievements.unlock(a.id);} catch (e){}}} if (!silent){ newly.forEach((a)=>{ w.toast(w.L(a.title), false, a.icon + ' ' + w.t('achUnlocked'));});}} return newly;}
+async function recordVisit(){ if (!metrics) await loadMetrics(); updateDailyStreak(); await saveMetrics(); return checkAndUnlock(true);}
+async function recordRound(data){ if (!metrics) await loadMetrics(); updateDailyStreak(); metrics.totalPlays++; const t=todayStr(); if (metrics.lastPlayDate===t) metrics.playsToday++; else{ metrics.playsToday=1; metrics.lastPlayDate=t;} if (typeof data.fastestCorrect==='number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect=data.fastestCorrect; if (typeof data.maxStreak==='number' && data.maxStreak >metrics.maxStreak) metrics.maxStreak=data.maxStreak; if (data.total >0 && data.mistakes===0) metrics.noMistakeRuns++; if (data.total >0 && data.score===0){ metrics.hasZeroScore=true; metrics.zeroLossStreak++;} else metrics.zeroLossStreak=0; if (data.total >0 && data.timeouts===data.total) metrics.allTimeouts=true; const h=new Date().getHours(); if (h >=2 && h <=4) metrics.playedAtNight=true; if (h >=5 && h <=7) metrics.playedEarlyMorning=true; metrics.lastPercent=data.percent; const lvl=Number(data.levelId); if (lvl && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl); await saveMetrics(); return checkAndUnlock(false);}
+async function achList(){ if (!unlockedSet) await loadUnlocked(); return (w.ACHIEVEMENTS || []).map(a=>({ ...a, unlocked: unlockedSet.has(a.id)}));}
 async function renderAchModal() {
   const body = d.getElementById('ach-body');
   if (!body) return;
@@ -2267,7 +1906,6 @@ const themedDef=(w.THEMED_LEVELS || []).find(l=>Number(l.id)===nid);
         const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id);
          return{ animalId: correct.id, name: correct.name, images: opts.map(o=>o.img), answer, description: correct.desc};});
           return{ regionKey: 'photo', mode: 'photo', optionCount: need, sub: photoDef.name, questions};} return null;}
-
 w.buildSingleThemedQuiz = buildSingleThemedQuiz;
 const DEFAULT_UNLOCKED = [1, 11, 1020,2031,2013,2009,2006, 2007, 1001,1002, 1006,1007, 1010, 1012, 1013];
 const CURRENT_GATING_VER = 5;
@@ -2588,9 +2226,7 @@ async function syncAllOnStart() {
 w.syncAllOnStart=syncAllOnStart;
 let __readySent=false;
 let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true;} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false;}}
-
 let __starsCreated = false;
-
 function createFlyingStars() {
     const container = document.getElementById('starsContainer');
     if (!container || __starsCreated) return;
@@ -2606,10 +2242,8 @@ function createFlyingStars() {
         (navigator.deviceMemory       && navigator.deviceMemory       <= 4)   
     );
     const count = isMobile ? (isWeak ? 0 : 5) : 30;
-
     const sizes = ['particle-sm', 'particle-md', 'particle-lg', 'particle-xl'];
     const colors = ['particle-blue', 'particle-pink', 'particle-gold', 'particle-purple', 'particle-orange'];
-
     for (let i = 0; i < count; i++) {
         const particle = document.createElement('div');
         particle.className =
@@ -2617,14 +2251,11 @@ function createFlyingStars() {
             colors[Math.floor(Math.random() * colors.length)] +
             ' ' +
             sizes[Math.floor(Math.random() * sizes.length)];
-
         particle.style.left = (Math.random() * 100) + '%';
         particle.style.top  = (Math.random() * 100) + '%';
-
         const duration = 3 + Math.random() * 3;
         particle.style.animation = `particleFloat ${duration}s ease-in-out infinite`;
         particle.style.animationDelay = (-Math.random() * duration) + 's';
-
         container.appendChild(particle);
     }
     __starsCreated = true;
@@ -2657,7 +2288,6 @@ function getFactList() {
   __factListCache = list;
   return list;
 }
-
 async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId = w.getAnimalId;
  const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; await w.Ach.checkAndUnlock(true);
@@ -2675,7 +2305,6 @@ const item = animals[seed % animals.length];
 el.className = 'level-card' + (isOpen ? '' : ' locked');
     if (isOpen) el.dataset.href='#/quiz/' + l.id;
     const adTitle=escapeHtml(w.t('titleAd')); 
-    
     const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; 
 const qCount = (qz && qz.questions) ? qz.questions.length : (l.count || 0);
 el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return;} 
@@ -2758,159 +2387,8 @@ $('#home-count').textContent = quiz.questions.length;
     }
     return r;
   };
- function startQuiz(){
-  if (Number(levelId) >= 1000) {
-    const fresh = buildSingleThemedQuiz(Number(levelId));
-    if (fresh && Array.isArray(fresh.questions) && fresh.questions.length) {
-      quiz.questions = fresh.questions;
-    }
-  }
-  state.order=shuffle(quiz.questions.map((_, i)=>i));
-  state.index=0; state.score=0; state.answers=0; state.answered=false;
-  state.finished=false; state.scoreSent=false; state.streak=0;
-  state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0;
-  state.roundCollection=new Set();
-  show(quizScreen);
-  if (isYandex) yandexGameplayStart();
-  renderQuestion();
-}
-  function renderQuestion() {
-    state.answered = false;
-    const cur = quiz.questions[state.order[state.index]];
- if (!cur){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; return renderQuestion();}
-    $('#counter').textContent = (state.index + 1) + ' / ' + quiz.questions.length;
-    $('#score-val').textContent = state.score;
-    $('#progress-fill').style.width = (state.index / quiz.questions.length * 100) + '%';
-    const imgEl = $('#question-img');
-    const txtEl = $('#question-text');
-    const box = $('#options');
-    if (!box) return;
-    box.innerHTML = '';
-    const isPhoto = quiz.mode === 'photo';
-    const bodyEl = d.querySelector('.quiz-body');
-    if (bodyEl) bodyEl.classList.toggle('photo-mode', isPhoto);
-    if (isPhoto) {
-      if (imgEl) { imgEl.hidden = true; imgEl.removeAttribute('src'); }
-      if (txtEl) { txtEl.hidden = false; txtEl.textContent = w.L(cur.name) || '—'; }
-      box.classList.add('photo-options');
-      box.classList.toggle('cols-2', (cur.images || []).length === 2);
-      if (!Array.isArray(cur.images) || cur.images.length === 0) {
-        console.warn('Photo question has no images');
-        state.answers++; state.timeouts++; return finishQuestion();
-      }
- cur.images.forEach((src, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option photo-option'; b.dataset.i=i; const im=d.createElement('img'); im.src=src; im.alt='';
-im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾';};
-        b.appendChild(im);
-        b.addEventListener('click', () => selectOption(i));
-        box.appendChild(b);
-      });
-    } else {
- if (txtEl){ txtEl.hidden=true; txtEl.textContent='';} if (imgEl){ imgEl.hidden=false; imgEl.style.opacity=''; imgEl.src=cur.img || ''; imgEl.alt=''; imgEl.onerror=function (){ this.style.opacity='.25'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾';};
-        imgEl.onload = function () { this.style.opacity = ''; };
-      }
-      box.classList.remove('photo-options', 'cols-2');
-      const opts = Array.isArray(cur.options) ? cur.options : [];
-      opts.forEach((opt, i) => {
-        const b = d.createElement('button');
-        b.type = 'button';
-        b.className = 'option';
-        b.textContent = w.L(opt) || '—';
-        b.dataset.i = i;
-        b.addEventListener('click', () => selectOption(i));
-        box.appendChild(b);
-      });
-    }
-    const desc = $('#description');
-    if (desc) { desc.hidden = true; desc.textContent = ''; }
-    const nb = $('#next-btn');
- if (nb){ nb.hidden=true; nb.textContent=(state.index >=quiz.questions.length - 1) ? w.t('results') : w.t('next');}
- try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src;});} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img;}}}} catch (e){}
-    startTimer();
-  }
-  function startTimer() {
-    stopTimer();
-    state.timeLeft = 10;
-    updateTimer();
-    state.timerId = setInterval(() => {
-      if (state.timeLeft <= 0) { stopTimer(); timeUp(); return; }
-      state.timeLeft--;
-      updateTimer();
-      if (state.timeLeft <= 0) { stopTimer(); timeUp(); }
-    }, 1000);
-  }
-  function updateTimer() {
-    const val = Math.max(0, Math.min(10, state.timeLeft));
-    const valEl = document.getElementById('timer-val');
-    const fillEl = document.getElementById('timer-fill');
-    const timerEl = document.getElementById('timer');
-    if (valEl) valEl.textContent = val;
-    if (fillEl) fillEl.style.width = (val / 10) * 100 + '%';
-    if (timerEl) timerEl.classList.toggle('warning', val <= 5);
-  }
-  function stopTimer() { if (state.timerId) { clearInterval(state.timerId); state.timerId = null; } }
-  async function selectOption(i) {
-    if (state.answered) return;
-    state.answered = true;
-    stopTimer();
-    const cur = quiz.questions[state.order[state.index]];
-    const correct = cur.answer;
-    const optCount = quiz.mode === 'photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0);
-    if (typeof correct !== 'number' || optCount === 0 || correct < 0 || correct >= optCount) {
-      console.warn('Invalid answer index:', correct);
-      state.answers++;
-      finishQuestion();
-      return;
-    }
-    Array.from(d.querySelectorAll('#options .option')).forEach(o => {
-      o.classList.add('disabled');
-      const idx = +o.dataset.i;
-      if (idx === correct) o.classList.add('correct');
-      else if (idx === i) o.classList.add('wrong');
-    });
-    try { (i === correct) ? w.Sound.playCorrect() : w.Sound.playWrong(); } catch (e) {}
-    if (i === correct) {
-      state.score++;
-      $('#score-val').textContent = state.score;
-      const id = cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || '');
-      if (id) state.roundCollection.add(id);
-      const timeSpent = 10 - Math.max(0, state.timeLeft);
-      if (timeSpent < state.fastestCorrect) state.fastestCorrect = timeSpent;
-      state.streak++;
-      if (state.streak > state.maxStreak) state.maxStreak = state.streak;
-    } else state.streak = 0;
-    state.answers++;
-    finishQuestion();
-  }
-  function timeUp() {
-    if (state.answered) return;
-    state.answered = true;
-    const cur = quiz.questions[state.order[state.index]];
-    const optCount = quiz.mode === 'photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0);
-    if (!cur || typeof cur.answer !== 'number' || optCount === 0 || cur.answer < 0 || cur.answer >= optCount) {
-      console.warn('Invalid answer index in timeUp');
-      state.answers++;
-      state.timeouts++;
-      finishQuestion();
-      return;
-    }
-    Array.from(d.querySelectorAll('#options .option')).forEach(o => {
-      o.classList.add('disabled');
-      if (+o.dataset.i === cur.answer) o.classList.add('correct');
-    });
-    try { w.Sound.playWrong(); } catch (e) {}
-    state.answers++;
-    state.timeouts++;
-    finishQuestion();
-  }
-  function finishQuestion() {
-    const cur = quiz.questions[state.order[state.index]];
-    if (cur.description) {
-      const dEl = $('#description');
-      dEl.textContent = w.L(cur.description);
-      dEl.hidden = false;
-    }
-    $('#next-btn').hidden = false;
-  }
+ function startQuiz(){ if (Number(levelId) >=1000){ const fresh=buildSingleThemedQuiz(Number(levelId)); if (fresh && Array.isArray(fresh.questions) && fresh.questions.length){ quiz.questions=fresh.questions;}} state.order=shuffle(quiz.questions.map((_, i)=>i)); state.index=0; state.score=0; state.answers=0; state.answered=false; state.finished=false; state.scoreSent=false; state.streak=0; state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0; state.roundCollection=new Set(); show(quizScreen); if (isYandex) yandexGameplayStart(); renderQuestion();} function renderQuestion(){ state.answered=false; const cur=quiz.questions[state.order[state.index]]; if (!cur){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; return renderQuestion()} $('#counter').textContent=(state.index + 1) + ' / ' + quiz.questions.length; $('#score-val').textContent=state.score; $('#progress-fill').style.width=(state.index / quiz.questions.length * 100) + '%'; const imgEl=$('#question-img'); const txtEl=$('#question-text'); const box=$('#options'); if (!box) return; box.innerHTML=''; const isPhoto=quiz.mode==='photo'; const bodyEl=d.querySelector('.quiz-body'); if (bodyEl) bodyEl.classList.toggle('photo-mode', isPhoto); if (isPhoto){ if (imgEl){ imgEl.hidden=true; imgEl.removeAttribute('src');} if (txtEl){ txtEl.hidden=false; txtEl.textContent=w.L(cur.name) || '—';} box.classList.add('photo-options'); box.classList.toggle('cols-2', (cur.images || []).length===2); if (!Array.isArray(cur.images) || cur.images.length===0){ console.warn('Photo question has no images'); state.answers++; state.timeouts++; return finishQuestion();} cur.images.forEach((src, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option photo-option'; b.dataset.i=i; const im=d.createElement('img'); im.src=src; im.alt='';
+im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; b.appendChild(im); b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b);});} else{ if (txtEl){ txtEl.hidden=true; txtEl.textContent=''} if (imgEl){ imgEl.hidden=false; imgEl.style.opacity=''; imgEl.src=cur.img || ''; imgEl.alt=''; imgEl.onerror=function (){ this.style.opacity='.25'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾'}; imgEl.onload=function (){ this.style.opacity='';};} box.classList.remove('photo-options', 'cols-2'); const opts=Array.isArray(cur.options) ? cur.options : []; opts.forEach((opt, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option'; b.textContent=w.L(opt) || '—'; b.dataset.i=i; b.addEventListener('click', ()=>selectOption(i)); box.appendChild(b);});} const desc=$('#description'); if (desc){ desc.hidden=true; desc.textContent='';} const nb=$('#next-btn'); if (nb){ nb.hidden=true; nb.textContent=(state.index >=quiz.questions.length - 1) ? w.t('results') : w.t('next')} try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src})} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img}}}} catch (e){} startTimer();} function startTimer(){ stopTimer(); state.timeLeft=10; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return;} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp();}}, 1000);} function updateTimer(){ const val=Math.max(0, Math.min(10, state.timeLeft)); const valEl=document.getElementById('timer-val'); const fillEl=document.getElementById('timer-fill'); const timerEl=document.getElementById('timer'); if (valEl) valEl.textContent=val; if (fillEl) fillEl.style.width=(val / 10) * 100 + '%'; if (timerEl) timerEl.classList.toggle('warning', val <=5);} function stopTimer(){ if (state.timerId){ clearInterval(state.timerId); state.timerId=null;}} async function selectOption(i){ if (state.answered) return; state.answered=true; stopTimer(); const cur=quiz.questions[state.order[state.index]]; const correct=cur.answer; const optCount=quiz.mode==='photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0); if (typeof correct !=='number' || optCount===0 || correct < 0 || correct >=optCount){ console.warn('Invalid answer index:', correct); state.answers++; finishQuestion(); return;} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); const idx=+o.dataset.i; if (idx===correct) o.classList.add('correct'); else if (idx===i) o.classList.add('wrong');}); try{ (i===correct) ? w.Sound.playCorrect() : w.Sound.playWrong();} catch (e){} if (i===correct){ state.score++; $('#score-val').textContent=state.score; const id=cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || ''); if (id) state.roundCollection.add(id); const timeSpent=10 - Math.max(0, state.timeLeft); if (timeSpent < state.fastestCorrect) state.fastestCorrect=timeSpent; state.streak++; if (state.streak >state.maxStreak) state.maxStreak=state.streak;} else state.streak=0; state.answers++; finishQuestion();} function timeUp(){ if (state.answered) return; state.answered=true; const cur=quiz.questions[state.order[state.index]]; const optCount=quiz.mode==='photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0); if (!cur || typeof cur.answer !=='number' || optCount===0 || cur.answer < 0 || cur.answer >=optCount){ console.warn('Invalid answer index in timeUp'); state.answers++; state.timeouts++; finishQuestion(); return;} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); if (+o.dataset.i===cur.answer) o.classList.add('correct');}); try{ w.Sound.playWrong();} catch (e){} state.answers++; state.timeouts++; finishQuestion();} function finishQuestion(){ const cur=quiz.questions[state.order[state.index]]; if (cur.description){ const dEl=$('#description'); dEl.textContent=w.L(cur.description); dEl.hidden=false;} $('#next-btn').hidden=false;}
   function nextQuestion() {
     if (state.index >= quiz.questions.length - 1) return finishQuiz();
     state.index++;
@@ -2962,10 +2440,8 @@ const animalId = w.getAnimalId;
   const list = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
   const collected = new Set(Array.isArray(list) ? list.map(String) : []);
   body.innerHTML = '';
-
   const seen = new Set();  
   let opened = 0;
-
   (w.REGIONS || []).forEach(region => {
     const animals = [];
     region.levels.forEach(lvl => {
@@ -2983,11 +2459,8 @@ const animalId = w.getAnimalId;
         });
       });
     });
-
     if (!animals.length) return;          
-
     animals.forEach(a => { if (collected.has(a.id)) opened++; });
-
     const sec = d.createElement('section');
     sec.className = 'col-region';
     sec.innerHTML = '<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>';
@@ -3011,7 +2484,6 @@ item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="t
     sec.appendChild(grid);
     body.appendChild(sec);
   });
-
   const counter = d.getElementById('col-counter');
   if (counter) counter.textContent = opened + ' / ' + seen.size;
 }
@@ -3026,67 +2498,9 @@ function openColModal(a) {
 }
 function closeColModal() { const m = d.getElementById('col-modal'); if (m) m.classList.remove('show'); }
 let currentPage = null;
-function refreshLocalization() {
-  applyStaticI18n();
-  if (w.Sound && w.Sound.apply) w.Sound.apply();
-  if (w.Theme && w.Theme.apply) w.Theme.apply();
-  if (currentPage === 'index') renderIndex();
-  else if (currentPage === 'collection') renderCollection();
-  const igm = d.getElementById('igames-modal');
-  if (igm && igm.classList.contains('show')) renderOtherGames();
- }
-async function renderOtherGames() {
-  const grid = d.getElementById('games-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  if (isYandex) {
-    let games = [];
-    try { games = await w.getAllGames(); } catch (e) {}
-    if (!games.length) {
-      try {
-        const g = await w.getGameByID(535101);
-        if (g) games.push(g);
-      } catch (e) {}
-    }
-    if (!games.length) {
-      grid.innerHTML = '<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>';
-      return;
-    }
-    games.forEach(g => {
-      const a = d.createElement('button');
-      a.type = 'button';
-      a.className = 'game-card';
-      a.addEventListener('click', () => window.open(g.url, '_blank'));
-      const iconHtml = g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>';
-      a.innerHTML = iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>';
-      grid.appendChild(a);
-    });
-    return;
-  }
-  function renderCard(opts) {
-    const a = d.createElement('button');
-    a.type = 'button';
-    a.className = 'game-card';
-a.addEventListener('click', () => {
-  const url = opts.url;
-  if (P.platform === 'desktop_web') {
-    window.open(url, '_blank');
-    return;
-  }
-  vkSend('VKWebAppOpenURL', { url }, 5000)
-    .then(res => {
-      if (!res) {
-        window.open(url, '_blank');
-      }
-    })
-    .catch(() => {
-      window.open(url, '_blank');
-    });
-});
-    const iconHtml = opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : '');
-    a.innerHTML = iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>';
-    grid.appendChild(a);
-  }
+function refreshLocalization(){ applyStaticI18n(); if (w.Sound && w.Sound.apply) w.Sound.apply(); if (w.Theme && w.Theme.apply) w.Theme.apply(); if (currentPage==='index') renderIndex(); else if (currentPage==='collection') renderCollection(); const igm=d.getElementById('igames-modal'); if (igm && igm.classList.contains('show')) renderOtherGames();}
+async function renderOtherGames(){ const grid=d.getElementById('games-grid'); if (!grid) return; grid.innerHTML=''; if (isYandex){ let games=[]; try{ games=await w.getAllGames();} catch (e){} if (!games.length){ try{ const g=await w.getGameByID(535101); if (g) games.push(g);} catch (e){}} if (!games.length){ grid.innerHTML='<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>'; return;} games.forEach(g=>{ const a=d.createElement('button'); a.type='button'; a.className='game-card'; a.addEventListener('click', ()=>window.open(g.url, '_blank')); const iconHtml=g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>'; a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>'; grid.appendChild(a);}); return;}
+function renderCard(opts){ const a=d.createElement('button'); a.type='button'; a.className='game-card'; a.addEventListener('click', ()=>{ const vkPlatform=(P.launchParams && P.launchParams.vk_platform) || ''; if (vkPlatform==='desktop_web'){ window.open(opts.url, '_blank'); return;} if (isVK || isOK){ vkSend('VKWebAppOpenURL',{ url: opts.url}, 5000) .then(res=>{ if (!res) window.open(opts.url, '_blank');}) .catch(()=>window.open(opts.url, '_blank'));} else{ window.open(opts.url, '_blank');}}); const iconHtml=opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : ''); a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>'; grid.appendChild(a);}
 const VK_GAMES = [
   { href: 'https://vk.com/app54634418', emoji: '💭', name: 'Словарекс',              iconURL: 'games/slovarex.jpg' },
   { href: 'https://vk.com/app54636699', emoji: '🍎', name: 'Найди слова',            iconURL: 'games/naydi-slova.jpg' },
@@ -3095,19 +2509,14 @@ const VK_GAMES = [
   { href: 'https://vk.com/app54659768', emoji: '🕹️', name: 'Тетра Дарк',             iconURL: 'games/tetra-dark.jpg' },
   { href: 'https://vk.com/app54678489', emoji: '🎨', name: 'Раскраска',              iconURL: 'games/raskraska.jpg' }
 ];
-
 const OK_GAMES = [
         { href: 'https://ok.ru/app/512005443175', emoji: '💭', name: 'Словарекс',              iconURL: 'games/slovarex.jpg' },
         { href: 'https://ok.ru/app/512005458660', emoji: '🕹️', name: 'Тетра Дарк',             iconURL: 'games/tetra-dark.jpg'},
         { href: 'https://ok.ru/app/512005390848', emoji: '9️', name: 'Судоку для самых умных', iconURL: 'games/sudoku.jpg' },
         { href:"https://ok.ru/app/512004963709",  emoji:"🎨",name:"Раскраска",                 iconURL: 'games/raskraska.jpg' },
         { href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: 'ТЕТРА',                  iconURL: 'games/tetra.jpg' }
-      
-
 ];
-
 const list = isOK ? OK_GAMES : VK_GAMES;
-
 list.forEach(g => {
   renderCard({
     url: g.href,
@@ -3140,44 +2549,36 @@ function bindGlobalUI() {
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     e.preventDefault();
   });
-
-
   const achModal = d.getElementById('ach-modal');
   if (achModal) {
     achModal.querySelectorAll('.modal-close, .modal-back, [data-act="close"]')
       .forEach(b => b.addEventListener('click', closeAchModal));
     achModal.addEventListener('click', e => { if (e.target === achModal) closeAchModal(); });
   }
-
-
   const colModal = d.getElementById('col-modal');
   if (colModal) {
     colModal.querySelectorAll('.modal-close, .modal-back')
       .forEach(b => b.addEventListener('click', closeColModal));
     colModal.addEventListener('click', e => { if (e.target === colModal) closeColModal(); });
   }
-
   const authModal = d.getElementById('auth-modal');
   if (authModal) {
     authModal.querySelectorAll('.modal-close, [data-act="close"]')
       .forEach(b => b.addEventListener('click', closeAuthModal));
     authModal.addEventListener('click', e => { if (e.target === authModal) closeAuthModal(); });
   }
-
   const yandexLbModal = d.getElementById('yandex-leaderboard-modal');
   if (yandexLbModal) {
     yandexLbModal.querySelectorAll('.modal-close')
       .forEach(b => b.addEventListener('click', () => yandexLbModal.classList.remove('show')));
     yandexLbModal.addEventListener('click', e => { if (e.target === yandexLbModal) yandexLbModal.classList.remove('show'); });
   }
-
   const igamesModal = d.getElementById('igames-modal');
   if (igamesModal) {
     igamesModal.querySelectorAll('.modal-close, .modal-back')
       .forEach(b => b.addEventListener('click', closeOtherGamesModal));
     igamesModal.addEventListener('click', e => { if (e.target === igamesModal) closeOtherGamesModal(); });
   }
-
   d.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeAchModal();
@@ -3187,7 +2588,6 @@ function bindGlobalUI() {
       if (yandexLbModal) yandexLbModal.classList.remove('show');
     }
   });
-
   d.addEventListener('visibilitychange', function () {
     if (d.visibilityState === 'hidden') {
       console.log('Page hidden — pausing');
@@ -3217,7 +2617,6 @@ function parseHash() {
   if (parts[0] === 'collection') return { name: 'collection' };
   return { name: 'index' };
 }
-
 function pushRoute(route, replace) {
   const state = { vkRoute: route };
   if (replace) window.history.replaceState(state, '', location.pathname + location.search);
@@ -3255,7 +2654,6 @@ function applyVKUIButtons() {
     });
     console.log('✅ applyVKUIButtons: обработано кнопок =', count);
 }
-
 async function navigate() {
   if (typeof currentPageCleanup === 'function') {
     try { currentPageCleanup(); } catch (e) {}
@@ -3392,8 +2790,6 @@ w.addEventListener('pagehide', () => {
 });
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
-
-
 setTimeout(applyVKUIButtons, 500);
 setTimeout(applyVKUIButtons, 2000);
 w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal };
