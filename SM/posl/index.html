@@ -51,11 +51,18 @@ const KEY = P + 'proverbs_theme_v1';
 <button class="icon-btn" id="progressMapBtn" aria-label="Карта" title="Карта"><span class="sprite sprite--map"></span></button>
 <button class="icon-btn" id="menuAchievementsBtn" aria-label="Достижения" title="Достижения"><span class="sprite sprite--cup"></span></button>
 </div>
-<button class="daily-btn daily-btn--active" id="dailyChallengeBtn">
-    <span class="sprite sprite--i2-gift" style="--sprite-size:1.5em"></span>
+<div class="daily-row">
+  <button class="daily-btn daily-btn--active" id="dailyChallengeBtn">
+    <span class="sprite sprite--i2-gift" style="--sprite-size:1.3em"></span>
     Вызов дня
-</button>
-  <div class="categories-grid" id="categoriesGrid"></div>
+  </button>
+  <button class="daily-btn daily-btn--quests" id="dailyQuestsBtn">
+    <span class="sprite sprite--i2-hint" style="--sprite-size:1.3em"></span>
+    Квесты дня
+  </button>
+</div>
+<div class="next-cat" id="nextCatProgress" style="display:none"></div>
+<div class="categories-grid" id="categoriesGrid"></div>
 <div class="menu-bottom">
 <button class="icon-btn" id="menuThemeBtn" aria-label="Тема оформления" title="Тема"><span class="sprite sprite--palitra"></span></button>
 <button class="icon-btn" id="menuSoundBtn" aria-label="Звук" title="Звук"><span class="sprite sprite--soundon"></span></button>
@@ -74,7 +81,10 @@ const KEY = P + 'proverbs_theme_v1';
     <button class="back-btn" id="soundBtn" aria-label="Звук" title="Звук"><span class="sprite sprite--soundon"></span></button>
 </div>
 </div>
-    <div class="category-label" id="categoryLabel"></div>
+<div class="category-label" id="categoryLabel">
+  <span id="categoryLabelText"></span>
+  <span class="bonus-counter" id="bonusCounter" style="display:none"></span>
+</div>
     <div class="riddle-text" id="riddleText"></div>
     <div class="answer-slots" id="answerSlots"></div>
     <div class="hints-row">
@@ -109,6 +119,14 @@ const KEY = P + 'proverbs_theme_v1';
   </div>
 </div>
 
+<div class="modal-overlay" id="dailyQuestsModal">
+  <div class="modal-content">
+    <button class="modal-close" id="dailyQuestsModalClose">✕</button>
+    <h2><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span> Квесты дня</h2>
+    <div class="daily-quests-list" id="dailyQuestsList"></div>
+    <button class="modal-btn modal-btn--confirm" id="dailyQuestsModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
+  </div>
+</div>
 <!-- ===== МОДАЛКА: темы ===== -->
 <div class="modal-overlay" id="themeModal">
   <div class="modal-content">
@@ -163,7 +181,7 @@ const KEY = P + 'proverbs_theme_v1';
   <div class="modal-content">
     <button class="modal-close" id="achievementsModalClose">✕</button>
 <h2><span class="sprite sprite--cup" style="--sprite-size:1.5em"></span> Достижения</h2>
-    <p id="achievementsHeader" style="font-weight:700;color:var(--primary)">Получено: 0 из 30</p>
+<p id="achievementsHeader" style="font-weight:700;color:var(--primary)"></p>
     <div class="achievements-list" id="achievementsList"></div>
     <button class="modal-btn modal-btn--confirm" id="achievementsModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
   </div>
