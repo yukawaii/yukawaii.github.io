@@ -53,11 +53,14 @@
         <button class="icon-btn" id="progressMapBtn" aria-label="Карта" title="Карта"><span class="sprite sprite--map"></span></button>
         <button class="icon-btn" id="menuAchievementsBtn" aria-label="Достижения" title="Достижения"><span class="sprite sprite--cup"></span></button>
       </div>
- <div class="daily-row">
-  <button class="daily-btn daily-btn--active" id="dailyChallengeBtn">
-    <span class="sprite sprite--i2-gift" style="--sprite-size:1.3em"></span>
-    Вызов дня
-  </button>
+<div class="daily-row">
+  <div class="daily-col">
+    <div class="daily-streak" id="dailyStreakLabel" style="display:none"></div>
+    <button class="daily-btn daily-btn--active" id="dailyChallengeBtn">
+      <span class="sprite sprite--i2-gift" style="--sprite-size:1.3em"></span>
+      Вызов дня
+    </button>
+  </div>
   <button class="daily-btn daily-btn--quests" id="dailyQuestsBtn">
     <span class="sprite sprite--i2-hint" style="--sprite-size:1.3em"></span>
     Квесты дня
