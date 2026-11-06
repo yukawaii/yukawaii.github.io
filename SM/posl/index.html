@@ -42,46 +42,49 @@ const KEY = P + 'proverbs_theme_v1';
   <!-- ===== МЕНЮ ===== -->
   <div id="menuScreen" class="screen">
     <header class="menu-header">
-      <h1 class="menu-title">🧩Пословицы!</h1>
+  <h1 class="menu-title"><span class="sprite sprite--i2-logo" style="--sprite-size:1.5em"></span>Пословицы!</h1>
       <p class="menu-subtitle">Для всей семьи</p>
     </header>
 <div class="menu-score-row">
-  <div class="menu-score">💎 <span id="totalScoreValue">0</span></div>
-<button class="back-btn" id="menuRulesBtn" aria-label="Как играть" title="Как играть">❓</button>
-<button class="icon-btn" id="progressMapBtn" aria-label="Карта" title="Карта">🗺️</button>
+<div class="menu-score"><span class="sprite sprite--points"></span> <span id="totalScoreValue">0</span></div>
+<button class="back-btn" id="menuRulesBtn" aria-label="Как играть" title="Как играть"><span class="sprite sprite--help"></span></button>
+<button class="icon-btn" id="progressMapBtn" aria-label="Карта" title="Карта"><span class="sprite sprite--map"></span></button>
+<button class="icon-btn" id="menuAchievementsBtn" aria-label="Достижения" title="Достижения"><span class="sprite sprite--cup"></span></button>
 </div>
-    <div class="categories-grid" id="categoriesGrid"></div>
+<button class="daily-btn daily-btn--active" id="dailyChallengeBtn">
+    <span class="sprite sprite--i2-gift" style="--sprite-size:1.5em"></span>
+    Вызов дня
+</button>
+  <div class="categories-grid" id="categoriesGrid"></div>
 <div class="menu-bottom">
-<button class="icon-btn" id="menuThemeBtn" aria-label="Тема оформления" title="Тема">🎨</button>
-<button class="icon-btn" id="menuSoundBtn" aria-label="Звук" title="Звук">🔊</button>
-<button class="icon-btn" id="otherGamesBtn" aria-label="Другие игры" title="Другие игры">🕹️</button>
-<button class="icon-btn" id="menuAchievementsBtn" aria-label="Достижения" title="Достижения">🏆</button>
-
+<button class="icon-btn" id="menuThemeBtn" aria-label="Тема оформления" title="Тема"><span class="sprite sprite--palitra"></span></button>
+<button class="icon-btn" id="menuSoundBtn" aria-label="Звук" title="Звук"><span class="sprite sprite--soundon"></span></button>
+<button class="icon-btn" id="otherGamesBtn" aria-label="Другие игры" title="Другие игры"><span class="sprite sprite--othergames"></span></button>
 </div>
   </div>
 
   <!-- ===== ИГРА ===== -->
   <div id="gameScreen" class="screen hidden">
 <div class="game-header">
-  <button class="back-btn" id="backBtn" aria-label="Назад" title="Назад">←</button>
-    <div class="game-score">💎 <span id="gameScoreValue">0</span></div>
-    <div class="game-header-actions">
-             <button class="back-btn" id="gameMapBtn" aria-label="Карта" title="Карта">🗺️</button>
-      <button class="back-btn" id="gameRulesBtn" aria-label="Как играть" title="Как играть">❓</button>
-        <button class="back-btn" id="soundBtn" aria-label="Звук" title="Звук">🔊</button>
-    </div>
+<button class="back-btn" id="backBtn" aria-label="Назад" title="Назад">←</button>
+<div class="game-score"><span class="sprite sprite--points"></span> <span id="gameScoreValue">0</span></div>
+<div class="game-header-actions">
+         <button class="back-btn" id="gameMapBtn" aria-label="Карта" title="Карта"><span class="sprite sprite--map"></span></button>
+  <button class="back-btn" id="gameRulesBtn" aria-label="Как играть" title="Как играть"><span class="sprite sprite--help"></span></button>
+    <button class="back-btn" id="soundBtn" aria-label="Звук" title="Звук"><span class="sprite sprite--soundon"></span></button>
+</div>
 </div>
     <div class="category-label" id="categoryLabel"></div>
     <div class="riddle-text" id="riddleText"></div>
     <div class="answer-slots" id="answerSlots"></div>
     <div class="hints-row">
-      <button class="hint-btn" id="hintRemoveBtn">🧹Убрать лишнее</button>
+   <button class="hint-btn" id="hintRemoveBtn"><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span>Убрать лишнее</button>
     </div>
     <div class="letters-pool" id="lettersPool"></div>
     <div class="controls-row">
-      <button class="backspace-btn" id="shuffleBtn" title="Перемешать">♻️</button>
-            <button class="backspace-btn" id="backspaceBtn">❌</button>  
-      <button class="submit-btn" id="submitBtn" disabled>✅Проверка</button>
+<button class="backspace-btn" id="shuffleBtn" title="Перемешать"><span class="sprite sprite--i2-refresh" style="--sprite-size:1.4em"></span></button>
+<button class="backspace-btn" id="backspaceBtn"><span class="sprite sprite--i2-chancel-error" style="--sprite-size:1.4em"></span></button>
+<button class="submit-btn" id="submitBtn" disabled><span class="sprite sprite--i2-check" style="--sprite-size:1.5em"></span>Проверка</button>
     </div>
   </div>
 
@@ -91,17 +94,18 @@ const KEY = P + 'proverbs_theme_v1';
 <div class="modal-overlay" id="rulesModal">
   <div class="modal-content">
     <button class="modal-close" id="rulesCloseBtn">✕</button>
-    <h2>📖 Как играть</h2>
+<h2><span class="sprite sprite--help" style="--sprite-size:1.5em"></span> Как играть</h2>
     <div class="rules-list">
-      <div class="rule"><span class="rule__icon">🤔</span><div><div class="rule__title">Прочитайте подсказку</div><div class="rule__text">Сверху дан смысл народной пословицы. Отгадайте, о чём она.</div></div></div>
-<div class="rule"><span class="rule__icon">🔤</span><div><div class="rule__title">Соберите пословицу из слов</div><div class="rule__text">Внизу перемешаны 10 слов: слова пословицы и несколько лишних. Нажимайте на слова по порядку.</div></div></div>
-      <div class="rule"><span class="rule__icon">💡</span><div><div class="rule__title">Используйте подсказки</div><div class="rule__text">«Убрать лишнее» — удалит одно лишнее слово из кучи.</div></div></div>
-<div class="rule"><span class="rule__icon">📺</span><div><div class="rule__title">Подсказка за рекламу</div><div class="rule__text">Каждая подсказка активируется после просмотра короткой рекламы до конца.</div></div></div>
-      <div class="rule"><span class="rule__icon">🔒</span><div><div class="rule__title">Закрытые категории</div><div class="rule__text">Некоторые категории открываются за рекламу на 24 часа.</div></div></div>
-<div class="rule"><span class="rule__icon">💎</span><div><div class="rule__title">Очки</div><div class="rule__text">+1 очко за каждую правильно собранную пословицу.</div></div></div>
-<div class="rule"><span class="rule__icon">🎨</span><div><div class="rule__title">Проверка</div><div class="rule__text">После сборки нажмите «Проверка». Верные слова станут зелёными, стоящие не на месте — синими, лишние — красными. Нажмите на слово в ряду, чтобы вернуть его в кучу.</div></div></div>
+     <div class="rule"><span class="rule__icon"><span class="sprite sprite--i2-think" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Прочитайте подсказку</div><div class="rule__text">Сверху дан смысл народной пословицы. Отгадайте, о чём она.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Соберите пословицу из слов</div><div class="rule__text">Внизу перемешаны 10 слов: слова пословицы и несколько лишних. Нажимайте на слова по порядку.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Используйте подсказки</div><div class="rule__text">«Убрать лишнее» — удалит одно лишнее слово из кучи.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--i2-tv" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Подсказка за рекламу</div><div class="rule__text">Каждая подсказка активируется после просмотра короткой рекламы до конца.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--i2-locked" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Закрытые категории</div><div class="rule__text">Категории можно открыть за Ягоды или за просмотр рекламы.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--points" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Ягоды</div><div class="rule__text">+1 ягода за каждую правильно собранную пословицу.</div></div></div>
+<div class="rule"><span class="rule__icon"><span class="sprite sprite--palitra" style="--sprite-size:1.5em"></span></span><div><div class="rule__title">Проверка</div><div class="rule__text">После сборки нажмите «Проверка». Верные слова станут зелёными, стоящие не на месте — синими, лишние — красными. Нажмите на слово в ряду, чтобы вернуть его в кучу.</div></div></div>
 </div>
-    <button class="modal-btn modal-btn--confirm" id="rulesStartBtn" style="width:100%">🚀 Понятно!</button>
+<button class="modal-btn modal-btn--confirm" id="rulesStartBtn" style="width:100%"><span class="sprite sprite--i2-check" style="--sprite-size:1.5em"></span> Понятно!</button>
+<button class="modal-btn modal-btn--cancel" id="tutorialStartBtn" style="width:100%;margin-top:10px"><span class="sprite sprite--i2-think" style="--sprite-size:1.5em"></span> Обучение</button>
   </div>
 </div>
 
@@ -109,7 +113,7 @@ const KEY = P + 'proverbs_theme_v1';
 <div class="modal-overlay" id="themeModal">
   <div class="modal-content">
     <button class="modal-close" id="themeCloseBtn">✕</button>
-    <h2>🎨 Тема оформления</h2>
+<h2><span class="sprite sprite--palitra" style="--sprite-size:1.5em"></span> Тема оформления</h2>
     <div class="theme-list">
       <button class="theme-item" data-theme="light"><span class="theme-item__circle" style="background:#f5f5f5;border:2px solid #ddd"></span><span class="theme-item__name">Светлая</span><span class="theme-item__check">✓</span></button>
       <button class="theme-item" data-theme="dark"><span class="theme-item__circle" style="background:#1a1a2e;border:2px solid #333"></span><span class="theme-item__name">Тёмная</span><span class="theme-item__check">✓</span></button>
@@ -122,32 +126,34 @@ const KEY = P + 'proverbs_theme_v1';
 <!-- ===== МОДАЛКА: подсказка за рекламу ===== -->
 <div class="modal-overlay" id="hintAdModal">
   <div class="modal-content">
-    <h2>💡 Подсказка</h2>
-    <div style="font-size:56px;margin:8px 0">📺</div>
-    <p>Посмотрите короткую рекламу, чтобы получить подсказку</p>
-    <div class="modal-buttons">
-      <button class="modal-btn modal-btn--cancel" id="hintAdCancelBtn">❌Отмена</button>
-      <button class="modal-btn modal-btn--confirm" id="hintAdConfirmBtn">🎁Смотреть📺</button>
-    </div>
+<h2><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span> Подсказка</h2>
+<div style="margin:8px 0"><span class="sprite sprite--i2-tv" style="--sprite-size:3.5em"></span></div>
+<p>Посмотрите короткую рекламу, чтобы получить подсказку</p>
+<div class="modal-buttons">
+  <button class="modal-btn modal-btn--cancel" id="hintAdCancelBtn"><span class="sprite sprite--i2-chancel-error" style="--sprite-size:1.5em"></span> Отмена</button>
+  <button class="modal-btn modal-btn--confirm" id="hintAdConfirmBtn"> Смотреть <span class="sprite sprite--i2-tv" style="--sprite-size:1.5em"></span></button>
+</div>
   </div>
 </div>
 
 <!-- ===== МОДАЛКА: разблокировать категорию ===== -->
 <div class="modal-overlay" id="unlockCategoryModal">
   <div class="modal-content">
-    <h2>🔒 Категория закрыта</h2>
-    <div style="font-size:56px;margin:8px 0">🎁</div>
-    <p>Посмотрите рекламу и откройте эту категорию на <strong>24 часа</strong>!</p>
-    <div class="modal-buttons">
-      <button class="modal-btn modal-btn--cancel" id="unlockCancelBtn">❌ Отмена</button>
-      <button class="modal-btn modal-btn--confirm" id="unlockConfirmBtn">📺 Открыть</button>
+    <button class="modal-close" id="unlockModalClose">✕</button>
+    <h2 id="unlockModalTitle"><span class="sprite sprite--i2-locked" style="--sprite-size:1.5em"></span> Категория закрыта</h2>
+    <div style="margin:8px 0"><span class="sprite sprite--i2-gift" style="--sprite-size:3.5em"></span></div>
+    <p id="unlockModalText">...</p>
+    <div class="modal-buttons" style="flex-direction:column;gap:8px;">
+      <button class="modal-btn modal-btn--confirm" id="unlockBuyBtn" style="display:none"></button>
+      <button class="modal-btn modal-btn--confirm" id="unlockConfirmBtn"><span class="sprite sprite--i2-tv" style="--sprite-size:1.5em"></span> Смотреть (24ч)</button>
+      <button class="modal-btn modal-btn--cancel" id="unlockCancelBtn"><span class="sprite sprite--i2-chancel-error" style="--sprite-size:1.5em"></span> Отмена</button>
     </div>
   </div>
 </div>
 <div class="modal-overlay" id="otherGamesModal">
   <div class="modal-content modal-content--games">
     <button class="modal-close" id="otherGamesModalClose">✕</button>
-    <h2>🎮 Другие игры</h2>
+   <h2><span class="sprite sprite--othergames" style="--sprite-size:2.4em"></span> Другие игры</h2>
     <div class="games-grid" id="otherGamesList"></div>
     <button class="modal-btn modal-btn--confirm" id="otherGamesModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
   </div>
@@ -156,7 +162,7 @@ const KEY = P + 'proverbs_theme_v1';
 <div class="modal-overlay" id="achievementsModal">
   <div class="modal-content">
     <button class="modal-close" id="achievementsModalClose">✕</button>
-    <h2>🏆 Достижения</h2>
+<h2><span class="sprite sprite--cup" style="--sprite-size:1.5em"></span> Достижения</h2>
     <p id="achievementsHeader" style="font-weight:700;color:var(--primary)">Получено: 0 из 30</p>
     <div class="achievements-list" id="achievementsList"></div>
     <button class="modal-btn modal-btn--confirm" id="achievementsModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
@@ -166,14 +172,17 @@ const KEY = P + 'proverbs_theme_v1';
 <div class="modal-overlay" id="progressMapModal">
   <div class="modal-content modal-content--map">
     <button class="modal-close" id="progressMapClose">✕</button>
-    <h2>🗺️ Ваш путь</h2>
+<h2><span class="sprite sprite--map" style="--sprite-size:1.5em"></span> Ваш путь</h2>
     <div class="map-wrap">
       <img src="map.jpg" class="map-img" alt="">
-      <img src="player.png" class="map-player" id="mapPlayer" alt="">
+    <div class="map-player" id="mapPlayer" aria-hidden="true"></div>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
+
+<script src="sprite.js"></script>
+<script src="tutorial.js"></script>
 
     <script src="game.min.js"></script>
 </body>
