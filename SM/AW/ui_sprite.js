@@ -120,7 +120,7 @@
         '🚪': 'home_menu', '🛏️': 'home_menu', '🛋️': 'home_menu', '🪑': 'home_menu', '🚽': 'home_menu', '🚿': 'home_menu', '🛁': 'home_menu', '🧹': 'home_menu', '🧺': 'home_menu', '🧻': 'home_menu', '🧼': 'home_menu', '🧽': 'home_menu', '🧴': 'home_menu', '🧷': 'home_menu', '🪒': 'home_menu', '🧯': 'home_menu',
         // Награды
         '👑': 'corona', '🏆': 'achivments', '🥇': 'achivments', '🥈': 'achivments', '🥉': 'achivments', '🎖️': 'achivments', '🎗️': 'achivments', '🏅': 'achivments',
-        '🎯': 'achivments', '🎓': 'achivments',
+        '🎯': 'slon', '🎓': 'achivments',
         '📈': 'achivments', '📉': 'achivments', '📊': 'achivments',
         '💯': 'hundred',
         '💎': 'points', '💰': 'coin', '💴': 'coin', '💵': 'coin', '💶': 'coin', '💷': 'coin', '💸': 'coin', '💳': 'coin', '🪙': 'coin',
