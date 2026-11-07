@@ -409,3 +409,10 @@ html.is-dark .extras-btn--ghost {
 html.is-dark .extras-btn--ghost:hover:not(:disabled) {
     background: rgba(255,255,255,.14);
 }
+/* Верхняя панель: раскрывающееся меню */
+.hero-more[hidden] {
+    display: none !important;
+}
+.hero-more {
+    flex-basis: 100%;
+}
