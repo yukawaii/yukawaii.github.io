@@ -286,18 +286,15 @@ function injectCSS() {
             '.col-title .emoji-icon > .ui-sprite,',
             '.emoji-icon[style*="width:1em"] > .ui-sprite{--ui-sprite-size:1.1em}',
 
-            // ===== 1) ВЕРХНИЕ КНОПКИ — иконка ×2 =====
-            // Очки (💎) и «Играть» — это НЕ .btn-icon, поэтому отдельные правила
-            '.score-chip .emoji-icon > .ui-sprite,',
-            '.btn-primary.btn-lg .emoji-icon > .ui-sprite{transform:scale(2);transform-origin:center}',
-            // Кнопки-иконки: Коллекция, Достижения, Топ, Ещё игры, Звук, Тема
-            '.btn-icon .emoji-icon > .ui-sprite,',
-            '.icon-btn .ui-sprite{transform:scale(2);transform-origin:center}',
-            // Кнопки со счётчиком (Коллекция 0/0, Достижения 30) — отступ справа,
-            // чтобы счётчик не перекрылся вылезшей иконкой
-            '.btn-icon .btn-icon-count{margin-left:0.5em}',
-            // Не обрезать увеличенную иконку
-            '.btn-icon,.icon-btn,.score-chip,.btn-primary.btn-lg,.hero-actions{overflow:visible}',
+// ===== 1) ВЕРХНИЕ КНОПКИ — иконка ×1.6 (было ×2) =====
+'.score-chip .emoji-icon > .ui-sprite,',
+'.btn-primary.btn-lg .emoji-icon > .ui-sprite{transform:scale(1.6);transform-origin:center}',
+'.btn-icon .emoji-icon > .ui-sprite,',
+'.icon-btn .ui-sprite{transform:scale(1.6);transform-origin:center}',
+'.btn-icon .btn-icon-count{margin-left:0.4em}',
+'.score-chip [data-total-score],',
+'.btn-primary.btn-lg [data-i18n="play"]{margin-left:0.6em;position:relative;z-index:2}',
+'.btn-icon,.icon-btn,.score-chip,.btn-primary.btn-lg,.hero-actions{overflow:visible}',
 
             // ===== 2) КАРТОЧКИ УРОВНЕЙ (категории внутри разделов) =====
             // Иконка ×2, отступы справа (от текста) и снизу

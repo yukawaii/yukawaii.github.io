@@ -2660,7 +2660,7 @@ function getFactList() {
 
 async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId = w.getAnimalId;
- const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; await w.Ach.checkAndUnlock(true);
+ const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals; await w.Ach.checkAndUnlock(true);
 const items=await w.Ach.list();
 const opened=items.filter(i=>i.unlocked).length;
 const badge=d.getElementById('ach-badge');
