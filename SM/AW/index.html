@@ -6,6 +6,7 @@
 <title data-i18n="appTitle">Угадай животное!</title>
 <meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="https://unpkg.com/@vkontakte/vkui@7/dist/vkui.css">
+<link rel="stylesheet" href="style-additions.css">
 <script>
 (function () {
  var sp=new URLSearchParams(location.search); var isVK=sp.has('vk_app_id') || sp.has('vk_client_id') || sp.has('vk_platform') || sp.has('vk_user_id') || sp.has('vk_client'); if (isVK){ window.__vkBridgeReady=new Promise(function (resolve){ if (window.vkBridge) return resolve(window.vkBridge); var vk=document.createElement('script'); vk.src='https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js'; vk.async=true; vk.onload=function (){ var b=window.vkBridge && (window.vkBridge.default || window.vkBridge); if (window.vkBridge && !window.vkBridge.send && b) window.vkBridge=b; resolve(window.vkBridge || null);}; vk.onerror=function (){ console.warn('VK Bridge failed to load'); resolve(null);}; document.head.appendChild(vk);});} else{ window.__vkBridgeReady=Promise.resolve(null); if (typeof YaGames==='undefined'){ var s=document.createElement('script'); s.src='/sdk.js'; s.async=true; s.onload=function (){ window.__YANDEX_SDK_LOADED__=true; try{ window.dispatchEvent(new Event('yandex-sdk-ready'));} catch (e){}}; s.onerror=function (){ console.warn('Yandex Games SDK failed to load');}; document.head.appendChild(s);}}
@@ -835,6 +836,7 @@ html:not(.is-dark) .modal-close:hover {
   <span class="emoji-icon" data-icon="medal" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><title>award-medal-4</title><g fill="none"><path fill="#ff808c" d="M8.548 1v4.44c.035.62.302 1.201.749 1.63l2.705 2.318V1z"/><path fill="#66e1ff" d="M15.455 5.44V1h-3.454v8.388l2.705-2.318a2.45 2.45 0 0 0 .749-1.63"/><path fill="#ffef5e" d="m16.44 18.764l2.119-2.12a.494.494 0 0 0 0-.697l-2.118-2.118l.395-1.983a.305.305 0 0 0-.22-.395a.3.3 0 0 0-.167.008l-1.984.395L12 9.388l-2.467 2.467l-1.984-.394a.3.3 0 0 0-.313.074a.31.31 0 0 0-.074.313l.395 1.983l-2.116 2.116a.494.494 0 0 0 0 .698l2.118 2.119l-.395 1.983a.306.306 0 0 0 .387.387l1.984-.395l2.116 2.116a.49.49 0 0 0 .698 0l2.118-2.118l1.984.395a.305.305 0 0 0 .387-.387z"/><path fill="#fff9bf" d="M7.164 20.747a.34.34 0 0 0 .072.311l9.528-9.527a.34.34 0 0 0-.311-.072l-1.984.395L12 9.388l-2.467 2.467l-1.984-.394a.3.3 0 0 0-.313.074a.31.31 0 0 0-.074.313l.395 1.983l-2.116 2.116a.494.494 0 0 0 0 .698l2.118 2.119z"/><path fill="#ffbc44" d="M12 18.764a2.467 2.467 0 1 0 0-4.935a2.467 2.467 0 0 0 0 4.935"/><path fill="#ffdda1" d="M10.256 18.041a2.468 2.468 0 0 1 3.49-3.49z"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="m16.44 18.764l2.119-2.12a.494.494 0 0 0 0-.697l-2.118-2.118l.395-1.983a.305.305 0 0 0-.22-.395a.3.3 0 0 0-.167.008l-1.984.395L12 9.388l-2.467 2.467l-1.984-.394a.3.3 0 0 0-.313.074a.31.31 0 0 0-.074.313l.395 1.983l-2.116 2.116a.494.494 0 0 0 0 .698l2.118 2.119l-.395 1.983a.306.306 0 0 0 .387.387l1.984-.395l2.116 2.116a.49.49 0 0 0 .698 0l2.118-2.118l1.984.395a.305.305 0 0 0 .387-.387zM15.456 5.44a2.45 2.45 0 0 1-.75 1.63l-2.704 2.318L9.297 7.07a2.45 2.45 0 0 1-.75-1.63V1h6.909zM12.001 1v8.388M5.587 1h12.83"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M12 18.764a2.467 2.467 0 1 0 0-4.935a2.467 2.467 0 0 0 0 4.935"/></g></svg></span>
   <span class="btn-icon-count" id="ach-badge">0</span>
 </button>
+<button class="btn btn-ghost btn-icon" id="extrasHelpBtn" title="Помощь">❓</button>
       <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
       <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
       <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
@@ -844,6 +846,16 @@ html:not(.is-dark) .modal-close:hover {
       <button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button>
       <button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
     </div>
+    <div class="extras-daily-row">
+  <div class="extras-daily-col">
+    <div class="extras-daily-streak" id="extrasDailyStreak" style="display:none"></div>
+    <button class="extras-daily-btn extras-daily-btn--active" id="extrasDailyBtn">
+      <span class="extras-daily-btn__icon">🎁</span> Вызов дня
+    </button>
+  </div>
+  <button class="extras-daily-btn extras-daily-btn--quests" id="extrasQuestsBtn">🎯 Квесты дня</button>
+</div>
+<div id="extrasProgress" class="extras-progress" style="display:none"></div>
     <section class="card fact-card" id="fact-block" hidden>
       <h2 class="fact-heading" data-i18n="knownTitle">💡 Знаете ли вы?</h2>
       <div class="fact-body">
@@ -914,6 +926,7 @@ html:not(.is-dark) .modal-close:hover {
       </div>
       <div class="question-meta">
         <span class="counter" id="counter">1 / 1</span>
+        <span id="extrasBonusCounter" class="extras-bonus-counter" style="display:none"></span>
         <div class="timer" id="timer">
           <span id="timer-val">10</span>
           <div class="timer-bar"><div class="timer-fill" id="timer-fill" style="width:100%"></div></div>
@@ -996,6 +1009,34 @@ html:not(.is-dark) .modal-close:hover {
     <div class="games-grid" id="games-grid"></div>
   </div>
 </div>
+</div>
+
+<div class="modal" id="extrasQuestsModal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2>🎯 Квесты дня</h2>
+    <div id="extrasQuestsList" class="extras-quests-list"></div>
+    <button class="extras-btn extras-btn--primary" data-act="close" style="margin-top:16px">Закрыть</button>
+  </div>
+</div>
+<div class="modal" id="extrasHelpModal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="close">×</button>
+    <h2>❓ Как играть</h2>
+    <div class="extras-help-text">
+      <p>Посмотри на фото животного и выбери один из четырёх вариантов ответа.</p>
+      <p>На каждый вопрос даётся 10 секунд — следи за таймером.</p>
+      <p>За правильные ответы ты получаешь ягоды.</p>
+      <p>Пройди всю викторину без ошибок — получишь 3 звезды.</p>
+      <p>Ягоды тратятся на открытие новых категорий. Также их можно временно открыть за рекламу.</p>
+      <p>Выполняй ежедневные квесты и вызов дня, чтобы получать бонусные ягоды.</p>
+      <p>Каждый 15-й правильный ответ даёт ×2 ягод.</p>
+    </div>
+    <div class="extras-help-actions">
+      <button class="extras-btn extras-btn--primary" data-act="tutorial">Обучение</button>
+      <button class="extras-btn extras-btn--ghost" data-act="close">Закрыть</button>
+    </div>
+  </div>
 </div>
 <div class="modal" id="auth-modal">
   <div class="modal-content modal-narrow">
@@ -1547,14 +1588,6 @@ const userId = parseInt(launchParams.vk_user_id || launchParams.vk_ok_user_id ||
 const storagePrefix = isOK ? 'ok_' : '';
 const P = {isVK, isOK, isYandex, platform, userId, storagePrefix, launchParams, isStandalone: platform === 'standalone', inIframe: (() => { try { return w.self !== w.top; } catch (e) { return true; } })()};
 w.__PLATFORM = P;
-const SVG_ICONS = {
-  sun: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 40 40"><title>sun</title><g fill="none" stroke-miterlimit="10"><path fill="#ffe236" stroke="#231f20" d="M10.82 19.9a9.179 9.179 0 0 0 15.671 6.491a9.18 9.18 0 0 0 0-12.982a9.18 9.18 0 0 0-12.982 0A9.18 9.18 0 0 0 10.82 19.9ZM23.43 6s.13-.72-1.1-2.93A11 11 0 0 0 20.72.79a1.05 1.05 0 0 0-1.45 0c-.623.667-1.16 1.41-1.6 2.21a8.8 8.8 0 0 0-1.11 3a1.1 1.1 0 0 0 .75 1.11c.88.208 1.785.299 2.69.27a10.3 10.3 0 0 0 2.68-.32A1.09 1.09 0 0 0 23.43 6Zm-6.86 28.05s-.13.72 1.1 2.93a11 11 0 0 0 1.61 2.23a1.05 1.05 0 0 0 1.45 0c.622-.668 1.16-1.41 1.6-2.21a8.9 8.9 0 0 0 1.11-2.93a1.1 1.1 0 0 0-.75-1.11a10.3 10.3 0 0 0-2.69-.34a10.3 10.3 0 0 0-2.69.32a1.09 1.09 0 0 0-.75 1.1zM12.49 7.64S12.07 7 9.64 6.35a11.6 11.6 0 0 0-2.72-.45a1.06 1.06 0 0 0-1 1c.037.922.188 1.835.45 2.72a8.8 8.8 0 0 0 1.26 2.88a1.1 1.1 0 0 0 1.37.26a10.6 10.6 0 0 0 2.12-1.68A10 10 0 0 0 12.75 9a1.09 1.09 0 0 0-.25-1.3zm15.02 24.72s.42.61 2.85 1.29c.886.258 1.799.409 2.72.45a1.06 1.06 0 0 0 1-1a11.2 11.2 0 0 0-.45-2.72a8.8 8.8 0 0 0-1.28-2.85a1.1 1.1 0 0 0-1.32-.26a10.6 10.6 0 0 0-2.12 1.68a10 10 0 0 0-1.68 2.13a1.09 1.09 0 0 0 .25 1.3zM6 16.57s-.72-.13-2.93 1.1a11 11 0 0 0-2.28 1.61a1.05 1.05 0 0 0 0 1.45c.667.623 1.41 1.16 2.21 1.6a8.8 8.8 0 0 0 3 1.11a1.1 1.1 0 0 0 1.11-.75c.208-.88.299-1.785.27-2.69a10.3 10.3 0 0 0-.32-2.68A1.09 1.09 0 0 0 6 16.57Zm28.05 6.86s.72.13 2.93-1.1a11 11 0 0 0 2.23-1.61a1.05 1.05 0 0 0 0-1.45a11.2 11.2 0 0 0-2.21-1.6a8.9 8.9 0 0 0-2.93-1.11a1.1 1.1 0 0 0-1.11.75a10.3 10.3 0 0 0-.34 2.69c-.013.907.095 1.811.32 2.69a1.09 1.09 0 0 0 1.1.75zM7.64 27.51s-.61.42-1.29 2.85a11.6 11.6 0 0 0-.45 2.72a1.06 1.06 0 0 0 1 1a11.2 11.2 0 0 0 2.72-.45a8.8 8.8 0 0 0 2.85-1.28a1.1 1.1 0 0 0 .26-1.32a10.6 10.6 0 0 0-1.68-2.12A10 10 0 0 0 9 27.25a1.09 1.09 0 0 0-1.3.25zm24.72-15.02s.61-.42 1.29-2.85c.258-.886.409-1.799.45-2.72a1.06 1.06 0 0 0-1-1a11.2 11.2 0 0 0-2.72.45a8.8 8.8 0 0 0-2.88 1.26A1.1 1.1 0 0 0 27.24 9a10.6 10.6 0 0 0 1.68 2.12a10 10 0 0 0 2.13 1.68a1.09 1.09 0 0 0 1.3-.25z"/><path stroke="#fff" stroke-linecap="round" d="M23.44 13.86a4.8 4.8 0 0 1 2.3 2.06"/></g></svg>',
-  sunCloud: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 40 40"><title>sun-clound-weather</title><g fill="none" stroke-miterlimit="10"><path fill="#ffe236" stroke="#231f20" d="M19.37 15.5a6.441 6.441 0 1 0 12.882 0a6.441 6.441 0 0 0-12.882 0ZM28 5.65s.07-.51-.83-2A8 8 0 0 0 26 2.07a.75.75 0 0 0-1 0a7.4 7.4 0 0 0-1.08 1.6a5.9 5.9 0 0 0-.73 2.07a.78.78 0 0 0 .54.77a7.7 7.7 0 0 0 1.9.17a7.2 7.2 0 0 0 1.88-.27a.77.77 0 0 0 .5-.78zm-4.35 19.84s-.07.51.83 2a7.8 7.8 0 0 0 1.17 1.55a.75.75 0 0 0 1 0a7.7 7.7 0 0 0 1.08-1.6c.368-.64.616-1.341.73-2.07a.78.78 0 0 0-.55-.77a7 7 0 0 0-1.91-.18a7.7 7.7 0 0 0-1.88.27a.8.8 0 0 0-.51.79zM20.33 7s-.31-.41-2-.85a7.7 7.7 0 0 0-1.91-.26a.74.74 0 0 0-.7.73a7.2 7.2 0 0 0 .36 1.9a6.2 6.2 0 0 0 .95 2a.77.77 0 0 0 .93.16a7.2 7.2 0 0 0 1.46-1.21a7.2 7.2 0 0 0 1.14-1.53a.77.77 0 0 0-.2-.91zM31.3 24.11s.31.42 2 .85a8 8 0 0 0 1.91.27a.75.75 0 0 0 .7-.74a7.8 7.8 0 0 0-.36-1.9a6.2 6.2 0 0 0-.95-2a.77.77 0 0 0-.93-.16a7.7 7.7 0 0 0-1.46 1.22a7 7 0 0 0-1.14 1.52a.77.77 0 0 0 .2.91zm-15.41-10.7s-.51-.08-2 .83a7.7 7.7 0 0 0-1.54 1.16a.75.75 0 0 0 0 1a8.4 8.4 0 0 0 1.6 1.09c.642.36 1.343.604 2.07.72a.77.77 0 0 0 .77-.54a7 7 0 0 0 .18-1.9a7.7 7.7 0 0 0-.27-1.88a.78.78 0 0 0-.79-.5zm19.85 4.32s.5.08 2-.83a7.6 7.6 0 0 0 1.54-1.17a.74.74 0 0 0 0-1a8 8 0 0 0-1.6-1.09a6.2 6.2 0 0 0-2.08-.73a.76.76 0 0 0-.76.55a7 7 0 0 0-.18 1.89a7 7 0 0 0 .27 1.88a.77.77 0 0 0 .79.51zm-18.47 3.33s-.41.3-.85 2a8 8 0 0 0-.27 1.94a.76.76 0 0 0 .74.7a7.8 7.8 0 0 0 1.9-.37a5.9 5.9 0 0 0 2-.95a.77.77 0 0 0 .16-.93A7 7 0 0 0 19.71 22a7.3 7.3 0 0 0-1.52-1.14a.77.77 0 0 0-.91.2zm17.09-10.98s.41-.3.85-2a8.6 8.6 0 0 0 .27-1.92a.75.75 0 0 0-.74-.7a7.7 7.7 0 0 0-1.9.36a6.1 6.1 0 0 0-2 1a.78.78 0 0 0-.16.93a6.8 6.8 0 0 0 1.22 1.46c.452.448.963.832 1.52 1.14a.76.76 0 0 0 .91-.19z"/><path stroke="#fff" stroke-linecap="round" d="M28.12 11.19a3.36 3.36 0 0 1 1.65 1.41"/><path fill="#48eeff" stroke="#231f20" d="M32.93 28.79a7.3 7.3 0 0 0 .45-2.29c.13-3.37-1.65-5.7-5.41-5.85q-.45-.03-.9 0c-1-2.09-3.08-3.4-6.21-3.53c-4.23-.17-6.7 2-7.36 5.42q-.45-.095-.91-.11A3.67 3.67 0 0 0 8.4 26.3a4.8 4.8 0 0 0 .09 1.16a5 5 0 0 0-2.73 4.38c-.07 1.81.88 4.26 3 4.82c1 .51 6.63 1.21 11.28 1.39s10.29 0 11.37-.48c2.12-.38 3.27-2.75 3.34-4.56a5.31 5.31 0 0 0-1.82-4.22Z"/><path stroke="#fff" stroke-linecap="round" d="M28.17 22.52A3 3 0 0 1 30.92 24"/><path fill="#ff52a1" stroke="#231f20" d="M.503 25.829c0 .32.257.628.711.854s1.07.351 1.712.35s1.257-.13 1.71-.359s.708-.536.707-.857a.73.73 0 0 0-.185-.463a1.6 1.6 0 0 0-.526-.391a3.2 3.2 0 0 0-.786-.26a4.6 4.6 0 0 0-.926-.09c-.318 0-.632.033-.926.094c-.293.062-.56.152-.784.264a1.6 1.6 0 0 0-.524.394a.73.73 0 0 0-.183.464Zm3.467-3.893a4.6 4.6 0 0 0 .795.485c.27.129.537.218.784.264s.47.047.655.004a.73.73 0 0 0 .427-.259a.73.73 0 0 0 .132-.48a1.6 1.6 0 0 0-.182-.63a3.2 3.2 0 0 0-.468-.682a4.6 4.6 0 0 0-.683-.633c-.253-.191-.523-.356-.794-.485s-.537-.218-.784-.264a1.6 1.6 0 0 0-.656-.003a.73.73 0 0 0-.426.258a.73.73 0 0 0-.132.48c.008.19.07.405.181.63c.112.225.27.457.468.683c.198.225.43.44.684.632Zm3.629-3.784c.282.578.668 1.076 1.072 1.384c.404.309.793.403 1.082.262s.453-.506.458-1.015s-.152-1.118-.434-1.696s-.668-1.075-1.072-1.384s-.793-.403-1.082-.261c-.289.14-.453.506-.458 1.014s.152 1.118.434 1.696Z"/></g></svg>',
-  muted: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><title>muted-speaker</title><path fill="#e8f4fa" d="M10.09 21.25L4.23 24.1c-1.3.65-.18 5.59 1.8 9.61s5.22 7.93 6.52 7.29l5.85-2.88Z"/><path fill="#fff" d="M10.09 21.25L4.23 24.1c-.76.38-.69 2.23-.1 4.51l7.71-3.8Z"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M10.09 21.25L4.23 24.1c-1.3.65-.18 5.59 1.8 9.61s5.22 7.93 6.52 7.29l5.85-2.88Z"/><path fill="#45413c" d="M7.14 43.05a16.86 1.95 0 1 0 33.72 0a16.86 1.95 0 1 0-33.72 0" opacity=".15"/><path fill="#c0dceb" d="M34 40.3L17.46 6.73l-1.35-.81l-6 15.2c-.38 1.61.93 5.95 2.56 9.27s4.28 7 5.79 7.69l15.78 4.49Z"/><path fill="#e8f4fa" d="m20.74 13.39l-3.28-6.66l-1.35-.81l-6 15.2a10.1 10.1 0 0 0 .61 4.26Z"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M34 40.3L17.46 6.73l-1.35-.81l-6 15.2c-.38 1.61.93 5.95 2.56 9.27s4.28 7 5.79 7.69l15.78 4.49Z"/><path fill="#e8f4fa" d="M35.69 42.29c-4.1 2-11.55-4.72-16.64-15.06S13.16 6.88 17.26 4.86S28.81 9.58 33.9 19.92s5.89 20.35 1.79 22.37"/><path fill="#fff" d="M17.26 8.26c4.1-2 11.55 4.73 16.64 15.06a41.9 41.9 0 0 1 4.33 14.16c.45-4.34-1-10.88-4.33-17.56C28.81 9.58 21.36 2.84 17.26 4.86c-2.08 1-2.9 4.09-2.54 8.21c.28-2.38 1.09-4.07 2.54-4.81"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M35.69 42.29c-4.1 2-11.55-4.72-16.64-15.06S13.16 6.88 17.26 4.86S28.81 9.58 33.9 19.92s5.89 20.35 1.79 22.37"/><path fill="#e0e0e0" d="M34.55 40c-2.94 1.44-8.93-4.73-13.39-13.78s-5.69-17.57-2.76-19S27.33 11.9 31.78 21s5.7 17.53 2.77 19"/><path fill="#f0f0f0" d="M18.4 12.28c2.93-1.44 8.93 4.73 13.38 13.79a44.1 44.1 0 0 1 4.1 12c.9-3.3-.61-10-4.1-17.11C27.33 11.9 21.33 5.73 18.4 7.18c-1.51.74-1.92 3.38-1.33 7a2.8 2.8 0 0 1 1.33-1.9"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M34.55 40c-2.94 1.44-8.93-4.73-13.39-13.78s-5.69-17.57-2.76-19S27.33 11.9 31.78 21s5.7 17.53 2.77 19"/><path fill="#e8f4fa" d="M25.19 24.21c-2-4.07-4.8-4.53-5.8-4a1 1 0 0 0-.48.78a57 57 0 0 0 2.25 5.24a55 55 0 0 0 2.78 5a1 1 0 0 0 .91.09c.99-.55 2.35-3.04.34-7.11"/><path fill="#fff" d="M25.74 27.1a9 9 0 0 1 .49 1.14a8.75 8.75 0 0 0-1-4c-2-4.07-4.8-4.53-5.8-4a1 1 0 0 0-.48.78c.27.72.56 1.47.88 2.22c1.24-.46 4.05.07 5.91 3.86"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M25.19 24.21c-2-4.07-4.8-4.53-5.8-4a1 1 0 0 0-.48.78a57 57 0 0 0 2.25 5.24a55 55 0 0 0 2.78 5a1 1 0 0 0 .91.09c.99-.55 2.35-3.04.34-7.11"/><path fill="#ff6242" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M44.53 43.29L6.47 5.24a1.62 1.62 0 0 0-2.3 2.29l38.06 38.06a1.63 1.63 0 0 0 2.3-2.3"/></svg>',
-  music: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48"><title>musical-score</title><path fill="#45413c" d="M14.48 45.5a11.5 1.5 0 1 0 23 0a11.5 1.5 0 1 0-23 0" opacity=".15"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M37 18.4c-10.78 2.5-10.59-.63-21.73.87C6.86 20.39 3.5 24.58 3.5 24.58l6.17 18.19s3.33-4.19 11.74-5.31c11.14-1.5 11 1.62 21.73-.88"/><path fill="none" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M34.54 27.33a47 47 0 0 0 5.23-.87M6.26 32.7c1.23-1.53 5.15-4.48 11.78-5.37m16.8 5.05a40 40 0 0 0 6.68-1M8 37.7c1.18-1.47 5-4.51 11.84-5.43M4.76 28.28c1.7-2.12 5.84-4.71 11.9-5.52c11.15-1.5 11 1.62 21.73-.88"/><path fill="#656769" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M7 21.87a12.8 12.8 0 0 0-3.5 2.71l6.17 18.19a12.8 12.8 0 0 1 3.54-2.71Z"/><path fill="#4acfff" stroke="#45413c" stroke-linecap="round" stroke-linejoin="round" d="M34.06 38.09a16 16 0 0 0-1-2.71a8.7 8.7 0 0 0 1.67-2.8c1.68-4.73-1.46-8.17-5.56-7.69a6.2 6.2 0 0 0-2.22.68c-.78-1.08-1.52-2.1-2.15-3a20.84 20.84 0 0 0 1.9-11.89c-.44-4.81-4.28-10.9-8.1-8.15C15.17 5 16 14 19.77 19.72a22.7 22.7 0 0 0-3.08 6.56c-2.24 7.16 2.3 11.4 6.37 12.56a10.12 10.12 0 0 0 8-1.67a28 28 0 0 1 .78 3c.21 1-.8 2.34-1.88 1.22c-1.36-1.4-3.41-.66-3.46 1a3.27 3.27 0 0 0 4.16 3c2.88-.54 4.39-2.48 3.4-7.3m-1.94-4.77C31.5 32.17 30.76 31 30 29.8c2.57-.27 3.7 1.39 2.12 3.52M20.28 10.77c-.17-5.56 4.84-6.17 3.6.94A13.55 13.55 0 0 1 21.74 17a20.3 20.3 0 0 1-1.46-6.23M22.59 35c-1.56-1.92-1.3-5 1-9.81l1.42 2a7.42 7.42 0 0 0-1.55 4.65c.09 2.66 3 3.23 3 3.23s.79-.86-.07-1.39s-1-2.23.94-3.29c.26.35.53.71.82 1.08a17.8 17.8 0 0 1 2.15 3.72c-2.92 2.12-6.15 1.81-7.71-.19"/></svg>',
-  key: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 -0.5 41 41"><title>key</title><g fill="none" stroke-miterlimit="10"><path fill="#ffe236" stroke="#231f20" d="M35 3.23c-1.74-1.74-4.19-2.1-14.67 8.38c-2.45 2.39-4.28 4.39-5.66 6.07a10.37 10.37 0 1 0 5.86 5.86c1.42-1.19 3.1-2.73 5.08-4.67q.461.6 1 1.13c1.35 1.35 3.52 2.76 4.63 2.35a5.6 5.6 0 0 0 1.94-1a1.5 1.5 0 0 0 .44-2a17.7 17.7 0 0 0-1.84-2.5c.37-.34.75-.69 1.11-1.06s.72-.74 1.06-1.11a17.7 17.7 0 0 0 2.5 1.84a1.5 1.5 0 0 0 2-.44a5.6 5.6 0 0 0 1-1.94c.41-1.11-1-3.28-2.35-4.63a11.6 11.6 0 0 0-2-1.61c1.35-2.55.83-3.73-.1-4.67Z"/><path fill="#fff" stroke="#231f20" d="M6.43 27.33a4.45 4.45 0 1 0 8.9 0a4.45 4.45 0 0 0-8.9 0Z"/><path stroke="#fff" stroke-linecap="round" d="M26.72 9.69c3.14-3.38 5.22-4.19 5.22-4.19"/></g></svg>',
-  confetti: '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title>party-confetti</title><g fill="none"><path fill="#ffbfc5" d="M8.174 7.696a2.391 2.391 0 1 0 0-4.783a2.391 2.391 0 0 0 0 4.783"/><path fill="#c2f3ff" d="M19.652 6.26a1.913 1.913 0 1 0 0-3.825a1.913 1.913 0 0 0 0 3.826"/><path fill="#c9f7ca" d="M19.173 15.826a1.913 1.913 0 1 0 0-3.826a1.913 1.913 0 0 0 0 3.826"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M16.288 12.207a4.75 4.75 0 0 1 6.711 0M11.778 7.713a4.743 4.743 0 0 0 0-6.713m6.032 7.412l3.357-1.117m-5.594-1.118l1.12-3.358M8.14 5.085a.24.24 0 0 1 .24.24m-.48-.001a.24.24 0 0 1 .24-.239m0 .479a.24.24 0 0 1-.24-.24"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M8.38 5.324a.24.24 0 0 1-.24.24m7.174 2.391a.24.24 0 0 1 .24.239m-.479 0a.24.24 0 0 1 .239-.24"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M15.314 8.433a.24.24 0 0 1-.24-.24m.479.001a.24.24 0 0 1-.239.239m3.826 5.261a.24.24 0 0 1 .239.239m-.479 0a.24.24 0 0 1 .24-.24m0 .479a.24.24 0 0 1-.24-.239m.479 0a.24.24 0 0 1-.24.24m.479-10.044a.24.24 0 0 1 .24.239m-.479 0a.24.24 0 0 1 .239-.24m0 .479a.24.24 0 0 1-.24-.24m.479.001a.24.24 0 0 1-.239.239"/><path fill="#ffef5e" d="m15.008 16.376l-12.11 6.472a1.29 1.29 0 0 1-1.745-1.746l6.471-12.11z"/><path fill="#fff9bf" d="M11.316 12.684L7.624 8.992l-6.47 12.11a1.29 1.29 0 0 0 .229 1.52z"/><path stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="m15.008 16.376l-12.11 6.472a1.29 1.29 0 0 1-1.745-1.746l6.471-12.11"/><path fill="#ffbc44" stroke="#191919" stroke-linecap="round" stroke-linejoin="round" d="M15.242 16.197c.934-.934.026-3.357-2.029-5.411s-4.477-2.963-5.41-2.03c-.935.934-.026 3.357 2.028 5.411c2.055 2.055 4.477 2.963 5.411 2.03"/></g></svg>'
-};
 const cls = d.documentElement.classList;
 cls.toggle('is-vk', isVK);
 cls.toggle('is-ok', isOK);
@@ -1714,6 +1747,7 @@ async function remoteGet(name) {
   }
   return null;
 }
+
 async function remoteSet(name, valueStr) {
   const key = storageKey(name);
   if (isYandex) {
@@ -1733,7 +1767,8 @@ function safeLocalSet(key, value) {
     console.warn('localStorage.setItem failed:', e);
     try {
       const keys = Object.keys(localStorage);
-      keys.filter(k => k.startsWith('aq_') && !k.includes('unlocked') && !k.includes('collection')).forEach(k => localStorage.removeItem(k));
+      const prefix = storagePrefix + 'aq_';
+      keys.filter(k => k.startsWith(prefix) && !k.includes('unlocked') && !k.includes('collection')).forEach(k => localStorage.removeItem(k));
       localStorage.setItem(key, value);
       return true;
     } catch (e2) { return false; }
@@ -1788,6 +1823,68 @@ function storageSet(name, value) {
   if (isVK || isOK) return remoteSet(name, str).catch(() => {});
   return Promise.resolve();
 }
+async function storageGetTotal() {
+  const KEY = storageKey('total');
+  const TS_KEY = storageKey('total_ts');
+  let localVal = null, localTs = 0;
+  try {
+    const rv = safeLocalGet(KEY);
+    if (rv != null) localVal = Number(JSON.parse(rv)) || 0;
+    const rt = safeLocalGet(TS_KEY);
+    if (rt != null) localTs = Number(JSON.parse(rt)) || 0;
+  } catch (e) {}
+  let remoteVal = null, remoteTs = 0;
+  if (!P.isStandalone) {
+    try {
+      if (isYandex && ysdkPlayer) {
+        const data = await ysdkPlayer.getData([KEY, TS_KEY]);
+        if (data && data[KEY] != null) remoteVal = Number(JSON.parse(data[KEY])) || 0;
+        if (data && data[TS_KEY] != null) remoteTs = Number(JSON.parse(data[TS_KEY])) || 0;
+      } else if (isVK || isOK) {
+        const data = await vkSend('VKWebAppStorageGet', { keys: [KEY, TS_KEY] }, 1500);
+        if (data && Array.isArray(data.keys)) {
+          for (const kv of data.keys) {
+            if (!kv || !kv.value) continue;
+            if (kv.key === KEY) remoteVal = Number(JSON.parse(kv.value)) || 0;
+            else if (kv.key === TS_KEY) remoteTs = Number(JSON.parse(kv.value)) || 0;
+          }
+        }
+      }
+    } catch (e) {}
+  }
+  let winner;
+  if (localVal == null && remoteVal == null) winner = 0;
+  else if (localVal == null) winner = remoteVal;
+  else if (remoteVal == null) winner = localVal;
+  else winner = (remoteTs > localTs) ? remoteVal : localVal;
+  try {
+    safeLocalSet(KEY, JSON.stringify(winner));
+    if (remoteVal != null && remoteTs > localTs) safeLocalSet(TS_KEY, JSON.stringify(remoteTs));
+  } catch (e) {}
+  return winner;
+}
+
+async function storageSetTotal(value) {
+  const total = Number(value) || 0;
+  const ts = Date.now();
+  safeLocalSet(storageKey('total'), JSON.stringify(total));
+  safeLocalSet(storageKey('total_ts'), JSON.stringify(ts));
+  if (P.isStandalone) return;
+  try {
+    if (isYandex && ysdkPlayer) {
+      await ysdkPlayer.setData({
+        [storageKey('total')]: JSON.stringify(total),
+        [storageKey('total_ts')]: JSON.stringify(ts)
+      }, true);
+      return;
+    }
+    if (isVK || isOK) {
+      await vkSend('VKWebAppStorageSet', { key: storageKey('total'), value: JSON.stringify(total) }, 2500);
+      await vkSend('VKWebAppStorageSet', { key: storageKey('total_ts'), value: JSON.stringify(ts) }, 2500);
+    }
+  } catch (e) {}
+}
+
 w.storageGet = storageGet;
 w.storageSet = storageSet;
 w.vkSend = vkSend;
@@ -1799,7 +1896,7 @@ function preloadRewardedAd(){ if (!(isVK || isOK)) return; vkSend('VKWebAppCheck
 function showRewardedAd(){
   if (P.isStandalone && !isYandex && typeof YaGames === 'undefined') return Promise.resolve(true);
   const yandexActive = isYandex || (typeof YaGames !== 'undefined' && !isVK && !isOK);
- if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false);} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result);}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true;}, onClose: ()=>{ finish(rewarded);}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false);}}});} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false);}}; if (ysdk && ysdk.adv){ runAd(ysdk);} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false;} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p;}).catch(()=>{}); runAd(sdk);}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false);});} else{ resolve(false);}});}
+ if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false);} yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; if (result) __lastRewardedAdTime=Date.now(); adUnmute(); yandexGameplayStart(); resolve(result);}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true;}, onClose: ()=>{ finish(rewarded);}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false);}}});} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false);}}; if (ysdk && ysdk.adv){ runAd(ysdk);} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false;} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p;}).catch(()=>{}); runAd(sdk);}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false);});} else{ resolve(false);}});}
  if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res;}); adMute(); (async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK ad flow →', reason, '| result=', result); try{ adUnmute();} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result);}; try{ const rewardReady=await waitForAdsAvailable(8000, 700, 'reward'); if (rewardReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward', use_waterfall: true }, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'reward-watched' : 'reward-not-completed:' + JSON.stringify(data));} console.log('Reward ads unavailable → trying interstitial fallback'); const interReady=await waitForAdsAvailable(4000, 700, 'interstitial'); if (interReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'interstitial-watched' : 'interstitial-not-completed:' + JSON.stringify(data));} return finish(false, 'no-ads-at-all');} catch (e){ finish(false, 'error:' + ((e && e.message) || e));}})(); return w.__rewardAdInFlight;}
  return Promise.resolve(false);}
 
@@ -1823,13 +1920,12 @@ function showInterstitial(){
     try {
       ysdk.adv.showFullscreenAdv({
         callbacks: {
-          onClose: () => { adUnmute(); yandexGameplayStart(); },
-          onError: () => { adUnmute(); yandexGameplayStart(); }
+          onClose: () => { adUnmute(); },
+          onError: () => { adUnmute(); }
         }
       });
     } catch (e) {
       adUnmute();
-      yandexGameplayStart();
     }
     return;
   }
@@ -1867,12 +1963,7 @@ w.yandexGameplayStart = yandexGameplayStart;
 w.yandexGameplayStop = yandexGameplayStop;
 function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname);} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname);}
 async function infr(){ if (isYandex || P.isStandalone){ toast(w.t('inviteVKOnly')); return;} if (!(isVK || isOK)){ toast(w.t('inviteVKOnly')); return;} const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res);} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true);}}
-async function top0(){ toast(w.t('topVKOnly'), true);}
-function favor1() { if (isVK || isOK) vkSend('VKWebAppAddToFavorites'); }
 w.infr = infr;
-w.top0 = top0;
-w.favor1 = favor1;
-w.myadd1 = showInterstitial;
 const __toastQueue = [];
 let __toastActive = false;
 function __showNextToast() {
@@ -1968,9 +2059,13 @@ function stopBgMusic() {
 }
 function applySoundState() {
   d.querySelectorAll('[data-sound-toggle]').forEach(btn => {
-btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + (soundEnabled ? SVG_ICONS.muted : SVG_ICONS.music) + '</span>';
-btn.title = soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle');
-btn.setAttribute('aria-label', soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle'));
+    const spriteName = soundEnabled ? 'soundoff' : 'soundon';
+    const inner = (w.UiSprite && w.UiSprite.has(spriteName))
+      ? w.UiSprite.html(spriteName)
+      : (soundEnabled ? '🔇' : '🔊');
+    btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + inner + '</span>';
+    btn.title = soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle');
+    btn.setAttribute('aria-label', soundEnabled ? w.t('soundOffTitle') : w.t('soundOnTitle'));
   });
   if (!soundEnabled) stopBgMusic();
 }
@@ -1989,7 +2084,9 @@ function attachSfxToUI(){ d.addEventListener('click', (e)=>{ if (e.target.closes
 function attachAudioUnlock() {
   const unlock = () => {
     ensureAudioCtx();
-    if (!soundEnabled) {
+    let soundPref = null;
+    try { soundPref = safeLocalGet(storageKey('sound_on')); } catch (e) {}
+    if (soundPref === null && !soundEnabled) {
       soundEnabled = true;
       applySoundState();
       storageSet('sound_on', true).catch(() => {});
@@ -2016,9 +2113,13 @@ function updateThemeColorMeta() {
 function applyTheme() {
   cls.toggle('is-dark', darkEnabled);
   d.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + (darkEnabled ? SVG_ICONS.sun : SVG_ICONS.sunCloud) + '</span>';
- btn.title = darkEnabled ? w.t('themeLightTitle') : w.t('themeDarkTitle');
-btn.setAttribute('aria-label', btn.title);
+    const spriteName = darkEnabled ? 'moon' : 'cloud';
+    const inner = (w.UiSprite && w.UiSprite.has(spriteName))
+      ? w.UiSprite.html(spriteName)
+      : (darkEnabled ? '☀️' : '⛅');
+    btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + inner + '</span>';
+    btn.title = darkEnabled ? w.t('themeLightTitle') : w.t('themeDarkTitle');
+    btn.setAttribute('aria-label', btn.title);
   });
   updateThemeColorMeta();
     __starsCreated = false;
@@ -2091,12 +2192,13 @@ function buildAchContext() {
   const collection = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
   const unlockedLvls = (w.__SYNCED__ && w.__SYNCED__.unlocked) || [];
   const unlockedLvlSet = new Set(unlockedLvls.map(Number));
-  let totalStars = 0, threeStarsCount = 0;
-  for (const k in starsMap) {
-    const v = Number(starsMap[k]) || 0;
-    totalStars += v;
-    if (v >= 3) threeStarsCount++;
-  }
+ let totalStars = 0, threeStarsCount = 0;
+for (const k in starsMap) {
+  if (Number(k) === 88888) continue;
+  const v = Number(starsMap[k]) || 0;
+  totalStars += v;
+  if (v >= 3) threeStarsCount++;
+}
   const unlockedRegions = new Set();
   let totalLevels = 0;
   (w.REGIONS || []).forEach(reg => {
@@ -2139,8 +2241,8 @@ const animalId = w.getAnimalId;
     const allInReg = regSet.size > 0 && Array.from(regSet).every(id => collectionSet.has(id));
     if (allInReg) regionFull.add(reg.id);
   });
-  return { ...metrics, totalStars, threeStarsCount, collectionCount: collection.length, collectionTotal, unlockedRegions, regionFull, totalLevels, playedLevels: new Set(metrics.playedLevels || []), themedTotal, themedUnlocked, themedPlayed, themed3Stars, photoTotal, photoUnlocked, photoPlayed, photo3Stars, stars: starsMap };
-}
+  const cleanPlayed = (metrics.playedLevels || []).filter(id => id !== 99999 && id !== 88888);
+  return { ...metrics, totalStars, threeStarsCount, collectionCount: collection.length, collectionTotal, unlockedRegions, regionFull, totalLevels, playedLevels: new Set(cleanPlayed), themedTotal, themedUnlocked, themedPlayed, themed3Stars, photoTotal, photoUnlocked, photoPlayed, photo3Stars, stars: starsMap };}
 async function checkAndUnlock(silent) {
   if (!metrics) await loadMetrics();
   if (!unlockedSet) await loadUnlocked();
@@ -2180,14 +2282,14 @@ async function recordRound(data) {
   if (typeof data.fastestCorrect === 'number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect = data.fastestCorrect;
   if (typeof data.maxStreak === 'number' && data.maxStreak > metrics.maxStreak) metrics.maxStreak = data.maxStreak;
   if (data.total > 0 && data.mistakes === 0) metrics.noMistakeRuns++;
-  if (data.total > 0 && data.score === 0) { metrics.hasZeroScore = true; metrics.zeroLossStreak++; } else metrics.zeroLossStreak = 0;
+if (data.total > 0 && (Number(data.correctCount) || 0) === 0) { metrics.hasZeroScore = true; metrics.zeroLossStreak++; } else metrics.zeroLossStreak = 0;
   if (data.total > 0 && data.timeouts === data.total) metrics.allTimeouts = true;
   const h = new Date().getHours();
   if (h >= 2 && h <= 4) metrics.playedAtNight = true;
   if (h >= 5 && h <= 7) metrics.playedEarlyMorning = true;
-  metrics.lastPercent = data.percent;
+   metrics.lastPercent = data.percent;
   const lvl = Number(data.levelId);
-  if (lvl && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl);
+  if (lvl && lvl !== 99999 && lvl !== 88888 && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl);
   await saveMetrics();
   return checkAndUnlock(false);
 }
@@ -2299,8 +2401,13 @@ async function gatingLoad(forceReload) {
   }
 }
 async function isUnlocked(levelId) {
+  const nid = Number(levelId);
+  if (nid === DAILY_ID) return true;
+  if (nid === 88888) return true;
+  if (isPurchasedLevel(nid)) return true;
+  if (isTempUnlockedLevel(nid)) return true;
   const list = await gatingLoad();
-  return list.includes(Number(levelId));
+  return list.includes(nid);
 }
 async function unlockLevel(levelId) {
   const list = await gatingLoad();
@@ -2312,47 +2419,9 @@ async function unlockLevel(levelId) {
   }
   return true;
 }
-async function unlockViaAd(levelId) {
-  const ok = await showRewardedAd();
-  if (ok) { await unlockLevel(levelId); return true; }
-  return false;
-}
-function buildUnlockModal() {
-  let m = d.getElementById('__unlockModal');
-  if (m) return m;
-  m = d.createElement('div');
-  m.id = '__unlockModal';
-  m.className = 'modal';
-m.innerHTML = '<div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></div><h2 class="modal-title"></h2><p class="modal-text"></p><div class="modal-actions"><button class="btn btn-primary" data-act="watch"></button><button class="btn btn-ghost" data-act="cancel"></button></div></div>';
-  d.body.appendChild(m);
-  return m;
-}
-function showUnlockModal(levelId, onUnlocked) {
-  const m = buildUnlockModal();
-  m.querySelector('.modal-title').textContent = w.t('unlockTitle');
-  m.querySelector('.modal-text').textContent = w.t('unlockText');
-  m.querySelector('[data-act="watch"]').textContent = w.t('watchAd');
-  m.querySelector('[data-act="cancel"]').textContent = w.t('cancel');
-  m.classList.add('show');
-    applyVKUIButtons();    
-  const $w = m.querySelector('[data-act="watch"]');
-  const $c = m.querySelector('[data-act="cancel"]');
-  const $x = m.querySelector('.modal-close');
-  const cleanup = () => { m.classList.remove('show'); $w.onclick = $c.onclick = $x.onclick = null; };
-  $w.onclick = () => withLock(async () => {
-    $w.disabled = true; $w.textContent = w.t('loadingAd');
-    const ok = await unlockViaAd(levelId);
-    $w.disabled = false; $w.textContent = w.t('watchAd');
-    if (ok) {
-      toast(w.t('levelOpened'));
-      cleanup();
-      if (typeof onUnlocked === 'function') onUnlocked(levelId);
-    } else toast(w.t('adUnavailable'), true);
-  });
-  $c.onclick = cleanup;
-  $x.onclick = cleanup;
-}
-w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, unlockViaAd, showUnlockModal, _invalidate: () => { gatingCache = null; } };
+
+
+w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, showUnlockModal: (id, cb) => showPurchaseModal(id, cb), _invalidate: () => { gatingCache = null; } };
 async function initVK() {
   console.log('🔑 initVK(): старт');
   if (!w.vkBridge) {
@@ -2550,9 +2619,9 @@ w.whenReady = new Promise(res => { __syncResolve = res; });
 async function syncAllOnStart() {
   try {
     const DEFAULT_LVL = (w.Gating && w.Gating.DEFAULT_UNLOCKED) || [1, 11,1020, 2031,2013,2009,2006, 2007, 1001,1002, 1006,1007, 1010, 1012, 1013];
-    const [unlockedRaw, collectionRaw, starsRaw, totalRaw, gatingVerRaw] = await Promise.all([
-      storageGet('unlocked'), storageGet('collection'), storageGet('stars'), storageGet('total'), storageGet('unlocked_v')
-    ]);
+const [unlockedRaw, collectionRaw, starsRaw, totalRaw, gatingVerRaw] = await Promise.all([
+  storageGet('unlocked'), storageGet('collection'), storageGet('stars'), storageGetTotal(), storageGet('unlocked_v')
+]);
     const storedVer = asNumber(gatingVerRaw, 0);
     const CURRENT_VER = 5;
     let unlocked;
@@ -2660,7 +2729,8 @@ function getFactList() {
 
 async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId = w.getAnimalId;
- const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals; await w.Ach.checkAndUnlock(true);
+ const allIds=new Set(); 
+ (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals; await w.Ach.checkAndUnlock(true);
 const items=await w.Ach.list();
 const opened=items.filter(i=>i.unlocked).length;
 const badge=d.getElementById('ach-badge');
@@ -2670,13 +2740,21 @@ if (animals.length){ const dt=new Date();
 const day = Math.floor(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()) / 86400000);
 const seed = (day * 2654435761) >>> 0;
 const item = animals[seed % animals.length];  
-  const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML=''; const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || []; const unlockedSet=new Set(unlocked.map(Number)); const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Number(starsMap[levelId]) || 0; return '<span class="stars' + (s >0 ? ' has-stars' : '') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>'}; 
+  const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML='';
+ const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || [];
+const unlockedSet=new Set(unlocked.map(Number));
+const __now = Date.now();
+for (const k in MECH.purchased) if (MECH.purchased[k]) unlockedSet.add(Number(k));
+for (const k in MECH.tempUnlocks) if (MECH.tempUnlocks[k] > __now) unlockedSet.add(Number(k));
+   const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Math.max(0,Math.min(3,Math.floor(Number(starsMap[levelId])||0))); return '<span class="stars' + (s>0?' has-stars':'') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>'}; 
+
   const renderLevelCard=(l, qz, container)=>{ const isOpen=unlockedSet.has(Number(l.id)); const el=d.createElement('button'); el.type='button';
 el.className = 'level-card' + (isOpen ? '' : ' locked');
     if (isOpen) el.dataset.href='#/quiz/' + l.id;
-    const adTitle=escapeHtml(w.t('titleAd')); 
-    
-    const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; 
+    const adTitle=escapeHtml(w.t('titleAd'));     
+const _price = getLevelPrice(Number(l.id));
+const _ptsHtml = ptsIcon('1.1em');
+const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-price">' + _ptsHtml + ' ' + _price + '</span></div>'; 
 const qCount = (qz && qz.questions) ? qz.questions.length : (l.count || 0);
 el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return;} 
 const a=d.createElement('button'); a.type='button'; a.className='level-card'; a.dataset.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span>' + '<span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + '<div class="level-actions"><span class="level-open">▶</span></div>'; el.replaceWith(a);});});} container.appendChild(el)}; const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{}} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState))} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section');
@@ -2685,21 +2763,48 @@ sec.className = 'card collapsible';
 themedSorted.forEach(l => { renderLevelCard(l, (w.QUIZZES || {})[l.id], grid); });
   if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo});
  photoSorted.forEach(l => { renderLevelCard(l, (w.QUIZZES || {})[l.id], grid); });
-  if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})}
+  if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})
+renderDailyBadge();
+renderProgress();
+}
+
+
 async function renderQuiz(levelId){ const nid=Number(levelId);
-if (nid >= 1000) {
+if (nid === DAILY_ID) {
+  ensureDaily();
+  if (MECH && MECH.daily && MECH.daily.completed) {
+    pushRoute({ name: 'index' }, true);
+    return null;
+  }
+  const qs = getDailyQuestions();
+  if (!qs.length) { pushRoute({ name: 'index' }, true); return null; }
+  w.QUIZZES[DAILY_ID] = {
+    regionKey: 'daily',
+    sub: { ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' },
+    questions: qs
+  };
+}
+if (nid >= 1000 && nid !== DAILY_ID && nid !== 88888) {
   const single = buildSingleThemedQuiz(nid);
   if (single) w.QUIZZES[nid] = single;
 }
   const quiz = (w.QUIZZES || {})[String(levelId)];
   if (!quiz) { pushRoute({ name: 'index' }, true); return null; }
- const $=(s)=>d.querySelector(s); const state={ order: [], index: 0, score: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, scoreSent: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set()}; const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId = w.getAnimalId; const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0;
+ const $=(s)=>d.querySelector(s); 
+ const state={ order: [], index: 0, score: 0, correctCount: 0, answers: 0, timeLeft: 0, timerId: null, answered: false, finished: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set()};
+   const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId = w.getAnimalId; const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0;
   };
 const region = (w.REGIONS || []).find(r => r.id === quiz.regionKey);
 const badgeEl = $('#home-region');
 if (badgeEl) {
 if (region) {
     badgeEl.textContent = (region.icon ? region.icon + ' ' : '') + w.L(region.name);
+    badgeEl.style.display = '';
+} else if (quiz.regionKey === 'daily') {
+    badgeEl.textContent = '🎁 ' + w.L({ ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' });
+    badgeEl.style.display = '';
+} else if (quiz.regionKey === 'tutorial') {
+    badgeEl.textContent = '🎓 ' + w.L({ ru: 'Обучение', en: 'Tutorial', tr: 'Öğretici' });
     badgeEl.style.display = '';
 } else {
     const nid = Number(levelId);
@@ -2715,7 +2820,7 @@ if (region) {
       badgeEl.textContent = '';
       badgeEl.style.display = 'none';
     }
-  }
+}
 }
 $('#home-title').textContent = quiz.sub ? w.L(quiz.sub) : '';
 const _nid = Number(levelId);
@@ -2733,7 +2838,7 @@ if (_emojiEl) {
 }
 $('#home-count').textContent = quiz.questions.length;
   const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
-  const starsCount = Number(starsMap[levelId]) || 0;
+  const starsCount = Math.max(0, Math.min(3, Math.floor(Number(starsMap[levelId]) || 0)));
   const hStars = $('#home-stars');
   if (hStars) {
     hStars.textContent = '★'.repeat(starsCount) + '☆'.repeat(3 - starsCount);
@@ -2742,14 +2847,9 @@ $('#home-count').textContent = quiz.questions.length;
   const gateUnlocked = await w.Gating.isUnlocked(levelId);
   show(gateUnlocked ? homeScreen : lockScreen);
     applyVKUIButtons(); 
-  $('#lock-watch-btn').onclick = () => withLock(async () => {
-    const btn = $('#lock-watch-btn');
-    btn.disabled = true; btn.textContent = w.t('loadingAd');
-    const ok = await w.Gating.unlockViaAd(levelId);
-    btn.disabled = false; btn.textContent = w.t('watchAd');
-    if (ok) { toast(w.t('levelOpened')); show(homeScreen); }
-    else toast(w.t('adUnavailable'), true);
-  });
+$('#lock-watch-btn').onclick = () => {
+    showPurchaseModal(levelId, () => { show(homeScreen); });
+};
   const shuffle = arr => {
     const r = arr.slice();
     for (let i = r.length - 1; i > 0; i--) {
@@ -2758,19 +2858,24 @@ $('#home-count').textContent = quiz.questions.length;
     }
     return r;
   };
- function startQuiz(){
-  if (Number(levelId) >= 1000) {
+function startQuiz(){
+  if (Number(levelId) === DAILY_ID && MECH && MECH.daily && MECH.daily.completed) {
+    pushRoute({ name: 'index' });
+    return;
+  }
+  if (Number(levelId) >= 1000 && Number(levelId) !== 88888) {
     const fresh = buildSingleThemedQuiz(Number(levelId));
     if (fresh && Array.isArray(fresh.questions) && fresh.questions.length) {
       quiz.questions = fresh.questions;
     }
   }
   state.order=shuffle(quiz.questions.map((_, i)=>i));
-  state.index=0; state.score=0; state.answers=0; state.answered=false;
-  state.finished=false; state.scoreSent=false; state.streak=0;
+  state.index=0; state.score=0; state.correctCount=0; state.answers=0; state.answered=false;
+  state.finished=false; state.streak=0;
   state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0;
   state.roundCollection=new Set();
   show(quizScreen);
+  renderBonusCounter();
   if (isYandex) yandexGameplayStart();
   renderQuestion();
 }
@@ -2868,40 +2973,48 @@ im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-g
       else if (idx === i) o.classList.add('wrong');
     });
     try { (i === correct) ? w.Sound.playCorrect() : w.Sound.playWrong(); } catch (e) {}
-    if (i === correct) {
-      state.score++;
-      $('#score-val').textContent = state.score;
-      const id = cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || '');
-      if (id) state.roundCollection.add(id);
-      const timeSpent = 10 - Math.max(0, state.timeLeft);
-      if (timeSpent < state.fastestCorrect) state.fastestCorrect = timeSpent;
-      state.streak++;
-      if (state.streak > state.maxStreak) state.maxStreak = state.streak;
-    } else state.streak = 0;
+if (i === correct) {
+  state.correctCount++;
+  state.score++;
+  const __isTutorialQ = Number(levelId) === 88888;
+  const bonus = __isTutorialQ ? 0 : onCorrectAnswer();
+  if (bonus > 0) state.score += bonus;
+  $('#score-val').textContent = state.score;
+  const id = cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || '');
+  if (id) state.roundCollection.add(id);
+  const timeSpent = 10 - Math.max(0, state.timeLeft);
+  if (timeSpent < state.fastestCorrect) state.fastestCorrect = timeSpent;
+  state.streak++;
+  if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+} else state.streak = 0;
     state.answers++;
     finishQuestion();
   }
-  function timeUp() {
-    if (state.answered) return;
-    state.answered = true;
-    const cur = quiz.questions[state.order[state.index]];
-    const optCount = quiz.mode === 'photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0);
-    if (!cur || typeof cur.answer !== 'number' || optCount === 0 || cur.answer < 0 || cur.answer >= optCount) {
-      console.warn('Invalid answer index in timeUp');
-      state.answers++;
-      state.timeouts++;
-      finishQuestion();
-      return;
-    }
-    Array.from(d.querySelectorAll('#options .option')).forEach(o => {
-      o.classList.add('disabled');
-      if (+o.dataset.i === cur.answer) o.classList.add('correct');
-    });
-    try { w.Sound.playWrong(); } catch (e) {}
+function timeUp() {
+  if (state.answered) return;
+  state.answered = true;
+  const cur = quiz.questions[state.order[state.index]];
+  const optCount = quiz.mode === 'photo'
+    ? (Array.isArray(cur && cur.images) ? cur.images.length : 0)
+    : (Array.isArray(cur && cur.options) ? cur.options.length : 0);
+  if (!cur || typeof cur.answer !== 'number' || optCount === 0 || cur.answer < 0 || cur.answer >= optCount) {
+    console.warn('Invalid answer index in timeUp');
     state.answers++;
     state.timeouts++;
+    state.streak = 0;
     finishQuestion();
+    return;
   }
+  Array.from(d.querySelectorAll('#options .option')).forEach(o => {
+    o.classList.add('disabled');
+    if (+o.dataset.i === cur.answer) o.classList.add('correct');
+  });
+  try { w.Sound.playWrong(); } catch (e) {}
+  state.answers++;
+  state.timeouts++;
+  state.streak = 0;
+  finishQuestion();
+}
   function finishQuestion() {
     const cur = quiz.questions[state.order[state.index]];
     if (cur.description) {
@@ -2919,38 +3032,94 @@ im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-g
 async function finishQuiz() {
   if (state.finished) return;
   state.finished = true;
+  const finishedState = state;
   stopTimer();
   try { w.Sound.playFanfare(); } catch (e) {}
   show(resultScreen);
   if (isYandex) yandexGameplayStop();
   const confettiEl = d.querySelector('.result-confetti');
-if (confettiEl) {
-  confettiEl.style.animation = 'none';
-  void confettiEl.offsetWidth;
-  confettiEl.style.animation = '';
-}
+  if (confettiEl) {
+    confettiEl.style.animation = 'none';
+    void confettiEl.offsetWidth;
+    confettiEl.style.animation = '';
+  }
+
   const total = quiz.questions.length;
-  const pct = Math.round((state.score / total) * 100);
+  const pct = total > 0 ? Math.round((finishedState.correctCount / total) * 100) : 0;
   const earnedStars = calcStars(pct);
   $('#res-total').textContent = total;
-  $('#res-correct').textContent = state.score;
-  $('#res-wrong').textContent = state.answers - state.score;
+  $('#res-correct').textContent = finishedState.correctCount;
+  $('#res-wrong').textContent = finishedState.answers - finishedState.correctCount;
   $('#res-percent').textContent = pct + '%';
   const starsEl = $('#res-stars');
- if (starsEl){ starsEl.textContent='★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars); starsEl.classList.toggle('has-stars', earnedStars >0);}
-try{ const [mapRaw, colRaw, totalRaw]=await Promise.all([ w.storageGet('stars'), w.storageGet('collection'), w.storageGet('total') ]);
- let map=(mapRaw && typeof mapRaw==='object' && !Array.isArray(mapRaw)) ? mapRaw :{}; let colList=Array.isArray(colRaw) ? colRaw : []; let total=(typeof totalRaw==='number' && !isNaN(totalRaw)) ? totalRaw : 0; const prevStars=Number(map[levelId]) || 0; if (earnedStars >prevStars) map[levelId]=earnedStars; const colBefore=colList.length;
-  state.roundCollection.forEach(id => { if (!colList.includes(id)) colList.push(id); });
- total +=state.score; await Promise.all([ w.storageSet('stars', map), w.storageSet('collection', colList), w.storageSet('total', total) ]);
- if (w.__SYNCED__){ w.__SYNCED__.stars=map; w.__SYNCED__.collection=colList; w.__SYNCED__.total=total} w.score=total; w.updateTotalScoreUI(total)} catch (e){ console.warn('finishQuiz save failed:', e)}  try{ if (w.Ach && w.Ach.recordRound){ await w.Ach.recordRound({ levelId, score: state.score, total, percent: pct, mistakes: state.answers - state.score, fastestCorrect: state.fastestCorrect, maxStreak: state.maxStreak, timeouts: state.timeouts});}
-} catch (e){} setTimeout(()=>{ try{ w.showInterstitial();} catch (e){}}, 400);}
-  $('#start-btn').onclick = () => withLock(startQuiz);
+  if (starsEl) {
+    starsEl.textContent = '★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars);
+    starsEl.classList.toggle('has-stars', earnedStars > 0);
+  }
+
+  const isTutorial = Number(levelId) === 88888;
+  if (isTutorial) return;
+
+  try {
+    const [mapRaw, colRaw, totalRaw] = await Promise.all([
+      w.storageGet('stars'),
+      w.storageGet('collection'),
+      storageGetTotal()
+    ]);
+    let map = (mapRaw && typeof mapRaw === 'object' && !Array.isArray(mapRaw)) ? mapRaw : {};
+    let colList = Array.isArray(colRaw) ? colRaw : [];
+    let totalScore = (typeof totalRaw === 'number' && !isNaN(totalRaw)) ? totalRaw : 0;
+    const prevStars = Number(map[levelId]) || 0;
+    if (earnedStars > prevStars) map[levelId] = earnedStars;
+    finishedState.roundCollection.forEach(id => { if (!colList.includes(id)) colList.push(id); });
+    totalScore += finishedState.score;
+    await Promise.all([
+      w.storageSet('stars', map),
+      w.storageSet('collection', colList),
+      storageSetTotal(totalScore)
+    ]);
+    if (w.__SYNCED__) {
+      w.__SYNCED__.stars = map;
+      w.__SYNCED__.collection = colList;
+      w.__SYNCED__.total = totalScore;
+    }
+    w.score = totalScore;
+    w.updateTotalScoreUI(totalScore);
+  } catch (e) {
+    console.warn('finishQuiz save failed:', e);
+  }
+
+  try {
+    if (w.Ach && w.Ach.recordRound) {
+      await w.Ach.recordRound({
+        levelId,
+        score: finishedState.score,
+        correctCount: finishedState.correctCount,
+        total,
+        percent: pct,
+        mistakes: finishedState.answers - finishedState.correctCount,
+        fastestCorrect: finishedState.fastestCorrect,
+        maxStreak: finishedState.maxStreak,
+        timeouts: finishedState.timeouts
+      });
+    }
+  } catch (e) {}
+
+  onQuizFinish({
+    levelId, score: finishedState.score, correctCount: finishedState.correctCount,
+    total, percent: pct, maxStreak: finishedState.maxStreak
+  });
+
+  setTimeout(() => { try { w.showInterstitial(); } catch (e) {} }, 400);
+}
+ $('#start-btn').onclick = () => withLock(startQuiz);
   $('#next-btn').onclick = () => withLock(nextQuestion);
-  $('#quit-btn').onclick = () => {
+$('#quit-btn').onclick = () => {
     stopTimer();
     if (isYandex) yandexGameplayStop();
     show(homeScreen);
-  };
+    renderBonusCounter();
+};
   $('#restart-btn').onclick = () => withLock(startQuiz);
 $('#home-btn').onclick = () => { pushRoute({ name: 'index' }); };
 let __pausedTimeLeft = null;
@@ -3003,7 +3172,7 @@ const animalId = w.getAnimalId;
   '" loading="lazy" onerror="this.style.opacity=\'.3\';this.style.background=\'linear-gradient(135deg,#ffe3ef,#e6e1ff)\'">';
         item.addEventListener('click', () => openColModal(a));
       } else {
-item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></span>';
+item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="true">' + ((w.UiSprite && w.UiSprite.has('locked')) ? w.UiSprite.html('locked') : '🔒') + '</span></span>';
         item.disabled = true;
       }
       grid.appendChild(item);
@@ -3281,6 +3450,7 @@ async function navigate() {
   } catch (e) { console.warn('navigate error', e); }
   try { window.scrollTo(0, 0); } catch (e) {}
   applyVKUIButtons();
+  renderBonusCounter();
 }
 async function boot() {
   w.addEventListener('error', function (e) {
@@ -3361,7 +3531,8 @@ async function boot() {
     if (w.Ach && w.Ach.recordVisit) { try { await w.Ach.recordVisit(); } catch (e) {} }
     try { await updateAuthButton(); } catch (e) {}
     try { await updateShortcutButton(); } catch (e) {}
-    bindGlobalUI();
+       bindGlobalUI();
+    initMechanics();
   } catch (e) { console.warn('Boot error:', e); }
 w.addEventListener('popstate', navigate);
   try { await withTimeout(navigate(), 5000, 'navigate'); }
@@ -3394,9 +3565,588 @@ else boot();
 
 setTimeout(applyVKUIButtons, 500);
 setTimeout(applyVKUIButtons, 2000);
-w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal };
+w.applyVKUIButtons = applyVKUIButtons;
+w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal, applyVKUIButtons };
+
+const DAILY_ID = 99999;
+const SURPRISE_PERIOD = 15;
+const MECH_KEY = storageKey('quiz_extras_v1');
+
+const MECH = {
+  purchased: {},
+  tempUnlocks: {},
+  daily: { date: '', completed: false, streak: 0, lastCompletedDate: '' },
+  quests: { date: '', quests: [] },
+  surprise: { counter: 0 }
+};
+
+const QUESTS_POOL = [
+  { id: 'solve5',   text: 'Ответь на 5 вопросов',   stat: 'solve',   target: 5,  reward: 3 },
+  { id: 'solve10',  text: 'Ответь на 10 вопросов',  stat: 'solve',   target: 10, reward: 4 },
+  { id: 'solve15',  text: 'Ответь на 15 вопросов',  stat: 'solve',   target: 15, reward: 5 },
+  { id: 'quiz2',    text: 'Пройди 2 викторины',     stat: 'quiz',    target: 2,  reward: 2 },
+  { id: 'quiz3',    text: 'Пройди 3 викторины',     stat: 'quiz',    target: 3,  reward: 3 },
+  { id: 'stars1',   text: 'Получи 3 звезды',         stat: 'stars3',  target: 1,  reward: 3 },
+  { id: 'perfect1', text: 'Пройди без ошибок',       stat: 'perfect', target: 1,  reward: 3 },
+  { id: 'streak5',  text: '5 правильных подряд',     stat: 'streak',  target: 5,  reward: 3 },
+  { id: 'streak10', text: '10 правильных подряд',    stat: 'streak',  target: 10, reward: 5 }
+];
+
+function loadMechanics() {
+  try {
+    const raw = safeLocalGet(MECH_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return;
+    if (data.purchased && typeof data.purchased === 'object') MECH.purchased = data.purchased;
+    if (data.tempUnlocks && typeof data.tempUnlocks === 'object') MECH.tempUnlocks = data.tempUnlocks;
+    if (data.daily && typeof data.daily === 'object') MECH.daily = data.daily;
+    if (data.quests && typeof data.quests === 'object') MECH.quests = data.quests;
+    if (data.surprise && typeof data.surprise === 'object') MECH.surprise = data.surprise;
+  } catch (e) {}
+}
+
+function saveMechanics() {
+  try { safeLocalSet(MECH_KEY, JSON.stringify(MECH)); } catch (e) {}
+}
+
+async function loadMechanicsCloud() {
+  if (!w.storageGet) return;
+  try {
+    const cloud = await w.storageGet('quiz_extras_cloud');
+    if (!cloud || typeof cloud !== 'object') return;
+    if (cloud.purchased && typeof cloud.purchased === 'object') {
+      for (const k in cloud.purchased) if (cloud.purchased[k]) MECH.purchased[k] = true;
+    }
+    if (cloud.tempUnlocks && typeof cloud.tempUnlocks === 'object') {
+      const now = Date.now();
+      for (const k in cloud.tempUnlocks) {
+        if (cloud.tempUnlocks[k] > now && (cloud.tempUnlocks[k] > (MECH.tempUnlocks[k] || 0))) {
+          MECH.tempUnlocks[k] = cloud.tempUnlocks[k];
+        }
+      }
+    }
+    if (cloud.daily && typeof cloud.daily === 'object') {
+      const cd = cloud.daily;
+      if (cd.lastCompletedDate && (!MECH.daily.lastCompletedDate || cd.lastCompletedDate > MECH.daily.lastCompletedDate)) {
+        MECH.daily.lastCompletedDate = cd.lastCompletedDate;
+      }
+      if ((cd.streak || 0) > (MECH.daily.streak || 0)) MECH.daily.streak = cd.streak;
+      if (cd.date === todayStr() && cd.completed) MECH.daily.completed = true;
+    }
+    if (cloud.quests && typeof cloud.quests === 'object' && cloud.quests.date === todayStr()) {
+      MECH.quests = cloud.quests;
+    }
+    safeLocalSet(MECH_KEY, JSON.stringify(MECH));
+  } catch (e) {}
+}
+
+function saveMechanicsCloud() {
+  if (!w.storageSet) return;
+  try {
+    w.storageSet('quiz_extras_cloud', {
+      purchased: MECH.purchased,
+      tempUnlocks: MECH.tempUnlocks,
+      daily: MECH.daily,
+      quests: MECH.quests
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+function ptsIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('points', size || '1em') : '🍎';
+}
+function tvIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('tv', size || '1em') : '📺';
+}
+function lockedIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('locked', size || '1em') : '🔒';
+}
+
+function getLevelPrice(levelId) {
+  const nid = Number(levelId);
+  let idx = 0;
+  for (const reg of (w.REGIONS || [])) {
+    for (const lvl of reg.levels) {
+      if (Number(lvl.id) === nid) return 22 + idx * 6;
+      idx++;
+    }
+  }
+  for (let i = 0; i < (w.THEMED_LEVELS || []).length; i++) {
+    if (Number(w.THEMED_LEVELS[i].id) === nid) return 18 + Math.floor(i / 4) * 5;
+  }
+  for (let i = 0; i < (w.PHOTO_LEVELS || []).length; i++) {
+    if (Number(w.PHOTO_LEVELS[i].id) === nid) return 15 + Math.floor(i / 7) * 6;
+  }
+  return 22;
+}
+function getLevelName(levelId) {
+  const nid = Number(levelId);
+  for (const reg of (w.REGIONS || [])) {
+    for (const lvl of reg.levels) {
+      if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+    }
+  }
+  for (const lvl of (w.THEMED_LEVELS || [])) {
+    if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+  }
+  for (const lvl of (w.PHOTO_LEVELS || [])) {
+    if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+  }
+  return 'Категория';
+}
+
+function isPurchasedLevel(levelId) { return !!MECH.purchased[Number(levelId)]; }
+function isTempUnlockedLevel(levelId) {
+  const nid = Number(levelId);
+  const exp = MECH.tempUnlocks[nid];
+  if (!exp) return false;
+  if (exp <= Date.now()) { delete MECH.tempUnlocks[nid]; saveMechanics(); return false; }
+  return true;
+}
+
+async function purchaseLevel(levelId) {
+  const nid = Number(levelId);
+  if (isPurchasedLevel(nid)) return true;
+  const price = getLevelPrice(nid);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  if (total < price) { toast('Недостаточно очков'); return false; }
+  const newTotal = total - price;
+await storageSetTotal(newTotal);
+  if (w.__SYNCED__) w.__SYNCED__.total = newTotal;
+  if (w.updateTotalScoreUI) w.updateTotalScoreUI(newTotal);
+  MECH.purchased[nid] = true;
+  saveMechanics();
+  saveMechanicsCloud();
+  try { if (w.Gating && w.Gating.unlockLevel) await w.Gating.unlockLevel(nid); } catch (e) {}
+  if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid) === -1) {
+    w.__SYNCED__.unlocked.push(nid);
+  }
+  toast('🎉 Категория открыта навсегда!');
+  return true;
+}
+
+async function unlockLevelViaAd(levelId) {
+  if (!w.showRewardedAd) return false;
+  try { const ok = await w.showRewardedAd(); if (!ok) return false; } catch (e) { return false; }
+  const nid = Number(levelId);
+  MECH.tempUnlocks[nid] = Date.now() + 24 * 60 * 60 * 1000;
+  saveMechanics();
+  saveMechanicsCloud();
+  if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid) === -1) {
+    w.__SYNCED__.unlocked.push(nid);
+  }
+  toast('🎉 Категория открыта на 24 часа!');
+  return true;
+}
+
+function showPurchaseModal(levelId, onUnlocked) {
+  const nid = Number(levelId);
+  if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)) {
+    if (typeof onUnlocked === 'function') onUnlocked(nid);
+    return;
+  }
+  const alreadyUnlocked = (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked))
+    ? w.__SYNCED__.unlocked.map(Number).includes(nid)
+    : false;
+  if (alreadyUnlocked) {
+    if (typeof onUnlocked === 'function') onUnlocked(nid);
+    return;
+  }
+  const price = getLevelPrice(nid);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  const canBuy = total >= price;
+  const name = getLevelName(nid);
+  let modal = d.getElementById('extrasUnlockModal');
+  if (!modal) {
+    modal = d.createElement('div');
+    modal.id = 'extrasUnlockModal';
+    modal.className = 'modal';
+    d.body.appendChild(modal);
+  }
+  modal.innerHTML =
+    '<div class="modal-content">' +
+      '<button class="modal-close" data-act="close" aria-label="close">×</button>' +
+      '<h2>' + lockedIcon('1.5em') + ' ' + escapeHtml(name) + ' — закрыта</h2>' +
+      '<p>Купить навсегда за <strong>' + price + '</strong> очков</p>' +
+      '<div class="extras-modal-actions">' +
+        '<button class="extras-btn extras-btn--primary" data-act="buy"' + (canBuy ? '' : ' disabled') + '>' +
+          ptsIcon('1.2em') + ' <span>Купить за ' + price + '</span>' +
+        '</button>' +
+        '<button class="extras-btn extras-btn--primary" data-act="ad">' +
+          tvIcon('1.2em') + ' Смотреть (24ч)' +
+        '</button>' +
+        '<button class="extras-btn extras-btn--ghost" data-act="cancel">Отмена</button>' +
+      '</div>' +
+    '</div>';
+  modal.classList.add('show');
+  const close = () => modal.classList.remove('show');
+  modal.querySelector('[data-act="close"]').onclick = close;
+  modal.querySelector('[data-act="cancel"]').onclick = close;
+  modal.onclick = (e) => { if (e.target === modal) close(); };
+  const buyBtn = modal.querySelector('[data-act="buy"]');
+  if (buyBtn) buyBtn.onclick = async () => {
+    if (!canBuy || buyBtn.disabled) return;
+    buyBtn.disabled = true;
+    try {
+      if (await purchaseLevel(nid)) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
+    } finally {
+      if (buyBtn.isConnected) buyBtn.disabled = false;
+    }
+  };
+  const adBtn = modal.querySelector('[data-act="ad"]');
+  if (adBtn) adBtn.onclick = async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    const prev = btn.innerHTML;
+    btn.innerHTML = '⌛ Загрузка...';
+    const ok = await unlockLevelViaAd(nid);
+    btn.disabled = false;
+    btn.innerHTML = prev;
+    if (ok) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
+    else toast('Реклама не найдена, попробуйте позже');
+  };
+  applyVKUIButtons();
+}
+
+function hashDate(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h;
+}
+
+function ensureQuests() {
+  const t = todayStr();
+  if (MECH.quests.date === t && Array.isArray(MECH.quests.quests) && MECH.quests.quests.length) return;
+  let seed = hashDate(t + '_quests');
+  const pool = QUESTS_POOL.slice();
+  for (let i = pool.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    const j = seed % (i + 1);
+    const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  MECH.quests = { date: t, quests: pool.slice(0, 3).map(q => Object.assign({}, q, { progress: 0, claimed: false })) };
+  saveMechanics();
+}
+function updateQuestProgress(stat, amount) {
+  ensureQuests();
+  let changed = false;
+  for (const q of MECH.quests.quests) {
+    if (q.stat !== stat || q.claimed) continue;
+    if (q.progress >= q.target) continue;
+    if (stat === 'streak') {
+      const nv = Math.min(q.target, Math.max(q.progress, Number(amount) || 0));
+      if (nv > q.progress) { q.progress = nv; changed = true; }
+    } else {
+      const nv = Math.min(q.target, q.progress + (Number(amount) || 0));
+      if (nv > q.progress) { q.progress = nv; changed = true; }
+    }
+  }
+  if (changed) { saveMechanics(); renderQuestsIfOpen(); }
+}
+function claimReadyQuests() {
+  ensureQuests();
+  let earned = 0;
+  for (const q of MECH.quests.quests) {
+    if (!q.claimed && q.progress >= q.target) { q.claimed = true; earned += q.reward; }
+  }
+  if (earned > 0) {
+    saveMechanics();
+    saveMechanicsCloud();
+    const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+    const newTotal = total + earned;
+storageSetTotal(newTotal);
+    if (w.__SYNCED__) w.__SYNCED__.total = newTotal;
+    if (w.updateTotalScoreUI) w.updateTotalScoreUI(newTotal);
+    toast('🎉 +' + earned + ' очков за квесты!');
+  }
+  return earned;
+}
+function renderQuestsList() {
+  const list = d.getElementById('extrasQuestsList');
+  if (!list) return;
+  ensureQuests();
+  list.innerHTML = MECH.quests.quests.map(q => {
+    const done = q.progress >= q.target;
+    const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+    return '<div class="extras-quest' + (done ? ' extras-quest--done' : '') + '">' +
+      '<div class="extras-quest__head">' +
+        '<span class="extras-quest__text">' + escapeHtml(q.text) + '</span>' +
+        '<span class="extras-quest__reward">' + ptsIcon('1em') + ' +' + q.reward + '</span>' +
+      '</div>' +
+      '<div class="extras-quest__bar"><div class="extras-quest__fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="extras-quest__prog">' + (done ? '✓ Выполнено' : q.progress + ' / ' + q.target) + '</div>' +
+    '</div>';
+  }).join('');
+}
+function renderQuestsIfOpen() {
+  const m = d.getElementById('extrasQuestsModal');
+  if (m && m.classList.contains('show')) renderQuestsList();
+}
+function openQuestsModal() {
+  renderQuestsList();
+  const m = d.getElementById('extrasQuestsModal');
+  if (m) m.classList.add('show');
+}
+
+function ensureDaily() {
+  const t = todayStr();
+  if (MECH.daily.date !== t) { MECH.daily.date = t; MECH.daily.completed = false; }
+  if (MECH.daily.lastCompletedDate) {
+    const y = yesterdayStr();
+    if (MECH.daily.lastCompletedDate !== t && MECH.daily.lastCompletedDate !== y) MECH.daily.streak = 0;
+  }
+  saveMechanics();
+}
+function collectAllQuestions() {
+  const all = [];
+  const seen = new Set();
+  (w.REGIONS || []).forEach(reg => {
+    reg.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (qz && Array.isArray(qz.questions)) {
+        qz.questions.forEach(qn => {
+          const aid = w.getAnimalId ? w.getAnimalId(qn.img) : (qn.img || '');
+          if (aid && !seen.has(aid)) { seen.add(aid); all.push(qn); }
+        });
+      }
+    });
+  });
+  return all;
+}
+function getDailyQuestions() {
+  const all = collectAllQuestions();
+  if (!all.length) return [];
+  let seed = hashDate(todayStr());
+  const arr = all.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    const j = seed % (i + 1);
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr.slice(0, Math.min(10, arr.length));
+}
+function startDailyChallenge() {
+  ensureDaily();
+  if (MECH.daily.completed) { toast('Вызов дня уже выполнен. Возвращайтесь завтра!'); return; }
+  const qs = getDailyQuestions();
+  if (!qs.length) { toast('Вызов дня недоступен'); return; }
+  w.QUIZZES[DAILY_ID] = {
+    regionKey: 'daily',
+    sub: { ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' },
+    questions: qs
+  };
+  pushRoute({ name: 'quiz', levelId: DAILY_ID });
+}
+function completeDaily() {
+  ensureDaily();
+  if (MECH.daily.completed) return;
+  MECH.daily.completed = true;
+  MECH.daily.streak = (MECH.daily.streak || 0) + 1;
+  MECH.daily.lastCompletedDate = todayStr();
+  saveMechanics();
+  saveMechanicsCloud();
+  toast('🎉 Вызов дня выполнен!');
+  renderDailyBadge();
+}
+function renderDailyBadge() {
+  ensureDaily();
+  const btn = d.getElementById('extrasDailyBtn');
+  const streakEl = d.getElementById('extrasDailyStreak');
+  if (btn) {
+    if (MECH.daily.completed) {
+      btn.innerHTML = 'Вызов выполнен';
+      btn.classList.add('extras-daily-btn--done');
+    } else {
+      btn.innerHTML = '<span class="extras-daily-btn__icon">🎁</span>Вызов дня';
+      btn.classList.remove('extras-daily-btn--done');
+    }
+  }
+  if (streakEl) {
+    const s = Number(MECH.daily.streak) || 0;
+    if (s > 0) {
+      let word = 'дней';
+      const m100 = s % 100, m10 = s % 10;
+      if (m100 < 11 || m100 > 14) {
+        if (m10 === 1) word = 'день';
+        else if (m10 >= 2 && m10 <= 4) word = 'дня';
+      }
+      streakEl.textContent = 'Серия: ' + s + ' ' + word + ' подряд';
+      streakEl.style.display = 'block';
+    } else streakEl.style.display = 'none';
+  }
+}
+
+function onCorrectAnswer() {
+  MECH.surprise.counter = (MECH.surprise.counter || 0) + 1;
+  let bonus = 0;
+  if (MECH.surprise.counter % SURPRISE_PERIOD === 0) {
+    bonus = 1;
+    toast('🎉 Бонус! +1 очко');
+  }
+  saveMechanics();
+  updateQuestProgress('solve', 1);
+  renderBonusCounter();
+  return bonus;
+}
+function renderBonusCounter() {
+  const el = d.getElementById('extrasBonusCounter');
+  if (!el) return;
+  const quizScreen = d.getElementById('quiz-screen');
+  const isQuizActive = quizScreen && quizScreen.classList.contains('active');
+  if (!isQuizActive) { el.style.display = 'none'; return; }
+  const c = MECH.surprise.counter || 0;
+  const left = SURPRISE_PERIOD - (c % SURPRISE_PERIOD);
+  el.style.display = 'inline-flex';
+  el.textContent = '×2 через ' + left;
+}
+
+function findNextLockedLevel() {
+  const unlocked = new Set((w.__SYNCED__ && w.__SYNCED__.unlocked) || []);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  let best = null;
+  const consider = (lvl) => {
+    const nid = Number(lvl.id);
+    if (unlocked.has(nid)) return;
+    if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)) return;
+    const price = getLevelPrice(nid);
+const need = Math.max(0, price - total);
+if (!best || price < best.price) best = { level: lvl, price, need, levelId: nid };
+  };
+  (w.REGIONS || []).forEach(reg => reg.levels.forEach(consider));
+  (w.THEMED_LEVELS || []).forEach(consider);
+  (w.PHOTO_LEVELS || []).forEach(consider);
+  return best;
+}
+function renderProgress() {
+  const el = d.getElementById('extrasProgress');
+  if (!el) return;
+  const next = findNextLockedLevel();
+  if (!next) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const name = w.L ? w.L(next.level.name) : next.level.name;
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  const ready = next.need <= 0;
+  el.innerHTML =
+    '<span class="extras-progress__label">' + lockedIcon('1.1em') + ' ' + escapeHtml(name) + '</span>' +
+    '<span class="extras-progress__right">' + ptsIcon('1.1em') + ' ' +
+    (ready
+      ? 'Хватает открыть · ' + next.price
+      : total + ' / ' + next.price + ' · ещё ' + next.need) +
+    '</span>';
+}
+
+function openHelpModal() {
+  const m = d.getElementById('extrasHelpModal');
+  if (m) m.classList.add('show');
+}
+function closeHelpModal() {
+  const m = d.getElementById('extrasHelpModal');
+  if (m) m.classList.remove('show');
+}
+
+function onQuizFinish(data) {
+  if (!data) return;
+  if (Number(data.levelId) === DAILY_ID) {
+    if (Number(data.percent) >= 50) completeDaily();
+    else toast('Чтобы выполнить вызов дня, ответь правильно хотя бы на половину вопросов');
+  }
+  updateQuestProgress('quiz', 1);
+  if (Number(data.percent) >= 90) updateQuestProgress('stars3', 1);
+  if (Number(data.total) > 0 && Number(data.correctCount) === Number(data.total)) updateQuestProgress('perfect', 1);
+  if (Number(data.maxStreak) > 0) updateQuestProgress('streak', Number(data.maxStreak));
+  claimReadyQuests();
+  renderProgress();
+  renderDailyBadge();
+}
+
+function mergeTempUnlocks() {
+  if (!w.__SYNCED__) return;
+  if (!Array.isArray(w.__SYNCED__.unlocked)) w.__SYNCED__.unlocked = [];
+  const now = Date.now();
+  let changed = false;
+  for (const nid in MECH.tempUnlocks) {
+    if (MECH.tempUnlocks[nid] > now) {
+      if (w.__SYNCED__.unlocked.indexOf(Number(nid)) === -1) w.__SYNCED__.unlocked.push(Number(nid));
+    } else { delete MECH.tempUnlocks[nid]; changed = true; }
+  }
+  if (changed) saveMechanics();
+}
+
+function initMechanics() {
+  loadMechanics();
+  ensureQuests();
+  ensureDaily();
+  renderDailyBadge();
+
+  loadMechanicsCloud().then(() => {
+    ensureQuests();
+    ensureDaily();
+    renderDailyBadge();
+    renderProgress();
+    mergeTempUnlocks();
+    if (currentPage === 'index') { try { renderIndex(); } catch (e) {} }
+  });
+
+  const dailyBtn = d.getElementById('extrasDailyBtn');
+  if (dailyBtn) dailyBtn.onclick = startDailyChallenge;
+  const questsBtn = d.getElementById('extrasQuestsBtn');
+  if (questsBtn) questsBtn.onclick = openQuestsModal;
+  const helpBtn = d.getElementById('extrasHelpBtn');
+  if (helpBtn) helpBtn.onclick = openHelpModal;
+
+  const questsModal = d.getElementById('extrasQuestsModal');
+  if (questsModal) {
+    questsModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
+      b.onclick = () => questsModal.classList.remove('show');
+    });
+    questsModal.onclick = (e) => { if (e.target === questsModal) questsModal.classList.remove('show'); };
+  }
+  const helpModal = d.getElementById('extrasHelpModal');
+  if (helpModal) {
+    helpModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
+      b.onclick = () => helpModal.classList.remove('show');
+    });
+    const tutBtn = helpModal.querySelector('[data-act="tutorial"]');
+    if (tutBtn) tutBtn.onclick = () => {
+      helpModal.classList.remove('show');
+      if (w.GameTutorial && typeof w.GameTutorial.start === 'function') w.GameTutorial.start(true);
+    };
+    helpModal.onclick = (e) => { if (e.target === helpModal) helpModal.classList.remove('show'); };
+  }
+
+  setTimeout(() => {
+    mergeTempUnlocks();
+    renderProgress();
+    renderDailyBadge();
+  }, 300);
+
+  (function tryAutoTutorial(n) {
+    n = n || 0;
+    if (n > 100) return;
+    if (!w.__appReady) { setTimeout(() => tryAutoTutorial(n + 1), 200); return; }
+    if (!w.GameTutorial || typeof w.GameTutorial.start !== 'function') return;
+    (async () => {
+      let passed = false;
+      try {
+        passed = (typeof w.GameTutorial.hasPassedAsync === 'function')
+          ? await w.GameTutorial.hasPassedAsync()
+          : w.GameTutorial.hasPassed();
+      } catch (e) { passed = w.GameTutorial.hasPassed(); }
+      if (!passed) {
+        try { w.GameTutorial.start(); } catch (e) { console.warn('Tutorial auto-start failed:', e); }
+      }
+    })();
+  })(0);
+}
+
+w.startDailyChallenge = startDailyChallenge;
+w.openQuestsModal = openQuestsModal;
+w.openHelpModal = openHelpModal;
 })(window, document);
 </script>
 <script src="ui_sprite.js"></script>
+<script src="tutorial.js"></script>
+
 </body>
 </html>

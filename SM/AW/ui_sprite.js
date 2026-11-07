@@ -95,7 +95,7 @@
         '🌍': 'earth_afrika_amerika', '🌎': 'earth_afrika_amerika', '🌏': 'earth_afrika_amerika', '🌐': 'earth_afrika_amerika',
         '🗺️': 'map', '🗺': 'map',
         // Погода/природа
-        '☀️': 'snow', '☀': 'snow', '🌞': 'snow',
+        '☀️': 'moon', '☀': 'moon', '🌞': 'moon',
         '🌝': 'moon', '🌚': 'moon', '🌛': 'moon', '🌜': 'moon', '🌙': 'moon', '🌑': 'moon', '🌒': 'moon', '🌓': 'moon', '🌔': 'moon', '🌕': 'moon', '🌖': 'moon', '🌗': 'moon', '🌘': 'moon',
         '⭐': 'corona', '🌟': 'corona', '✨': 'corona', '💫': 'corona',
         '❄️': 'snow', '❄': 'snow', '☃️': 'snow', '⛄': 'snow', '🌨️': 'snow',
@@ -126,7 +126,7 @@
         '💎': 'points', '💰': 'coin', '💴': 'coin', '💵': 'coin', '💶': 'coin', '💷': 'coin', '💸': 'coin', '💳': 'coin', '🪙': 'coin',
         '🧠': 'think', '🤔': 'think', '💡': 'hint', '💭': 'think', '💬': 'think',
         '🎁': 'gift', '🎀': 'gift', '🧧': 'gift',
-        '🎉': 'party_selebraition', '🎊': 'party_selebraition', '🎈': 'party_selebraition', '🎂': 'party_selebraition', '🎆': 'party_selebraition', '🎇': 'party_selebraition', '🎄': 'snow', '🎃': 'party_selebraition', '🎪': 'party_selebraition', '🎠': 'party_selebraition', '🎡': 'party_selebraition', '🎢': 'party_selebraition',
+        '🎉': 'party_selebraition', '🎊': 'party_selebraition', '🎈': 'party_selebraition', '🎂': 'party_selebraition', '🎆': 'party_selebraition', '🎇': 'party_selebraition', '🎄': 'forest', '🎃': 'party_selebraition', '🎪': 'party_selebraition', '🎠': 'party_selebraition', '🎡': 'party_selebraition', '🎢': 'party_selebraition',
         // Лица
         '😅': 'think', '🙈': 'think', '😱': 'chancel_error', '😊': 'party_selebraition', '😍': 'party_selebraition', '🤩': 'party_selebraition', '🥳': 'party_selebraition', '😎': 'party_selebraition', '😴': 'moon', '😀': 'party_selebraition', '😃': 'party_selebraition', '😄': 'party_selebraition', '😁': 'party_selebraition', '😂': 'party_selebraition', '🤣': 'party_selebraition', '☺️': 'party_selebraition', '😇': 'party_selebraition', '🙂': 'party_selebraition', '😉': 'party_selebraition', '😘': 'party_selebraition', '🥰': 'party_selebraition', '😋': 'party_selebraition', '😛': 'party_selebraition', '😜': 'party_selebraition', '😝': 'party_selebraition', '🤪': 'party_selebraition',
         '🤨': 'think', '🧐': 'think', '🤓': 'think', '😒': 'think', '😞': 'think', '😔': 'think', '😟': 'think', '😕': 'think', '🙁': 'think', '☹️': 'think', '😣': 'think', '😖': 'think', '😫': 'think', '😩': 'think', '🥺': 'think', '😢': 'think', '😭': 'think', '😤': 'think', '😠': 'think', '😡': 'think', '🤬': 'think', '🤯': 'think', '😳': 'think', '🥵': 'think', '🥶': 'snow', '😨': 'think', '😰': 'think', '😥': 'think', '😓': 'think', '🤗': 'party_selebraition', '🤭': 'think', '🤫': 'think', '🤥': 'think', '😶': 'think', '😐': 'think', '😑': 'think', '😬': 'think', '🙄': 'think', '😯': 'think', '😦': 'think', '😧': 'think', '😮': 'think', '😲': 'think', '🥱': 'think', '🤤': 'think', '😪': 'think', '😵': 'think', '🤐': 'think', '🥴': 'think', '🤢': 'chancel_error', '🤮': 'chancel_error', '🤧': 'think', '😷': 'think', '🤒': 'think', '🤕': 'think', '🤑': 'coin', '🤠': 'family', '😈': 'snake', '👿': 'snake', '👹': 'snake', '👺': 'snake', '🤡': 'party_selebraition', '💩': 'help', '👻': 'party_selebraition', '💀': 'chancel_error', '☠️': 'chancel_error', '👽': 'party_selebraition', '👾': 'party_selebraition', '🤖': 'party_selebraition',
@@ -249,9 +249,9 @@
         // Шаг 1: заменить статичные SVG-иконки `data-icon` на спрайты
         if (node.classList && node.classList.contains('emoji-icon') && node.dataset && node.dataset.icon) {
             var ICON_MAP = {
-                star: 'coin',
+                star: 'points',
                 play: 'party_selebraition',
-                collection: 'help',
+                collection: 'hundred',
                 medal: 'achivments',
                 games: 'othergames',
                 home: 'home_menu',
@@ -290,7 +290,9 @@ function injectCSS() {
 '.score-chip .emoji-icon > .ui-sprite,',
 '.btn-primary.btn-lg .emoji-icon > .ui-sprite{transform:scale(1.6);transform-origin:center}',
 '.btn-icon .emoji-icon > .ui-sprite,',
-'.icon-btn .ui-sprite{transform:scale(1.6);transform-origin:center}',
+'.btn-icon > .ui-sprite,',
+'.icon-btn .ui-sprite,',
+'.btn-lg > .ui-sprite{transform:scale(1.6);transform-origin:center}',
 '.btn-icon .btn-icon-count{margin-left:0.4em}',
 '.score-chip [data-total-score],',
 '.btn-primary.btn-lg [data-i18n="play"]{margin-left:0.6em;position:relative;z-index:2}',
@@ -316,17 +318,8 @@ function injectCSS() {
     style.textContent = css.join('\n');
     document.head.appendChild(style);
 }
-    function patchSVGIcons() {
-        if (!window.SVG_ICONS) return;
-        window.SVG_ICONS.sun = html('snow');
-        window.SVG_ICONS.sunCloud = html('cloud');
-        window.SVG_ICONS.muted = html('soundoff');
-        window.SVG_ICONS.music = html('soundon');
-        window.SVG_ICONS.key = html('locked');
-        window.SVG_ICONS.confetti = html('party_selebraition');
-    }
 
-    // MutationObserver
+
     var pending = [];
     var scheduled = false;
     function flushPending() {
@@ -360,7 +353,6 @@ function injectCSS() {
 
 function init() {
     injectCSS();
-    patchSVGIcons();
 
     // Патчим apply-методы: после каждого вызова из инлайн-кода
     // перерисовываем спрайты (иконки звука/темы вставляются именно так)
