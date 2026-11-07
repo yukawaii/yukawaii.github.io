@@ -76,6 +76,9 @@ body.app-ready .app{opacity:1}
 .screen{display:none;flex-direction:column;gap:var(--gap);flex:1;min-height:0}
 .screen.active{display:flex}
 .hero{text-align:center;padding-top:var(--gap)}
+
+
+
 .hero-actions{display:flex;flex-wrap:wrap;gap:var(--gap-sm);justify-content:center}
 .region-title{font-size:var(--f-lg);margin:0 0 var(--gap-sm);display:flex;align-items:center;gap:6px}
 .levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--gap-sm)}
@@ -127,6 +130,7 @@ body.app-ready .app{opacity:1}
   letter-spacing:.2px;color:var(--text);cursor:pointer;transition:background .15s,border-color .15s,transform .1s,box-shadow .2s;text-align:center;box-shadow:0 2px 6px rgba(15,23,42,.05);-webkit-tap-highlight-color:transparent;user-select:none;overflow-wrap:anywhere;word-break:normal}
 .option:hover:not(.disabled){background:#f8faff;border-color:#a5b4fc;transform:translateY(-2px);box-shadow:0 6px 16px rgba(102,126,234,.18)}
 .option.disabled{pointer-events:none;opacity:.85}
+
 .option.correct{background:var(--success-l);border-color:var(--success);color:#052e16;font-weight:600}
 .option.wrong{background:var(--danger-l);border-color:var(--danger);color:#450a0a;font-weight:600}
 .description{position:relative;font-size:clamp(16px,2.6vmin,20px);line-height:1.5;color:#1f2937;background:#f0f7b5;border:1px solid rgba(123,92,255,.18);border-radius:12px;padding:20px 16px 14px;margin-top:10px;box-shadow:0 6px 20px rgba(123,92,255,.18)}
@@ -354,6 +358,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
 .particle-md { width: 4px; height: 4px; }
 .particle-lg { width: 6px; height: 6px; }
 .particle-xl { width: 8px; height: 8px; }
+
 @keyframes particleFloat {
     0%   { transform: translateY(0) translateX(0) scale(.5);   opacity: 0; }
     10%  { opacity: .8; transform: translateY(-20px) translateX(10px) scale(1); }
@@ -361,6 +366,7 @@ html.is-ok .app{ padding-bottom: calc(var(--gap) + env(safe-area-inset-bottom, 0
     90%  { opacity: .8; transform: translateY(-100px) translateX(20px) scale(.8); }
     100% { transform: translateY(-120px) translateX(0) scale(.3); opacity: 0; }
 }
+
 html.is-dark .particle-blue   { background: radial-gradient(circle, rgba(150,220,255,.9), rgba(50,150,255,.2)); }
 html.is-dark .particle-pink   { background: radial-gradient(circle, rgba(255,180,220,.9), rgba(200,50,150,.2)); }
 html.is-dark .particle-purple { background: radial-gradient(circle, rgba(200,140,255,.9), rgba(100,50,200,.2)); }
@@ -419,6 +425,7 @@ html.is-dark .question-text{ background: linear-gradient(135deg,#a29bfe,#c8b6ff)
 .col-counter,
 .badge{ background: #f3f4f6 !important; color: #7c3aed !important; border: 1px solid #e5e7eb !important; box-shadow: none !important; font-weight: 700 !important; pointer-events: none !important; cursor: default !important; border-radius: 10px !important; padding: 6px 14px !important; display: inline-flex !important; align-items: center !important; gap: 4px !important; font-size: 14px !important;}
 .badge{ font-size: 11px !important; padding: 4px 10px !important; border-radius: 8px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;}
+
 .btn-icon-count{ background: transparent !important; border: none !important; color: #7c3aed !important; padding: 0 !important; font-weight: 700 !important; font-size: 14px !important;} 
 html.is-dark .vkuiButton--mode-primary{ background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%) !important; box-shadow: 0 4px 16px rgba(108, 92, 231, 0.45) !important;}
 html.is-dark .vkuiButton--mode-primary:hover{ background: linear-gradient(135deg, #7d6ff0 0%, #b3adff 100%) !important; box-shadow: 0 8px 22px rgba(108, 92, 231, 0.6) !important;}
@@ -448,6 +455,7 @@ html:not(.is-dark) .vkuiButton--mode-tertiary:hover{ background: #afe0f7 !import
 html:not(.is-dark) .vkuiButton--mode-secondary:active,
 html:not(.is-dark) .vkuiButton--mode-tertiary:active{ background: #afe0f7 !important;} html:not(.is-dark) .vkuiButton--mode-secondary .btn-icon-count,
 html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !important; background: transparent !important;} html.weak-device .particle{ display: none !important;}
+
 #page-collection.active {
     display: flex;
     flex-direction: column;
@@ -455,7 +463,10 @@ html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !i
     border-radius: var(--r);
     background: var(--card);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+
 }
+
+
 #page-collection .col-header {
     background: var(--card) !important;
     border-bottom: 1px solid var(--card-b) !important;
@@ -466,6 +477,8 @@ html:not(.is-dark) .vkuiButton--mode-tertiary .btn-icon-count{ color: #3681b3 !i
     top: 0;
     z-index: 10;
 }
+
+
 #page-collection #col-body {
     background: var(--bg-light);
     padding: var(--gap);
@@ -503,26 +516,33 @@ html.is-dark .hero-title {
     -webkit-text-fill-color: transparent !important;
 }
 html.is-dark .hero-sub { color: #f5e6d3 !important; }
+
 #page-collection #col-body {
     background: var(--bg-light);
     padding: var(--gap);
     flex: 1;
     border-radius: 0 0 var(--r) var(--r);
 }
+
 html:not(.is-dark) .timer {
     color: #22c55e !important;   
 }
 html:not(.is-dark) .timer.warning {
     color: #f87171 !important;  
 }
+
 html:not(.is-dark) .progress-fill {
     background: linear-gradient(90deg, #16a34a 0%, #22c55e 50%, #4ade80 100%) !important;
 }
+
+
 #ach-modal .modal-content {
     align-items: stretch !important;
     padding: 0 !important;
     gap: 0 !important;
 }
+
+
 #ach-modal .ach-sticky-head {
     position: sticky;
     top: 0;
@@ -535,6 +555,8 @@ html:not(.is-dark) .progress-fill {
     flex-direction: column;
     gap: 4px;
 }
+
+
 #ach-modal .ach-head-row {
     display: flex;
     align-items: center;
@@ -542,6 +564,8 @@ html:not(.is-dark) .progress-fill {
     gap: var(--gap-sm);
     width: 100%;
 }
+
+
 #ach-modal .ach-head-row .modal-back,
 #ach-modal .ach-head-row .modal-close {
     position: static !important;
@@ -555,6 +579,8 @@ html:not(.is-dark) .progress-fill {
     font-size: 20px !important;
     flex-shrink: 0;
 }
+
+
 #ach-modal .ach-head-row .modal-title {
     flex: 1;
     margin: 0 !important;
@@ -564,6 +590,8 @@ html:not(.is-dark) .progress-fill {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
 #ach-modal .ach-sticky-head .ach-total {
     margin: 0 !important;
     font-size: var(--f-sm);
@@ -571,9 +599,12 @@ html:not(.is-dark) .progress-fill {
     text-align: center;
     font-weight: 600;
 }
+
+
 #ach-modal #ach-body {
     padding: var(--gap-lg);
 }
+
 /* ============ RESULT SCREEN — redesign ============ */
 .result-card{
   gap: var(--gap-sm) !important;
@@ -592,6 +623,7 @@ html:not(.is-dark) .progress-fill {
   z-index:0;
 }
 .result-card > *{position: relative; z-index: 1;}
+
 .result-hero{
   display:flex;
   flex-direction:column;
@@ -611,6 +643,7 @@ html:not(.is-dark) .progress-fill {
   55%  { transform: scale(1.2) rotate(10deg); opacity: 1; }
   100% { transform: scale(1) rotate(0); opacity: 1; }
 }
+
 .result-title{
   font-size: var(--f-sm) !important;
   color: var(--muted) !important;
@@ -619,6 +652,7 @@ html:not(.is-dark) .progress-fill {
   text-transform: uppercase;
   margin: 0 !important;
 }
+
 .result-percent{
   font-size: clamp(52px, 15vmin, 88px) !important;
   font-weight: 900 !important;
@@ -627,12 +661,14 @@ html:not(.is-dark) .progress-fill {
   filter: drop-shadow(0 4px 14px rgba(255,95,162,.3));
   margin: 0 !important;
 }
+
 .result-stars{
   font-size: clamp(26px, 5.5vmin, 42px) !important;
   letter-spacing: 6px !important;
   margin: 0 !important;
   text-shadow: 0 2px 10px rgba(255,200,0,.45);
 }
+
 .result-grid{
   grid-template-columns: repeat(3, 1fr) !important;
   gap: var(--gap-sm) !important;
@@ -657,7 +693,9 @@ html:not(.is-dark) .progress-fill {
   font-weight: 600 !important;
   opacity: .8;
 }
+
 .result-actions{ margin-top: var(--gap-sm); }
+
 html.is-dark .result-cell{
   background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.04)) !important;
   border-color: rgba(255,255,255,.08) !important;
@@ -666,6 +704,7 @@ html.is-dark .result-cell{
 html.is-dark .result-card::before{
   background: radial-gradient(ellipse at center, rgba(255,95,162,.14) 0%, rgba(156,125,255,.08) 45%, transparent 72%);
 }
+
 html.weak-device .modal {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -700,6 +739,7 @@ html:not(.is-dark) .modal-close:hover {
     background: #93d4f0 !important;
     color: #1e5f8a !important;
 }
+
 @media (min-width:720px),
        (orientation:landscape) and (min-width:480px) and (max-height:600px) {
     .description {
@@ -710,6 +750,7 @@ html:not(.is-dark) .modal-close:hover {
         top: -7px;            
     }
 }
+
 .emoji-icon {
   display: inline-flex;
   align-items: center;
@@ -727,6 +768,8 @@ html:not(.is-dark) .modal-close:hover {
   display: block;
   overflow: visible;
 }
+
+
 .modal-title .emoji-icon,
 .col-title .emoji-icon {
   width: 1em;
@@ -738,9 +781,13 @@ html:not(.is-dark) .modal-close:hover {
   transform: scale(1.25);
   transform-origin: center;
 }
+
+
 .btn-icon .emoji-icon > svg {
   transform: scale(1.15);
 }
+
+
 .modal-title .emoji-icon > svg,
 .col-title .emoji-icon > svg {
   transform: none;
@@ -1318,6 +1365,7 @@ qq('215',[T('Журавль','Crane','Turna'),T('Птица-секретарь',
 ,qq('265',[T('Муравей','Ant','Karınca'),T('Жук-короед','Bark beetle','Kabuk böceği'),T('Термит','Termite','Termit'),T('Проволочник','Wireworm','Tel kurdu')],2,T('Термит. Живёт огромными колониями, строит сложные термитники. Переваривает целлюлозу с помощью симбиотических микроорганизмов.','Termite. Lives in huge colonies and builds complex mounds. Digests cellulose with symbiotic microorganisms.','Termit. Devasa koloniler halinde yaşar ve karmaşık höyükler inşa eder. Selülozu simbiyotik mikroorganizmalarla sindirir.'))
 ]}
 };
+
 w.ACHIEVEMENTS=[
 {id:'prog_first',cat:'progress',icon:'🎯',title:T('Первый шаг','First step','İlk adım'),desc:T('Пройдите первую викторину','Complete your first quiz','İlk testi tamamla'),check:c=>c.totalPlays>=1},
 {id:'prog_aus',cat:'progress',icon:'🌏',title:T('Открыл Австралию','Discovered Australia','Avustralya\'yı keşfettin'),desc:T('Откройте Австралийскую область','Unlock the Australian region','Avustralya bölgesinin kilidini aç'),check:c=>c.unlockedRegions.has('australian')},
@@ -1585,6 +1633,7 @@ function vkSend(method, params, timeoutMs) {
   }
   return trySend();
 }
+
 let __actionLock = false;
 async function withLock(fn) {
   if (__actionLock) return;
@@ -1753,6 +1802,7 @@ function showRewardedAd(){
  if (yandexActive){ return new Promise(resolve=>{ const now=Date.now(); if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) return resolve(false); const runAd=(sdk)=>{ if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){ console.warn('Yandex adv API unavailable'); return resolve(false);} __lastRewardedAdTime=Date.now(); yandexGameplayStop(); adMute(); let rewarded=false; let finished=false; const finish=(result)=>{ if (finished) return; finished=true; adUnmute(); yandexGameplayStart(); resolve(result);}; try{ sdk.adv.showRewardedVideo({ callbacks:{ onRewarded: ()=>{ rewarded=true;}, onClose: ()=>{ finish(rewarded);}, onError: (e)=>{ console.warn('Yandex ad error:', e); finish(false);}}});} catch (e){ console.warn('Yandex showRewardedVideo exception:', e); finish(false);}}; if (ysdk && ysdk.adv){ runAd(ysdk);} else if (typeof YaGames !=='undefined'){ YaGames.init().then(sdk=>{ ysdk=sdk; if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false;} if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p;}).catch(()=>{}); runAd(sdk);}).catch(err=>{ console.warn('YaGames re-init failed:', err); resolve(false);});} else{ resolve(false);}});}
  if (isVK || isOK){ if (w.__rewardAdInFlight) return w.__rewardAdInFlight; let resolveOuter; w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res;}); adMute(); (async ()=>{ let resolved=false; const finish=(result, reason)=>{ if (resolved) return; resolved=true; console.log('VK ad flow →', reason, '| result=', result); try{ adUnmute();} catch (e){} w.__rewardAdInFlight=null; resolveOuter(result);}; try{ const rewardReady=await waitForAdsAvailable(8000, 700, 'reward'); if (rewardReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'reward', use_waterfall: true }, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'reward-watched' : 'reward-not-completed:' + JSON.stringify(data));} console.log('Reward ads unavailable → trying interstitial fallback'); const interReady=await waitForAdsAvailable(4000, 700, 'interstitial'); if (interReady){ const data=await vkSend('VKWebAppShowNativeAds',{ ad_format: 'interstitial'}, 90000); const ok=!!(data && (data.result===true || data.result===1 || data.result==='true' || data.success===true)); setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000);}, 500); return finish(ok, ok ? 'interstitial-watched' : 'interstitial-not-completed:' + JSON.stringify(data));} return finish(false, 'no-ads-at-all');} catch (e){ finish(false, 'error:' + ((e && e.message) || e));}})(); return w.__rewardAdInFlight;}
  return Promise.resolve(false);}
+
 function showInterstitial(){
   const now = Date.now();
   if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN) {
@@ -1765,6 +1815,7 @@ function showInterstitial(){
     return;
   }
   __lastInterstitialTime = now;
+
   if (isYandex) {
     if (!ysdk) return;
     yandexGameplayStop();
@@ -1782,6 +1833,7 @@ function showInterstitial(){
     }
     return;
   }
+
   if (isVK || isOK) {
     (async () => {
       try {
@@ -1800,6 +1852,7 @@ function showInterstitial(){
     })();
   }
 }
+
  let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=5;
 const BANNER_RETRY_DELAY=10000; 
 function showBanner(){ if (!(isVK || isOK)) return; if (bannerShown) return; if (bannerRetryTimer) return; bannerAttempts++; const attemptNo=bannerAttempts; console.log('🎯 Banner attempt #' + attemptNo); vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000) .then(function (data){ const ok=data && (data.result===true || data.result===1); if (ok){ bannerShown=true; console.log('✅ Banner shown (attempt #' + attemptNo + ')'); return;} console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data); scheduleBannerRetry(attemptNo);}) .catch(function (err){ console.warn('❌ Banner error (attempt #' + attemptNo + '):', err); scheduleBannerRetry(attemptNo);});}
@@ -1849,6 +1902,7 @@ function toast(msg, isError, title) {
   __toastQueue.push({ msg, isError, title });
   if (!__toastActive) __showNextToast();
 }
+
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
@@ -1949,6 +2003,7 @@ function attachAudioUnlock() {
   d.addEventListener('touchstart', unlock, true);
   d.addEventListener('keydown', unlock, true);
 }
+
 function adMute() { adPlaying = true; if (soundEnabled) Sound.stopBg(); }
 function adUnmute() { adPlaying = false; if (soundEnabled && bgStarted) Sound.startBg(); }
 w.Sound = { playClick, playCorrect, playWrong, playFanfare, toggle: toggleSound, apply: applySoundState, startBg: startBgMusic, stopBg: stopBgMusic, mute: adMute, unmute: adUnmute };
@@ -2109,10 +2164,66 @@ async function checkAndUnlock(silent) {
   }
   return newly;
 }
-async function recordVisit(){ if (!metrics) await loadMetrics(); updateDailyStreak(); await saveMetrics(); return checkAndUnlock(true);}
-async function recordRound(data){ if (!metrics) await loadMetrics(); updateDailyStreak(); metrics.totalPlays++; const t=todayStr(); if (metrics.lastPlayDate===t) metrics.playsToday++; else{ metrics.playsToday=1; metrics.lastPlayDate=t;} if (typeof data.fastestCorrect==='number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect=data.fastestCorrect; if (typeof data.maxStreak==='number' && data.maxStreak >metrics.maxStreak) metrics.maxStreak=data.maxStreak; if (data.total >0 && data.mistakes===0) metrics.noMistakeRuns++; if (data.total >0 && data.score===0){ metrics.hasZeroScore=true; metrics.zeroLossStreak++;} else metrics.zeroLossStreak=0; if (data.total >0 && data.timeouts===data.total) metrics.allTimeouts=true; const h=new Date().getHours(); if (h >=2 && h <=4) metrics.playedAtNight=true; if (h >=5 && h <=7) metrics.playedEarlyMorning=true; metrics.lastPercent=data.percent; const lvl=Number(data.levelId); if (lvl && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl); await saveMetrics(); return checkAndUnlock(false);}
-async function achList(){ if (!unlockedSet) await loadUnlocked(); return (w.ACHIEVEMENTS || []).map(a=>({ ...a, unlocked: unlockedSet.has(a.id)}));}
-async function renderAchModal(){ const body=d.getElementById('ach-body'); if (!body) return; const items=await achList(); const totalUnlocked=items.filter(i=>i.unlocked).length; const counter=d.getElementById('ach-counter'); if (counter) counter.textContent=totalUnlocked + ' / ' + items.length; body.innerHTML=''; (w.ACH_CATEGORIES || []).forEach(cat=>{ const group=items.filter(i=>i.cat===cat.id); if (!group.length) return; const sec=d.createElement('section'); sec.className='ach-group'; const h=d.createElement('h3'); h.className='ach-group-title'; h.textContent=cat.icon + ' ' + w.L(cat.name) + ' (' + group.filter(g=>g.unlocked).length + '/' + group.length + ')'; sec.appendChild(h); const grid=d.createElement('div'); grid.className='ach-grid'; group.forEach(a=>{ const el=d.createElement('div'); el.className='ach-item' + (a.unlocked ? ' unlocked' : ''); el.innerHTML='<div class="ach-icon">' + a.icon + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(w.L(a.title)) + '</div><div class="ach-desc">' + escapeHtml(w.L(a.desc)) + '</div></div>' + (a.unlocked ? '<div class="ach-check">✓</div>' : ''); grid.appendChild(el);}); sec.appendChild(grid); body.appendChild(sec);});}
+async function recordVisit() {
+  if (!metrics) await loadMetrics();
+  updateDailyStreak();
+  await saveMetrics();
+  return checkAndUnlock(true);
+}
+async function recordRound(data) {
+  if (!metrics) await loadMetrics();
+  updateDailyStreak();
+  metrics.totalPlays++;
+  const t = todayStr();
+  if (metrics.lastPlayDate === t) metrics.playsToday++;
+  else { metrics.playsToday = 1; metrics.lastPlayDate = t; }
+  if (typeof data.fastestCorrect === 'number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect = data.fastestCorrect;
+  if (typeof data.maxStreak === 'number' && data.maxStreak > metrics.maxStreak) metrics.maxStreak = data.maxStreak;
+  if (data.total > 0 && data.mistakes === 0) metrics.noMistakeRuns++;
+  if (data.total > 0 && data.score === 0) { metrics.hasZeroScore = true; metrics.zeroLossStreak++; } else metrics.zeroLossStreak = 0;
+  if (data.total > 0 && data.timeouts === data.total) metrics.allTimeouts = true;
+  const h = new Date().getHours();
+  if (h >= 2 && h <= 4) metrics.playedAtNight = true;
+  if (h >= 5 && h <= 7) metrics.playedEarlyMorning = true;
+  metrics.lastPercent = data.percent;
+  const lvl = Number(data.levelId);
+  if (lvl && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl);
+  await saveMetrics();
+  return checkAndUnlock(false);
+}
+async function achList() {
+  if (!unlockedSet) await loadUnlocked();
+  return (w.ACHIEVEMENTS || []).map(a => ({ ...a, unlocked: unlockedSet.has(a.id) }));
+}
+async function renderAchModal() {
+  const body = d.getElementById('ach-body');
+  if (!body) return;
+  const items = await achList();
+  const totalUnlocked = items.filter(i => i.unlocked).length;
+  const counter = d.getElementById('ach-counter');
+  if (counter) counter.textContent = totalUnlocked + ' / ' + items.length;
+  body.innerHTML = '';
+  (w.ACH_CATEGORIES || []).forEach(cat => {
+    const group = items.filter(i => i.cat === cat.id);
+    if (!group.length) return;
+    const sec = d.createElement('section');
+    sec.className = 'ach-group';
+    const h = d.createElement('h3');
+    h.className = 'ach-group-title';
+    h.textContent = cat.icon + ' ' + w.L(cat.name) + ' (' + group.filter(g => g.unlocked).length + '/' + group.length + ')';
+    sec.appendChild(h);
+    const grid = d.createElement('div');
+    grid.className = 'ach-grid';
+    group.forEach(a => {
+      const el = d.createElement('div');
+      el.className = 'ach-item' + (a.unlocked ? ' unlocked' : '');
+      el.innerHTML = '<div class="ach-icon">' + a.icon + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(w.L(a.title)) + '</div><div class="ach-desc">' + escapeHtml(w.L(a.desc)) + '</div></div>' + (a.unlocked ? '<div class="ach-check">✓</div>' : '');
+      grid.appendChild(el);
+    });
+    sec.appendChild(grid);
+    body.appendChild(sec);
+  });
+}
 function openAchModal() {
   const m = d.getElementById('ach-modal');
   if (!m) return;
@@ -2156,16 +2267,66 @@ const themedDef=(w.THEMED_LEVELS || []).find(l=>Number(l.id)===nid);
         const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id);
          return{ animalId: correct.id, name: correct.name, images: opts.map(o=>o.img), answer, description: correct.desc};});
           return{ regionKey: 'photo', mode: 'photo', optionCount: need, sub: photoDef.name, questions};} return null;}
+
 w.buildSingleThemedQuiz = buildSingleThemedQuiz;
 const DEFAULT_UNLOCKED = [1, 11, 1020,2031,2013,2009,2006, 2007, 1001,1002, 1006,1007, 1010, 1012, 1013];
 const CURRENT_GATING_VER = 5;
 let gatingCache = null;
-async function gatingLoad(forceReload){ if (gatingCache && !forceReload) return gatingCache; try{ const storedVer=asNumber(await storageGet('unlocked_v'), 0); let arr=await storageGet('unlocked'); if (!Array.isArray(arr)) arr=[]; if (storedVer < CURRENT_GATING_VER){ const storedUnlocked=arr.map(Number).filter(n=>!isNaN(n) && n >0); arr=Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked])); await storageSet('unlocked', arr); await storageSet('unlocked_v', CURRENT_GATING_VER); console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);} else{ const merged=Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)])); if (merged.length !==arr.length) await storageSet('unlocked', merged); arr=merged;} gatingCache=arr; if (w.__SYNCED__) w.__SYNCED__.unlocked=arr.slice(); return arr;} catch (e){ console.warn('gatingLoad failed:', e); gatingCache=DEFAULT_UNLOCKED.slice(); return gatingCache;}}
-async function isUnlocked(levelId){ const list=await gatingLoad(); return list.includes(Number(levelId));}
-async function unlockLevel(levelId){ const list=await gatingLoad(); const n=Number(levelId); if (!list.includes(n)){ list.push(n); gatingCache=list; await storageSet('unlocked', list); if (w.__SYNCED__) w.__SYNCED__.unlocked=list.slice();} return true;}
-async function unlockViaAd(levelId){ const ok=await showRewardedAd(); if (ok){ await unlockLevel(levelId); return true;} return false;}
-function buildUnlockModal(){ let m=d.getElementById('__unlockModal'); if (m) return m; m=d.createElement('div'); m.id='__unlockModal'; m.className='modal';
-m.innerHTML='<div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></div><h2 class="modal-title"></h2><p class="modal-text"></p><div class="modal-actions"><button class="btn btn-primary" data-act="watch"></button><button class="btn btn-ghost" data-act="cancel"></button></div></div>'; d.body.appendChild(m); return m;}
+async function gatingLoad(forceReload) {
+  if (gatingCache && !forceReload) return gatingCache;
+  try {
+    const storedVer = asNumber(await storageGet('unlocked_v'), 0);
+    let arr = await storageGet('unlocked');
+    if (!Array.isArray(arr)) arr = [];
+    if (storedVer < CURRENT_GATING_VER) {
+      const storedUnlocked = arr.map(Number).filter(n => !isNaN(n) && n > 0);
+      arr = Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked]));
+      await storageSet('unlocked', arr);
+      await storageSet('unlocked_v', CURRENT_GATING_VER);
+      console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);
+    } else {
+      const merged = Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)]));
+      if (merged.length !== arr.length) await storageSet('unlocked', merged);
+      arr = merged;
+    }
+    gatingCache = arr;
+    if (w.__SYNCED__) w.__SYNCED__.unlocked = arr.slice();
+    return arr;
+  } catch (e) {
+    console.warn('gatingLoad failed:', e);
+    gatingCache = DEFAULT_UNLOCKED.slice();
+    return gatingCache;
+  }
+}
+async function isUnlocked(levelId) {
+  const list = await gatingLoad();
+  return list.includes(Number(levelId));
+}
+async function unlockLevel(levelId) {
+  const list = await gatingLoad();
+  const n = Number(levelId);
+  if (!list.includes(n)) {
+    list.push(n); gatingCache = list;
+    await storageSet('unlocked', list);
+    if (w.__SYNCED__) w.__SYNCED__.unlocked = list.slice();
+  }
+  return true;
+}
+async function unlockViaAd(levelId) {
+  const ok = await showRewardedAd();
+  if (ok) { await unlockLevel(levelId); return true; }
+  return false;
+}
+function buildUnlockModal() {
+  let m = d.getElementById('__unlockModal');
+  if (m) return m;
+  m = d.createElement('div');
+  m.id = '__unlockModal';
+  m.className = 'modal';
+m.innerHTML = '<div class="modal-content modal-narrow"><button class="modal-close" aria-label="close">×</button><div class="modal-emoji"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></div><h2 class="modal-title"></h2><p class="modal-text"></p><div class="modal-actions"><button class="btn btn-primary" data-act="watch"></button><button class="btn btn-ghost" data-act="cancel"></button></div></div>';
+  d.body.appendChild(m);
+  return m;
+}
 function showUnlockModal(levelId, onUnlocked) {
   const m = buildUnlockModal();
   m.querySelector('.modal-title').textContent = w.t('unlockTitle');
@@ -2427,7 +2588,9 @@ async function syncAllOnStart() {
 w.syncAllOnStart=syncAllOnStart;
 let __readySent=false;
 let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true;} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false;}}
+
 let __starsCreated = false;
+
 function createFlyingStars() {
     const container = document.getElementById('starsContainer');
     if (!container || __starsCreated) return;
@@ -2443,8 +2606,10 @@ function createFlyingStars() {
         (navigator.deviceMemory       && navigator.deviceMemory       <= 4)   
     );
     const count = isMobile ? (isWeak ? 0 : 5) : 30;
+
     const sizes = ['particle-sm', 'particle-md', 'particle-lg', 'particle-xl'];
     const colors = ['particle-blue', 'particle-pink', 'particle-gold', 'particle-purple', 'particle-orange'];
+
     for (let i = 0; i < count; i++) {
         const particle = document.createElement('div');
         particle.className =
@@ -2452,11 +2617,14 @@ function createFlyingStars() {
             colors[Math.floor(Math.random() * colors.length)] +
             ' ' +
             sizes[Math.floor(Math.random() * sizes.length)];
+
         particle.style.left = (Math.random() * 100) + '%';
         particle.style.top  = (Math.random() * 100) + '%';
+
         const duration = 3 + Math.random() * 3;
         particle.style.animation = `particleFloat ${duration}s ease-in-out infinite`;
         particle.style.animationDelay = (-Math.random() * duration) + 's';
+
         container.appendChild(particle);
     }
     __starsCreated = true;
@@ -2489,6 +2657,7 @@ function getFactList() {
   __factListCache = list;
   return list;
 }
+
 async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId = w.getAnimalId;
  const allIds=new Set(); (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals + '/' + totalAnimals; await w.Ach.checkAndUnlock(true);
@@ -2506,6 +2675,7 @@ const item = animals[seed % animals.length];
 el.className = 'level-card' + (isOpen ? '' : ' locked');
     if (isOpen) el.dataset.href='#/quiz/' + l.id;
     const adTitle=escapeHtml(w.t('titleAd')); 
+    
     const actionsHtml=isOpen ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '<div class="level-actions"><span class="level-lock"><span class="emoji-icon" aria-hidden="true">' + SVG_ICONS.key + '</span></span><span class="tv-btn" title="' + adTitle + '">📺</span></div>'; 
 const qCount = (qz && qz.questions) ? qz.questions.length : (l.count || 0);
 el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return;} 
@@ -2792,8 +2962,10 @@ const animalId = w.getAnimalId;
   const list = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
   const collected = new Set(Array.isArray(list) ? list.map(String) : []);
   body.innerHTML = '';
+
   const seen = new Set();  
   let opened = 0;
+
   (w.REGIONS || []).forEach(region => {
     const animals = [];
     region.levels.forEach(lvl => {
@@ -2811,8 +2983,11 @@ const animalId = w.getAnimalId;
         });
       });
     });
+
     if (!animals.length) return;          
+
     animals.forEach(a => { if (collected.has(a.id)) opened++; });
+
     const sec = d.createElement('section');
     sec.className = 'col-region';
     sec.innerHTML = '<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>';
@@ -2836,6 +3011,7 @@ item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="t
     sec.appendChild(grid);
     body.appendChild(sec);
   });
+
   const counter = d.getElementById('col-counter');
   if (counter) counter.textContent = opened + ' / ' + seen.size;
 }
@@ -2917,14 +3093,19 @@ const VK_GAMES = [
   { href: 'https://vk.com/app54659768', emoji: '🕹️', name: 'Тетра Дарк',             iconURL: 'games/tetra-dark.jpg' },
   { href: 'https://vk.com/app54678489', emoji: '🎨', name: 'Раскраска',              iconURL: 'games/raskraska.jpg' }
 ];
+
 const OK_GAMES = [
         { href: 'https://ok.ru/app/512005443175', emoji: '💭', name: 'Словарекс',              iconURL: 'games/slovarex.jpg' },
         { href: 'https://ok.ru/app/512005458660', emoji: '🕹️', name: 'Тетра Дарк',             iconURL: 'games/tetra-dark.jpg'},
         { href: 'https://ok.ru/app/512005390848', emoji: '9️', name: 'Судоку для самых умных', iconURL: 'games/sudoku.jpg' },
         { href:"https://ok.ru/app/512004963709",  emoji:"🎨",name:"Раскраска",                 iconURL: 'games/raskraska.jpg' },
         { href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: 'ТЕТРА',                  iconURL: 'games/tetra.jpg' }
+      
+
 ];
+
 const list = isOK ? OK_GAMES : VK_GAMES;
+
 list.forEach(g => {
   renderCard({
     url: g.href,
@@ -2957,36 +3138,44 @@ function bindGlobalUI() {
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     e.preventDefault();
   });
+
+
   const achModal = d.getElementById('ach-modal');
   if (achModal) {
     achModal.querySelectorAll('.modal-close, .modal-back, [data-act="close"]')
       .forEach(b => b.addEventListener('click', closeAchModal));
     achModal.addEventListener('click', e => { if (e.target === achModal) closeAchModal(); });
   }
+
+
   const colModal = d.getElementById('col-modal');
   if (colModal) {
     colModal.querySelectorAll('.modal-close, .modal-back')
       .forEach(b => b.addEventListener('click', closeColModal));
     colModal.addEventListener('click', e => { if (e.target === colModal) closeColModal(); });
   }
+
   const authModal = d.getElementById('auth-modal');
   if (authModal) {
     authModal.querySelectorAll('.modal-close, [data-act="close"]')
       .forEach(b => b.addEventListener('click', closeAuthModal));
     authModal.addEventListener('click', e => { if (e.target === authModal) closeAuthModal(); });
   }
+
   const yandexLbModal = d.getElementById('yandex-leaderboard-modal');
   if (yandexLbModal) {
     yandexLbModal.querySelectorAll('.modal-close')
       .forEach(b => b.addEventListener('click', () => yandexLbModal.classList.remove('show')));
     yandexLbModal.addEventListener('click', e => { if (e.target === yandexLbModal) yandexLbModal.classList.remove('show'); });
   }
+
   const igamesModal = d.getElementById('igames-modal');
   if (igamesModal) {
     igamesModal.querySelectorAll('.modal-close, .modal-back')
       .forEach(b => b.addEventListener('click', closeOtherGamesModal));
     igamesModal.addEventListener('click', e => { if (e.target === igamesModal) closeOtherGamesModal(); });
   }
+
   d.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeAchModal();
@@ -2996,6 +3185,7 @@ function bindGlobalUI() {
       if (yandexLbModal) yandexLbModal.classList.remove('show');
     }
   });
+
   d.addEventListener('visibilitychange', function () {
     if (d.visibilityState === 'hidden') {
       console.log('Page hidden — pausing');
@@ -3025,6 +3215,7 @@ function parseHash() {
   if (parts[0] === 'collection') return { name: 'collection' };
   return { name: 'index' };
 }
+
 function pushRoute(route, replace) {
   const state = { vkRoute: route };
   if (replace) window.history.replaceState(state, '', location.pathname + location.search);
@@ -3062,6 +3253,7 @@ function applyVKUIButtons() {
     });
     console.log('✅ applyVKUIButtons: обработано кнопок =', count);
 }
+
 async function navigate() {
   if (typeof currentPageCleanup === 'function') {
     try { currentPageCleanup(); } catch (e) {}
@@ -3198,10 +3390,13 @@ w.addEventListener('pagehide', () => {
 });
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
+
+
 setTimeout(applyVKUIButtons, 500);
 setTimeout(applyVKUIButtons, 2000);
 w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, top0, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal };
 })(window, document);
 </script>
+<script src="ui_sprite.js"></script>
 </body>
 </html>
