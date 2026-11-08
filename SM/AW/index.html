@@ -2266,26 +2266,8 @@ async function initYandex() {
   if (!sdkReady || typeof YaGames === 'undefined') { console.warn('YaGames is not available — skipping Yandex init'); return; }
  if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false; cls.toggle('is-yandex', true); cls.toggle('is-standalone', false);}
  try{ const timeout=new Promise((_, rej)=>setTimeout(()=>rej(new Error('YaGames.init timeout')), 7000)); ysdk=await Promise.race([YaGames.init(), timeout]);} catch (e){ console.warn('YaGames.init failed', e); return;}
-  try {
-    const sdkLang = ysdk.environment.i18n.lang || 'ru';
-    const normalized = normalizeLang(sdkLang);
-    if (SUPPORTED.includes(normalized) && normalized !== LANG) {
-      LANG = normalized;
-      w.LANG = LANG;
-      applyStaticI18n();
-      refreshLocalization();
-      console.log('Yandex lang override →', LANG);
-    }
-    d.documentElement.lang = LANG;
-  } catch (e) {}
-  try {
-    const t = new Promise((_, rej) => setTimeout(() => rej(new Error('getPlayer timeout')), 5000));
-    ysdkPlayer = await Promise.race([ysdk.getPlayer(), t]);
-    try {
-      const uid = ysdkPlayer.getUniqueID && ysdkPlayer.getUniqueID();
-      if (uid) { w.id = uid; sessionStorage.setItem('id', uid); }
-    } catch (e) {}
-  } catch (e) { ysdkPlayer = null; console.warn('getPlayer failed', e); }
+ try{ const sdkLang=ysdk.environment.i18n.lang || 'ru'; const normalized=normalizeLang(sdkLang); if (SUPPORTED.includes(normalized) && normalized !==LANG){ LANG=normalized; w.LANG=LANG; applyStaticI18n(); refreshLocalization(); console.log('Yandex lang override →', LANG);} d.documentElement.lang=LANG;} catch (e){}
+ try{ const t=new Promise((_, rej)=>setTimeout(()=>rej(new Error('getPlayer timeout')), 5000)); ysdkPlayer=await Promise.race([ysdk.getPlayer(), t]); try{ const uid=ysdkPlayer.getUniqueID && ysdkPlayer.getUniqueID(); if (uid){ w.id=uid; sessionStorage.setItem('id', uid);}} catch (e){}} catch (e){ ysdkPlayer=null; console.warn('getPlayer failed', e);}
 try {
     ysdk.on('game_api_pause', function () {
       yandexGameplayStop();
@@ -2361,33 +2343,13 @@ const [unlockedRaw, collectionRaw, starsRaw, totalRaw, gatingVerRaw] = await Pro
     const storedVer = asNumber(gatingVerRaw, 0);
     const CURRENT_VER = 5;
     let unlocked;
-    if (storedVer < CURRENT_VER) {
-      const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
-      unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
-      try { await storageSet('unlocked', unlocked); } catch (e) {}
-      try { await storageSet('unlocked_v', CURRENT_VER); } catch (e) {}
-      if (w.Gating && w.Gating._invalidate) w.Gating._invalidate();
-      console.log('Gating upgrade → v' + CURRENT_VER, unlocked);
-    } else {
-      const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
-      unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
-      if (storedUnlocked.length !== unlocked.length) { try { await storageSet('unlocked', unlocked); } catch (e) {} }
-    }
-    const collection = asArray(collectionRaw).filter(x => typeof x === 'string');
-    const stars = asObject(starsRaw);
-    for (const k in stars) {
-      const v = asNumber(stars[k], 0);
-      stars[k] = Math.max(0, Math.min(3, v));
-    }
+ if (storedVer < CURRENT_VER){ const storedUnlocked=asArray(unlockedRaw).map(Number).filter(n=>!isNaN(n) && n >0); unlocked=Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked])); try{ await storageSet('unlocked', unlocked);} catch (e){} try{ await storageSet('unlocked_v', CURRENT_VER);} catch (e){} if (w.Gating && w.Gating._invalidate) w.Gating._invalidate(); console.log('Gating upgrade → v' + CURRENT_VER, unlocked);} else{ const storedUnlocked=asArray(unlockedRaw).map(Number).filter(n=>!isNaN(n) && n >0); unlocked=Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked])); if (storedUnlocked.length !==unlocked.length){ try{ await storageSet('unlocked', unlocked);} catch (e){}}} const collection=asArray(collectionRaw).filter(x=>typeof x==='string'); const stars=asObject(starsRaw); for (const k in stars){ const v=asNumber(stars[k], 0); stars[k]=Math.max(0, Math.min(3, v));}
     const total = asNumber(totalRaw, 0);
     w.__SYNCED__ = { unlocked, collection, stars, total };
     if (w.Gating && w.Gating.loadUnlocked) { try { await w.Gating.loadUnlocked(true); } catch (e) {} }
     updateTotalScoreUI(total);
     console.log('Sync complete:', w.__SYNCED__);
-  } catch (e) {
-    console.warn('Sync failed:', e);
-    w.__SYNCED__ = { unlocked: [1, 11, 1020,2031,2013,2009,2006, 2007, 1001,1002, 1006,1007, 1010, 1012, 1013], collection: [], stars: {}, total: 0 };
-  }
+} catch (e){ console.warn('Sync failed:', e); w.__SYNCED__={ unlocked: [1, 11, 1020,2031,2013,2009,2006, 2007, 1001,1002, 1006,1007, 1010, 1012, 1013], collection: [], stars:{}, total: 0};}
   if (__syncResolve) __syncResolve(w.__SYNCED__);
 }
 w.syncAllOnStart=syncAllOnStart;
@@ -2411,50 +2373,12 @@ function createFlyingStars() {
     const count = isMobile ? (isWeak ? 0 : 5) : 30;
     const sizes = ['particle-sm', 'particle-md', 'particle-lg', 'particle-xl'];
     const colors = ['particle-blue', 'particle-pink', 'particle-gold', 'particle-purple', 'particle-orange'];
-    for (let i = 0; i < count; i++) {
-        const particle = document.createElement('div');
-        particle.className =
-            'particle ' +
-            colors[Math.floor(Math.random() * colors.length)] +
-            ' ' +
-            sizes[Math.floor(Math.random() * sizes.length)];
-        particle.style.left = (Math.random() * 100) + '%';
-        particle.style.top  = (Math.random() * 100) + '%';
-        const duration = 3 + Math.random() * 3;
-        particle.style.animation = `particleFloat ${duration}s ease-in-out infinite`;
-        particle.style.animationDelay = (-Math.random() * duration) + 's';
-        container.appendChild(particle);
-    }
+ for (let i=0; i < count; i++){ const particle=document.createElement('div'); particle.className='particle ' + colors[Math.floor(Math.random() * colors.length)] + ' ' + sizes[Math.floor(Math.random() * sizes.length)]; particle.style.left=(Math.random() * 100) + '%'; particle.style.top=(Math.random() * 100) + '%'; const duration=3 + Math.random() * 3; particle.style.animation=`particleFloat ${duration}s ease-in-out infinite`; particle.style.animationDelay=(-Math.random() * duration) + 's'; container.appendChild(particle);}
     __starsCreated = true;
 }
-function hideLoadingAndShowMenu(){
-    if (__menuShown) return;
-    __menuShown=true;
-    const loading=d.getElementById('loading-screen');
-    if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none';}, 400);}
-    d.body.classList.add('app-ready');
-    createFlyingStars();        
-    const root=d.getElementById('app-root');
-    if (root) root.classList.add('visible');
-    w.__appReady=true;
-    trySendLoadingReady();
-}
+function hideLoadingAndShowMenu(){ if (__menuShown) return; __menuShown=true; const loading=d.getElementById('loading-screen'); if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none'}, 400)} d.body.classList.add('app-ready'); createFlyingStars(); const root=d.getElementById('app-root'); if (root) root.classList.add('visible'); w.__appReady=true; trySendLoadingReady();}
 let __factListCache = null;
-function getFactList() {
-  if (__factListCache) return __factListCache;
-  const list = [];
-  (w.REGIONS || []).forEach(reg => {
-    reg.levels.forEach(lvl => {
-      const qz = (w.QUIZZES || {})[lvl.id];
-      if (!qz || !Array.isArray(qz.questions)) return;
-      qz.questions.forEach(qn => {
-        list.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description) });
-      });
-    });
-  });
-  __factListCache = list;
-  return list;
-}
+function getFactList(){ if (__factListCache) return __factListCache; const list=[]; (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz || !Array.isArray(qz.questions)) return; qz.questions.forEach(qn=>{ list.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description)});});});}); __factListCache=list; return list;}
 async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
 const animalId = w.getAnimalId;
  const allIds=new Set(); 
@@ -2509,10 +2433,7 @@ if (nid === DAILY_ID) {
     questions: qs
   };
 }
-if (nid >= 1000 && nid !== DAILY_ID && nid !== 88888) {
-  const single = buildSingleThemedQuiz(nid);
-  if (single) w.QUIZZES[nid] = single;
-}
+if (nid >=1000 && nid !==DAILY_ID && nid !==88888){ const single=buildSingleThemedQuiz(nid); if (single) w.QUIZZES[nid]=single;}
   const quiz = (w.QUIZZES || {})[String(levelId)];
   if (!quiz) { pushRoute({ name: 'index' }, true); return null; }
  const $=(s)=>d.querySelector(s); 
@@ -2521,45 +2442,15 @@ if (nid >= 1000 && nid !== DAILY_ID && nid !== 88888) {
   };
 const region = (w.REGIONS || []).find(r => r.id === quiz.regionKey);
 const badgeEl = $('#home-region');
-if (badgeEl) {
-if (region) {
-    badgeEl.textContent = (region.icon ? region.icon + ' ' : '') + w.L(region.name);
-    badgeEl.style.display = '';
-} else if (quiz.regionKey === 'daily') {
-    badgeEl.textContent = '🎁 ' + w.L({ ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' });
-    badgeEl.style.display = '';
-} else if (quiz.regionKey === 'tutorial') {
-    badgeEl.textContent = '🎓 ' + w.L({ ru: 'Обучение', en: 'Tutorial', tr: 'Öğretici' });
-    badgeEl.style.display = '';
-} else {
-    const nid = Number(levelId);
-    const themedLevel = (w.THEMED_LEVELS || []).find(l => Number(l.id) === nid);
-    const photoLevel  = (w.PHOTO_LEVELS  || []).find(l => Number(l.id) === nid);
-    if (themedLevel) {
-      badgeEl.textContent = '🎨 ' + w.L({ ru: 'Тематическая викторина', en: 'Themed quiz', tr: 'Tematik test' });
-      badgeEl.style.display = '';
-    } else if (photoLevel) {
-      badgeEl.textContent = '🎯 ' + w.L({ ru: 'Фото-викторина', en: 'Photo quiz', tr: 'Foto test' });
-      badgeEl.style.display = '';
-    } else {
-      badgeEl.textContent = '';
-      badgeEl.style.display = 'none';
-    }
-}
-}
+if (badgeEl){
+if (region){ badgeEl.textContent=(region.icon ? region.icon + ' ' : '') + w.L(region.name); badgeEl.style.display=''} else if (quiz.regionKey==='daily'){ badgeEl.textContent='🎁 ' + w.L({ ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma'}); badgeEl.style.display=''} else if (quiz.regionKey==='tutorial'){ badgeEl.textContent='🎓 ' + w.L({ ru: 'Обучение', en: 'Tutorial', tr: 'Öğretici'}); badgeEl.style.display=''} else{ const nid=Number(levelId); const themedLevel=(w.THEMED_LEVELS || []).find(l=>Number(l.id)===nid); const photoLevel=(w.PHOTO_LEVELS || []).find(l=>Number(l.id)===nid); if (themedLevel){ badgeEl.textContent='🎨 ' + w.L({ ru: 'Тематическая викторина', en: 'Themed quiz', tr: 'Tematik test'}); badgeEl.style.display=''} else if (photoLevel){ badgeEl.textContent='🎯 ' + w.L({ ru: 'Фото-викторина', en: 'Photo quiz', tr: 'Foto test'}); badgeEl.style.display=''} else{ badgeEl.textContent=''; badgeEl.style.display='none'}}}
 $('#home-title').textContent = quiz.sub ? w.L(quiz.sub) : '';
 const _nid = Number(levelId);
 const _lvl = (w.THEMED_LEVELS || []).find(l => Number(l.id) === _nid)
           || (w.PHOTO_LEVELS  || []).find(l => Number(l.id) === _nid);
 const _emojiEl = $('#home-emoji');
 if (_emojiEl) {
-  if (_lvl && _lvl.icon) {
-    _emojiEl.textContent = _lvl.icon;
-    _emojiEl.style.display = '';
-  } else {
-    _emojiEl.textContent = '';
-    _emojiEl.style.display = 'none';
-  }
+ if (_lvl && _lvl.icon){ _emojiEl.textContent=_lvl.icon; _emojiEl.style.display='';} else{ _emojiEl.textContent=''; _emojiEl.style.display='none';}
 }
 $('#home-count').textContent = quiz.questions.length;
   const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
@@ -2583,27 +2474,7 @@ $('#lock-watch-btn').onclick = () => {
     }
     return r;
   };
-function startQuiz(){
-  if (Number(levelId) === DAILY_ID && MECH && MECH.daily && MECH.daily.completed) {
-    pushRoute({ name: 'index' });
-    return;
-  }
-  if (Number(levelId) >= 1000 && Number(levelId) !== 88888) {
-    const fresh = buildSingleThemedQuiz(Number(levelId));
-    if (fresh && Array.isArray(fresh.questions) && fresh.questions.length) {
-      quiz.questions = fresh.questions;
-    }
-  }
-  state.order=shuffle(quiz.questions.map((_, i)=>i));
-  state.index=0; state.score=0; state.correctCount=0; state.answers=0; state.answered=false;
-  state.finished=false; state.streak=0;
-  state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0;
-  state.roundCollection=new Set();
-  show(quizScreen);
-  renderBonusCounter();
-  if (isYandex) yandexGameplayStart();
-  renderQuestion();
-}
+function startQuiz(){ if (Number(levelId)===DAILY_ID && MECH && MECH.daily && MECH.daily.completed){ pushRoute({ name: 'index'}); return;} if (Number(levelId) >=1000 && Number(levelId) !==88888){ const fresh=buildSingleThemedQuiz(Number(levelId)); if (fresh && Array.isArray(fresh.questions) && fresh.questions.length){ quiz.questions=fresh.questions;}} state.order=shuffle(quiz.questions.map((_, i)=>i)); state.index=0; state.score=0; state.correctCount=0; state.answers=0; state.answered=false; state.finished=false; state.streak=0; state.maxStreak=0; state.fastestCorrect=99; state.timeouts=0; state.roundCollection=new Set(); show(quizScreen); renderBonusCounter(); if (isYandex) yandexGameplayStart(); renderQuestion();}
   function renderQuestion() {
     state.answered = false;
     const cur = quiz.questions[state.order[state.index]];
@@ -2657,26 +2528,8 @@ im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-g
  try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src;});} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img;}}}} catch (e){}
     startTimer();
   }
-  function startTimer() {
-    stopTimer();
-    state.timeLeft = 10;
-    updateTimer();
-    state.timerId = setInterval(() => {
-      if (state.timeLeft <= 0) { stopTimer(); timeUp(); return; }
-      state.timeLeft--;
-      updateTimer();
-      if (state.timeLeft <= 0) { stopTimer(); timeUp(); }
-    }, 1000);
-  }
-  function updateTimer() {
-    const val = Math.max(0, Math.min(10, state.timeLeft));
-    const valEl = document.getElementById('timer-val');
-    const fillEl = document.getElementById('timer-fill');
-    const timerEl = document.getElementById('timer');
-    if (valEl) valEl.textContent = val;
-    if (fillEl) fillEl.style.width = (val / 10) * 100 + '%';
-    if (timerEl) timerEl.classList.toggle('warning', val <= 5);
-  }
+ function startTimer(){ stopTimer(); state.timeLeft=10; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return;} state.timeLeft--; updateTimer(); if (state.timeLeft <=0){ stopTimer(); timeUp();}}, 1000);}
+ function updateTimer(){ const val=Math.max(0, Math.min(10, state.timeLeft)); const valEl=document.getElementById('timer-val'); const fillEl=document.getElementById('timer-fill'); const timerEl=document.getElementById('timer'); if (valEl) valEl.textContent=val; if (fillEl) fillEl.style.width=(val / 10) * 100 + '%'; if (timerEl) timerEl.classList.toggle('warning', val <=5);}
   function stopTimer() { if (state.timerId) { clearInterval(state.timerId); state.timerId = null; } }
   async function selectOption(i) {
     if (state.answered) return;
@@ -2685,12 +2538,7 @@ im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-g
     const cur = quiz.questions[state.order[state.index]];
     const correct = cur.answer;
     const optCount = quiz.mode === 'photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0);
-    if (typeof correct !== 'number' || optCount === 0 || correct < 0 || correct >= optCount) {
-      console.warn('Invalid answer index:', correct);
-      state.answers++;
-      finishQuestion();
-      return;
-    }
+ if (typeof correct !=='number' || optCount===0 || correct < 0 || correct >=optCount){ console.warn('Invalid answer index:', correct); state.answers++; finishQuestion(); return;}
     Array.from(d.querySelectorAll('#options .option')).forEach(o => {
       o.classList.add('disabled');
       const idx = +o.dataset.i;
@@ -2715,45 +2563,8 @@ if (i === correct) {
     state.answers++;
     finishQuestion();
   }
-function timeUp() {
-  if (state.answered) return;
-  state.answered = true;
-  const cur = quiz.questions[state.order[state.index]];
-  const optCount = quiz.mode === 'photo'
-    ? (Array.isArray(cur && cur.images) ? cur.images.length : 0)
-    : (Array.isArray(cur && cur.options) ? cur.options.length : 0);
-  if (!cur || typeof cur.answer !== 'number' || optCount === 0 || cur.answer < 0 || cur.answer >= optCount) {
-    console.warn('Invalid answer index in timeUp');
-    state.answers++;
-    state.timeouts++;
-    state.streak = 0;
-    finishQuestion();
-    return;
-  }
-  Array.from(d.querySelectorAll('#options .option')).forEach(o => {
-    o.classList.add('disabled');
-    if (+o.dataset.i === cur.answer) o.classList.add('correct');
-  });
-  try { w.Sound.playWrong(); } catch (e) {}
-  state.answers++;
-  state.timeouts++;
-  state.streak = 0;
-  finishQuestion();
-}
-  function finishQuestion() {
-    const cur = quiz.questions[state.order[state.index]];
-    if (cur.description) {
-      const dEl = $('#description');
-      dEl.textContent = w.L(cur.description);
-      dEl.hidden = false;
-    }
-    $('#next-btn').hidden = false;
-  }
-  function nextQuestion() {
-    if (state.index >= quiz.questions.length - 1) return finishQuiz();
-    state.index++;
-    renderQuestion();
-  }
+function timeUp(){ if (state.answered) return; state.answered=true; const cur=quiz.questions[state.order[state.index]]; const optCount=quiz.mode==='photo' ? (Array.isArray(cur && cur.images) ? cur.images.length : 0) : (Array.isArray(cur && cur.options) ? cur.options.length : 0); if (!cur || typeof cur.answer !=='number' || optCount===0 || cur.answer < 0 || cur.answer >=optCount){ console.warn('Invalid answer index in timeUp'); state.answers++; state.timeouts++; state.streak=0; finishQuestion(); return;} Array.from(d.querySelectorAll('#options .option')).forEach(o=>{ o.classList.add('disabled'); if (+o.dataset.i===cur.answer) o.classList.add('correct');}); try{ w.Sound.playWrong();} catch (e){} state.answers++; state.timeouts++; state.streak=0; finishQuestion();}
+ function finishQuestion(){ const cur=quiz.questions[state.order[state.index]]; if (cur.description){ const dEl=$('#description'); dEl.textContent=w.L(cur.description); dEl.hidden=false;} $('#next-btn').hidden=false;} function nextQuestion(){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; renderQuestion();}
 async function finishQuiz() {
   if (state.finished) return; state.finished=true; const finishedState=state; stopTimer(); try{ w.Sound.playFanfare();} catch (e){} show(resultScreen); if (isYandex) yandexGameplayStop(); const confettiEl=d.querySelector('.result-confetti'); if (confettiEl){ confettiEl.style.animation='none'; void confettiEl.offsetWidth; confettiEl.style.animation='';}
   const total = quiz.questions.length;
@@ -2844,15 +2655,7 @@ item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="t
 function openColModal(a){ const m=d.getElementById('col-modal'); if (!m) return; d.getElementById('modal-img').src=a.img; d.getElementById('modal-img').alt=a.name; d.getElementById('modal-title').textContent=a.name; d.getElementById('modal-desc').textContent=a.desc; m.classList.add('show');}
 function closeColModal() { const m = d.getElementById('col-modal'); if (m) m.classList.remove('show'); }
 let currentPage = null;
-function refreshLocalization() {
-  applyStaticI18n();
-  if (w.Sound && w.Sound.apply) w.Sound.apply();
-  if (w.Theme && w.Theme.apply) w.Theme.apply();
-  if (currentPage === 'index') renderIndex();
-  else if (currentPage === 'collection') renderCollection();
-  const igm = d.getElementById('igames-modal');
-  if (igm && igm.classList.contains('show')) renderOtherGames();
- }
+function refreshLocalization(){ applyStaticI18n(); if (w.Sound && w.Sound.apply) w.Sound.apply(); if (w.Theme && w.Theme.apply) w.Theme.apply(); if (currentPage==='index') renderIndex(); else if (currentPage==='collection') renderCollection(); const igm=d.getElementById('igames-modal'); if (igm && igm.classList.contains('show')) renderOtherGames();}
 async function renderOtherGames(){ const grid=d.getElementById('games-grid'); if (!grid) return; grid.innerHTML=''; if (isYandex){ let games=[]; try{ games=await w.getAllGames();} catch (e){} if (!games.length){ try{ const g=await w.getGameByID(535101); if (g) games.push(g);} catch (e){}} if (!games.length){ grid.innerHTML='<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>'; return;} games.forEach(g=>{ const a=d.createElement('button'); a.type='button'; a.className='game-card'; a.addEventListener('click', ()=>window.open(g.url, '_blank')); const iconHtml=g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>'; a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>'; grid.appendChild(a);}); return;}
 function renderCard(opts){ const a=d.createElement('button'); a.type='button'; a.className='game-card'; a.addEventListener('click', ()=>{ const vkPlatform=(P.launchParams && P.launchParams.vk_platform) || ''; if (vkPlatform==='desktop_web'){ window.open(opts.url, '_blank'); return;} if (isVK || isOK){ vkSend('VKWebAppOpenURL',{ url: opts.url}, 5000) .then(res=>{ if (!res) window.open(opts.url, '_blank');}) .catch(()=>window.open(opts.url, '_blank'));} else{ window.open(opts.url, '_blank');}}); const iconHtml=opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : ''); a.innerHTML=iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>'; grid.appendChild(a);}
 const VK_GAMES = [
@@ -2887,29 +2690,14 @@ function parseHash(){ if (window.history.state && window.history.state.vkRoute){
 function withTimeout(promise, ms, label){ return Promise.race([ promise, new Promise((_, rej)=>setTimeout(()=>rej(new Error('timeout ' + label + ' after ' + ms + 'ms')), ms)) ]);}
 function applyVKUIButtons(){ let count=0; document.querySelectorAll( '.btn:not(.score-chip):not(.score-pill), .icon-btn' ).forEach(el=>{ if (el.id==='yandex-auth-btn') return; el.classList.remove( 'vkuiButton', 'vkuiButton--size-l', 'vkuiButton--size-m', 'vkuiButton--mode-primary', 'vkuiButton--mode-secondary', 'vkuiButton--mode-tertiary', 'vkuiButton--appearance-accent', 'vkuiButton--appearance-neutral' ); el.classList.add('vkuiButton'); el.classList.add(el.classList.contains('btn-lg') ? 'vkuiButton--size-l' : 'vkuiButton--size-m'); if (el.classList.contains('btn-primary')){ el.classList.add('vkuiButton--mode-primary', 'vkuiButton--appearance-accent');} else if (el.classList.contains('icon-btn')){ el.classList.add('vkuiButton--mode-tertiary', 'vkuiButton--appearance-neutral');} else{ el.classList.add('vkuiButton--mode-secondary', 'vkuiButton--appearance-neutral');} count++;}); console.log('✅ applyVKUIButtons: обработано кнопок=', count);}
 async function navigate() {
-  if (typeof currentPageCleanup === 'function') {
-    try { currentPageCleanup(); } catch (e) {}
-    currentPageCleanup = null;
-  }
-  const route = parseHash();
-  if (!window.history.state || !window.history.state.vkRoute) {
-    window.history.replaceState({ vkRoute: route }, '', location.pathname + location.search);
-  }
+ if (typeof currentPageCleanup==='function'){ try{ currentPageCleanup();} catch (e){} currentPageCleanup=null;} const route=parseHash(); if (!window.history.state || !window.history.state.vkRoute){ window.history.replaceState({ vkRoute: route}, '', location.pathname + location.search);}
   PAGE_IDS.forEach(p => {
     const el = d.getElementById('page-' + p);
     if (el) el.classList.toggle('active', p === route.name);
   });
   currentPage = route.name;
   if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
-  try {
-    if (route.name === 'index') {
-      await renderIndex();
-    } else if (route.name === 'quiz') {
-      const cleanup = await renderQuiz(route.levelId);
-      currentPageCleanup = cleanup;
-    } else if (route.name === 'collection') {
-      await renderCollection();
-    }
+ try{ if (route.name==='index'){ await renderIndex();} else if (route.name==='quiz'){ const cleanup=await renderQuiz(route.levelId); currentPageCleanup=cleanup;} else if (route.name==='collection'){ await renderCollection();}
   } catch (e) { console.warn('navigate error', e); }
   try { window.scrollTo(0, 0); } catch (e) {}
   applyVKUIButtons();
@@ -3017,11 +2805,7 @@ setTimeout(() => {
     console.error('Watchdog error:', e);
   }
 }, 15000);
-w.addEventListener('pagehide', () => {
-  if (isYandex) yandexGameplayStop();
-  if (soundEnabled) { try { Sound.stopBg(); } catch (e) {} }
-  if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
-});
+w.addEventListener('pagehide', ()=>{ if (isYandex) yandexGameplayStop(); if (soundEnabled){ try{ Sound.stopBg();} catch (e){}} if (w.__currentQuizPause){ try{ w.__currentQuizPause();} catch (e){}}});
 if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
 else boot();
 setTimeout(applyVKUIButtons, 500);
@@ -3030,16 +2814,7 @@ w.applyVKUIButtons = applyVKUIButtons;
 w.VKApp={ storageGet, storageSet, showRewardedAd, showInterstitial, infr, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal, applyVKUIButtons}; const DAILY_ID=99999;
 const SURPRISE_PERIOD=15;
 const MECH_KEY=storageKey('quiz_extras_v1'); const MECH={ purchased:{}, tempUnlocks:{}, daily:{ date: '', completed: false, streak: 0, lastCompletedDate: ''}, quests:{ date: '', quests: []}, surprise:{ counter: 0}};
-const QUESTS_POOL = [
-  { id: 'solve5',   text: 'Ответь на 5 вопросов',   stat: 'solve',   target: 5,  reward: 3 },
-  { id: 'solve10',  text: 'Ответь на 10 вопросов',  stat: 'solve',   target: 10, reward: 4 },
-  { id: 'solve15',  text: 'Ответь на 15 вопросов',  stat: 'solve',   target: 15, reward: 5 },
-  { id: 'quiz2',    text: 'Пройди 2 викторины',     stat: 'quiz',    target: 2,  reward: 2 },
-  { id: 'quiz3',    text: 'Пройди 3 викторины',     stat: 'quiz',    target: 3,  reward: 3 },
-  { id: 'stars1',   text: 'Получи 3 звезды',         stat: 'stars3',  target: 1,  reward: 3 },
-  { id: 'perfect1', text: 'Пройди без ошибок',       stat: 'perfect', target: 1,  reward: 3 },
-  { id: 'streak5',  text: '5 правильных подряд',     stat: 'streak',  target: 5,  reward: 3 },
-  { id: 'streak10', text: '10 правильных подряд',    stat: 'streak',  target: 10, reward: 5 }
+const QUESTS_POOL=[ { id: 'solve5', text: 'Ответь на 5 вопросов', stat: 'solve', target: 5, reward: 3}, { id: 'solve10', text: 'Ответь на 10 вопросов', stat: 'solve', target: 10, reward: 4}, { id: 'solve15', text: 'Ответь на 15 вопросов', stat: 'solve', target: 15, reward: 5}, { id: 'quiz2', text: 'Пройди 2 викторины', stat: 'quiz', target: 2, reward: 2}, { id: 'quiz3', text: 'Пройди 3 викторины', stat: 'quiz', target: 3, reward: 3}, { id: 'stars1', text: 'Получи 3 звезды', stat: 'stars3', target: 1, reward: 3}, { id: 'perfect1', text: 'Пройди без ошибок', stat: 'perfect', target: 1, reward: 3}, { id: 'streak5', text: '5 правильных подряд', stat: 'streak', target: 5, reward: 3}, { id: 'streak10', text: '10 правильных подряд', stat: 'streak', target: 10, reward: 5}
 ];
 function loadMechanics(){ try{ const raw=safeLocalGet(MECH_KEY); if (!raw) return; const data=JSON.parse(raw); if (!data || typeof data !=='object') return; if (data.purchased && typeof data.purchased==='object') MECH.purchased=data.purchased; if (data.tempUnlocks && typeof data.tempUnlocks==='object') MECH.tempUnlocks=data.tempUnlocks; if (data.daily && typeof data.daily==='object') MECH.daily=data.daily; if (data.quests && typeof data.quests==='object') MECH.quests=data.quests; if (data.surprise && typeof data.surprise==='object') MECH.surprise=data.surprise;} catch (e){}} function saveMechanics(){ try{ safeLocalSet(MECH_KEY, JSON.stringify(MECH));} catch (e){}}
 async function loadMechanicsCloud(){ if (!w.storageGet) return; try{ const cloud=await w.storageGet('quiz_extras_cloud'); if (!cloud || typeof cloud !=='object') return; if (cloud.purchased && typeof cloud.purchased==='object'){ for (const k in cloud.purchased) if (cloud.purchased[k]) MECH.purchased[k]=true;} if (cloud.tempUnlocks && typeof cloud.tempUnlocks==='object'){ const now=Date.now(); for (const k in cloud.tempUnlocks){ if (cloud.tempUnlocks[k] >now && (cloud.tempUnlocks[k] >(MECH.tempUnlocks[k] || 0))){ MECH.tempUnlocks[k]=cloud.tempUnlocks[k];}}} if (cloud.daily && typeof cloud.daily==='object'){ const cd=cloud.daily; if (cd.lastCompletedDate && (!MECH.daily.lastCompletedDate || cd.lastCompletedDate >MECH.daily.lastCompletedDate)){ MECH.daily.lastCompletedDate=cd.lastCompletedDate;} if ((cd.streak || 0) >(MECH.daily.streak || 0)) MECH.daily.streak=cd.streak; if (cd.date===todayStr() && cd.completed) MECH.daily.completed=true;} if (cloud.quests && typeof cloud.quests==='object' && cloud.quests.date===todayStr()){ MECH.quests=cloud.quests;} safeLocalSet(MECH_KEY, JSON.stringify(MECH));} catch (e){}}
@@ -3052,74 +2827,7 @@ function isPurchasedLevel(levelId) { return !!MECH.purchased[Number(levelId)]; }
 function isTempUnlockedLevel(levelId){ const nid=Number(levelId); const exp=MECH.tempUnlocks[nid]; if (!exp) return false; if (exp <=Date.now()){ delete MECH.tempUnlocks[nid]; saveMechanics(); return false;} return true;}
 async function purchaseLevel(levelId){ const nid=Number(levelId); if (isPurchasedLevel(nid)) return true; const price=getLevelPrice(nid); const total=Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; if (total < price){ toast('Недостаточно очков'); return false;} const newTotal=total - price;
 await storageSetTotal(newTotal); if (w.__SYNCED__) w.__SYNCED__.total=newTotal; if (w.updateTotalScoreUI) w.updateTotalScoreUI(newTotal); MECH.purchased[nid]=true; saveMechanics(); saveMechanicsCloud(); try{ if (w.Gating && w.Gating.unlockLevel) await w.Gating.unlockLevel(nid);} catch (e){} if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid)===-1){ w.__SYNCED__.unlocked.push(nid);} toast('🎉 Категория открыта навсегда!'); return true;} async function unlockLevelViaAd(levelId){ if (!w.showRewardedAd) return false; try{ const ok=await w.showRewardedAd(); if (!ok) return false;} catch (e){ return false;} const nid=Number(levelId); MECH.tempUnlocks[nid]=Date.now() + 24 * 60 * 60 * 1000; saveMechanics(); saveMechanicsCloud(); if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid)===-1){ w.__SYNCED__.unlocked.push(nid);} toast('🎉 Категория открыта на 24 часа!'); return true;}
-function showPurchaseModal(levelId, onUnlocked) {
-  const nid = Number(levelId);
-  if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)) {
-    if (typeof onUnlocked === 'function') onUnlocked(nid);
-    return;
-  }
-  const alreadyUnlocked = (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked))
-    ? w.__SYNCED__.unlocked.map(Number).includes(nid)
-    : false;
-  if (alreadyUnlocked) {
-    if (typeof onUnlocked === 'function') onUnlocked(nid);
-    return;
-  }
-  const price = getLevelPrice(nid);
-  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
-  const canBuy = total >= price;
-  const name = getLevelName(nid);
-  let modal = d.getElementById('extrasUnlockModal');
-  if (!modal) {
-    modal = d.createElement('div');
-    modal.id = 'extrasUnlockModal';
-    modal.className = 'modal';
-    d.body.appendChild(modal);
-  }
-  modal.innerHTML =
-    '<div class="modal-content">' +
-      '<button class="modal-close" data-act="close" aria-label="close">×</button>' +
-      '<h2>' + lockedIcon('1.5em') + ' ' + escapeHtml(name) + ' — закрыта</h2>' +
-      '<p>Купить навсегда за <strong>' + price + '</strong> очков</p>' +
-      '<div class="extras-modal-actions">' +
-        '<button class="extras-btn extras-btn--primary" data-act="buy"' + (canBuy ? '' : ' disabled') + '>' +
-          ptsIcon('1.2em') + ' <span>Купить за ' + price + '</span>' +
-        '</button>' +
-        '<button class="extras-btn extras-btn--primary" data-act="ad">' +
-          tvIcon('1.2em') + ' Смотреть (24ч)' +
-        '</button>' +
-        '<button class="extras-btn extras-btn--ghost" data-act="cancel">Отмена</button>' +
-      '</div>' +
-    '</div>';
-  modal.classList.add('show');
-  const close = () => modal.classList.remove('show');
-  modal.querySelector('[data-act="close"]').onclick = close;
-  modal.querySelector('[data-act="cancel"]').onclick = close;
-  modal.onclick = (e) => { if (e.target === modal) close(); };
-  const buyBtn = modal.querySelector('[data-act="buy"]');
-  if (buyBtn) buyBtn.onclick = async () => {
-    if (!canBuy || buyBtn.disabled) return;
-    buyBtn.disabled = true;
-    try {
-      if (await purchaseLevel(nid)) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
-    } finally {
-      if (buyBtn.isConnected) buyBtn.disabled = false;
-    }
-  };
-  const adBtn = modal.querySelector('[data-act="ad"]');
-  if (adBtn) adBtn.onclick = async (e) => {
-    const btn = e.currentTarget;
-    btn.disabled = true;
-    const prev = btn.innerHTML;
-    btn.innerHTML = '⌛ Загрузка...';
-    const ok = await unlockLevelViaAd(nid);
-    btn.disabled = false;
-    btn.innerHTML = prev;
-    if (ok) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
-    else toast('Реклама не найдена, попробуйте позже');
-  };
-  applyVKUIButtons();
-}
+function showPurchaseModal(levelId, onUnlocked){ const nid=Number(levelId); if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)){ if (typeof onUnlocked==='function') onUnlocked(nid); return;} const alreadyUnlocked=(w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked)) ? w.__SYNCED__.unlocked.map(Number).includes(nid) : false; if (alreadyUnlocked){ if (typeof onUnlocked==='function') onUnlocked(nid); return;} const price=getLevelPrice(nid); const total=Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; const canBuy=total >=price; const name=getLevelName(nid); let modal=d.getElementById('extrasUnlockModal'); if (!modal){ modal=d.createElement('div'); modal.id='extrasUnlockModal'; modal.className='modal'; d.body.appendChild(modal);} modal.innerHTML='<div class="modal-content">' + '<button class="modal-close" data-act="close" aria-label="close">×</button>' + '<h2>' + lockedIcon('1.5em') + ' ' + escapeHtml(name) + ' — закрыта</h2>' + '<p>Купить навсегда за <strong>' + price + '</strong>очков</p>' + '<div class="extras-modal-actions">' + '<button class="extras-btn extras-btn--primary" data-act="buy"' + (canBuy ? '' : ' disabled') + '>' + ptsIcon('1.2em') + ' <span>Купить за ' + price + '</span>' + '</button>' + '<button class="extras-btn extras-btn--primary" data-act="ad">' + tvIcon('1.2em') + ' Смотреть (24ч)' + '</button>' + '<button class="extras-btn extras-btn--ghost" data-act="cancel">Отмена</button>' + '</div>' + '</div>'; modal.classList.add('show'); const close=()=>modal.classList.remove('show'); modal.querySelector('[data-act="close"]').onclick=close; modal.querySelector('[data-act="cancel"]').onclick=close; modal.onclick=(e)=>{ if (e.target===modal) close();}; const buyBtn=modal.querySelector('[data-act="buy"]'); if (buyBtn) buyBtn.onclick=async ()=>{ if (!canBuy || buyBtn.disabled) return; buyBtn.disabled=true; try{ if (await purchaseLevel(nid)){ close(); if (typeof onUnlocked==='function') onUnlocked(nid);}} finally{ if (buyBtn.isConnected) buyBtn.disabled=false;}}; const adBtn=modal.querySelector('[data-act="ad"]'); if (adBtn) adBtn.onclick=async (e)=>{ const btn=e.currentTarget; btn.disabled=true; const prev=btn.innerHTML; btn.innerHTML='⌛ Загрузка...'; const ok=await unlockLevelViaAd(nid); btn.disabled=false; btn.innerHTML=prev; if (ok){ close(); if (typeof onUnlocked==='function') onUnlocked(nid);} else toast('Реклама не найдена, попробуйте позже');}; applyVKUIButtons();}
 function hashDate(str){ let h=2166136261; for (let i=0; i < str.length; i++){ h ^=str.charCodeAt(i); h=Math.imul(h, 16777619) >0;} return h;} function ensureQuests(){ const t=todayStr(); if (MECH.quests.date===t && Array.isArray(MECH.quests.quests) && MECH.quests.quests.length) return; let seed=hashDate(t + '_quests'); const pool=QUESTS_POOL.slice(); for (let i=pool.length - 1; i >0; i--){ seed=(seed * 1103515245 + 12345) >0; const j=seed % (i + 1); const tmp=pool[i]; pool[i]=pool[j]; pool[j]=tmp;} MECH.quests={ date: t, quests: pool.slice(0, 3).map(q=>Object.assign({}, q,{ progress: 0, claimed: false}))}; saveMechanics();}
 function updateQuestProgress(stat, amount){ ensureQuests(); let changed=false; for (const q of MECH.quests.quests){ if (q.stat !==stat || q.claimed) continue; if (q.progress >=q.target) continue; if (stat==='streak'){ const nv=Math.min(q.target, Math.max(q.progress, Number(amount) || 0)); if (nv >q.progress){ q.progress=nv; changed=true;}} else{ const nv=Math.min(q.target, q.progress + (Number(amount) || 0)); if (nv >q.progress){ q.progress=nv; changed=true;}}} if (changed){ saveMechanics(); renderQuestsIfOpen();}}
 function claimReadyQuests(){ ensureQuests(); let earned=0; for (const q of MECH.quests.quests){ if (!q.claimed && q.progress >=q.target){ q.claimed=true; earned +=q.reward;}} if (earned >0){ saveMechanics(); saveMechanicsCloud(); const total=Number(w.__SYNCED__ && w.__SYNCED__.total) || 0; const newTotal=total + earned;
@@ -3140,49 +2848,8 @@ function renderProgress(){ const el=d.getElementById('extrasProgress'); if (!el)
 function openHelpModal(){ const m=d.getElementById('extrasHelpModal'); if (m) m.classList.add('show');}
 function closeHelpModal(){ const m=d.getElementById('extrasHelpModal'); if (m) m.classList.remove('show');} function onQuizFinish(data){ if (!data) return; if (Number(data.levelId)===DAILY_ID){ if (Number(data.percent) >=50) completeDaily(); else toast('Чтобы выполнить вызов дня, ответь правильно хотя бы на половину вопросов');} updateQuestProgress('quiz', 1); if (Number(data.percent) >=90) updateQuestProgress('stars3', 1); if (Number(data.total) >0 && Number(data.correctCount)===Number(data.total)) updateQuestProgress('perfect', 1); if (Number(data.maxStreak) >0) updateQuestProgress('streak', Number(data.maxStreak)); claimReadyQuests(); renderProgress(); renderDailyBadge();}
 function mergeTempUnlocks(){ if (!w.__SYNCED__) return; if (!Array.isArray(w.__SYNCED__.unlocked)) w.__SYNCED__.unlocked=[]; const now=Date.now(); let changed=false; for (const nid in MECH.tempUnlocks){ if (MECH.tempUnlocks[nid] >now){ if (w.__SYNCED__.unlocked.indexOf(Number(nid))===-1) w.__SYNCED__.unlocked.push(Number(nid));} else{ delete MECH.tempUnlocks[nid]; changed=true;}} if (changed) saveMechanics();}
-function initMechanics() {
-  loadMechanics();
-  ensureQuests();
-  ensureDaily();
-  renderDailyBadge();
-  loadMechanicsCloud().then(() => {
-    ensureQuests();
-    ensureDaily();
-    renderDailyBadge();
-    renderProgress();
-    mergeTempUnlocks();
-    if (currentPage === 'index') { try { renderIndex(); } catch (e) {} }
-  });
-  const dailyBtn = d.getElementById('extrasDailyBtn');
-  if (dailyBtn) dailyBtn.onclick = startDailyChallenge;
-  const questsBtn = d.getElementById('extrasQuestsBtn');
-  if (questsBtn) questsBtn.onclick = openQuestsModal;
-  const helpBtn = d.getElementById('extrasHelpBtn');
-  if (helpBtn) helpBtn.onclick = openHelpModal;
-  const questsModal = d.getElementById('extrasQuestsModal');
-  if (questsModal) {
-    questsModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
-      b.onclick = () => questsModal.classList.remove('show');
-    });
-    questsModal.onclick = (e) => { if (e.target === questsModal) questsModal.classList.remove('show'); };
-  }
-  const helpModal = d.getElementById('extrasHelpModal');
-  if (helpModal) {
-    helpModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
-      b.onclick = () => helpModal.classList.remove('show');
-    });
-    const tutBtn = helpModal.querySelector('[data-act="tutorial"]');
-    if (tutBtn) tutBtn.onclick = () => {
-      helpModal.classList.remove('show');
-      if (w.GameTutorial && typeof w.GameTutorial.start === 'function') w.GameTutorial.start(true);
-    };
-    helpModal.onclick = (e) => { if (e.target === helpModal) helpModal.classList.remove('show'); };
-  }
-  setTimeout(() => {
-    mergeTempUnlocks();
-    renderProgress();
-    renderDailyBadge();
-  }, 300);
+function initMechanics(){ loadMechanics(); ensureQuests(); ensureDaily(); renderDailyBadge(); loadMechanicsCloud().then(()=>{ ensureQuests(); ensureDaily(); renderDailyBadge(); renderProgress(); mergeTempUnlocks(); if (currentPage==='index'){ try{ renderIndex();} catch (e){}}}); const dailyBtn=d.getElementById('extrasDailyBtn'); if (dailyBtn) dailyBtn.onclick=startDailyChallenge; const questsBtn=d.getElementById('extrasQuestsBtn'); if (questsBtn) questsBtn.onclick=openQuestsModal; const helpBtn=d.getElementById('extrasHelpBtn'); if (helpBtn) helpBtn.onclick=openHelpModal; const questsModal=d.getElementById('extrasQuestsModal'); if (questsModal){ questsModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b=>{ b.onclick=()=>questsModal.classList.remove('show')}); questsModal.onclick=(e)=>{ if (e.target===questsModal) questsModal.classList.remove('show')}} const helpModal=d.getElementById('extrasHelpModal'); if (helpModal){ helpModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b=>{ b.onclick=()=>helpModal.classList.remove('show');}); const tutBtn=helpModal.querySelector('[data-act="tutorial"]'); if (tutBtn) tutBtn.onclick=()=>{ helpModal.classList.remove('show'); if (w.GameTutorial && typeof w.GameTutorial.start==='function') w.GameTutorial.start(true);}; helpModal.onclick=(e)=>{ if (e.target===helpModal) helpModal.classList.remove('show');};}
+  setTimeout(()=>{ mergeTempUnlocks(); renderProgress(); renderDailyBadge();}, 300);
   (function tryAutoTutorial(n) {
     n = n || 0;
     if (n > 100) return;
