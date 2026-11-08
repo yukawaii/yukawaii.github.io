@@ -3803,17 +3803,17 @@ function getLevelPrice(levelId) {
   let idx = 0;
   for (const reg of (w.REGIONS || [])) {
     for (const lvl of reg.levels) {
-      if (Number(lvl.id) === nid) return 22 + idx * 6;
+      if (Number(lvl.id) === nid) return 40 + idx * 10;          
       idx++;
     }
   }
   for (let i = 0; i < (w.THEMED_LEVELS || []).length; i++) {
-    if (Number(w.THEMED_LEVELS[i].id) === nid) return 18 + Math.floor(i / 4) * 5;
+    if (Number(w.THEMED_LEVELS[i].id) === nid) return 32 + Math.floor(i / 4) * 9;  
   }
   for (let i = 0; i < (w.PHOTO_LEVELS || []).length; i++) {
-    if (Number(w.PHOTO_LEVELS[i].id) === nid) return 15 + Math.floor(i / 7) * 6;
+    if (Number(w.PHOTO_LEVELS[i].id) === nid) return 26 + Math.floor(i / 7) * 10;   
   }
-  return 22;
+  return 40;
 }
 function getLevelName(levelId) {
   const nid = Number(levelId);
