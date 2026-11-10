@@ -50,7 +50,7 @@
 <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-box">
         <div class="loading-spinner"></div>
-        <div class="loading-title">🧩 Кроссворды</div>
+     <div class="loading-title"><span class="sprite-icon sprite-logo"></span>Кроссворды</div>
         <div class="loading-text" id="loadingText">Загрузка…</div>
     </div>
 </div>
@@ -69,23 +69,28 @@
             </div>
         </div> 
                 <div class="daily-badge" id="dailyBadge">
-            <div class="daily-badge__icon">☀️</div>
+        <div class="daily-badge__icon"><span class="sprite-icon sprite-moon"></span></div>
             <div class="daily-badge__info">
                 <div class="daily-badge__title">Кроссворд дня</div>
                 <div class="daily-badge__sub">Проверяем…</div>
             </div>
         </div>
-        <button class="menu-btn menu-btn--continue" id="continueBtn" style="display:none;">▶️ Продолжить</button>
-        <button class="menu-btn menu-btn--primary" id="dailyBtn">☀️ Кроссворд дня</button>
-        <button class="menu-btn" id="playRandomBtn">🎲 Случайный кроссворд</button>
-        <button class="menu-btn" id="categoriesBtn">📚 По темам</button>
-        <button class="menu-btn" id="difficultyBtn">📊 По сложности</button>
-        <button class="menu-btn" id="achBtn">🏆 Достижения</button>
+      <button class="menu-btn menu-btn--continue" id="continueBtn" style="display:none;"><span class="sprite-icon sprite-sokol"></span>Продолжить</button>
+<button class="menu-btn" id="playRandomBtn"><span class="sprite-icon sprite-circle_refresh"></span>Случайный кроссворд</button>
+<button class="menu-btn" id="categoriesBtn"><span class="sprite-icon sprite-literature_books"></span>По темам</button>
+<div class="menu-row">
+    <button class="menu-row__btn" id="achBtn" title="Достижения"><span class="sprite-icon sprite-achivments"></span></button>
+    <button class="menu-row__btn" id="questsBtn" title="Квесты дня"><span class="sprite-icon sprite-filin"></span></button>
+    <div class="menu-row__badge" id="berriesBadge" title="Ягоды">
+        <span class="sprite-icon sprite-points"></span>
+        <span class="berries-value" id="berriesValue">0</span>
+    </div>
+</div>
 
         <div class="menu-bottom">
-            <button class="menu-icon-btn" id="themeBtn" title="Тема">🎨</button>
-<button class="menu-icon-btn" id="soundBtnMenu" title="Звук">🔇</button>
-            <button class="menu-icon-btn" id="otherGamesBtn" title="Другие игры">🎮</button>
+  <button class="menu-icon-btn" id="themeBtn" title="Тема"><span class="sprite-icon sprite-palitra"></span></button>
+<button class="menu-icon-btn" id="soundBtnMenu" title="Звук"><span class="sprite-icon sprite-soundoff"></span></button>
+<button class="menu-icon-btn" id="otherGamesBtn" title="Другие игры"><span class="sprite-icon sprite-othergames"></span></button>
         </div>
     </div>
 </div>
@@ -96,8 +101,8 @@
         <button class="game-header__btn" id="backBtn">←</button>
         <div class="game-title" id="gameTitle">Кроссворд</div>
         <div class="game-timer" id="timerVal">00:00</div>
-        <button class="game-header__btn" id="hintBtn">💡</button>
-<button class="game-header__btn" id="soundBtn">🔇</button>
+  <button class="game-header__btn" id="hintBtn"><span class="sprite-icon sprite-hint"></span></button>
+<button class="game-header__btn" id="soundBtn"><span class="sprite-icon sprite-soundoff"></span></button>
     </div>
 
     <div class="clue-panel" id="cluePanel">
@@ -114,31 +119,31 @@
 <!-- ============ МОДАЛКИ ============ -->
 <div id="hintAdModal" class="modal-overlay">
     <div class="modal-box">
-        <div class="hint-icon">📺</div>
+  <div class="hint-icon"><span class="sprite-icon sprite-tv"></span></div>
         <h2 class="modal-title">Подсказка</h2>
         <p class="modal-text">Посмотрите рекламу, чтобы открыть одну букву в выбранном слове.</p>
-        <button class="modal-btn modal-btn--primary" id="hintAdConfirm">🎁 Открыть букву</button>
-        <button class="modal-btn" id="hintAdCancel">❌ Отмена</button>
+     <button class="modal-btn modal-btn--primary" id="hintAdConfirm"><span class="sprite-icon sprite-gift"></span>Открыть букву</button>
+<button class="modal-btn" id="hintAdCancel"><span class="sprite-icon sprite-chancel_error"></span>Отмена</button>
     </div>
 </div>
 
 <div id="winModal" class="modal-overlay">
     <div class="modal-box">
-        <h2 class="modal-title" id="winTitle">🎉 Отлично!</h2>
+     <h2 class="modal-title" id="winTitle"><span class="sprite-icon sprite-party_selebraition"></span>Отлично!</h2>
         <p class="modal-text" id="winTime"></p>
         <p class="modal-text" id="winScore"></p>
-        <button class="modal-btn modal-btn--primary" id="winShareBtn">📤 Поделиться</button>
-        <button class="modal-btn" id="winClose">▶️ Продолжить</button>
+    <button class="modal-btn modal-btn--primary" id="winShareBtn"><span class="sprite-icon sprite-rocket"></span>Поделиться</button>
+<button class="modal-btn" id="winClose"><span class="sprite-icon sprite-sokol"></span>Продолжить</button>
     </div>
 </div>
 
 <div id="exitModal" class="modal-overlay">
     <div class="modal-box">
         <h2 class="modal-title">Выйти в меню?</h2>
-      <p class="modal-text">Прогресс сохранится — вернуться можно кнопкой ▶️ Продолжить.</p>
+      <p class="modal-text">Прогресс сохранится — вернуться можно кнопкой Продолжить.</p>
         <div class="modal-btn--row">
-            <button class="modal-btn" id="exitCancel">❌ Отмена</button>
-            <button class="modal-btn modal-btn--primary" id="exitConfirm">🏠 Выйти</button>
+         <button class="modal-btn" id="exitCancel"><span class="sprite-icon sprite-chancel_error"></span>Отмена</button>
+<button class="modal-btn modal-btn--primary" id="exitConfirm"><span class="sprite-icon sprite-home_menu"></span>Выйти</button>
         </div>
     </div>
 </div>
@@ -146,41 +151,50 @@
 <div id="achModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="achClose">✕</button>
-        <h2 class="modal-title">🏆 Достижения</h2>
+   <h2 class="modal-title"><span class="sprite-icon sprite-achivments"></span>Достижения</h2>
         <div class="ach-grid" id="achGrid"></div>
     </div>
 </div>
 
+<div id="questsModal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" id="questsClose">✕</button>
+        <h2 class="modal-title"><span class="sprite-icon sprite-filin"></span>Квесты дня</h2>
+        <div class="quests-list" id="questsList"></div>
+    </div>
+</div>
 <div id="catModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="catClose">✕</button>
-        <h2 class="modal-title">📚 Выберите тему</h2>
+  <h2 class="modal-title"><span class="sprite-icon sprite-literature_books"></span>Выберите тему</h2>
         <div class="cat-grid" id="catGrid"></div>
     </div>
 </div>
 <div id="catUnlockModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="catUnlockClose">✕</button>
-        <div class="hint-icon">🔒</div>
+    <div class="hint-icon"><span class="sprite-icon sprite-locked"></span></div>
         <h2 class="modal-title" id="catUnlockTitle">Категория закрыта</h2>
         <p class="modal-text" id="catUnlockText"></p>
-        <button class="modal-btn modal-btn--primary" id="catUnlockConfirm">📺 Открыть на 24 часа</button>
-        <button class="modal-btn" id="catUnlockCancel">❌ Отмена</button>
+<button class="modal-btn modal-btn--primary" id="catUnlockConfirm"><span class="sprite-icon sprite-tv"></span> Открыть на 24ч.</button>
+<button class="modal-btn" id="catBuyConfirm">Купить <span id="catBuyPrice">100</span> <span class="sprite-icon sprite-points"></span></button>
+<p class="modal-text" style="font-size:var(--font-small);margin:6px 0 0;">Баланс: <span class="sprite-icon sprite-points"></span> <span id="catBuyBalance">0</span></p>
+<button class="modal-btn" id="catUnlockCancel"><span class="sprite-icon sprite-chancel_error"></span> Отмена</button>
     </div>
 </div>
 <div id="diffModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="diffClose">✕</button>
-        <h2 class="modal-title" id="diffTitle">📊 Сложность</h2>
+     <h2 class="modal-title" id="diffTitle"><span class="sprite-icon sprite-chart_easy_or_hard"></span>Сложность</h2>
         <div class="theme-list">
             <button class="theme-item" data-diff="easy">
                 <span class="theme-circle" style="background: #81c784;"></span>
-                <span class="theme-name">🌱 Легко</span>
+              <span class="theme-name"><span class="sprite-icon sprite-vegatarian"></span>Легко</span>
                 <span class="theme-check">→</span>
             </button>
             <button class="theme-item" data-diff="hard">
                 <span class="theme-circle" style="background: #f08654;"></span>
-                <span class="theme-name">🔥 Сложно</span>
+              <span class="theme-name"><span class="sprite-icon sprite-lion"></span>Сложно</span>
                 <span class="theme-check">→</span>
             </button>
         </div>
@@ -190,7 +204,7 @@
 <div id="themeModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="themeClose">✕</button>
-        <h2 class="modal-title">🎨 Выберите тему</h2>
+    <h2 class="modal-title"><span class="sprite-icon sprite-palitra"></span> Выберите тему</h2>
     <div class="theme-list">
     <button class="theme-item" data-theme="peach">
         <span class="theme-circle"></span>
@@ -228,26 +242,26 @@
 
 <div id="dailyInfoModal" class="modal-overlay">
     <div class="modal-box">
-        <div class="daily-info-icon">🏆</div>
+       <div class="daily-info-icon"><span class="sprite-icon sprite-corona"></span></div>
         <h2 class="modal-title">Кроссворд дня</h2>
         <p class="modal-text" id="dailyInfoText"></p>
-        <button class="modal-btn modal-btn--primary" id="dailyInfoClose">✨ Ок</button>
+       <button class="modal-btn modal-btn--primary" id="dailyInfoClose"><span class="sprite-icon sprite-check_ok"></span>Ок</button>
     </div>
 </div>
 <div id="otherGamesModal" class="modal-overlay">
     <div class="modal-box modal-box--games">
         <button class="modal-close" id="otherGamesClose">✕</button>
-        <h2 class="modal-title">🎮 Другие игры</h2>
+       <h2 class="modal-title"><span class="sprite-icon sprite-othergames"></span>Другие игры</h2>
         <div class="games-grid" id="otherGamesList"></div>
     </div>
 </div>
 <div id="achGetModal" class="modal-overlay">
     <div class="modal-box" style="text-align:center;">
-        <div style="font-size:60px;" id="achGetIcon">🏆</div>
-        <h2 class="modal-title">🎉 Достижение!</h2>
+     <div style="font-size:60px;" id="achGetIcon"><span class="sprite-icon sprite-corona"></span></div>
+<h2 class="modal-title"><span class="sprite-icon sprite-party_selebraition"></span>Достижение!</h2>
         <div style="font-weight:800; font-size:18px; margin:6px 0;" id="achGetName"></div>
         <div style="color:var(--text-muted); margin-bottom:18px;" id="achGetDesc"></div>
-        <button class="modal-btn modal-btn--primary" id="achGetClose">✅ Отлично</button>
+       <button class="modal-btn modal-btn--primary" id="achGetClose"><span class="sprite-icon sprite-check_ok"></span>Отлично</button>
     </div>
 </div>
 
