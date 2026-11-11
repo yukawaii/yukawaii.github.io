@@ -3,157 +3,12 @@ if (!window.vkBridge || typeof window.vkBridge.send !== 'function') {
 } else {
     console.log('✅ Настоящий vkBridge загружен, всё ок');
 }
-function getLaunchParams(){const c={};try{const n=new URLSearchParams(window.location.search||"");for(const[o,a]of n)c[o]=a}catch(c){}try{const n=(window.location.hash||"").replace(/^#/,"");if(n){const o=new URLSearchParams(n);for(const[n,a]of o)n in c||(c[n]=a)}}catch(c){}return c}
-const launchParams = getLaunchParams();
-const platform = launchParams.vk_client === 'ok' ? 'ok' : 'vk';
-const userId = parseInt(
-    launchParams.vk_user_id ||      
-    launchParams.vk_ok_user_id ||   
-    launchParams.viewer_id ||      
-    launchParams.user_id || 
-    '0'
-);
+function getLaunchParams(){const a={};try{const c=new URLSearchParams(window.location.search||"");for(const[n,r]of c)a[n]=r}catch(a){}try{const c=(window.location.hash||"").replace(/^#/,"");if(c){const n=new URLSearchParams(c);for(const[c,r]of n)c in a||(a[c]=r)}}catch(a){}return a}const launchParams=getLaunchParams(),platform="ok"===launchParams.vk_client?"ok":"vk",userId=parseInt(launchParams.vk_user_id||launchParams.vk_ok_user_id||launchParams.viewer_id||launchParams.user_id||"0");
 console.log(`🔍 Платформа: ${platform}, ID пользователя: ${userId}`);
 let vkInitialized = false;
 let vkUserId = null;
-class AdManager {
-    constructor() {
-        this.bannerShown = false;
-        this.bannerRetryCount = 0;
-        this.maxBannerRetries = 3;
-        this.bannerRetryTimeout = null;
-        this.bannerPending = false;
-        this.bannerDelay = 3e5;
-    }
-    checkAndShowBanner() {
-        if (void 0 === vkBridge) return void this.scheduleBannerRetry();
-        (window.vkBridge.sendPromise || window.vkBridge)
-            .call(vkBridge, "VKWebAppCheckBannerAd", {})
-            .then((e) => {
-                if (e && e.result) {
-                    this.bannerShown = true;
-                } else {
-                    this.showBannerDirect();
-                }
-            })
-            .catch(() => { this.showBannerDirect(); });
-    }
-    showBannerDirect() {
-        if (this.bannerPending) return;
-        this.bannerPending = true;
-        (window.vkBridge.sendPromise || window.vkBridge)
-            .call(vkBridge, "VKWebAppShowBannerAd", { banner_location: "bottom" })
-            .then((e) => {
-                this.bannerPending = false;
-                if (e && (true === e.result || 1 === e.result)) {
-                    this.bannerShown = true;
-                }
-            })
-            .catch(() => { this.bannerPending = false; });
-    }
-    showBottomBanner() {
-        if (this.bannerShown) return;
-        if (void 0 === vkBridge) return void this.scheduleBannerRetry();
-        if (this.bannerPending) return;
-        this.bannerRetryCount++;
-        this.bannerPending = true;
-        (window.vkBridge.sendPromise || window.vkBridge)
-            .call(vkBridge, "VKWebAppShowBannerAd", { banner_location: "bottom" })
-            .then((e) => {
-                this.bannerPending = false;
-                if (e && (true === e.result || 1 === e.result)) {
-                    this.bannerShown = true;
-                    this.bannerRetryCount = 0;
-                } else {
-                    this.scheduleBannerRetry();
-                }
-            })
-            .catch(() => {
-                this.bannerPending = false;
-                this.scheduleBannerRetry();
-            });
-    }
-    handleBannerError() {  }
-    scheduleBannerRetry() {
-        if (this.bannerShown) return;
-        if (this.bannerRetryCount >= this.maxBannerRetries) return;
-        this.bannerRetryTimeout && clearTimeout(this.bannerRetryTimeout);
-        this.bannerRetryTimeout = setTimeout(() => {
-            this.bannerRetryTimeout = null;
-            this.showBottomBanner();
-        }, this.bannerDelay); 
-    }
-    showRewardedAd() {
-        return new Promise((e) => {
-            const t = setTimeout(() => { e(!1); }, 12e4);
-            if (void 0 === vkBridge) return clearTimeout(t), void e(!1);
-            (window.vkBridge.sendPromise || window.vkBridge)
-                .call(vkBridge, "VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true  })
-                .then((s) => {
-                    if (clearTimeout(t), s) {
-                        if (!0 === s.result || !0 === s.success || "success" === s.status)
-                            return this.preloadRewardedAd(), void e(!0);
-                        if (s.data) {
-                            const t = s.data;
-                            if (!0 === t.result || !0 === t.success || "success" === t.status)
-                                return void e(!0);
-                        }
-                        void 0 !== s.error || !1 === s.result ? e(!1) : e(!0);
-                    } else e(!1);
-                })
-                .catch((s) => { clearTimeout(t), e(!1); });
-        });
-    }
-    preloadRewardedAd() {
-        if (void 0 === vkBridge) return;
-        (window.vkBridge.sendPromise || window.vkBridge)
-            .call(vkBridge, "VKWebAppCheckNativeAds", { ad_format: "reward" })
-            .then((e) => { e && e.result })
-            .catch((e) => {});
-    }
-}
-class SoundManager {
-    constructor() {
-        this.enabled = true;
-        this.ctx = null;
-        this.initialized = false;
-          this.maxHints = 0;
-    }
-    init() {
-        if (this.initialized) return;
-        try {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            this.initialized = true;
-        } catch (e) {
-            console.warn('Web Audio не поддерживается');
-        }
-    }
-    beep(freq = 600, duration = 80, volume = 0.15) {
-        if (!this.enabled || !this.ctx) return;
-        try {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.frequency.value = freq;
-            osc.type = 'sine';
-            gain.gain.setValueAtTime(volume, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration / 1000);
-            osc.start(this.ctx.currentTime);
-            osc.stop(this.ctx.currentTime + duration / 1000);
-        } catch (e) {  }
-    }
-    click() { this.beep(700, 60, 0.12); }
-    error() { this.beep(300, 150, 0.15); }
-    win() { 
-        this.beep(523, 120, 0.12);
-        setTimeout(() => this.beep(659, 120, 0.12), 150);
-        setTimeout(() => this.beep(784, 180, 0.12), 300);
-    }
-    hint() { this.beep(880, 80, 0.1); }
-    solve() { this.beep(440, 100, 0.1); }
-    toggle() { this.beep(500, 50, 0.1); }
-}
+class AdManager{constructor(){this.bannerShown=!1,this.bannerRetryCount=0,this.maxBannerRetries=3,this.bannerRetryTimeout=null,this.bannerPending=!1,this.bannerDelay=3e5}checkAndShowBanner(){void 0!==vkBridge?(window.vkBridge.sendPromise||window.vkBridge).call(vkBridge,"VKWebAppCheckBannerAd",{}).then((e=>{e&&e.result?this.bannerShown=!0:this.showBannerDirect()})).catch((()=>{this.showBannerDirect()})):this.scheduleBannerRetry()}showBannerDirect(){this.bannerPending||(this.bannerPending=!0,(window.vkBridge.sendPromise||window.vkBridge).call(vkBridge,"VKWebAppShowBannerAd",{banner_location:"bottom"}).then((e=>{this.bannerPending=!1,!e||!0!==e.result&&1!==e.result||(this.bannerShown=!0)})).catch((()=>{this.bannerPending=!1})))}showBottomBanner(){this.bannerShown||(void 0!==vkBridge?this.bannerPending||(this.bannerRetryCount++,this.bannerPending=!0,(window.vkBridge.sendPromise||window.vkBridge).call(vkBridge,"VKWebAppShowBannerAd",{banner_location:"bottom"}).then((e=>{this.bannerPending=!1,!e||!0!==e.result&&1!==e.result?this.scheduleBannerRetry():(this.bannerShown=!0,this.bannerRetryCount=0)})).catch((()=>{this.bannerPending=!1,this.scheduleBannerRetry()}))):this.scheduleBannerRetry())}handleBannerError(){}scheduleBannerRetry(){this.bannerShown||this.bannerRetryCount>=this.maxBannerRetries||(this.bannerRetryTimeout&&clearTimeout(this.bannerRetryTimeout),this.bannerRetryTimeout=setTimeout((()=>{this.bannerRetryTimeout=null,this.showBottomBanner()}),this.bannerDelay))}showRewardedAd(){if("undefined"==typeof vkBridge)return Promise.resolve(!1);if(!navigator.onLine)return Promise.resolve(!1);const e=window.vkBridge&&window.vkBridge.sendPromise?window.vkBridge.sendPromise.bind(window.vkBridge):window.vkBridge.send.bind(window.vkBridge);return new Promise((n=>{let t=!1,r=null,i=!1;const s=()=>{r&&(clearTimeout(r),r=null)},a=e=>{s(),t||i||(r=setTimeout((()=>{t||i||d(!1)}),e||12e4))},d=e=>{if(!t){if(t=!0,s(),document.removeEventListener("visibilitychange",o),e)try{this.preloadRewardedAd()}catch(e){}n(!!e)}},o=()=>{document.hidden?(i=!0,s()):t||(i=!1,a(9e4))};document.addEventListener("visibilitychange",o),a(12e4);let h=0;const c=()=>{t||(h++,e("VKWebAppCheckNativeAds",{ad_format:"reward"}).then((n=>{if(t)return;const r=n&&(!0===n.result||1===n.result||"ok"===n.result);!r&&h<6?setTimeout(c,3e3):r?e("VKWebAppShowNativeAds",{ad_format:"reward",use_waterfall:!0}).then((e=>{if(t)return;e&&(!0===e.result||1===e.result||"ok"===e.result||"success"===e.result||!0===e.success||"success"===e.status||e.data&&(!0===e.data.result||!0===e.data.success||"success"===e.data.status))?d(!0):u()})).catch((e=>{t||u()})):u()})).catch((e=>{t||u()})))},u=()=>{t||(a(9e4),e("VKWebAppShowNativeAds",{ad_format:"interstitial",use_waterfall:!0}).then((e=>{t||(!e||!0!==e.result&&1!==e.result&&"ok"!==e.result&&"success"!==e.result&&!0!==e.success&&"success"!==e.status?d(!1):d(!0))})).catch((e=>{t||d(!1)})))};c()}))}preloadRewardedAd(){void 0!==vkBridge&&(window.vkBridge.sendPromise||window.vkBridge).call(vkBridge,"VKWebAppCheckNativeAds",{ad_format:"reward"}).then((e=>{e&&e.result})).catch((e=>{}))}}
+class SoundManager{constructor(){this.enabled=!0,this.ctx=null,this.initialized=!1,this.maxHints=0}init(){if(!this.initialized)try{this.ctx=new(window.AudioContext||window.webkitAudioContext),this.initialized=!0}catch(t){}}beep(t=600,e=80,i=.15){if(this.enabled&&this.ctx)try{const s=this.ctx.createOscillator(),n=this.ctx.createGain();s.connect(n),n.connect(this.ctx.destination),s.frequency.value=t,s.type="sine",n.gain.setValueAtTime(i,this.ctx.currentTime),n.gain.exponentialRampToValueAtTime(.001,this.ctx.currentTime+e/1e3),s.start(this.ctx.currentTime),s.stop(this.ctx.currentTime+e/1e3)}catch(t){}}click(){this.beep(700,60,.12)}error(){this.beep(300,150,.15)}win(){this.beep(523,120,.12),setTimeout((()=>this.beep(659,120,.12)),150),setTimeout((()=>this.beep(784,180,.12)),300)}hint(){this.beep(880,80,.1)}solve(){this.beep(440,100,.1)}toggle(){this.beep(500,50,.1)}}
 class SudokuGame {
     constructor() {
 this.sound=new SoundManager,this.adManager=new AdManager,this.adManager.preloadRewardedAd(),this.difficulty="easy",this.grid=[],this.solution=[],this.userGrid=[],this.given=[],this.selectedRow=-1,this.selectedCol=-1,this.timer=0,this.timerInterval=null,this.isRunning=!1,this.isFinished=!1,this.hintsUsed=0,this.checksUsed=0,this.checkedCells={},this.cellsToRemove=0,this.platform=platform,this.userId=userId;
@@ -266,14 +121,7 @@ const overlay=document.createElement("div");overlay.style.cssText="\n        pos
         }
         callback(true);
     });
-    overlay.addEventListener('pointerdown', (e) => { e.preventDefault();
-        if (e.target === overlay) {
-            if (overlay.parentNode) {
-                document.body.removeChild(overlay);
-            }
-              callback(false);
-        }
-    });
+overlay.addEventListener("pointerdown",(e=>{e.preventDefault(),e.target===overlay&&(overlay.parentNode&&document.body.removeChild(overlay),callback(!1))}));
 }
 showHintAdModal() {
     return new Promise((resolve) => {
@@ -1745,9 +1593,6 @@ updateHintButton() {
     }
 }
 }
-// ============================================================
-// 5. Запуск
-// ============================================================
 document.addEventListener("DOMContentLoaded",(()=>{const e=new SudokuGame;window.__game=e}));
 document.addEventListener('touchmove', function(event) {
     var target = event.target;
