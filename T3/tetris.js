@@ -1,79 +1,166 @@
-let arenaWidth=10,arenaHeight=20,arena=[],soundMuted=!1,musicMuted=!0,currentMusicTrack=null,isGameStarted=!1,isGameOver=!1,audioInitialized=!1,selectedMode="classic",selectedDifficulty="medium",difficultyMultiplier=1,slowDownInterval=null,isSlowDownActive=!1,comboDisplayTimer=null,dailyBonusClaimedToday=!1,lastInterstitialAdTime=0,pendingSlowDown=!1,slowDownTimerId=null,currentScrollPage=1;const SCROLLS_PER_PAGE=5,TOTAL_SCROLLS=100;let currentCollectionPage=1,currentCollectionCategory=null;const COLLECTION_ITEMS_PER_PAGE=15,CATEGORY_ORDER=["blocks","animals","plants","space"],BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};let activeBonus=null,bonusSpawnCooldown=0;const BONUS_SPAWN_CHANCE=.15,BONUS_MAX_COOLDOWN=7,canvas=document.getElementById("tetris"),context=canvas.getContext("2d"),CYBER_COLORS={I:"#00ffff",O:"#FFE138",T:"#ff00ff",S:"#00ff66",Z:"#ff0055",L:"#ffaa00",J:"#0066ff"},colors=[null,CYBER_COLORS.I,CYBER_COLORS.O,CYBER_COLORS.T,CYBER_COLORS.S,CYBER_COLORS.Z,CYBER_COLORS.L,CYBER_COLORS.J];function calculateOptimalArenaWidth(){const e=document.querySelector(".canvas-container");if(!e)return 14;const t=e.getBoundingClientRect().width-12;return t<=0?14:/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)?t>=500?18:t>=400?16:14:t>=1e3?24:t>=800?22:t>=600?20:22}function updateCanvasSize(){const e=document.querySelector(".canvas-container");if(!e)return;const t=e.getBoundingClientRect(),n=.85*window.innerHeight,o=t.width-12,a=Math.min(t.height-12,n);o<=0||a<=0||(canvas.width=o,canvas.height=a)}function createMatrix(e,t){const n=[];for(;t--;)n.push(new Array(e).fill(0));return n}function createPiece(e){switch(e){case"T":return[[0,0,0],[1,1,1],[0,1,0]];case"O":return[[2,2],[2,2]];case"L":return[[0,3,0],[0,3,0],[0,3,3]];case"J":return[[0,4,0],[0,4,0],[4,4,0]];case"I":return[[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];case"S":return[[0,6,6],[6,6,0],[0,0,0]];case"Z":return[[7,7,0],[0,7,7],[0,0,0]];default:return[[0]]}}const pieces="ILJOTSZ",tetraPieces={I:{shape:[[1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[1,1,0]],color:CYBER_COLORS.S},O:{shape:[[1,1],[1,1]],color:CYBER_COLORS.O},T:{shape:[[0,1,0],[1,1,1],[0,1,0]],color:CYBER_COLORS.T}},tetraKeys=["I","L","J","Z","S","O","T"];function createTetraPiece(){const e=tetraKeys[Math.floor(Math.random()*tetraKeys.length)],t=tetraPieces[e],n=t.shape.map((e=>[...e]));return n._color=t.color,n._key=e,n}function rotateTetraMatrix(e){const t=e._key;if("O"===t||"T"===t){const t=e.map((e=>[...e]));return t._color=e._color,t._key=e._key,t}const n=e.length,o=e[0].length,a=[];for(let t=0;t<o;t++){a[t]=[];for(let o=n-1;o>=0;o--)a[t].push(e[o][t])}return a._color=e._color,a._key=e._key,a}const pentaPieces={I:{shape:[[1,1,1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,0],[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[0,1],[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[0,1,0],[1,1,0]],color:CYBER_COLORS.S},T:{shape:[[1,1,1],[0,1,0],[0,1,0]],color:CYBER_COLORS.T},P:{shape:[[1,1],[1,1],[1,0]],color:CYBER_COLORS.O}},pentaKeys=["I","L","J","Z","S","T","P"];function createPentaPiece(){const e=pentaKeys[Math.floor(Math.random()*pentaKeys.length)],t=pentaPieces[e],n=t.shape.map((e=>[...e]));return n._color=t.color,n._key=e,n}function rotatePentaMatrix(e){const t=e.length,n=e[0].length,o=[];for(let a=0;a<n;a++){o[a]=[];for(let n=t-1;n>=0;n--)o[a].push(e[n][a])}return o._color=e._color,o._key=e._key,o}const player={pos:{x:5,y:0},matrix:null,nextMatrix:null,score:0,lines:0,level:1,spins:0,crazySpins:!1,isTetraMode:!1,isPentaMode:!1},gameState={initialized:!1,paused:!1,introSongPlayed:!1,gameOver:!1};let dropCounter=0,dropInterval=1e3,lastTime=0,animationFrameId=null,gameOverAnimation={active:!1,startTime:0,duration:4e3,matrix:null,pos:{x:0,y:0}};function collide(e,t){if(t.isTetraMode){const[n,o]=[t.matrix,t.pos];for(let t=0;t<n.length;++t)for(let a=0;a<n[t].length;++a)if(0!==n[t][a]){const n=t+o.y,r=a+o.x;if(n<0||n>=arenaHeight||r<0||r>=arenaWidth)return!0;const s=e[n]?.[r];if(0!==s&&"bonus"!==s)return!0}return!1}const[n,o]=[t.matrix,t.pos];for(let t=0;t<n.length;++t)for(let a=0;a<n[t].length;++a)if(0!==n[t][a]){const n=t+o.y,r=a+o.x;if(n<0||n>=arenaHeight||r<0||r>=arenaWidth)return!0;const s=e[n]?.[r];if(0!==s&&"bonus"!==s)return!0}return!1}function spawnBonus(){if(activeBonus)return;if(bonusSpawnCooldown>0)return void bonusSpawnCooldown--;const e=["STAR","CLOVER","CANDY"],t=e[Math.floor(Math.random()*e.length)],n=BONUS_TYPES[t];let o;o="easy"===selectedDifficulty?arenaHeight-5:"medium"===selectedDifficulty?arenaHeight-8:5;let a,r,s=0,l=!1;for(;s<50&&!l;)r=Math.floor(Math.random()*o),a=Math.floor(Math.random()*arenaWidth),arena[r]&&0===arena[r][a]&&(l=!0),s++;l&&(activeBonus={type:t,x:a,y:r,symbol:n.symbol,points:n.points,color:n.color,label:n.label},arena[r][a]="bonus")}function checkBonusCollision(){if(!activeBonus)return!1;for(let e=0;e<player.matrix.length;e++)for(let t=0;t<player.matrix[e].length;t++){const n=player.pos.y+e,o=player.pos.x+t;if(arena[n]&&"bonus"===arena[n][o]){const e=activeBonus;return arena[n][o]=0,player.score+=e.points,"function"==typeof saveVKScore&&saveVKScore(player.score),showBonusNotification(e),activeBonus=null,bonusSpawnCooldown=7,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.15),!0}}return!1}function showBonusNotification(e){const t=(window.getText||(e=>e))("bonus")||"Бонус!",n=document.createElement("div");n.style.cssText=`\n        position: fixed; bottom: 30px; left: 50%;\n        transform: translateX(-50%) translateY(100px);\n        background: rgba(20, 20, 30, 0.92);\n        border: 2px solid ${e.color||"#FFD700"};\n        border-radius: 20px; padding: 16px 30px;\n        display: flex; align-items: center; gap: 16px;\n        z-index: 99999; opacity: 0;\n        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);\n        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);\n        backdrop-filter: blur(20px);\n        font-family: 'Russo One', sans-serif;\n        pointer-events: none;\n    `,n.innerHTML=`\n        <span>${e.symbol}</span>\n        <div>\n            <span style="color: #fff; text-transform: uppercase;">${t}</span>\n            <span style="color: ${e.color}; display: block;">${e.label}</span>\n        </div>\n        <span style="color: ${e.color}; font-weight: bold;">+${e.points}</span>\n    `,document.body.appendChild(n),requestAnimationFrame((()=>{n.style.opacity="1",n.style.transform="translateX(-50%) translateY(0)"})),setTimeout((()=>{n.style.opacity="0",n.style.transform="translateX(-50%) translateY(-30px)",setTimeout((()=>{n.parentNode&&n.remove()}),400)}),2e3)}function merge(e,t){if(t.isTetraMode||t.isPentaMode){const n=t.matrix._color||"#ff0000";t.matrix.forEach(((o,a)=>{o.forEach(((o,r)=>{if(0!==o){const o=t.pos.y+a,s=t.pos.x+r;o>=0&&o<arenaHeight&&s>=0&&s<arenaWidth&&"bonus"!==e[o][s]&&(e[o][s]=n)}}))}))}else t.matrix.forEach(((n,o)=>{n.forEach(((n,a)=>{if(0!==n){const r=t.pos.y+o,s=t.pos.x+a;r>=0&&r<arenaHeight&&s>=0&&s<arenaWidth&&"bonus"!==e[r][s]&&(e[r][s]=n)}}))}))}
+let arenaWidth = 10;
+let arenaHeight = 20;
+let arena = [];
+let soundMuted = false;
+let musicMuted = true;
+let currentMusicTrack = null;
+let isGameStarted = false;
+let isGameOver = false;
+let audioInitialized = false;
+let selectedMode = 'classic';
+let selectedDifficulty = 'medium';
+let difficultyMultiplier = 1;
+let slowDownInterval = null;
+let isSlowDownActive = false;
+let comboDisplayTimer = null;
+let dailyBonusClaimedToday = false; 
+let lastInterstitialAdTime = 0; 
+let pendingSlowDown = false;
+let slowDownTimerId = null;
+let currentScrollPage = 1;
+const SCROLLS_PER_PAGE = 5;
+const TOTAL_SCROLLS = 100;
+let currentCollectionPage = 1;
+let currentCollectionCategory = null;
+const COLLECTION_ITEMS_PER_PAGE = 15;
+const CATEGORY_ORDER = ['blocks', 'animals', 'plants', 'space'];
+const BONUS_TYPES={STAR:{symbol:"⭐",points:3,color:"#FFD700",label:"Звезда"},CLOVER:{symbol:"🍀",points:2,color:"#22c55e",label:"Клевер"},CANDY:{symbol:"🍬",points:1,color:"#f472b6",label:"Конфета"}};
+let activeBonus = null;
+let bonusSpawnCooldown = 0;
+const BONUS_SPAWN_CHANCE = 0.15;
+const BONUS_MAX_COOLDOWN = 7;
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
+const CYBER_COLORS={I:"#00ffff",O:"#FFE138",T:"#ff00ff",S:"#00ff66",Z:"#ff0055",L:"#ffaa00",J:"#0066ff"},colors=[null,CYBER_COLORS.I,CYBER_COLORS.O,CYBER_COLORS.T,CYBER_COLORS.S,CYBER_COLORS.Z,CYBER_COLORS.L,CYBER_COLORS.J];function calculateOptimalArenaWidth(){const e=document.querySelector(".canvas-container");if(!e)return 14;const t=e.getBoundingClientRect().width-12;if(t<=0)return 14;return/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)?t>=500?18:t>=400?16:14:t>=1e3?24:t>=800?22:t>=600?20:22}function updateCanvasSize(){const e=document.querySelector(".canvas-container");if(!e)return;const t=e.getBoundingClientRect(),n=.85*window.innerHeight,r=t.width-12,c=Math.min(t.height-12,n);r<=0||c<=0||(canvas.width=r,canvas.height=c)}function createMatrix(e,t){const n=[];for(;t--;)n.push(new Array(e).fill(0));return n}function createPiece(e){switch(e){case"T":return[[0,0,0],[1,1,1],[0,1,0]];case"O":return[[2,2],[2,2]];case"L":return[[0,3,0],[0,3,0],[0,3,3]];case"J":return[[0,4,0],[0,4,0],[4,4,0]];case"I":return[[0,5,0,0],[0,5,0,0],[0,5,0,0],[0,5,0,0]];case"S":return[[0,6,6],[6,6,0],[0,0,0]];case"Z":return[[7,7,0],[0,7,7],[0,0,0]];default:return[[0]]}}const pieces="ILJOTSZ",tetraPieces={I:{shape:[[1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[1,1,0]],color:CYBER_COLORS.S},O:{shape:[[1,1],[1,1]],color:CYBER_COLORS.O},T:{shape:[[0,1,0],[1,1,1],[0,1,0]],color:CYBER_COLORS.T}};
+const tetraKeys = ['I', 'L', 'J', 'Z', 'S', 'O', 'T'];
+function createTetraPiece(){const e=tetraKeys[Math.floor(Math.random()*tetraKeys.length)],t=tetraPieces[e],o=t.shape.map((e=>[...e]));return o._color=t.color,o._key=e,o}function rotateTetraMatrix(e){const t=e._key;if("O"===t||"T"===t){const t=e.map((e=>[...e]));return t._color=e._color,t._key=e._key,t}const o=e.length,r=e[0].length,c=[];for(let t=0;t<r;t++){c[t]=[];for(let r=o-1;r>=0;r--)c[t].push(e[r][t])}return c._color=e._color,c._key=e._key,c}
+const pentaPieces={I:{shape:[[1,1,1,1,1]],color:CYBER_COLORS.I},L:{shape:[[1,0],[1,0],[1,0],[1,1]],color:CYBER_COLORS.L},J:{shape:[[0,1],[0,1],[0,1],[1,1]],color:CYBER_COLORS.J},Z:{shape:[[1,1,0],[0,1,0],[0,1,1]],color:CYBER_COLORS.Z},S:{shape:[[0,1,1],[0,1,0],[1,1,0]],color:CYBER_COLORS.S},T:{shape:[[1,1,1],[0,1,0],[0,1,0]],color:CYBER_COLORS.T},P:{shape:[[1,1],[1,1],[1,0]],color:CYBER_COLORS.O}};
+const pentaKeys = ['I', 'L', 'J', 'Z', 'S', 'T', 'P'];
+function createPentaPiece(){const e=pentaKeys[Math.floor(Math.random()*pentaKeys.length)],t=pentaPieces[e],o=t.shape.map((e=>[...e]));return o._color=t.color,o._key=e,o}function rotatePentaMatrix(e){const t=e.length,o=e[0].length,n=[];for(let r=0;r<o;r++){n[r]=[];for(let o=t-1;o>=0;o--)n[r].push(e[o][r])}return n._color=e._color,n._key=e._key,n}
+const player={pos:{x:5,y:0},matrix:null,nextMatrix:null,score:0,lines:0,level:1,spins:0,crazySpins:!1,isTetraMode:!1,isPentaMode:!1},gameState={initialized:!1,paused:!1,introSongPlayed:!1,gameOver:!1};
+let dropCounter = 0;
+let dropInterval = 1000;
+let lastTime = 0;
+let animationFrameId = null;
+let gameOverAnimation = {
+    active: false,
+    startTime: 0,
+    duration: 4000,
+    matrix: null,
+    pos: { x: 0, y: 0 }
+};
+function collide(arena, player) {
+    if (player.isTetraMode) {
+        const [m, o] = [player.matrix, player.pos];
+        for (let y = 0; y < m.length; ++y) {
+            for (let x = 0; x < m[y].length; ++x) {
+                if (m[y][x] !== 0) {
+                    const arenaY = y + o.y;
+                    const arenaX = x + o.x;
+                    if (arenaY < 0 || arenaY >= arenaHeight || arenaX < 0 || arenaX >= arenaWidth) return true;
+                    const cell = arena[arenaY]?.[arenaX];
+                    if (cell !== 0 && cell !== 'bonus') return true;
+                }
+            }
+        }
+        return false;
+    }
+    const [m, o] = [player.matrix, player.pos];
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
+            if (m[y][x] !== 0) {
+                const arenaY = y + o.y;
+                const arenaX = x + o.x;
+                if (arenaY < 0 || arenaY >= arenaHeight || arenaX < 0 || arenaX >= arenaWidth) return true;
+                const cell = arena[arenaY]?.[arenaX];
+                if (cell !== 0 && cell !== 'bonus') return true;
+            }
+        }
+    }
+    return false;
+}
+function spawnBonus(){if(activeBonus)return;if(bonusSpawnCooldown>0)return void bonusSpawnCooldown--;const o=["STAR","CLOVER","CANDY"],e=o[Math.floor(Math.random()*o.length)],n=BONUS_TYPES[e];let a;a="easy"===selectedDifficulty?arenaHeight-5:"medium"===selectedDifficulty?arenaHeight-8:5;let t,r,l=0,i=!1;for(;l<50&&!i;)r=Math.floor(Math.random()*a),t=Math.floor(Math.random()*arenaWidth),arena[r]&&0===arena[r][t]&&(i=!0),l++;i&&(activeBonus={type:e,x:t,y:r,symbol:n.symbol,points:n.points,color:n.color,label:n.label},arena[r][t]="bonus")}function checkBonusCollision(){if(!activeBonus)return!1;for(let o=0;o<player.matrix.length;o++)for(let e=0;e<player.matrix[o].length;e++){const n=player.pos.y+o,a=player.pos.x+e;if(arena[n]&&"bonus"===arena[n][a]){const o=activeBonus;return arena[n][a]=0,player.score+=o.points,"function"==typeof saveVKScore&&saveVKScore(player.score),showBonusNotification(o),activeBonus=null,bonusSpawnCooldown=BONUS_MAX_COOLDOWN,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.15),!0}}return!1}
+function showBonusNotification(bonus) {
+    const t = window.getText || (key => key);
+    const bonusText = t('bonus') || 'Бонус!';
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed; bottom: 30px; left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: rgba(20, 20, 30, 0.92);
+        border: 2px solid ${bonus.color || '#FFD700'};
+        border-radius: 20px; padding: 16px 30px;
+        display: flex; align-items: center; gap: 16px;
+        z-index: 99999; opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        font-family: 'Russo One', sans-serif;
+        pointer-events: none;
+    `;
+    notification.innerHTML = `
+        <span>${bonus.symbol}</span>
+        <div>
+            <span style="color: #fff; text-transform: uppercase;">${bonusText}</span>
+            <span style="color: ${bonus.color}; display: block;">${bonus.label}</span>
+        </div>
+        <span style="color: ${bonus.color}; font-weight: bold;">+${bonus.points}</span>
+    `;
+    document.body.appendChild(notification);
+    requestAnimationFrame(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(-50%) translateY(-30px)';
+        setTimeout(() => { if (notification.parentNode) notification.remove(); }, 400);
+    }, 2000);
+}
+function merge(o,a){if(a.isTetraMode||a.isPentaMode){const e=a.matrix._color||"#ff0000";a.matrix.forEach(((r,i)=>{r.forEach(((r,t)=>{if(0!==r){const r=a.pos.y+i,n=a.pos.x+t;r>=0&&r<arenaHeight&&n>=0&&n<arenaWidth&&"bonus"!==o[r][n]&&(o[r][n]=e)}}))}))}else a.matrix.forEach(((e,r)=>{e.forEach(((e,i)=>{if(0!==e){const t=a.pos.y+r,n=a.pos.x+i;t>=0&&t<arenaHeight&&n>=0&&n<arenaWidth&&"bonus"!==o[t][n]&&(o[t][n]=e)}}))}))}
 function arenaSweep() {
     let rowsCleared = 0;
     let rowMultiplier = 1;
-for(let e=arenaHeight-1;e>=0;e--){let l=!0;for(let a=0;a<arenaWidth;a++)if(0===arena[e][a]||"bonus"===arena[e][a]){l=!1;break}if(l){let l;arena.splice(e,1)[0],arena.unshift(new Array(arenaWidth).fill(0)),rowsCleared++,player.lines++,l="easy"===selectedDifficulty?1:"hard"===selectedDifficulty?3:2,player.score+=rowMultiplier*l,rowMultiplier*=2,e++}}rowsCleared>1&&showComboDisplay(rowsCleared),rowsCleared>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);let oldLevel=player.level;player.lines>=5&&1===player.level?player.level=2:player.lines>=10&&2===player.level?player.level=3:player.lines>=20&&3===player.level?player.level=4:player.lines>=40&&4===player.level?player.level=5:player.lines>=80&&5===player.level?player.level=6:player.lines>=160&&6===player.level?player.level=7:player.lines>=320&&7===player.level?player.level=8:player.lines>=640&&8===player.level&&(player.level=9),oldLevel!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),rowsCleared>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25);
-    if (typeof saveVKScore === 'function' && player && player.score !== undefined) {
-        saveVKScore(player.score);
+    for (let y = arenaHeight - 1; y >= 0; y--) {
+        let full = true;
+        for (let x = 0; x < arenaWidth; x++) {
+            if (arena[y][x] === 0 || arena[y][x] === 'bonus') {
+                full = false;
+                break;
+            }
+        }
+        if (full) {
+            const row = arena.splice(y, 1)[0];
+            arena.unshift(new Array(arenaWidth).fill(0));
+            rowsCleared++;
+            player.lines++;
+            let pointsPerLine;
+            if (selectedDifficulty === 'easy') pointsPerLine = 1;
+            else if (selectedDifficulty === 'hard') pointsPerLine = 3;
+            else pointsPerLine = 2;
+            player.score += rowMultiplier * pointsPerLine;
+            rowMultiplier *= 2;
+            y++;
+        }
     }
+  rowsCleared>1&&showComboDisplay(rowsCleared);
+rowsCleared>0&&(Math.random()<BONUS_SPAWN_CHANCE&&!activeBonus&&spawnBonus(),bonusSpawnCooldown>0&&bonusSpawnCooldown--);
+    let oldLevel = player.level;
+    if (player.lines >= 5 && player.level === 1) player.level = 2;
+    else if (player.lines >= 10 && player.level === 2) player.level = 3;
+    else if (player.lines >= 20 && player.level === 3) player.level = 4;
+    else if (player.lines >= 40 && player.level === 4) player.level = 5;
+    else if (player.lines >= 80 && player.level === 5) player.level = 6;
+    else if (player.lines >= 160 && player.level === 6) player.level = 7;
+    else if (player.lines >= 320 && player.level === 7) player.level = 8;
+    else if (player.lines >= 640 && player.level === 8) player.level = 9;
+oldLevel!==player.level&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("levelup",.2),rowsCleared>0&&"undefined"!=typeof gameAudio&&gameAudio.playOneShot("sweep",.25),"function"==typeof saveVKScore&&player&&void 0!==player.score&&saveVKScore(player.score);
     return rowsCleared;
 }
-function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merge(arena,player),checkBonusCollision(),playerReset(),arenaSweep(),"undefined"!=typeof gameAudio&&gameAudio.playOneShot("collide",.05)),dropCounter=0}
-function playerMove(dir) {
-    player.pos.x += dir;
-    if (collide(arena, player)) player.pos.x -= dir;
-    if (typeof gameAudio !== 'undefined' && !gameState.paused && isGameStarted) {
-        gameAudio.playOneShot('rotate', 0.02);
-    }
-}
+function playerDrop(){player.pos.y++,collide(arena,player)&&(player.pos.y--,merge(arena,player),checkBonusCollision(),playerReset(),arenaSweep(),"undefined"!=typeof gameAudio&&gameAudio.playOneShot("collide",.05)),dropCounter=0}function playerMove(e){player.pos.x+=e,collide(arena,player)&&(player.pos.x-=e),"undefined"!=typeof gameAudio&&!gameState.paused&&isGameStarted&&gameAudio.playOneShot("rotate",.02)}
 function rotate(e,r){for(let r=0;r<e.length;++r)for(let t=0;t<r;++t)[e[t][r],e[r][t]]=[e[r][t],e[t][r]];r>0?e.forEach((e=>e.reverse())):e.reverse()}
-function playerRotate(dir) {
-    const pos = player.pos.x;
-    let offset = 1;
-    if (player.isTetraMode) {
-        const originalMatrix = player.matrix.map(row => [...row]);
-        const rotatedMatrix = rotateTetraMatrix(player.matrix);
-        player.matrix = rotatedMatrix;
-        const maxX = arenaWidth - player.matrix[0].length;
-        if (player.pos.x < 0) player.pos.x = 0;
-        if (player.pos.x > maxX) player.pos.x = maxX;
-        if (collide(arena, player)) {
-            player.matrix = originalMatrix;
-            return;
-        }
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        return;
-    }
-    if (player.isPentaMode) {
-        const originalMatrix = player.matrix.map(row => [...row]);
-        const rotatedMatrix = rotatePentaMatrix(player.matrix);
-        player.matrix = rotatedMatrix;
-        const maxX = arenaWidth - player.matrix[0].length;
-        if (player.pos.x < 0) player.pos.x = 0;
-        if (player.pos.x > maxX) player.pos.x = maxX;
-        if (collide(arena, player)) {
-            player.matrix = originalMatrix;
-            return;
-        }
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        return;
-    }
-    rotate(player.matrix, dir);
-    while (collide(arena, player)) {
-        player.pos.x += offset;
-        offset = -(offset + (offset > 0 ? 1 : -1));
-        if (offset > player.matrix[0].length) {
-            rotate(player.matrix, -dir);
-            player.pos.x = pos;
-            return;
-        }
-    }
-    if (!player.crazySpins) {
-        if (typeof gameAudio !== 'undefined') gameAudio.playOneShot('rotate', 0.15);
-        player.spins++;
-    }
-   if (player.spins > 25) {
-    player.crazySpins = true;
-    if (typeof gameAudio !== 'undefined') {
-        gameAudio.playOneShot('highspins', 0.2);
-    }
-    player.spins = 0;
-    setTimeout(() => {
-        player.crazySpins = false;
-    }, 2000);
-}
-}
-function playerReset(){player.isTetraMode?(player.matrix=player.nextMatrix,player.nextMatrix=createTetraPiece()):player.isPentaMode?(player.matrix=player.nextMatrix,player.nextMatrix=createPentaPiece()):(player.matrix=player.nextMatrix,player.nextMatrix=createPiece(pieces[Math.floor(Math.random()*pieces.length)])),player.pos.y=0;const e=arenaWidth-player.matrix[0].length;player.pos.x=Math.floor(e/2),collide(arena,player)&&startGameOverAnimation()}function startGameOverAnimation(){gameOverAnimation.active=!0,gameOverAnimation.startTime=Date.now(),gameOverAnimation.matrix=player.matrix.map((e=>[...e])),gameOverAnimation.pos={x:player.pos.x,y:player.pos.y},gameState.initialized=!1,isGameStarted=!1,gameState.paused=!1,stopSounds(),animationFrameId&&cancelAnimationFrame(animationFrameId),lastTime=0,dropCounter=0,update()}
+function playerRotate(e){const a=player.pos.x;let r=1;if(player.isTetraMode){const e=player.matrix.map((e=>[...e])),a=rotateTetraMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}if(player.isPentaMode){const e=player.matrix.map((e=>[...e])),a=rotatePentaMatrix(player.matrix);player.matrix=a;const r=arenaWidth-player.matrix[0].length;return player.pos.x<0&&(player.pos.x=0),player.pos.x>r&&(player.pos.x=r),collide(arena,player)?void(player.matrix=e):void("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15))}for(rotate(player.matrix,e);collide(arena,player);)if(player.pos.x+=r,r=-(r+(r>0?1:-1)),r>player.matrix[0].length)return rotate(player.matrix,-e),void(player.pos.x=a);player.crazySpins||("undefined"!=typeof gameAudio&&gameAudio.playOneShot("rotate",.15),player.spins++),player.spins>25&&(player.crazySpins=!0,"undefined"!=typeof gameAudio&&gameAudio.playOneShot("highspins",.2),player.spins=0,setTimeout((()=>{player.crazySpins=!1}),2e3))}function playerReset(){player.isTetraMode?(player.matrix=player.nextMatrix,player.nextMatrix=createTetraPiece()):player.isPentaMode?(player.matrix=player.nextMatrix,player.nextMatrix=createPentaPiece()):(player.matrix=player.nextMatrix,player.nextMatrix=createPiece(pieces[Math.floor(Math.random()*pieces.length)])),player.pos.y=0;const e=arenaWidth-player.matrix[0].length;player.pos.x=Math.floor(e/2),collide(arena,player)&&startGameOverAnimation()}
+function startGameOverAnimation(){gameOverAnimation.active=!0,gameOverAnimation.startTime=Date.now(),gameOverAnimation.matrix=player.matrix.map((a=>[...a])),gameOverAnimation.pos={x:player.pos.x,y:player.pos.y},gameState.initialized=!1,isGameStarted=!1,gameState.paused=!1,stopSounds(),animationFrameId&&cancelAnimationFrame(animationFrameId),lastTime=0,dropCounter=0,update()}
 function drawGameOverAnimation() {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -94,7 +181,22 @@ function drawGameOverAnimation() {
     context.fillRect(0, 0, canvasWidth, canvasHeight);
     context.fillStyle = '#0a0a0f';
     context.fillRect(0, topPanelHeight, canvasWidth, gameAreaHeight);
-for(let t=0;t<arenaHeight;t++)for(let e=0;e<arenaWidth;e++){const o=arena[t][e];if(0!==o&&"bonus"!==o){const l=offsetX+e*blockSize,c=offsetY+t*blockSize;let i;i="string"==typeof o&&o.startsWith("#")?o:colors[o]||"#FFF",context.fillStyle=i,context.fillRect(l,c,blockSize-.5,blockSize-.5),context.strokeStyle="rgba(0,0,0,0.3)",context.strokeRect(l,c,blockSize-.5,blockSize-.5)}}
+    for (let y = 0; y < arenaHeight; y++) {
+        for (let x = 0; x < arenaWidth; x++) {
+            const value = arena[y][x];
+            if (value !== 0 && value !== 'bonus') {
+                const posX = offsetX + x * blockSize;
+                const posY = offsetY + y * blockSize;
+                let fillColor;
+                if (typeof value === 'string' && value.startsWith('#')) fillColor = value;
+                else fillColor = colors[value] || '#FFF';
+                context.fillStyle = fillColor;
+                context.fillRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
+                context.strokeStyle = "rgba(0,0,0,0.3)";
+                context.strokeRect(posX, posY, blockSize - 0.5, blockSize - 0.5);
+            }
+        }
+    }
     const elapsed = Date.now() - gameOverAnimation.startTime;
     const maxDuration = gameOverAnimation.duration;
     if (elapsed < maxDuration) {
@@ -1159,31 +1261,7 @@ let html = `
         const isClaimed = progress[itemId] || false;
         const imgPath = `images/${category.folder}/${i}.png`;
         let bgColor, borderColor, clickAction, content;
-        if (isClaimed) {
-            bgColor = 'rgba(52, 211, 153, 0.08)';
-            borderColor = 'rgba(52, 211, 153, 0.4)';
-            clickAction = `openFullImage('${imgPath}', ${i}, '${categoryId}')`;
-            content = `<img src="${imgPath}" alt="${categoryName} ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.style.display='none'">`;
-        } else if (isAvailable) {
-            bgColor = 'rgba(255, 215, 0, 0.08)';
-            borderColor = 'rgba(255, 215, 0, 0.3)';
-            clickAction = `claimCollectionItem('${categoryId}', ${i}, ${page})`;
-            content = `
-                <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: clamp(22px, 5vw, 28px);">✋</span>
-                    <span style="font-size: clamp(6px, 1.5vw, 8px); color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t('getBonus') || 'Забрать'}</span>
-                </div>
-            `;
-        } else {
-            bgColor = 'rgba(30,30,40,0.5)';
-            borderColor = 'rgba(255,255,255,0.05)';
-            clickAction = `showLockReason('${categoryId}', ${i})`;
-            content = `
-                <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <span style="font-size: clamp(22px, 5vw, 28px);">🔒</span>
-                </div>
-            `;
-        }
+isClaimed?(bgColor="rgba(52, 211, 153, 0.08)",borderColor="rgba(52, 211, 153, 0.4)",clickAction=`openFullImage('${imgPath}', ${i}, '${categoryId}')`,content=`<img src="${imgPath}" alt="${categoryName} ${i}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.style.display='none'">`):isAvailable?(bgColor="rgba(255, 215, 0, 0.08)",borderColor="rgba(255, 215, 0, 0.3)",clickAction=`claimCollectionItem('${categoryId}', ${i}, ${page})`,content=`\n                <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">\n                    <span style="font-size: clamp(22px, 5vw, 28px);">✋</span>\n                    <span style="font-size: clamp(6px, 1.5vw, 8px); color: #fcd34d; font-family: 'Russo One', sans-serif; margin-top: 2px;">${t("getBonus")||"Забрать"}</span>\n                </div>\n            `):(bgColor="rgba(30,30,40,0.5)",borderColor="rgba(255,255,255,0.05)",clickAction=`showLockReason('${categoryId}', ${i})`,content='\n                <div style="width: 100%; height: 100%; background: #1a1a2e; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">\n                    <span style="font-size: clamp(22px, 5vw, 28px);">🔒</span>\n                </div>\n            ');
         html += `
             <div style="aspect-ratio: 3/4; background: ${bgColor}; border: 2px solid ${borderColor}; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; cursor: pointer; transition: all 0.2s; overflow: hidden;" onclick="${clickAction}">
                 ${content}
@@ -1475,543 +1553,14 @@ function renderScrolls() {
     const endIndex = Math.min(startIndex + SCROLLS_PER_PAGE, TOTAL_SCROLLS);
     container.innerHTML = '';
     let scrollText = window.getText ? window.getText('scroll') : 'Свиток';
-    if (scrollText === 'scroll') scrollText = 'Свиток';
-    for (let i = startIndex + 1; i <= endIndex; i++) {
-        const isAvailable = isScrollUnlocked(i, playerScore);
-        const isClaimed = progress[i] || false;
-        let icon = '🔒', bgColor = 'rgba(255, 255, 255, 0.02)', borderColor = 'rgba(255, 255, 255, 0.05)', boxShadow = '', animation = '', action = '';
-        if (isClaimed) {
-            icon = getCheckmarkSVG();
-            bgColor = 'rgba(52, 211, 153, 0.05)';
-            borderColor = 'rgba(52, 211, 153, 0.2)';
-            boxShadow = 'box-shadow: 0 0 15px rgba(52, 211, 153, 0.05);';
-            action = `openScrollTextModal(${i})`;
-        } else if (isAvailable) {
-            icon = '✋';
-            bgColor = 'rgba(255, 215, 0, 0.08)';
-            borderColor = 'rgba(255, 215, 0, 0.3)';
-            boxShadow = 'box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);';
-            animation = 'animation: pulse-gold 1.5s ease-in-out infinite;';
-            action = `claimScroll(${i})`;
-        } else {
-            icon = '🔒';
-            action = `openScrollTextModal(${i})`;
-        }
-        const scrollItem = document.createElement('div');
-        scrollItem.className = 'scroll-item';  
-        scrollItem.style.cssText = `display: flex; justify-content: space-between; align-items: center; background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; cursor: pointer; transition: all 0.2s; ${boxShadow} ${animation}`;
-        scrollItem.onclick = () => { if (isClaimed) openScrollTextModal(i); else if (isAvailable) claimScroll(i); else openScrollTextModal(i); };
-        scrollItem.onmouseover = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.5)' : isAvailable ? 'rgba(255, 215, 0, 0.5)' : 'rgba(255, 255, 255, 0.15)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.08)' : isAvailable ? 'rgba(255, 215, 0, 0.12)' : 'rgba(255, 255, 255, 0.04)'; };
-        scrollItem.onmouseout = () => { scrollItem.style.borderColor = isClaimed ? 'rgba(52, 211, 153, 0.2)' : isAvailable ? 'rgba(255, 215, 0, 0.3)' : 'rgba(255, 255, 255, 0.05)'; scrollItem.style.background = isClaimed ? 'rgba(52, 211, 153, 0.05)' : isAvailable ? 'rgba(255, 215, 0, 0.08)' : 'rgba(255, 255, 255, 0.02)'; };
-        scrollItem.innerHTML = `<span style="color: ${isClaimed ? '#e2e8f0' : isAvailable ? '#fcd34d' : '#64748b'}; font-family: 'Russo One', sans-serif; font-size: 15px;">${scrollText} ${i}${isAvailable && !isClaimed ? ' <span style="font-size: 11px; color: #fcd34d;">✨</span>' : ''}</span><span style="font-size: 22px; transition: all 0.3s; display: flex; align-items: center;">${icon}</span>`;
-        container.appendChild(scrollItem);
-    }
-   const pageSpan = document.querySelector('#scrolls-modal .pagination-page');
-if (pageSpan) {
-    pageSpan.textContent = `${currentScrollPage} / ${totalPages}`;
+"scroll"===scrollText&&(scrollText="Свиток");for(let e=startIndex+1;e<=endIndex;e++){const o=isScrollUnlocked(e,playerScore),a=progress[e]||!1;let r="🔒",l="rgba(255, 255, 255, 0.02)",n="rgba(255, 255, 255, 0.05)",s="",t="",c="";a?(r=getCheckmarkSVG(),l="rgba(52, 211, 153, 0.05)",n="rgba(52, 211, 153, 0.2)",s="box-shadow: 0 0 15px rgba(52, 211, 153, 0.05);",c=`openScrollTextModal(${e})`):o?(r="✋",l="rgba(255, 215, 0, 0.08)",n="rgba(255, 215, 0, 0.3)",s="box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);",t="animation: pulse-gold 1.5s ease-in-out infinite;",c=`claimScroll(${e})`):(r="🔒",c=`openScrollTextModal(${e})`);const i=document.createElement("div");i.className="scroll-item",i.style.cssText=`display: flex; justify-content: space-between; align-items: center; background: ${l}; border: 1px solid ${n}; border-radius: 12px; cursor: pointer; transition: all 0.2s; ${s} ${t}`,i.onclick=()=>{a?openScrollTextModal(e):o?claimScroll(e):openScrollTextModal(e)},i.onmouseover=()=>{i.style.borderColor=a?"rgba(52, 211, 153, 0.5)":o?"rgba(255, 215, 0, 0.5)":"rgba(255, 255, 255, 0.15)",i.style.background=a?"rgba(52, 211, 153, 0.08)":o?"rgba(255, 215, 0, 0.12)":"rgba(255, 255, 255, 0.04)"},i.onmouseout=()=>{i.style.borderColor=a?"rgba(52, 211, 153, 0.2)":o?"rgba(255, 215, 0, 0.3)":"rgba(255, 255, 255, 0.05)",i.style.background=a?"rgba(52, 211, 153, 0.05)":o?"rgba(255, 215, 0, 0.08)":"rgba(255, 255, 255, 0.02)"},i.innerHTML=`<span style="color: ${a?"#e2e8f0":o?"#fcd34d":"#64748b"}; font-family: 'Russo One', sans-serif; font-size: 15px;">${scrollText} ${e}${o&&!a?' <span style="font-size: 11px; color: #fcd34d;">✨</span>':""}</span><span style="font-size: 22px; transition: all 0.3s; display: flex; align-items: center;">${r}</span>`,container.appendChild(i)}const pageSpan=document.querySelector("#scrolls-modal .pagination-page");pageSpan&&(pageSpan.textContent=`${currentScrollPage} / ${totalPages}`);
 }
-}
-function nextScrollPage() {
-    const totalPages = Math.ceil(TOTAL_SCROLLS / SCROLLS_PER_PAGE);
-    if (currentScrollPage < totalPages) {
-        currentScrollPage++;
-        renderScrolls();
-    }
-}
-function prevScrollPage() {
-    if (currentScrollPage > 1) {
-        currentScrollPage--;
-        renderScrolls();
-    }
-}
-function getCheckmarkSVG() {
-    return `<span class="achievement-item__checkmark" style="display: inline-block; width: 24px; height: 24px; flex-shrink: 0; position: relative;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="11" stroke="#34d399" stroke-width="2" fill="rgba(52, 211, 153, 0.1)"/>
-            <path class="checkmark-path" d="M7 12L10.5 16L17 8" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray: 30; stroke-dashoffset: 0; animation: checkmarkDraw 2s ease-in-out infinite;"/>
-        </svg>
-    </span>`;
-}
-function openScrollsModal() {
-    if (typeof loadTotalProgress === 'function') loadTotalProgress();
-    const modal = document.getElementById('scrolls-modal');
-    if (modal) { modal.style.display = 'flex'; renderScrolls(); }
-}
-function closeScrollsModal() {
-    const scrollsModal = document.getElementById('scrolls-modal');
-    if (scrollsModal) scrollsModal.style.display = 'none';
-    const rewardsModal = document.getElementById('rewards-center-modal');
-    if (rewardsModal) rewardsModal.style.display = 'flex';
-}
-function openScrollTextModal(scrollId) {
-      console.log('📜 openScrollTextModal вызван для', scrollId);
-    const playerScore = player ? player.score : 0;
-    const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-    const totalScore = Math.max(playerScore, savedScore);
-    const progress = getScrollsProgress();
-    const isAvailable = isScrollUnlocked(scrollId, totalScore);
-    const isClaimed = progress[scrollId] || false;
-    if (isAvailable && !isClaimed) { claimScroll(scrollId); return; }
-if (!isAvailable) {
-    const t = window.getText || (key => key);
-    const neededPoints = scrollId <= 50 ? scrollId * 100 : 5000 + (scrollId - 50) * 300;
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100001;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(15px);
-    `;
-    modal.innerHTML += `
-        <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px);">
-            <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>
-            <!-- Убрали строку с замком -->
-            <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t('scrollLockedTitle')}</h2>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px; font-family: 'Russo One', sans-serif; line-height: 1.6;">${t('scrollLockedText')}</p>
-            <p style="color: #fcd34d; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">💡 ${t('needPoints') || 'Нужно'}: ${neededPoints} ${t('points') || 'очков'}</p>
-            <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${t('ok')}</button>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    return;
-}
-    const modal = document.getElementById('scroll-text-modal');
-    const titleEl = document.getElementById('scroll-text-title');
-    const contentEl = document.getElementById('scroll-text-content');
-     console.log('📜 Элементы модалки:', { modal, titleEl, contentEl });
-    if (modal && titleEl && contentEl) {
-        titleEl.textContent = `📜 ${window.getText ? window.getText('scroll') : 'Свиток'} ${scrollId}`;
-        contentEl.textContent = getScrollText(scrollId);
-        modal.style.display = 'flex';
-        if (typeof updateInterfaceLanguage === 'function') updateInterfaceLanguage();
-    }
-}
-function closeScrollTextModal() {
-    const modal = document.getElementById('scroll-text-modal');
-    if (modal) modal.style.display = 'none';
-}
-function openRewardsCenter() {
-    document.querySelectorAll('[id$="-modal"]').forEach(el => {
-        if (el.id !== 'rewards-center-modal' && el.id !== 'scroll-text-modal') {
-            el.style.display = 'none';
-        }
-    });
-    const modal = document.getElementById('rewards-center-modal');
-    if (!modal) return;
-    modal.style.cssText = `display: flex; position: fixed ; top: 0 ; left: 0; width: 100% ; height: 100% ; z-index: 99999 !important; justify-content: center ; align-items: center ; overflow: auto ; padding: 20px ; background: url('1.jpg') no-repeat center center fixed; background-size: cover;`;
-    const scoreEl = document.getElementById('rewards-player-score');
-    if (scoreEl) {
-        const totalScore = parseInt(localStorage.getItem('totalScore') || '0');
-        scoreEl.textContent = formatScore(totalScore);
-    }
-    const scrollProgress = document.getElementById('scrolls-progress');
-    if (scrollProgress) {
-        const savedScore = parseInt(localStorage.getItem('totalScore') || '0');
-        const unlocked = countUnlockedScrolls(savedScore);
-        scrollProgress.textContent = `${unlocked}/100`;
-    }
-    updateDailyBonusStatus();
-    updateCollectionsProgress();
-    modal.style.display = 'flex';
-}
-function closeRewardsCenter() {
-    const modal = document.getElementById('rewards-center-modal');
-    if (modal) modal.style.display = 'none';
-    const scrollsModal = document.getElementById('scrolls-modal');
-    if (scrollsModal) scrollsModal.style.display = 'none';
-    const scrollTextModal = document.getElementById('scroll-text-modal');
-    if (scrollTextModal) scrollTextModal.style.display = 'none';
-    const menu = document.getElementById('main-menu-modal');
-    if (menu) menu.style.display = 'flex';
-}
-function openScrollsFromRewards() {
-    const rewardsModal = document.getElementById('rewards-center-modal');
-    if (rewardsModal) rewardsModal.style.display = 'none';
-    openScrollsModal();
-}
-function formatScore(value) {
-    if (value >= 1000000) {
-        const millions = value / 1000000;
-        return millions % 1 === 0 ? millions + 'M' : millions.toFixed(1) + 'M';
-    } else if (value >= 1000) {
-        const thousands = value / 1000;
-        return thousands % 1 === 0 ? thousands + 'K' : thousands.toFixed(1) + 'K';
-    }
-    return value.toString();
-}
-function countUnlockedScrolls(playerScore) {
-    let count = 0;
-    for (let i = 1; i <= TOTAL_SCROLLS; i++) {
-        if (isScrollUnlocked(i, playerScore)) count++;
-    }
-    return count;
-}
-function getTodayKey() {
-    const today = new Date();
-    return `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-}
-function isDailyBonusClaimedToday() {
-    const todayKey = getTodayKey();
-    const lastClaimed = localStorage.getItem('dailyBonusDate');
-    return lastClaimed === todayKey;
-}
-function updateDailyBonusStatus() {
-    dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    const statusEl = document.getElementById('daily-bonus-status');
-    if (!statusEl) return;
-    if (dailyBonusClaimedToday) {
-        statusEl.innerHTML = getCheckmarkSVG();
-        statusEl.style.color = '#34d399';
-        statusEl.style.fontSize = '20px';
-        statusEl.style.display = 'inline-flex';
-        statusEl.style.alignItems = 'center';
-    } else {
-        statusEl.textContent = '';
-        statusEl.style.color = '#fcd34d';
-        statusEl.style.fontSize = '12px';
-    }
-}
-function openDailyBonus() {
-    dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    if (dailyBonusClaimedToday) {
-        showCustomModal({
-            title: '✅ Уже получено!',
-            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
-            type: 'info',
-            button: 'OK'
-        });
-        return;
-    }
-    const t = window.getText || (key => key);
-    const oldModal = document.getElementById('daily-bonus-modal');
-    if (oldModal) oldModal.remove();
-    const modal = document.createElement('div');
-    modal.id = 'daily-bonus-modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100002;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: url('1.jpg') no-repeat center center fixed;
-        background-size: cover;
-    `;
-modal.innerHTML += `
-    <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-        <button class="modal-close-btn" onclick="this.closest('#daily-bonus-modal').remove()">✕</button>
-        <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>
-        <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">
-            ${t('dailyBonus') || 'Ежедневный бонус'}
-        </h2>
-        <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">
-            ${t('dailyBonusText') || 'Получить +10 очков?'}
-        </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">       
-            <button class="modal-action-btn" onclick="claimDailyBonus()" style="flex: 1 1 auto; min-width: 100px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
-                🎁+10
-            </button>
-            <button class="modal-action-btn" onclick="claimEnhancedDailyBonus()" style="flex: 1 1 auto; min-width: 120px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">
-                📺+25
-            </button>
-                 <button class="modal-action-btn" onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1 1 auto; min-width: 80px; padding: 12px 14px; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">
-                ${t('cancel') || 'Отмена'}
-            </button>
-        </div>
-    </div>
-`;
-    document.body.appendChild(modal);
-}
-function claimDailyBonus() {
-    dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    if (dailyBonusClaimedToday) {
-        const modal = document.getElementById('daily-bonus-modal');
-        if (modal) modal.remove();
-        showCustomModal({
-            title: '✅ Уже получено!',
-            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
-            type: 'info',
-            button: 'OK'
-        });
-        return;
-    }
-    const todayKey = getTodayKey(); 
-    let total = parseInt(localStorage.getItem('totalScore') || '0');
-    total += 10;
-    localStorage.setItem('totalScore', total);
-    window.totalScore = total;
-    if (typeof saveToVKStorage === 'function') {
-        saveToVKStorage('tetris_total_score_v1', total);
-    }
-    localStorage.setItem('dailyBonusDate', todayKey);
-    dailyBonusClaimedToday = true;
-    if (typeof saveToVKStorage === 'function') {
-        saveToVKStorage('tetris_daily_bonus_v1', todayKey);
-    }
-    const modal = document.getElementById('daily-bonus-modal');
-    if (modal) modal.remove();
-    updateDailyBonusStatus();
-    const scoreEl = document.getElementById('rewards-player-score');
-    if (scoreEl) {
-        scoreEl.textContent = formatScore(total);
-    }
-    showSuccessModal('🎉 Бонус получен!', '+10 очков в общую копилку!');
-}
-function claimEnhancedDailyBonus() {
-    dailyBonusClaimedToday = isDailyBonusClaimedToday();
-    if (dailyBonusClaimedToday) {
-        const modal = document.getElementById('daily-bonus-modal');
-        if (modal) modal.remove();
-        showCustomModal({
-            title: '✅ Уже получено!',
-            text: 'Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!',
-            type: 'info',
-            button: 'OK'
-        });
-        return;
-    }
-    if (isGameStarted && !isGameOver && !gameState.paused) {
-        pauseGame();
-    }
-    const modal = document.getElementById('daily-bonus-modal');
-    if (modal) modal.remove();
-    showRewardedAdForContinue().then((success) => {
-        if (success) {
-            const todayKey = getTodayKey();
-            let total = parseInt(localStorage.getItem('totalScore') || '0');
-            total += 25;
-            localStorage.setItem('totalScore', total);
-            window.totalScore = total;
-            if (typeof saveToVKStorage === 'function') {
-                saveToVKStorage('tetris_total_score_v1', total);
-            }
-            localStorage.setItem('dailyBonusDate', todayKey);
-            dailyBonusClaimedToday = true;
-            if (typeof saveToVKStorage === 'function') {
-                saveToVKStorage('tetris_daily_bonus_v1', todayKey);
-            }
-            updateDailyBonusStatus();
-            const scoreEl = document.getElementById('rewards-player-score');
-            if (scoreEl) {
-                scoreEl.textContent = formatScore(total);
-            }
-            showCustomModal({
-                title: '🎉 Усиленный бонус получен!',
-                text: '+25 очков! Спасибо за просмотр рекламы!',
-                type: 'success',
-                button: 'OK'
-            });
-        } else {
-            showCustomModal({
-                title: '❌ Реклама недоступна',
-                text: 'Попробуйте позже или возьмите обычный бонус (+10).',
-                type: 'error',
-                button: 'OK'
-            });
-            if (gameState.paused && isGameStarted && !isGameOver) {
-                resumeGame();
-            }
-        }
-    });
-}
-function showSuccessModal(title, text) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100003;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    `;
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: -1;
-    `;
-    modal.appendChild(overlay);
-    modal.innerHTML += `
-        <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-            <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
-            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${title}</h2>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${text}</p>
-            <button onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">
-                OK
-            </button>
-        </div>
-    `;
-    document.body.appendChild(modal);
-}
-     function clearTopRows() {
-    hideSlowDownIndicator();
-    isSlowDownActive = false;
-    if (slowDownTimerId) {
-        clearTimeout(slowDownTimerId);
-        slowDownTimerId = null;
-    }
-    pendingSlowDown = false;
-    const rowsToClear = 7;
-    let hasBlocks = false;
-    for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
-        for (let x = 0; x < arenaWidth; x++) {
-            if (arena[y][x] !== 0 && arena[y][x] !== 'bonus') {
-                hasBlocks = true;
-                break;
-            }
-        }
-        if (hasBlocks) break;
-    }
-    if (!hasBlocks) {
-        showCustomModal({
-            title: '⚠️ Верхние ряды пусты',
-            text: 'Нет блоков для удаления. Продолжайте игру!',
-            type: 'info',
-            button: 'OK'
-        });
-        return false;
-    }
-    arena.splice(0, rowsToClear);
-    for (let i = 0; i < rowsToClear; i++) {
-        arena.unshift(new Array(arenaWidth).fill(0));
-    }
-    for (let y = 0; y < rowsToClear && y < arenaHeight; y++) {
-        for (let x = 0; x < arenaWidth; x++) {
-            if (arena[y][x] === 'bonus') {
-                arena[y][x] = 0;
-            }
-        }
-    }
-    player.pos.y = 0;
-    const maxX = arenaWidth - player.matrix[0].length;
-    player.pos.x = Math.floor(maxX / 2);
-    if (collide(arena, player)) {
-        player.pos.y = -1;
-    }
-    console.log(`🧹 Стерто ${rowsToClear} верхних рядов`);
-    return true;
-}
+function nextScrollPage(){const e=Math.ceil(TOTAL_SCROLLS/SCROLLS_PER_PAGE);currentScrollPage<e&&(currentScrollPage++,renderScrolls())}function prevScrollPage(){currentScrollPage>1&&(currentScrollPage--,renderScrolls())}function getCheckmarkSVG(){return'<span class="achievement-item__checkmark" style="display: inline-block; width: 24px; height: 24px; flex-shrink: 0; position: relative;">\n        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">\n            <circle cx="12" cy="12" r="11" stroke="#34d399" stroke-width="2" fill="rgba(52, 211, 153, 0.1)"/>\n            <path class="checkmark-path" d="M7 12L10.5 16L17 8" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray: 30; stroke-dashoffset: 0; animation: checkmarkDraw 2s ease-in-out infinite;"/>\n        </svg>\n    </span>'}function openScrollsModal(){"function"==typeof loadTotalProgress&&loadTotalProgress();const e=document.getElementById("scrolls-modal");e&&(e.style.display="flex",renderScrolls())}function closeScrollsModal(){const e=document.getElementById("scrolls-modal");e&&(e.style.display="none");const t=document.getElementById("rewards-center-modal");t&&(t.style.display="flex")}function openScrollTextModal(e){const t=player?player.score:0,n=parseInt(localStorage.getItem("totalScore")||"0"),o=Math.max(t,n),l=getScrollsProgress(),s=isScrollUnlocked(e,o),a=l[e]||!1;if(s&&!a)return void claimScroll(e);if(!s){const t=window.getText||(e=>e),n=e<=50?100*e:5e3+300*(e-50),o=document.createElement("div");return o.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 100001;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        backdrop-filter: blur(8px);\n        -webkit-backdrop-filter: blur(15px);\n    ",o.innerHTML+=`\n        <div class="modal-content" style="border: 2px solid rgba(239, 68, 68, 0.3); max-width: 400px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px);">\n            <button class="modal-close-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()">✕</button>\n            \x3c!-- Убрали строку с замком --\x3e\n            <h2 style="color: #ef4444; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${t("scrollLockedTitle")}</h2>\n            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 12px; font-family: 'Russo One', sans-serif; line-height: 1.6;">${t("scrollLockedText")}</p>\n            <p style="color: #fcd34d; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">💡 ${t("needPoints")||"Нужно"}: ${n} ${t("points")||"очков"}</p>\n            <button class="modal-action-btn" onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;">${t("ok")}</button>\n        </div>\n    `,void document.body.appendChild(o)}const i=document.getElementById("scroll-text-modal"),r=document.getElementById("scroll-text-title"),d=document.getElementById("scroll-text-content");i&&r&&d&&(r.textContent=`📜 ${window.getText?window.getText("scroll"):"Свиток"} ${e}`,d.textContent=getScrollText(e),i.style.display="flex","function"==typeof updateInterfaceLanguage&&updateInterfaceLanguage())}function closeScrollTextModal(){const e=document.getElementById("scroll-text-modal");e&&(e.style.display="none")}function openRewardsCenter(){document.querySelectorAll('[id$="-modal"]').forEach((e=>{"rewards-center-modal"!==e.id&&"scroll-text-modal"!==e.id&&(e.style.display="none")}));const e=document.getElementById("rewards-center-modal");if(!e)return;e.style.cssText="display: flex; position: fixed ; top: 0 ; left: 0; width: 100% ; height: 100% ; z-index: 99999 !important; justify-content: center ; align-items: center ; overflow: auto ; padding: 20px ; background: url('1.jpg') no-repeat center center fixed; background-size: cover;";const t=document.getElementById("rewards-player-score");if(t){const e=parseInt(localStorage.getItem("totalScore")||"0");t.textContent=formatScore(e)}const n=document.getElementById("scrolls-progress");if(n){const e=countUnlockedScrolls(parseInt(localStorage.getItem("totalScore")||"0"));n.textContent=`${e}/100`}updateDailyBonusStatus(),updateCollectionsProgress(),e.style.display="flex"}function closeRewardsCenter(){const e=document.getElementById("rewards-center-modal");e&&(e.style.display="none");const t=document.getElementById("scrolls-modal");t&&(t.style.display="none");const n=document.getElementById("scroll-text-modal");n&&(n.style.display="none");const o=document.getElementById("main-menu-modal");o&&(o.style.display="flex")}function openScrollsFromRewards(){const e=document.getElementById("rewards-center-modal");e&&(e.style.display="none"),openScrollsModal()}function formatScore(e){if(e>=1e6){const t=e/1e6;return t%1==0?t+"M":t.toFixed(1)+"M"}if(e>=1e3){const t=e/1e3;return t%1==0?t+"K":t.toFixed(1)+"K"}return e.toString()}function countUnlockedScrolls(e){let t=0;for(let n=1;n<=TOTAL_SCROLLS;n++)isScrollUnlocked(n,e)&&t++;return t}function getTodayKey(){const e=new Date;return`${e.getFullYear()}-${e.getMonth()}-${e.getDate()}`}function isDailyBonusClaimedToday(){const e=getTodayKey();return localStorage.getItem("dailyBonusDate")===e}function updateDailyBonusStatus(){dailyBonusClaimedToday=isDailyBonusClaimedToday();const e=document.getElementById("daily-bonus-status");e&&(dailyBonusClaimedToday?(e.innerHTML=getCheckmarkSVG(),e.style.color="#34d399",e.style.fontSize="20px",e.style.display="inline-flex",e.style.alignItems="center"):(e.textContent="",e.style.color="#fcd34d",e.style.fontSize="12px"))}function openDailyBonus(){if(dailyBonusClaimedToday=isDailyBonusClaimedToday(),dailyBonusClaimedToday)return void showCustomModal({title:"✅ Уже получено!",text:"Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!",type:"info",button:"OK"});const e=window.getText||(e=>e),t=document.getElementById("daily-bonus-modal");t&&t.remove();const n=document.createElement("div");n.id="daily-bonus-modal",n.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 100002;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        background: url('1.jpg') no-repeat center center fixed;\n        background-size: cover;\n    ",n.innerHTML+=`\n    <div class="modal-content" style="background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(52, 211, 153, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">\n        <button class="modal-close-btn" onclick="this.closest('#daily-bonus-modal').remove()">✕</button>\n        <div style="font-size: 48px; margin-bottom: 16px;">🎁</div>\n        <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">\n            ${e("dailyBonus")||"Ежедневный бонус"}\n        </h2>\n        <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif; margin-bottom: 20px;">\n            ${e("dailyBonusText")||"Получить +10 очков?"}\n        </p>\n        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">       \n            <button class="modal-action-btn" onclick="claimDailyBonus()" style="flex: 1 1 auto; min-width: 100px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">\n                🎁+10\n            </button>\n            <button class="modal-action-btn" onclick="claimEnhancedDailyBonus()" style="flex: 1 1 auto; min-width: 120px; padding: 12px 14px; font-size: 13px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);">\n                📺+25\n            </button>\n                 <button class="modal-action-btn" onclick="this.closest('#daily-bonus-modal').remove()" style="flex: 1 1 auto; min-width: 80px; padding: 12px 14px; font-size: 13px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8;">\n                ${e("cancel")||"Отмена"}\n            </button>\n        </div>\n    </div>\n`,document.body.appendChild(n)}
+function claimDailyBonus(){if(dailyBonusClaimedToday=isDailyBonusClaimedToday(),dailyBonusClaimedToday){const e=document.getElementById("daily-bonus-modal");return e&&e.remove(),void showCustomModal({title:"✅ Уже получено!",text:"Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!",type:"info",button:"OK"})}const e=getTodayKey();let t=parseInt(localStorage.getItem("totalScore")||"0");t+=10,localStorage.setItem("totalScore",t),window.totalScore=t,"function"==typeof saveToVKStorage&&saveToVKStorage("tetris_total_score_v1",t),localStorage.setItem("dailyBonusDate",e),dailyBonusClaimedToday=!0,"function"==typeof saveToVKStorage&&saveToVKStorage("tetris_daily_bonus_v1",e);const o=document.getElementById("daily-bonus-modal");o&&o.remove(),updateDailyBonusStatus();const a=document.getElementById("rewards-player-score");a&&(a.textContent=formatScore(t)),showSuccessModal("🎉 Бонус получен!","+10 очков в общую копилку!")}function claimEnhancedDailyBonus(){if(dailyBonusClaimedToday=isDailyBonusClaimedToday(),dailyBonusClaimedToday){const e=document.getElementById("daily-bonus-modal");return e&&e.remove(),void showCustomModal({title:"✅ Уже получено!",text:"Ты уже получил ежедневный бонус сегодня. Возвращайся завтра!",type:"info",button:"OK"})}!isGameStarted||isGameOver||gameState.paused||pauseGame();const e=document.getElementById("daily-bonus-modal");e&&e.remove(),showRewardedAdForContinue().then((e=>{if(e){const e=getTodayKey();let t=parseInt(localStorage.getItem("totalScore")||"0");t+=25,localStorage.setItem("totalScore",t),window.totalScore=t,"function"==typeof saveToVKStorage&&saveToVKStorage("tetris_total_score_v1",t),localStorage.setItem("dailyBonusDate",e),dailyBonusClaimedToday=!0,"function"==typeof saveToVKStorage&&saveToVKStorage("tetris_daily_bonus_v1",e),updateDailyBonusStatus();const o=document.getElementById("rewards-player-score");o&&(o.textContent=formatScore(t)),showCustomModal({title:"🎉 Усиленный бонус получен!",text:"+25 очков! Спасибо за просмотр рекламы!",type:"success",button:"OK"})}else showCustomModal({title:"❌ Реклама недоступна",text:"Попробуйте позже или возьмите обычный бонус (+10).",type:"error",button:"OK"}),gameState.paused&&isGameStarted&&!isGameOver&&resumeGame()}))}function showSuccessModal(e,t){const o=document.createElement("div");o.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 100003;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n    ";const a=document.createElement("div");a.style.cssText="\n        position: absolute;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: rgba(0, 0, 0, 0.6);\n        z-index: -1;\n    ",o.appendChild(a),o.innerHTML+=`\n        <div class="modal-content" style="background: rgba(20, 20, 30, 0.95); border: 2px solid rgba(34, 197, 94, 0.3); width: 90%; max-width: 400px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">\n            <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>\n            <h2 style="color: #34d399; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; font-family: 'Russo One', sans-serif;">${e}</h2>\n            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px; font-family: 'Russo One', sans-serif;">${t}</p>\n            <button onclick="this.closest('div[style*=\\'position: fixed\\']').remove()" style="width: 100%; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);">\n                OK\n            </button>\n        </div>\n    `,document.body.appendChild(o)}function clearTopRows(){hideSlowDownIndicator(),isSlowDownActive=!1,slowDownTimerId&&(clearTimeout(slowDownTimerId),slowDownTimerId=null),pendingSlowDown=!1;let e=!1;for(let t=0;t<7&&t<arenaHeight;t++){for(let o=0;o<arenaWidth;o++)if(0!==arena[t][o]&&"bonus"!==arena[t][o]){e=!0;break}if(e)break}if(!e)return showCustomModal({title:"⚠️ Верхние ряды пусты",text:"Нет блоков для удаления. Продолжайте игру!",type:"info",button:"OK"}),!1;arena.splice(0,7);for(let e=0;e<7;e++)arena.unshift(new Array(arenaWidth).fill(0));for(let e=0;e<7&&e<arenaHeight;e++)for(let t=0;t<arenaWidth;t++)"bonus"===arena[e][t]&&(arena[e][t]=0);player.pos.y=0;const t=arenaWidth-player.matrix[0].length;return player.pos.x=Math.floor(t/2),collide(arena,player)&&(player.pos.y=-1),!0}
 let isRewardedAdLoading = false;
-function showRewardedAdForContinue() {
-    return new Promise((resolve) => {
-        if (isRewardedAdLoading) {
-            resolve(false);
-            return;
-        }
-        if (!vkInitialized) {
-            console.warn('⚠️ VK не инициализирован');
-            resolve(false);
-            return;
-        }
-        isRewardedAdLoading = true;
-        showLoadingAdModal();
-        if (typeof gameAudio !== 'undefined') {
-            gameAudio.pauseAll();
-        }
-        vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward', use_waterfall: true  })
-            .then((data) => {
-                console.log('✅ Реклама за вознаграждение показана:', data);
-                closeLoadingAdModal();
-                isRewardedAdLoading = false;
-                resolve(true);
-            })
-            .catch((error) => {
-                console.error('❌ Ошибка показа рекламы за вознаграждение:', error);
-                closeLoadingAdModal();
-                isRewardedAdLoading = false;
-                resolve(false);
-            });
-    });
-}
-function showVKFullscreenAd() {
-    const now = Date.now();
-    if (now - lastInterstitialAdTime < 35000) {
-        console.log('⏳ Межэкранная реклама: прошло менее 30 секунд, пропускаем');
-        return;
-    }
-    if (typeof vkBridge === 'undefined') return;
-    vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'interstitial' })
-        .then((data) => {
-            if (data.result) {
-                lastInterstitialAdTime = now; 
-                console.log('✅ Межэкранная реклама показана');
-            }
-        })
-        .catch((error) => {
-            console.warn('⚠️ Ошибка показа межэкранной рекламы:', error);
-        });
-}
-function showLoadingAdModal() {
-    const modal = document.createElement('div');
-    modal.id = 'loading-ad-modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100010;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(10, 10, 14, 0.85);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-    `;
-    modal.innerHTML = `
-        <div class="modal-content" style="text-align: center; color: #fff;">
-            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s ease-in-out infinite;">📺</div>
-            <h2 style="color: #34d399; font-size: 24px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
-                Загрузка рекламы...
-            </h2>
-            <p style="color: #94a3b8; font-size: 14px; font-family: 'Russo One', sans-serif;">
-                Пожалуйста, подождите
-            </p>
-            <div style="margin-top: 20px; width: 60px; height: 60px; margin-left: auto; margin-right: auto;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite; width: 100%; height: 100%;">
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                </svg>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    if (!document.getElementById('ad-animation-styles')) {
-        const style = document.createElement('style');
-        style.id = 'ad-animation-styles';
-        style.textContent = `
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); opacity: 1; }
-                50% { transform: scale(1.1); opacity: 0.7; }
-            }
-            @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-}
-function closeLoadingAdModal() {
-    const modal = document.getElementById('loading-ad-modal');
-    if (modal) modal.remove();
-}
+function showRewardedAdForContinue(){return new Promise((e=>{if(isRewardedAdLoading)return void e(!1);if("undefined"==typeof vkBridge)return void e(!1);if(!vkInitialized)return void e(!1);if(!navigator.onLine)return void e(!1);isRewardedAdLoading=!0,showLoadingAdModal(),"undefined"!=typeof gameAudio&&gameAudio.pauseAll();let t=!1,i=null,n=!1;function d(){i&&(clearTimeout(i),i=null)}function s(e){d(),t||n||(i=setTimeout((function(){t||n||o(!1)}),e||12e4))}function o(i){if(!t){if(t=!0,d(),document.removeEventListener("visibilitychange",u),closeLoadingAdModal(),isRewardedAdLoading=!1,i){if("function"==typeof preloadRewardedAd)try{preloadRewardedAd()}catch(e){}}else"undefined"!=typeof gameAudio&&gameAudio.resumeAll();e(!!i)}}function u(){document.hidden?(n=!0,d()):t||(n=!1,s(9e4))}document.addEventListener("visibilitychange",u),s(12e4);let r=0;function a(){t||(s(9e4),vkBridge.send("VKWebAppShowNativeAds",{ad_format:"interstitial",use_waterfall:!0}).then((function(e){t||o(!(!e||!0!==e.result&&1!==e.result&&"ok"!==e.result&&"success"!==e.result&&!0!==e.success&&"success"!==e.status))})).catch((function(e){t||o(!1)})))}!function e(){t||(r++,vkBridge.send("VKWebAppCheckNativeAds",{ad_format:"reward"}).then((function(i){if(t)return;const n=i&&(!0===i.result||1===i.result||"ok"===i.result);!n&&r<6?setTimeout(e,3e3):n?vkBridge.send("VKWebAppShowNativeAds",{ad_format:"reward",use_waterfall:!0}).then((function(e){t||(!e||!0!==e.result&&1!==e.result&&"ok"!==e.result&&"success"!==e.result&&!0!==e.success&&"success"!==e.status?a():o(!0))})).catch((function(e){t||a()})):a()})).catch((function(e){t||a()})))}()}))}function showVKFullscreenAd(){const e=Date.now();e-lastInterstitialAdTime<35e3||"undefined"!=typeof vkBridge&&vkBridge.send("VKWebAppShowNativeAds",{ad_format:"interstitial"}).then((t=>{t.result&&(lastInterstitialAdTime=e)})).catch((e=>{}))}
+function showLoadingAdModal(){const n=document.createElement("div");if(n.id="loading-ad-modal",n.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 100010;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        background: rgba(10, 10, 14, 0.85);\n        backdrop-filter: blur(15px);\n        -webkit-backdrop-filter: blur(15px);\n    ",n.innerHTML='\n        <div class="modal-content" style="text-align: center; color: #fff;">\n            <div style="font-size: 48px; margin-bottom: 20px; animation: pulse 1s ease-in-out infinite;">📺</div>\n            <h2 style="color: #34d399; font-size: 24px; font-family: \'Russo One\', sans-serif; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">\n                Загрузка рекламы...\n            </h2>\n            <p style="color: #94a3b8; font-size: 14px; font-family: \'Russo One\', sans-serif;">\n                Пожалуйста, подождите\n            </p>\n            <div style="margin-top: 20px; width: 60px; height: 60px; margin-left: auto; margin-right: auto;">\n                <svg viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite; width: 100%; height: 100%;">\n                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>\n                </svg>\n            </div>\n        </div>\n    ',document.body.appendChild(n),!document.getElementById("ad-animation-styles")){const n=document.createElement("style");n.id="ad-animation-styles",n.textContent="\n            @keyframes pulse {\n                0%, 100% { transform: scale(1); opacity: 1; }\n                50% { transform: scale(1.1); opacity: 0.7; }\n            }\n            @keyframes spin {\n                from { transform: rotate(0deg); }\n                to { transform: rotate(360deg); }\n            }\n        ",document.head.appendChild(n)}}
+function closeLoadingAdModal(){const o=document.getElementById("loading-ad-modal");o&&o.remove()}
 async function handleContinueWithAd() {
     const confirmed = await showContinueConfirmationModal();
     if (!confirmed) return;
@@ -2155,174 +1704,8 @@ function showContinueConfirmationModal() {
         };
     });
 }
-function showSlowDownModal() {
-    if (!isGameStarted || isGameOver) {
-        showCustomModal({
-            title: '⚠️ Игра не активна',
-            text: 'Начните игру, чтобы использовать замедление!',
-            type: 'info',
-            button: 'OK'
-        });
-        return;
-    }
-    if (isSlowDownActive) {
-        showCustomModal({
-            title: '🐢 Замедление уже активно!',
-            text: 'Подождите, пока эффект закончится.',
-            type: 'info',
-            button: 'OK'
-        });
-        return;
-    }
-    if (!gameState.paused) {
-        pauseGame();
-    }
-    const modal = document.createElement('div');
-    modal.id = 'slowdown-confirm-modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 100020;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: url('1.jpg') no-repeat center center fixed;
-        background-size: cover;
-    `;
-    const overlay = document.createElement('div');
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: -1;
-    `;
-    modal.appendChild(overlay);
-    modal.innerHTML += `
-        <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">
-            <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>
-            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: 'Russo One', sans-serif;">
-                Замедлить?
-            </h2>
-            <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: 'Russo One', sans-serif; margin-bottom: 8px;">
-                Посмотрите рекламу и <strong style="color: #fcd34d;">замедлите падение фигурок</strong> на <strong>15 секунд</strong>!
-            </p>
-            <p style="color: #64748b; font-size: 13px; font-family: 'Russo One', sans-serif; margin-bottom: 24px;">
-                ⏱️ Идеально для сложных моментов!
-            </p>
-        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                <button onclick="document.getElementById('slowdown-confirm-modal').remove(); if (gameState.paused) resumeGame();" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">
-                    Отмена
-                </button>
-                <button onclick="activateSlowDown()" style="flex: 1; padding: 14px; font-size: 16px; font-family: 'Russo One', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #34d399, #059669); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(52, 211, 153, 0.3);">
-                    🐢 Замедлить
-                </button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-}
-function activateSlowDown() {
-    const confirmModal = document.getElementById('slowdown-confirm-modal');
-    if (confirmModal) confirmModal.remove();
-    showRewardedAdForContinue().then((success) => {
-        if (success) {
-            pendingSlowDown = true;
-            showCustomModal({
-                title: '🐢 Фигурки замедлятся!',
-                text: 'Падение замедлено на 15 секунд!',
-                type: 'success',
-                button: 'OK',
-                timer: 2000
-            });                   
-        } else {
-            showCustomModal({
-                title: '❌ Реклама недоступна',
-                text: 'Попробуйте позже.',
-                type: 'error',
-                button: 'OK'
-            });         
-        }
-    });
-}
-function applySlowDownEffect() {
-    if (isSlowDownActive) return;
-    isSlowDownActive = true;
-    const originalDropInterval = dropInterval;
-    dropInterval = originalDropInterval * 3;
-    showSlowDownIndicator();
-    if (slowDownTimerId) {
-        clearTimeout(slowDownTimerId);
-        slowDownTimerId = null;
-    }
-  slowDownTimerId = setTimeout(() => {
-    dropInterval = originalDropInterval;
-    isSlowDownActive = false;
-    hideSlowDownIndicator();
-    slowDownTimerId = null;
-}, 15000);
-}
-function showSlowDownIndicator() {
-    let indicator = document.getElementById('slowdown-indicator');
-    if (!indicator) {
-        indicator = document.createElement('div');
-        indicator.id = 'slowdown-indicator';
-        indicator.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            color: #34d399;
-            text-shadow: 0 0 40px rgba(52, 211, 153, 0.5);
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            font-family: 'Russo One', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        `;
-        indicator.innerHTML = `
-            <span>🐢</span>
-            <span style="font-size: 16px; color: #94a3b8;">ЗАМЕДЛЕНИЕ</span>
-            <span style="font-size: 12px; color: #64748b;" id="slowdown-timer">15с</span>
-        `;
-        document.body.appendChild(indicator);
-    }
-    setTimeout(() => {
-        indicator.style.opacity = '1';
-    }, 100);
-    let seconds = 15;
-    const timerEl = document.getElementById('slowdown-timer');
-    if (timerEl) {
-        timerEl.textContent = `${seconds}с`;
-        const interval = setInterval(() => {
-            seconds--;
-            if (seconds <= 0) {
-                clearInterval(interval);
-                return;
-            }
-            timerEl.textContent = `${seconds}с`;
-        }, 1000);
-    }
-}
-function hideSlowDownIndicator() {
-    const indicator = document.getElementById('slowdown-indicator');
-    if (indicator) {
-        indicator.style.opacity = '0';
-        setTimeout(() => {
-            if (indicator.parentNode) indicator.remove();
-        }, 400);
-    }
-}
+function showSlowDownModal(){if(!isGameStarted||isGameOver)return void showCustomModal({title:"⚠️ Игра не активна",text:"Начните игру, чтобы использовать замедление!",type:"info",button:"OK"});if(isSlowDownActive)return void showCustomModal({title:"🐢 Замедление уже активно!",text:"Подождите, пока эффект закончится.",type:"info",button:"OK"});gameState.paused||pauseGame();const n=document.createElement("div");n.id="slowdown-confirm-modal",n.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        z-index: 100020;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        background: url('1.jpg') no-repeat center center fixed;\n        background-size: cover;\n    ";const t=document.createElement("div");t.style.cssText="\n        position: fixed;\n        top: 0;\n        left: 0;\n        width: 100%;\n        height: 100%;\n        background: rgba(0, 0, 0, 0.6);\n        z-index: -1;\n    ",n.appendChild(t),n.innerHTML+='\n        <div class="modal-content" style="background: rgba(20, 20, 30, 0.92); border: 2px solid rgba(52, 211, 153, 0.4); width: 90%; max-width: 420px; border-radius: 30px; padding: clamp(24px, 6vw, 35px) clamp(16px, 5vw, 30px); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); text-align: center; position: relative; animation: modalPopIn 0.3s ease;">\n            <div style="font-size: 48px; margin-bottom: 16px;">🐢</div>\n            <h2 style="color: #34d399; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; font-family: \'Russo One\', sans-serif;">\n                Замедлить?\n            </h2>\n            <p style="color: #94a3b8; font-size: 15px; line-height: 1.6; font-family: \'Russo One\', sans-serif; margin-bottom: 8px;">\n                Посмотрите рекламу и <strong style="color: #fcd34d;">замедлите падение фигурок</strong> на <strong>15 секунд</strong>!\n            </p>\n            <p style="color: #64748b; font-size: 13px; font-family: \'Russo One\', sans-serif; margin-bottom: 24px;">\n                ⏱️ Идеально для сложных моментов!\n            </p>\n        <div style="display: flex; flex-wrap: wrap; gap: 12px;">\n                <button onclick="document.getElementById(\'slowdown-confirm-modal\').remove(); if (gameState.paused) resumeGame();" style="flex: 1; padding: 14px; font-size: 16px; font-family: \'Russo One\', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; cursor: pointer; transition: all 0.2s;">\n                    Отмена\n                </button>\n                <button onclick="activateSlowDown()" style="flex: 1; padding: 14px; font-size: 16px; font-family: \'Russo One\', sans-serif; text-transform: uppercase; letter-spacing: 2px; color: #fff; background: linear-gradient(135deg, #34d399, #059669); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(52, 211, 153, 0.3);">\n                    🐢 Замедлить\n                </button>\n            </div>\n        </div>\n    ',document.body.appendChild(n)}function activateSlowDown(){const n=document.getElementById("slowdown-confirm-modal");n&&n.remove(),showRewardedAdForContinue().then((n=>{n?(pendingSlowDown=!0,showCustomModal({title:"🐢 Фигурки замедлятся!",text:"Падение замедлено на 15 секунд!",type:"success",button:"OK",timer:2e3})):showCustomModal({title:"❌ Реклама недоступна",text:"Попробуйте позже.",type:"error",button:"OK"})}))}
+function applySlowDownEffect(){if(isSlowDownActive)return;isSlowDownActive=!0;const n=dropInterval;dropInterval=3*n,showSlowDownIndicator(),slowDownTimerId&&(clearTimeout(slowDownTimerId),slowDownTimerId=null),slowDownTimerId=setTimeout((()=>{dropInterval=n,isSlowDownActive=!1,hideSlowDownIndicator(),slowDownTimerId=null}),15e3)}function showSlowDownIndicator(){let n=document.getElementById("slowdown-indicator");n||(n=document.createElement("div"),n.id="slowdown-indicator",n.style.cssText="\n            position: fixed;\n            top: 50%;\n            left: 50%;\n            transform: translate(-50%, -50%);\n            font-size: 48px;\n            color: #34d399;\n            text-shadow: 0 0 40px rgba(52, 211, 153, 0.5);\n            z-index: 9999;\n            pointer-events: none;\n            opacity: 0;\n            transition: opacity 0.3s ease;\n            font-family: 'Russo One', sans-serif;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            gap: 8px;\n        ",n.innerHTML='\n            <span>🐢</span>\n            <span style="font-size: 16px; color: #94a3b8;">ЗАМЕДЛЕНИЕ</span>\n            <span style="font-size: 12px; color: #64748b;" id="slowdown-timer">15с</span>\n        ',document.body.appendChild(n)),setTimeout((()=>{n.style.opacity="1"}),100);let o=15;const e=document.getElementById("slowdown-timer");if(e){e.textContent=`${o}с`;const n=setInterval((()=>{o--,o<=0?clearInterval(n):e.textContent=`${o}с`}),1e3)}}function hideSlowDownIndicator(){const n=document.getElementById("slowdown-indicator");n&&(n.style.opacity="0",setTimeout((()=>{n.parentNode&&n.remove()}),400))}
 function showComboDisplay(rowsCleared) {
     const oldDisplay = document.getElementById('combo-display');
     if (oldDisplay) oldDisplay.remove();
@@ -2357,53 +1740,14 @@ function showComboDisplay(rowsCleared) {
         text-align: center;
         line-height: 1.2;
     `;
-    let color = '#fcd34d';
-    let glowColor = 'rgba(255, 215, 0, 0.8)';
-    if (rowsCleared >= 5) {
-        color = '#ff6b6b';
-        glowColor = 'rgba(255, 107, 107, 0.8)';
-    } else if (rowsCleared >= 4) {
-        color = '#ff922b';
-        glowColor = 'rgba(255, 146, 43, 0.8)';
-    } else if (rowsCleared >= 3) {
-        color = '#fcc419';
-        glowColor = 'rgba(252, 196, 25, 0.8)';
-    }
+let color="#fcd34d",glowColor="rgba(255, 215, 0, 0.8)";rowsCleared>=5?(color="#ff6b6b",glowColor="rgba(255, 107, 107, 0.8)"):rowsCleared>=4?(color="#ff922b",glowColor="rgba(255, 146, 43, 0.8)"):rowsCleared>=3&&(color="#fcc419",glowColor="rgba(252, 196, 25, 0.8)");
     let comboText = `x${rowsCleared}`;
     let subText = `${rowsCleared} линии`;
     if (rowsCleared === 2) subText = `${rowsCleared} линии`;
     else if (rowsCleared === 3) subText = `${rowsCleared} линии`;
     else if (rowsCleared === 4) subText = `${rowsCleared} линии`;
     else if (rowsCleared >= 5) subText = `${rowsCleared} линий`;
-    display.innerHTML = `
-        <div style="color: ${color}; text-shadow: 0 0 40px ${glowColor}, 0 0 80px ${glowColor}40;">
-            ${comboText}
-        </div>
-        <div style="font-size: ${rowsCleared >= 5 ? 20 : 16}px; color: #94a3b8; text-shadow: none; margin-top: -8px;">
-            ${subText}
-        </div>
-    `;
-    document.body.appendChild(display);
-    requestAnimationFrame(() => {
-        display.style.opacity = '1';
-        display.style.transform = 'translate(-50%, -50%) scale(1)';
-    });
-    if (rowsCleared >= 3) {
-        let confettiCount = 20;
-        if (rowsCleared >= 5) confettiCount = 80;
-        else if (rowsCleared >= 4) confettiCount = 50;
-        createConfetti(confettiCount);
-    }
-    comboDisplayTimer = setTimeout(() => {
-        if (display) {
-            display.style.opacity = '0';
-            display.style.transform = 'translate(-50%, -50%) scale(1.2)';
-            setTimeout(() => {
-                if (display.parentNode) display.remove();
-            }, 400);
-        }
-        comboDisplayTimer = null;
-    }, 1500);
+if(display.innerHTML=`\n        <div style="color: ${color}; text-shadow: 0 0 40px ${glowColor}, 0 0 80px ${glowColor}40;">\n            ${comboText}\n        </div>\n        <div style="font-size: ${rowsCleared>=5?20:16}px; color: #94a3b8; text-shadow: none; margin-top: -8px;">\n            ${subText}\n        </div>\n    `,document.body.appendChild(display),requestAnimationFrame((()=>{display.style.opacity="1",display.style.transform="translate(-50%, -50%) scale(1)"})),rowsCleared>=3){let e=20;rowsCleared>=5?e=80:rowsCleared>=4&&(e=50),createConfetti(e)}comboDisplayTimer=setTimeout((()=>{display&&(display.style.opacity="0",display.style.transform="translate(-50%, -50%) scale(1.2)",setTimeout((()=>{display.parentNode&&display.remove()}),400)),comboDisplayTimer=null}),1500);
 }
 let loadingScreenVisible = false;
 function showLoadingScreen(message = 'Загрузка...') {
