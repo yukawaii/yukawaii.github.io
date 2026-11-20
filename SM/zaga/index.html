@@ -8,8 +8,6 @@
 <meta name="format-detection" content="telephone=no">
 <title>Загадки! — для всей семьи</title>
 <meta name="description" content="Народные загадки для всей семьи">
-
-<!-- Тема до загрузки страницы -->
 <script>
 (function(){
   try {
@@ -34,24 +32,78 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+.start-stats{display:flex;gap:28px;justify-content:center;margin:0 0 16px}
+.start-stat{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:800;font-size:1.15em;color:var(--text,#333)}
+.start-stat__row{display:inline-flex;align-items:center;gap:6px}
+.start-stat__label{font-size:.6em;font-weight:600;opacity:.7}
+.level-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72)}
+.level-overlay.show{display:flex}
+.level-overlay__box{text-align:center;animation:levelPop .5s ease}
+.level-overlay__line{font-family:Inter,sans-serif;font-weight:800;line-height:1.15;background:linear-gradient(180deg,#ffe9a8,#f7c948 45%,#e0a020);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#f7c948;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.level-overlay__line:first-child{font-size:clamp(28px,7vw,44px)}
+.level-overlay__line:last-child{font-size:clamp(56px,16vw,110px)}
+.level-overlay__deco{pointer-events:none}
+.level-overlay__deco.start-deco--cloud,.level-overlay__deco.start-deco--star,.level-overlay__deco.start-deco--leaf,.level-overlay__deco.start-deco--berry{opacity:.95;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+.level-overlay__deco.start-deco-float{animation:levelDecoFloat 3.5s ease-in-out infinite}
+@keyframes levelDecoFloat{
+0%,100%{transform:translateY(0) rotate(0deg) scale(var(--s,1))}
+50%{transform:translateY(-14px) rotate(4deg) scale(var(--s,1))}
+}
+@keyframes levelPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
+</style>
     <link rel="stylesheet" href="style.min.css">
 </head>
-
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
-  <div class="particles-container" id="particlesContainer"></div>
+  <div id="startScreen" class="start-screen">
+    <div class="start-bg" aria-hidden="true"></div>
+    <div class="start-content">
+      <div class="start-logo" aria-hidden="true">
+        <span class="sprite sprite--i2-logo" style="--sprite-size:64px"></span>
+      </div>
+      <h1 class="start-title" aria-label="Загадки!">
+        <span class="start-title-letter" style="--i:0">З</span><span class="start-title-letter" style="--i:1">а</span><span class="start-title-letter" style="--i:2">г</span><span class="start-title-letter" style="--i:3">а</span><span class="start-title-letter" style="--i:4">д</span><span class="start-title-letter" style="--i:5">к</span><span class="start-title-letter" style="--i:6">и</span><span class="start-title-letter" style="--i:7">!</span>
+      </h1>
+      <p class="start-subtitle">Для всей семьи</p>
+      <div class="start-stats">
+        <div class="start-stat"><span class="start-stat__row"><span class="sprite sprite--points" style="--sprite-size:1.4em"></span><span id="startScoreValue">0</span></span><span class="start-stat__label">Ягоды</span></div>
+        <div class="start-stat"><span class="start-stat__row"><span class="sprite sprite--bogatstvo" style="--sprite-size:1.4em"></span><span id="startMaxLevelValue">1</span></span><span class="start-stat__label">Макс. Ур.</span></div>
+      </div>
+      <div class="start-right">
+        <button class="start-play-btn" id="startPlayBtn" type="button">
+          <span class="start-play-icon" aria-hidden="true">▶</span>
+          <span>Играть</span>
+        </button>
+        <button class="start-help-btn" id="startCategoriesBtn" type="button">
+          <span class="sprite sprite--map" style="--sprite-size:1.1em"></span>
+          Категории
+        </button>
+        <button class="start-help-btn" id="startHelpBtn" type="button">
+          <span class="sprite sprite--help" style="--sprite-size:1.1em"></span>
+          Как играть?
+        </button>
+        <div class="start-icons" role="group" aria-label="Настройки">
+          <button class="start-icon" id="startSoundBtn" type="button" aria-label="Звук" title="Звук">
+            <span class="sprite sprite--soundon" style="--sprite-size:1.6em"></span>
+          </button>
+          <button class="start-icon" id="startThemeBtn" type="button" aria-label="Тема" title="Тема">
+            <span class="sprite sprite--palitra" style="--sprite-size:1.6em"></span>
+          </button>
+          <button class="start-icon" id="startAchBtn" type="button" aria-label="Достижения" title="Достижения">
+            <span class="sprite sprite--cup" style="--sprite-size:1.6em"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="app-container">
-
-    <!-- ===== МЕНЮ ===== -->
-    <div id="menuScreen" class="screen">
-      <header class="menu-header">
-        <h1 class="menu-title"><span class="sprite sprite--i2-logo" style="--sprite-size:1.5em"></span>Загадки!</h1>
-        <p class="menu-subtitle">Для всей семьи</p>
-      </header>
+    <div id="menuScreen" class="screen hidden">
       <div class="menu-score-row">
         <div class="menu-score"><span class="sprite sprite--points"></span> <span id="totalScoreValue">0</span></div>
         <button class="back-btn" id="menuRulesBtn" aria-label="Как играть" title="Как играть"><span class="sprite sprite--help"></span></button>
         <button class="icon-btn" id="progressMapBtn" aria-label="Карта" title="Карта"><span class="sprite sprite--map"></span></button>
         <button class="icon-btn" id="menuAchievementsBtn" aria-label="Достижения" title="Достижения"><span class="sprite sprite--cup"></span></button>
+ <button class="icon-btn" id="menuHomeBtn" aria-label="Главное меню" title="Главное меню"><span class="sprite sprite--home"></span></button>
       </div>
 <div class="daily-row">
   <div class="daily-col">
@@ -66,7 +118,6 @@
     Квесты дня
   </button>
 </div>
-
 <div class="next-cat" id="nextCatProgress" style="display:none"></div>
       <div class="categories-grid" id="categoriesGrid"></div>
       <div class="menu-bottom">
@@ -75,8 +126,6 @@
         <button class="icon-btn" id="otherGamesBtn" aria-label="Другие игры" title="Другие игры"><span class="sprite sprite--othergames"></span></button>
       </div>
     </div>
-
-    <!-- ===== ИГРА ===== -->
     <div id="gameScreen" class="screen hidden">
       <div class="game-header">
         <button class="back-btn" id="backBtn" aria-label="Назад" title="Назад">←</button>
@@ -104,10 +153,7 @@
         <button class="submit-btn" id="submitBtn" disabled><span class="sprite sprite--i2-check" style="--sprite-size:1.5em"></span> Проверка</button>
       </div>
     </div>
-
   </div>
-
-  <!-- ===== МОДАЛКА: правила ===== -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-content">
       <button class="modal-close" id="rulesCloseBtn">✕</button>
@@ -124,7 +170,6 @@
       <button class="modal-btn modal-btn--cancel" id="tutorialStartBtn" style="width:100%;margin-top:10px"><span class="sprite sprite--i2-corona" style="--sprite-size:1em"></span> Обучение</button>
     </div>
   </div>
-
   <div class="modal-overlay" id="dailyQuestsModal">
   <div class="modal-content">
     <button class="modal-close" id="dailyQuestsModalClose">✕</button>
@@ -133,7 +178,6 @@
     <button class="modal-btn modal-btn--confirm" id="dailyQuestsModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
   </div>
 </div>
-  <!-- ===== МОДАЛКА: темы ===== -->
   <div class="modal-overlay" id="themeModal">
     <div class="modal-content">
       <button class="modal-close" id="themeCloseBtn">✕</button>
@@ -146,8 +190,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ===== МОДАЛКА: подсказка за рекламу ===== -->
   <div class="modal-overlay" id="hintAdModal">
     <div class="modal-content">
       <h2><span class="sprite sprite--i2-hint" style="--sprite-size:1.5em"></span> Подсказка</h2>
@@ -159,8 +201,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ===== МОДАЛКА: разблокировать категорию ===== -->
   <div class="modal-overlay" id="unlockCategoryModal">
     <div class="modal-content">
       <button class="modal-close" id="unlockModalClose">✕</button>
@@ -174,8 +214,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ===== МОДАЛКА: другие игры ===== -->
   <div class="modal-overlay" id="otherGamesModal">
     <div class="modal-content modal-content--games">
       <button class="modal-close" id="otherGamesModalClose">✕</button>
@@ -184,8 +222,6 @@
       <button class="modal-btn modal-btn--confirm" id="otherGamesModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
     </div>
   </div>
-
-  <!-- ===== МОДАЛКА: достижения ===== -->
   <div class="modal-overlay" id="achievementsModal">
     <div class="modal-content">
       <button class="modal-close" id="achievementsModalClose">✕</button>
@@ -195,8 +231,6 @@
       <button class="modal-btn modal-btn--confirm" id="achievementsModalBtn" style="width:100%;margin-top:16px">Закрыть</button>
     </div>
   </div>
-
-  <!-- ===== МОДАЛКА: карта прогресса ===== -->
   <div class="modal-overlay" id="progressMapModal">
     <div class="modal-content modal-content--map">
       <button class="modal-close" id="progressMapClose">✕</button>
@@ -207,10 +241,8 @@
       </div>
     </div>
   </div>
-
   <div class="toast" id="toast"></div>
-  <script src="sprite.js"></script>
-  <script src="tutorial.js"></script>
-    <script src="game.min.js"></script>
+    <div class="level-overlay" id="levelOverlay"><div class="level-overlay__box" id="levelOverlayBox"></div></div>
+      <script src="game.min.js"></script>
 </body>
 </html>
