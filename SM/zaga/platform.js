@@ -8,7 +8,8 @@
     const launchParams = {};
     for (const [k, v] of searchParams) launchParams[k] = v;
 
-    const isOK = launchParams.vk_client === 'ok';
+    const isOK = launchParams.vk_client === 'ok' || (Boolean(launchParams.vk_ok_user_id) && launchParams.vk_ok_user_id !== '0');
+
     const platform = isOK ? 'ok' : 'vk';
     const userId = parseInt(
         launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0'
