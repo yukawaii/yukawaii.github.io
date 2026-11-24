@@ -38,7 +38,7 @@
         const lowRAM  = navigator.deviceMemory      && navigator.deviceMemory      <= 4;
         if (isMobile && (weakCPU || lowRAM)) {
             document.documentElement.classList.add('weak-device');
-            console.log('📱 Слабое устройство — отключаем тяжёлые эффекты');
+           // console.log('📱 Слабое устройство — отключаем тяжёлые эффекты');
         }
     } catch (e) {}
 })();
