@@ -1,3 +1,7 @@
+// ============================================================
+// platform.js — определение платформы VK / OK
+// Загружается ПЕРВЫМ, до App.js и game.js
+// ============================================================
 (function () {
     'use strict';
     const searchParams = new URLSearchParams(window.location.search);
