@@ -1,11 +1,5 @@
-// ============================================================
-// ui_sprite.js — автозамена всех эмодзи на спрайты из ui_atlas.png
-// Атлас: 1326×510, сетка 13×5, шаг 102.
-// ============================================================
 (function () {
     'use strict';
-
-    // Координаты (x, y) из ui_atlas.json
     var FRAMES = {
         achivments:            { x: 1,    y: 1   },
         anchient:              { x: 1,    y: 103 },
@@ -70,11 +64,7 @@
         tv:                    { x: 1225, y: 1   },
         vegatarian:            { x: 1225, y: 103 }
     };
-
-    // Эмодзи → имя спрайта. Все, что здесь есть, заменяется.
-    // Что не попало — остаётся как есть (безопасный fallback).
     var EMOJI_MAP = {
-        // Животные
         '🐦': 'bird', '🦅': 'sokol', '🦉': 'filin', '🕊️': 'bird', '🐤': 'bird', '🐥': 'bird', '🐣': 'bird', '🐓': 'bird', '🦃': 'bird', '🐧': 'bird',
         '🦜': 'pavlin', '🦚': 'pavlin', '🦩': 'pavlin',
         '🦆': 'duck', '🦢': 'duck',
@@ -91,10 +81,8 @@
         '🐻': 'panda', '🐼': 'panda', '🐻‍❄️': 'snow',
         '🐨': 'kenguru', '🦥': 'cat', '🦦': 'cat', '🦨': 'cat', '🦡': 'cat', '🦇': 'fox',
         '🐵': 'mouse', '🐒': 'mouse',
-        // Земля/регионы
         '🌍': 'earth_afrika_amerika', '🌎': 'earth_afrika_amerika', '🌏': 'earth_afrika_amerika', '🌐': 'earth_afrika_amerika',
         '🗺️': 'map', '🗺': 'map',
-        // Погода/природа
         '☀️': 'moon', '☀': 'moon', '🌞': 'moon',
         '🌝': 'moon', '🌚': 'moon', '🌛': 'moon', '🌜': 'moon', '🌙': 'moon', '🌑': 'moon', '🌒': 'moon', '🌓': 'moon', '🌔': 'moon', '🌕': 'moon', '🌖': 'moon', '🌗': 'moon', '🌘': 'moon',
         '⭐': 'corona', '🌟': 'corona', '✨': 'corona', '💫': 'corona',
@@ -104,21 +92,17 @@
         '🌊': 'dolphin',
         '🔥': 'party_selebraition', '💥': 'party_selebraition', '⚡': 'party_selebraition', '💢': 'chancel_error',
         '🌈': 'palitra',
-        // Растения
         '🌲': 'forest', '🌳': 'forest', '🌴': 'palm', '🌵': 'cactus',
         '🌱': 'forest', '🌿': 'forest', '☘️': 'forest', '🍀': 'forest', '🎍': 'japan', '🎋': 'japan',
         '🌾': 'vegatarian', '🌻': 'palitra', '🌺': 'palitra', '🌸': 'palitra', '🌷': 'palitra', '🌹': 'palitra', '🥀': 'palitra', '🏵️': 'palitra', '💐': 'palitra',
         '🍁': 'fruits', '🍂': 'fruits', '🍃': 'fruits', '🌰': 'fruits',
         '🍄': 'vegatarian', '🍄‍🟫': 'vegatarian',
-        // Пейзажи
         '🏔️': 'mountain', '⛰️': 'mountain', '🌋': 'mountain', '🗻': 'mountain',
         '🏕️': 'forest', '🏖️': 'palm', '🏜️': 'cactus', '🏝️': 'palm', '🏞️': 'forest',
-        // Дома
         '🏠': 'home_menu', '🏡': 'home_menu', '🏘️': 'home_menu', '🏚️': 'home_menu', '🏢': 'home_menu', '🏣': 'home_menu', '🏤': 'home_menu', '🏥': 'home_menu', '🏦': 'home_menu', '🏨': 'home_menu', '🏩': 'home_menu', '🏪': 'home_menu', '🏫': 'home_menu', '🏬': 'home_menu', '🏭': 'home_menu',
         '🏯': 'japan', '🏰': 'japan', '🗼': 'japan', '🗽': 'earth_afrika_amerika',
         '🏗️': 'stroiteli', '🏛️': 'anchient', '🗿': 'anchient', '🏺': 'anchient',
         '🚪': 'home_menu', '🛏️': 'home_menu', '🛋️': 'home_menu', '🪑': 'home_menu', '🚽': 'home_menu', '🚿': 'home_menu', '🛁': 'home_menu', '🧹': 'home_menu', '🧺': 'home_menu', '🧻': 'home_menu', '🧼': 'home_menu', '🧽': 'home_menu', '🧴': 'home_menu', '🧷': 'home_menu', '🪒': 'home_menu', '🧯': 'home_menu',
-        // Награды
         '👑': 'corona', '🏆': 'achivments', '🥇': 'achivments', '🥈': 'achivments', '🥉': 'achivments', '🎖️': 'achivments', '🎗️': 'achivments', '🏅': 'achivments',
         '🎯': 'slon', '🎓': 'achivments',
         '📈': 'achivments', '📉': 'achivments', '📊': 'achivments',
@@ -127,78 +111,55 @@
         '🧠': 'think', '🤔': 'think', '💡': 'hint', '💭': 'think', '💬': 'think',
         '🎁': 'gift', '🎀': 'gift', '🧧': 'gift',
         '🎉': 'party_selebraition', '🎊': 'party_selebraition', '🎈': 'party_selebraition', '🎂': 'party_selebraition', '🎆': 'party_selebraition', '🎇': 'party_selebraition', '🎄': 'forest', '🎃': 'party_selebraition', '🎪': 'party_selebraition', '🎠': 'party_selebraition', '🎡': 'party_selebraition', '🎢': 'party_selebraition',
-        // Лица
         '😅': 'think', '🙈': 'think', '😱': 'chancel_error', '😊': 'party_selebraition', '😍': 'party_selebraition', '🤩': 'party_selebraition', '🥳': 'party_selebraition', '😎': 'party_selebraition', '😴': 'moon', '😀': 'party_selebraition', '😃': 'party_selebraition', '😄': 'party_selebraition', '😁': 'party_selebraition', '😂': 'party_selebraition', '🤣': 'party_selebraition', '☺️': 'party_selebraition', '😇': 'party_selebraition', '🙂': 'party_selebraition', '😉': 'party_selebraition', '😘': 'party_selebraition', '🥰': 'party_selebraition', '😋': 'party_selebraition', '😛': 'party_selebraition', '😜': 'party_selebraition', '😝': 'party_selebraition', '🤪': 'party_selebraition',
         '🤨': 'think', '🧐': 'think', '🤓': 'think', '😒': 'think', '😞': 'think', '😔': 'think', '😟': 'think', '😕': 'think', '🙁': 'think', '☹️': 'think', '😣': 'think', '😖': 'think', '😫': 'think', '😩': 'think', '🥺': 'think', '😢': 'think', '😭': 'think', '😤': 'think', '😠': 'think', '😡': 'think', '🤬': 'think', '🤯': 'think', '😳': 'think', '🥵': 'think', '🥶': 'snow', '😨': 'think', '😰': 'think', '😥': 'think', '😓': 'think', '🤗': 'party_selebraition', '🤭': 'think', '🤫': 'think', '🤥': 'think', '😶': 'think', '😐': 'think', '😑': 'think', '😬': 'think', '🙄': 'think', '😯': 'think', '😦': 'think', '😧': 'think', '😮': 'think', '😲': 'think', '🥱': 'think', '🤤': 'think', '😪': 'think', '😵': 'think', '🤐': 'think', '🥴': 'think', '🤢': 'chancel_error', '🤮': 'chancel_error', '🤧': 'think', '😷': 'think', '🤒': 'think', '🤕': 'think', '🤑': 'coin', '🤠': 'family', '😈': 'snake', '👿': 'snake', '👹': 'snake', '👺': 'snake', '🤡': 'party_selebraition', '💩': 'help', '👻': 'party_selebraition', '💀': 'chancel_error', '☠️': 'chancel_error', '👽': 'party_selebraition', '👾': 'party_selebraition', '🤖': 'party_selebraition',
         '😺': 'cat', '😸': 'cat', '😹': 'cat', '😻': 'cat', '😼': 'cat', '😽': 'cat', '🙀': 'cat', '😿': 'cat', '😾': 'cat',
-        // Руки/жесты
         '👋': 'palec', '🤚': 'palec', '🖐️': 'palec', '✋': 'palec', '🖖': 'palec', '🤌': 'palec', '🤏': 'palec', '🤙': 'palec', '👈': 'palec', '👉': 'palec', '👆': 'palec', '👇': 'palec', '☝️': 'palec', '✊': 'palec', '👊': 'palec', '🤛': 'palec', '🤜': 'palec',
         '👌': 'check_ok', '👍': 'check_ok', '👎': 'chancel_error',
         '✌️': 'party_selebraition', '🤞': 'party_selebraition', '🤟': 'party_selebraition', '🤘': 'party_selebraition',
         '👏': 'party_selebraition', '🙌': 'party_selebraition', '👐': 'party_selebraition', '🤲': 'party_selebraition', '🙏': 'family', '🤝': 'family', '✍️': 'think', '🤳': 'tv', '💪': 'party_selebraition',
         '👂': 'think', '👃': 'think', '👀': 'think', '👁️': 'think', '👅': 'think', '👄': 'think', '💋': 'family', '🦷': 'think', '🦴': 'think',
-        // Сердца
         '💌': 'family', '💘': 'family', '💝': 'family', '💖': 'family', '💗': 'family', '💓': 'family', '💞': 'family', '💕': 'family', '💟': 'family', '❣️': 'family', '💔': 'family', '❤️': 'family', '🧡': 'family', '💛': 'family', '💚': 'family', '💙': 'family', '💜': 'family', '🤎': 'family', '🖤': 'family', '🤍': 'family',
-        // Числа
         '1️⃣': 'points', '2️⃣': 'points', '3️⃣': 'points', '4️⃣': 'points', '5️⃣': 'points', '6️⃣': 'points', '7️⃣': 'points', '8️⃣': 'points', '9️⃣': 'points', '0️⃣': 'points', '#️⃣': 'points', '*️⃣': 'points',
-        // Стрелки/символы
         '▶️': 'check_ok', '▶': 'check_ok', '➡️': 'check_ok', '⬅️': 'check_ok', '⬆️': 'check_ok', '⬇️': 'check_ok', '↗️': 'check_ok', '↘️': 'check_ok', '↙️': 'check_ok', '↖️': 'check_ok', '↕️': 'check_ok', '↔️': 'check_ok',
         '↩️': 'circle_refresh', '↪️': 'circle_refresh', '⤴️': 'circle_refresh', '⤵️': 'circle_refresh',
         '🔄': 'circle_refresh', '🔁': 'circle_refresh', '🔃': 'circle_refresh',
         '✅': 'check_ok', '✔️': 'check_ok', '✔': 'check_ok', '☑️': 'check_ok',
         '❌': 'chancel_error', '✖️': 'chancel_error', '✖': 'chancel_error', '✕': 'chancel_error', '❎': 'chancel_error', '🚫': 'chancel_error', '⛔': 'chancel_error', '⚠️': 'chancel_error', '⚠': 'chancel_error', '‼️': 'chancel_error',
         '❓': 'help', '❔': 'help', '❗': 'hint', '⁉️': 'think',
-        // Время
         '⏰': 'circle_refresh', '⏱️': 'circle_refresh', '⏱': 'circle_refresh', '⏲️': 'circle_refresh', '🕰️': 'circle_refresh', '⌚': 'circle_refresh', '⌛': 'loading', '⏳': 'loading',
         '🕐': 'circle_refresh', '🕑': 'circle_refresh', '🕒': 'circle_refresh', '🕓': 'circle_refresh', '🕔': 'circle_refresh', '🕕': 'circle_refresh', '🕖': 'circle_refresh', '🕗': 'circle_refresh', '🕘': 'circle_refresh', '🕙': 'circle_refresh', '🕚': 'circle_refresh', '🕛': 'circle_refresh',
        '🐾': 'cat',
-        // Ключи/замки
         '🔑': 'locked', '🗝️': 'locked', '🔒': 'locked', '🔓': 'locked', '🔏': 'locked', '🔐': 'locked',
-        // Звук
         '🔊': 'soundon', '🔉': 'soundon', '🔈': 'soundoff', '🔇': 'soundoff', '📢': 'soundon', '📣': 'soundon', '🔔': 'soundon', '🔕': 'soundoff', '📯': 'musical_animal',
-        // Медиа
         '📺': 'tv', '📻': 'tv', '📱': 'tv', '📲': 'tv', '📞': 'tv', '☎️': 'tv', '📟': 'tv', '📠': 'tv', '📷': 'tv', '📸': 'tv', '📹': 'tv', '🎥': 'tv', '🎬': 'tv', '📽️': 'tv', '📼': 'tv', '📀': 'tv', '💿': 'tv', '💾': 'tv', '💽': 'tv', '🖥️': 'tv', '💻': 'tv', '⌨️': 'tv', '🖨️': 'tv', '🖱️': 'tv', '🖲️': 'tv', '📡': 'tv',
-        // Книги
         '📖': 'help', '📚': 'help', '📕': 'help', '📗': 'help', '📘': 'help', '📙': 'help', '📓': 'help', '📒': 'help', '📔': 'help', '📃': 'help', '📜': 'help', '📄': 'help', '📰': 'help', '🗞️': 'help', '📋': 'help', '📁': 'help', '📂': 'help', '🗂️': 'help', '🗃️': 'help', '🗄️': 'help',
-        // Карты/локации
         '📍': 'map', '📌': 'check_ok', '📎': 'map', '🏷️': 'map', '🔖': 'map', '📅': 'map', '📆': 'map', '🗓️': 'map', '📇': 'map', '🔗': 'map', '⛓️': 'map', '🦯': 'map', '🦽': 'map', '🦼': 'map',
-        // Музыка
         '🎵': 'musical_animal', '🎶': 'musical_animal', '🎤': 'musical_animal', '🎧': 'musical_animal', '🎼': 'musical_animal', '🎷': 'musical_animal', '🎸': 'musical_animal', '🎹': 'musical_animal', '🎺': 'musical_animal', '🎻': 'musical_animal', '🥁': 'musical_animal', '🪕': 'musical_animal',
-        // Игры
         '🎮': 'othergames', '🕹️': 'othergames', '🎲': 'othergames', '🎰': 'othergames', '🃏': 'othergames',
-        // Люди/семья
         '👥': 'family', '👨‍👩‍👧‍👦': 'family', '👨‍👩‍👧': 'family', '👨‍👩‍👦': 'family', '👪': 'family', '👨': 'family', '👩': 'family', '👶': 'family', '🧑': 'family', '👦': 'family', '👧': 'family', '👴': 'family', '👵': 'family', '👫': 'family', '👬': 'family', '👭': 'family', '💑': 'family', '💏': 'family', '💍': 'family',
-        // Инструменты
         '🔧': 'stroiteli', '🔨': 'stroiteli', '⛏️': 'stroiteli', '⚒️': 'stroiteli', '🛠️': 'stroiteli', '🔩': 'stroiteli', '⚙️': 'stroiteli', '🗜️': 'stroiteli', '🧰': 'stroiteli',
         '🧲': 'think', '🔬': 'think', '🔭': 'think', '🧪': 'think', '⚗️': 'think', '🧫': 'think', '🧬': 'think',
         '💉': 'family', '💊': 'family', '🩺': 'family', '🩹': 'family', '🩸': 'family', '🫀': 'family', '🫁': 'family',
         '⚔️': 'sokol', '🗡️': 'sokol', '🛡️': 'sokol', '🏹': 'sokol',
-        // Письменные принадлежности
         '📝': 'think', '✏️': 'think', '🖊️': 'think', '🖋️': 'think', '✒️': 'think',
         '🎨': 'palitra', '🖌️': 'palitra', '🖍️': 'palitra',
-        // Символы
         '💯': 'hundred', '💤': 'moon', '🚀': 'party_selebraition', '🛸': 'party_selebraition',
         '🕐': 'circle_refresh', '🎭': 'help',
         '🏁': 'check_ok', '🚩': 'hint', '🎌': 'japan', '🏴': 'check_ok', '🏳️': 'check_ok',
-        // Еда
         '🍎': 'fruits', '🍏': 'fruits', '🍊': 'fruits', '🍋': 'fruits', '🍌': 'fruits', '🍍': 'fruits', '🥭': 'fruits', '🥝': 'fruits', '🍇': 'fruits', '🍈': 'fruits', '🍉': 'fruits', '🍑': 'fruits', '🍐': 'fruits', '🍒': 'fruits', '🍓': 'fruits', '🥥': 'fruits',
         '🥕': 'vegatarian', '🍆': 'vegatarian', '🥑': 'vegatarian', '🥦': 'vegatarian', '🥬': 'vegatarian', '🥒': 'vegatarian', '🌶️': 'vegatarian', '🌽': 'vegatarian', '🧄': 'vegatarian', '🧅': 'vegatarian', '🥔': 'vegatarian', '🍠': 'vegatarian', '🍞': 'vegatarian', '🥐': 'vegatarian', '🍔': 'vegatarian', '🍕': 'vegatarian', '🍟': 'vegatarian', '🌭': 'vegatarian', '🥪': 'vegatarian', '🥗': 'vegatarian', '🍳': 'vegatarian', '🥚': 'gift',
         '🍰': 'gift', '🧁': 'gift', '🍭': 'gift', '🍬': 'gift', '🍫': 'gift', '🍪': 'gift', '🍩': 'gift',
         '☕': 'gift', '🍵': 'gift', '🥛': 'gift', '🍼': 'gift', '🥤': 'gift', '🍶': 'gift', '🍷': 'gift', '🍺': 'gift', '🍻': 'gift',
         '🍣': 'fish', '🍥': 'fish', '🍤': 'fish',
-        // Прочее
         '🛒': 'gift', '🛍️': 'gift', '🎒': 'gift', '👜': 'gift', '👛': 'gift', '👝': 'gift', '💼': 'family', '🧳': 'gift',
         '🔮': 'think', '📿': 'achivments', '🧿': 'help',
         '🎴': 'japan', '🀄': 'japan', '🎎': 'japan', '🎏': 'japan', '🎐': 'japan', '🎑': 'japan', '🏮': 'japan',
         '🏳️‍🌈': 'palitra', '🏴‍☠️': 'sokol'
     };
-
-    // Соберём regex из всех ключей (длинные первыми)
     var keys = Object.keys(EMOJI_MAP).sort(function (a, b) { return b.length - a.length; });
     function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
     var EMOJI_RE = new RegExp('(' + keys.map(escRe).join('|') + ')', 'g');
-
-    // Публичное API
     function has(name) { return Object.prototype.hasOwnProperty.call(FRAMES, name); }
     function html(name, size) {
         if (!has(name)) return '';
@@ -211,15 +172,12 @@
         if (name && has(name)) return html(name, size);
         return String(nameOrEmoji);
     }
-
-    // Замена эмодзи в текстовых узлах
     function scanTextNode(node) {
         var text = node.nodeValue;
         if (!text) return;
         EMOJI_RE.lastIndex = 0;
         if (!EMOJI_RE.test(text)) return;
         EMOJI_RE.lastIndex = 0;
-
         var frag = document.createDocumentFragment();
         var last = 0, m;
         while ((m = EMOJI_RE.exec(text)) !== null) {
@@ -237,7 +195,6 @@
         if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
         node.parentNode.replaceChild(frag, node);
     }
-
     function scanNode(node) {
         if (!node) return;
         if (node.nodeType === 3) { scanTextNode(node); return; }
@@ -245,8 +202,6 @@
         var tag = node.tagName;
         if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'OPTION') return;
         if (node.classList && node.classList.contains('ui-sprite')) return;
-
-        // Шаг 1: заменить статичные SVG-иконки `data-icon` на спрайты
         if (node.classList && node.classList.contains('emoji-icon') && node.dataset && node.dataset.icon) {
             var ICON_MAP = {
                 star: 'points',
@@ -262,14 +217,10 @@
                 node.innerHTML = html(sprite);
             }
         }
-
-        // Шаг 2: рекурсивно пройти по детям
         var kids = Array.prototype.slice.call(node.childNodes);
         for (var i = 0; i < kids.length; i++) scanNode(kids[i]);
     }
-
     function scan(root) { scanNode(root || document.body); }
-
 function injectCSS() {
     var css = []
         .concat([
@@ -280,13 +231,10 @@ function injectCSS() {
             return '.ui-sprite--' + name + '{background-position:calc(' + (-f.x / 100) + ' * var(--ui-sprite-size)) calc(' + (-f.y / 100) + ' * var(--ui-sprite-size))}';
         }))
         .concat([
-            // Базовые размеры спрайтов
             '.emoji-icon > .ui-sprite{--ui-sprite-size:1.6em}',
             '.modal-title .emoji-icon > .ui-sprite,',
             '.col-title .emoji-icon > .ui-sprite,',
             '.emoji-icon[style*="width:1em"] > .ui-sprite{--ui-sprite-size:1.1em}',
-
-// ===== 1) ВЕРХНИЕ КНОПКИ — иконка ×1.6 (было ×2) =====
 '.score-chip .emoji-icon > .ui-sprite,',
 '.btn-primary.btn-lg .emoji-icon > .ui-sprite{transform:scale(1.6);transform-origin:center}',
 '.btn-icon .emoji-icon > .ui-sprite,',
@@ -297,29 +245,19 @@ function injectCSS() {
 '.score-chip [data-total-score],',
 '.btn-primary.btn-lg [data-i18n="play"]{margin-left:0.6em;position:relative;z-index:2}',
 '.btn-icon,.icon-btn,.score-chip,.btn-primary.btn-lg,.hero-actions{overflow:visible}',
-
-            // ===== 2) КАРТОЧКИ УРОВНЕЙ (категории внутри разделов) =====
-            // Иконка ×2, отступы справа (от текста) и снизу
             '.level-name .ui-sprite{transform:scale(2);transform-origin:center;margin-right:1.1em;margin-bottom:0.4em}',
             '.level-name{overflow:visible;line-height:1.4}',
             '.level-card{overflow:visible}',
-
-            // ===== 3) НАЗВАНИЯ БОЛЬШИХ РАЗДЕЛОВ — БЕЗ увеличения =====
-            // Раньше было scale(2) — убираем, иконка остаётся базового размера
             '.region-title .ui-sprite,.col-title .ui-sprite{transform:none;margin-right:0.4em;margin-bottom:0.1em}',
             '.region-title,.col-title{overflow:visible}',
+'.description::before{content:"Интересный факт"!important;position:absolute!important;top:-14px!important;left:14px!important;padding:6px 14px 6px 46px!important;background:var(--wb-daily-bg, #fbbf24)!important;color:var(--wb-border, #5d4037)!important;border:2px solid var(--wb-border, #5d4037)!important;border-radius:22px!important;font-size:12px!important;font-weight:900!important;letter-spacing:.5px!important;line-height:1.35!important;box-shadow:0 2px 0 var(--wb-border, #5d4037)!important;z-index:1}',
 
-            // Бейдж «Интересный факт»
-'.description::before{content:"Интересный факт"!important;position:absolute!important;top:-12px!important;left:14px!important;padding:8px 14px 8px 48px!important;background:linear-gradient(135deg,#7b5cff 0%,#a855f7 100%)!important;color:#fff!important;border-radius:22px!important;font-size:12px!important;font-weight:700!important;letter-spacing:.5px!important;line-height:1.35!important;box-shadow:0 3px 8px rgba(123,92,255,.35)!important;z-index:1}',
 '.description::after{content:""!important;position:absolute!important;top:-12px!important;left:22px!important;width:32px!important;height:32px!important;background:url("ui_atlas.png") no-repeat -32.96px -0.32px / 424.32px 163.2px!important;background-repeat:no-repeat!important;pointer-events:none!important;z-index:2}'        ]);
-
     var style = document.createElement('style');
     style.id = 'ui-sprite-css';
     style.textContent = css.join('\n');
     document.head.appendChild(style);
 }
-
-
     var pending = [];
     var scheduled = false;
     function flushPending() {
@@ -330,7 +268,6 @@ function injectCSS() {
             try { scanNode(nodes[i]); } catch (e) {}
         }
     }
-
     function installObserver() {
         var observer = new MutationObserver(function (muts) {
             for (var i = 0; i < muts.length; i++) {
@@ -350,12 +287,8 @@ function injectCSS() {
         });
         observer.observe(document.body, { childList: true, subtree: true, characterData: true });
     }
-
 function init() {
     injectCSS();
-
-    // Патчим apply-методы: после каждого вызова из инлайн-кода
-    // перерисовываем спрайты (иконки звука/темы вставляются именно так)
     try {
         if (window.Sound && typeof window.Sound.apply === 'function' && !window.Sound.__uiSpritePatched) {
             var origSoundApply = window.Sound.apply;
@@ -367,7 +300,6 @@ function init() {
             window.Sound.__uiSpritePatched = true;
         }
     } catch (e) {}
-
     try {
         if (window.Theme && typeof window.Theme.apply === 'function' && !window.Theme.__uiSpritePatched) {
             var origThemeApply = window.Theme.apply;
@@ -379,28 +311,20 @@ function init() {
             window.Theme.__uiSpritePatched = true;
         }
     } catch (e) {}
-
-    // Принудительная перерисовка иконок звука и темы спрайтами
     function forceRedrawToggles() {
         try { if (window.Sound && window.Sound.apply) window.Sound.apply(); } catch (e) {}
         try { if (window.Theme && window.Theme.apply) window.Theme.apply(); } catch (e) {}
         scan(document.body);
     }
-
     forceRedrawToggles();
     scan(document.body);
     installObserver();
-
-    // Несколько волн — boot() в инлайн-скрипте асинхронный
     setTimeout(forceRedrawToggles, 500);
     setTimeout(forceRedrawToggles, 1500);
     setTimeout(forceRedrawToggles, 3000);
-
     console.log('[ui_sprite] Эмодзи→спрайты готовы');
 }
-
     window.UiSprite = { has: has, html: html, icon: icon, scan: scan, FRAMES: FRAMES, EMOJI_MAP: EMOJI_MAP };
-
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
