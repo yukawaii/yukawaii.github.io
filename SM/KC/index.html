@@ -38,8 +38,7 @@
         const lowRAM  = navigator.deviceMemory      && navigator.deviceMemory      <= 4;
         if (isMobile && (weakCPU || lowRAM)) {
             document.documentElement.classList.add('weak-device');
-           // console.log('📱 Слабое устройство — отключаем тяжёлые эффекты');
-        }
+              }
     } catch (e) {}
 })();
 </script>
@@ -54,7 +53,6 @@
         <div class="loading-text" id="loadingText">Загрузка…</div>
     </div>
 </div>
-
 <div id="menuScreen" style="display:none;">
     <div class="start-bg" id="menuBg" aria-hidden="true"></div>
     <div class="menu-inner">
@@ -62,7 +60,6 @@
             <h1 class="menu-logo__title">Кроссворды</h1>
             <p class="menu-logo__sub">Разгадывай и узнавай новое!</p>
         </div>
-
         <div class="menu-stats">
             <div class="menu-stat">
                 <div class="menu-stat__val" id="menuScore">0</div>
@@ -87,7 +84,6 @@
         <span class="berries-value" id="berriesValue">0</span>
     </div>
 </div>
-
         <div class="menu-bottom">
   <button class="menu-icon-btn" id="themeBtn" title="Тема"><span class="sprite-icon sprite-palitra"></span></button>
 <button class="menu-icon-btn" id="soundBtnMenu" title="Звук"><span class="sprite-icon sprite-soundoff"></span></button>
@@ -95,8 +91,6 @@
         </div>
     </div>
 </div>
-
-<!-- ============ ИГРА ============ -->
 <div id="gameScreen" style="display:none;">
     <div class="game-header">
         <button class="game-header__btn" id="backBtn">←</button>
@@ -105,19 +99,14 @@
   <button class="game-header__btn" id="hintBtn"><span class="sprite-icon sprite-hint"></span></button>
 <button class="game-header__btn" id="soundBtn"><span class="sprite-icon sprite-soundoff"></span></button>
     </div>
-
     <div class="clue-panel" id="cluePanel">
         <span class="clue-placeholder">Нажмите на клетку, чтобы увидеть вопрос</span>
     </div>
-
     <div class="grid-wrapper" id="gridWrapper">
         <div class="grid" id="grid"></div>
     </div>
-
     <div class="keyboard" id="keyboard"></div>
 </div>
-
-<!-- ============ МОДАЛКИ ============ -->
 <div id="hintAdModal" class="modal-overlay">
     <div class="modal-box">
   <div class="hint-icon"><span class="sprite-icon sprite-tv"></span></div>
@@ -127,7 +116,6 @@
 <button class="modal-btn" id="hintAdCancel"><span class="sprite-icon sprite-chancel_error"></span>Отмена</button>
     </div>
 </div>
-
 <div id="winModal" class="modal-overlay">
     <div class="modal-box">
      <h2 class="modal-title" id="winTitle"><span class="sprite-icon sprite-party_selebraition"></span>Отлично!</h2>
@@ -137,7 +125,6 @@
 <button class="modal-btn" id="winClose"><span class="sprite-icon sprite-sokol"></span>Продолжить</button>
     </div>
 </div>
-
 <div id="exitModal" class="modal-overlay">
     <div class="modal-box">
         <h2 class="modal-title">Выйти в меню?</h2>
@@ -148,7 +135,6 @@
         </div>
     </div>
 </div>
-
 <div id="achModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="achClose">✕</button>
@@ -156,7 +142,6 @@
         <div class="ach-grid" id="achGrid"></div>
     </div>
 </div>
-
 <div id="questsModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="questsClose">✕</button>
@@ -201,7 +186,6 @@
         </div>
     </div>
 </div>
-
 <div id="themeModal" class="modal-overlay">
     <div class="modal-box">
         <button class="modal-close" id="themeClose">✕</button>
@@ -240,7 +224,6 @@
 </div>
     </div>
 </div>
-
 <div id="dailyInfoModal" class="modal-overlay">
     <div class="modal-box">
        <div class="daily-info-icon"><span class="sprite-icon sprite-corona"></span></div>
@@ -265,8 +248,6 @@
        <button class="modal-btn modal-btn--primary" id="achGetClose"><span class="sprite-icon sprite-check_ok"></span>Отлично</button>
     </div>
 </div>
-
-
 <div id="toast"></div>
 <canvas id="confetti"></canvas>
     <script src="pako.min.js" defer></script>
