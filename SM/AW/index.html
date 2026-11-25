@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, viewport-fit=cover">
 <title data-i18n="appTitle">Угадай животное!</title>
 <meta name="theme-color" content="#ffffff">
-<link rel="stylesheet" href="https://unpkg.com/@vkontakte/vkui@7/dist/vkui.css">
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 <link rel="stylesheet" href="style-additions.css">
 <script>
 (function () {
@@ -21,7 +21,7 @@
       <span class="ui-sprite ui-sprite--bird" aria-hidden="true"></span>
     </div>
 
-    <h1 class="start-title" aria-label="Викторина">
+    <h1 class="start-title" id="startTitle" aria-label="Викторина">
       <span class="start-title-letter" style="--i:0">В</span>
       <span class="start-title-letter" style="--i:1">и</span>
       <span class="start-title-letter" style="--i:2">к</span>
@@ -33,7 +33,7 @@
       <span class="start-title-letter" style="--i:8">а</span>
     </h1>
 
-    <p class="start-subtitle">Для всей семьи</p>
+    <p class="start-subtitle" data-i18n="startSubtitle">Для всей семьи</p>
 
     <div class="start-stats">
       <div class="start-stat">
@@ -41,46 +41,46 @@
           <span class="start-stat__icon"><span class="ui-sprite ui-sprite--points" aria-hidden="true"></span></span>
           <span class="start-stat__value" id="startScoreValue">0</span>
         </div>
-        <span class="start-stat__label">Ягоды</span>
+        <span class="start-stat__label" data-i18n="statBerries">Ягоды</span>
       </div>
       <div class="start-stat">
         <div class="start-stat__row">
           <span class="start-stat__icon">🏆</span>
           <span class="start-stat__value" id="startMaxLevelValue">1</span>
         </div>
-        <span class="start-stat__label">Макс. Ур.</span>
+        <span class="start-stat__label" data-i18n="statMaxLvl">Макс. Ур.</span>
       </div>
     </div>
-
     <div class="start-right">
       <button id="startPlayBtn" class="start-play-btn">
-        <span class="start-play-icon" aria-hidden="true">▶</span>
+        <span class="start-play-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--party_selebraition"></span></span>
         <span data-i18n="play">Играть</span>
       </button>
-
       <button id="startCategoriesBtn" style="display: none;" class="start-categories-btn">
-        <span class="ui-sprite ui-sprite--think" aria-hidden="true"></span>
-        <span>Категории</span>
+        <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--think"></span></span>
+        <span data-i18n="categoriesBtn">Категории</span>
       </button>
       <button id="startMapBtn" class="start-categories-btn">
         <span aria-hidden="true">🗺️</span>
-        <span>Карта</span>
+        <span data-i18n="mapBtn">Карта</span>
       </button>
       <div class="start-icons">
-        <button id="startHelpBtn" class="start-icon" title="Как играть?">
+        <button id="startHelpBtn" class="start-icon" data-i18n-title="helpTitle" title="Как играть?">
           <span class="ui-sprite ui-sprite--help" aria-hidden="true"></span>
         </button>
-        <button id="startSoundBtn" class="start-icon" title="Звук">
+        <button id="startSoundBtn" class="start-icon" data-i18n-title="titleSound" title="Звук">
           <span class="ui-sprite ui-sprite--soundon" aria-hidden="true"></span>
         </button>
-        <button id="startThemeBtn" class="start-icon" title="Тема">
+        <button id="startThemeBtn" class="start-icon" data-i18n-title="titleTheme" title="Тема">
           <span class="ui-sprite ui-sprite--palitra" aria-hidden="true"></span>
         </button>
-        <button id="startAchBtn" class="start-icon" title="Достижения">
-          <span class="ui-sprite ui-sprite--achivments" aria-hidden="true"></span>
+        <button id="startLangBtn" class="start-icon" data-i18n-title="titleLang" title="Язык">
+          <span aria-hidden="true">🌐</span>
         </button>
+
       </div>
     </div>
+
   </div>
 </div>
 
@@ -111,33 +111,36 @@
   <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--achivments"></span></span>
   <span class="btn-icon-count" id="ach-badge">0</span>
 </button>
-<button class="btn btn-ghost btn-icon" id="extrasHelpBtn" title="Помощь">❓</button>
-      <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
-      <button type="button" id="menuHomeBtn" class="btn btn-ghost btn-icon" title="На главную">
+<button class="btn btn-ghost btn-icon" id="extrasHelpBtn" data-i18n-title="helpBtnTitle" title="Помощь">❓</button>
+           <button type="button" id="menuHomeBtn" class="btn btn-ghost btn-icon" data-i18n-title="homeMenuTitle" title="На главную">
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--home_menu"></span></span>
       </button>
 
-      <button class="btn btn-ghost btn-icon" id="heroMoreToggle" onclick="toggleHeroMore()" aria-expanded="false" data-i18n-title="titleMoreGames">
+      <button class="btn btn-ghost btn-icon" id="heroMoreToggle" onclick="toggleHeroMore(this)" aria-expanded="false" data-i18n-title="titleMoreGames">
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--othergames"></span></span>
       </button>
       <div class="hero-actions hero-more" id="heroMoreMenu" hidden>
+         <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">👑</button>
         <button class="btn btn-ghost btn-icon" onclick="openOtherGamesModal()" data-i18n-title="titleMoreGames">
           <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--othergames"></span></span>
         </button>
         <button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button>
         <button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-          <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
-          <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" data-yandex-only style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
+          <button type="button" class="icon-btn" onclick="infr()" data-vk-only data-i18n-title="titleInvite" title="Пригласить">
+            <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--family"></span></span>
+          </button>
+          <button class="btn btn-ghost btn-icon" data-yandex-shortcut
+ data-yandex-only style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
+
       </div>
     </div>
     <div class="extras-daily-row">
   <div class="extras-daily-col">
-    <div class="extras-daily-streak" id="extrasDailyStreak" style="display:none"></div>
     <button class="extras-daily-btn extras-daily-btn--active" id="extrasDailyBtn">
-      <span class="extras-daily-btn__icon">🎁</span> Вызов дня
+      <span class="extras-daily-btn__icon">🎁</span> <span data-i18n="dailyTitle">Вызов дня</span>
     </button>
   </div>
-<button class="extras-daily-btn extras-daily-btn--quests" id="extrasQuestsBtn"><span class="extras-daily-btn__icon">🎯</span> Квесты дня</button>
+<button class="extras-daily-btn extras-daily-btn--quests" id="extrasQuestsBtn"><span class="extras-daily-btn__icon">🎯</span> <span data-i18n="questsTitle">Квесты дня</span></button>
 </div>
 <div id="extrasProgress" class="extras-progress" style="display:none"></div>
     <section class="card fact-card" id="fact-block" hidden>
@@ -182,9 +185,13 @@
         </div>
      <button class="vkuiButton vkuiButton--size-l vkuiButton--mode-primary btn btn-primary btn-lg" id="start-btn" data-i18n="playBtn">Начать игру</button>
         <div class="home-actions">
-<button class="btn btn-ghost" id="yandex-shortcut-btn" data-yandex-only style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
-          <button class="btn btn-ghost" onclick="infr()" data-vk-only><span data-i18n="invite">Пригласить</span></button>
+<button class="btn btn-ghost" data-yandex-shortcut
+ data-yandex-only style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
+          <button type="button" class="icon-btn" onclick="infr()" data-vk-only data-i18n-title="titleInvite" title="Пригласить">
+            <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--family"></span></span>
+          </button>
 <button type="button" class="btn btn-ghost" id="quiz-start-home-btn">
+
   <span class="emoji-icon" data-icon="home" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 65 65"><title>house</title><path fill="#fff" d="M19 32h34v24H19z"/><path fill="#a57939" d="M25 40h9v16h-9z"/><path fill="#92d3f5" d="M40 40h8v7h-8z"/><path fill="#ea5a47" d="M53 32H19v-1l16-16l18 16z"/><path fill="#ea5a47" d="m29 21l-5 5v-9h5z"/><g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"><path d="M25 40h9v16h-9zm15 0h8v7h-8zm13-8H19v-1l16-16l18 16z"/><path d="M19 32h34v24H19zm10-11l-5 5v-9h5z"/></g></svg>
   </span>
@@ -204,6 +211,9 @@
   </span>
   <span id="score-val">0</span>
 </div>
+  <button type="button" class="icon-btn" id="hint-btn" data-i18n-title="hintTitle" title="Подсказка">
+          <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--hint"></span></span>
+        </button>
         <button class="icon-btn" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
       </div>
       <div class="question-meta">
@@ -250,7 +260,8 @@
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--hundred"></span></span>
         <span data-i18n="collection">Коллекция</span>
       </button>
-   <button class="btn btn-ghost" id="yandex-shortcut-btn" data-yandex-only style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
+   <button class="btn btn-ghost" data-yandex-shortcut
+ data-yandex-only style="display:none" onclick="showShortcut()"><span data-i18n="shortcut">Ярлык</span></button>
       <button class="btn btn-ghost" id="home-btn">
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--home_menu"></span></span>
         <span data-i18n="backHome"></span>
@@ -302,39 +313,38 @@
   <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--achivments"></span></span>
   <span class="btn-icon-count" id="map-ach-badge">0</span>
 </button>
-
-
-
-<button class="btn btn-ghost btn-icon" id="extrasHelpBtn" title="Помощь">❓</button>
-      <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">🏆</button>
-      <button type="button" id="mapMenuHomeBtn" class="btn btn-ghost btn-icon" title="На главную">
+<button class="btn btn-ghost btn-icon" id="mapHelpBtn" data-i18n-title="helpBtnTitle" title="Помощь">❓</button>
+      <button type="button" id="mapMenuHomeBtn" class="btn btn-ghost btn-icon" data-i18n-title="homeMenuTitle" title="На главную">
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--home_menu"></span></span>
       </button>
-      <button class="btn btn-ghost btn-icon" id="heroMoreToggle" onclick="toggleHeroMore()" aria-expanded="false" data-i18n-title="titleMoreGames">
+      <button class="btn btn-ghost btn-icon" id="mapMoreToggle" onclick="toggleHeroMore(this)" aria-expanded="false" data-i18n-title="titleMoreGames">
         <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--othergames"></span></span>
       </button>
-      <div class="hero-actions hero-more" id="heroMoreMenu" hidden>
+      <div class="hero-actions hero-more" id="mapMoreMenu" hidden>
+              <button class="btn btn-ghost btn-icon" onclick="openYandexLeaderboard()" data-yandex-only data-i18n-title="titleTop">👑</button>
         <button class="btn btn-ghost btn-icon" onclick="openOtherGamesModal()" data-i18n-title="titleMoreGames">
           <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--othergames"></span></span>
         </button>
         <button class="btn btn-ghost btn-icon" data-theme-toggle onclick="Theme.toggle()" data-i18n-title="titleTheme">🌙</button>
         <button class="btn btn-ghost btn-icon" data-sound-toggle onclick="Sound.toggle()" data-i18n-title="titleSound">🔊</button>
-          <button class="btn btn-ghost btn-icon" onclick="infr()" data-vk-only data-i18n-title="titleInvite">👥</button>
-          <button class="btn btn-ghost btn-icon" id="yandex-shortcut-btn" data-yandex-only style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
+          <button type="button" class="icon-btn" onclick="infr()" data-vk-only data-i18n-title="titleInvite" title="Пригласить">
+            <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--family"></span></span>
+          </button>
+          <button class="btn btn-ghost btn-icon" data-yandex-shortcut
+ data-yandex-only style="display:none" onclick="showShortcut()" data-i18n-title="shortcut">📌</button>
+
       </div>
     </div>
-
   <div class="extras-daily-row">
     <div class="extras-daily-col">
       <button class="extras-daily-btn extras-daily-btn--active" id="map-daily-btn">
-        <span class="extras-daily-btn__icon">🎁</span> Вызов дня
+        <span class="extras-daily-btn__icon">🎁</span> <span data-i18n="dailyTitle">Вызов дня</span>
       </button>
     </div>
     <button class="extras-daily-btn extras-daily-btn--quests" id="map-quests-btn">
-      <span class="extras-daily-btn__icon">🎯</span> Квесты дня
+      <span class="extras-daily-btn__icon">🎯</span> <span data-i18n="questsTitle">Квесты дня</span>
     </button>
   </div>
-
   <div class="map-container" id="map-container">
     <div id="map-canvas">
       <div class="map-path" id="map-path"></div>
@@ -342,39 +352,48 @@
       <div class="map-player" id="map-player">🐱</div>
     </div>
   </div>
-
-
-
 </div>
 
-
+<div class="modal" id="langModal">
+  <div class="modal-content modal-narrow">
+    <button type="button" class="modal-close" id="langModalClose" aria-label="close">×</button>
+    <h2 class="modal-title" data-i18n="chooseLangTitle">Выберите язык</h2>
+    <div class="modal-actions" style="flex-direction:column;">
+      <button type="button" class="btn lang-option-btn" data-lang="ru">Русский</button>
+      <button type="button" class="btn lang-option-btn" data-lang="en">English</button>
+      <button type="button" class="btn lang-option-btn" data-lang="tr">Türkçe</button>
+    </div>
+  </div>
+</div>
 <div class="modal" id="extrasQuestsModal">
+
   <div class="modal-content">
     <button class="modal-close" aria-label="close">×</button>
-    <h2>🎯 Квесты дня</h2>
+    <h2>🎯 <span data-i18n="questsTitle">Квесты дня</span></h2>
     <div id="extrasQuestsList" class="extras-quests-list"></div>
-    <button class="extras-btn extras-btn--primary" data-act="close" >Закрыть</button>
+    <button class="extras-btn extras-btn--primary" data-act="close" data-i18n="closeBtn">Закрыть</button>
   </div>
 </div>
 <div class="modal" id="extrasHelpModal">
   <div class="modal-content">
     <button class="modal-close" aria-label="close">×</button>
-    <h2>❓ Как играть</h2>
+    <h2>❓ <span data-i18n="helpTitle">Как играть</span></h2>
     <div class="extras-help-text">
-      <p>Посмотри на фото животного и выбери один из вариантов ответа.</p>
-      <p>На каждый вопрос даётся 10 секунд — следи за таймером.</p>
-      <p>За правильные ответы ты получаешь ягоды.</p>
-      <p>Пройди всю викторину без ошибок — получишь 3 звезды!</p>
-      <p>После открытия всех уровней ягоды можно будет потратить на открытие категорий.</p>
-      <p>Выполняй ежедневные квесты и вызов дня, чтобы получать бонусные ягоды.</p>
-      <p>Каждый 15-й правильный ответ даёт ×2 ягод.</p>
+      <p data-i18n="helpP1">Посмотри на фото животного и выбери один из вариантов ответа.</p>
+      <p data-i18n="helpP2">На каждый вопрос даётся 10 секунд — следи за таймером.</p>
+      <p data-i18n="helpP3">За правильные ответы ты получаешь ягоды.</p>
+      <p data-i18n="helpP4">Пройди всю викторину без ошибок — получишь 3 звезды!</p>
+      <p data-i18n="helpP5">После открытия всех уровней ягоды можно будет потратить на открытие категорий.</p>
+      <p data-i18n="helpP6">Выполняй ежедневные квесты и вызов дня, чтобы получать бонусные ягоды.</p>
+      <p data-i18n="helpP7">Каждый 15-й правильный ответ даёт ×2 ягод.</p>
     </div>
     <div class="extras-help-actions">
-      <button class="extras-btn extras-btn--primary" data-act="tutorial">Обучение</button>
-      <button class="extras-btn extras-btn--ghost" data-act="close">Закрыть</button>
+      <button class="extras-btn extras-btn--primary" data-act="tutorial" data-i18n="tutorialBtn">Обучение</button>
+      <button class="extras-btn extras-btn--ghost" data-act="close" data-i18n="closeBtn">Закрыть</button>
     </div>
   </div>
 </div>
+
 <div class="modal" id="auth-modal">
   <div class="modal-content modal-narrow">
     <button class="modal-close" aria-label="close">×</button>
@@ -415,8 +434,27 @@
 <div class="modal" id="yandex-leaderboard-modal">
   <div class="modal-content">
     <button class="modal-close" aria-label="close">×</button>
-    <h2 class="modal-title" data-i18n="leaderboardTitle">🏆 Таблица лидеров</h2>
+    <h2 class="modal-title">👑 <span data-i18n="leaderboardTitle">Таблица лидеров</span></h2>
     <div id="yandex-leaderboard-body" class="ach-body"></div>
+  </div>
+</div>
+<div class="modal" id="hintModal">
+  <div class="modal-content modal-narrow">
+    <button type="button" class="modal-close" id="hintModalClose" aria-label="close">×</button>
+    <h2 class="modal-title">
+      <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--hint"></span></span>
+      <span data-i18n="hintModalTitle">Подсказка!</span>
+    </h2>
+    <p class="modal-text" data-i18n="hintModalDesc">Посмотри короткую рекламу, чтобы получить подсказку.</p>
+    <div class="modal-actions" style="flex-direction:column;">
+      <button type="button" class="btn" id="hint5050Btn" style="width:100%;">
+        <span>50/50</span>
+      </button>
+      <button type="button" class="btn" id="hintTimeBtn" style="width:100%;">
+        <span class="emoji-icon" aria-hidden="true"><span class="ui-sprite ui-sprite--loading"></span></span>
+        <span>+20</span>
+      </button>
+    </div>
   </div>
 </div>
     <div class="level-overlay" id="levelOverlay"><div class="level-overlay__box" id="levelOverlayBox"></div></div>

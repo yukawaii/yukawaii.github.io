@@ -1,1 +1,4182 @@
-!function(e,t){"use strict";e.__T;!function(){const e=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent),t=navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4,n=navigator.deviceMemory&&navigator.deviceMemory<=4;e&&(t||n)&&document.documentElement.classList.add("weak-device")}();const n=new URLSearchParams(location.search),a={};for(const[e,t]of n)a[e]=t;const o="ok"===a.vk_client||Boolean(a.vk_ok_user_id)&&"0"!==a.vk_ok_user_id,r=!!(a.vk_app_id||a.vk_client_id||a.vk_platform||a.vk_user_id||a.vk_client),s="undefined"!=typeof YaGames,i=e.YandexGamesSDKEnvironment,c=!(!i||!i.appId&&!i.clipId);let l=!1,d=!1,u=!1,m="standalone";r?(d=o,l=!o,m=d?"ok":"vk"):s&&c&&(u=!0,m="yandex");const y=parseInt(a.vk_user_id||a.vk_ok_user_id||a.viewer_id||a.user_id||"0"),f=d?"ok_":"",p={isVK:l,isOK:d,isYandex:u,platform:m,userId:y,storagePrefix:f,launchParams:a,isStandalone:"standalone"===m,inIframe:(()=>{try{return e.self!==e.top}catch(e){return!0}})()};e.__PLATFORM=p;const h=t.documentElement.classList;h.toggle("is-vk",l),h.toggle("is-ok",d),h.toggle("is-yandex",u),h.toggle("is-standalone","standalone"===m);let g=!1;try{const e=localStorage.getItem(f+"aq_theme_dark");"true"!==e&&!0!==e||(g=!0,h.add("is-dark"))}catch(e){}const _=["ru","en","tr"];function v(e){return(e=String(e||"").toLowerCase()).startsWith("ru")?"ru":e.startsWith("en")?"en":e.startsWith("tr")?"tr":"ru"}let S=l||d?v(a.vk_language||"ru"):a.vk_language?v(a.vk_language):v(navigator.language||navigator.userLanguage||"ru");function E(){t.querySelectorAll("[data-i18n]").forEach((t=>{t.textContent=e.t(t.dataset.i18n)})),t.querySelectorAll("[data-i18n-title]").forEach((t=>{t.title=e.t(t.dataset.i18nTitle)}));const n=t.querySelector(".loading-text");n&&(n.textContent=e.t("loading")),t.documentElement.lang=S}e.LANG=S,e.t=function(t){const n=e.I18N&&e.I18N[e.LANG]||{},a=e.I18N&&e.I18N.ru||{};return null!=n[t]?n[t]:null!=a[t]?a[t]:t},e.L=function(t){return null==t?"":"string"==typeof t?t:t[e.LANG]||t.ru||""};let w=null,b=null;function k(t,n,a){if(a=a||2e3,!l&&!d)return Promise.resolve(null);const o=()=>{const o=e.vkBridge;if(!o||"function"!=typeof o.send)return Promise.resolve(null);let r=!1,s=null;const i=new Promise((e=>{try{o.send(t,n||{}).then((t=>{r||(r=!0,clearTimeout(s),e(t))})).catch((t=>{r||(r=!0,clearTimeout(s),e(null))}))}catch(t){r||(r=!0,clearTimeout(s),e(null))}})),c=new Promise((e=>{s=setTimeout((()=>{r||(r=!0,resolve(null))}),a)}));return Promise.race([i,c])};return e.__vkBridgeReady&&!e.vkBridge?e.__vkBridgeReady.then((()=>o())):o()}let x=!1;async function N(e){if(!x){x=!0;try{await e()}finally{setTimeout((()=>{x=!1}),300)}}}async function L(e,t=null,n=""){try{return await e()}catch(e){return t}}function A(e){return f+"aq_"+e}function C(e,t){if(null==e)return t;if(null==t)return e;if(Array.isArray(e)&&Array.isArray(t))return Array.from(new Set([...e,...t]));if("object"==typeof e&&"object"==typeof t&&!Array.isArray(e)&&!Array.isArray(t)){const n={...e};for(const e in t){const a=Number(n[e]),o=Number(t[e]);isNaN(a)&&isNaN(o)?n[e]=t[e]:n[e]=Math.max(isNaN(a)?0:a,isNaN(o)?0:o)}return n}return t}function M(e,t){if(null==e)return t;if(null==t)return e;if("object"!=typeof e||"object"!=typeof t)return e;const n={...e},a=new Set([...Object.keys(e),...Object.keys(t)]);for(const o of a){const a=e[o],r=t[o];if(void 0!==a)if(void 0!==r)if(Array.isArray(a)||Array.isArray(r)){const e=Array.isArray(a)?a:[],t=Array.isArray(r)?r:[];n[o]=Array.from(new Set([...e,...t]))}else if("object"!=typeof a||"object"!=typeof r)if("boolean"!=typeof a&&"boolean"!=typeof r){if("number"==typeof a||"number"==typeof r){const e=Number(a),t=Number(r);if(!isNaN(e)&&!isNaN(t)){n[o]="fastestCorrect"===o?Math.min(e,t):Math.max(e,t);continue}}"string"==typeof a&&"string"==typeof r&&/^\d{4}-\d{2}-\d{2}/.test(a)&&/^\d{4}-\d{2}-\d{2}/.test(r)?n[o]=a>r?a:r:n[o]=a}else n[o]=!(!a&&!r);else n[o]=M(a,r);else n[o]=a;else n[o]=r}return n}async function I(e){const t=A(e);if(u){if(!b)return{ok:!1,value:null};try{const e=await b.getData([t]),n=e&&e[t];if(null==n)return{ok:!0,value:null};try{return{ok:!0,value:JSON.parse(n)}}catch{return{ok:!0,value:n}}}catch(e){return{ok:!1,value:null}}}if(l||d){const e=await k("VKWebAppStorageGet",{keys:[t]},2500);if(!e||!Array.isArray(e.keys))return{ok:!1,value:null};const n=e.keys.find((e=>e&&e.key===t))||e.keys[0],a=n&&n.value;if(""===a||null==a)return{ok:!0,value:null};try{return{ok:!0,value:JSON.parse(a)}}catch{return{ok:!0,value:a}}}return{ok:!1,value:null}}async function D(e){return(await I(e)).value}async function q(e,t){const n=A(e);if(u){if(!b)return!1;try{return await b.setData({[n]:t},!0),!0}catch(e){return!1}}if(l||d){return null!==await k("VKWebAppStorageSet",{key:n,value:t},2500)}return!1}function T(e){try{return localStorage.getItem(e)}catch(e){return null}}function U(e,t){try{return localStorage.setItem(e,t),!0}catch(n){try{const n=Object.keys(localStorage),a=f+"aq_";return n.filter((e=>e.startsWith(a)&&!e.includes("unlocked")&&!e.includes("collection"))).forEach((e=>localStorage.removeItem(e))),localStorage.setItem(e,t),!0}catch(e){return!1}}}function B(e,t=[]){return Array.isArray(e)?e:t}function O(e,t=0){const n=Number(e);return isNaN(n)?t:n}function P(e,t={}){return e&&"object"==typeof e&&!Array.isArray(e)?e:t}function Y(e){const t=A(e);let n=null;try{const e=T(t);if(null!==e)try{n=JSON.parse(e)}catch{n=e}}catch(e){}return p.isStandalone?Promise.resolve(n):u?b?(async()=>{try{const e=await b.getData([t]),a=e&&e[t];if(null==a)return n;let o;try{o=JSON.parse(a)}catch{o=a}const r=C(n,o);try{localStorage.setItem(t,JSON.stringify(r))}catch(e){}return r}catch(e){return n}})():Promise.resolve(n):l||d?I(e).then((a=>{if(a.ok){if(null!=a.value){const o=C(n,a.value);return U(t,JSON.stringify(o)),JSON.stringify(o)!==JSON.stringify(a.value)&&q(e,JSON.stringify(o)).catch((()=>{})),o}return null!=n&&q(e,JSON.stringify(n)).catch((()=>{})),n}return n})):Promise.resolve(n)}function G(e,t){const n=A(e),a="string"==typeof t?t:JSON.stringify(t);return U(n,a),p.isStandalone?Promise.resolve():u?b?(async()=>{try{await b.setData({[n]:a},!0)}catch(e){}})():Promise.resolve():l||d?q(e,a).catch((()=>{})):Promise.resolve()}async function z(){const e=A("total"),t=A("total_ts");let n=null,a=0;try{const o=T(e);null!=o&&(n=Number(JSON.parse(o))||0);const r=T(t);null!=r&&(a=Number(JSON.parse(r))||0)}catch(e){}let o,r=!1,s=null,i=0;if(!p.isStandalone)try{if(u&&b){const n=await b.getData([e,t]);r=!0,n&&null!=n[e]&&(s=Math.max(0,Math.floor(Number(JSON.parse(n[e]))||0))),n&&null!=n[t]&&(i=Number(JSON.parse(n[t]))||0)}else if(l||d){const n=await k("VKWebAppStorageGet",{keys:[e,t]},2500);if(n&&Array.isArray(n.keys)){r=!0;for(const a of n.keys)a&&""!==a.value&&null!=a.value&&(a.key===e?s=Math.max(0,Math.floor(Number(JSON.parse(a.value))||0)):a.key===t&&(i=Number(JSON.parse(a.value))||0))}}}catch(e){}o=null==n&&null==s?0:null==n?s:null==s?n:i>a?s:n,o=Math.max(0,Math.floor(Number(o)||0));try{U(e,JSON.stringify(o)),null!=s&&i>a&&U(t,JSON.stringify(i)),(l||d)&&r&&null!=n&&a>i&&(k("VKWebAppStorageSet",{key:e,value:JSON.stringify(o)},2500).catch((()=>{})),k("VKWebAppStorageSet",{key:t,value:JSON.stringify(a)},2500).catch((()=>{})))}catch(e){}return o}async function R(e){const t=Number(e)||0;let n=0;try{n=Number(JSON.parse(T(A("total_ts"))))||0}catch(e){}const a=Math.max(Date.now(),n+1);if(U(A("total"),JSON.stringify(t)),U(A("total_ts"),JSON.stringify(a)),!p.isStandalone)try{if(u&&b)return void await b.setData({[A("total")]:JSON.stringify(t),[A("total_ts")]:JSON.stringify(a)},!0);(l||d)&&(await k("VKWebAppStorageSet",{key:A("total"),value:JSON.stringify(t)},2500),await k("VKWebAppStorageSet",{key:A("total_ts"),value:JSON.stringify(a)},2500))}catch(e){}}e.storageGet=Y,e.storageSet=G,e.vkSend=k;let H=0,V=0,j=null;function Q(){j&&(clearTimeout(j),j=null),X&&(clearTimeout(X),X=null),J&&(clearInterval(J),J=null),te&&(clearInterval(te),te=null)}e.clearAdTimers=Q;async function K(e,t,n){e=e||8e3,t=t||700,n=n||"reward";const a=Date.now();for(;Date.now()-a<e;){const e=await k("VKWebAppCheckNativeAds",{ad_format:n},3e3);if(e&&!0===e.result)return!0;await new Promise((e=>setTimeout(e,t)))}return!1}let J=null;function F(){(l||d)&&(k("VKWebAppCheckNativeAds",{ad_format:"reward"},3e3),k("VKWebAppCheckNativeAds",{ad_format:"interstitial"},3e3),J||(J=setInterval((()=>{ye||fe||document.hidden||(k("VKWebAppCheckNativeAds",{ad_format:"reward"},3e3),k("VKWebAppCheckNativeAds",{ad_format:"interstitial"},3e3))}),45e3)))}function W(){if(p.isStandalone&&!u&&"undefined"==typeof YaGames)return Promise.resolve(!0);if(u||"undefined"!=typeof YaGames&&!l&&!d){return Date.now()-H<31e3?(de(e.t("adSkipped"),!0),Promise.resolve(!1)):new Promise((t=>{const n=n=>{if(!n||!n.adv||"function"!=typeof n.adv.showRewardedVideo)return de(e.t("adUnavailable"),!0),t(!1);re(),Ie();let a=!1,o=!1;const r=setTimeout((()=>s(!1)),95e3),s=e=>{o||(o=!0,clearTimeout(r),e&&(H=Date.now()),De(),oe(),t(e))};try{n.adv.showRewardedVideo({callbacks:{onRewarded:()=>{a=!0},onClose:()=>{if(a)return s(!0);try{n.adv.showFullscreenAdv({callbacks:{onClose:()=>s(!0),onError:t=>{de(e.t("adUnavailable"),!0),s(!1)}}})}catch(t){de(e.t("adUnavailable"),!0),s(!1)}},onError:t=>{de(e.t("adUnavailable"),!0),s(!1)}}})}catch(t){de(e.t("adUnavailable"),!0),s(!1)}};w&&w.adv?n(w):"undefined"!=typeof YaGames?YaGames.init().then((e=>{w=e,u||(u=!0,m="yandex",p.isYandex=!0,p.platform="yandex",p.isStandalone=!1),!b&&e.getPlayer&&e.getPlayer().then((e=>{b=e})).catch((()=>{})),n(e)})).catch((n=>{de(e.t("adUnavailable"),!0),t(!1)})):(de(e.t("adUnavailable"),!0),t(!1))}))}if(l||d){if(e.__rewardAdInFlight)return e.__rewardAdInFlight;let t;return e.__rewardAdInFlight=new Promise((e=>{t=e})),Ie(),(async()=>{let n=!1;const a=(a,o)=>{if(!n){n=!0;try{De()}catch(e){}e.__rewardAdInFlight=null,t(a)}};try{if(await K(2500,500,"reward")){const e=await k("VKWebAppShowNativeAds",{ad_format:"reward",use_waterfall:!0},9e4),t=!(!e||!0!==e.result);if(setTimeout((()=>{k("VKWebAppCheckNativeAds",{ad_format:"reward"},3e3),ne(!0)}),500),t)return a(!0)}if(!await K(2e3,500,"interstitial"))return de(e.t("adUnavailable"),!0),a(!1);const t=await k("VKWebAppShowNativeAds",{ad_format:"interstitial"},9e4),n=!(!t||!0!==t.result);setTimeout((()=>{k("VKWebAppCheckNativeAds",{ad_format:"reward"},3e3),ne(!0)}),500),n?a(!0):(de(e.t("adSkipped"),!0),a(!1))}catch(t){de(e.t("adUnavailable"),!0),a(!1,t&&t.message)}})(),e.__rewardAdInFlight}return de(e.t("adUnavailable"),!0),Promise.resolve(!1)}function Z(){const e=Date.now();if(e-V<6e5)return;if(!document.querySelector("#quiz-screen.active"))if(V=e,u){if(!w)return;re(),Ie();let e=!1;const t=()=>{e||(e=!0,De())},n=setTimeout(t,65e3);try{w.adv.showFullscreenAdv({callbacks:{onClose:()=>{clearTimeout(n),t()},onError:()=>{clearTimeout(n),t()}}})}catch(e){clearTimeout(n),t()}}else(l||d)&&(async()=>{try{const e=await k("VKWebAppCheckNativeAds",{ad_format:"interstitial"},3e3);if(!e||!0!==e.result)return;Ie(),await k("VKWebAppShowNativeAds",{ad_format:"interstitial"},6e4)}catch(e){}finally{try{De()}catch(e){}}})()}let $=!1,X=null,ee=0;let te=null;function ne(e){if(!l&&!d)return;if(te||(te=setInterval((function(){t.hidden||ye||ne(!0)}),3e5)),$&&!e)return;if(X)return;ee++;const n=ee;k("VKWebAppShowBannerAd",{banner_location:"bottom"},5e3).then((function(e){if(e&&(!0===e.result||1===e.result))return $=!0,void(ee=0);$=!1,ae(n)})).catch((function(e){$=!1,ae(n)}))}function ae(e){$||(e>=5?ee=0:X=setTimeout((function(){X=null,ne(!0)}),1e4))}function oe(){if(u&&w&&w.features&&w.features.GameplayAPI)try{w.features.GameplayAPI.start()}catch(e){}}function re(){if(u&&w&&w.features&&w.features.GameplayAPI)try{w.features.GameplayAPI.stop()}catch(e){}}async function se(){if(u||p.isStandalone)return void de(e.t("inviteVKOnly"));if(!l&&!d)return void de(e.t("inviteVKOnly"));const t=function(){const e=p.launchParams.vk_app_id||p.launchParams.vk_client_id||new URLSearchParams(location.search).get("vk_app_id")||new URLSearchParams(location.search).get("vk_client_id")||"";return d?e?"https://ok.ru/app/"+e:location.origin+location.pathname:e?"https://vk.com/app"+e:location.origin+location.pathname}();try{await k("VKWebAppShare",{link:t},6e4)}catch(t){de(e.t("inviteVKOnly"),!0)}}e.showRewardedAd=W,e.showInterstitial=Z,e.showBanner=ne,e.preloadRewardedAd=F,e.yandexGameplayStart=oe,e.yandexGameplayStop=re,e.infr=se;const ie=[];let ce=!1;function le(){if(!ie.length)return void(ce=!1);ce=!0;const{msg:e,isError:n,title:a}=ie.shift();let o=t.getElementById("__toast");o||(o=t.createElement("div"),o.id="__toast",t.body.appendChild(o)),o.className="toast"+(n?" toast-error":"");const r=e=>"string"==typeof e&&(-1!==e.indexOf("<svg")||-1!==e.indexOf("<span"));a?o.innerHTML='<div class="toast-title">'+(r(a)?a:ue(a))+'</div><div class="toast-msg">'+(r(e)?e:ue(e))+"</div>":r(e)?o.innerHTML=e:o.textContent=e,requestAnimationFrame((()=>o.classList.add("show"))),clearTimeout(o.__t),o.__t=setTimeout((()=>{o.classList.remove("show"),setTimeout(le,350)}),3e3)}function de(e,t,n){ie.push({msg:e,isError:t,title:n}),ce||le()}function ue(e){return String(e).replace(/[&<>"']/g,(e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e])))}e.toast=de;let me=1,ye=!1,fe=!1,pe=null,he=null;function ge(){return me>0&&!ye&&!fe&&!document.hidden}function _e(){return 2===me&&!ye&&!fe&&!document.hidden}let ve=!1;function Se(){if(!ve)return null;if(!pe)try{pe=new(e.AudioContext||e.webkitAudioContext)}catch(e){pe=null}if(pe&&"suspended"===pe.state)try{pe.resume().catch((()=>{}))}catch(e){}return pe}function Ee(e,t,n,a,o){if(ge())try{const r=Se();if(!r)return;const s=r.currentTime+(a||0),i=r.createOscillator(),c=r.createGain();i.type=n||"sine",i.frequency.setValueAtTime(e,s),c.gain.setValueAtTime(1e-4,s),c.gain.exponentialRampToValueAtTime(null==o?.15:o,s+.015),c.gain.exponentialRampToValueAtTime(1e-4,s+1.6*t),i.connect(c),c.connect(r.destination),i.start(s),i.stop(s+t+.05),i.onended=()=>{try{i.disconnect(),c.disconnect()}catch(e){}}}catch(e){}}let we=0;function be(){if(!ge())return;const e=Date.now();e-we<60||(we=e,Ee(587,.03,"sine",0,.02),Ee(784,.05,"sine",.02,.018))}let ke=!1,xe=0;function Ne(){if(he)return he;if(xe>=5)return null;try{const e=new Audio;e.loop=!0,e.volume=.25,e.preload="auto",e.src="sounds/music.ogg";const t=()=>{ke&&_e()&&e.paused&&e.play().catch((()=>{}))},n=()=>{xe++,e.removeEventListener("canplay",t),e.removeEventListener("error",n),e.src="",he=null,xe>=5&&Le()};e.addEventListener("canplay",t),e.addEventListener("error",n),he=e}catch(e){he=null}return he}function Le(){t.removeEventListener("pointerdown",qe,!0),t.removeEventListener("keydown",qe,!0)}function Ae(){ve=!0,Se();const e=Ne();if(!e||!_e()||!e.paused)return;const t=()=>{const t=e.play();t&&t.then&&t.then((()=>{ke=!0,Le()})).catch((()=>{}))};if(e.readyState>=2)t();else{e.addEventListener("canplay",t,{once:!0});try{e.load()}catch(e){}}}function Ce(){if(he&&!he.paused)try{he.__savedTime=he.currentTime,he.pause()}catch(e){}}function Me(){const n=me>0;t.querySelectorAll("[data-sound-toggle]").forEach((t=>{const a=n?"soundoff":"soundon",o=e.UiSprite&&e.UiSprite.has(a)?e.UiSprite.html(a):n?"🔇":"🔊";t.innerHTML='<span class="emoji-icon" aria-hidden="true">'+o+"</span>",t.title=n?e.t("soundOffTitle"):e.t("soundOnTitle"),t.setAttribute("aria-label",n?e.t("soundOffTitle"):e.t("soundOnTitle"))})),_e()||Ce(),e.dispatchEvent(new Event("quiz:sound-changed"))}function Ie(){ye=!0,Ce()}function De(){ye=!1,_e()&&Ae()}function qe(){ve=!0,Se();const e=Ne();if(e){if(0===e.readyState)try{e.load()}catch(e){}if(_e()&&(!ke||e.paused)){const t=()=>{ke=!0,Le()};if(e.readyState>=2){const n=e.play();n&&n.then&&n.then(t).catch((()=>{}))}else{const n=()=>{if(!_e())return;const n=e.play();n&&n.then&&n.then(t).catch((()=>{}))};e.addEventListener("canplay",n,{once:!0})}}}}e.Sound={isEnabled:()=>me>0,getMode:()=>me,playClick:be,playCorrect:function(){ge()&&(Ee(660,.12,"sine",0,.16),Ee(880,.16,"sine",.1,.16),Ee(1320,.22,"sine",.22,.14))},playWrong:function(){ge()&&(Ee(240,.18,"sawtooth",0,.05),Ee(170,.3,"sawtooth",.1,.05))},playFanfare:function(){ge()&&([523.25,659.25,783.99,1046.5].forEach(((e,t)=>Ee(e,.3,"triangle",.12*t,.15))),[523.25,659.25,783.99,1046.5].forEach((e=>Ee(e,.75,"sine",.55,.13))))},toggle:function(){me=1===me?2:2===me?0:1,Se(),2===me?Ae():Ce(),Me(),G("sound_mode",me).catch((()=>{}))},apply:Me,startBg:Ae,stopBg:Ce,mute:Ie,unmute:De,unlockAndPlay:qe};const Te="theme_name",Ue=["light","dark","blue","green"],Be={light:"#fdf6e3",dark:"#1a1430",blue:"#dbeafe",green:"#dcfce7"};let Oe="light";function Pe(){t.documentElement.setAttribute("data-theme",Oe),h.toggle("is-dark","dark"===Oe),t.querySelectorAll("[data-theme-toggle]").forEach((t=>{const n="dark"===Oe?"moon":"palitra",a=e.UiSprite&&e.UiSprite.has(n)?e.UiSprite.html(n):"dark"===Oe?"🌙":"🎨";t.innerHTML='<span class="emoji-icon" aria-hidden="true">'+a+"</span>",t.title=e.t("titleTheme"),t.setAttribute("aria-label",t.title)})),function(){let e=t.querySelector('meta[name="theme-color"]');e||(e=t.createElement("meta"),e.name="theme-color",t.head.appendChild(e)),e.content=Be[Oe]||"#fdf6e3"}(),Nt=!1}function Ye(e){const n=Math.max(0,Math.floor(Number(e)||0)),a=(o=n)<1e3?String(o):o<1e6?(o/1e3).toFixed(o<1e4?1:0).replace(/\.0$/,"")+"K":o<1e9?(o/1e6).toFixed(1).replace(/\.0$/,"")+"M":(o/1e9).toFixed(1).replace(/\.0$/,"")+"B";var o;t.querySelectorAll("[data-total-score]").forEach((e=>{e.textContent=a,e.title=String(n)}))}e.Theme={toggle:async function(){const e=(Ue.indexOf(Oe)+1)%Ue.length;Oe=Ue[e];try{await G(Te,Oe)}catch(e){}Pe()},apply:Pe,load:async function(){try{const e=await Y(Te);Oe=Ue.includes(e)?e:"light"}catch(e){Oe="light"}Pe()},isDark:()=>"dark"===Oe,get:()=>Oe},e.updateTotalScoreUI=Ye;var Ge=Ye;e.updateTotalScoreUI=function(e){Ge(e),window.StartMenu&&window.StartMenu.updateStats&&window.StartMenu.updateStats()};const ze="ach_metrics",Re="ach_unlocked";let He=null,Ve=null;function je(){const e=new Date;return e.getFullYear()+"-"+String(e.getMonth()+1).padStart(2,"0")+"-"+String(e.getDate()).padStart(2,"0")}function Qe(){const e=new Date;return e.setDate(e.getDate()-1),e.getFullYear()+"-"+String(e.getMonth()+1).padStart(2,"0")+"-"+String(e.getDate()).padStart(2,"0")}async function Ke(){let e=null;try{const t=T(A(ze));if(null!=t)try{e=JSON.parse(t)}catch{e=t}}catch(e){}let t=null;try{t=await D(ze)}catch(e){}const n=M(e,t),a=n&&"object"==typeof n&&!Array.isArray(n)?n:{};return He={totalPlays:0,playsToday:0,lastPlayDate:"",maxStreak:0,fastestCorrect:99,noMistakeRuns:0,zeroLossStreak:0,hasZeroScore:!1,allTimeouts:!1,playedAtNight:!1,playedEarlyMorning:!1,dailyStreak:0,maxDailyStreak:0,lastActiveDate:"",playedLevels:[],lastPercent:0,...a},U(A(ze),JSON.stringify(He)),null!=t&&JSON.stringify(He)!==JSON.stringify(t)&&q(ze,JSON.stringify(He)).catch((()=>{})),He}async function Je(){let e=null;try{e=await Y(Re)}catch(e){}const t=Array.isArray(e)?Array.from(new Set(e)):[];return Ve=new Set(t),U(A(Re),JSON.stringify(t)),Ve}async function Fe(){await G(ze,He)}function We(){const e=je();He.lastActiveDate!==e&&(He.lastActiveDate===Qe()?He.dailyStreak++:He.dailyStreak=1,He.lastActiveDate=e,He.dailyStreak>He.maxDailyStreak&&(He.maxDailyStreak=He.dailyStreak))}async function Ze(t){Ve||await Je();const n=function(){const t=new Set((e.__SYNCED__&&e.__SYNCED__.unlocked||[]).map(Number)),n=P(e.__SYNCED__&&e.__SYNCED__.stars),a=B(e.__SYNCED__&&e.__SYNCED__.collection),o=new Set(a.map(String));let r=0,s=0;for(const e in n){const t=Math.max(0,Math.min(3,Math.floor(Number(n[e])||0)));r+=t,t>=3&&s++}const i=new Set,c=new Set,l=new Set;let d=0;(e.REGIONS||[]).forEach((n=>{const a=new Set;n.levels.forEach((o=>{if(o.isFullSet)return;d++,t.has(Number(o.id))&&i.add(n.id);const r=(e.QUIZZES||{})[o.id];r&&Array.isArray(r.questions)&&r.questions.forEach((e=>{const t=at(e.img);t&&(l.add(t),a.add(t))}))})),a.size>0&&Array.from(a).every((e=>o.has(e)))&&c.add(n.id)}));let u=0,m=0,y=0,f=0;(e.THEMED_LEVELS||[]).forEach((e=>{if(e.isFullSet)return;const a=Number(e.id);u++,t.has(a)&&m++,null!=n[a]&&y++,Number(n[a])>=3&&f++}));let p=0,h=0,g=0,_=0;(e.PHOTO_LEVELS||[]).forEach((e=>{if(e.isFullSet)return;const a=Number(e.id);p++,t.has(a)&&h++,null!=n[a]&&g++,Number(n[a])>=3&&_++}));const v=He||{};return{totalStars:r,threeStarsCount:s,stars:n,unlockedLevels:t.size,totalLevels:d,unlockedRegions:i,regionFull:c,collectionCount:o.size,collectionTotal:l.size,themedTotal:u,themedUnlocked:m,themedPlayed:y,themed3Stars:f,photoTotal:p,photoUnlocked:h,photoPlayed:g,photo3Stars:_,totalPlays:v.totalPlays||0,playsToday:v.playsToday||0,maxStreak:v.maxStreak||0,fastestCorrect:null!=v.fastestCorrect?v.fastestCorrect:99,noMistakeRuns:v.noMistakeRuns||0,zeroLossStreak:v.zeroLossStreak||0,hasZeroScore:!!v.hasZeroScore,allTimeouts:!!v.allTimeouts,playedAtNight:!!v.playedAtNight,playedEarlyMorning:!!v.playedEarlyMorning,maxDailyStreak:v.maxDailyStreak||0,playedLevels:new Set(Array.isArray(v.playedLevels)?v.playedLevels:[]),lastPercent:v.lastPercent||0}}(),a=[];for(const t of e.ACHIEVEMENTS||[]){if(Ve.has(t.id))continue;let e=!1;try{e=!!t.check(n)}catch(e){}e&&(Ve.add(t.id),a.push(t))}return a.length&&(await async function(){await G(Re,Array.from(Ve))}(),t||a.forEach((t=>{de(t.icon+" "+e.L(t.title),!1,"🏆 "+e.t("achUnlocked"))}))),a}async function $e(){return Ve||await Je(),(e.ACHIEVEMENTS||[]).map((e=>({...e,unlocked:Ve.has(e.id)})))}async function Xe(){const n=t.getElementById("ach-body");if(!n)return;const a=await $e(),o=a.filter((e=>e.unlocked)).length,r=t.getElementById("ach-counter");r&&(r.textContent=o+" / "+a.length),n.innerHTML="",(e.ACH_CATEGORIES||[]).forEach((o=>{const r=a.filter((e=>e.cat===o.id));if(!r.length)return;const s=t.createElement("section");s.className="ach-group";const i=t.createElement("h3");i.className="ach-group-title",i.textContent=o.icon+" "+e.L(o.name)+" ("+r.filter((e=>e.unlocked)).length+"/"+r.length+")",s.appendChild(i);const c=t.createElement("div");c.className="ach-grid",r.forEach((n=>{const a=t.createElement("div");a.className="ach-item"+(n.unlocked?" unlocked":""),a.innerHTML='<div class="ach-icon">'+n.icon+'</div><div class="ach-text"><div class="ach-title">'+ue(e.L(n.title))+'</div><div class="ach-desc">'+ue(e.L(n.desc))+"</div></div>"+(n.unlocked?'<div class="ach-check">✓</div>':""),c.appendChild(a)})),s.appendChild(c),n.appendChild(s)}))}function et(){const e=t.getElementById("ach-modal");e&&e.classList.remove("show")}function tt(){const e=t.getElementById("igames-modal");e&&(Ht(),e.classList.add("show"))}function nt(){const e=t.getElementById("igames-modal");e&&e.classList.remove("show")}function at(e){return String(e||"").split("/").pop().replace(/\.(png|jpe?g)$/i,"")}e.Ach={loadMetrics:Ke,recordVisit:async function(){return He||await Ke(),We(),await Fe(),Ze(!0)},recordRound:async function(e){He||await Ke(),We(),He.totalPlays++;const t=je();He.lastPlayDate===t?He.playsToday++:(He.playsToday=1,He.lastPlayDate=t),"number"==typeof e.fastestCorrect&&e.fastestCorrect<He.fastestCorrect&&(He.fastestCorrect=e.fastestCorrect),"number"==typeof e.maxStreak&&e.maxStreak>He.maxStreak&&(He.maxStreak=e.maxStreak),e.total>0&&0===e.mistakes&&He.noMistakeRuns++,e.total>0&&0===(Number(e.correctCount)||0)?(He.hasZeroScore=!0,He.zeroLossStreak++):He.zeroLossStreak=0,e.total>0&&e.timeouts===e.total&&(He.allTimeouts=!0);const n=(new Date).getHours();n>=2&&n<=4&&(He.playedAtNight=!0),n>=5&&n<=7&&(He.playedEarlyMorning=!0),He.lastPercent=e.percent;const a=Number(e.levelId);return a&&99999!==a&&88888!==a&&!He.playedLevels.includes(a)&&He.playedLevels.push(a),await Fe(),Ze(!1)},checkAndUnlock:Ze,list:$e,openModal:function(){const e=t.getElementById("ach-modal");e&&(Xe(),e.classList.add("show"))},closeModal:et,renderModal:Xe},e.openOtherGamesModal=tt,e.closeOtherGamesModal=nt,e.getAnimalId=at;let ot=null;function rt(){if(ot)return ot;const t={};return(e.REGIONS||[]).forEach((n=>{(n.levels||[]).forEach((n=>{const a=(e.QUIZZES||{})[n.id];a&&Array.isArray(a.questions)&&a.questions.forEach((e=>{const n=at(e.img);if(!n||t[n])return;if(!Array.isArray(e.options))return;const a=e.options[e.answer];a&&(t[n]={id:n,img:e.img,name:a,desc:e.description})}))}))})),ot=t,t}function st(e){const t=e.slice();for(let e=t.length-1;e>0;e--){const n=Math.floor(Math.random()*(e+1)),a=t[e];t[e]=t[n],t[n]=a}return t}e.getAnimalMap=rt;const it=new Map;function ct(e){const t=e.join(",");if(it.has(t))return it.get(t);const n=rt(),a=e.map((e=>n[e])).filter(Boolean);if(it.size>=25){const e=it.keys().next().value;it.delete(e)}return it.set(t,a),a}function lt(t){const n=Number(t),a=(e.THEMED_LEVELS||[]).find((e=>Number(e.id)===n));if(a){const e=ct(a.pool||[]);if(e.length<4)return null;const t=Math.min(a.count||e.length,e.length),n=st(e).slice(0,t).map((t=>{const n=st(e.filter((e=>e.id!==t.id))).slice(0,3),a=st([t].concat(n)),o=a.findIndex((e=>e.id===t.id));return{animalId:t.id,img:t.img,options:a.map((e=>e.name)),answer:o,description:t.desc}}));return{regionKey:"themed",mode:"text",sub:a.name,questions:n}}const o=(e.PHOTO_LEVELS||[]).find((e=>Number(e.id)===n));if(o){const e=ct(o.pool||[]),t=Math.max(2,Math.min(4,o.optionCount||4));if(e.length<t)return null;const n=Math.min(o.count||e.length,e.length),a=st(e).slice(0,n).map((n=>{const a=st(e.filter((e=>e.id!==n.id))).slice(0,t-1),o=st([n].concat(a)),r=o.findIndex((e=>e.id===n.id));return{animalId:n.id,name:n.name,images:o.map((e=>e.img)),answer:r,description:n.desc}}));return{regionKey:"photo",mode:"photo",optionCount:t,sub:o.name,questions:a}}return null}e.buildSingleThemedQuiz=lt;const dt=[1,11,1020,2031,2013,2009,2006,2007,1001,1002,1006,1007,1010,1012,1013];let ut=null;async function mt(t){if(ut&&!t)return ut;try{const t=O(await Y("unlocked_v"),0);let n=await Y("unlocked");if(Array.isArray(n)||(n=[]),t<5){const e=n.map(Number).filter((e=>!isNaN(e)&&e>0));n=Array.from(new Set([...dt,...e])),await G("unlocked",n),await G("unlocked_v",5)}else{const e=Array.from(new Set([...dt,...n.map(Number).filter(Boolean)]));e.length!==n.length&&await G("unlocked",e),n=e}return ut=n,e.__SYNCED__&&(e.__SYNCED__.unlocked=n.slice()),n}catch(e){return ut=dt.slice(),ut}}const yt=new Set([88888,99999,3001,3002]);async function ft(){if(await new Promise((e=>{if("undefined"!=typeof YaGames)return e(!0);let t=0;const n=setInterval((()=>{t+=200,"undefined"!=typeof YaGames?(clearInterval(n),e(!0)):t>=1e4&&(clearInterval(n),e(!1))}),200)}))&&"undefined"!=typeof YaGames){u||(u=!0,m="yandex",p.isYandex=!0,p.platform="yandex",p.isStandalone=!1,h.toggle("is-yandex",!0),h.toggle("is-standalone",!1));try{const e=new Promise(((e,t)=>setTimeout((()=>t(new Error("YaGames.init timeout"))),7e3)));w=await Promise.race([YaGames.init(),e])}catch(e){return}try{const n=v(w.environment.i18n.lang||"ru");_.includes(n)&&n!==S&&(S=n,e.LANG=S,E(),function(){E(),e.Sound&&e.Sound.apply&&e.Sound.apply();e.Theme&&e.Theme.apply&&e.Theme.apply();"index"===Rt?Pt():"collection"===Rt&&Gt();const n=t.getElementById("igames-modal");n&&n.classList.contains("show")&&Ht()}()),t.documentElement.lang=S}catch(e){}try{const t=new Promise(((e,t)=>setTimeout((()=>t(new Error("getPlayer timeout"))),5e3)));b=await Promise.race([w.getPlayer(),t]);try{const t=b.getUniqueID&&b.getUniqueID();t&&(e.id=t,sessionStorage.setItem("id",t))}catch(e){}}catch(e){b=null}try{w.on("game_api_pause",(function(){if(fe=!0,re(),Ce(),e.__currentQuizPause)try{e.__currentQuizPause()}catch(e){}})),w.on("game_api_resume",(function(){if(fe=!1,oe(),_e()&&Ae(),e.__currentQuizResume)try{e.__currentQuizResume()}catch(e){}}))}catch(e){}e.__appReady&&xt()}}async function pt(){const e=t.querySelectorAll("#yandex-auth-btn");if(e.length)if(u&&w)try{let t=b;!t&&w.getPlayer&&(t=await w.getPlayer(),b=t);let n=!1;t&&"function"==typeof t.isAuthorized?n=t.isAuthorized():t&&"function"==typeof t.getMode&&(n="lite"!==t.getMode()),e.forEach((e=>e.style.display=n?"none":""))}catch(t){e.forEach((e=>e.style.display=""))}else e.forEach((e=>e.style.display="none"))}function ht(){const e=t.getElementById("auth-modal");e&&e.classList.add("show")}function gt(){const e=t.getElementById("auth-modal");e&&e.classList.remove("show")}async function _t(){if(gt(),!u||!w)return void de(e.t("authUnavail2"),!0);let t=!1;try{t=await w.isAvailableMethod("auth.openAuthDialog")}catch(e){}if(!t)return void de(e.t("authUnavail"),!0);de(await L((async()=>(await w.auth.openAuthDialog(),b=await L((()=>w.getPlayer()),null,"getPlayer"),await wt(),pt(),!0)),!1,"openAuthDialog")?e.t("authOk"):e.t("authFail"))}async function vt(){if(!u||!w||!w.shortcut)return!1;const e=await L((()=>w.shortcut.canShowPrompt()),null,"canShowPrompt");return!(!e||!e.canShow)}async function St(){const e=t.querySelectorAll("#yandex-shortcut-btn");if(!e.length)return;let n=!1;if(u)try{n=await vt()}catch(e){n=!1}e.forEach((e=>{n?e.style.removeProperty("display"):e.style.setProperty("display","none","important")}))}let Et;async function wt(){const t=e.Gating&&e.Gating.DEFAULT_UNLOCKED||[1,11,1020,2031,2013,2009,2006,2007,1001,1002,1006,1007,1010,1012,1013];try{const[n,a,o,r,s,i]=await Promise.all([Y("unlocked"),Y("collection"),Y("stars"),z(),Y("unlocked_v"),Y("map_unlocked")]),c=O(s,0),l=5;let d;if(c<l){const a=B(n).map(Number).filter((e=>!isNaN(e)&&e>0));d=Array.from(new Set([...t,...a]));try{await G("unlocked",d)}catch(e){}try{await G("unlocked_v",l)}catch(e){}e.Gating&&e.Gating._invalidate&&e.Gating._invalidate()}else{const e=B(n).map(Number).filter((e=>!isNaN(e)&&e>0));if(d=Array.from(new Set([...t,...e])),e.length!==d.length)try{await G("unlocked",d)}catch(e){}}const u=B(a).filter((e=>"string"==typeof e)),m=P(o);for(const e in m){const t=O(m[e],0);m[e]=Math.max(0,Math.min(3,t))}const y=O(r,0),f=B(i).map(Number).filter((e=>!isNaN(e)&&e>0)),p=f.filter((e=>1!==e&&1001!==e||Number(m[e])>0)),h=Array.from(new Set([2001,...p]));if(f.length!==h.length||!f.includes(2001))try{await G("map_unlocked",h)}catch(e){}if(e.__SYNCED__={unlocked:d,collection:u,stars:m,total:y,mapUnlocked:h},e.Gating&&e.Gating.loadUnlocked)try{await e.Gating.loadUnlocked(!0)}catch(e){}Ln(),await It(),Dt(),Ye(y)}catch(n){e.__SYNCED__={unlocked:t,collection:[],stars:{},total:0,mapUnlocked:[2001]}}Et&&Et(e.__SYNCED__)}e.Gating={DEFAULT_UNLOCKED:dt,loadUnlocked:mt,isUnlocked:async function(e){const t=Number(e);return t===Zt||(88888===t||(!!dn(t)||(!!un(t)||(await mt()).includes(t))))},unlockLevel:async function(t){const n=Number(t);if(!n||n<=0||yt.has(n)||n>=3e3)return!1;const a=await mt();return a.includes(n)||(a.push(n),ut=a,await G("unlocked",a),e.__SYNCED__&&(e.__SYNCED__.unlocked=a.slice())),!0},showUnlockModal:(e,t)=>mn(e,t),_invalidate:()=>{ut=null}},e.openYandexLeaderboard=async function(){if(!u||!w)return void de(e.t("topVKOnly"));const n=t.getElementById("yandex-leaderboard-modal"),a=t.getElementById("yandex-leaderboard-body");if(n&&a){a.innerHTML='<p class="modal-text">'+e.t("leaderboardLoading")+"</p>",n.classList.add("show");try{const t=await w.leaderboards.getEntries("bestscore",{quantityTop:10,includeUser:!0,quantityAround:3});if(!t||!t.entries||0===t.entries.length)return void(a.innerHTML='<p class="modal-text">'+e.t("leaderboardEmpty")+"</p>");let n='<div class="ach-group"><div class="ach-grid">';t.entries.forEach((t=>{const a=t.player.publicName||e.t("leaderboardPlayer"),o=e.t("leaderboardRow").replace("{rank}",t.rank).replace("{score}",t.score);n+='<div class="ach-item unlocked"><div class="ach-icon">'+(t.rank<=3?"🏅":"👤")+'</div><div class="ach-text"><div class="ach-title">'+ue(a)+'</div><div class="ach-desc">'+ue(o)+"</div></div></div>"})),n+="</div></div>",a.innerHTML=n}catch(t){a.innerHTML='<p class="modal-text" style="color:var(--danger);">'+e.t("leaderboardError")+"</p>"}}},e.openAuthModal=ht,e.closeAuthModal=gt,e.doYandexAuth=_t,e.updateAuthButton=pt,e.showShortcut=async function(){if(u&&w&&w.shortcut)try{const t=await w.shortcut.showPrompt();t&&"accepted"===t.outcome&&de(e.t("shortcutOk"))}catch(t){de(e.t("shortcutFail"),!0)}else de(e.t("shortcutYa"),!0)},e.canShowShortcut=vt,e.updateShortcutButton=St,e.getAllGames=async function(){if(!(u&&w&&w.features&&w.features.GamesAPI))return[];const e=await L((()=>w.features.GamesAPI.getAllGames()),null,"getAllGames");return e&&Array.isArray(e.games)?e.games:[]},e.getGameByID=async function(e){if(!(u&&w&&w.features&&w.features.GamesAPI))return null;const t=await L((()=>w.features.GamesAPI.getGameByID(e)),null,"getGameByID");return t&&t.isAvailable&&t.game?t.game:null},e.whenReady=new Promise((e=>{Et=e})),e.syncAllOnStart=wt;let bt=!1,kt=!1;function xt(){if(bt)return!1;if(!(u&&w&&w.features&&w.features.LoadingAPI))return!1;try{return w.features.LoadingAPI.ready(),bt=!0,!0}catch(e){return!1}}let Nt=!1;function Lt(){if(kt)return;kt=!0;const n=t.getElementById("loading-screen");n&&(n.classList.add("hidden"),setTimeout((()=>{n.style.display="none"}),400)),t.body.classList.add("app-ready");const a=t.getElementById("app-root");a&&a.classList.add("visible"),e.__appReady=!0,xt()}let At=null;function Ct(){const t=(e.PHOTO_LEVELS||[]).filter((e=>!e.isFullSet)).map((e=>({...e,kind:"photo"}))),n=(e.THEMED_LEVELS||[]).filter((e=>!e.isFullSet)).map((e=>({...e,kind:"themed"}))),a=[];(e.REGIONS||[]).forEach((e=>{e.levels.forEach((t=>{t.isFullSet||a.push({...t,regionKey:e.id,kind:"region"})}))}));const o=n.concat(a),r=[],s=Math.max(t.length,o.length);for(let e=0;e<s;e++)e<t.length&&r.push(t[e]),e<o.length&&r.push(o[e]);return r}function Mt(){const t=e.__SYNCED__&&Array.isArray(e.__SYNCED__.mapUnlocked)?e.__SYNCED__.mapUnlocked:new Array,n=new Set(t.map(Number)),a=P(e.__SYNCED__&&e.__SYNCED__.stars),o=Ct();let r=0;return o.forEach(((e,t)=>{const o=Number(e.id);n.has(o)&&Number(a[o])>=2&&(r=Math.max(r,t+1))})),r}async function It(){const t=Mt();return await G("maxlvl",t),e.StartMenu&&"function"==typeof e.StartMenu.updateStats&&e.StartMenu.updateStats(),t}function Dt(){const n=t.getElementById("startCategoriesBtn");if(!n)return;const a=function(){const t=Ct(),n=t.item?t.item(91):t.slice(91,92).pop();if(!n)return!1;const a=Number(n.id),o=P(e.__SYNCED__&&e.__SYNCED__.stars);return Number(o[a])>=2}();n.style.display=a?"":"none"}e.getMaxOpenedMapLevel=Mt,e.updateCategoriesBtnVisibility=Dt;const qt=[{x:12.9,y:10.8},{x:32.9,y:7.7},{x:33,y:8.6},{x:49.6,y:4.2},{x:47.9,y:7.9},{x:67.9,y:3.8},{x:66.5,y:6.9},{x:87.4,y:6.2},{x:74.6,y:11.6},{x:73.7,y:14.4},{x:52.5,y:13.6},{x:50.3,y:12.8},{x:28,y:15.1},{x:25,y:17.8},{x:53.1,y:22.9},{x:17.5,y:25.9},{x:18.3,y:22.7},{x:45.1,y:20},{x:46.6,y:17.8},{x:74.7,y:21.3},{x:81.1,y:17.3},{x:51,y:24.4},{x:28.8,y:25.6},{x:41,y:30.2},{x:49.1,y:28.6},{x:75.3,y:31.4},{x:81,y:30.2},{x:83.2,y:35.4},{x:56.1,y:34.7},{x:51.3,y:34.1},{x:25.9,y:35.8},{x:27.1,y:33.1},{x:5.4,y:34.7},{x:4.8,y:37.7},{x:2,y:41},{x:27.1,y:42.3},{x:31.3,y:40.8},{x:52.6,y:41.1},{x:52.9,y:42.3},{x:78.5,y:44.4},{x:76.3,y:40.7},{x:94.4,y:44.4},{x:76.2,y:47.5},{x:69.5,y:48.1},{x:48.4,y:47.9},{x:46.7,y:47.7},{x:23.9,y:53.4},{x:22.5,y:51.6},{x:8.2,y:46.4},{x:8.2,y:48},{x:4.2,y:54.9},{x:4.9,y:57.9},{x:6.3,y:60.8},{x:34.6,y:58.4},{x:35.3,y:53.7},{x:60.5,y:53},{x:61.1,y:56.1},{x:86.8,y:55.7},{x:84.9,y:59.3},{x:80.3,y:60.3},{x:49.1,y:58.3},{x:43.5,y:60.9},{x:44.3,y:63.1},{x:74.8,y:63.8},{x:78.5,y:63.2},{x:82.5,y:68.8},{x:53.3,y:65.9},{x:39.8,y:66},{x:19.1,y:63.7},{x:19.2,y:67.9},{x:2.4,y:72.1},{x:28.1,y:73.2},{x:32.3,y:71.6},{x:63.1,y:72.1},{x:64.4,y:73.9},{x:90.5,y:73.6},{x:56.8,y:77.4},{x:50.9,y:74},{x:10.5,y:77.7},{x:5.2,y:77.2},{x:39.5,y:80.2},{x:73,y:81.8},{x:74.7,y:82.3},{x:68.7,y:86.8},{x:40.1,y:87.9},{x:37.3,y:83},{x:73.3,y:91.2},{x:62.8,y:92.6},{x:56.7,y:97},{x:49,y:96.3},{x:24.6,y:94.3},{x:20.1,y:93.2}];async function Tt(){const n=t.getElementById("map-nodes"),a=t.getElementById("map-player");if(!n||!a)return;const o=e.__SYNCED__&&e.__SYNCED__.collection||[],r=new Set;(e.REGIONS||[]).forEach((t=>{t.levels.forEach((t=>{const n=(e.QUIZZES||{})[t.id];n&&n.questions.forEach((t=>r.add(e.getAnimalId(t.img))))}))}));const s=t.querySelector("[data-map-col-count]");s&&(s.textContent=Math.min(o.length,r.size)),await e.Ach.checkAndUnlock(!0);const i=await e.Ach.list(),c=t.getElementById("map-ach-badge");c&&(c.textContent=i.filter((e=>e.unlocked)).length),n.innerHTML="";const l=e.__SYNCED__&&e.__SYNCED__.mapUnlocked||Array.of(2001),d=new Set(l.map(Number)),u=P(e.__SYNCED__&&e.__SYNCED__.stars),m=Ct();let y=0;m.forEach(((e,t)=>{d.has(Number(e.id))&&(y=t)}));let f=y;if(null!=e.__mapSelectedLevelId){const t=m.findIndex((t=>Number(t.id)===Number(e.__mapSelectedLevelId)));-1!==t&&d.has(Number(m[t].id))&&(f=t)}const p=t.getElementById("map-play-btn");if(p&&m[y]){const e=m[y],t=Number(e.id),n=Math.floor(Number(u[t])||0),a=y+1,o=a<m.length?m[a]:null,r=o&&!d.has(Number(o.id))&&n>=2;p.onclick=()=>{r?Ot(o,a):Ft({name:"quiz",levelId:t,fromMap:!0})}}m.forEach(((a,o)=>{const r=Number(a.id),s=d.has(r),i=Math.max(0,Math.min(3,Math.floor(Number(u[r])||0))),c=s&&null!=u[r],l=o===y,f=o>0?m[o-1]:null,p=f?Math.floor(Number(u[Number(f.id)])||0):0,h=!f||d.has(Number(f.id)),g=!s&&h&&p>=2,_=t.createElement("div");_.className="map-node",_.dataset.levelId=r;const v=qt[o];v&&(_.style.left=v.x+"%",_.style.top=v.y+"%"),c?_.classList.add("completed"):s?(_.classList.add("unlocked"),l&&_.classList.add("current")):g?_.classList.add("pre-unlocked"):_.classList.add("locked");const S=(e.QUIZZES||{})[r],E=a.icon||(S&&S.questions&&S.questions[0]?"⛰️":"❓");if(s||g?_.textContent=E:_.innerHTML=cn("1.2em"),c){const e=t.createElement("div");e.className="map-node-stars"+(i>0?" has-stars":""),e.textContent="★".repeat(i)+"☆".repeat(3-i),_.appendChild(e)}else if(g){const e=t.createElement("div");e.className="map-node-stars",e.innerHTML=sn("1em"),_.appendChild(e)}_.addEventListener("click",(()=>async function(n,a,o,r){const s=Number(n.id),i=e.__SYNCED__&&e.__SYNCED__.mapUnlocked||Array.of(2001);if(new Set(i.map(Number)).has(s)){e.__mapSelectedLevelId=s;const n=t.getElementById("map-player");return n&&Ut(n,a,!0),void Ft({name:"quiz",levelId:s,fromMap:!0})}if(!r)return void function(){let e=t.getElementById("mapLockedModal");if(!e){e=t.createElement("div"),e.id="mapLockedModal",e.className="modal",e.innerHTML='<div class="modal-content modal-narrow"><button type="button" class="modal-close" data-act="close" aria-label="close">×</button><img src="icons/cat.png" alt="" class="map-locked-sprite"><h2 class="modal-title">Уровень закрыт!</h2><p class="modal-text">Пройди предыдущий уровень на 2 или 3 звезды, чтобы продвинуться дальше.</p><div class="modal-actions"><button type="button" class="btn btn-primary" data-act="ok" style="width:100%;">Хорошо</button></div></div>',t.body.appendChild(e);const n=()=>e.classList.remove("show");e.querySelector('[data-act="close"]').onclick=n,e.querySelector('[data-act="ok"]').onclick=n,e.onclick=t=>{t.target===e&&n()}}e.classList.add("show")}();Ot(n,a)}(a,o,0,g))),n.appendChild(_)})),requestAnimationFrame((()=>Ut(a,f,!1)));const h=t.getElementById("map-progress-fill");if(h){const e=m.length>0?(y+1)/m.length*100:0;h.style.width=e+"%"}bn()}function Ut(n,a,o){e.__lastMapNodeIdx=a;const r=t.getElementById("map-canvas"),s=t.getElementById("map-nodes");if(!r||!s||!n)return;const i=s.querySelectorAll(".map-node")[a];if(!i)return;n.style.transition=o?"left 0.45s cubic-bezier(.22,1,.36,1), top 0.45s cubic-bezier(.22,1,.36,1)":"none";const c=r.getBoundingClientRect(),l=i.getBoundingClientRect(),d=n.offsetWidth||44,u=n.offsetHeight||44;let m=l.right-c.left+4;m+d>c.width-4&&(m=Math.max(4,l.left-c.left-d-4));const y=l.top-c.top+(l.height-u)/2;n.style.left=Math.round(m)+"px",n.style.top=Math.round(y)+"px"}let Bt=null;function Ot(n,a){const o=Number(n.id);let r=t.getElementById("mapUnlockAdModal");if(!r){r=t.createElement("div"),r.id="mapUnlockAdModal",r.className="modal",r.innerHTML='<div class="modal-content modal-narrow"><button type="button" class="modal-close" data-act="close" aria-label="close">×</button><div class="modal-emoji" id="mapUnlockAdIcon"></div><h2 class="modal-title">Готово!</h2><p class="modal-text">Открыть уровень, посмотрев короткую рекламу?</p><div class="modal-actions"><button type="button" class="btn btn-primary" data-act="watch">'+sn("1.2em")+' <span>Смотреть</span></button><button type="button" class="btn btn-ghost" data-act="cancel">Отмена</button></div></div>',t.body.appendChild(r);const e=()=>r.classList.remove("show");r.querySelector('[data-act="close"]').onclick=e,r.querySelector('[data-act="cancel"]').onclick=e,r.onclick=t=>{t.target===r&&e()}}const s=r.querySelector("#mapUnlockAdIcon");s&&(s.textContent=n.icon||"🐾");const i=r.querySelector('[data-act="watch"]');i.disabled=!1,i.innerHTML=sn("1.2em")+" <span>Смотреть</span>",i.onclick=async()=>{if(i.disabled)return;i.disabled=!0;const n=i.innerHTML;i.textContent=e.t("loadingAd");let s=!1;try{s=await e.showRewardedAd()}catch(e){s=!1}if(!s)return void(i.isConnected&&(i.disabled=!1,i.innerHTML=n));r.classList.remove("show"),await async function(t){const n=Number(t);if(!n||n<=0)return!1;const a=e.__SYNCED__&&Array.isArray(e.__SYNCED__.mapUnlocked)?e.__SYNCED__.mapUnlocked:new Array;return a.includes(n)||(a.push(n),e.__SYNCED__&&(e.__SYNCED__.mapUnlocked=a),await G("map_unlocked",a),await It()),!0}(o),Cn("buy_cat"),de("🎉 Уровень открыт!"),await Tt();const c=t.getElementById("map-player");c&&Ut(c,a,!0)},r.classList.add("show")}async function Pt(){const n=e.__SYNCED__&&e.__SYNCED__.collection||[],a=e.getAnimalId,o=new Set;(e.REGIONS||[]).forEach((t=>{t.levels.forEach((t=>{const n=(e.QUIZZES||{})[t.id];n&&n.questions.forEach((e=>o.add(a(e.img))))}))}));const r=o.size,s=Math.min(n.length,r),i=t.querySelector("[data-col-count]");i&&(i.textContent=s),await e.Ach.checkAndUnlock(!0);const c=(await e.Ach.list()).filter((e=>e.unlocked)).length,l=t.getElementById("ach-badge");l&&(l.textContent=c);const d=function(){if(At)return At;const t=[];return(e.REGIONS||[]).forEach((n=>{n.levels.forEach((n=>{const a=(e.QUIZZES||{})[n.id];a&&Array.isArray(a.questions)&&a.questions.forEach((n=>{t.push({img:n.img,name:e.L(n.options[n.answer]),desc:e.L(n.description)})}))}))})),At=t,t}();if(d.length){const e=new Date,n=d[(2654435761*Math.floor(Date.UTC(e.getFullYear(),e.getMonth(),e.getDate())/864e5)>>>0)%d.length],a=t.getElementById("fact-img"),o=t.getElementById("fact-name"),r=t.getElementById("fact-desc");a&&(a.src=n.img,a.alt=n.name),o&&(o.textContent=n.name),r&&(r.textContent=n.desc);const s=t.getElementById("fact-block");s&&(s.hidden=!1)}const u=t.getElementById("regions");if(!u)return;u.innerHTML="";const m=e.__SYNCED__&&e.__SYNCED__.unlocked||[],y=new Set(m.map(Number)),f=Date.now();for(const e in Xt.purchased)Xt.purchased[e]&&y.add(Number(e));for(const e in Xt.tempUnlocks)Xt.tempUnlocks[e]>f&&y.add(Number(e));const p=P(e.__SYNCED__&&e.__SYNCED__.stars),h=e=>{const t=Math.max(0,Math.min(3,Math.floor(Number(p[e])||0)));return'<span class="stars'+(t>0?" has-stars":"")+'">'+"★".repeat(t)+"☆".repeat(3-t)+"</span>"},g=(n,a,o)=>{const r=y.has(Number(n.id)),s=t.createElement("button");s.type="button",s.className="level-card"+(r?"":" locked"),r&&(s.dataset.href="#/quiz/"+n.id);ue(e.t("titleAd"));const i=ln(Number(n.id)),c=rn("1.1em"),l=Math.floor(Number(p[n.id])||0)>=3,d=r?l?'<div class="level-actions"><span class="level-open">▶</span></div>':"":'<div class="level-actions"><span class="level-price">'+c+" "+i+"</span></div>",u=a&&a.questions?a.questions.length:n.count||0;s.innerHTML='<span class="level-name">'+(n.icon?n.icon+" ":"")+ue(e.L(n.name))+'</span><span class="level-meta">'+u+" "+e.t("questions")+"</span>"+h(n.id)+d,r||s.addEventListener("click",(()=>{e.Gating.showUnlockModal(n.id,(()=>{if(!s.parentNode)return void("index"===Rt&&Pt());const a=t.createElement("button");a.type="button",a.className="level-card",a.dataset.href="#/quiz/"+n.id,a.innerHTML='<span class="level-name">'+(n.icon?n.icon+" ":"")+ue(e.L(n.name))+'</span><span class="level-meta">'+u+" "+e.t("questions")+"</span>"+h(n.id),s.replaceWith(a)}))})),o.appendChild(s)},_=A("cat_open");let v={};try{const e=T(_);e&&(v=JSON.parse(e)||{})}catch(e){}const S=(e,n)=>{const a=t.createElement("section");a.className="card collapsible",v[n]&&a.classList.add("open");const o=t.createElement("button");o.type="button",o.className="region-title collapsible-header",o.innerHTML="<span>"+e+'</span><span class="toggle-arrow">▼</span>',o.addEventListener("click",(()=>{a.classList.toggle("open"),v[n]=a.classList.contains("open"),(()=>{try{U(_,JSON.stringify(v))}catch(e){}})()}));const r=t.createElement("div");r.className="collapsible-body";const s=t.createElement("div");return s.className="levels",r.appendChild(s),a.appendChild(o),a.appendChild(r),{sec:a,grid:s}};if(Array.isArray(e.THEMED_LEVELS)&&e.THEMED_LEVELS.length){const{sec:t,grid:n}=S("🎨 "+e.L({ru:"Тематические викторины",en:"Themed quizzes",tr:"Tematik testler"}),"themed");[...e.THEMED_LEVELS].sort(((e,t)=>(y.has(Number(e.id))?0:1)-(y.has(Number(t.id))?0:1))).forEach((t=>{g(t,(e.QUIZZES||{})[t.id],n)})),n.children.length&&u.appendChild(t)}if(Array.isArray(e.PHOTO_LEVELS)&&e.PHOTO_LEVELS.length){const{sec:t,grid:n}=S("🎯 "+e.L({ru:"Фото-викторины",en:"Photo quizzes",tr:"Foto testler"}),"photo");[...e.PHOTO_LEVELS].sort(((e,t)=>(y.has(Number(e.id))?0:1)-(y.has(Number(t.id))?0:1))).forEach((t=>{g(t,(e.QUIZZES||{})[t.id],n)})),n.children.length&&u.appendChild(t)}(e.REGIONS||[]).forEach((t=>{const{sec:n,grid:a}=S(t.icon+" "+ue(e.L(t.name)),"region_"+t.id);t.levels.forEach((t=>{const n=(e.QUIZZES||{})[t.id];g(t,n,a)})),u.appendChild(n)})),bn(),xn()}async function Yt(n){const a=Jt();e.__quizFromMap=Boolean(a&&a.fromMap);const o={name:e.__quizFromMap?"map":"index"};["lock-home-btn","quiz-start-home-btn","home-btn"].forEach((e=>{const n=t.getElementById(e);n&&(n.onclick=()=>Ft(o))}));const r=Number(n);if(r===Zt){if(Sn(),Xt&&Xt.daily&&Xt.daily.completed)return Ft({name:"index"},!0),null;const t=En();if(!t.length)return Ft({name:"index"},!0),null;e.QUIZZES[Zt]={regionKey:"daily",sub:{ru:"Вызов дня",en:"Daily challenge",tr:"Günlük meydan okuma"},questions:t}}if(r>=1e3&&r!==Zt&&88888!==r){const t=lt(r);t&&(e.QUIZZES[r]=t)}const s=(e.QUIZZES||{})[String(n)];if(!s)return Ft({name:"index"},!0),null;const i=e=>t.querySelector(e),c={order:[],index:0,score:0,correctCount:0,answers:0,timeLeft:0,timerId:null,answered:!1,finished:!1,streak:0,maxStreak:0,fastestCorrect:99,timeouts:0,roundCollection:new Set,currentLevel:1},l=i("#home-screen"),d=i("#quiz-screen"),m=i("#result-screen"),y=i("#lock-screen"),f=[l,d,m,y],p=e=>f.forEach((t=>t&&t.classList.toggle("active",t===e))),h=e.getAnimalId,g=(e.REGIONS||[]).find((e=>e.id===s.regionKey)),_=i("#home-region");if(_)if(g)_.textContent=(g.icon?g.icon+" ":"")+e.L(g.name),_.style.display="";else if("daily"===s.regionKey)_.textContent="🎁 "+e.L({ru:"Вызов дня",en:"Daily challenge",tr:"Günlük meydan okuma"}),_.style.display="";else if("tutorial"===s.regionKey)_.textContent="🎓 "+e.L({ru:"Обучение",en:"Tutorial",tr:"Öğretici"}),_.style.display="";else{const t=Number(n),a=(e.THEMED_LEVELS||[]).find((e=>Number(e.id)===t)),o=(e.PHOTO_LEVELS||[]).find((e=>Number(e.id)===t));a?(_.textContent="🎨 "+e.L({ru:"Тематическая викторина",en:"Themed quiz",tr:"Tematik test"}),_.style.display=""):o?(_.textContent="🎯 "+e.L({ru:"Фото-викторина",en:"Photo quiz",tr:"Foto test"}),_.style.display=""):(_.textContent="",_.style.display="none")}i("#home-title").textContent=s.sub?e.L(s.sub):"";const v=Number(n),S=(e.THEMED_LEVELS||[]).find((e=>Number(e.id)===v))||(e.PHOTO_LEVELS||[]).find((e=>Number(e.id)===v)),E=i("#home-emoji");E&&(S&&S.icon?E.textContent=S.icon:E.innerHTML=e.UiSprite&&"function"==typeof e.UiSprite.html?e.UiSprite.html("mountain","1em"):"⛰️",E.style.display=""),i("#home-count").textContent=s.questions.length;const w=P(e.__SYNCED__&&e.__SYNCED__.stars),b=Math.max(0,Math.min(3,Math.floor(Number(w[n])||0))),k=i("#home-stars");k&&(k.textContent="★".repeat(b)+"☆".repeat(3-b),k.classList.toggle("has-stars",b>0));const x=(e.__SYNCED__&&e.__SYNCED__.mapUnlocked||Array.of(2001)).map(Number).includes(Number(n))||await e.Gating.isUnlocked(n);e.__autoStartQuiz&&x?p(d):p(x?l:y),i("#lock-watch-btn").onclick=()=>{mn(n,(()=>{p(l)}))};function L(){if(Number(n)===Zt&&Xt&&Xt.daily&&Xt.daily.completed)return void Ft({name:"index"});if(Number(n)>=1e3&&88888!==Number(n)){const e=lt(Number(n));e&&Array.isArray(e.questions)&&e.questions.length&&(s.questions=e.questions)}c.order=(e=>{const t=e.slice();for(let e=t.length-1;e>0;e--){const n=Math.floor(Math.random()*(e+1));[t[e],t[n]]=[t[n],t[e]]}return t})(s.questions.map(((e,t)=>t))),c.index=0,c.score=0,c.correctCount=0,c.answers=0,c.answered=!0,c.finished=!1,c.streak=0,c.maxStreak=0,c.fastestCorrect=99,c.timeouts=0,c.roundCollection=new Set;let t=null;if(e.__quizFromMap){const e=Ct().findIndex((e=>Number(e.id)===Number(n)));-1!==e&&(t=e+1)}p(d),kn(),A(!0),c.answered=!0;88888===Number(n)||"function"!=typeof e.showLevelSequence?(c.answered=!1,u&&oe(),C()):e.showLevelSequence(t,(()=>{c.answered=!1,u&&oe(),C()}))}function A(n){c.answered=!1;const a=s.questions[c.order[c.index]];if(!a)return c.index>=s.questions.length-1?B():(c.index++,A());i("#counter").textContent=c.index+1+" / "+s.questions.length,i("#score-val").textContent=c.score,i("#progress-fill").style.width=c.index/s.questions.length*100+"%";const o=i("#question-img"),r=i("#question-text"),l=i("#options");if(!l)return;l.innerHTML="";const d="photo"===s.mode,u=t.querySelector(".quiz-body");if(u&&u.classList.toggle("photo-mode",d),d){if(o&&(o.hidden=!0,o.removeAttribute("src")),r&&(r.hidden=!1,r.textContent=e.L(a.name)||"—"),l.classList.add("photo-options"),l.classList.toggle("cols-2",2===(a.images||[]).length),!Array.isArray(a.images)||0===a.images.length)return c.answers++,c.timeouts++,T();a.images.forEach(((e,n)=>{const a=t.createElement("button");a.type="button",a.className="option photo-option",a.dataset.i=n;const o=t.createElement("img");o.src=e,o.alt="",o.onerror=function(){this.style.opacity=".3",this.style.background="linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)",this.alt="🐾"},a.appendChild(o),a.addEventListener("click",(()=>D(n))),l.appendChild(a)}))}else{r&&(r.hidden=!0,r.textContent=""),o&&(o.hidden=!1,o.style.opacity="",o.src=a.img||"",o.alt="",o.onerror=function(){this.style.opacity=".25",this.style.background="linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)",this.alt="🐾"},o.onload=function(){this.style.opacity=""}),l.classList.remove("photo-options","cols-2");(Array.isArray(a.options)?a.options:[]).forEach(((n,a)=>{const o=t.createElement("button");o.type="button",o.className="option",o.textContent=e.L(n)||"—",o.dataset.i=a,o.addEventListener("click",(()=>D(a))),l.appendChild(o)}))}const m=i("#description");m&&(m.hidden=!0,m.textContent="");const y=i("#next-btn");y&&(y.hidden=!0,y.textContent=c.index>=s.questions.length-1?e.t("results"):e.t("next"));try{const e=c.order[c.index+1];if(null!=e){const t=s.questions[e];if(t)if(Array.isArray(t.images))t.images.forEach((e=>{(new Image).src=e}));else if(t.img){(new Image).src=t.img}}}catch(e){}n?(c.timeLeft=10,M()):C()}function C(){I(),c.timeLeft=10,M(),88888!==Number(n)&&(c.timerId=setInterval((()=>{if(c.timeLeft<=0)return I(),void q();c.timeLeft--,M(),c.timeLeft<=0&&(I(),q())}),1e3))}function M(){const e=Math.max(0,Math.min(10,c.timeLeft)),t=document.getElementById("timer-val"),n=document.getElementById("timer-fill"),a=document.getElementById("timer");t&&(t.textContent=e),n&&(n.style.width=e/10*100+"%"),a&&a.classList.toggle("warning",e<=5)}function I(){c.timerId&&(clearInterval(c.timerId),c.timerId=null)}async function D(a){if(c.answered)return;c.answered=!0,I();const o=s.questions[c.order[c.index]],r=o.answer,l="photo"===s.mode?Array.isArray(o.images)?o.images.length:0:Array.isArray(o.options)?o.options.length:0;if("number"!=typeof r||0===l||r<0||r>=l)return c.answers++,void T();Array.from(t.querySelectorAll("#options .option")).forEach((e=>{e.classList.add("disabled");const t=+e.dataset.i;t===r?e.classList.add("correct"):t===a&&e.classList.add("wrong")}));try{a===r?e.Sound.playCorrect():e.Sound.playWrong()}catch(e){}if(a===r){c.correctCount++,function(e){if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;if(!e||e<=0)return;const t=document.querySelector(".confetti-layer");t&&t.remove();const n="weak"===In(),a=document.createElement("div");a.className="confetti-layer";const o=document.createDocumentFragment(),r=["#667eea","#764ba2","#10b981","#f59e0b","#ef4444","#4a9eff","#43a047"];for(let t=0;t<e;t++){const e=document.createElement("div");e.className="confetti-piece",e.style.background=r[t%r.length],e.style.left=5+90*Math.random()+"%",e.style.animationDelay=.2*Math.random()+"s",e.style.animationDuration=1.3+.6*Math.random()+"s",e.style.setProperty("--rot",n?"0deg":Math.floor(720*Math.random()-360)+"deg"),e.style.setProperty("--drift",40*Math.random()-20+"px"),o.appendChild(e)}a.appendChild(o),document.body.appendChild(a),setTimeout((()=>{a.parentNode&&a.remove()}),2400)}(function(){const e=In();return"weak"===e?7:"mobile"===e?12:22}()),c.score++;const e=88888===Number(n)?0:function(){Xt.surprise.counter=(Xt.surprise.counter||0)+1;let e=0;Xt.surprise.counter%15==0&&(e=1,de("🎉 Бонус! +2 ягоды"));return nn(),pn("solve",1),gn(),kn(),e}();e>0&&(c.score+=e),i("#score-val").textContent=c.score;const t=o.animalId||h(o.img||o.images&&o.images[o.answer]||"");t&&c.roundCollection.add(t);const a=10-Math.max(0,c.timeLeft);a<c.fastestCorrect&&(c.fastestCorrect=a),c.streak++,c.streak>c.maxStreak&&(c.maxStreak=c.streak)}else c.streak=0;c.answers++,T()}function q(){if(c.answered)return;c.answered=!0;const n=s.questions[c.order[c.index]],a="photo"===s.mode?Array.isArray(n&&n.images)?n.images.length:0:Array.isArray(n&&n.options)?n.options.length:0;if(!n||"number"!=typeof n.answer||0===a||n.answer<0||n.answer>=a)return c.answers++,c.timeouts++,c.streak=0,void T();Array.from(t.querySelectorAll("#options .option")).forEach((e=>{e.classList.add("disabled"),+e.dataset.i===n.answer&&e.classList.add("correct")}));try{e.Sound.playWrong()}catch(e){}c.answers++,c.timeouts++,c.streak=0,T()}function T(){const t=s.questions[c.order[c.index]];if(t.description){const n=i("#description");n.textContent=e.L(t.description),n.hidden=!1}i("#next-btn").hidden=!1}function U(){if(c.index>=s.questions.length-1)return B();c.index++,A()}async function B(){if(c.finished)return;c.finished=!0;const a=c;I();try{e.Sound.playFanfare()}catch(e){}p(m),u&&re();const o=t.querySelector(".result-confetti");o&&(o.style.animation="none",o.offsetWidth,o.style.animation="");const r=s.questions.length,l=r>0?Math.round(a.correctCount/r*100):0,d=(y=l)>=90?3:y>=70?2:y>=50?1:0;var y;i("#res-total").textContent=r,i("#res-correct").textContent=a.correctCount,i("#res-wrong").textContent=a.answers-a.correctCount,i("#res-percent").textContent=l+"%";const f=i("#res-stars");f&&(f.textContent="★".repeat(d)+"☆".repeat(3-d),f.classList.toggle("has-stars",d>0));if(!(88888===Number(n))){try{await gn();const[t,o,r]=await Promise.all([e.storageGet("stars"),e.storageGet("collection"),z()]);let s=t&&"object"==typeof t&&!Array.isArray(t)?t:{},i=Array.isArray(o)?o:[],c="number"!=typeof r||isNaN(r)?0:r;d>(Number(s[n])||0)&&(s[n]=d),a.roundCollection.forEach((e=>{i.includes(e)||i.push(e)})),c+=a.score,await Promise.all([e.storageSet("stars",s),e.storageSet("collection",i),R(c)]),e.__SYNCED__&&(e.__SYNCED__.stars=s,e.__SYNCED__.collection=i,e.__SYNCED__.total=c),e.score=c,e.updateTotalScoreUI(c),await It(),Dt()}catch(e){}try{e.Ach&&e.Ach.recordRound&&await e.Ach.recordRound({levelId:n,score:a.score,correctCount:a.correctCount,total:r,percent:l,mistakes:a.answers-a.correctCount,fastestCorrect:a.fastestCorrect,maxStreak:a.maxStreak,timeouts:a.timeouts})}catch(e){}!function(e){if(!e)return;Number(e.levelId)===Zt&&(Number(e.total)>0&&Number(e.correctCount)===Number(e.total)?function(){if(Sn(),Xt.daily.completed)return;Xt.daily.completed=!0,Xt.daily.streak=(Xt.daily.streak||0)+1,Xt.daily.lastCompletedDate=je(),nn(),on(),de("🎉 Вызов дня выполнен!"),bn()}():de("Чтобы выполнить вызов дня, ответь правильно на все вопросы"));pn("quiz",1),Number(e.percent)>=90&&pn("stars3",1);Number(e.total)>0&&Number(e.correctCount)===Number(e.total)&&pn("perfect",1);Number(e.maxStreak)>0&&pn("streak",Number(e.maxStreak));gn().then((()=>xn())),bn()}({levelId:n,score:a.score,correctCount:a.correctCount,total:r,percent:l,maxStreak:a.maxStreak}),j&&clearTimeout(j),j=setTimeout((()=>{j=null;try{e.showInterstitial()}catch(e){}}),400)}}i("#start-btn").onclick=()=>N(L),i("#next-btn").onclick=()=>N(U),i("#quit-btn").onclick=()=>{I(),"function"==typeof e.hideLevelSequence&&e.hideLevelSequence(),u&&re();Ft({name:Jt().fromMap?"map":"index"})},i("#restart-btn").onclick=()=>N(L),i("#home-btn").onclick=()=>{Ft({name:Jt().fromMap?"map":"index"})},e.__autoStartQuiz&&(e.__autoStartQuiz=!1,L());let O=null;function Y(){c.timerId&&(c.finished||c.answered||(O=c.timeLeft,I()))}function G(){if(null==O)return;if(c.finished||c.answered)return;const e=O;O=null,c.timeLeft=e,M(),c.timerId=setInterval((()=>{if(c.timeLeft<=0)return I(),void q();c.timeLeft--,M(),c.timeLeft<=0&&(I(),q())}),1e3)}function H(){I(),"function"==typeof e.hideLevelSequence&&e.hideLevelSequence(),e.__currentQuizCleanup===H&&(e.__currentQuizCleanup=null),e.__currentQuizPause===Y&&(e.__currentQuizPause=null),e.__currentQuizResume===G&&(e.__currentQuizResume=null)}return e.__currentQuizCleanup=H,e.__currentQuizPause=Y,e.__currentQuizResume=G,H}async function Gt(){const n=t.getElementById("col-body");if(!n)return;const a=e.getAnimalId,o=B(e.__SYNCED__&&e.__SYNCED__.collection),r=new Set(Array.isArray(o)?o.map(String):[]);n.innerHTML="";const s=new Set;let i=0;(e.REGIONS||[]).forEach((o=>{const c=[];if(o.levels.forEach((t=>{const n=(e.QUIZZES||{})[t.id];n&&n.questions.forEach((t=>{const n=a(t.img);n&&!s.has(n)&&(s.add(n),c.push({id:n,img:t.img,name:e.L(t.options[t.answer]),desc:e.L(t.description)}))}))})),!c.length)return;c.forEach((e=>{r.has(e.id)&&i++}));const l=t.createElement("section");l.className="col-region",l.innerHTML='<h2 class="region-title">'+o.icon+" "+ue(e.L(o.name))+"</h2>";const d=t.createElement("div");d.className="collection-grid",c.forEach((n=>{const a=r.has(n.id),o=t.createElement("button");o.type="button",o.className="collection-item"+(a?" unlocked":" locked"),a?(o.innerHTML='<img src="'+n.img+'" alt="'+ue(n.name)+'" loading="lazy" onerror="this.style.opacity=\'.3\';this.style.background=\'linear-gradient(135deg,#ffe3ef,#e6e1ff)\'">',o.addEventListener("click",(()=>function(e){const n=t.getElementById("col-modal");if(!n)return;t.getElementById("modal-img").src=e.img,t.getElementById("modal-img").alt=e.name,t.getElementById("modal-title").textContent=e.name,t.getElementById("modal-desc").textContent=e.desc,n.classList.add("show")}(n)))):(o.innerHTML='<span class="col-lock"><span class="emoji-icon" aria-hidden="true">'+(e.UiSprite&&e.UiSprite.has("locked")?e.UiSprite.html("locked"):"🔒")+"</span></span>",o.disabled=!0),d.appendChild(o)})),l.appendChild(d),n.appendChild(l)}));const c=t.getElementById("col-counter");c&&(c.textContent=i+" / "+s.size)}function zt(){const e=t.getElementById("col-modal");e&&e.classList.remove("show")}e.addEventListener("resize",(()=>{"map"===Rt&&(clearTimeout(Bt),Bt=setTimeout((()=>{const n=t.getElementById("map-player");n&&"number"==typeof e.__lastMapNodeIdx&&Ut(n,e.__lastMapNodeIdx,!1)}),150))})),e.renderMap=Tt;let Rt=null;async function Ht(){const n=t.getElementById("games-grid");if(!n)return;if(n.innerHTML="",u){let a=[];try{a=await e.getAllGames()}catch(e){}if(!a.length)try{const t=await e.getGameByID(535101);t&&a.push(t)}catch(e){}return a.length?void a.forEach((e=>{const a=t.createElement("button");a.type="button",a.className="game-card",a.addEventListener("click",(()=>window.open(e.url,"_blank")));const o=e.iconURL?'<img class="game-icon" src="'+e.iconURL+'" alt="" loading="lazy">':'<span class="emoji">🎲</span>';a.innerHTML=o+'<span class="name">'+ue(e.title||"")+"</span>",n.appendChild(a)})):void(n.innerHTML='<p class="modal-text">'+e.t("otherGamesEmpty")+"</p>")}(d?[{href:"https://ok.ru/app/512005443175",emoji:"💭",name:"Словарекс",iconURL:"games/slovarex.jpg"},{href:"https://ok.ru/app/512005458660",emoji:"🕹️",name:"Тетра Дарк",iconURL:"games/tetra-dark.jpg"},{href:"https://ok.ru/app/512005390848",emoji:"9️",name:"Судоку для самых умных",iconURL:"games/sudoku.jpg"},{href:"https://ok.ru/app/512004963709",emoji:"🎨",name:"Раскраска",iconURL:"games/raskraska.jpg"},{href:"https://ok.ru/app/512005107616",emoji:"🧩",name:"ТЕТРА",iconURL:"games/tetra.jpg"}]:[{href:"https://vk.com/app54634418",emoji:"💭",name:"Словарекс",iconURL:"games/slovarex.jpg"},{href:"https://vk.com/app54636699",emoji:"🍎",name:"Найди слова",iconURL:"games/naydi-slova.jpg"},{href:"https://vk.ru/app51399364",emoji:"9️",name:"Судоку для самых умных",iconURL:"games/sudoku.jpg"},{href:"https://vk.com/app54620141",emoji:"🧩",name:"ТЕТРА",iconURL:"games/tetra.jpg"},{href:"https://vk.com/app54659768",emoji:"🕹️",name:"Тетра Дарк",iconURL:"games/tetra-dark.jpg"},{href:"https://vk.com/app54678489",emoji:"🎨",name:"Раскраска",iconURL:"games/raskraska.jpg"}]).forEach((e=>{!function(e){const a=t.createElement("button");a.type="button",a.className="game-card",a.addEventListener("click",(()=>{"desktop_web"!==(p.launchParams&&p.launchParams.vk_platform||"")&&(l||d)?k("VKWebAppOpenURL",{url:e.url},5e3).then((t=>{t||window.open(e.url,"_blank")})).catch((()=>window.open(e.url,"_blank"))):window.open(e.url,"_blank")}));const o=e.iconURL?'<img class="game-icon" src="'+e.iconURL+'" alt="" loading="lazy">':e.emoji?'<span class="emoji">'+e.emoji+"</span>":"";a.innerHTML=o+'<span class="name">'+ue(e.title||"")+"</span>",n.appendChild(a)}({url:e.href,title:e.name,emoji:e.emoji,iconURL:e.iconURL||null})}))}function Vt(){try{he&&!he.paused&&(he.__pausedByVisibility=!0,he.pause()),pe&&"running"===pe.state&&pe.suspend().catch((()=>{}))}catch(e){}}function jt(){try{if("hidden"===t.visibilityState)return;pe&&"suspended"===pe.state&&ge()&&pe.resume().catch((()=>{})),he&&he.__pausedByVisibility&&(he.__pausedByVisibility=!1,_e()&&he.play().catch((()=>{})))}catch(e){}}t.addEventListener("visibilitychange",(()=>{if("hidden"===t.visibilityState){if(Vt(),"function"==typeof e.__currentQuizPause)try{e.__currentQuizPause()}catch(e){}}else if("visible"===t.visibilityState){if(jt(),(l||d)&&ne(!0),"function"==typeof e.__currentQuizResume)try{e.__currentQuizResume()}catch(e){}e.__appReady&&(l||d||u)&&(async()=>{try{await e.Theme.load();const n=await D("sound_mode");null!==n&&[0,1,2].includes(Number(n))&&Number(n)!==me&&(me=Number(n),U(A("sound_mode"),String(me)),Me()),await wt(),await an(),Ln(),bn(),xn(),"index"===Rt?await Pt():"map"===Rt?(["mapUnlockAdModal","mapLockedModal"].forEach((e=>{const n=t.getElementById(e);n&&n.classList.remove("show")})),await Tt()):"collection"===Rt&&await Gt()}catch(e){}})()}})),e.addEventListener("blur",Vt),e.addEventListener("focus",jt);const Qt=["index","quiz","collection","map"];let Kt=null;function Jt(){if(window.history.state&&window.history.state.vkRoute)return window.history.state.vkRoute;const e=(location.hash||"#/").replace(/^#\/?/,"").split("/").filter(Boolean);if("map"===e[0])return{name:"map"};if(!e.length)return{name:"index"};if("quiz"===e[0]){const t=parseInt(e[1],10);return{name:"quiz",levelId:isNaN(t)||t<1?1:t}}return"collection"===e[0]?{name:"collection"}:{name:"index"}}function Ft(e,t){const n={vkRoute:e};t?window.history.replaceState(n,"",location.pathname+location.search):window.history.pushState(n,"",location.pathname+location.search),Wt()}async function Wt(){if("function"==typeof Kt){try{Kt()}catch(e){}Kt=null}["mapUnlockAdModal","mapLockedModal","extrasUnlockModal"].forEach((e=>{const n=t.getElementById(e);n&&n.classList.remove("show")}));const e=Jt();window.history.state&&window.history.state.vkRoute||window.history.replaceState({vkRoute:e},"",location.pathname+location.search),Qt.forEach((n=>{const a=t.getElementById("page-"+n);a&&a.classList.toggle("active",n===e.name)})),Rt=e.name,"quiz"!==e.name&&u&&re();try{if("index"===e.name)await Pt();else if("map"===e.name)await Tt();else if("quiz"===e.name){const t=await Yt(e.levelId);Kt=t}else"collection"===e.name&&await Gt()}catch(e){}try{window.scrollTo(0,0)}catch(e){}kn()}e.pushRoute=Ft;const Zt=99999,$t=A("quiz_extras_v1"),Xt={purchased:{},tempUnlocks:{},daily:{date:"",completed:!1,streak:0,lastCompletedDate:""},quests:{date:"",quests:[]},surprise:{counter:0}},en=[{id:"solve5",text:"Ответь на 5 вопросов",stat:"solve",target:5,reward:3},{id:"solve10",text:"Ответь на 10 вопросов",stat:"solve",target:10,reward:4},{id:"solve15",text:"Ответь на 15 вопросов",stat:"solve",target:15,reward:5},{id:"quiz2",text:"Пройди 2 викторины",stat:"quiz",target:2,reward:2},{id:"quiz3",text:"Пройди 3 викторины",stat:"quiz",target:3,reward:3},{id:"stars1",text:"Получи 3 звезды",stat:"stars3",target:1,reward:3},{id:"perfect1",text:"Пройди без ошибок",stat:"perfect",target:1,reward:3},{id:"streak5",text:"5 правильных подряд",stat:"streak",target:5,reward:3},{id:"streak10",text:"10 правильных подряд",stat:"streak",target:10,reward:5}];async function tn(){e.addEventListener("error",(function(e){})),e.addEventListener("unhandledrejection",(function(e){e.preventDefault()}));try{try{const e=T(A("sound_mode"));if(null!==e&&[0,1,2].includes(Number(e)))me=Number(e);else{const e=T(A("sound_on"));me=null===e||!1!==JSON.parse(e)?1:0}}catch(e){me=1}if(Ne(),t.addEventListener("pointerdown",qe,!0),t.addEventListener("keydown",qe,!0),t.addEventListener("click",(e=>{if(e.target.closest(".option"))return;const t=e.target.closest("button, .btn, .icon-btn, .level-card, .collection-item, .modal-close");t&&!t.disabled&&(t.matches('#startPlayBtn, #startCategoriesBtn, #startHelpBtn, #startAchBtn, #menuHomeBtn, [data-theme-toggle], [data-sound-toggle], #extrasHelpBtn, #extrasDailyBtn, #extrasQuestsBtn, #home-btn, #quit-btn, .collapsible-header, [data-href], [onclick="Ach.openModal()"], [data-i18n-title="titleAchievements"]')?Cn("menu_select"):be())})),E(),Pe(),Me(),l||d){try{window.__vkBridgeReady&&await window.__vkBridgeReady}catch(e){}if(window.vkBridge){await async function(){if(!e.vkBridge)return;await k("VKWebAppInit",{},3e3);let t=p.userId;if(!t){const n=await k("VKWebAppGetUserInfo",{},3e3);if(n&&n.id){t=n.id,e.id=n.id;try{sessionStorage.setItem("id",n.id)}catch(e){}}}if(!t){const n=new URLSearchParams(location.search).get("viewer_id");if(n){t=parseInt(n),e.id=t;try{sessionStorage.setItem("id",t)}catch(e){}}}t&&(p.userId=t),ne(),F()}();try{window.vkBridge.subscribe((function(e){const t=e&&e.detail&&e.detail.type;"VKWebAppViewHide"===t&&(fe=!0,Ce()),"VKWebAppViewRestore"===t&&(fe=!1,_e()&&Ae())}))}catch(e){}}}else{(u||"undefined"!=typeof YaGames||!0===e.__YANDEX_SDK_LOADED__)&&(u||(u=!0,m="yandex",p.isYandex=!0,p.platform="yandex",p.isStandalone=!1,h.toggle("is-yandex",!0),h.toggle("is-standalone",!1)),await ft()),e.addEventListener("yandex-sdk-ready",(async()=>{if(!u){u=!0,m="yandex",p.isYandex=!0,p.platform="yandex",p.isStandalone=!1,h.toggle("is-yandex",!0),h.toggle("is-standalone",!1);try{await ft()}catch(e){}try{await wt()}catch(e){}try{await pt()}catch(e){}try{await St()}catch(e){}try{Pt()}catch(e){}e.__appReady&&xt()}}),{once:!0})}await e.Theme.load();try{const e=await D("sound_mode");null!==e&&[0,1,2].includes(Number(e))&&(me=Number(e),U(A("sound_mode"),String(me)),Me())}catch(e){}await wt();try{await e.Ach.loadMetrics()}catch(e){}try{await Je()}catch(e){}if(e.Ach&&e.Ach.recordVisit)try{await e.Ach.recordVisit()}catch(e){}try{await pt()}catch(e){}try{await St()}catch(e){}!function(){t.addEventListener("click",(function(e){const n=e.target.closest('a[href^="#/"], button[data-href^="#/"]');if(!n)return;e.preventDefault();const a=(n.getAttribute("href")||n.dataset.href).replace(/^#\/?/,"").split("/").filter(Boolean);if(!a.length)return Ft({name:"index"});if("quiz"===a[0]){const e=parseInt(a[1],10),n=isNaN(e)||e<1?1:e,o=t.getElementById("page-index");return"index"===Rt&&o&&!o.classList.contains("page-exit")?(o.classList.add("page-exit"),void setTimeout((()=>{o.classList.remove("page-exit"),Ft({name:"quiz",levelId:n})}),720)):Ft({name:"quiz",levelId:n})}if("collection"===a[0])return Ft({name:"collection"});Ft({name:"index"})}));const e=t.getElementById("ach-modal");e&&(e.querySelectorAll('.modal-close, .modal-back, [data-act="close"]').forEach((e=>e.addEventListener("click",et))),e.addEventListener("click",(t=>{t.target===e&&et()})));const n=t.getElementById("col-modal");n&&(n.querySelectorAll(".modal-close, .modal-back").forEach((e=>e.addEventListener("click",zt))),n.addEventListener("click",(e=>{e.target===n&&zt()})));const a=t.getElementById("auth-modal");a&&(a.querySelectorAll('.modal-close, [data-act="close"]').forEach((e=>e.addEventListener("click",gt))),a.addEventListener("click",(e=>{e.target===a&&gt()})));const o=t.getElementById("yandex-leaderboard-modal");o&&(o.querySelectorAll(".modal-close").forEach((e=>e.addEventListener("click",(()=>o.classList.remove("show"))))),o.addEventListener("click",(e=>{e.target===o&&o.classList.remove("show")})));const r=t.getElementById("igames-modal");r&&(r.querySelectorAll(".modal-close, .modal-back").forEach((e=>e.addEventListener("click",nt))),r.addEventListener("click",(e=>{e.target===r&&nt()})));const s=t.getElementById("map-back-btn");s&&s.addEventListener("click",(()=>{Ft({name:"index"})}));const i=t.getElementById("map-daily-btn");i&&i.addEventListener("click",wn);const c=t.getElementById("map-quests-btn");c&&c.addEventListener("click",vn),t.addEventListener("keydown",(e=>{if("Escape"===e.key){et(),zt(),gt(),nt();const e=t.getElementById("mapUnlockAdModal");e&&e.classList.remove("show"),o&&o.classList.remove("show");const n=t.getElementById("mapLockedModal");n&&n.classList.remove("show")}}))}(),function(){const n="maxlvl";let a=1;async function o(){const e=await Y(n);return a=Math.max(1,Number(e)||1),window.StartMenu&&window.StartMenu.updateStats(),a}async function r(e){const t=Number(e)||1;t>a&&(a=t,await G(n,a),window.StartMenu&&"function"==typeof window.StartMenu.updateStats&&window.StartMenu.updateStats())}let s=0,i=null;function c(e,t){const n=document.getElementById("levelOverlay"),a=document.getElementById("levelOverlayBox");if(!n||!a)return void t();i&&(clearTimeout(i),i=null),n.parentElement!==document.body&&document.body.appendChild(n);const o=++s,r=null!=e&&Number(e)>0,c=r?['<div class="level-overlay__line">Уровень</div><div class="level-overlay__line">'+e+"</div>","3","2","1"]:["3","2","1"];let l=0;d(n),u(n),n.classList.add("show"),function e(){if(o!==s)return;if(l>=c.length)return i=null,n.classList.remove("show"),d(n),void t();const u=r&&0===l;a.innerHTML=u?c[0]:'<div class="level-overlay__line">'+c[l]+"</div>",a.style.animation="none",a.offsetWidth,a.style.animation="",Cn(u?"levelup":"menu_select"),i=setTimeout(e,u?1800:700),l++}()}function l(){s++,i&&(clearTimeout(i),i=null);const e=document.getElementById("levelOverlay");e&&(e.classList.remove("show"),d(e))}function d(e){e&&e.querySelectorAll(".level-overlay__deco").forEach((function(e){e.remove()}))}function u(e){if(e&&(!window.matchMedia||!window.matchMedia("(prefers-reduced-motion: reduce)").matches)){var t=In(),n="mobile"===t||"weak"===t;[{type:"leaf",dx:-95,dy:68,s:.9},{type:"star",dx:-58,dy:84,s:.85},{type:"berry",dx:-20,dy:92,s:1},{type:"berry",dx:20,dy:92,s:.85},{type:"star",dx:58,dy:84,s:.85},{type:"leaf",dx:95,dy:68,s:.9}].forEach((function(t,a){var o=document.createElement("div");o.className="start-deco start-deco--"+t.type+(n?"":" start-deco-float")+" level-overlay__deco",o.style.left="calc(50% + "+t.dx+"px)",o.style.top="calc(50% + "+t.dy+"px)",o.style.transform="translate(-50%, -50%) scale("+t.s+")",n||(o.style.animationDelay=.2*a+"s"),o.style.zIndex="1",e.appendChild(o)}))}}function m(){window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches||(document.querySelectorAll(".game-deco").forEach((function(e){e.remove()})),[{type:"cloud",x:8,y:12,s:1},{type:"cloud",x:78,y:8,s:.8},{type:"cloud",x:85,y:70,s:.7},{type:"star",x:15,y:70,s:1},{type:"star",x:90,y:30,s:.8},{type:"star",x:5,y:45,s:.6},{type:"leaf",x:20,y:85,s:1},{type:"leaf",x:72,y:88,s:.9},{type:"berry",x:30,y:15,s:1},{type:"berry",x:65,y:18,s:.8},{type:"berry",x:92,y:55,s:.7}].forEach((function(e,t){var n=document.createElement("div");n.className="start-deco start-deco--"+e.type+" start-deco-float game-deco",n.style.left=e.x+"%",n.style.top=e.y+"%",n.style.transform="scale("+e.s+")",n.style.animationDelay=.3*t+"s",document.body.appendChild(n)})))}e.showLevelSequence=c,e.hideLevelSequence=l,e.updateMaxLevel=r,o(),m(),window.startRandomGame=function(t){for(var n=window.__SYNCED__&&window.__SYNCED__.unlocked||new Array,a=new Array,o=0;o<n.length;o++){var r=Number(n[o]);r>0&&r<1e3&&window.QUIZZES[String(r)]&&a.push(r)}a.length||(a=new Array(1));var s=a[Math.floor(Math.random()*a.length)];t&&(e.__autoStartQuiz=!0),Ft({name:"quiz",levelId:s})},window.startMapGame=function(n){var a=window.__SYNCED__&&window.__SYNCED__.mapUnlocked||new Array(2001),o=new Set(a.map(Number)),r=P(e.__SYNCED__&&e.__SYNCED__.stars),s=Ct(),i=0;s.forEach((function(e,t){o.has(Number(e.id))&&(i=t)}));var c=s[i]||{id:2001},l=Number(c.id),d=Math.floor(Number(r[l])||0),u=i+1<s.length?s[i+1]:null;if(u&&!o.has(Number(u.id))&&d>=2)return Ft({name:"map"}),void setTimeout((function(){var e=t.getElementById("extrasTutOverlay");e&&"none"!==e.style.display||Ot(u,i+1)}),120);n&&(e.__autoStartQuiz=!0),e.__quizFromMap=!0,Ft({name:"quiz",levelId:l,fromMap:!0})},e.startRandomGame=startRandomGame,function(){try{const e=T($t);if(!e)return;const t=JSON.parse(e);if(!t||"object"!=typeof t)return;t.purchased&&"object"==typeof t.purchased&&(Xt.purchased=t.purchased),t.tempUnlocks&&"object"==typeof t.tempUnlocks&&(Xt.tempUnlocks=t.tempUnlocks),t.daily&&"object"==typeof t.daily&&(Xt.daily=t.daily),t.quests&&"object"==typeof t.quests&&(Xt.quests=t.quests),t.surprise&&"object"==typeof t.surprise&&(Xt.surprise=t.surprise)}catch(e){}}(),gn(),fn(),Sn(),bn(),window.StartMenu&&window.StartMenu.init&&window.StartMenu.init();Dt(),["menuHomeBtn","mapMenuHomeBtn"].forEach((e=>{const n=t.getElementById(e);n&&n.addEventListener("click",(()=>{if(window.StartMenu&&"function"==typeof window.StartMenu.show)window.StartMenu.show();else{const e=t.getElementById("startScreen");e&&e.classList.remove("hidden","start-exit")}}))})),an().then((()=>{if(fn(),Sn(),gn(),bn(),xn(),Ln(),"index"===Rt)try{Pt()}catch(e){}}));const y=t.getElementById("extrasDailyBtn");y&&(y.onclick=wn);const f=t.getElementById("extrasQuestsBtn");f&&(f.onclick=vn);const p=t.getElementById("extrasHelpBtn");p&&(p.onclick=Nn);const h=t.getElementById("extrasQuestsModal");h&&(h.querySelectorAll('.modal-close, [data-act="close"]').forEach((e=>{e.onclick=()=>h.classList.remove("show")})),h.onclick=e=>{e.target===h&&h.classList.remove("show")});const g=t.getElementById("extrasHelpModal");if(g){g.querySelectorAll('.modal-close, [data-act="close"]').forEach((e=>{e.onclick=()=>g.classList.remove("show")}));const t=g.querySelector('[data-act="tutorial"]');t&&(t.onclick=()=>{g.classList.remove("show"),e.GameTutorial&&"function"==typeof e.GameTutorial.start&&e.GameTutorial.start(!0)}),g.onclick=e=>{e.target===g&&g.classList.remove("show")}}setTimeout((()=>{Ln(),xn(),bn()}),300),function t(n){(n=n||0)>100||(e.__appReady?e.GameTutorial&&"function"==typeof e.GameTutorial.start&&(async()=>{let t=!1;try{t="function"==typeof e.GameTutorial.hasPassedAsync?await e.GameTutorial.hasPassedAsync():e.GameTutorial.hasPassed()}catch(n){t=e.GameTutorial.hasPassed()}if(!t)try{e.GameTutorial.start()}catch(e){}})():setTimeout((()=>t(n+1)),200))}(0)}()}catch(e){}e.addEventListener("popstate",Wt);try{await(n=Wt(),a=5e3,o="navigate",Promise.race([n,new Promise(((e,t)=>setTimeout((()=>t(new Error("timeout "+o+" after "+a+"ms"))),a)))]))}catch(e){}var n,a,o;try{Lt()}catch(e){}}function nn(){try{U($t,JSON.stringify(Xt))}catch(e){}}async function an(){try{const e=await I("quiz_extras_cloud");if(!e.ok)return;const t=e.value;if(!t||"object"!=typeof t)return void((Object.keys(Xt.purchased).length||Object.keys(Xt.tempUnlocks).length)&&on());const n=JSON.stringify({p:Xt.purchased,u:Xt.tempUnlocks,d:Xt.daily});if(t.purchased&&"object"==typeof t.purchased)for(const e in t.purchased)t.purchased[e]&&(Xt.purchased[e]=!0);if(t.tempUnlocks&&"object"==typeof t.tempUnlocks){const e=Date.now();for(const n in t.tempUnlocks)t.tempUnlocks[n]>e&&t.tempUnlocks[n]>(Xt.tempUnlocks[n]||0)&&(Xt.tempUnlocks[n]=t.tempUnlocks[n])}if(t.daily&&"object"==typeof t.daily){const e=t.daily;e.lastCompletedDate&&(!Xt.daily.lastCompletedDate||e.lastCompletedDate>Xt.daily.lastCompletedDate)&&(Xt.daily.lastCompletedDate=e.lastCompletedDate),(e.streak||0)>(Xt.daily.streak||0)&&(Xt.daily.streak=e.streak),e.date===je()&&e.completed&&(Xt.daily.completed=!0)}t.quests&&"object"==typeof t.quests&&t.quests.date===je()&&(Xt.quests=t.quests),U($t,JSON.stringify(Xt));const a=JSON.stringify({p:Xt.purchased,u:Xt.tempUnlocks,d:Xt.daily}),o=JSON.stringify({p:t.purchased||{},u:t.tempUnlocks||{},d:t.daily||{}});a===o&&n===o||on()}catch(e){}}function on(){if(e.storageSet)try{e.storageSet("quiz_extras_cloud",{purchased:Xt.purchased,tempUnlocks:Xt.tempUnlocks,daily:Xt.daily,quests:Xt.quests}).catch((function(){}))}catch(e){}}function rn(t){return e.UiSprite&&"function"==typeof e.UiSprite.html?e.UiSprite.html("points",t||"1em"):"🍎"}function sn(t){return e.UiSprite&&"function"==typeof e.UiSprite.html?e.UiSprite.html("tv",t||"1em"):"📺"}function cn(t){return e.UiSprite&&"function"==typeof e.UiSprite.html?e.UiSprite.html("locked",t||"1em"):"🔒"}function ln(t){const n=Number(t),a=(e.THEMED_LEVELS||[]).find((e=>Number(e.id)===n&&e.isFullSet));if(a)return Math.max(100,3*(a.count||0));const o=(e.PHOTO_LEVELS||[]).find((e=>Number(e.id)===n&&e.isFullSet));if(o)return Math.max(100,3*(o.count||0));for(const t of e.REGIONS||[]){const e=(t.levels||[]).find((e=>Number(e.id)===n&&e.isFullSet));if(e)return Math.max(100,3*(e.count||0))}let r=0;for(const t of e.REGIONS||[])for(const e of t.levels){if(Number(e.id)===n)return 40+10*r;r++}for(let t=0;t<(e.THEMED_LEVELS||[]).length;t++)if(Number(e.THEMED_LEVELS[t].id)===n)return 32+9*Math.floor(t/4);for(let t=0;t<(e.PHOTO_LEVELS||[]).length;t++)if(Number(e.PHOTO_LEVELS[t].id)===n)return 26+10*Math.floor(t/7);return 40}function dn(e){return!!Xt.purchased[Number(e)]}function un(e){const t=Number(e),n=Xt.tempUnlocks[t];return!!n&&(!(n<=Date.now())||(delete Xt.tempUnlocks[t],nn(),!1))}function mn(n,a){const o=Number(n);if(dn(o)||un(o))return void("function"==typeof a&&a(o));if(!(!e.__SYNCED__||!Array.isArray(e.__SYNCED__.unlocked))&&e.__SYNCED__.unlocked.map(Number).includes(o))return void("function"==typeof a&&a(o));const r=ln(o),s=(Number(e.__SYNCED__&&e.__SYNCED__.total)||0)>=r,i=function(t){const n=Number(t);for(const t of e.REGIONS||[])for(const a of t.levels)if(Number(a.id)===n)return e.L?e.L(a.name):a.name;for(const t of e.THEMED_LEVELS||[])if(Number(t.id)===n)return e.L?e.L(t.name):t.name;for(const t of e.PHOTO_LEVELS||[])if(Number(t.id)===n)return e.L?e.L(t.name):t.name;return"Категория"}(o);let c=t.getElementById("extrasUnlockModal");c||(c=t.createElement("div"),c.id="extrasUnlockModal",c.className="modal",t.body.appendChild(c)),c.innerHTML='<div class="modal-content"><button class="modal-close" data-act="close" aria-label="close">×</button><h2>'+cn("1.5em")+" "+ue(i)+" — закрыта</h2><p>Купить навсегда за <strong>"+r+'</strong> ягод или открыть временно?</p><div class="extras-modal-actions"><button class="btn btn-primary" data-act="buy"'+(s?"":" disabled")+"> <span>Купить за "+r+"</span>"+rn("1.2em")+'</button><button class="btn btn-secondary" data-act="ad">'+sn("1.2em")+' Смотреть (24ч)</button><button class="btn btn-ghost" data-act="cancel">Отмена</button></div></div>',c.classList.add("show");const l=()=>c.classList.remove("show");c.querySelector('[data-act="close"]').onclick=l,c.querySelector('[data-act="cancel"]').onclick=l,c.onclick=e=>{e.target===c&&l()};const d=c.querySelector('[data-act="buy"]');d&&(d.onclick=async()=>{if(s&&!d.disabled){d.disabled=!0;try{await async function(t){const n=Number(t);if(dn(n))return!0;const a=ln(n),o=Number(e.__SYNCED__&&e.__SYNCED__.total)||0;if(o<a)return de("Недостаточно ягод"),!1;const r=o-a;await R(r),e.__SYNCED__&&(e.__SYNCED__.total=r),e.updateTotalScoreUI&&e.updateTotalScoreUI(r),Xt.purchased[n]=!0,nn(),on();try{e.Gating&&e.Gating.unlockLevel&&await e.Gating.unlockLevel(n)}catch(e){}return e.__SYNCED__&&Array.isArray(e.__SYNCED__.unlocked)&&-1===e.__SYNCED__.unlocked.indexOf(n)&&e.__SYNCED__.unlocked.push(n),Cn("buy_cat"),de("🎉 Категория открыта навсегда!"),!0}(o)&&(l(),"function"==typeof a&&a(o))}finally{d.isConnected&&(d.disabled=!1)}}});const u=c.querySelector('[data-act="ad"]');u&&(u.onclick=async t=>{const n=t.currentTarget;if(n.disabled)return;n.disabled=!0;const r=n.innerHTML;n.textContent=e.t("loadingAd");const s=await async function(t){if(!e.showRewardedAd)return!1;try{if(!await e.showRewardedAd())return!1}catch(e){return!1}const n=Number(t);return Xt.tempUnlocks[n]=Date.now()+864e5,nn(),on(),e.__SYNCED__&&Array.isArray(e.__SYNCED__.unlocked)&&-1===e.__SYNCED__.unlocked.indexOf(n)&&e.__SYNCED__.unlocked.push(n),Cn("buy_cat"),de("🎉 Категория открыта на 24 часа!"),!0}(o);n.isConnected&&(n.disabled=!1,n.innerHTML=r),s&&(l(),"function"==typeof a&&a(o))})}function yn(e){let t=2166136261;for(let n=0;n<e.length;n++)t^=e.charCodeAt(n),t=Math.imul(t,16777619)>>>0;return t}function fn(){const e=je();if(Xt.quests.date===e&&Array.isArray(Xt.quests.quests)&&Xt.quests.quests.length)return;let t=yn(e+"_quests");const n=en.slice();for(let e=n.length-1;e>0;e--){t=1103515245*t+12345>>>0;const a=t%(e+1),o=n[e];n[e]=n[a],n[a]=o}Xt.quests={date:e,quests:n.slice(0,3).map((e=>Object.assign({},e,{progress:0,claimed:!1})))},nn()}function pn(e,n){fn();let a=!1;for(const t of Xt.quests.quests)if(!(t.stat!==e||t.claimed||t.progress>=t.target))if("streak"===e){const e=Math.min(t.target,Math.max(t.progress,Number(n)||0));e>t.progress&&(t.progress=e,a=!0)}else{const e=Math.min(t.target,t.progress+(Number(n)||0));e>t.progress&&(t.progress=e,a=!0)}a&&(nn(),function(){const e=t.getElementById("extrasQuestsModal");e&&e.classList.contains("show")&&_n()}())}setTimeout((()=>{if(!t.body.classList.contains("app-ready")||!t.querySelector(".page.active"))try{if(Lt(),!t.querySelector(".page.active")){const e=t.getElementById("page-index");e&&e.classList.add("active");try{Rt="index"}catch(e){}}try{Promise.resolve(Pt()).catch((e=>{}))}catch(e){}}catch(e){}}),15e3),e.addEventListener("pagehide",(()=>{if(Q(),u&&re(),me>0)try{Sound.stopBg()}catch(e){}if(e.__currentQuizPause)try{e.__currentQuizPause()}catch(e){}})),"loading"===t.readyState?t.addEventListener("DOMContentLoaded",tn):tn(),e.VKApp={storageGet:Y,storageSet:G,showRewardedAd:W,showInterstitial:Z,infr:se,toast:de,openAuthModal:ht,closeAuthModal:gt,doYandexAuth:_t,openOtherGamesModal:tt,closeOtherGamesModal:nt};let hn=!1;async function gn(){if(hn)return 0;const t=Xt.quests.quests.filter((e=>!e.claimed&&e.progress>=e.target));if(!t.length)return 0;hn=!0;try{const n=t.reduce(((e,t)=>e+t.reward),0),a=(Number(e.__SYNCED__&&e.__SYNCED__.total)||0)+n;return await R(a),e.__SYNCED__&&(e.__SYNCED__.total=a),e.updateTotalScoreUI&&e.updateTotalScoreUI(a),t.forEach((e=>{e.claimed=!0})),nn(),on(),de("🎉 +"+n+" ягод за квесты!"),n}finally{hn=!1}}function _n(){const e=t.getElementById("extrasQuestsList");e&&(fn(),e.innerHTML=Xt.quests.quests.map((e=>{const t=e.progress>=e.target,n=Math.min(100,Math.round(e.progress/e.target*100));return'<div class="extras-quest'+(t?" extras-quest--done":"")+'"><div class="extras-quest__head"><span class="extras-quest__text">'+ue(e.text)+'</span><span class="extras-quest__reward">'+rn("1em")+" +"+e.reward+'</span></div><div class="extras-quest__bar"><div class="extras-quest__fill" style="width:'+n+'%"></div></div><div class="extras-quest__prog">'+(t?"✓ Выполнено":e.progress+" / "+e.target)+"</div></div>"})).join(""))}function vn(){_n();const e=t.getElementById("extrasQuestsModal");e&&e.classList.add("show")}function Sn(){const e=je();if(Xt.daily.date!==e&&(Xt.daily.date=e,Xt.daily.completed=!1),Xt.daily.lastCompletedDate){const t=Qe();Xt.daily.lastCompletedDate!==e&&Xt.daily.lastCompletedDate!==t&&(Xt.daily.streak=0)}nn()}function En(){const t=function(){const t=[],n=new Set;return(e.REGIONS||[]).forEach((a=>{a.levels.forEach((a=>{const o=(e.QUIZZES||{})[a.id];o&&Array.isArray(o.questions)&&o.questions.forEach((a=>{const o=e.getAnimalId?e.getAnimalId(a.img):a.img||"";o&&!n.has(o)&&(n.add(o),t.push(a))}))}))})),t}();if(!t.length)return[];let n=yn(je());const a=t.slice();for(let e=a.length-1;e>0;e--){n=1103515245*n+12345>>>0;const t=n%(e+1),o=a[e];a[e]=a[t],a[t]=o}return a.slice(0,Math.min(10,a.length))}function wn(){if(Sn(),Xt.daily.completed)return void de("Вызов дня уже выполнен. Возвращайтесь завтра!");const n=En();if(!n.length)return void de("Вызов дня недоступен");e.QUIZZES[Zt]={regionKey:"daily",sub:{ru:"Вызов дня",en:"Daily challenge",tr:"Günlük meydan okuma"},questions:n};const a=t.getElementById("page-index");if("index"===Rt&&a&&!a.classList.contains("page-exit"))return a.classList.add("page-exit"),void setTimeout((()=>{a.classList.remove("page-exit"),Ft({name:"quiz",levelId:Zt})}),720);Ft({name:"quiz",levelId:Zt})}function bn(){Sn();const e=t.getElementById("extrasDailyBtn"),n=t.getElementById("extrasDailyStreak");if(e&&(Xt.daily.completed?(e.innerHTML="Вызов выполнен",e.classList.add("extras-daily-btn--done")):(e.innerHTML='<span class="extras-daily-btn__icon">🎁</span>Вызов дня',e.classList.remove("extras-daily-btn--done"))),n){const e=Number(Xt.daily.streak)||0;if(e>0){let t="дней";const a=e%100,o=e%10;(a<11||a>14)&&(1===o?t="день":o>=2&&o<=4&&(t="дня")),n.textContent="Серия: "+e+" "+t+" подряд",n.style.display="block"}else n.style.display="none"}}function kn(){const e=t.getElementById("extrasBonusCounter");if(!e)return;const n=t.getElementById("quiz-screen");if(!(n&&n.classList.contains("active")))return void(e.style.display="none");const a=15-(Xt.surprise.counter||0)%15;e.style.display="inline-flex",e.textContent="×2 через "+a}function xn(){const n=t.getElementById("extrasProgress");if(!n)return;const a=function(){const t=new Set(e.__SYNCED__&&e.__SYNCED__.unlocked||[]),n=Number(e.__SYNCED__&&e.__SYNCED__.total)||0;let a=null;const o=e=>{const o=Number(e.id);if(t.has(o))return;if(dn(o)||un(o))return;const r=ln(o),s=Math.max(0,r-n);(!a||r<a.price)&&(a={level:e,price:r,need:s,levelId:o})};return(e.REGIONS||[]).forEach((e=>e.levels.forEach(o))),(e.THEMED_LEVELS||[]).forEach(o),(e.PHOTO_LEVELS||[]).forEach(o),a}();if(!a)return void(n.style.display="none");n.style.display="flex";const o=e.L?e.L(a.level.name):a.level.name,r=Number(e.__SYNCED__&&e.__SYNCED__.total)||0,s=a.need<=0;n.innerHTML='<span class="extras-progress__label">'+cn("1.1em")+" "+ue(o)+'</span><span class="extras-progress__right">'+rn("1.1em")+" "+(s?"Хватает открыть · "+a.price:r+" / "+a.price+" · ещё "+a.need)+"</span>"}function Nn(){const e=t.getElementById("extrasHelpModal");e&&e.classList.add("show")}function Ln(){if(!e.__SYNCED__)return;Array.isArray(e.__SYNCED__.unlocked)||(e.__SYNCED__.unlocked=[]);const t=Date.now();let n=!1;for(const a in Xt.tempUnlocks)Xt.tempUnlocks[a]>t?-1===e.__SYNCED__.unlocked.indexOf(Number(a))&&e.__SYNCED__.unlocked.push(Number(a)):(delete Xt.tempUnlocks[a],n=!0);n&&nn()}const An={};function Cn(e){if(ge())try{const t=An[e];if(!t)return;const n=t.cloneNode();n.volume=.8,n.play().catch((()=>{}))}catch(e){}}["levelup","buy_cat","menu_select"].forEach((e=>{try{const t=new Audio("sounds/"+e+".ogg");t.preload="auto",An[e]=t}catch(e){}}));let Mn=null;function In(){if(null!==Mn)return Mn;const e=navigator.userAgent||"",t=/Mobi|Android|iPhone|iPad|iPod/i.test(e),n=window.innerWidth<768,a=t||n,o=navigator.hardwareConcurrency||0,r=navigator.deviceMemory||0;return Mn=a&&(o>0&&o<=2||r>0&&r<=2)?"weak":a?"mobile":"desktop",Mn}e.playOgg=Cn,e.startDailyChallenge=wn,e.openQuestsModal=vn,e.openHelpModal=Nn,e.toggleHeroMore=function(){const e=document.getElementById("heroMoreMenu"),t=document.getElementById("heroMoreToggle");if(!e)return;const n=e.hasAttribute("hidden");n?e.removeAttribute("hidden"):e.setAttribute("hidden",""),t&&t.setAttribute("aria-expanded",n?"true":"false")}}(window,document);
+(function (w, d) {
+'use strict';
+const T = w.__T || ((ru, en, tr) => ({ ru, en: en || ru, tr: tr || ru }));
+(function() {
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    const lowRAM  = navigator.deviceMemory       && navigator.deviceMemory       <= 4;
+    const isWeak  = isMobile && (weakCPU || lowRAM);
+    if (isWeak) {
+        document.documentElement.classList.add('weak-device');
+        console.log('📱 Слабое устройство: отключаем тяжёлые эффекты');
+    }
+})();
+const sp = new URLSearchParams(location.search);
+const launchParams = {};
+for (const [k, v] of sp) launchParams[k] = v;
+const vkOK = launchParams.vk_client === 'ok' || (Boolean(launchParams.vk_ok_user_id) && launchParams.vk_ok_user_id !== '0');
+const hasVKParams = !!(launchParams.vk_app_id || launchParams.vk_client_id || launchParams.vk_platform || launchParams.vk_user_id || launchParams.vk_client);
+const hasYaGames = typeof YaGames !== 'undefined';
+const yaEnv = w.YandexGamesSDKEnvironment;
+const hasYaEnv = !!(yaEnv && (yaEnv.appId || yaEnv.clipId));
+let isVK = false, isOK = false, isYandex = false, platform = 'standalone';
+if (hasVKParams) { isOK = vkOK; isVK = !vkOK; platform = isOK ? 'ok' : 'vk'; }
+else if (hasYaGames || hasYaEnv) { isYandex = true; platform = 'yandex'; }
+const userId = parseInt(launchParams.vk_user_id || launchParams.vk_ok_user_id || launchParams.viewer_id || launchParams.user_id || '0');
+const storagePrefix = isOK ? 'ok_' : '';
+const P = {isVK, isOK, isYandex, platform, userId, storagePrefix, launchParams, isStandalone: platform === 'standalone', inIframe: (() => { try { return w.self !== w.top; } catch (e) { return true; } })()};
+w.__PLATFORM = P;
+const cls = d.documentElement.classList;
+cls.toggle('is-vk', isVK);
+cls.toggle('is-ok', isOK);
+cls.toggle('is-yandex', isYandex);
+cls.toggle('is-standalone', platform === 'standalone');
+let darkEnabled = false;
+try {
+  const raw = localStorage.getItem(storagePrefix + 'aq_theme_dark');
+  if (raw === 'true' || raw === true) { darkEnabled = true; cls.add('is-dark'); }
+} catch (e) {}
+console.log('%c🎮 ' + platform.toUpperCase(), 'color:#e94560;font-weight:bold', '| userId=' + userId + ' | prefix="' + (storagePrefix || '(none)') + '"');
+const SUPPORTED = ['ru', 'en', 'tr'];
+function normalizeLang(l) {
+  l = String(l || '').toLowerCase();
+  if (l.startsWith('ru')) return 'ru';
+  if (l.startsWith('en')) return 'en';
+  if (l.startsWith('tr')) return 'tr';
+  return 'ru';
+}
+const LANG_STORAGE_KEY = storagePrefix + 'aq_user_lang';
+function detectPlatformLang() {
+  if (isVK || isOK) return normalizeLang(launchParams.vk_language || navigator.language || 'ru');
+  if (launchParams.vk_language || launchParams.lang) {
+    return normalizeLang(launchParams.vk_language || launchParams.lang);
+  }
+  try {
+    if (w.ysdk && w.ysdk.environment && w.ysdk.environment.i18n && w.ysdk.environment.i18n.lang) {
+      return normalizeLang(w.ysdk.environment.i18n.lang);
+    }
+  } catch (e) {}
+  return normalizeLang(navigator.language || navigator.userLanguage || 'ru');
+}
+function initialLang() {
+  try {
+    const saved = localStorage.getItem(LANG_STORAGE_KEY);
+    if (saved && SUPPORTED.includes(saved)) return saved;
+  } catch (e) {}
+  return detectPlatformLang();
+}
+let LANG = initialLang();
+w.LANG = LANG;
+function setGameLanguage(newLang, isManual) {
+  const next = normalizeLang(newLang);
+  if (!SUPPORTED.includes(next)) return;
+  if (isManual) {
+    try { localStorage.setItem(LANG_STORAGE_KEY, next); } catch (e) {}
+  }
+  if (LANG === next) return;
+  LANG = next;
+  w.LANG = next;
+  applyStaticI18n();
+  refreshLocalization();
+}
+w.setGameLanguage = setGameLanguage;
+w.t = function (key) {
+  const cur = (w.I18N && w.I18N[w.LANG]) || {};
+  const fb = (w.I18N && w.I18N.ru) || {};
+  return cur[key] != null ? cur[key] : (fb[key] != null ? fb[key] : key);
+};
+w.L = function (obj) {
+  if (obj == null) return '';
+  if (typeof obj === 'string') return obj;
+  return obj[w.LANG] || obj.ru || '';
+};
+const EXTRA_I18N = {
+  ru: {
+    titleLang: 'Язык',
+    chooseLangTitle: 'Выберите язык',
+    startTitleWord: 'Викторина',
+    startSubtitle: 'Для всей семьи',
+    statBerries: 'Ягоды',
+    statMaxLvl: 'Макс. Ур.',
+    categoriesBtn: 'Категории',
+    mapBtn: 'Карта',
+    helpTitle: 'Как играть',
+    helpBtnTitle: 'Помощь',
+    homeMenuTitle: 'На главную',
+    dailyTitle: 'Вызов дня',
+    dailyDone: 'Вызов выполнен',
+    dailyAlready: 'Вызов дня уже выполнен. Возвращайтесь завтра!',
+    dailyUnavail: 'Вызов дня недоступен',
+    dailyCompletedToast: '🎉 Вызов дня выполнен!',
+    dailyNeedAll: 'Чтобы выполнить вызов дня, ответь правильно на все вопросы',
+    questsTitle: 'Квесты дня',
+    questDone: '✓ Выполнено',
+    questRewardToast: '🎉 +{n} ягод за квесты!',
+    closeBtn: 'Закрыть',
+    tutorialBtn: 'Обучение',
+    helpP1: 'Посмотри на фото животного и выбери один из вариантов ответа.',
+    helpP2: 'На каждый вопрос даётся 10 секунд — следи за таймером.',
+    helpP3: 'За правильные ответы ты получаешь ягоды.',
+    helpP4: 'Пройди всю викторину без ошибок — получишь 3 звезды!',
+    helpP5: 'После открытия всех уровней ягоды можно будет потратить на открытие категорий.',
+    helpP6: 'Выполняй ежедневные квесты и вызов дня, чтобы получать бонусные ягоды.',
+    helpP7: 'Каждый 15-й правильный ответ даёт ×2 ягод.',
+    mapLockedTitle: 'Уровень закрыт!',
+    mapLockedDesc: 'Пройди предыдущий уровень на 2 или 3 звезды, чтобы продвинуться дальше.',
+    okBtn: 'Хорошо',
+    readyTitle: 'Готово!',
+    mapUnlockAdDesc: 'Открыть уровень, посмотрев короткую рекламу?',
+    watchBtn: 'Смотреть',
+    cancelBtn: 'Отмена',
+    levelOpenedToast: '🎉 Уровень открыт!',
+    categoryFallback: 'Категория',
+    notEnoughBerries: 'Недостаточно ягод',
+    catOpenedForever: '🎉 Категория открыта навсегда!',
+    catOpened24h: '🎉 Категория открыта на 24 часа!',
+    catClosedSuffix: ' — закрыта',
+    buyModalDesc: 'Купить навсегда за <strong>{price}</strong> ягод или открыть временно?',
+    buyForBtn: 'Купить за {price}',
+    watch24hBtn: 'Смотреть (24ч)',
+    bonusToast: '🎉 Бонус! +2 ягоды',
+    bonusCounter: '×2 через {n}',
+    progressReady: 'Хватает открыть · {price}',
+    progressNeed: '{total} / {price} · ещё {need}',
+    levelWord: 'Уровень',
+      hintTitle: 'Подсказка',
+    hintModalTitle: 'Подсказка!',
+    hintModalDesc: 'Посмотри короткую рекламу, чтобы получить подсказку.'
+  },
+  en: {
+     hintTitle: 'Hint',
+    hintModalTitle: 'Hint!',
+    hintModalDesc: 'Watch a short ad to get a hint.',
+    titleLang: 'Language',
+    chooseLangTitle: 'Choose language',
+    startTitleWord: 'Animal Quiz',
+    startSubtitle: 'For the whole family',
+    statBerries: 'Berries',
+    statMaxLvl: 'Max Lvl',
+    categoriesBtn: 'Categories',
+    mapBtn: 'Map',
+    helpTitle: 'How to play',
+    helpBtnTitle: 'Help',
+    homeMenuTitle: 'Main menu',
+    dailyTitle: 'Daily Challenge',
+    dailyDone: 'Challenge completed',
+    dailyAlready: 'Daily challenge is already completed. Come back tomorrow!',
+    dailyUnavail: 'Daily challenge unavailable',
+    dailyCompletedToast: '🎉 Daily challenge completed!',
+    dailyNeedAll: 'Answer all questions correctly to complete the daily challenge',
+    questsTitle: 'Daily Quests',
+    questDone: '✓ Completed',
+    questRewardToast: '🎉 +{n} berries for quests!',
+    closeBtn: 'Close',
+    tutorialBtn: 'Tutorial',
+    helpP1: 'Look at the animal photo and choose one of the answer options.',
+    helpP2: 'You have 10 seconds per question — watch the timer.',
+    helpP3: 'You earn berries for correct answers.',
+    helpP4: 'Complete the entire quiz without mistakes to get 3 stars!',
+    helpP5: 'After unlocking all levels, you can spend berries to unlock categories.',
+    helpP6: 'Complete daily quests and the daily challenge to earn bonus berries.',
+    helpP7: 'Every 15th correct answer gives ×2 berries.',
+    mapLockedTitle: 'Level locked!',
+    mapLockedDesc: 'Complete the previous level with 2 or 3 stars to move forward.',
+    okBtn: 'OK',
+    readyTitle: 'Ready!',
+    mapUnlockAdDesc: 'Unlock this level by watching a short ad?',
+    watchBtn: 'Watch',
+    cancelBtn: 'Cancel',
+    levelOpenedToast: '🎉 Level unlocked!',
+    categoryFallback: 'Category',
+    notEnoughBerries: 'Not enough berries',
+    catOpenedForever: '🎉 Category unlocked forever!',
+    catOpened24h: '🎉 Category unlocked for 24 hours!',
+    catClosedSuffix: ' — locked',
+    buyModalDesc: 'Buy permanently for <strong>{price}</strong> berries or unlock temporarily?',
+    buyForBtn: 'Buy for {price}',
+    watch24hBtn: 'Watch (24h)',
+    bonusToast: '🎉 Bonus! +2 berries',
+    bonusCounter: '×2 in {n}',
+    progressReady: 'Ready to unlock · {price}',
+    progressNeed: '{total} / {price} · {need} more',
+    levelWord: 'Level'
+  },
+  tr: {
+     hintTitle: 'İpucu',
+    hintModalTitle: 'İpucu!',
+    hintModalDesc: 'İpucu almak için kısa bir reklam izle.',
+    titleLang: 'Dil',
+    chooseLangTitle: 'Dil seçin',
+    startTitleWord: 'Bilgi Yarışması',
+    startSubtitle: 'Tüm aile için',
+    statBerries: 'Meyveler',
+    statMaxLvl: 'Maks. Sv.',
+    categoriesBtn: 'Kategoriler',
+    mapBtn: 'Harita',
+    helpTitle: 'Nasıl oynanır',
+    helpBtnTitle: 'Yardım',
+    homeMenuTitle: 'Ana menü',
+    dailyTitle: 'Günün Meydan Okuması',
+    dailyDone: 'Meydan okuma tamamlandı',
+    dailyAlready: 'Günün meydan okuması tamamlandı. Yarın tekrar gel!',
+    dailyUnavail: 'Günün meydan okuması kullanılamıyor',
+    dailyCompletedToast: '🎉 Günün meydan okuması tamamlandı!',
+    dailyNeedAll: 'Günün meydan okumasını tamamlamak için tüm soruları doğru yanıtla',
+    questsTitle: 'Günlük Görevler',
+    questDone: '✓ Tamamlandı',
+    questRewardToast: '🎉 Görevler için +{n} meyve!',
+    closeBtn: 'Kapat',
+    tutorialBtn: 'Eğitim',
+    helpP1: 'Hayvan fotoğrafına bak ve seçeneklerden birini seç.',
+    helpP2: 'Her soru için 10 saniyen var — zamanlayıcıyı takip et.',
+    helpP3: 'Doğru cevaplar için meyve kazanırsın.',
+    helpP4: 'Hatasız tamamla ve 3 yıldız kazan!',
+    helpP5: 'Tüm seviyeleri açtıktan sonra meyvelerle kategorileri açabilirsin.',
+    helpP6: 'Bonus meyve kazanmak için günlük görevleri ve günün meydan okumasını tamamla.',
+    helpP7: 'Her 15. doğru cevap ×2 meyve verir.',
+    mapLockedTitle: 'Seviye kilitli!',
+    mapLockedDesc: 'İlerlemek için önceki seviyeyi 2 veya 3 yıldızla tamamla.',
+    okBtn: 'Tamam',
+    readyTitle: 'Hazır!',
+    mapUnlockAdDesc: 'Kısa bir reklam izleyerek bu seviyeyi açmak ister misin?',
+    watchBtn: 'İzle',
+    cancelBtn: 'İptal',
+    levelOpenedToast: '🎉 Seviye açıldı!',
+    categoryFallback: 'Kategori',
+    notEnoughBerries: 'Yetersiz meyve',
+    catOpenedForever: '🎉 Kategori kalıcı olarak açıldı!',
+    catOpened24h: '🎉 Kategori 24 saatliğine açıldı!',
+    catClosedSuffix: ' — kilitli',
+    buyModalDesc: '<strong>{price}</strong> meyve karşılığında kalıcı olarak satın al veya geçici olarak aç?',
+    buyForBtn: '{price} karşılığında al',
+    watch24hBtn: 'İzle (24s)',
+    bonusToast: '🎉 Bonus! +2 meyve',
+    bonusCounter: '×2 için {n}',
+    progressReady: 'Açmaya hazır · {price}',
+    progressNeed: '{total} / {price} · {need} kaldı',
+    levelWord: 'Seviye'
+  }
+};
+w.I18N = w.I18N || {};
+['ru', 'en', 'tr'].forEach(l => {
+  w.I18N[l] = Object.assign({}, EXTRA_I18N[l], w.I18N[l] || {});
+});
+function renderStartTitle() {
+  const titleEl = d.getElementById('startTitle');
+  if (!titleEl) return;
+  const word = w.t('startTitleWord');
+  titleEl.setAttribute('aria-label', word);
+  titleEl.innerHTML = Array.from(word).map((ch, idx) =>
+    '<span class="start-title-letter" style="--i:' + idx + '">' + (ch === ' ' ? '&nbsp;' : escapeHtml(ch)) + '</span>'
+  ).join('');
+}
+function applyStaticI18n() {
+  d.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = w.t(el.dataset.i18n); });
+  d.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = w.t(el.dataset.i18nTitle); });
+  const lt = d.querySelector('.loading-text');
+  if (lt) lt.textContent = w.t('loading');
+  renderStartTitle();
+  d.documentElement.lang = LANG;
+}
+let ysdk = null, ysdkPlayer = null;
+function vkSend(method, params, timeoutMs) {
+  timeoutMs = timeoutMs || 2000;
+  if (!(isVK || isOK)) return Promise.resolve(null);
+  const trySend = () => {
+    const bridge = w.vkBridge;
+    if (!bridge || typeof bridge.send !== 'function') return Promise.resolve(null);
+    let settled = false;
+    let timerId = null;
+    const call = new Promise(resolve => {
+      try {
+        bridge.send(method, params || {}).then(r => {
+          if (!settled) { settled = true; clearTimeout(timerId); resolve(r); }
+        })
+        .catch(err => {
+        console.error('VK Bridge ' + method + ' ошибка:', JSON.stringify(err, null, 2) || err);
+          if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
+        });
+      } catch (e) {
+        console.error(`VK Bridge ${method} исключение:`, e);
+        if (!settled) { settled = true; clearTimeout(timerId); resolve(null); }
+      }
+    });
+    const timer = new Promise(res => {
+      timerId = setTimeout(() => {
+        if (!settled) { settled = true; resolve(null); }
+      }, timeoutMs);
+    });
+    return Promise.race([call, timer]);
+  };
+  if (w.__vkBridgeReady && !w.vkBridge) {
+    return w.__vkBridgeReady.then(() => trySend());
+  }
+  return trySend();
+}
+let __actionLock = false;
+async function withLock(fn) {
+  if (__actionLock) return;
+  __actionLock = true;
+  try { await fn(); } finally { setTimeout(() => { __actionLock = false; }, 300); }
+}
+async function safeCall(fn, fallback = null, label = '') {
+  try { return await fn(); }
+  catch (e) { console.warn('safeCall' + (label ? ' [' + label + ']' : '') + ':', e); return fallback; }
+}
+function storageKey(name) { return storagePrefix + 'aq_' + name; }
+function mergeValues(localVal, remoteVal) {
+  if (localVal == null) return remoteVal;
+  if (remoteVal == null) return localVal;
+  if (Array.isArray(localVal) && Array.isArray(remoteVal)) return Array.from(new Set([...localVal, ...remoteVal]));
+  if (typeof localVal === 'object' && typeof remoteVal === 'object' && !Array.isArray(localVal) && !Array.isArray(remoteVal)) {
+    const merged = { ...localVal };
+    for (const k in remoteVal) {
+      const lv = Number(merged[k]);
+      const rv = Number(remoteVal[k]);
+      if (isNaN(lv) && isNaN(rv)) merged[k] = remoteVal[k];
+      else merged[k] = Math.max(isNaN(lv) ? 0 : lv, isNaN(rv) ? 0 : rv);
+    }
+    return merged;
+  }
+  return remoteVal;
+}
+function deepMergeMetrics(local, remote) {
+  if (local == null) return remote;
+  if (remote == null) return local;
+  if (typeof local !== 'object' || typeof remote !== 'object') return local;
+  const out = { ...local };
+  const keys = new Set([...Object.keys(local), ...Object.keys(remote)]);
+  for (const k of keys) {
+    const lv = local[k];
+    const rv = remote[k];
+    if (lv === undefined) { out[k] = rv; continue; }
+    if (rv === undefined) { out[k] = lv; continue; }
+    if (Array.isArray(lv) || Array.isArray(rv)) {
+      const a = Array.isArray(lv) ? lv : [];
+      const b = Array.isArray(rv) ? rv : [];
+      out[k] = Array.from(new Set([...a, ...b]));
+      continue;
+    }
+    if (typeof lv === 'object' && typeof rv === 'object') { out[k] = deepMergeMetrics(lv, rv); continue; }
+    if (typeof lv === 'boolean' || typeof rv === 'boolean') { out[k] = !!(lv || rv); continue; }
+    if (typeof lv === 'number' || typeof rv === 'number') {
+      const ln = Number(lv), rn = Number(rv);
+      if (!isNaN(ln) && !isNaN(rn)) {
+        if (k === 'fastestCorrect') out[k] = Math.min(ln, rn);
+        else out[k] = Math.max(ln, rn);
+        continue;
+      }
+    }
+    if (typeof lv === 'string' && typeof rv === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}/.test(lv) && /^\d{4}-\d{2}-\d{2}/.test(rv)) { out[k] = lv > rv ? lv : rv; continue; }
+    }
+    out[k] = lv;
+  }
+  return out;
+}
+async function remoteGetWithStatus(name) {
+  const key = storageKey(name);
+  if (isYandex) {
+    if (!ysdkPlayer) return { ok: false, value: null };
+    try {
+      const data = await ysdkPlayer.getData([key]);
+      const raw = data && data[key];
+      if (raw == null) return { ok: true, value: null };
+      try { return { ok: true, value: JSON.parse(raw) }; } catch { return { ok: true, value: raw }; }
+    } catch (e) { return { ok: false, value: null }; }
+  }
+  if (isVK || isOK) {
+    const data = await vkSend('VKWebAppStorageGet', { keys: [key] }, 2500);
+    if (!data || !Array.isArray(data.keys)) return { ok: false, value: null };
+    const item = data.keys.find(kv => kv && kv.key === key) || data.keys[0];
+    const raw = item && item.value;
+    if (raw === '' || raw === undefined || raw === null) return { ok: true, value: null };
+    try { return { ok: true, value: JSON.parse(raw) }; } catch { return { ok: true, value: raw }; }
+  }
+  return { ok: false, value: null };
+}
+async function remoteGet(name) {
+  const res = await remoteGetWithStatus(name);
+  return res.value;
+}
+async function remoteSet(name, valueStr) {
+  const key = storageKey(name);
+  if (isYandex) {
+    if (!ysdkPlayer) return false;
+    try { await ysdkPlayer.setData({ [key]: valueStr }, true); return true; } catch (e) { return false; }
+  }
+  if (isVK || isOK) {
+    const r = await vkSend('VKWebAppStorageSet', { key, value: valueStr }, 2500);
+    return r !== null;
+  }
+  return false;
+}
+function safeLocalGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+function safeLocalSet(key, value) {
+  try { localStorage.setItem(key, value); return true; }
+  catch (e) {
+    console.warn('localStorage.setItem failed:', e);
+    try {
+      const keys = Object.keys(localStorage);
+      const prefix = storagePrefix + 'aq_';
+      keys.filter(k => k.startsWith(prefix) && !k.includes('unlocked') && !k.includes('collection')).forEach(k => localStorage.removeItem(k));
+      localStorage.setItem(key, value);
+      return true;
+    } catch (e2) { return false; }
+  }
+}
+function asArray(val, fallback = []) { return Array.isArray(val) ? val : fallback; }
+function asNumber(val, fallback = 0) { const n = Number(val); return isNaN(n) ? fallback : n; }
+function asObject(val, fallback = {}) { return (val && typeof val === 'object' && !Array.isArray(val)) ? val : fallback; }
+function storageGet(name) {
+  const key = storageKey(name);
+  let localVal = null;
+  try {
+    const raw = safeLocalGet(key);
+    if (raw !== null) { try { localVal = JSON.parse(raw); } catch { localVal = raw; } }
+  } catch (e) {}
+  if (P.isStandalone) return Promise.resolve(localVal);
+  if (isYandex) {
+    if (!ysdkPlayer) return Promise.resolve(localVal);
+    return (async () => {
+      try {
+        const data = await ysdkPlayer.getData([key]);
+        const raw = data && data[key];
+        if (raw == null) return localVal;
+        let remoteVal;
+        try { remoteVal = JSON.parse(raw); } catch { remoteVal = raw; }
+        const merged = mergeValues(localVal, remoteVal);
+        try { localStorage.setItem(key, JSON.stringify(merged)); } catch (e) {}
+        return merged;
+      } catch (e) { console.warn('Cloud getData failed for', key, e); return localVal; }
+    })();
+  }
+  if (isVK || isOK) {
+    return remoteGetWithStatus(name).then(res => {
+      if (res.ok) {
+        if (res.value != null) {
+          const merged = mergeValues(localVal, res.value);
+          safeLocalSet(key, JSON.stringify(merged));
+          if (JSON.stringify(merged) !== JSON.stringify(res.value)) {
+            remoteSet(name, JSON.stringify(merged)).catch(() => {});
+          }
+          return merged;
+        }
+        if (localVal != null) {
+          remoteSet(name, JSON.stringify(localVal)).catch(() => {});
+        }
+        return localVal;
+      }
+      return localVal;
+    });
+  }
+  return Promise.resolve(localVal);
+}
+function storageSet(name, value) {
+  const key = storageKey(name);
+  const str = typeof value === 'string' ? value : JSON.stringify(value);
+  safeLocalSet(key, str);
+  if (P.isStandalone) return Promise.resolve();
+  if (isYandex) {
+    if (!ysdkPlayer) return Promise.resolve();
+    return (async () => {
+      try { await ysdkPlayer.setData({ [key]: str }, true); } catch (e) { console.warn('Cloud setData failed for', key, e); }
+    })();
+  }
+  if (isVK || isOK) return remoteSet(name, str).catch(() => {});
+  return Promise.resolve();
+}
+async function storageGetTotal() {
+  const KEY = storageKey('total');
+  const TS_KEY = storageKey('total_ts');
+  let localVal = null, localTs = 0;
+  try {
+    const rv = safeLocalGet(KEY);
+    if (rv != null) localVal = Number(JSON.parse(rv)) || 0;
+    const rt = safeLocalGet(TS_KEY);
+    if (rt != null) localTs = Number(JSON.parse(rt)) || 0;
+  } catch (e) {}
+  let remoteOk = false, remoteVal = null, remoteTs = 0;
+  if (!P.isStandalone) {
+    try {
+      if (isYandex && ysdkPlayer) {
+        const data = await ysdkPlayer.getData([KEY, TS_KEY]);
+        remoteOk = true;
+        if (data && data[KEY] != null) remoteVal = Math.max(0, Math.floor(Number(JSON.parse(data[KEY])) || 0));
+        if (data && data[TS_KEY] != null) remoteTs = Number(JSON.parse(data[TS_KEY])) || 0;
+      } else if (isVK || isOK) {
+        const data = await vkSend('VKWebAppStorageGet', { keys: [KEY, TS_KEY] }, 2500);
+        if (data && Array.isArray(data.keys)) {
+          remoteOk = true;
+          for (const kv of data.keys) {
+            if (!kv || kv.value === '' || kv.value == null) continue;
+            if (kv.key === KEY) remoteVal = Math.max(0, Math.floor(Number(JSON.parse(kv.value)) || 0));
+            else if (kv.key === TS_KEY) remoteTs = Number(JSON.parse(kv.value)) || 0;
+          }
+        }
+      }
+    } catch (e) {}
+  }
+  let winner;
+  if (localVal == null && remoteVal == null) winner = 0;
+  else if (localVal == null) winner = remoteVal;
+  else if (remoteVal == null) winner = localVal;
+  else winner = (remoteTs > localTs) ? remoteVal : localVal;
+  winner = Math.max(0, Math.floor(Number(winner) || 0));
+  try {
+    safeLocalSet(KEY, JSON.stringify(winner));
+    if (remoteVal != null && remoteTs > localTs) safeLocalSet(TS_KEY, JSON.stringify(remoteTs));
+    if ((isVK || isOK) && remoteOk && localVal != null && localTs > remoteTs) {
+      vkSend('VKWebAppStorageSet', { key: KEY, value: JSON.stringify(winner) }, 2500).catch(() => {});
+      vkSend('VKWebAppStorageSet', { key: TS_KEY, value: JSON.stringify(localTs) }, 2500).catch(() => {});
+    }
+  } catch (e) {}
+  return winner;
+}
+async function storageSetTotal(value) {
+  const total = Number(value) || 0;
+  let prevTs = 0;
+  try { prevTs = Number(JSON.parse(safeLocalGet(storageKey('total_ts')))) || 0; } catch (e) {}
+  const ts = Math.max(Date.now(), prevTs + 1);
+  safeLocalSet(storageKey('total'), JSON.stringify(total));
+  safeLocalSet(storageKey('total_ts'), JSON.stringify(ts));
+  if (P.isStandalone) return;
+  try {
+    if (isYandex && ysdkPlayer) {
+      await ysdkPlayer.setData({
+        [storageKey('total')]: JSON.stringify(total),
+        [storageKey('total_ts')]: JSON.stringify(ts)
+      }, true);
+      return;
+    }
+    if (isVK || isOK) {
+      await vkSend('VKWebAppStorageSet', { key: storageKey('total'), value: JSON.stringify(total) }, 2500);
+      await vkSend('VKWebAppStorageSet', { key: storageKey('total_ts'), value: JSON.stringify(ts) }, 2500);
+    }
+  } catch (e) {}
+}
+w.storageGet = storageGet;
+w.storageSet = storageSet;
+w.vkSend = vkSend;
+let __lastRewardedAdTime = 0;let __lastInterstitialTime = 0; let __interstitialDelayTimer = null;
+function clearAdTimers() {
+  if (__interstitialDelayTimer) {
+    clearTimeout(__interstitialDelayTimer);
+    __interstitialDelayTimer = null;
+  }
+  if (bannerRetryTimer) {
+    clearTimeout(bannerRetryTimer);
+    bannerRetryTimer = null;
+  }
+  if (__adPreloadTimer) {
+    clearInterval(__adPreloadTimer);
+    __adPreloadTimer = null;
+  }
+  if (__bannerKeepAliveTimer) {
+    clearInterval(__bannerKeepAliveTimer);
+    __bannerKeepAliveTimer = null;
+  }
+}
+w.clearAdTimers = clearAdTimers;
+const REWARDED_AD_COOLDOWN = 31000;const INTERSTITIAL_AD_COOLDOWN = 600000;
+async function waitForAdsAvailable(maxWaitMs, pollIntervalMs, adFormat){ maxWaitMs=maxWaitMs || 8000; pollIntervalMs=pollIntervalMs || 700; adFormat=adFormat || 'reward'; const startWait=Date.now(); while (Date.now() - startWait < maxWaitMs){ const chk=await vkSend('VKWebAppCheckNativeAds',{ ad_format: adFormat}, 3000); if (chk && chk.result===true) return true; await new Promise(r=>setTimeout(r, pollIntervalMs));} return false;}
+let __adPreloadTimer = null;
+function preloadRewardedAd(){ if (!(isVK || isOK)) return; vkSend('VKWebAppCheckNativeAds',
+  { ad_format: 'reward'}, 3000); vkSend('VKWebAppCheckNativeAds',
+    { ad_format: 'interstitial'}, 3000); if (__adPreloadTimer) return; 
+    __adPreloadTimer=setInterval(()=>{ if (adPlaying || isGamePaused || document.hidden) return; 
+      vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); 
+      vkSend('VKWebAppCheckNativeAds',{ ad_format: 'interstitial'}, 3000);}, 45000);}
+function showRewardedAd(){
+  if (P.isStandalone && !isYandex && typeof YaGames === 'undefined') return Promise.resolve(true);
+  const sdkActive = isYandex || (typeof YaGames !== 'undefined' && !isVK && !isOK);
+  if (sdkActive){
+    const now = Date.now();
+    if (now - __lastRewardedAdTime < REWARDED_AD_COOLDOWN) {
+      toast(w.t('adSkipped'), true);
+      return Promise.resolve(false);
+    }
+    return new Promise(resolve=>{
+      const runAd=(sdk)=>{
+        if (!sdk || !sdk.adv || typeof sdk.adv.showRewardedVideo !=='function'){
+          console.warn('adv API unavailable');
+          toast(w.t('adUnavailable'), true);
+          return resolve(false);
+        }
+yandexGameplayStop(); adMute();
+let rewarded = false;
+let finished = false;
+const safetyTimer = setTimeout(() => finish(false), 95000);
+const finish = (result) => {
+  if (finished) return;
+  finished = true;
+  clearTimeout(safetyTimer);
+  if (result) __lastRewardedAdTime = Date.now();
+  adUnmute();
+  const qs = d.getElementById('quiz-screen');
+  if (qs && qs.classList.contains('active')) yandexGameplayStart();
+  resolve(result);
+};
+           try{
+          sdk.adv.showRewardedVideo({
+            callbacks:{
+              onRewarded: ()=>{ rewarded=true; },
+              onClose: ()=>{
+                if (rewarded) return finish(true);
+                toast(w.t('adSkipped'), true);
+                finish(false);
+              },
+              onError: (e)=>{
+                console.warn('ad error:', e);
+                toast(w.t('adUnavailable'), true);
+                finish(false);
+              }
+            }
+          });
+        } catch (e){
+          console.warn('showRewardedVideo exception:', e);
+          toast(w.t('adUnavailable'), true);
+          finish(false);
+        }
+      };
+      if (ysdk && ysdk.adv){ runAd(ysdk); }
+      else if (typeof YaGames !=='undefined'){
+        YaGames.init().then(sdk=>{
+          ysdk=sdk;
+          if (!isYandex){ isYandex=true; platform='yandex'; P.isYandex=true; P.platform='yandex'; P.isStandalone=false; }
+          if (!ysdkPlayer && sdk.getPlayer) sdk.getPlayer().then(p=>{ ysdkPlayer=p; }).catch(()=>{});
+          runAd(sdk);
+        }).catch(err=>{
+          console.warn('re-init failed:', err);
+          toast(w.t('adUnavailable'), true);
+          resolve(false);
+        });
+      } else {
+        toast(w.t('adUnavailable'), true);
+        resolve(false);
+      }
+    });
+  }
+  if (isVK || isOK){
+    if (w.__rewardAdInFlight) return w.__rewardAdInFlight;
+    let resolveOuter;
+    w.__rewardAdInFlight=new Promise(res=>{ resolveOuter=res; });
+    adMute();
+    (async ()=>{
+      let resolved=false;
+      const finish=(result, reason)=>{
+        if (resolved) return; resolved=true;
+        console.log('ad flow →', reason, '| result=', result);
+        try{ adUnmute(); } catch (e){}
+        w.__rewardAdInFlight=null;
+        resolveOuter(result);
+      };
+      try{
+        const rewardReady=await waitForAdsAvailable(2500, 500, 'reward');
+        if (rewardReady){
+          const data=await vkSend('VKWebAppShowNativeAds',
+            { ad_format: 'reward', use_waterfall: true }, 90000);
+          const ok=!!(data && data.result === true);
+          setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); showBanner(true); }, 500);
+          if (ok) return finish(true, 'reward-watched');
+          console.log('reward closed early → interstitial fallback');
+        } else {
+          console.log('reward unavailable → interstitial fallback');
+        }
+        const interReady=await waitForAdsAvailable(2000, 500, 'interstitial');
+        if (!interReady){
+          toast(w.t('adUnavailable'), true);
+          return finish(false, 'no-ads-at-all');
+        }
+        const data=await vkSend('VKWebAppShowNativeAds',
+          { ad_format: 'interstitial' }, 90000);
+        const ok=!!(data && data.result === true);
+        setTimeout(()=>{ vkSend('VKWebAppCheckNativeAds',{ ad_format: 'reward'}, 3000); showBanner(true); }, 500);
+        if (ok) return finish(true, 'interstitial-watched');
+        toast(w.t('adSkipped'), true);
+        return finish(false, 'interstitial-not-completed');
+      } catch (e){
+        toast(w.t('adUnavailable'), true);
+        finish(false, 'error:' + ((e && e.message) || e));
+      }
+    })();
+    return w.__rewardAdInFlight;
+  }
+  toast(w.t('adUnavailable'), true);
+  return Promise.resolve(false);
+}
+function showInterstitial(){
+  const now = Date.now();
+  if (now - __lastInterstitialTime < INTERSTITIAL_AD_COOLDOWN) {
+    console.log('Interstitial ad skipped: cooldown active');
+    return;
+  }
+  const quizScreenActive = document.querySelector('#quiz-screen.active');
+  if (quizScreenActive) {
+    console.log('Interstitial ad skipped: quiz is active');
+    return;
+  }
+  __lastInterstitialTime = now;
+if (isYandex) {
+  if (!ysdk) return;
+  yandexGameplayStop();
+  adMute();
+  let closed = false;
+  const done = () => {
+    if (closed) return;
+    closed = true;
+    adUnmute();
+  };
+  const fallbackTimer = setTimeout(done, 65000);
+  try {
+    ysdk.adv.showFullscreenAdv({
+      callbacks: {
+        onClose: () => { clearTimeout(fallbackTimer); done(); },
+        onError: () => { clearTimeout(fallbackTimer); done(); }
+      }
+    });
+  } catch (e) {
+    clearTimeout(fallbackTimer);
+    done();
+  }
+  return;
+}
+  if (isVK || isOK) {
+    (async () => {
+      try {
+        const chk = await vkSend('VKWebAppCheckNativeAds', { ad_format: 'interstitial' }, 3000);
+        if (!chk || chk.result !== true) {
+          console.log('Interstitial skipped: no ads');
+          return;
+        }
+        adMute();
+        await vkSend('VKWebAppShowNativeAds', { ad_format: 'interstitial' }, 60000);
+      } catch (e) {
+        console.warn('Interstitial failed:', e);
+      } finally {
+        try { adUnmute(); } catch (e) {}
+      }
+    })();
+  }
+}
+let bannerShown=false; let bannerRetryTimer=null; let bannerAttempts=0; const BANNER_MAX_ATTEMPTS=5;
+const BANNER_RETRY_DELAY=10000;
+let __bannerKeepAliveTimer=null;
+function startBannerKeepAlive(){
+  if (__bannerKeepAliveTimer) return;
+  __bannerKeepAliveTimer=setInterval(function (){
+    if (d.hidden || adPlaying) return;
+    showBanner(true);
+  }, 5 * 60 * 1000);
+}
+function showBanner(forceCheck){
+  if (!(isVK || isOK)) return;
+  startBannerKeepAlive();
+  if (bannerShown && !forceCheck) return;
+  if (bannerRetryTimer) return;
+  bannerAttempts++;
+  const attemptNo=bannerAttempts;
+  vkSend('VKWebAppShowBannerAd',{ banner_location: 'bottom'}, 5000)
+    .then(function (data){
+      const ok=data && (data.result===true || data.result===1);
+      if (ok){
+        bannerShown=true;
+        bannerAttempts=0;
+        return;
+      }
+      bannerShown=false;
+      console.warn('⚠️ Banner not shown (attempt #' + attemptNo + '):', data);
+      scheduleBannerRetry(attemptNo);
+    })
+    .catch(function (err){
+      bannerShown=false;
+      console.warn('❌ Banner error (attempt #' + attemptNo + '):', err);
+      scheduleBannerRetry(attemptNo);
+    });
+}
+function scheduleBannerRetry(attemptNo){
+  if (bannerShown) return;
+  if (attemptNo >=BANNER_MAX_ATTEMPTS){
+    console.warn('⛔ Banner retry limit reached (' + BANNER_MAX_ATTEMPTS + ' attempts)');
+    bannerAttempts=0;
+    return;
+  }
+  bannerRetryTimer=setTimeout(function (){ bannerRetryTimer=null; showBanner(true); }, BANNER_RETRY_DELAY);
+  console.log('🔁 Banner retry in ' + (BANNER_RETRY_DELAY / 1000) + 's (next attempt #' + (attemptNo + 1) + ')');
+}
+function yandexGameplayStart() { if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try { ysdk.features.GameplayAPI.start(); } catch (e) {} }
+function yandexGameplayStop() { if (isYandex && ysdk && ysdk.features && ysdk.features.GameplayAPI) try { ysdk.features.GameplayAPI.stop(); } catch (e) {} }
+w.showRewardedAd = showRewardedAd;
+w.showInterstitial = showInterstitial;
+w.showBanner = showBanner;
+w.preloadRewardedAd = preloadRewardedAd;
+w.yandexGameplayStart = yandexGameplayStart;
+w.yandexGameplayStop = yandexGameplayStop;
+function getMiniAppShareUrl(){ const appId=P.launchParams.vk_app_id || P.launchParams.vk_client_id || new URLSearchParams(location.search).get('vk_app_id') || new URLSearchParams(location.search).get('vk_client_id') || ''; if (isOK){ return appId ? ('https://ok.ru/app/' + appId) : (location.origin + location.pathname);} return appId ? ('https://vk.com/app' + appId) : (location.origin + location.pathname);}
+async function infr(){ if (isYandex || P.isStandalone || !isVK){ toast(w.t('inviteVKOnly')); return;}
+ const link=getMiniAppShareUrl(); try{ const res=await vkSend('VKWebAppShare',{ link: link}, 60000); console.log('VKWebAppShare →', res);} catch (e){ console.warn('Share failed:', e); toast(w.t('inviteVKOnly'), true);}}
+
+w.infr = infr;
+const __toastQueue = [];
+let __toastActive = false;
+function __showNextToast() {
+  if (!__toastQueue.length) { __toastActive = false; return; }
+  __toastActive = true;
+  const { msg, isError, title } = __toastQueue.shift();
+  let el = d.getElementById('__toast');
+  if (!el) { el = d.createElement('div'); el.id = '__toast'; d.body.appendChild(el); }
+  el.className = 'toast' + (isError ? ' toast-error' : '');
+const allowHtml = (s) => typeof s === 'string' && (s.indexOf('<svg') !== -1 || s.indexOf('<span') !== -1);
+if (title) {
+  el.innerHTML = '<div class="toast-title">' + (allowHtml(title) ? title : escapeHtml(title)) +
+                 '</div><div class="toast-msg">' + (allowHtml(msg) ? msg : escapeHtml(msg)) + '</div>';
+} else if (allowHtml(msg)) {
+  el.innerHTML = msg;
+} else {
+  el.textContent = msg;
+}
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(el.__t);
+  el.__t = setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(__showNextToast, 350);
+  }, 3000);
+}
+function toast(msg, isError, title) {
+  __toastQueue.push({ msg, isError, title });
+  if (!__toastActive) __showNextToast();
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+w.toast = toast;
+let soundMode = 1;
+let adPlaying = false;
+let isGamePaused = false;
+let audioCtx = null;
+let bgAudio = null;
+function canPlaySfx() {
+  return soundMode > 0 && !adPlaying && !isGamePaused && !document.hidden;
+}
+function canPlayMusic() {
+  return soundMode === 2 && !adPlaying && !isGamePaused && !document.hidden;
+}
+let __userInteracted = false;
+function ensureAudioCtx() {
+  if (!__userInteracted) return null;
+  if (!audioCtx) { try { audioCtx = new (w.AudioContext || w.webkitAudioContext)(); } catch (e) { audioCtx = null; } }
+  if (audioCtx && audioCtx.state === 'suspended') { try { audioCtx.resume().catch(() => {}); } catch (e) {} }
+  return audioCtx;
+}
+function tone(freq, dur, type, when, peak) {
+  if (!canPlaySfx()) return;
+  try {
+    const ctx = ensureAudioCtx();
+    if (!ctx) return;
+    const t0 = ctx.currentTime + (when || 0);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(peak == null ? 0.15 : peak, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur * 1.6);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.05);
+    osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch (e) {} };
+  } catch (e) { console.warn('Audio error:', e); }
+}
+let __lastClickSound = 0;
+function playClick() {
+  if (!canPlaySfx()) return;
+  const now = Date.now();
+  if (now - __lastClickSound < 60) return;
+  __lastClickSound = now;
+  tone(587, 0.03, 'sine', 0, 0.02);
+  tone(784, 0.05, 'sine', 0.02, 0.018);
+}
+function playCorrect() {
+  if (!canPlaySfx()) return;
+  tone(660, 0.12, 'sine', 0, 0.16);
+  tone(880, 0.16, 'sine', 0.10, 0.16);
+  tone(1320, 0.22, 'sine', 0.22, 0.14);
+}
+function playWrong() {
+  if (!canPlaySfx()) return;
+  tone(240, 0.18, 'sawtooth', 0, 0.05);
+  tone(170, 0.30, 'sawtooth', 0.10, 0.05);
+}
+function playFanfare() {
+  if (!canPlaySfx()) return;
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.30, 'triangle', i * 0.12, 0.15));
+  [523.25, 659.25, 783.99, 1046.5].forEach(f => tone(f, 0.75, 'sine', 0.55, 0.13));
+}
+ function playHint() {
+      if (!canPlaySfx()) return;
+      tone(587.33, 0.06, 'square', 0.00, 0.055);
+      tone(739.99, 0.06, 'square', 0.06, 0.060);
+      tone(880.00, 0.20, 'square', 0.12, 0.065);
+    }
+    function playTick(secLeft) {
+      if (!canPlaySfx()) return;
+      try {
+        const ctx = ensureAudioCtx();
+        if (!ctx) return;
+        const freqs = { 3: 523.25, 2: 587.33, 1: 659.25 };
+        const f = freqs[secLeft] || 587.33;
+        const t0 = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(f * 0.75, t0);
+        osc.frequency.exponentialRampToValueAtTime(f * 1.25, t0 + 0.07);
+        gain.gain.setValueAtTime(0.085, t0);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t0);
+        osc.stop(t0 + 0.09);
+        osc.onended = () => { try { osc.disconnect(); gain.disconnect(); } catch (e) {} };
+      } catch (e) {}
+    }
+let __bgUnlocked = false;
+let __bgFailCount = 0;
+function ensureBgAudio() {
+  if (bgAudio) return bgAudio;
+  if (__bgFailCount >= 5) return null;
+  try {
+    const audio = new Audio();
+    audio.loop = true;
+    audio.volume = 0.25;
+    audio.preload = 'auto';
+    audio.src = 'sounds/music.ogg';
+    const onCanPlay = () => {
+      if (__bgUnlocked && canPlayMusic() && audio.paused) {
+        audio.play().catch(() => {});
+      }
+    };
+    const onError = () => {
+      __bgFailCount++;
+      console.warn('Background music failed to load: sounds/music.ogg');
+      audio.removeEventListener('canplay', onCanPlay);
+      audio.removeEventListener('error', onError);
+      audio.src = '';
+      bgAudio = null;
+      if (__bgFailCount >= 5) removeAudioUnlockListeners();
+    };
+    audio.addEventListener('canplay', onCanPlay);
+    audio.addEventListener('error', onError);
+    bgAudio = audio;
+  } catch (e) {
+    console.warn('Audio creation failed:', e);
+    bgAudio = null;
+  }
+  return bgAudio;
+}
+function removeAudioUnlockListeners() {
+  d.removeEventListener('pointerdown', unlockAndPlay, true);
+  d.removeEventListener('keydown', unlockAndPlay, true);
+}
+function startBgMusic() {
+  __userInteracted = true;
+  ensureAudioCtx();
+  const audio = ensureBgAudio();
+  if (!audio || !canPlayMusic() || !audio.paused) return;
+  const tryPlay = () => {
+    const p = audio.play();
+    if (p && p.then) {
+      p.then(() => {
+        __bgUnlocked = true;
+        removeAudioUnlockListeners();
+      }).catch(() => {});
+    }
+  };
+  if (audio.readyState >= 2) {
+    tryPlay();
+  } else {
+    audio.addEventListener('canplay', tryPlay, { once: true });
+    try { audio.load(); } catch (e) {}
+  }
+}
+function attachAudioUnlock() {
+  ensureBgAudio();
+  d.addEventListener('pointerdown', unlockAndPlay, true);
+  d.addEventListener('keydown', unlockAndPlay, true);
+}
+function stopBgMusic() {
+  if (bgAudio && !bgAudio.paused) {
+    try { bgAudio.__savedTime = bgAudio.currentTime; bgAudio.pause(); } catch (e) {}
+  }
+}
+function applySoundState() {
+  const isAudioActive = soundMode > 0; 
+  d.querySelectorAll('[data-sound-toggle]').forEach(btn => {
+    const spriteName = isAudioActive ? 'soundoff' : 'soundon';
+    const inner = (w.UiSprite && w.UiSprite.has(spriteName))
+      ? w.UiSprite.html(spriteName)
+      : (isAudioActive ? '🔇' : '🔊');
+    btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + inner + '</span>';
+    btn.title = isAudioActive ? w.t('soundOffTitle') : w.t('soundOnTitle');
+    btn.setAttribute('aria-label', isAudioActive ? w.t('soundOffTitle') : w.t('soundOnTitle'));
+  });
+  if (!canPlayMusic()) stopBgMusic();
+  w.dispatchEvent(new Event('quiz:sound-changed'));
+}
+function toggleSound() {
+  if (soundMode === 1) {
+    soundMode = 2;
+  } else if (soundMode === 2) {
+    soundMode = 0;
+  } else {
+    soundMode = 1;
+  }
+  ensureAudioCtx();
+  if (soundMode === 2) {
+    startBgMusic();
+  } else {
+    stopBgMusic();
+  }
+  applySoundState();
+  storageSet('sound_mode', soundMode).catch(() => {});
+}
+function attachSfxToUI() {
+  d.addEventListener('click', (e) => {
+    if (e.target.closest('.option')) return;
+    const t = e.target.closest('button, .btn, .icon-btn, .level-card, .collection-item, .modal-close');
+    if (!t || t.disabled) return;
+    if (
+      t.matches('#startPlayBtn, #startCategoriesBtn, #startHelpBtn, #startLangBtn, #menuHomeBtn, #mapMenuHomeBtn, [data-theme-toggle], [data-sound-toggle], #hint-btn, #extrasHelpBtn, #mapHelpBtn, #extrasDailyBtn, #extrasQuestsBtn, #home-btn, #quit-btn, .collapsible-header, [data-href], [onclick="Ach.openModal()"], [onclick="openYandexLeaderboard()"], [data-i18n-title="titleAchievements"]')
+    ) {
+      playOgg('menu_select');
+      return;
+    }
+
+    playClick();
+  });
+}
+function adMute() {
+  adPlaying = true;
+  stopBgMusic();
+}
+function adUnmute() {
+  adPlaying = false;
+  if (canPlayMusic()) startBgMusic();
+}
+function unlockAndPlay() {
+  __userInteracted = true;
+  ensureAudioCtx();
+  const audio = ensureBgAudio(); 
+  if (!audio) return;
+  if (audio.readyState === 0) {
+    try { audio.load(); } catch (e) {}
+  }
+  if (!canPlayMusic()) return;
+  if (!__bgUnlocked || audio.paused) {
+    const onPlaySuccess = () => {
+      __bgUnlocked = true;
+      removeAudioUnlockListeners();
+    };
+    if (audio.readyState >= 2) {
+      const p = audio.play();
+      if (p && p.then) p.then(onPlaySuccess).catch(() => {});
+    } else {
+      const onReady = () => {
+        if (!canPlayMusic()) return;
+        const p = audio.play();
+        if (p && p.then) p.then(onPlaySuccess).catch(() => {});
+      };
+      audio.addEventListener('canplay', onReady, { once: true });
+    }
+  }
+}
+w.Sound = {
+  isEnabled: () => soundMode > 0,
+  getMode: () => soundMode,
+  playClick,
+  playCorrect,
+  playWrong,
+  playFanfare,
+  playHint,
+        playTick,
+  toggle: toggleSound,
+  apply: applySoundState,
+  startBg: startBgMusic,
+  stopBg: stopBgMusic,
+  mute: adMute,
+  unmute: adUnmute,
+  unlockAndPlay: unlockAndPlay
+};
+const THEME_KEY = 'theme_name';
+const THEMES = ['light', 'dark', 'blue', 'green'];
+const THEME_META_COLORS = {
+  light: '#fdf6e3',
+  dark: '#1a1430',
+  blue: '#dbeafe',
+  green: '#dcfce7'
+};
+let currentTheme = 'light';
+function updateThemeColorMeta() {
+  let meta = d.querySelector('meta[name="theme-color"]');
+  if (!meta) { meta = d.createElement('meta'); meta.name = 'theme-color'; d.head.appendChild(meta); }
+  meta.content = THEME_META_COLORS[currentTheme] || '#fdf6e3';
+}
+function applyTheme() {
+  d.documentElement.setAttribute('data-theme', currentTheme);
+  cls.toggle('is-dark', currentTheme === 'dark');
+  d.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+    const spriteName = currentTheme === 'dark' ? 'moon' : 'palitra';
+    const inner = (w.UiSprite && w.UiSprite.has(spriteName))
+      ? w.UiSprite.html(spriteName)
+      : (currentTheme === 'dark' ? '🌙' : '🎨');
+    btn.innerHTML = '<span class="emoji-icon" aria-hidden="true">' + inner + '</span>';
+    btn.title = w.t('titleTheme');
+    btn.setAttribute('aria-label', btn.title);
+  });
+  updateThemeColorMeta();
+  __starsCreated = false;
+}
+async function loadTheme() {
+  try {
+    const saved = await storageGet(THEME_KEY);
+    if (THEMES.includes(saved)) {
+      currentTheme = saved;
+    } else {
+      currentTheme = 'light';
+    }
+  } catch (e) {
+    currentTheme = 'light';
+  }
+  applyTheme();
+}
+async function toggleTheme() {
+  const nextIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+  currentTheme = THEMES[nextIdx];
+  try { await storageSet(THEME_KEY, currentTheme); } catch (e) {}
+  applyTheme();
+}
+w.Theme = {
+  toggle: toggleTheme,
+  apply: applyTheme,
+  load: loadTheme,
+  isDark: () => currentTheme === 'dark',
+  get: () => currentTheme
+};
+function updateTotalScoreUI(value){
+  const v = Math.max(0, Math.floor(Number(value) || 0));
+  const abbrev = (n) => {
+    if (n < 1000) return String(n);
+    if (n < 1e6)  return (n/1e3).toFixed(n < 1e4 ? 1 : 0).replace(/\.0$/, '') + 'K';
+    if (n < 1e9)  return (n/1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+    return (n/1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+  };
+  const text = abbrev(v);
+  d.querySelectorAll('[data-total-score]').forEach(el => {
+    el.textContent = text;
+    el.title = String(v);
+  });
+}
+w.updateTotalScoreUI = updateTotalScoreUI;
+var __origUpdateTotal = updateTotalScoreUI;
+w.updateTotalScoreUI = function (v) {
+__origUpdateTotal(v);
+if (window.StartMenu && window.StartMenu.updateStats) window.StartMenu.updateStats();
+};
+const METRICS_KEY = 'ach_metrics', UNLOCKED_KEY = 'ach_unlocked';
+let metrics = null, unlockedSet = null;
+function todayStr() {
+  const dt = new Date();
+  return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+}
+function yesterdayStr() {
+  const dt = new Date(); dt.setDate(dt.getDate() - 1);
+  return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0');
+}
+async function loadMetrics() {
+  let local = null;
+  try {
+    const raw = safeLocalGet(storageKey(METRICS_KEY));
+    if (raw != null) { try { local = JSON.parse(raw); } catch { local = raw; } }
+  } catch (e) {}
+  let remote = null;
+  try { remote = await remoteGet(METRICS_KEY); } catch (e) {}
+  const merged = deepMergeMetrics(local, remote);
+  const base = (merged && typeof merged === 'object' && !Array.isArray(merged)) ? merged : {};
+  const dflt = { totalPlays: 0, playsToday: 0, lastPlayDate: '', maxStreak: 0, fastestCorrect: 99, noMistakeRuns: 0, zeroLossStreak: 0, hasZeroScore: false, allTimeouts: false, playedAtNight: false, playedEarlyMorning: false, dailyStreak: 0, maxDailyStreak: 0, lastActiveDate: '', playedLevels: [], lastPercent: 0 };
+  metrics = { ...dflt, ...base };
+  safeLocalSet(storageKey(METRICS_KEY), JSON.stringify(metrics));
+  if (remote != null && JSON.stringify(metrics) !== JSON.stringify(remote)) {
+    remoteSet(METRICS_KEY, JSON.stringify(metrics)).catch(() => {});
+  }
+  return metrics;
+}
+async function loadUnlocked() {
+  let raw = null;
+  try { raw = await storageGet(UNLOCKED_KEY); } catch (e) {}
+  const a = Array.isArray(raw) ? Array.from(new Set(raw)) : [];
+  unlockedSet = new Set(a);
+  safeLocalSet(storageKey(UNLOCKED_KEY), JSON.stringify(a));
+  return unlockedSet;
+}
+async function saveMetrics() { await storageSet(METRICS_KEY, metrics); }
+async function saveUnlocked() { await storageSet(UNLOCKED_KEY, Array.from(unlockedSet)); }
+function updateDailyStreak() {
+  const t = todayStr();
+  if (metrics.lastActiveDate === t) return;
+  if (metrics.lastActiveDate === yesterdayStr()) metrics.dailyStreak++;
+  else metrics.dailyStreak = 1;
+  metrics.lastActiveDate = t;
+  if (metrics.dailyStreak > metrics.maxDailyStreak) metrics.maxDailyStreak = metrics.dailyStreak;
+}
+function buildAchContext() {
+  const unlockedLvlSet = new Set(((w.__SYNCED__ && w.__SYNCED__.unlocked) || []).map(Number));
+  const mapUnlockedSet = new Set(((w.__SYNCED__ && w.__SYNCED__.mapUnlocked) || []).map(Number));
+  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  const colArr = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
+  const colSet = new Set(colArr.map(String));
+  let totalStars = 0, threeStarsCount = 0;
+  for (const k in starsMap) {
+    const s = Math.max(0, Math.min(3, Math.floor(Number(starsMap[k]) || 0)));
+    totalStars += s;
+    if (s >= 3) threeStarsCount++;
+  }
+  const unlockedRegions = new Set();
+  const regionFull = new Set();
+  const allAnimalIds = new Set();
+  let totalLevels = 0;
+  (w.REGIONS || []).forEach(reg => {
+    const regAnimalIds = new Set();
+    reg.levels.forEach(l => {
+      if (l.isFullSet) return;
+      totalLevels++;
+      if (unlockedLvlSet.has(Number(l.id)) || mapUnlockedSet.has(Number(l.id))) unlockedRegions.add(reg.id);
+      const qz = (w.QUIZZES || {})[l.id];
+      if (qz && Array.isArray(qz.questions)) {
+        qz.questions.forEach(qn => {
+          const id = getAnimalId(qn.img);
+          if (id) {
+            allAnimalIds.add(id);
+            regAnimalIds.add(id);
+          }
+        });
+      }
+    });
+    if (regAnimalIds.size > 0 && Array.from(regAnimalIds).every(id => colSet.has(id))) {
+      regionFull.add(reg.id);
+    }
+  });
+  let themedTotal = 0, themedUnlocked = 0, themedPlayed = 0, themed3Stars = 0;
+  (w.THEMED_LEVELS || []).forEach(l => {
+    if (l.isFullSet) return;
+    const id = Number(l.id);
+    themedTotal++;
+    if (unlockedLvlSet.has(id)) themedUnlocked++;
+    if (starsMap[id] != null) themedPlayed++;
+    if (Number(starsMap[id]) >= 3) themed3Stars++;
+  });
+  let photoTotal = 0, photoUnlocked = 0, photoPlayed = 0, photo3Stars = 0;
+  (w.PHOTO_LEVELS || []).forEach(l => {
+    if (l.isFullSet) return;
+    const id = Number(l.id);
+    photoTotal++;
+    if (unlockedLvlSet.has(id)) photoUnlocked++;
+    if (starsMap[id] != null) photoPlayed++;
+    if (Number(starsMap[id]) >= 3) photo3Stars++;
+  });
+  const m = metrics || {};
+  return {
+    totalStars,
+    threeStarsCount,
+    stars: starsMap,
+    unlockedLevels: unlockedLvlSet.size,
+    totalLevels,
+    unlockedRegions,
+    regionFull,
+    collectionCount: colSet.size,
+    collectionTotal: allAnimalIds.size,
+    themedTotal, themedUnlocked, themedPlayed, themed3Stars,
+    photoTotal, photoUnlocked, photoPlayed, photo3Stars,
+    totalPlays: m.totalPlays || 0,
+    playsToday: m.playsToday || 0,
+    maxStreak: m.maxStreak || 0,
+    fastestCorrect: m.fastestCorrect != null ? m.fastestCorrect : 99,
+    noMistakeRuns: m.noMistakeRuns || 0,
+    zeroLossStreak: m.zeroLossStreak || 0,
+    hasZeroScore: !!m.hasZeroScore,
+    allTimeouts: !!m.allTimeouts,
+    playedAtNight: !!m.playedAtNight,
+    playedEarlyMorning: !!m.playedEarlyMorning,
+    maxDailyStreak: m.maxDailyStreak || 0,
+    playedLevels: new Set(Array.isArray(m.playedLevels) ? m.playedLevels : []),
+    lastPercent: m.lastPercent || 0
+  };
+}
+async function checkAndUnlock(silent) {
+  if (!unlockedSet) await loadUnlocked();
+  const ctx = buildAchContext();
+  const newly = [];
+  for (const a of (w.ACHIEVEMENTS || [])) {
+    if (unlockedSet.has(a.id)) continue;
+    let ok = false;
+    try { ok = !!a.check(ctx); } catch (e) {}
+    if (ok) { unlockedSet.add(a.id); newly.push(a); }
+  }
+  if (newly.length) {
+    await saveUnlocked();
+    if (!silent) {
+      newly.forEach(a => {
+        toast(a.icon + ' ' + w.L(a.title), false, '🏆 ' + w.t('achUnlocked'));
+      });
+    }
+  }
+  return newly;
+}
+async function recordVisit() {
+  if (!metrics) await loadMetrics();
+  updateDailyStreak();
+  await saveMetrics();
+  return checkAndUnlock(true);
+}
+async function recordRound(data) {
+  if (!metrics) await loadMetrics();
+  updateDailyStreak();
+  metrics.totalPlays++;
+  const t = todayStr();
+  if (metrics.lastPlayDate === t) metrics.playsToday++;
+  else { metrics.playsToday = 1; metrics.lastPlayDate = t; }
+  if (typeof data.fastestCorrect === 'number' && data.fastestCorrect < metrics.fastestCorrect) metrics.fastestCorrect = data.fastestCorrect;
+  if (typeof data.maxStreak === 'number' && data.maxStreak > metrics.maxStreak) metrics.maxStreak = data.maxStreak;
+  if (data.total > 0 && data.mistakes === 0) metrics.noMistakeRuns++;
+if (data.total > 0 && (Number(data.correctCount) || 0) === 0) { metrics.hasZeroScore = true; metrics.zeroLossStreak++; } else metrics.zeroLossStreak = 0;
+  if (data.total > 0 && data.timeouts === data.total) metrics.allTimeouts = true;
+  const h = new Date().getHours();
+  if (h >= 2 && h <= 4) metrics.playedAtNight = true;
+  if (h >= 5 && h <= 7) metrics.playedEarlyMorning = true;
+   metrics.lastPercent = data.percent;
+  const lvl = Number(data.levelId);
+  if (lvl && lvl !== 99999 && lvl !== 88888 && !metrics.playedLevels.includes(lvl)) metrics.playedLevels.push(lvl);
+  await saveMetrics();
+  return checkAndUnlock(false);
+}
+async function achList() {
+  if (!unlockedSet) await loadUnlocked();
+  return (w.ACHIEVEMENTS || []).map(a => ({ ...a, unlocked: unlockedSet.has(a.id) }));
+}
+async function renderAchModal() {
+  const body = d.getElementById('ach-body');
+  if (!body) return;
+  const items = await achList();
+  const totalUnlocked = items.filter(i => i.unlocked).length;
+  const counter = d.getElementById('ach-counter');
+  if (counter) counter.textContent = totalUnlocked + ' / ' + items.length;
+  body.innerHTML = '';
+  (w.ACH_CATEGORIES || []).forEach(cat => {
+    const group = items.filter(i => i.cat === cat.id);
+    if (!group.length) return;
+    const sec = d.createElement('section');
+    sec.className = 'ach-group';
+    const h = d.createElement('h3');
+    h.className = 'ach-group-title';
+    h.textContent = cat.icon + ' ' + w.L(cat.name) + ' (' + group.filter(g => g.unlocked).length + '/' + group.length + ')';
+    sec.appendChild(h);
+    const grid = d.createElement('div');
+    grid.className = 'ach-grid';
+    group.forEach(a => {
+      const el = d.createElement('div');
+      el.className = 'ach-item' + (a.unlocked ? ' unlocked' : '');
+      el.innerHTML = '<div class="ach-icon">' + a.icon + '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(w.L(a.title)) + '</div><div class="ach-desc">' + escapeHtml(w.L(a.desc)) + '</div></div>' + (a.unlocked ? '<div class="ach-check">✓</div>' : '');
+      grid.appendChild(el);
+    });
+    sec.appendChild(grid);
+    body.appendChild(sec);
+  });
+}
+function openAchModal() {
+  const m = d.getElementById('ach-modal');
+  if (!m) return;
+  renderAchModal();
+  m.classList.add('show');
+}
+function closeAchModal() { const m = d.getElementById('ach-modal'); if (m) m.classList.remove('show'); }
+w.Ach = { loadMetrics, recordVisit, recordRound, checkAndUnlock, list: achList, openModal: openAchModal, closeModal: closeAchModal, renderModal: renderAchModal };
+function openOtherGamesModal() {
+  const m = d.getElementById('igames-modal');
+  if (!m) return;
+  if (m.parentElement !== d.body) d.body.appendChild(m);
+  renderOtherGames();
+  m.classList.add('show');
+}
+function closeOtherGamesModal() {
+  const m = d.getElementById('igames-modal');
+  if (m) m.classList.remove('show');
+}
+w.openOtherGamesModal = openOtherGamesModal;
+w.closeOtherGamesModal = closeOtherGamesModal;
+function getAnimalId(img){ return String(img || '').split('/').pop().replace(/\.(png|jpe?g)$/i, '');}
+w.getAnimalId = getAnimalId;
+let __animalMapCache = null;
+function getAnimalMap(){ if (__animalMapCache) return __animalMapCache; const byId={}; (w.REGIONS || []).forEach(reg=>{ (reg.levels || []).forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz || !Array.isArray(qz.questions)) return; qz.questions.forEach(qn=>{ const id=getAnimalId(qn.img); if (!id || byId[id]) return; if (!Array.isArray(qn.options)) return; const ansOpt=qn.options[qn.answer]; if (!ansOpt) return; byId[id]={ id, img: qn.img, name: ansOpt, desc: qn.description};});});}); __animalMapCache=byId; return byId;}
+w.getAnimalMap = getAnimalMap;
+function shuffleInPlace(arr){ const a=arr.slice(); for (let i=a.length - 1; i >0; i--){ const j=Math.floor(Math.random() * (i + 1)); const tmp=a[i]; a[i]=a[j]; a[j]=tmp;} return a;}
+const __poolCache = new Map();
+function getPoolAnimals(pool) {
+  const key = pool.join(',');
+  if (__poolCache.has(key)) return __poolCache.get(key);
+  const byId = getAnimalMap();
+  const arr = pool.map(id => byId[id]).filter(Boolean);
+  if (__poolCache.size >= 25) {
+    const oldestKey = __poolCache.keys().next().value;
+    __poolCache.delete(oldestKey);
+  }
+  __poolCache.set(key, arr);
+  return arr;
+}
+function buildSingleThemedQuiz(levelId){ const nid=Number(levelId); 
+const themedDef=(w.THEMED_LEVELS || []).find(l=>Number(l.id)===nid); 
+  if (themedDef){ const animals = getPoolAnimals(themedDef.pool || []);
+    if (animals.length < 4) return null; const count=Math.min(themedDef.count || animals.length, animals.length); 
+    const picked=shuffleInPlace(animals).slice(0, count); const questions=picked.map(correct=>{ const others=shuffleInPlace(animals.filter(a=>a.id !==correct.id)).slice(0, 3); const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id); return{ animalId: correct.id, img: correct.img, options: opts.map(o=>o.name), answer, description: correct.desc};}); 
+    return{ regionKey: 'themed', mode: 'text', sub: themedDef.name, questions};} 
+    const photoDef=(w.PHOTO_LEVELS || []).find(l=>Number(l.id)===nid); 
+    if (photoDef){ const animals = getPoolAnimals(photoDef.pool || []);
+      const need=Math.max(2, Math.min(4, photoDef.optionCount || 4)); 
+      if (animals.length < need) return null; const count=Math.min(photoDef.count || animals.length, animals.length);
+       const picked=shuffleInPlace(animals).slice(0, count); const questions=picked.map(correct=>{ 
+        const others=shuffleInPlace(animals.filter(a=>a.id !==correct.id)).slice(0, need - 1); 
+        const opts=shuffleInPlace([correct].concat(others)); const answer=opts.findIndex(o=>o.id===correct.id);
+         return{ animalId: correct.id, name: correct.name, images: opts.map(o=>o.img), answer, description: correct.desc};});
+          return{ regionKey: 'photo', mode: 'photo', optionCount: need, sub: photoDef.name, questions};} return null;}
+w.buildSingleThemedQuiz = buildSingleThemedQuiz;
+const DEFAULT_UNLOCKED = [
+  1001, 1002, 1003,
+  2001, 2002, 2003
+];
+const CURRENT_GATING_VER = 5;
+let gatingCache = null;
+async function gatingLoad(forceReload) {
+  if (gatingCache && !forceReload) return gatingCache;
+  try {
+    const storedVer = asNumber(await storageGet('unlocked_v'), 0);
+    let arr = await storageGet('unlocked');
+    if (!Array.isArray(arr)) arr = [];
+    if (storedVer < CURRENT_GATING_VER) {
+      const storedUnlocked = arr.map(Number).filter(n => !isNaN(n) && n > 0);
+      arr = Array.from(new Set([...DEFAULT_UNLOCKED, ...storedUnlocked]));
+      await storageSet('unlocked', arr);
+      await storageSet('unlocked_v', CURRENT_GATING_VER);
+      console.log('Gating upgrade → v' + CURRENT_GATING_VER, arr);
+    } else {
+      const merged = Array.from(new Set([...DEFAULT_UNLOCKED, ...arr.map(Number).filter(Boolean)]));
+      if (merged.length !== arr.length) await storageSet('unlocked', merged);
+      arr = merged;
+    }
+    gatingCache = arr;
+    if (w.__SYNCED__) w.__SYNCED__.unlocked = arr.slice();
+    return arr;
+  } catch (e) {
+    console.warn('gatingLoad failed:', e);
+    gatingCache = DEFAULT_UNLOCKED.slice();
+    return gatingCache;
+  }
+}
+async function isUnlocked(levelId) {
+  const nid = Number(levelId);
+  if (nid === DAILY_ID) return true;
+  if (nid === 88888) return true;
+  if (isPurchasedLevel(nid)) return true;
+  if (isTempUnlockedLevel(nid)) return true;
+  const list = await gatingLoad();
+  return list.includes(nid);
+}
+const SERVICE_LEVEL_IDS = new Set([88888, 99999, 3001, 3002]);
+async function unlockLevel(levelId) {
+  const n = Number(levelId);
+  if (!n || n <= 0 || SERVICE_LEVEL_IDS.has(n) || n >= 3000) return false;
+  const list = await gatingLoad();
+  if (!list.includes(n)) {
+    list.push(n);
+    gatingCache = list;
+    await storageSet('unlocked', list);
+    if (w.__SYNCED__) w.__SYNCED__.unlocked = list.slice();
+  }
+  return true;
+}
+w.Gating = { DEFAULT_UNLOCKED, loadUnlocked: gatingLoad, isUnlocked, unlockLevel, showUnlockModal: (id, cb) => showPurchaseModal(id, cb), _invalidate: () => { gatingCache = null; } };
+async function initVK() {
+  console.log('🔑 initVK(): старт');
+  if (!w.vkBridge) {
+    console.warn('🔑 vkBridge не найден, инициализация VK пропущена');
+    return;
+  }
+  console.log('🔑 P.userId (из URL):', P.userId, '| launchParams.vk_user_id:', launchParams.vk_user_id, '| viewer_id:', launchParams.viewer_id);
+  await vkSend('VKWebAppInit', {}, 3000);
+  let uid = P.userId;
+  if (!uid) {
+    const info = await vkSend('VKWebAppGetUserInfo', {}, 3000);
+    console.log('🔑 VKWebAppGetUserInfo ответ:', info);
+    if (info && info.id) {
+      uid = info.id;
+      w.id = info.id;
+      try { sessionStorage.setItem('id', info.id); } catch (e) {}
+    }
+  }
+  if (!uid) {
+    const sp = new URLSearchParams(location.search);
+    const viewerId = sp.get('viewer_id');
+    if (viewerId) {
+      uid = parseInt(viewerId);
+      w.id = uid;
+      try { sessionStorage.setItem('id', uid); } catch (e) {}
+    }
+  }
+  if (!uid) console.warn('🔑 initVK(): НЕ УДАЛОСЬ получить uid!');
+if (uid) P.userId = uid;
+  console.log('🔑 initVK(): ФИНАЛЬНЫЙ P.userId =', P.userId);
+  showBanner();
+  preloadRewardedAd();
+}
+async function initYandex() {
+  const sdkReady = await new Promise(resolve => {
+    if (typeof YaGames !== 'undefined') return resolve(true);
+    let waited = 0;
+    const iv = setInterval(() => {
+      waited += 200;
+      if (typeof YaGames !== 'undefined') { clearInterval(iv); resolve(true); }
+      else if (waited >= 10000) { clearInterval(iv); console.warn('Yandex Games SDK not loaded within 10s'); resolve(false); }
+    }, 200);
+  });
+  if (!sdkReady || typeof YaGames === 'undefined') { console.warn('YaGames is not available — skipping Yandex init'); return; }
+  if (!isYandex) {
+    isYandex = true;
+    platform = 'yandex';
+    P.isYandex = true;
+    P.platform = 'yandex';
+    P.isStandalone = false;
+    cls.toggle('is-yandex', true);
+    cls.toggle('is-standalone', false);
+  }
+  try {
+    const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('YaGames.init timeout')), 7000));
+    ysdk = await Promise.race([YaGames.init(), timeout]);
+  } catch (e) { console.warn('YaGames.init failed', e); return; }
+  try {
+    const sdkLang = ysdk.environment.i18n.lang || 'ru';
+    const normalized = normalizeLang(sdkLang);
+    let hasManual = false;
+    try { hasManual = Boolean(localStorage.getItem(LANG_STORAGE_KEY)); } catch (e) {}
+    if (!hasManual && SUPPORTED.includes(normalized) && normalized !== LANG) {
+      setGameLanguage(normalized, false);
+      console.log('Yandex lang override →', LANG);
+    }
+    d.documentElement.lang = LANG;
+  } catch (e) {}
+  try {
+    const t = new Promise((_, rej) => setTimeout(() => rej(new Error('getPlayer timeout')), 5000));
+    ysdkPlayer = await Promise.race([ysdk.getPlayer(), t]);
+    try {
+      const uid = ysdkPlayer.getUniqueID && ysdkPlayer.getUniqueID();
+      if (uid) { w.id = uid; sessionStorage.setItem('id', uid); }
+    } catch (e) {}
+  } catch (e) { ysdkPlayer = null; console.warn('getPlayer failed', e); }
+try {
+ysdk.on('game_api_pause', function () {
+  isGamePaused = true;
+  yandexGameplayStop();
+  stopBgMusic();
+  if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
+});
+ysdk.on('game_api_resume', function () {
+  isGamePaused = false;
+  const qs = d.getElementById('quiz-screen');
+  if (qs && qs.classList.contains('active')) yandexGameplayStart();
+  if (canPlayMusic()) startBgMusic();
+  if (w.__currentQuizResume) { try { w.__currentQuizResume(); } catch (e) {} }
+});
+
+  } catch (e) {}
+  if (w.__appReady) trySendLoadingReady();
+}
+async function updateAuthButton() {
+  const btns = d.querySelectorAll('#yandex-auth-btn');
+  if (!btns.length) return;
+  if (!isYandex || !ysdk) { btns.forEach(b => b.style.display = 'none'); return; }
+ try{ let p=ysdkPlayer; if (!p && ysdk.getPlayer){ p=await ysdk.getPlayer(); ysdkPlayer=p;
+    }
+    let authorized = false;
+    if (p && typeof p.isAuthorized === 'function') authorized = p.isAuthorized();
+    else if (p && typeof p.getMode === 'function') authorized = p.getMode() !== 'lite';
+    btns.forEach(b => b.style.display = authorized ? 'none' : '');
+  } catch (e) { 
+    btns.forEach(b => b.style.display = ''); 
+  }
+}
+function openAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.add('show'); }
+function closeAuthModal() { const m = d.getElementById('auth-modal'); if (m) m.classList.remove('show'); }
+async function doYandexAuth() {
+  closeAuthModal();
+  if (!isYandex || !ysdk) { toast(w.t('authUnavail2'), true); return; }
+  let available = false;
+  try { available = await ysdk.isAvailableMethod('auth.openAuthDialog'); } catch (e) {}
+  if (!available) { toast(w.t('authUnavail'), true); return; }
+  const ok = await safeCall(async () => {
+    await ysdk.auth.openAuthDialog();
+    ysdkPlayer = await safeCall(() => ysdk.getPlayer(), null, 'getPlayer');
+    await syncAllOnStart();
+    const curTotal = Math.max(0, Math.floor(Number((w.__SYNCED__ && w.__SYNCED__.total) || 0)));
+    if (ysdk && ysdk.leaderboards && ysdkPlayer && typeof ysdkPlayer.isAuthorized === 'function' && ysdkPlayer.isAuthorized()) {
+      ysdk.leaderboards.setLeaderboardScore('bestscore', curTotal).catch(() => {});
+    }
+    updateAuthButton();
+    return true;
+
+  }, false, 'openAuthDialog');
+  if (ok) toast(w.t('authOk')); else toast(w.t('authFail'));
+}
+async function canShowShortcut() {
+  if (!isYandex || !ysdk || !ysdk.shortcut) return false;
+  const p = await safeCall(() => ysdk.shortcut.canShowPrompt(), null, 'canShowPrompt');
+  return !!(p && p.canShow);
+}
+async function showShortcut() {
+  if (!isYandex || !ysdk || !ysdk.shortcut) { toast(w.t('shortcutYa'), true); return; }
+  try {
+    const r = await ysdk.shortcut.showPrompt();
+    if (r && r.outcome === 'accepted') toast(w.t('shortcutOk'));
+  } catch (e) { toast(w.t('shortcutFail'), true); }
+}
+async function updateShortcutButton() {
+  const btns = d.querySelectorAll('[data-yandex-shortcut]');
+
+  if (!btns.length) return;
+  let show = false;
+  if (isYandex) {
+    try { show = await canShowShortcut(); } catch (e) { show = false; }
+  }
+  btns.forEach(b => {
+    if (show) {
+      b.style.removeProperty('display');
+    } else {
+      b.style.setProperty('display', 'none', 'important');
+    }
+  });
+}
+async function openYandexLeaderboard() {
+  if (!isYandex || !ysdk) { toast(w.t('topVKOnly')); return; }
+  const modal = d.getElementById('yandex-leaderboard-modal');
+  const body = d.getElementById('yandex-leaderboard-body');
+  if (!modal || !body) return;
+  body.innerHTML = '<p class="modal-text">' + w.t('leaderboardLoading') + '</p>';
+  modal.classList.add('show');
+  let isAuth = false;
+  try {
+    if (ysdkPlayer && typeof ysdkPlayer.isAuthorized === 'function') isAuth = ysdkPlayer.isAuthorized();
+    else if (ysdkPlayer && typeof ysdkPlayer.getMode === 'function') isAuth = ysdkPlayer.getMode() !== 'lite';
+  } catch (e) {}
+  try {
+    const entries = await ysdk.leaderboards.getEntries('bestscore', { quantityTop: 10, includeUser: true, quantityAround: 3 });
+    let authBanner = '';
+    if (!isAuth) {
+      authBanner = '<div style="margin-bottom:12px;text-align:center;">' +
+        '<button type="button" class="btn btn-primary" onclick="document.getElementById(\'yandex-leaderboard-modal\').classList.remove(\'show\');doYandexAuth();">' +
+        escapeHtml(w.t('authYandex')) + '</button></div>';
+    }
+    if (!entries || !entries.entries || entries.entries.length === 0) {
+      body.innerHTML = authBanner + '<p class="modal-text">' + w.t('leaderboardEmpty') + '</p>';
+      return;
+    }
+    let html = authBanner + '<div class="ach-group"><div class="ach-grid">';
+    entries.entries.forEach(e => {
+      const name = (e.player && e.player.publicName) || w.t('leaderboardPlayer');
+      let avatarSrc = '';
+      try {
+        if (e.player && typeof e.player.getAvatarSrc === 'function') {
+          avatarSrc = e.player.getAvatarSrc('small') || '';
+        }
+      } catch (err) {}
+      const avatarHtml = avatarSrc
+        ? '<img src="' + escapeHtml(avatarSrc) + '" alt="" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">'
+        : (e.rank <= 3 ? '🏅' : '👤');
+      const row = w.t('leaderboardRow')
+        .replace('{rank}', e.rank)
+        .replace('{score}', e.score);
+      html += '<div class="ach-item unlocked"><div class="ach-icon">' +
+        avatarHtml +
+        '</div><div class="ach-text"><div class="ach-title">' + escapeHtml(name) +
+        '</div><div class="ach-desc">' + escapeHtml(row) + '</div></div></div>';
+    });
+    html += '</div></div>';
+    body.innerHTML = html;
+  } catch (e) {
+    console.warn('Yandex leaderboard error:', e);
+    body.innerHTML = '<p class="modal-text" style="color:var(--danger);">' + w.t('leaderboardError') + '</p>';
+  }
+}
+
+w.openYandexLeaderboard = openYandexLeaderboard;
+async function getAllGames() {
+  if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.GamesAPI) return [];
+  const data = await safeCall(() => ysdk.features.GamesAPI.getAllGames(), null, 'getAllGames');
+  return (data && Array.isArray(data.games)) ? data.games : [];
+}
+async function getGameByID(appID) {
+  if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.GamesAPI) return null;
+  const data = await safeCall(() => ysdk.features.GamesAPI.getGameByID(appID), null, 'getGameByID');
+  return (data && data.isAvailable && data.game) ? data.game : null;
+}
+w.openAuthModal = openAuthModal;
+w.closeAuthModal = closeAuthModal;
+w.doYandexAuth = doYandexAuth;
+w.updateAuthButton = updateAuthButton;
+w.showShortcut = showShortcut;
+w.canShowShortcut = canShowShortcut;
+w.updateShortcutButton = updateShortcutButton;
+w.getAllGames = getAllGames;
+w.getGameByID = getGameByID;
+let __syncResolve;
+w.whenReady = new Promise(res => { __syncResolve = res; });
+async function syncAllOnStart() {
+  const DEFAULT_LVL = (w.Gating && w.Gating.DEFAULT_UNLOCKED) || [1001, 1002, 1003, 2001, 2002, 2003];
+ try {
+const [unlockedRaw, collectionRaw, starsRaw, totalRaw, gatingVerRaw, mapUnlockedRaw] = await Promise.all([
+      storageGet('unlocked'), storageGet('collection'), storageGet('stars'), storageGetTotal(), storageGet('unlocked_v'), storageGet('map_unlocked')
+    ]);
+    const storedVer = asNumber(gatingVerRaw, 0);
+    const CURRENT_VER = 5;
+    let unlocked;
+    if (storedVer < CURRENT_VER) {
+      const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
+      unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
+      try { await storageSet('unlocked', unlocked); } catch (e) {}
+      try { await storageSet('unlocked_v', CURRENT_VER); } catch (e) {}
+      if (w.Gating && w.Gating._invalidate) w.Gating._invalidate();
+      console.log('Gating upgrade → v' + CURRENT_VER, unlocked);
+    } else {
+      const storedUnlocked = asArray(unlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
+      unlocked = Array.from(new Set([...DEFAULT_LVL, ...storedUnlocked]));
+      if (storedUnlocked.length !== unlocked.length) { try { await storageSet('unlocked', unlocked); } catch (e) {} }
+    }
+    const collection = asArray(collectionRaw).filter(x => typeof x === 'string');
+    const stars = asObject(starsRaw);
+    for (const k in stars) {
+      const v = asNumber(stars[k], 0);
+      stars[k] = Math.max(0, Math.min(3, v));
+    }
+    const total = asNumber(totalRaw, 0);
+   const storedMapUnlocked = asArray(mapUnlockedRaw).map(Number).filter(n => !isNaN(n) && n > 0);
+    const cleanedMapUnlocked = storedMapUnlocked.filter(n => (n !== 1 && n !== 1001) || Number(stars[n]) > 0);
+    const mapUnlocked = Array.from(new Set([2001, ...cleanedMapUnlocked]));
+    if (storedMapUnlocked.length !== mapUnlocked.length || !storedMapUnlocked.includes(2001)) {
+      try { await storageSet('map_unlocked', mapUnlocked); } catch (e) {}
+    }
+  w.__SYNCED__ = { unlocked, collection, stars, total, mapUnlocked };
+    if (w.Gating && w.Gating.loadUnlocked) { try { await w.Gating.loadUnlocked(true); } catch (e) {} }
+    mergeTempUnlocks();
+    await syncMaxMapLevel();
+    updateCategoriesBtnVisibility();
+    updateTotalScoreUI(total);
+    console.log('Sync complete:', w.__SYNCED__);
+  } catch (e) {
+    console.warn('Sync failed:', e);
+       w.__SYNCED__ = { unlocked: DEFAULT_LVL, collection: [], stars: {}, total: 0, mapUnlocked: [2001] };
+  }
+  if (__syncResolve) __syncResolve(w.__SYNCED__);
+}
+w.syncAllOnStart=syncAllOnStart;
+let __readySent=false;
+let __menuShown=false; function trySendLoadingReady(){ if (__readySent) return false; if (!isYandex || !ysdk || !ysdk.features || !ysdk.features.LoadingAPI) return false; try{ ysdk.features.LoadingAPI.ready(); __readySent=true; console.log('✅ Yandex LoadingAPI.ready() sent'); return true;} catch (e){ console.warn('LoadingAPI.ready() failed:', e); return false;}}
+let __starsCreated = false;
+function hideLoadingAndShowMenu(){
+    if (typeof __bootWatchdogTimer !== 'undefined') clearTimeout(__bootWatchdogTimer);
+    if (__menuShown) return;
+    __menuShown=true;
+    const loading=d.getElementById('loading-screen');
+    if (loading){ loading.classList.add('hidden'); setTimeout(()=>{ loading.style.display='none';}, 400);}
+    d.body.classList.add('app-ready');
+    const root=d.getElementById('app-root');
+    if (root) root.classList.add('visible');
+    w.__appReady=true;
+    trySendLoadingReady();
+}
+let __factListCache = null;
+function getFactList() {
+  if (__factListCache) return __factListCache;
+  const list = [];
+  (w.REGIONS || []).forEach(reg => {
+    reg.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (!qz || !Array.isArray(qz.questions)) return;
+      qz.questions.forEach(qn => {
+        list.push({ img: qn.img, name: w.L(qn.options[qn.answer]), desc: w.L(qn.description) });
+      });
+    });
+  });
+  __factListCache = list;
+  return list;
+}
+function getMapLevels() {
+  const photos = (w.PHOTO_LEVELS || [])
+    .filter(lvl => !lvl.isFullSet)
+    .map(lvl => ({ ...lvl, kind: 'photo' }));
+  const themed = (w.THEMED_LEVELS || [])
+    .filter(lvl => !lvl.isFullSet)
+    .map(lvl => ({ ...lvl, kind: 'themed' }));
+  const regions = [];
+  (w.REGIONS || []).forEach(reg => {
+    reg.levels.forEach(lvl => {
+      if (!lvl.isFullSet) regions.push({ ...lvl, regionKey: reg.id, kind: 'region' });
+    });
+  });
+  const others = themed.concat(regions);
+  const list = [];
+  const maxLen = Math.max(photos.length, others.length);
+  for (let i = 0; i < maxLen; i++) {
+    if (i < photos.length) list.push(photos[i]);
+    if (i < others.length) list.push(others[i]);
+  }
+  return list;
+}
+function getMaxOpenedMapLevel() {
+  const mapUnlocked = (w.__SYNCED__ && Array.isArray(w.__SYNCED__.mapUnlocked))
+    ? w.__SYNCED__.mapUnlocked
+    : new Array();
+  const mapUnlockedSet = new Set(mapUnlocked.map(Number));
+  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  const mapLevels = getMapLevels();
+  let maxNum = 0;
+  mapLevels.forEach((lvl, idx) => {
+    const nid = Number(lvl.id);
+    if (mapUnlockedSet.has(nid) && Number(starsMap[nid]) >= 2) {
+      maxNum = Math.max(maxNum, idx + 1);
+    }
+  });
+  return maxNum;
+}
+w.getMaxOpenedMapLevel = getMaxOpenedMapLevel;
+async function syncMaxMapLevel() {
+  const maxNum = getMaxOpenedMapLevel();
+  await storageSet('maxlvl', maxNum);
+  if (w.StartMenu && typeof w.StartMenu.updateStats === 'function') {
+    w.StartMenu.updateStats();
+  }
+  return maxNum;
+}
+function isLevel92Completed() {
+  const mapLevels = getMapLevels();
+  const lvl92 = mapLevels.item ? mapLevels.item(91) : mapLevels.slice(91, 92).pop();
+  if (!lvl92) return false;
+  const nid = Number(lvl92.id);
+  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  return Number(starsMap[nid]) >= 2;
+}
+function updateCategoriesBtnVisibility() {
+  const btn = d.getElementById('startCategoriesBtn');
+  if (!btn) return;
+  const unlocked = isLevel92Completed();
+  btn.style.display = unlocked ? '' : 'none';
+}
+w.updateCategoriesBtnVisibility = updateCategoriesBtnVisibility;
+async function unlockMapLevel(levelId) {
+  const n = Number(levelId);
+  if (!n || n <= 0) return false;
+  const list = (w.__SYNCED__ && Array.isArray(w.__SYNCED__.mapUnlocked))
+    ? w.__SYNCED__.mapUnlocked
+    : new Array();
+  if (!list.includes(n)) {
+    list.push(n);
+    if (w.__SYNCED__) w.__SYNCED__.mapUnlocked = list;
+    await storageSet('map_unlocked', list);
+    await syncMaxMapLevel();
+    if (w.Ach && typeof w.Ach.checkAndUnlock === 'function') {
+      await w.Ach.checkAndUnlock(false);
+    }
+  }
+  return true;
+}
+const MAP_PATH_POINTS=[{x:12.9,y:10.8},{x:32.9,y:7.7},{x:33,y:8.6},{x:49.6,y:4.2},{x:47.9,y:7.9},{x:67.9,y:3.8},{x:66.5,y:6.9},{x:87.4,y:6.2},{x:74.6,y:11.6},{x:73.7,y:14.4},{x:52.5,y:13.6},{x:50.3,y:12.8},{x:28,y:15.1},{x:25,y:17.8},{x:53.1,y:22.9},{x:17.5,y:25.9},{x:18.3,y:22.7},{x:45.1,y:20},{x:46.6,y:17.8},{x:74.7,y:21.3},{x:81.1,y:17.3},{x:51,y:24.4},{x:28.8,y:25.6},{x:41,y:30.2},{x:49.1,y:28.6},{x:75.3,y:31.4},{x:81,y:30.2},{x:83.2,y:35.4},{x:56.1,y:34.7},{x:51.3,y:34.1},{x:25.9,y:35.8},{x:27.1,y:33.1},{x:5.4,y:34.7},{x:4.8,y:37.7},{x:2,y:41},{x:27.1,y:42.3},{x:31.3,y:40.8},{x:52.6,y:41.1},{x:52.9,y:42.3},{x:78.5,y:44.4},{x:76.3,y:40.7},{x:94.4,y:44.4},{x:76.2,y:47.5},{x:69.5,y:48.1},{x:48.4,y:47.9},{x:46.7,y:47.7},{x:23.9,y:53.4},{x:22.5,y:51.6},{x:8.2,y:46.4},{x:8.2,y:48},{x:4.2,y:54.9},{x:4.9,y:57.9},{x:6.3,y:60.8},{x:34.6,y:58.4},{x:35.3,y:53.7},{x:60.5,y:53},{x:61.1,y:56.1},{x:86.8,y:55.7},{x:84.9,y:59.3},{x:80.3,y:60.3},{x:49.1,y:58.3},{x:43.5,y:60.9},{x:44.3,y:63.1},{x:74.8,y:63.8},{x:78.5,y:63.2},{x:82.5,y:68.8},{x:53.3,y:65.9},{x:39.8,y:66},{x:19.1,y:63.7},{x:19.2,y:67.9},{x:2.4,y:72.1},{x:28.1,y:73.2},{x:32.3,y:71.6},{x:63.1,y:72.1},{x:64.4,y:73.9},{x:90.5,y:73.6},{x:56.8,y:77.4},{x:50.9,y:74},{x:10.5,y:77.7},{x:5.2,y:77.2},{x:39.5,y:80.2},{x:73,y:81.8},{x:74.7,y:82.3},{x:68.7,y:86.8},{x:40.1,y:87.9},{x:37.3,y:83},{x:73.3,y:91.2},{x:62.8,y:92.6},{x:56.7,y:97},{x:49,y:96.3},{x:24.6,y:94.3},{x:20.1,y:93.2}];
+async function renderMap() {
+  const container = d.getElementById('map-nodes');
+  const player = d.getElementById('map-player');
+  if (!container || !player) return;
+  const colArr = (w.__SYNCED__ && w.__SYNCED__.collection) || [];
+  const allIds = new Set();
+  (w.REGIONS || []).forEach(reg => {
+    reg.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (!qz) return;
+      qz.questions.forEach(qn => allIds.add(w.getAnimalId(qn.img)));
+    });
+  });
+  const mapColEl = d.querySelector('[data-map-col-count]');
+  if (mapColEl) mapColEl.textContent = Math.min(colArr.length, allIds.size);
+  await w.Ach.checkAndUnlock(true);
+  const achItems = await w.Ach.list();
+  const mapAchBadge = d.getElementById('map-ach-badge');
+  if (mapAchBadge) mapAchBadge.textContent = achItems.filter(i => i.unlocked).length;
+  container.innerHTML = '';
+  const mapUnlocked = (w.__SYNCED__ && w.__SYNCED__.mapUnlocked) || Array.of(2001);
+  const mapUnlockedSet = new Set(mapUnlocked.map(Number));
+  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  const mapLevels = getMapLevels();
+  let lastUnlockedIdx = 0;
+  mapLevels.forEach((lvl, idx) => {
+    if (mapUnlockedSet.has(Number(lvl.id))) lastUnlockedIdx = idx;
+  });
+  let playerIdx = lastUnlockedIdx;
+  if (w.__mapSelectedLevelId != null) {
+    const selIdx = mapLevels.findIndex(l => Number(l.id) === Number(w.__mapSelectedLevelId));
+    if (selIdx !== -1 && mapUnlockedSet.has(Number(mapLevels[selIdx].id))) {
+      playerIdx = selIdx;
+    }
+  }
+  const mapPlayBtn = d.getElementById('map-play-btn');
+  if (mapPlayBtn && mapLevels[lastUnlockedIdx]) {
+    const curLvl = mapLevels[lastUnlockedIdx];
+    const curId = Number(curLvl.id);
+    const curStars = Math.floor(Number(starsMap[curId]) || 0);
+    const nextIdx = lastUnlockedIdx + 1;
+    const nextLvl = nextIdx < mapLevels.length ? mapLevels[nextIdx] : null;
+    const nextPreUnlocked = nextLvl && !mapUnlockedSet.has(Number(nextLvl.id)) && curStars >= 2;
+    mapPlayBtn.onclick = () => {
+      if (nextPreUnlocked) {
+        showMapUnlockAdModal(nextLvl, nextIdx);
+      } else {
+        pushRoute({ name: 'quiz', levelId: curId, fromMap: true });
+      }
+    };
+  }
+  mapLevels.forEach((lvl, idx) => {
+    const nid = Number(lvl.id);
+    const isOpen = mapUnlockedSet.has(nid);
+    const stars = Math.max(0, Math.min(3, Math.floor(Number(starsMap[nid]) || 0)));
+    const isCompleted = isOpen && starsMap[nid] != null;
+    const isCurrent = idx === lastUnlockedIdx;
+    const prevLvl = idx > 0 ? mapLevels[idx - 1] : null;
+    const prevStars = prevLvl ? Math.floor(Number(starsMap[Number(prevLvl.id)]) || 0) : 0;
+    const isPrevOpen = prevLvl ? mapUnlockedSet.has(Number(prevLvl.id)) : true;
+    const isPreUnlocked = !isOpen && isPrevOpen && prevStars >= 2;
+    const node = d.createElement('div');
+    node.className = 'map-node';
+    node.dataset.levelId = nid;
+    const pt = MAP_PATH_POINTS[idx];
+    if (pt) {
+      node.style.left = pt.x + '%';
+      node.style.top = pt.y + '%';
+    }
+    if (isCompleted) {
+      node.classList.add('completed');
+    } else if (isOpen) {
+      node.classList.add('unlocked');
+      if (isCurrent) node.classList.add('current');
+    } else if (isPreUnlocked) {
+      node.classList.add('pre-unlocked');
+    } else {
+      node.classList.add('locked');
+    }
+    const qz = (w.QUIZZES || {})[nid];
+    const icon = lvl.icon || (qz && qz.questions && qz.questions[0] ? '⛰️' : '❓');
+    if (!isOpen && !isPreUnlocked) {
+      node.innerHTML = lockedIcon('1.2em');
+    } else {
+      node.textContent = icon;
+    }
+    if (isCompleted) {
+      const starsEl = d.createElement('div');
+      starsEl.className = 'map-node-stars' + (stars > 0 ? ' has-stars' : '');
+      starsEl.textContent = '★'.repeat(stars) + '☆'.repeat(3 - stars);
+      node.appendChild(starsEl);
+    } else if (isPreUnlocked) {
+      const adBadge = d.createElement('div');
+      adBadge.className = 'map-node-stars';
+      adBadge.innerHTML = tvIcon('1em');
+      node.appendChild(adBadge);
+    }
+    node.addEventListener('click', () => handleMapNodeClick(lvl, idx, mapLevels, isPreUnlocked));
+    container.appendChild(node);
+  });
+  requestAnimationFrame(() => positionPlayer(player, playerIdx, false));
+  const progressFill = d.getElementById('map-progress-fill');
+  if (progressFill) {
+    const progress = mapLevels.length > 0 ? ((lastUnlockedIdx + 1) / mapLevels.length) * 100 : 0;
+    progressFill.style.width = progress + '%';
+  }
+  renderDailyBadge();
+}
+function positionPlayer(playerEl, nodeIndex, animate) {
+  w.__lastMapNodeIdx = nodeIndex;
+  const canvas = d.getElementById('map-canvas');
+  const container = d.getElementById('map-nodes');
+  if (!canvas || !container || !playerEl) return;
+  const nodes = container.querySelectorAll('.map-node');
+  const target = nodes[nodeIndex];
+  if (!target) return;
+  playerEl.style.transition = animate
+    ? 'left 0.45s cubic-bezier(.22,1,.36,1), top 0.45s cubic-bezier(.22,1,.36,1)'
+    : 'none';
+  const canvasRect = canvas.getBoundingClientRect();
+  const nodeRect = target.getBoundingClientRect();
+  const playerW = playerEl.offsetWidth || 44;
+  const playerH = playerEl.offsetHeight || 44;
+  const gap = 4; 
+  let left = nodeRect.right - canvasRect.left + gap;
+  if (left + playerW > canvasRect.width - 4) {
+    left = Math.max(4, nodeRect.left - canvasRect.left - playerW - gap);
+  }
+  const top = (nodeRect.top - canvasRect.top) + (nodeRect.height - playerH) / 2;
+  playerEl.style.left = Math.round(left) + 'px';
+  playerEl.style.top = Math.round(top) + 'px';
+}
+let __mapResizeTimer = null;
+w.addEventListener('resize', () => {
+  if (currentPage !== 'map') return;
+  clearTimeout(__mapResizeTimer);
+  __mapResizeTimer = setTimeout(() => {
+    const playerEl = d.getElementById('map-player');
+    if (playerEl && typeof w.__lastMapNodeIdx === 'number') {
+      positionPlayer(playerEl, w.__lastMapNodeIdx, false);
+    }
+  }, 150);
+});
+function showMapLockedModal() {
+  let modal = d.getElementById('mapLockedModal');
+  if (!modal) {
+    modal = d.createElement('div');
+    modal.id = 'mapLockedModal';
+    modal.className = 'modal';
+    d.body.appendChild(modal);
+  }
+  modal.innerHTML =
+    '<div class="modal-content modal-narrow">' +
+      '<button type="button" class="modal-close" data-act="close" aria-label="close">×</button>' +
+      '<img src="icons/cat.png" alt="" class="map-locked-sprite">' +
+      '<h2 class="modal-title">' + escapeHtml(w.t('mapLockedTitle')) + '</h2>' +
+      '<p class="modal-text">' + escapeHtml(w.t('mapLockedDesc')) + '</p>' +
+      '<div class="modal-actions">' +
+        '<button type="button" class="btn btn-primary" data-act="ok" style="width:100%;">' + escapeHtml(w.t('okBtn')) + '</button>' +
+      '</div>' +
+    '</div>';
+  const close = () => modal.classList.remove('show');
+  modal.querySelector('[data-act="close"]').onclick = close;
+  modal.querySelector('[data-act="ok"]').onclick = close;
+  modal.onclick = (e) => { if (e.target === modal) close(); };
+  modal.classList.add('show');
+}
+function showMapUnlockAdModal(lvl, idx) {
+  const nid = Number(lvl.id);
+  let modal = d.getElementById('mapUnlockAdModal');
+  if (!modal) {
+    modal = d.createElement('div');
+    modal.id = 'mapUnlockAdModal';
+    modal.className = 'modal';
+    d.body.appendChild(modal);
+  }
+  modal.innerHTML =
+    '<div class="modal-content modal-narrow">' +
+      '<button type="button" class="modal-close" data-act="close" aria-label="close">×</button>' +
+      '<div class="modal-emoji" id="mapUnlockAdIcon"></div>' +
+      '<h2 class="modal-title">' + escapeHtml(w.t('readyTitle')) + '</h2>' +
+      '<p class="modal-text">' + escapeHtml(w.t('mapUnlockAdDesc')) + '</p>' +
+      '<div class="modal-actions">' +
+        '<button type="button" class="btn btn-primary" data-act="watch">' +
+          tvIcon('1.2em') + ' <span>' + escapeHtml(w.t('watchBtn')) + '</span>' +
+        '</button>' +
+        '<button type="button" class="btn btn-ghost" data-act="cancel">' + escapeHtml(w.t('cancelBtn')) + '</button>' +
+      '</div>' +
+    '</div>';
+  const close = () => modal.classList.remove('show');
+  modal.querySelector('[data-act="close"]').onclick = close;
+  modal.querySelector('[data-act="cancel"]').onclick = close;
+  modal.onclick = (e) => { if (e.target === modal) close(); };
+  const iconBox = modal.querySelector('#mapUnlockAdIcon');
+  if (iconBox) iconBox.textContent = lvl.icon || '🐾';
+  const watchBtn = modal.querySelector('[data-act="watch"]');
+  watchBtn.disabled = false;
+  watchBtn.innerHTML = tvIcon('1.2em') + ' <span>' + escapeHtml(w.t('watchBtn')) + '</span>';
+  watchBtn.onclick = async () => {
+    if (watchBtn.disabled) return;
+    watchBtn.disabled = true;
+    const prevHtml = watchBtn.innerHTML;
+    watchBtn.textContent = w.t('loadingAd');
+    let ok = false;
+    try {
+      ok = await w.showRewardedAd();
+    } catch (e) {
+      ok = false;
+    }
+    if (!ok) {
+      if (watchBtn.isConnected) {
+        watchBtn.disabled = false;
+        watchBtn.innerHTML = prevHtml;
+      }
+      return;
+    }
+    modal.classList.remove('show');
+    await unlockMapLevel(nid);
+    playOgg('buy_cat');
+    toast(w.t('levelOpenedToast'));
+    await renderMap();
+    const player = d.getElementById('map-player');
+    if (player) {
+      positionPlayer(player, idx, true);
+    }
+  };
+  modal.classList.add('show');
+}
+async function handleMapNodeClick(lvl, idx, mapLevels, isPreUnlocked) {
+  const nid = Number(lvl.id);
+  const mapUnlocked = (w.__SYNCED__ && w.__SYNCED__.mapUnlocked) || Array.of(2001);
+  const mapUnlockedSet = new Set(mapUnlocked.map(Number));
+  if (mapUnlockedSet.has(nid)) {
+    w.__mapSelectedLevelId = nid;
+    const player = d.getElementById('map-player');
+    if (player) positionPlayer(player, idx, true);
+    pushRoute({ name: 'quiz', levelId: nid, fromMap: true });
+    return;
+  }
+  if (!isPreUnlocked) {
+    showMapLockedModal();
+    return;
+  }
+  showMapUnlockAdModal(lvl, idx);
+}
+w.renderMap = renderMap;
+async function renderIndex(){ const colArr=(w.__SYNCED__ && w.__SYNCED__.collection) || [];
+const animalId = w.getAnimalId;
+ const allIds=new Set(); 
+ (w.REGIONS || []).forEach(reg=>{ reg.levels.forEach(lvl=>{ const qz=(w.QUIZZES ||{})[lvl.id]; if (!qz) return; qz.questions.forEach(qn=>allIds.add(animalId(qn.img)))})}); const totalAnimals=allIds.size; const haveAnimals=Math.min(colArr.length, totalAnimals); const colEl=d.querySelector('[data-col-count]'); if (colEl) colEl.textContent=haveAnimals; 
+ await w.Ach.checkAndUnlock(true);
+const items=await w.Ach.list();
+const opened=items.filter(i=>i.unlocked).length;
+const badge=d.getElementById('ach-badge');
+if (badge) badge.textContent=opened; 
+const animals = getFactList();
+if (animals.length){ const dt=new Date(); 
+const day = Math.floor(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()) / 86400000);
+const seed = (day * 2654435761) >>> 0;
+const item = animals[seed % animals.length];  
+  const fi=d.getElementById('fact-img'); const fn=d.getElementById('fact-name'); const fd=d.getElementById('fact-desc'); if (fi){ fi.src=item.img; fi.alt=item.name} if (fn) fn.textContent=item.name; if (fd) fd.textContent=item.desc; const fb=d.getElementById('fact-block'); if (fb) fb.hidden=false} const holder=d.getElementById('regions'); if (!holder) return; holder.innerHTML='';
+ const unlocked=(w.__SYNCED__ && w.__SYNCED__.unlocked) || [];
+const unlockedSet=new Set(unlocked.map(Number));
+const __now = Date.now();
+for (const k in MECH.purchased) if (MECH.purchased[k]) unlockedSet.add(Number(k));
+for (const k in MECH.tempUnlocks) if (MECH.tempUnlocks[k] > __now) unlockedSet.add(Number(k));
+   const starsMap=asObject(w.__SYNCED__ && w.__SYNCED__.stars); const starsHtml=levelId=>{ const s=Math.max(0,Math.min(3,Math.floor(Number(starsMap[levelId])||0))); return '<span class="stars' + (s>0?' has-stars':'') + '">' + '★'.repeat(s) + '☆'.repeat(3 - s) + '</span>'}; 
+  const renderLevelCard=(l, qz, container)=>{ const isOpen=unlockedSet.has(Number(l.id)); const el=d.createElement('button'); el.type='button';
+el.className = 'level-card' + (isOpen ? '' : ' locked');
+    if (isOpen) el.dataset.href='#/quiz/' + l.id;
+    const adTitle=escapeHtml(w.t('titleAd'));     
+const _price = getLevelPrice(Number(l.id));
+const _ptsHtml = ptsIcon('1.1em');
+const isThreeStars = Math.floor(Number(starsMap[l.id]) || 0) >= 3;
+const actionsHtml = !isOpen
+  ? '<div class="level-actions"><span class="level-price">' + _ptsHtml + ' ' + _price + '</span></div>'
+  : (isThreeStars ? '<div class="level-actions"><span class="level-open">▶</span></div>' : '');
+const qCount = (qz && qz.questions) ? qz.questions.length : (l.count || 0);
+el.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span><span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id) + actionsHtml; if (!isOpen){ el.addEventListener('click', ()=>{ w.Gating.showUnlockModal(l.id, ()=>{ if (!el.parentNode){ if (currentPage==='index') renderIndex(); return;} 
+const a=d.createElement('button'); a.type='button'; a.className='level-card'; a.dataset.href='#/quiz/' + l.id; a.innerHTML='<span class="level-name">' + (l.icon ? l.icon + ' ' : '') + escapeHtml(w.L(l.name)) + '</span>' + '<span class="level-meta">' + qCount + ' ' + w.t('questions') + '</span>' + starsHtml(l.id); el.replaceWith(a);});});} container.appendChild(el)};
+const OPEN_KEY=storageKey('cat_open'); let openState={}; try{ const raw=safeLocalGet(OPEN_KEY); if (raw) openState=JSON.parse(raw) ||{}} catch (e){} const saveOpenState=()=>{ try{ safeLocalSet(OPEN_KEY, JSON.stringify(openState))} catch (e){}}; const makeSection=(titleHtml, sectionKey)=>{ const sec=d.createElement('section');
+sec.className = 'card collapsible';
+ if (openState[sectionKey]) sec.classList.add('open'); const header=d.createElement('button'); header.type='button'; header.className='region-title collapsible-header'; header.innerHTML='<span>' + titleHtml + '</span><span class="toggle-arrow">▼</span>'; header.addEventListener('click', ()=>{ sec.classList.toggle('open'); openState[sectionKey]=sec.classList.contains('open'); saveOpenState()}); const body=d.createElement('div'); body.className='collapsible-body'; const grid=d.createElement('div'); grid.className='levels'; body.appendChild(grid); sec.appendChild(header); sec.appendChild(body); return{ sec, grid}}; if (Array.isArray(w.THEMED_LEVELS) && w.THEMED_LEVELS.length){ const{ sec, grid}=makeSection( '🎨 ' + w.L({ ru: 'Тематические викторины', en: 'Themed quizzes', tr: 'Tematik testler'}), 'themed' ); const themedSorted=[...w.THEMED_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo});
+themedSorted.forEach(l => { renderLevelCard(l, (w.QUIZZES || {})[l.id], grid); });
+  if (grid.children.length) holder.appendChild(sec)} if (Array.isArray(w.PHOTO_LEVELS) && w.PHOTO_LEVELS.length){ const{ sec, grid}=makeSection( '🎯 ' + w.L({ ru: 'Фото-викторины', en: 'Photo quizzes', tr: 'Foto testler'}), 'photo' ); const photoSorted=[...w.PHOTO_LEVELS].sort((a, b)=>{ const ao=unlockedSet.has(Number(a.id)) ? 0 : 1; const bo=unlockedSet.has(Number(b.id)) ? 0 : 1; return ao - bo});
+ photoSorted.forEach(l => { renderLevelCard(l, (w.QUIZZES || {})[l.id], grid); });
+  if (grid.children.length) holder.appendChild(sec)} (w.REGIONS || []).forEach(reg=>{ const{ sec, grid}=makeSection( reg.icon + ' ' + escapeHtml(w.L(reg.name)), 'region_' + reg.id ); reg.levels.forEach(l=>{ const qz=(w.QUIZZES ||{})[l.id]; renderLevelCard(l, qz, grid)}); holder.appendChild(sec)})
+renderDailyBadge();
+renderProgress();
+}
+async function renderQuiz(levelId){
+  const curRoute = parseHash();
+  const fallbackPage = isLevel92Completed() ? 'index' : 'map';
+  const originPage = (curRoute && curRoute.fromPage && curRoute.fromPage !== 'quiz')
+    ? curRoute.fromPage
+    : (curRoute && curRoute.fromMap ? 'map' : fallbackPage);
+  const originStartMenu = Boolean(curRoute && curRoute.fromStartMenu);
+  w.__quizFromMap = originPage === 'map';
+  const returnToOrigin = (replace) => {
+    pushRoute({ name: originPage, startMenuOpen: originStartMenu }, Boolean(replace));
+  };
+  ['lock-home-btn', 'quiz-start-home-btn', 'home-btn'].forEach(btnId => {
+    const btn = d.getElementById(btnId);
+    if (btn) btn.onclick = () => returnToOrigin(false);
+  });
+  const nid=Number(levelId);
+if (nid === DAILY_ID) {
+  ensureDaily();
+  if (MECH && MECH.daily && MECH.daily.completed) {
+    w.__autoStartQuiz = false;
+    returnToOrigin(true);
+    return null;
+  }
+  const qs = getDailyQuestions();
+  if (!qs.length) { w.__autoStartQuiz = false; returnToOrigin(true); return null; }
+  w.QUIZZES[DAILY_ID] = {
+    regionKey: 'daily',
+    sub: { ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' },
+    questions: qs
+  };
+}
+if (nid >= 1000 && nid !== DAILY_ID && nid !== 88888) {
+  const single = buildSingleThemedQuiz(nid);
+  if (single) w.QUIZZES[nid] = single;
+}
+  const quiz = (w.QUIZZES || {})[String(levelId)];
+  if (!quiz) { w.__autoStartQuiz = false; returnToOrigin(true); return null; }
+ const $=(s)=>d.querySelector(s); 
+ const state={ order: [], index: 0, score: 0, correctCount: 0, answers: 0, timeLeft: 0, maxTime: 10, timerId: null, answered: false, finished: false, streak: 0, maxStreak: 0, fastestCorrect: 99, timeouts: 0, roundCollection: new Set(), used5050: false,
+  currentLevel: 1};
+   const homeScreen=$('#home-screen'); const quizScreen=$('#quiz-screen'); const resultScreen=$('#result-screen'); const lockScreen=$('#lock-screen'); const screens=[homeScreen, quizScreen, resultScreen, lockScreen]; const show=el=>screens.forEach(s=>s && s.classList.toggle('active', s===el)); const animalId = w.getAnimalId; const calcStars=percent=>{ if (percent >=90) return 3; if (percent >=70) return 2; if (percent >=50) return 1; return 0;
+  };
+const region = (w.REGIONS || []).find(r => r.id === quiz.regionKey);
+const badgeEl = $('#home-region');
+if (badgeEl) {
+if (region) {
+    badgeEl.textContent = (region.icon ? region.icon + ' ' : '') + w.L(region.name);
+    badgeEl.style.display = '';
+} else if (quiz.regionKey === 'daily') {
+    badgeEl.textContent = '🎁 ' + w.L({ ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' });
+    badgeEl.style.display = '';
+} else if (quiz.regionKey === 'tutorial') {
+    badgeEl.textContent = '🎓 ' + w.L({ ru: 'Обучение', en: 'Tutorial', tr: 'Öğretici' });
+    badgeEl.style.display = '';
+} else {
+    const nid = Number(levelId);
+    const themedLevel = (w.THEMED_LEVELS || []).find(l => Number(l.id) === nid);
+    const photoLevel  = (w.PHOTO_LEVELS  || []).find(l => Number(l.id) === nid);
+    if (themedLevel) {
+      badgeEl.textContent = '🎨 ' + w.L({ ru: 'Тематическая викторина', en: 'Themed quiz', tr: 'Tematik test' });
+      badgeEl.style.display = '';
+    } else if (photoLevel) {
+      badgeEl.textContent = '🎯 ' + w.L({ ru: 'Фото-викторина', en: 'Photo quiz', tr: 'Foto test' });
+      badgeEl.style.display = '';
+    } else {
+      badgeEl.textContent = '';
+      badgeEl.style.display = 'none';
+    }
+}
+}
+$('#home-title').textContent = quiz.sub ? w.L(quiz.sub) : '';
+const _nid = Number(levelId);
+const _lvl = (w.THEMED_LEVELS || []).find(l => Number(l.id) === _nid)
+          || (w.PHOTO_LEVELS  || []).find(l => Number(l.id) === _nid);
+const _emojiEl = $('#home-emoji');
+if (_emojiEl) {
+  if (_lvl && _lvl.icon) {
+    _emojiEl.textContent = _lvl.icon;
+  } else {
+    _emojiEl.innerHTML = (w.UiSprite && typeof w.UiSprite.html === 'function')
+      ? w.UiSprite.html('mountain', '1em')
+      : '⛰️';
+  }
+  _emojiEl.style.display = '';
+}
+$('#home-count').textContent = quiz.questions.length;
+  const starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  const starsCount = Math.max(0, Math.min(3, Math.floor(Number(starsMap[levelId]) || 0)));
+  const hStars = $('#home-stars');
+  if (hStars) {
+    hStars.textContent = '★'.repeat(starsCount) + '☆'.repeat(3 - starsCount);
+    hStars.classList.toggle('has-stars', starsCount > 0);
+  }
+  const mapUnlockedList = (w.__SYNCED__ && w.__SYNCED__.mapUnlocked) || Array.of(2001);
+  const isOpenedOnMap = mapUnlockedList.map(Number).includes(Number(levelId));
+  const gateUnlocked = isOpenedOnMap || (await w.Gating.isUnlocked(levelId));
+  if (!gateUnlocked) w.__autoStartQuiz = false;
+  if (w.__autoStartQuiz && gateUnlocked) {
+    show(quizScreen);
+  } else {
+    show(gateUnlocked ? homeScreen : lockScreen);
+  }
+$('#lock-watch-btn').onclick = () => {
+    showPurchaseModal(levelId, () => { show(homeScreen); });
+};
+  const shuffle = arr => {
+    const r = arr.slice();
+    for (let i = r.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [r[i], r[j]] = [r[j], r[i]];
+    }
+    return r;
+  };
+function startQuiz() {
+  if (Number(levelId) === DAILY_ID && MECH && MECH.daily && MECH.daily.completed) {
+    returnToOrigin(false);
+    return;
+  }
+  if (Number(levelId) >= 1000 && Number(levelId) !== 88888) {
+    const fresh = buildSingleThemedQuiz(Number(levelId));
+    if (fresh && Array.isArray(fresh.questions) && fresh.questions.length) {
+      quiz.questions = fresh.questions;
+    }
+  }
+  state.order = shuffle(quiz.questions.map((_, i) => i));
+  state.index = 0; state.score = 0; state.correctCount = 0; state.answers = 0;
+  state.answered = true;
+  state.finished = false; state.streak = 0;
+  state.maxStreak = 0; state.fastestCorrect = 99; state.timeouts = 0;
+  state.roundCollection = new Set();
+  let mapNodeNum = null;
+  if (w.__quizFromMap) {
+    const mapIdx = getMapLevels().findIndex(l => Number(l.id) === Number(levelId));
+    if (mapIdx !== -1) mapNodeNum = mapIdx + 1;
+  }
+  show(quizScreen);
+  renderBonusCounter();
+  renderQuestion(true);
+  state.answered = true;
+  const __isTut = Number(levelId) === 88888;
+  if (!__isTut && typeof w.showLevelSequence === 'function') {
+    w.showLevelSequence(mapNodeNum, () => {
+      state.answered = false;
+      if (isYandex) yandexGameplayStart();
+      startTimer();
+    });
+  } else {
+    state.answered = false;
+    if (isYandex) yandexGameplayStart();
+    startTimer();
+  }
+}
+function renderQuestion(skipTimer) {
+    state.answered = false;
+    const cur = quiz.questions[state.order[state.index]];
+ if (!cur){ if (state.index >=quiz.questions.length - 1) return finishQuiz(); state.index++; return renderQuestion();}
+    $('#counter').textContent = (state.index + 1) + ' / ' + quiz.questions.length;
+    $('#score-val').textContent = state.score;
+    $('#progress-fill').style.width = (state.index / quiz.questions.length * 100) + '%';
+    const imgEl = $('#question-img');
+    const txtEl = $('#question-text');
+    const box = $('#options');
+    if (!box) return;
+    box.innerHTML = '';
+    const isPhoto = quiz.mode === 'photo';
+    const bodyEl = d.querySelector('.quiz-body');
+    if (bodyEl) bodyEl.classList.toggle('photo-mode', isPhoto);
+    if (isPhoto) {
+      if (imgEl) { imgEl.hidden = true; imgEl.removeAttribute('src'); }
+      if (txtEl) { txtEl.hidden = false; txtEl.textContent = w.L(cur.name) || '—'; }
+      box.classList.add('photo-options');
+      box.classList.toggle('cols-2', (cur.images || []).length === 2);
+      if (!Array.isArray(cur.images) || cur.images.length === 0) {
+        console.warn('Photo question has no images');
+        state.answers++; state.timeouts++; return finishQuestion();
+      }
+ cur.images.forEach((src, i)=>{ const b=d.createElement('button'); b.type='button'; b.className='option photo-option'; b.dataset.i=i; const im=d.createElement('img'); im.src=src; im.alt='';
+im.onerror=function (){ this.style.opacity='.3'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾';};
+        b.appendChild(im);
+        b.addEventListener('click', () => selectOption(i));
+        box.appendChild(b);
+      });
+    } else {
+ if (txtEl){ txtEl.hidden=true; txtEl.textContent='';} if (imgEl){ imgEl.hidden=false; imgEl.style.opacity=''; imgEl.src=cur.img || ''; imgEl.alt=''; imgEl.onerror=function (){ this.style.opacity='.25'; this.style.background='linear-gradient(135deg,#ffe3ef 0%,#e6e1ff 100%)'; this.alt='🐾';};
+        imgEl.onload = function () { this.style.opacity = ''; };
+      }
+      box.classList.remove('photo-options', 'cols-2');
+      const opts = Array.isArray(cur.options) ? cur.options : [];
+      opts.forEach((opt, i) => {
+        const b = d.createElement('button');
+        b.type = 'button';
+        b.className = 'option';
+        b.textContent = w.L(opt) || '—';
+        b.dataset.i = i;
+        b.addEventListener('click', () => selectOption(i));
+        box.appendChild(b);
+      });
+    }
+    const desc = $('#description');
+    if (desc) { desc.hidden = true; desc.textContent = ''; }
+    const nb = $('#next-btn');
+ if (nb){ nb.hidden=true; nb.textContent=(state.index >=quiz.questions.length - 1) ? w.t('results') : w.t('next');}
+try{ const nextIdx=state.order[state.index + 1]; if (nextIdx !=null){ const nextQ=quiz.questions[nextIdx]; if (nextQ){ if (Array.isArray(nextQ.images)){ nextQ.images.forEach(src=>{ const im=new Image(); im.src=src;});} else if (nextQ.img){ const im=new Image(); im.src=nextQ.img;}}}} catch (e){}
+    state.used5050 = false;
+    state.maxTime = 10;
+    const hintBtn = $('#hint-btn');
+    if (hintBtn) hintBtn.disabled = (Number(levelId) === 88888);
+    if (!skipTimer) {
+      startTimer();
+    } else {
+      state.timeLeft = 10;
+      updateTimer();
+    }
+  }
+  function startTimer() {
+    stopTimer();
+    state.maxTime = 10;
+    state.timeLeft = 10;
+    updateTimer();
+    if (Number(levelId) === 88888) return;
+    state.timerId = setInterval(() => {
+      if (state.timeLeft <= 0) { stopTimer(); timeUp(); return; }
+      state.timeLeft--;
+      updateTimer();
+       if (state.timeLeft > 0 && state.timeLeft <= 3 && w.Sound && typeof w.Sound.playTick === 'function') {
+        w.Sound.playTick(state.timeLeft);
+      }
+      if (state.timeLeft <= 0) { stopTimer(); timeUp(); }
+    }, 1000);
+  }
+  function updateTimer() {
+    const maxT = Math.max(10, state.maxTime || 10);
+    const val = Math.max(0, Math.min(maxT, state.timeLeft));
+    const valEl = document.getElementById('timer-val');
+    const fillEl = document.getElementById('timer-fill');
+    const timerEl = document.getElementById('timer');
+    if (valEl) valEl.textContent = val;
+    if (fillEl) fillEl.style.width = (val / maxT) * 100 + '%';
+    if (timerEl) timerEl.classList.toggle('warning', val <= 5);
+  }
+  function stopTimer() { if (state.timerId) { clearInterval(state.timerId); state.timerId = null; } }
+  function selectOption(i) {
+    if (state.answered) return;
+    const clickedBtn = d.querySelector(`#options .option[data-i="${i}"]`);
+    if (clickedBtn && (clickedBtn.disabled || clickedBtn.classList.contains('disabled'))) return;
+    state.answered = true;
+    stopTimer();
+    const cur = quiz.questions[state.order[state.index]];
+    const correct = cur.answer;
+    const optCount = quiz.mode === 'photo' ? (Array.isArray(cur.images) ? cur.images.length : 0) : (Array.isArray(cur.options) ? cur.options.length : 0);
+    if (typeof correct !== 'number' || optCount === 0 || correct < 0 || correct >= optCount) {
+      console.warn('Invalid answer index:', correct);
+      state.answers++;
+      finishQuestion();
+      return;
+    }
+    const isRight = (i === correct);
+    Array.from(d.querySelectorAll('#options .option')).forEach(o => {
+      o.classList.add('disabled');
+      const idx = +o.dataset.i;
+      if (isRight && idx === correct) o.classList.add('correct');
+      else if (!isRight && idx === i) o.classList.add('wrong');
+    });
+    try { (i === correct) ? w.Sound.playCorrect() : w.Sound.playWrong(); } catch (e) {}
+if (i === correct) {
+  state.correctCount++;
+  playConfetti(getConfettiCount());
+  state.score++;
+  const __isTutorialQ = Number(levelId) === 88888;
+  const bonus = __isTutorialQ ? 0 : onCorrectAnswer();
+  if (bonus > 0) state.score += bonus;
+  $('#score-val').textContent = state.score;
+  if (!__isTutorialQ) {
+    const delta = Math.max(0, (Number(state.score) || 0) - (Number(state.creditedScore) || 0));
+    if (delta > 0) {
+      state.creditedScore = Number(state.score) || 0;
+      const prevTotal = Number((w.__SYNCED__ && w.__SYNCED__.total) != null ? w.__SYNCED__.total : w.score) || 0;
+      const nextTotal = prevTotal + delta;
+      if (w.__SYNCED__) w.__SYNCED__.total = nextTotal;
+      w.score = nextTotal;
+      if (typeof w.updateTotalScoreUI === 'function') w.updateTotalScoreUI(nextTotal);
+      storageSetTotal(nextTotal).catch(() => {});
+    }
+  }
+  const id = cur.animalId || animalId(cur.img || (cur.images && cur.images[cur.answer]) || '');
+  if (id && !__isTutorialQ) {
+    state.roundCollection.add(id);
+    if (w.__SYNCED__) {
+      if (!Array.isArray(w.__SYNCED__.collection)) w.__SYNCED__.collection = [];
+      if (!w.__SYNCED__.collection.includes(id)) {
+        w.__SYNCED__.collection.push(id);
+        w.storageSet('collection', w.__SYNCED__.collection).catch(() => {});
+      }
+    }
+  }
+  const timeSpent = Math.max(0, (state.maxTime || 10) - Math.max(0, state.timeLeft));
+  if (timeSpent < state.fastestCorrect) state.fastestCorrect = timeSpent;
+  state.streak++;
+  if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+} else state.streak = 0;
+       state.answers++;
+    finishQuestion(isRight);
+  }
+function timeUp() {
+  if (state.answered) return;
+  state.answered = true;
+  const cur = quiz.questions[state.order[state.index]];
+  const optCount = quiz.mode === 'photo'
+    ? (Array.isArray(cur && cur.images) ? cur.images.length : 0)
+    : (Array.isArray(cur && cur.options) ? cur.options.length : 0);
+  if (!cur || typeof cur.answer !== 'number' || optCount === 0 || cur.answer < 0 || cur.answer >= optCount) {
+    console.warn('Invalid answer index in timeUp');
+    state.answers++;
+    state.timeouts++;
+    state.streak = 0;
+    finishQuestion(false);
+    return;
+  }
+  Array.from(d.querySelectorAll('#options .option')).forEach(o => {
+    o.classList.add('disabled');
+  });
+  try { w.Sound.playWrong(); } catch (e) {}
+  state.answers++;
+  state.timeouts++;
+  state.streak = 0;
+  finishQuestion(false);
+}
+  function finishQuestion(isRight) {
+    const cur = quiz.questions[state.order[state.index]];
+    const dEl = $('#description');
+    if (dEl) {
+      if (isRight && cur && cur.description) {
+        dEl.textContent = w.L(cur.description);
+        dEl.hidden = false;
+      } else {
+        dEl.textContent = '';
+        dEl.hidden = true;
+      }
+    }
+    const hintBtn = $('#hint-btn');
+    if (hintBtn) hintBtn.disabled = true;
+    $('#next-btn').hidden = false;
+  }
+function nextQuestion() {
+  if (state.index >= quiz.questions.length - 1) return finishQuiz();
+  state.index++;
+  renderQuestion();
+}
+async function finishQuiz() {
+  if (state.finished) return;
+  state.finished = true;
+  const finishedState = state;
+  stopTimer();
+  try { w.Sound.playFanfare(); } catch (e) {}
+  show(resultScreen);
+  if (isYandex) yandexGameplayStop();
+  const confettiEl = d.querySelector('.result-confetti');
+  if (confettiEl) {
+    confettiEl.style.animation = 'none';
+    void confettiEl.offsetWidth;
+    confettiEl.style.animation = '';
+  }
+  const total = quiz.questions.length;
+  const pct = total > 0 ? Math.round((finishedState.correctCount / total) * 100) : 0;
+  const earnedStars = calcStars(pct);
+  $('#res-total').textContent = total;
+  $('#res-correct').textContent = finishedState.correctCount;
+  $('#res-wrong').textContent = finishedState.answers - finishedState.correctCount;
+  $('#res-percent').textContent = pct + '%';
+  const starsEl = $('#res-stars');
+  if (starsEl) {
+    starsEl.textContent = '★'.repeat(earnedStars) + '☆'.repeat(3 - earnedStars);
+    starsEl.classList.toggle('has-stars', earnedStars > 0);
+  }
+  const isTutorial = Number(levelId) === 88888;
+  if (isTutorial) return;
+  try {
+    await claimReadyQuests();
+    const [mapRaw, colRaw, totalRaw] = await Promise.all([
+      w.storageGet('stars'),
+      w.storageGet('collection'),
+      storageGetTotal()
+    ]);
+    let map = (mapRaw && typeof mapRaw === 'object' && !Array.isArray(mapRaw)) ? mapRaw : {};
+    let colList = Array.isArray(colRaw) ? colRaw : [];
+    let totalScore = (typeof totalRaw === 'number' && !isNaN(totalRaw)) ? totalRaw : 0;
+    const prevStars = Number(map[levelId]) || 0;
+    if (earnedStars > prevStars) map[levelId] = earnedStars;
+    finishedState.roundCollection.forEach(id => { if (!colList.includes(id)) colList.push(id); });
+    const remScore = Math.max(0, (Number(finishedState.score) || 0) - (Number(finishedState.creditedScore) || 0));
+    finishedState.creditedScore = Number(finishedState.score) || 0;
+    totalScore += remScore;
+    await Promise.all([
+      w.storageSet('stars', map),
+      w.storageSet('collection', colList),
+      storageSetTotal(totalScore)
+    ]);
+    if (w.__SYNCED__) {
+      w.__SYNCED__.stars = map;
+      w.__SYNCED__.collection = colList;
+      w.__SYNCED__.total = totalScore;
+    }
+    w.score = totalScore;
+    w.updateTotalScoreUI(totalScore);
+    if (isYandex && ysdk && ysdk.leaderboards && ysdkPlayer && typeof ysdkPlayer.isAuthorized === 'function' && ysdkPlayer.isAuthorized()) {
+      ysdk.leaderboards.setLeaderboardScore('bestscore', totalScore).catch(() => {});
+    }
+    await syncMaxMapLevel();
+    updateCategoriesBtnVisibility();
+  } catch (e) {
+    console.warn('finishQuiz save failed:', e);
+  }
+  try {
+    if (w.Ach && w.Ach.recordRound) {
+      await w.Ach.recordRound({
+        levelId,
+        score: finishedState.score,
+        correctCount: finishedState.correctCount,
+        total,
+        percent: pct,
+        mistakes: finishedState.answers - finishedState.correctCount,
+        fastestCorrect: finishedState.fastestCorrect,
+        maxStreak: finishedState.maxStreak,
+        timeouts: finishedState.timeouts
+      });
+    }
+  } catch (e) {}
+  onQuizFinish({
+    levelId, score: finishedState.score, correctCount: finishedState.correctCount,
+    total, percent: pct, maxStreak: finishedState.maxStreak
+  });
+  if (__interstitialDelayTimer) clearTimeout(__interstitialDelayTimer);
+__interstitialDelayTimer = setTimeout(() => {
+  __interstitialDelayTimer = null;
+  try { w.showInterstitial(); } catch (e) {}
+}, 400);
+}
+ $('#start-btn').onclick = () => withLock(startQuiz);
+  $('#next-btn').onclick = () => withLock(nextQuestion);
+$('#quit-btn').onclick = () => {
+    stopTimer();
+    if (typeof w.hideLevelSequence === 'function') w.hideLevelSequence();
+    if (isYandex) yandexGameplayStop();
+    returnToOrigin(false);
+};
+  $('#restart-btn').onclick = () => withLock(startQuiz);
+$('#home-btn').onclick = () => {
+  returnToOrigin(false);
+};
+if (w.__autoStartQuiz) {
+  w.__autoStartQuiz = false;
+  startQuiz();
+}
+let __pausedTimeLeft = null;
+ function pauseQuiz(){ if (!state.timerId) return; if (state.finished || state.answered) return; __pausedTimeLeft=state.timeLeft; stopTimer();} 
+ function resumeQuiz(){ if (__pausedTimeLeft==null) return; if (state.finished || state.answered) return; const remain=__pausedTimeLeft; __pausedTimeLeft=null; state.timeLeft=remain; updateTimer(); state.timerId=setInterval(()=>{ if (state.timeLeft <=0){ stopTimer(); timeUp(); return;} state.timeLeft--; updateTimer(); if (state.timeLeft > 0 && state.timeLeft <= 3 && w.Sound && typeof w.Sound.playTick === 'function') { w.Sound.playTick(state.timeLeft); } if (state.timeLeft <=0){ stopTimer(); timeUp();}}, 1000);} 
+const hintModal = d.getElementById('hintModal');
+const hintBtn = $('#hint-btn');
+const hint5050Btn = d.getElementById('hint5050Btn');
+const hintTimeBtn = d.getElementById('hintTimeBtn');
+const hintCloseBtn = d.getElementById('hintModalClose');
+w.__hintAdInProgress = false;
+function closeHintModal(shouldResume) {
+  if (w.__hintAdInProgress) return;
+  if (hintModal) hintModal.classList.remove('show');
+  if (shouldResume) resumeQuiz();
+}
+if (hintBtn && hintModal) {
+  hintBtn.onclick = () => {
+    if (state.answered || state.finished || w.__hintAdInProgress) return;
+    pauseQuiz();
+    const optsCount = d.querySelectorAll('#options .option:not(.disabled)').length;
+    if (hint5050Btn) hint5050Btn.disabled = state.used5050 || optsCount <= 2;
+    if (hintTimeBtn) hintTimeBtn.disabled = Number(levelId) === 88888;
+    hintModal.classList.add('show');
+  };
+}
+if (hintCloseBtn) hintCloseBtn.onclick = () => closeHintModal(true);
+if (hintModal) {
+  hintModal.onclick = (e) => {
+    if (e.target === hintModal) closeHintModal(true);
+  };
+}
+async function handleUseHint(type, btn) {
+  if (!btn || btn.disabled || w.__hintAdInProgress) return;
+  w.__hintAdInProgress = true;
+  if (hint5050Btn) hint5050Btn.disabled = true;
+  if (hintTimeBtn) hintTimeBtn.disabled = true;
+  if (hintCloseBtn) hintCloseBtn.disabled = true;
+  const prevHtml = btn.innerHTML;
+  btn.textContent = w.t('loadingAd');
+  let ok = false;
+  try {
+    ok = await w.showRewardedAd();
+  } catch (e) {
+    ok = false;
+  } finally {
+    w.__hintAdInProgress = false;
+    if (hintCloseBtn) hintCloseBtn.disabled = false;
+  }
+  if (btn.isConnected) btn.innerHTML = prevHtml;
+  if (!ok) {
+    const optsCount = d.querySelectorAll('#options .option:not(.disabled)').length;
+    if (hint5050Btn) hint5050Btn.disabled = state.used5050 || optsCount <= 2;
+    if (hintTimeBtn) hintTimeBtn.disabled = Number(levelId) === 88888;
+    return;
+  }
+  if (type === '5050') {
+    const cur = quiz.questions[state.order[state.index]];
+    const correctIdx = cur ? cur.answer : -1;
+    const wrongBtns = Array.from(d.querySelectorAll('#options .option:not(.disabled)'))
+      .filter(el => Number(el.dataset.i) !== correctIdx);
+    shuffle(wrongBtns).slice(0, 2).forEach(el => {
+      el.classList.add('wrong', 'disabled', 'hint-eliminated');
+      el.disabled = true;
+      el.setAttribute('aria-disabled', 'true');
+    });
+    state.used5050 = true;
+  }
+ else if (type === 'time') {
+    const baseRemain = __pausedTimeLeft != null ? __pausedTimeLeft : state.timeLeft;
+    const nextRemain = baseRemain + 20;
+    state.maxTime = Math.max(state.maxTime || 10, nextRemain);
+    if (__pausedTimeLeft != null) {
+      __pausedTimeLeft = nextRemain;
+    } else {
+      state.timeLeft = nextRemain;
+    }
+    updateTimer();
+  }
+  if (w.Sound && typeof w.Sound.playHint === 'function') {
+    w.Sound.playHint();
+  }
+  closeHintModal(true);
+}
+if (hint5050Btn) hint5050Btn.onclick = () => handleUseHint('5050', hint5050Btn);
+if (hintTimeBtn) hintTimeBtn.onclick = () => handleUseHint('time', hintTimeBtn);
+function cleanup(){
+  stopTimer();
+  if (typeof w.hideLevelSequence === 'function') w.hideLevelSequence();
+  if (w.__currentQuizCleanup===cleanup) w.__currentQuizCleanup=null;
+  if (w.__currentQuizPause===pauseQuiz) w.__currentQuizPause=null;
+  if (w.__currentQuizResume===resumeQuiz) w.__currentQuizResume=null;
+}
+ w.__currentQuizCleanup=cleanup; w.__currentQuizPause=pauseQuiz; w.__currentQuizResume=resumeQuiz; return cleanup;}
+async function renderCollection() {
+  const body = d.getElementById('col-body');
+  if (!body) return;
+const animalId = w.getAnimalId;
+  const list = asArray(w.__SYNCED__ && w.__SYNCED__.collection);
+  const collected = new Set(Array.isArray(list) ? list.map(String) : []);
+  body.innerHTML = '';
+  const seen = new Set();  
+  let opened = 0;
+  (w.REGIONS || []).forEach(region => {
+    const animals = [];
+    region.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (!qz) return;
+      qz.questions.forEach(qn => {
+        const id = animalId(qn.img);
+        if (!id || seen.has(id)) return;  
+        seen.add(id);
+        animals.push({
+          id,
+          img: qn.img,
+          name: w.L(qn.options[qn.answer]),
+          desc: w.L(qn.description)
+        });
+      });
+    });
+    if (!animals.length) return;          
+    animals.forEach(a => { if (collected.has(a.id)) opened++; });
+    const sec = d.createElement('section');
+    sec.className = 'col-region';
+    sec.innerHTML = '<h2 class="region-title">' + region.icon + ' ' + escapeHtml(w.L(region.name)) + '</h2>';
+    const grid = d.createElement('div');
+    grid.className = 'collection-grid';
+    animals.forEach(a => {
+      const isOpen = collected.has(a.id);
+      const item = d.createElement('button');
+      item.type = 'button';
+      item.className = 'collection-item' + (isOpen ? ' unlocked' : ' locked');
+      if (isOpen) {
+ item.innerHTML = '<img src="' + a.img + '" alt="' + escapeHtml(a.name) +
+  '" loading="lazy" onerror="this.style.opacity=\'.3\';this.style.background=\'linear-gradient(135deg,#ffe3ef,#e6e1ff)\'">';
+        item.addEventListener('click', () => openColModal(a));
+      } else {
+item.innerHTML = '<span class="col-lock"><span class="emoji-icon" aria-hidden="true">' + ((w.UiSprite && w.UiSprite.has('locked')) ? w.UiSprite.html('locked') : '🔒') + '</span></span>';
+        item.disabled = true;
+      }
+      grid.appendChild(item);
+    });
+    sec.appendChild(grid);
+    body.appendChild(sec);
+  });
+  const counter = d.getElementById('col-counter');
+  if (counter) counter.textContent = opened + ' / ' + seen.size;
+}
+function openColModal(a) {
+  const m = d.getElementById('col-modal');
+  if (!m) return;
+  d.getElementById('modal-img').src = a.img;
+  d.getElementById('modal-img').alt = a.name;
+  d.getElementById('modal-title').textContent = a.name;
+  d.getElementById('modal-desc').textContent = a.desc;
+  m.classList.add('show');
+}
+function closeColModal() { const m = d.getElementById('col-modal'); if (m) m.classList.remove('show'); }
+let currentPage = null;
+function refreshLocalization() {
+  applyStaticI18n();
+  if (w.Sound && w.Sound.apply) w.Sound.apply();
+  if (w.Theme && w.Theme.apply) w.Theme.apply();
+  renderDailyBadge();
+  renderProgress();
+  renderBonusCounter();
+  renderQuestsIfOpen();
+  if (currentPage === 'index') renderIndex();
+  else if (currentPage === 'map') renderMap();
+  else if (currentPage === 'collection') renderCollection();
+  const igm = d.getElementById('igames-modal');
+  if (igm && igm.classList.contains('show')) renderOtherGames();
+}
+async function renderOtherGames() {
+  const grid = d.getElementById('games-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  if (isYandex) {
+    let games = [];
+    try { games = await w.getAllGames(); } catch (e) {}
+    if (!games.length) {
+      try {
+        const g = await w.getGameByID(535101);
+        if (g) games.push(g);
+      } catch (e) {}
+    }
+    if (!games.length) {
+      grid.innerHTML = '<p class="modal-text">' + w.t('otherGamesEmpty') + '</p>';
+      return;
+    }
+    games.forEach(g => {
+      const a = d.createElement('button');
+      a.type = 'button';
+      a.className = 'game-card';
+      a.addEventListener('click', () => window.open(g.url, '_blank'));
+      const iconHtml = g.iconURL ? '<img class="game-icon" src="' + g.iconURL + '" alt="" loading="lazy">' : '<span class="emoji">🎲</span>';
+      a.innerHTML = iconHtml + '<span class="name">' + escapeHtml(g.title || '') + '</span>';
+      grid.appendChild(a);
+    });
+    return;
+  }
+function renderCard(opts) {
+    const a = d.createElement('button');
+    a.type = 'button';
+    a.className = 'game-card';
+    a.addEventListener('click', () => {
+      const vkPlatform = (P.launchParams && P.launchParams.vk_platform) || '';
+      if (vkPlatform === 'desktop_web') {
+        window.open(opts.url, '_blank');
+        return;
+      }
+      if (isVK || isOK) {
+        vkSend('VKWebAppOpenURL', { url: opts.url }, 5000)
+          .then(res => { if (!res) window.open(opts.url, '_blank'); })
+          .catch(() => window.open(opts.url, '_blank'));
+      } else {
+        window.open(opts.url, '_blank');
+      }
+    });
+    const iconHtml = opts.iconURL ? '<img class="game-icon" src="' + opts.iconURL + '" alt="" loading="lazy">' : (opts.emoji ? '<span class="emoji">' + opts.emoji + '</span>' : '');
+    a.innerHTML = iconHtml + '<span class="name">' + escapeHtml(opts.title || '') + '</span>';
+    grid.appendChild(a);
+}
+const VK_GAMES = [
+  { href: 'https://vk.com/app54634418', emoji: '💭', name: { ru: 'Словарекс', en: 'Slovarex', tr: 'Slovarex' },               iconURL: 'games/slovarex.jpg' },
+  { href: 'https://vk.com/app54636699', emoji: '🍎',name: { ru: 'Найди слова', en: 'Find Words', tr: 'Kelime Bul' },               iconURL: 'games/naydi-slova.jpg' },
+  { href: 'https://vk.ru/app51399364',  emoji: '9️', name: { ru: 'Судоку для самых умных', en: 'Smart Sudoku', tr: 'Akıllı Sudoku' },iconURL: 'games/sudoku.jpg' },
+  { href: 'https://vk.com/app54620141', emoji: '🧩', name: { ru: 'ТЕТРА', en: 'TETRA', tr: 'TETRA' },               iconURL: 'games/tetra.jpg' },
+  { href: 'https://vk.com/app54659768', emoji: '🕹️', name: { ru: 'Тетра Дарк', en: 'Tetra Dark', tr: 'Tetra Dark' },           iconURL: 'games/tetra-dark.jpg' },
+  { href: 'https://vk.com/app54678489', emoji: '🎨', name: { ru: 'Раскраска', en: 'Coloring Book', tr: 'Boyama Kitabı' },              iconURL: 'games/raskraska.jpg' }
+];
+const OK_GAMES = [
+        { href: 'https://ok.ru/app/512005443175', emoji: '💭', name: { ru: 'Словарекс', en: 'Slovarex', tr: 'Slovarex' },                 iconURL: 'games/slovarex.jpg' },
+            { href: "https://ok.ru/app/512004943223", emoji: "🍎", name: { ru: 'Найди слова', en: 'Find Words', tr: 'Kelime Bul' },          iconURL: "games/naydi-slova.jpg" },
+        { href: 'https://ok.ru/app/512005458660', emoji: '🕹️', name: { ru: 'Тетра Дарк', en: 'Tetra Dark', tr: 'Tetra Dark' },          iconURL: 'games/tetra-dark.jpg'},
+        { href: 'https://ok.ru/app/512005390848', emoji: '9️', name: { ru: 'Судоку для самых умных', en: 'Smart Sudoku', tr: 'Akıllı Sudoku' }, iconURL: 'games/sudoku.jpg' },
+        { href:"https://ok.ru/app/512004963709",  emoji:"🎨",name: { ru: 'Раскраска', en: 'Coloring Book', tr: 'Boyama Kitabı' },                 iconURL: 'games/raskraska.jpg' },
+        { href: 'https://ok.ru/app/512005107616', emoji: '🧩', name: { ru: 'ТЕТРА', en: 'TETRA', tr: 'TETRA' },                iconURL: 'games/tetra.jpg' }
+];
+const list = isOK ? OK_GAMES : VK_GAMES;
+list.forEach(g => {
+  renderCard({
+    url: g.href,
+    title: w.L(g.name),
+    emoji: g.emoji,
+    iconURL: g.iconURL || null
+  });
+});
+}
+function bindGlobalUI() {
+  d.addEventListener('click', function (e) {
+    const link = e.target.closest('a[href^="#/"], button[data-href^="#/"]');
+    if (!link) return;
+    e.preventDefault();
+    const raw = link.getAttribute('href') || link.dataset.href;
+    const h = raw.replace(/^#\/?/, '');
+    const parts = h.split('/').filter(Boolean);
+    if (!parts.length) {
+      if (currentPage === 'collection') {
+        const curRoute = parseHash();
+        const fallback = isLevel92Completed() ? 'index' : 'map';
+        const target = (curRoute && curRoute.fromPage && curRoute.fromPage !== 'collection')
+          ? curRoute.fromPage
+          : fallback;
+        pushRoute({
+          name: target,
+          startMenuOpen: Boolean(curRoute && curRoute.fromStartMenu)
+        });
+        return;
+      }
+      return pushRoute({ name: isLevel92Completed() ? 'index' : 'map' });
+    }
+    if (parts[0] === 'quiz') {
+      const id = parseInt(parts[1], 10);
+      const levelId = isNaN(id) || id < 1 ? 1 : id;
+      const fromPage = (currentPage && currentPage !== 'quiz')
+        ? currentPage
+        : (isLevel92Completed() ? 'index' : 'map');
+      const pageIndex = d.getElementById('page-index');
+      if (currentPage === 'index' && pageIndex && !pageIndex.classList.contains('page-exit')) {
+        pageIndex.classList.add('page-exit');
+        setTimeout(() => {
+          pageIndex.classList.remove('page-exit');
+          pushRoute({ name: 'quiz', levelId, fromPage: 'index' });
+        }, 720);
+        return;
+      }
+      return pushRoute({ name: 'quiz', levelId, fromPage });
+    }
+    if (parts[0] === 'collection') {
+      const startEl = d.getElementById('startScreen');
+      const fromStartMenu = Boolean(startEl && !startEl.classList.contains('hidden'));
+      return pushRoute({
+        name: 'collection',
+        fromPage: currentPage || (isLevel92Completed() ? 'index' : 'map'),
+        fromStartMenu
+      });
+    }
+    pushRoute({ name: isLevel92Completed() ? 'index' : 'map' });
+  });
+  const achModal = d.getElementById('ach-modal');
+  if (achModal) {
+    achModal.querySelectorAll('.modal-close, .modal-back, [data-act="close"]')
+      .forEach(b => b.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeAchModal();
+      }));
+    achModal.addEventListener('click', e => { if (e.target === achModal) closeAchModal(); });
+  }
+  const colModal = d.getElementById('col-modal');
+  if (colModal) {
+    colModal.querySelectorAll('.modal-close, .modal-back')
+      .forEach(b => b.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeColModal();
+      }));
+    colModal.addEventListener('click', e => { if (e.target === colModal) closeColModal(); });
+  }
+  const authModal = d.getElementById('auth-modal');
+  if (authModal) {
+    authModal.querySelectorAll('.modal-close, [data-act="close"]')
+      .forEach(b => b.addEventListener('click', closeAuthModal));
+    authModal.addEventListener('click', e => { if (e.target === authModal) closeAuthModal(); });
+  }
+  const yandexLbModal = d.getElementById('yandex-leaderboard-modal');
+  if (yandexLbModal) {
+    yandexLbModal.querySelectorAll('.modal-close')
+      .forEach(b => b.addEventListener('click', () => yandexLbModal.classList.remove('show')));
+    yandexLbModal.addEventListener('click', e => { if (e.target === yandexLbModal) yandexLbModal.classList.remove('show'); });
+  }
+  const igamesModal = d.getElementById('igames-modal');
+  if (igamesModal) {
+    igamesModal.querySelectorAll('.modal-close, .modal-back')
+      .forEach(b => b.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeOtherGamesModal();
+      }));
+    igamesModal.addEventListener('click', e => { if (e.target === igamesModal) closeOtherGamesModal(); });
+  }
+  const langModal = d.getElementById('langModal');
+  if (langModal) {
+    const closeLang = () => langModal.classList.remove('show');
+    const closeBtn = d.getElementById('langModalClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeLang);
+    langModal.addEventListener('click', e => { if (e.target === langModal) closeLang(); });
+    langModal.querySelectorAll('.lang-option-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setGameLanguage(btn.dataset.lang, true);
+        closeLang();
+      });
+    });
+  }
+const mapDailyBtn = d.getElementById('map-daily-btn');
+if (mapDailyBtn) {
+mapDailyBtn.addEventListener('click', startDailyChallenge);
+}
+const mapQuestsBtn = d.getElementById('map-quests-btn');
+if (mapQuestsBtn) {
+mapQuestsBtn.addEventListener('click', openQuestsModal);
+}
+  d.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeAchModal();
+      closeColModal();
+      closeAuthModal();
+      closeOtherGamesModal();
+      const mapUnlockAd = d.getElementById('mapUnlockAdModal');
+if (mapUnlockAd) mapUnlockAd.classList.remove('show');
+      if (yandexLbModal) yandexLbModal.classList.remove('show');
+      const mapLocked = d.getElementById('mapLockedModal');
+      if (mapLocked) mapLocked.classList.remove('show');
+      const hintM = d.getElementById('hintModal');
+      if (hintM && hintM.classList.contains('show') && !w.__hintAdInProgress) {
+        hintM.classList.remove('show');
+        if (typeof w.__currentQuizResume === 'function') w.__currentQuizResume();
+      }
+    }
+  });
+}
+function pauseAllAudioOnBlur() {
+  try {
+    if (bgAudio && !bgAudio.paused) {
+      bgAudio.__pausedByVisibility = true;
+      bgAudio.pause();
+    }
+    if (audioCtx && audioCtx.state === 'running') {
+      audioCtx.suspend().catch(() => {});
+    }
+  } catch (e) {}
+}
+function resumeAllAudioOnFocus() {
+  try {
+    if (d.visibilityState === 'hidden') return;
+    if (audioCtx && audioCtx.state === 'suspended' && canPlaySfx()) {
+      audioCtx.resume().catch(() => {});
+    }
+    if (bgAudio && bgAudio.__pausedByVisibility) {
+      bgAudio.__pausedByVisibility = false;
+      if (canPlayMusic()) {
+        bgAudio.play().catch(() => {});
+      }
+    }
+  } catch (e) {}
+}
+d.addEventListener('visibilitychange', () => {
+  if (d.visibilityState === 'hidden') {
+    pauseAllAudioOnBlur();
+    if (typeof w.__currentQuizPause === 'function') {
+      try { w.__currentQuizPause(); } catch (e) {}
+    }
+  } else if (d.visibilityState === 'visible') {
+    resumeAllAudioOnFocus();
+    if (isVK || isOK) showBanner(true);
+    if (typeof w.__currentQuizResume === 'function') {
+      try { w.__currentQuizResume(); } catch (e) {}
+    }
+    if (w.__appReady && (isVK || isOK || isYandex)) {
+      (async () => {
+        try {
+          await w.Theme.load();
+          const remoteSound = await remoteGet('sound_mode');
+          if (remoteSound !== null && [0, 1, 2].includes(Number(remoteSound)) && Number(remoteSound) !== soundMode) {
+            soundMode = Number(remoteSound);
+            safeLocalSet(storageKey('sound_mode'), String(soundMode));
+            applySoundState();
+          }
+          await syncAllOnStart();
+          await loadMechanicsCloud();
+          mergeTempUnlocks();
+          renderDailyBadge();
+          renderProgress();
+          if (currentPage === 'index') await renderIndex();
+          else if (currentPage === 'map') {
+            ['mapUnlockAdModal', 'mapLockedModal'].forEach(mid => {
+              const m = d.getElementById(mid);
+              if (m) m.classList.remove('show');
+            });
+            await renderMap();
+          }
+          else if (currentPage === 'collection') await renderCollection();
+        } catch (e) {}
+      })();
+    }
+  }
+});
+w.addEventListener('blur', pauseAllAudioOnBlur);
+w.addEventListener('focus', resumeAllAudioOnFocus);
+const PAGE_IDS = ['index', 'quiz', 'collection', 'map'];
+let currentPageCleanup = null;
+function parseHash() {
+  if (window.history.state && window.history.state.vkRoute) {
+    return window.history.state.vkRoute;
+  }
+  const h = (location.hash || '#/').replace(/^#\/?/, '');
+  const parts = h.split('/').filter(Boolean);
+  if (parts[0] === 'map') return { name: 'map' };
+  if (!parts.length) return { name: 'index' };
+  if (parts[0] === 'quiz') {
+    const id = parseInt(parts[1], 10);
+    return { name: 'quiz', levelId: isNaN(id) || id < 1 ? 1 : id };
+  }
+  if (parts[0] === 'collection') return { name: 'collection' };
+  return { name: 'index' };
+}
+function pushRoute(route, replace) {
+  const nextRoute = Object.assign({ startMenuOpen: false }, route);
+  const state = { vkRoute: nextRoute };
+  if (replace) window.history.replaceState(state, '', location.pathname + location.search);
+  else window.history.pushState(state, '', location.pathname + location.search);
+  navigate();
+}
+w.pushRoute = pushRoute;
+function withTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout ' + label + ' after ' + ms + 'ms')), ms))
+  ]);
+}
+async function navigate() {
+  if (typeof currentPageCleanup === 'function') {
+    try { currentPageCleanup(); } catch (e) {}
+    currentPageCleanup = null;
+  }
+  [
+    'mapUnlockAdModal', 'mapLockedModal', 'extrasUnlockModal', 'hintModal',
+    'ach-modal', 'col-modal', 'igames-modal', 'extrasQuestsModal',
+    'extrasHelpModal', 'auth-modal', 'yandex-leaderboard-modal'
+  ].forEach(mid => {
+    const m = d.getElementById(mid);
+    if (m) m.classList.remove('show');
+  });
+  d.querySelectorAll('.hero-more').forEach(menu => menu.setAttribute('hidden', ''));
+  d.querySelectorAll('[id$="MoreToggle"]').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
+  const route = parseHash();
+  if (route.name !== 'index' || route.startMenuOpen) {
+    d.querySelectorAll('#regions .collapsible.open').forEach(sec => sec.classList.remove('open'));
+    safeLocalSet(storageKey('cat_open'), '{}');
+  }
+  const startEl = d.getElementById('startScreen');
+  if (!window.history.state || !window.history.state.vkRoute) {
+    route.startMenuOpen = Boolean(startEl && !startEl.classList.contains('hidden'));
+    window.history.replaceState({ vkRoute: route }, '', location.pathname + location.search);
+  }
+  if (route.startMenuOpen) {
+    if (w.StartMenu && typeof w.StartMenu.show === 'function') {
+      w.StartMenu.show();
+    } else if (startEl) {
+      startEl.classList.remove('hidden', 'start-exit');
+    }
+  } else if (startEl && !startEl.classList.contains('hidden') && !startEl.classList.contains('start-exit')) {
+    startEl.classList.add('hidden');
+  }
+  PAGE_IDS.forEach(p => {
+    const el = d.getElementById('page-' + p);
+    if (el) el.classList.toggle('active', p === route.name);
+  });
+  currentPage = route.name;
+  if (route.name !== 'quiz' && isYandex) yandexGameplayStop();
+  try {
+    if (route.name === 'index') {
+      await renderIndex();
+    } else if (route.name === 'map') {
+      await renderMap();
+    } else if (route.name === 'quiz') {
+      const cleanup = await renderQuiz(route.levelId);
+      currentPageCleanup = cleanup;
+    } else if (route.name === 'collection') {
+      await renderCollection();
+    }
+  } catch (e) { console.warn('navigate error', e); }
+  try { window.scrollTo(0, 0); } catch (e) {}
+  renderBonusCounter();
+}const DAILY_ID = 99999;
+const SURPRISE_PERIOD = 15;
+const MECH_KEY = storageKey('quiz_extras_v1');
+const MECH = {
+  purchased: {},
+  tempUnlocks: {},
+  daily: { date: '', completed: false, streak: 0, lastCompletedDate: '' },
+  quests: { date: '', quests: [] },
+  surprise: { counter: 0 }
+};
+const QUESTS_POOL = [
+  { id: 'solve5',   text: { ru: 'Ответь на 5 вопросов',   en: 'Answer 5 questions',     tr: '5 soruyu yanıtla' },      stat: 'solve',   target: 5,  reward: 3 },
+  { id: 'solve10',  text: { ru: 'Ответь на 10 вопросов',  en: 'Answer 10 questions',    tr: '10 soruyu yanıtla' },     stat: 'solve',   target: 10, reward: 4 },
+  { id: 'solve15',  text: { ru: 'Ответь на 15 вопросов',  en: 'Answer 15 questions',    tr: '15 soruyu yanıtla' },     stat: 'solve',   target: 15, reward: 5 },
+  { id: 'quiz2',    text: { ru: 'Пройди 2 викторины',     en: 'Complete 2 quizzes',     tr: '2 testi tamamla' },       stat: 'quiz',    target: 2,  reward: 2 },
+  { id: 'quiz3',    text: { ru: 'Пройди 3 викторины',     en: 'Complete 3 quizzes',     tr: '3 testi tamamla' },       stat: 'quiz',    target: 3,  reward: 3 },
+  { id: 'stars1',   text: { ru: 'Получи 3 звезды',        en: 'Earn 3 stars',           tr: '3 yıldız kazan' },        stat: 'stars3',  target: 1,  reward: 3 },
+  { id: 'perfect1', text: { ru: 'Пройди без ошибок',      en: 'Finish with no mistakes', tr: 'Hatasız tamamla' },       stat: 'perfect', target: 1,  reward: 3 },
+  { id: 'streak5',  text: { ru: '5 правильных подряд',    en: '5 correct in a row',     tr: 'Art arda 5 doğru' },      stat: 'streak',  target: 5,  reward: 3 },
+  { id: 'streak10', text: { ru: '10 правильных подряд',   en: '10 correct in a row',    tr: 'Art arda 10 doğru' },     stat: 'streak',  target: 10, reward: 5 }
+];
+async function boot() {
+  w.addEventListener('error', function (e) {
+    console.error('Global error:', e && e.message, e && e.filename, e && e.lineno);
+  });
+  w.addEventListener('unhandledrejection', function (e) {
+    console.error('Unhandled promise rejection:', e && e.reason);
+    e.preventDefault();
+  });
+  try {
+    try {
+      const savedMode = safeLocalGet(storageKey('sound_mode'));
+      if (savedMode !== null && [0, 1, 2].includes(Number(savedMode))) {
+        soundMode = Number(savedMode);
+      } else {
+        const localSound = safeLocalGet(storageKey('sound_on'));
+        soundMode = (localSound === null || JSON.parse(localSound) !== false) ? 1 : 0;
+      }
+    } catch (e) { soundMode = 1; }
+    attachAudioUnlock();
+    attachSfxToUI();
+    applyStaticI18n();
+    applyTheme();
+    applySoundState();
+    if (isVK || isOK) {
+      try {
+        if (window.__vkBridgeReady) await window.__vkBridgeReady;
+      } catch (e) {}
+      if (window.vkBridge) {
+        await initVK();
+        try {
+          window.vkBridge.subscribe(function (event) {
+            const type = event && event.detail && event.detail.type;
+if (type === 'VKWebAppViewHide') {
+  console.log('VK ViewHide');
+  isGamePaused = true;
+  stopBgMusic();
+  if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
+}
+if (type === 'VKWebAppViewRestore') {
+  console.log('VK ViewRestore');
+  isGamePaused = false;
+  if (canPlayMusic()) startBgMusic();
+  if (w.__currentQuizResume) { try { w.__currentQuizResume(); } catch (e) {} }
+}
+
+          });
+        } catch (e) { console.warn('VK subscribe failed', e); }
+      } else {
+        console.warn('VK Bridge unavailable — running in fallback mode');
+      }
+    } else {
+      const hasYa = isYandex || typeof YaGames !== 'undefined' || w.__YANDEX_SDK_LOADED__ === true;
+      if (hasYa) {
+        if (!isYandex) {
+          isYandex = true;
+          platform = 'yandex';
+          P.isYandex = true;
+          P.platform = 'yandex';
+          P.isStandalone = false;
+          cls.toggle('is-yandex', true);
+          cls.toggle('is-standalone', false);
+          console.log('Yandex detected at runtime');
+        }
+        await initYandex();
+      }
+      w.addEventListener('yandex-sdk-ready', async () => {
+        if (isYandex) return;
+        isYandex = true;
+        platform = 'yandex';
+        P.isYandex = true;
+        P.platform = 'yandex';
+        P.isStandalone = false;
+        cls.toggle('is-yandex', true);
+        cls.toggle('is-standalone', false);
+        console.log('Yandex detected (late load)');
+        try { await initYandex(); } catch (e) { console.warn(e); }
+        try { await syncAllOnStart(); } catch (e) {}
+        try { await updateAuthButton(); } catch (e) {}
+        try { await updateShortcutButton(); } catch (e) {}
+        try { renderIndex(); } catch (e) {}
+          if (w.__appReady) trySendLoadingReady();
+      }, { once: true });
+    }
+    await w.Theme.load();
+    try {
+      const remoteSound = await remoteGet('sound_mode');
+      if (remoteSound !== null && [0, 1, 2].includes(Number(remoteSound))) {
+        soundMode = Number(remoteSound);
+        safeLocalSet(storageKey('sound_mode'), String(soundMode));
+        applySoundState();
+      }
+    } catch (e) {}
+    await syncAllOnStart();
+    try { await w.Ach.loadMetrics(); } catch (e) {}
+    try { await loadUnlocked(); } catch (e) {}
+    if (w.Ach && w.Ach.recordVisit) { try { await w.Ach.recordVisit(); } catch (e) {} }
+    try { await updateAuthButton(); } catch (e) {}
+    try { await updateShortcutButton(); } catch (e) {}
+       bindGlobalUI();
+    initMechanics();
+  } catch (e) { console.warn('Boot error:', e); }
+  const initRoute = {
+    name: isLevel92Completed() ? 'index' : 'map',
+    startMenuOpen: true
+  };
+  window.history.replaceState({ vkRoute: initRoute }, '', location.pathname + location.search);
+  w.addEventListener('popstate', navigate);
+  try { await withTimeout(navigate(), 5000, 'navigate'); }
+  catch (e) { console.warn('Navigate timed out / failed:', e); }
+  try { hideLoadingAndShowMenu(); } catch (e) { console.error('hideLoading failed:', e); }
+}
+const __bootWatchdogTimer = setTimeout(() => {
+  if (d.body.classList.contains('app-ready') && d.querySelector('.page.active')) return;
+  console.warn('Boot watchdog: forcing loader hide / home page');
+  try {
+    hideLoadingAndShowMenu();
+    if (!d.querySelector('.page.active')) {
+      const idx = d.getElementById('page-index');
+      if (idx) idx.classList.add('active');
+      try { currentPage = 'index'; } catch (_) {}
+    }
+    try { Promise.resolve(renderIndex()).catch(e => console.warn('watchdog renderIndex:', e)); } catch (e) {}
+  } catch (e) {
+    console.error('Watchdog error:', e);
+  }
+}, 15000);
+w.addEventListener('pagehide', () => {
+    clearAdTimers();
+  if (isYandex) yandexGameplayStop();
+  if (soundMode > 0) { try { Sound.stopBg(); } catch (e) {} }
+  if (w.__currentQuizPause) { try { w.__currentQuizPause(); } catch (e) {} }
+});
+if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', boot);
+else boot();
+w.VKApp = { storageGet, storageSet, showRewardedAd, showInterstitial, infr, toast, openAuthModal, closeAuthModal, doYandexAuth, openOtherGamesModal, closeOtherGamesModal };
+function loadMechanics() {
+  try {
+    const raw = safeLocalGet(MECH_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return;
+    if (data.purchased && typeof data.purchased === 'object') MECH.purchased = data.purchased;
+    if (data.tempUnlocks && typeof data.tempUnlocks === 'object') MECH.tempUnlocks = data.tempUnlocks;
+    if (data.daily && typeof data.daily === 'object') MECH.daily = data.daily;
+    if (data.quests && typeof data.quests === 'object') MECH.quests = data.quests;
+    if (data.surprise && typeof data.surprise === 'object') MECH.surprise = data.surprise;
+  } catch (e) {}
+}
+function saveMechanics() {
+  try { safeLocalSet(MECH_KEY, JSON.stringify(MECH)); } catch (e) {}
+}
+async function loadMechanicsCloud() {
+  try {
+    const res = await remoteGetWithStatus('quiz_extras_cloud');
+    if (!res.ok) return;
+    const cloud = res.value;
+    if (!cloud || typeof cloud !== 'object') {
+      if (Object.keys(MECH.purchased).length || Object.keys(MECH.tempUnlocks).length) {
+        saveMechanicsCloud();
+      }
+      return;
+    }
+    const beforeStr = JSON.stringify({ p: MECH.purchased, u: MECH.tempUnlocks, d: MECH.daily });
+    if (cloud.purchased && typeof cloud.purchased === 'object') {
+      for (const k in cloud.purchased) if (cloud.purchased[k]) MECH.purchased[k] = true;
+    }
+    if (cloud.tempUnlocks && typeof cloud.tempUnlocks === 'object') {
+      const now = Date.now();
+      for (const k in cloud.tempUnlocks) {
+        if (cloud.tempUnlocks[k] > now && (cloud.tempUnlocks[k] > (MECH.tempUnlocks[k] || 0))) {
+          MECH.tempUnlocks[k] = cloud.tempUnlocks[k];
+        }
+      }
+    }
+    if (cloud.daily && typeof cloud.daily === 'object') {
+      const cd = cloud.daily;
+      if (cd.lastCompletedDate && (!MECH.daily.lastCompletedDate || cd.lastCompletedDate > MECH.daily.lastCompletedDate)) {
+        MECH.daily.lastCompletedDate = cd.lastCompletedDate;
+      }
+      if ((cd.streak || 0) > (MECH.daily.streak || 0)) MECH.daily.streak = cd.streak;
+      if (cd.date === todayStr() && cd.completed) MECH.daily.completed = true;
+    }
+    if (cloud.quests && typeof cloud.quests === 'object' && cloud.quests.date === todayStr()) {
+      MECH.quests = cloud.quests;
+    }
+    safeLocalSet(MECH_KEY, JSON.stringify(MECH));
+    const afterStr = JSON.stringify({ p: MECH.purchased, u: MECH.tempUnlocks, d: MECH.daily });
+    const cloudStr = JSON.stringify({ p: cloud.purchased || {}, u: cloud.tempUnlocks || {}, d: cloud.daily || {} });
+    if (afterStr !== cloudStr || beforeStr !== cloudStr) {
+      saveMechanicsCloud();
+    }
+  } catch (e) {}
+}
+function saveMechanicsCloud() {
+  if (!w.storageSet) return;
+  try {
+    w.storageSet('quiz_extras_cloud', {
+      purchased: MECH.purchased,
+      tempUnlocks: MECH.tempUnlocks,
+      daily: MECH.daily,
+      quests: MECH.quests
+    }).catch(function () {});
+  } catch (e) {}
+}
+function ptsIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('points', size || '1em') : '🍎';
+}
+function tvIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('tv', size || '1em') : '📺';
+}
+function lockedIcon(size) {
+  return (w.UiSprite && typeof w.UiSprite.html === 'function') ? w.UiSprite.html('locked', size || '1em') : '🔒';
+}
+function getLevelPrice(levelId) {
+  const nid = Number(levelId);
+    const themedFull = (w.THEMED_LEVELS || []).find(l => Number(l.id) === nid && l.isFullSet);
+  if (themedFull) return Math.max(100, (themedFull.count || 0) * 3);
+  const photoFull = (w.PHOTO_LEVELS || []).find(l => Number(l.id) === nid && l.isFullSet);
+  if (photoFull) return Math.max(100, (photoFull.count || 0) * 3);
+  for (const reg of (w.REGIONS || [])) {
+    const regFull = (reg.levels || []).find(l => Number(l.id) === nid && l.isFullSet);
+    if (regFull) return Math.max(100, (regFull.count || 0) * 3);
+  }
+  let idx = 0;
+  for (const reg of (w.REGIONS || [])) {
+    for (const lvl of reg.levels) {
+      if (Number(lvl.id) === nid) return 40 + idx * 10;          
+      idx++;
+    }
+  }
+  for (let i = 0; i < (w.THEMED_LEVELS || []).length; i++) {
+    if (Number(w.THEMED_LEVELS[i].id) === nid) return 32 + Math.floor(i / 4) * 9;  
+  }
+  for (let i = 0; i < (w.PHOTO_LEVELS || []).length; i++) {
+    if (Number(w.PHOTO_LEVELS[i].id) === nid) return 26 + Math.floor(i / 7) * 10;   
+  }
+  return 40;
+}
+function getLevelName(levelId) {
+  const nid = Number(levelId);
+  for (const reg of (w.REGIONS || [])) {
+    for (const lvl of reg.levels) {
+      if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+    }
+  }
+  for (const lvl of (w.THEMED_LEVELS || [])) {
+    if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+  }
+  for (const lvl of (w.PHOTO_LEVELS || [])) {
+    if (Number(lvl.id) === nid) return w.L ? w.L(lvl.name) : lvl.name;
+  }
+  return w.t('categoryFallback');
+}
+function isPurchasedLevel(levelId) { return !!MECH.purchased[Number(levelId)]; }
+function isTempUnlockedLevel(levelId) {
+  const nid = Number(levelId);
+  const exp = MECH.tempUnlocks[nid];
+  if (!exp) return false;
+  if (exp <= Date.now()) { delete MECH.tempUnlocks[nid]; saveMechanics(); return false; }
+  return true;
+}
+async function purchaseLevel(levelId) {
+  const nid = Number(levelId);
+  if (isPurchasedLevel(nid)) return true;
+  const price = getLevelPrice(nid);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  if (total < price) { toast(w.t('notEnoughBerries')); return false; }
+  const newTotal = total - price;
+await storageSetTotal(newTotal);
+  if (w.__SYNCED__) w.__SYNCED__.total = newTotal;
+  if (w.updateTotalScoreUI) w.updateTotalScoreUI(newTotal);
+  MECH.purchased[nid] = true;
+  saveMechanics();
+  saveMechanicsCloud();
+  try { if (w.Gating && w.Gating.unlockLevel) await w.Gating.unlockLevel(nid); } catch (e) {}
+  if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid) === -1) {
+    w.__SYNCED__.unlocked.push(nid);
+  }
+   playOgg('buy_cat');
+  toast(w.t('catOpenedForever'));
+  if (w.Ach && typeof w.Ach.checkAndUnlock === 'function') {
+    await w.Ach.checkAndUnlock(false);
+  }
+  return true;
+}
+async function unlockLevelViaAd(levelId) {
+  if (!w.showRewardedAd) return false;
+  try { const ok = await w.showRewardedAd(); if (!ok) return false; } catch (e) { return false; }
+  const nid = Number(levelId);
+  MECH.tempUnlocks[nid] = Date.now() + 24 * 60 * 60 * 1000;
+  saveMechanics();
+  saveMechanicsCloud();
+  if (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked) && w.__SYNCED__.unlocked.indexOf(nid) === -1) {
+    w.__SYNCED__.unlocked.push(nid);
+  }
+   playOgg('buy_cat');
+  toast(w.t('catOpened24h'));
+  if (w.Ach && typeof w.Ach.checkAndUnlock === 'function') {
+    await w.Ach.checkAndUnlock(false);
+  }
+  return true;
+}
+function showPurchaseModal(levelId, onUnlocked) {
+  const nid = Number(levelId);
+  if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)) {
+    if (typeof onUnlocked === 'function') onUnlocked(nid);
+    return;
+  }
+  const alreadyUnlocked = (w.__SYNCED__ && Array.isArray(w.__SYNCED__.unlocked))
+    ? w.__SYNCED__.unlocked.map(Number).includes(nid)
+    : false;
+  if (alreadyUnlocked) {
+    if (typeof onUnlocked === 'function') onUnlocked(nid);
+    return;
+  }
+  const price = getLevelPrice(nid);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  const canBuy = total >= price;
+  const name = getLevelName(nid);
+  let modal = d.getElementById('extrasUnlockModal');
+  if (!modal) {
+    modal = d.createElement('div');
+    modal.id = 'extrasUnlockModal';
+    modal.className = 'modal';
+    d.body.appendChild(modal);
+  }
+  modal.innerHTML =
+    '<div class="modal-content">' +
+      '<button class="modal-close" data-act="close" aria-label="close">×</button>' +
+      '<h2>' + lockedIcon('1.5em') + ' ' + escapeHtml(name) + escapeHtml(w.t('catClosedSuffix')) + '</h2>' +
+      '<p>' + w.t('buyModalDesc').replace('{price}', price) + '</p>' +
+       '<div class="extras-modal-actions">' +
+        '<button class="btn btn-primary" data-act="buy"' + (canBuy ? '' : ' disabled') + '>' +
+         ' <span>' + escapeHtml(w.t('buyForBtn').replace('{price}', price)) + '</span>' +  ptsIcon('1.2em') +
+        '</button>' +
+        '<button class="btn btn-secondary" data-act="ad">' +
+          tvIcon('1.2em') + ' ' + escapeHtml(w.t('watch24hBtn')) +
+        '</button>' +
+        '<button class="btn btn-ghost" data-act="cancel">' + escapeHtml(w.t('cancelBtn')) + '</button>' +
+      '</div>' +
+    '</div>';
+  modal.classList.add('show');
+  const close = () => modal.classList.remove('show');
+  modal.querySelector('[data-act="close"]').onclick = close;
+  modal.querySelector('[data-act="cancel"]').onclick = close;
+  modal.onclick = (e) => { if (e.target === modal) close(); };
+  const buyBtn = modal.querySelector('[data-act="buy"]');
+  if (buyBtn) buyBtn.onclick = async () => {
+    if (!canBuy || buyBtn.disabled) return;
+    buyBtn.disabled = true;
+    try {
+      if (await purchaseLevel(nid)) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
+    } finally {
+      if (buyBtn.isConnected) buyBtn.disabled = false;
+    }
+  };
+  const adBtn = modal.querySelector('[data-act="ad"]');
+  if (adBtn) adBtn.onclick = async (e) => {
+    const btn = e.currentTarget;
+    if (btn.disabled) return;
+    btn.disabled = true;
+    const prev = btn.innerHTML;
+    btn.textContent = w.t('loadingAd');
+    const ok = await unlockLevelViaAd(nid);
+    if (btn.isConnected) {
+      btn.disabled = false;
+      btn.innerHTML = prev;
+    }
+    if (ok) { close(); if (typeof onUnlocked === 'function') onUnlocked(nid); }
+  };
+}
+function hashDate(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h;
+}
+function ensureQuests() {
+  const t = todayStr();
+  if (MECH.quests.date === t && Array.isArray(MECH.quests.quests) && MECH.quests.quests.length) return;
+  let seed = hashDate(t + '_quests');
+  const pool = QUESTS_POOL.slice();
+  for (let i = pool.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    const j = seed % (i + 1);
+    const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  MECH.quests = { date: t, quests: pool.slice(0, 3).map(q => Object.assign({}, q, { progress: 0, claimed: false })) };
+  saveMechanics();
+}
+function updateQuestProgress(stat, amount) {
+  ensureQuests();
+  let changed = false;
+  for (const q of MECH.quests.quests) {
+    if (q.stat !== stat || q.claimed) continue;
+    if (q.progress >= q.target) continue;
+    if (stat === 'streak') {
+      const nv = Math.min(q.target, Math.max(q.progress, Number(amount) || 0));
+      if (nv > q.progress) { q.progress = nv; changed = true; }
+    } else {
+      const nv = Math.min(q.target, q.progress + (Number(amount) || 0));
+      if (nv > q.progress) { q.progress = nv; changed = true; }
+    }
+  }
+  if (changed) { saveMechanics(); renderQuestsIfOpen(); }
+}
+let __claimingQuests = false;
+async function claimReadyQuests() {
+  if (__claimingQuests) return 0;
+  const ready = MECH.quests.quests.filter(q => !q.claimed && q.progress >= q.target);
+  if (!ready.length) return 0;
+  __claimingQuests = true;
+  try {
+    const earned = ready.reduce((sum, q) => sum + q.reward, 0);
+    const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+    const newTotal = total + earned;
+    await storageSetTotal(newTotal);
+    if (w.__SYNCED__) w.__SYNCED__.total = newTotal;
+    if (w.updateTotalScoreUI) w.updateTotalScoreUI(newTotal);
+    ready.forEach(q => { q.claimed = true; });
+    saveMechanics();
+    saveMechanicsCloud();
+    toast(w.t('questRewardToast').replace('{n}', earned));
+    return earned;
+  } finally {
+    __claimingQuests = false;
+  }
+}
+function renderQuestsList() {
+  const list = d.getElementById('extrasQuestsList');
+  if (!list) return;
+  ensureQuests();
+  list.innerHTML = MECH.quests.quests.map(q => {
+    const poolDef = QUESTS_POOL.find(p => p.id === q.id);
+    const qText = w.L((poolDef && poolDef.text) || q.text);
+    const done = q.progress >= q.target;
+    const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+    return '<div class="extras-quest' + (done ? ' extras-quest--done' : '') + '">' +
+      '<div class="extras-quest__head">' +
+        '<span class="extras-quest__text">' + escapeHtml(qText) + '</span>' +
+        '<span class="extras-quest__reward">' + ptsIcon('1em') + ' +' + q.reward + '</span>' +
+      '</div>' +
+      '<div class="extras-quest__bar"><div class="extras-quest__fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="extras-quest__prog">' + (done ? escapeHtml(w.t('questDone')) : q.progress + ' / ' + q.target) + '</div>' +
+    '</div>';
+  }).join('');
+}
+function renderQuestsIfOpen() {
+  const m = d.getElementById('extrasQuestsModal');
+  if (m && m.classList.contains('show')) renderQuestsList();
+}
+function openQuestsModal() {
+  renderQuestsList();
+  const m = d.getElementById('extrasQuestsModal');
+  if (m) {
+    if (m.parentElement !== d.body) d.body.appendChild(m);
+    m.classList.add('show');
+  }
+}
+function ensureDaily() {
+  const t = todayStr();
+  if (MECH.daily.date !== t) { MECH.daily.date = t; MECH.daily.completed = false; }
+  if (MECH.daily.lastCompletedDate) {
+    const y = yesterdayStr();
+    if (MECH.daily.lastCompletedDate !== t && MECH.daily.lastCompletedDate !== y) MECH.daily.streak = 0;
+  }
+  saveMechanics();
+}
+function collectAllQuestions() {
+  const all = [];
+  const seen = new Set();
+  (w.REGIONS || []).forEach(reg => {
+    reg.levels.forEach(lvl => {
+      const qz = (w.QUIZZES || {})[lvl.id];
+      if (qz && Array.isArray(qz.questions)) {
+        qz.questions.forEach(qn => {
+          const aid = w.getAnimalId ? w.getAnimalId(qn.img) : (qn.img || '');
+          if (aid && !seen.has(aid)) { seen.add(aid); all.push(qn); }
+        });
+      }
+    });
+  });
+  return all;
+}
+function getDailyQuestions() {
+  const all = collectAllQuestions();
+  if (!all.length) return [];
+  let seed = hashDate(todayStr());
+  const arr = all.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    const j = seed % (i + 1);
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr.slice(0, Math.min(10, arr.length));
+}
+function startDailyChallenge() {
+  ensureDaily();
+  if (MECH.daily.completed) { toast(w.t('dailyAlready')); return; }
+  const qs = getDailyQuestions();
+  if (!qs.length) { toast(w.t('dailyUnavail')); return; }
+  w.QUIZZES[DAILY_ID] = {
+    regionKey: 'daily',
+    sub: { ru: 'Вызов дня', en: 'Daily challenge', tr: 'Günlük meydan okuma' },
+    questions: qs
+  };
+  const fromPage = (currentPage && currentPage !== 'quiz')
+    ? currentPage
+    : (isLevel92Completed() ? 'index' : 'map');
+  const pageIndex = d.getElementById('page-index');
+  if (currentPage === 'index' && pageIndex && !pageIndex.classList.contains('page-exit')) {
+    pageIndex.classList.add('page-exit');
+    setTimeout(() => {
+      pageIndex.classList.remove('page-exit');
+      pushRoute({ name: 'quiz', levelId: DAILY_ID, fromPage: 'index' });
+    }, 720);
+    return;
+  }
+  pushRoute({ name: 'quiz', levelId: DAILY_ID, fromPage });
+}
+function completeDaily() {
+  ensureDaily();
+  if (MECH.daily.completed) return;
+  MECH.daily.completed = true;
+  MECH.daily.streak = (MECH.daily.streak || 0) + 1;
+  MECH.daily.lastCompletedDate = todayStr();
+  saveMechanics();
+  saveMechanicsCloud();
+  toast(w.t('dailyCompletedToast'));
+  renderDailyBadge();
+}
+function renderDailyBadge() {
+  ensureDaily();
+  ['extrasDailyBtn', 'map-daily-btn'].forEach(btnId => {
+    const btn = d.getElementById(btnId);
+    if (!btn) return;
+    if (MECH.daily.completed) {
+      btn.textContent = w.t('dailyDone');
+      btn.classList.add('extras-daily-btn--done');
+    } else {
+      btn.innerHTML = '<span class="extras-daily-btn__icon">🎁</span> ' + escapeHtml(w.t('dailyTitle'));
+      btn.classList.remove('extras-daily-btn--done');
+    }
+  });
+  const streakEl = d.getElementById('extrasDailyStreak');
+  if (streakEl) {
+    const s = Number(MECH.daily.streak) || 0;
+    if (s > 0) {
+      if (w.LANG === 'en') {
+        streakEl.textContent = 'Streak: ' + s + (s === 1 ? ' day in a row' : ' days in a row');
+      } else if (w.LANG === 'tr') {
+        streakEl.textContent = 'Seri: art arda ' + s + ' gün';
+      } else {
+        let word = 'дней';
+        const m100 = s % 100, m10 = s % 10;
+        if (m100 < 11 || m100 > 14) {
+          if (m10 === 1) word = 'день';
+          else if (m10 >= 2 && m10 <= 4) word = 'дня';
+        }
+        streakEl.textContent = 'Серия: ' + s + ' ' + word + ' подряд';
+      }
+      streakEl.style.display = 'block';
+    } else streakEl.style.display = 'none';
+  }
+}
+function onCorrectAnswer() {
+  MECH.surprise.counter = (MECH.surprise.counter || 0) + 1;
+  let bonus = 0;
+  if (MECH.surprise.counter % SURPRISE_PERIOD === 0) {
+    bonus = 1;
+    toast(w.t('bonusToast'));
+  }
+  saveMechanics();
+  updateQuestProgress('solve', 1);
+  claimReadyQuests(); 
+  renderBonusCounter();
+  return bonus;
+}
+function renderBonusCounter() {
+  const el = d.getElementById('extrasBonusCounter');
+  if (!el) return;
+  const quizScreen = d.getElementById('quiz-screen');
+  const isQuizActive = quizScreen && quizScreen.classList.contains('active');
+  if (!isQuizActive) { el.style.display = 'none'; return; }
+  const c = MECH.surprise.counter || 0;
+  const left = SURPRISE_PERIOD - (c % SURPRISE_PERIOD);
+  el.style.display = 'inline-flex';
+  el.textContent = w.t('bonusCounter').replace('{n}', left);
+}
+function findNextLockedLevel() {
+  const unlocked = new Set((w.__SYNCED__ && w.__SYNCED__.unlocked) || []);
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  let best = null;
+  const consider = (lvl) => {
+    const nid = Number(lvl.id);
+    if (unlocked.has(nid)) return;
+    if (isPurchasedLevel(nid) || isTempUnlockedLevel(nid)) return;
+    const price = getLevelPrice(nid);
+const need = Math.max(0, price - total);
+if (!best || price < best.price) best = { level: lvl, price, need, levelId: nid };
+  };
+  (w.REGIONS || []).forEach(reg => reg.levels.forEach(consider));
+  (w.THEMED_LEVELS || []).forEach(consider);
+  (w.PHOTO_LEVELS || []).forEach(consider);
+  return best;
+}
+function renderProgress() {
+  const el = d.getElementById('extrasProgress');
+  if (!el) return;
+  const next = findNextLockedLevel();
+  if (!next) { el.style.display = 'none'; return; }
+  el.style.display = 'flex';
+  const name = w.L ? w.L(next.level.name) : next.level.name;
+  const total = Number(w.__SYNCED__ && w.__SYNCED__.total) || 0;
+  const ready = next.need <= 0;
+  el.innerHTML =
+    '<span class="extras-progress__label">' + lockedIcon('1.1em') + ' ' + escapeHtml(name) + '</span>' +
+    '<span class="extras-progress__right">' + ptsIcon('1.1em') + ' ' +
+    (ready
+      ? escapeHtml(w.t('progressReady').replace('{price}', next.price))
+      : escapeHtml(w.t('progressNeed').replace('{total}', total).replace('{price}', next.price).replace('{need}', next.need))) +
+    '</span>';
+}
+function openHelpModal() {
+  const m = d.getElementById('extrasHelpModal');
+  if (m) {
+    if (m.parentElement !== d.body) d.body.appendChild(m);
+    m.classList.add('show');
+  }
+}
+function onQuizFinish(data) {
+  if (!data) return;
+  if (Number(data.levelId) === DAILY_ID) {
+    if (Number(data.total) > 0 && Number(data.correctCount) === Number(data.total)) {
+      completeDaily();
+    } else {
+      toast(w.t('dailyNeedAll'));
+    }
+  }
+  updateQuestProgress('quiz', 1);
+  if (Number(data.percent) >= 90) updateQuestProgress('stars3', 1);
+  if (Number(data.total) > 0 && Number(data.correctCount) === Number(data.total)) updateQuestProgress('perfect', 1);
+  if (Number(data.maxStreak) > 0) updateQuestProgress('streak', Number(data.maxStreak));
+  claimReadyQuests().then(() => renderProgress());
+  renderDailyBadge();
+}
+function mergeTempUnlocks() {
+  if (!w.__SYNCED__) return;
+  if (!Array.isArray(w.__SYNCED__.unlocked)) w.__SYNCED__.unlocked = [];
+  const now = Date.now();
+  let changed = false;
+  for (const nid in MECH.tempUnlocks) {
+    if (MECH.tempUnlocks[nid] > now) {
+      if (w.__SYNCED__.unlocked.indexOf(Number(nid)) === -1) w.__SYNCED__.unlocked.push(Number(nid));
+    } else { delete MECH.tempUnlocks[nid]; changed = true; }
+  }
+  if (changed) saveMechanics();
+}
+const _oggCache = {};
+['levelup', 'buy_cat', 'menu_select'].forEach(name => {
+  try {
+    const a = new Audio('sounds/' + name + '.ogg');
+    a.preload = 'auto';
+    _oggCache[name] = a;
+  } catch (e) {}
+});
+function playOgg(name) {
+  if (!canPlaySfx()) return;
+  try {
+    const base = _oggCache[name];
+    if (!base) return;
+    const inst = base.cloneNode();
+    inst.volume = 0.8;
+    inst.play().catch(() => {});
+  } catch (e) {}
+}
+let _deviceTier = null;
+function getDeviceTier() {
+    if (_deviceTier !== null) return _deviceTier;
+    const ua = navigator.userAgent || '';
+    const isMobileUA = /Mobi|Android|iPhone|iPad|iPod/i.test(ua);
+    const isNarrow   = window.innerWidth < 768;
+    const isMobile   = isMobileUA || isNarrow;
+    const cores = navigator.hardwareConcurrency || 0;
+    const ram   = navigator.deviceMemory || 0; 
+    const weakCPU = cores > 0 && cores <= 2;
+    const lowRAM  = ram   > 0 && ram   <= 2;
+    if (isMobile && (weakCPU || lowRAM)) _deviceTier = 'weak';
+    else if (isMobile)                   _deviceTier = 'mobile';
+    else                                 _deviceTier = 'desktop';
+    return _deviceTier;
+}
+w.playOgg = playOgg;
+function getConfettiCount() {
+    const tier = (typeof getDeviceTier === 'function') ? getDeviceTier() : 'desktop';
+    if (tier === 'weak')   return 7;
+    if (tier === 'mobile') return 12;
+    return 22;
+}
+function playConfetti(count) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!count || count <= 0) return;
+    const oldLayer = document.querySelector('.confetti-layer');
+    if (oldLayer) oldLayer.remove();
+    const isWeak = (typeof getDeviceTier === 'function') && getDeviceTier() === 'weak';
+    const layer = document.createElement('div');
+    layer.className = 'confetti-layer';
+    const frag = document.createDocumentFragment();
+    const colors = ['#667eea','#764ba2','#10b981','#f59e0b','#ef4444','#4a9eff','#43a047'];
+    for (let i = 0; i < count; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        c.style.background = colors[i % colors.length];
+        c.style.left = (5 + Math.random() * 90) + '%';
+        c.style.animationDelay = (Math.random() * 0.2) + 's';
+        c.style.animationDuration = (1.3 + Math.random() * 0.6) + 's';
+        c.style.setProperty('--rot', isWeak ? '0deg' : (Math.floor(Math.random() * 720 - 360) + 'deg'));
+        c.style.setProperty('--drift', (Math.random() * 40 - 20) + 'px');
+        frag.appendChild(c);
+    }
+    layer.appendChild(frag);
+    document.body.appendChild(layer);
+    setTimeout(() => {
+        if (layer.parentNode) layer.remove();
+    }, 2400);
+}
+function initMechanics() {
+const MAXLVL_KEY = 'maxlvl';
+let maxReachedLevel = 1;
+async function loadMaxLevel() {
+  const saved = await storageGet(MAXLVL_KEY);
+  maxReachedLevel = Math.max(1, Number(saved) || 1);
+  if (window.StartMenu) window.StartMenu.updateStats();
+  return maxReachedLevel;
+}
+async function updateMaxLevel(lvlNum) {
+  const n = Number(lvlNum) || 1;
+  if (n > maxReachedLevel) {
+    maxReachedLevel = n;
+    await storageSet(MAXLVL_KEY, maxReachedLevel);
+    if (window.StartMenu && typeof window.StartMenu.updateStats === 'function') {
+      window.StartMenu.updateStats();
+    }
+  }
+}
+let _levelSeq = 0;
+let _levelSeqTimer = null;
+function showLevelSequence(level, cb) {
+    const ov = document.getElementById('levelOverlay');
+    const box = document.getElementById('levelOverlayBox');
+    if (!ov || !box) { cb(); return; }
+    if (_levelSeqTimer) {
+        clearTimeout(_levelSeqTimer);
+        _levelSeqTimer = null;
+    }
+    if (ov.parentElement !== document.body) {
+        document.body.appendChild(ov);
+    }
+    const seq = ++_levelSeq;
+    const hasLevel = level != null && Number(level) > 0;
+    const steps = hasLevel
+        ? ['<div class="level-overlay__line">' + escapeHtml(w.t('levelWord')) + '</div><div class="level-overlay__line">' + level + '</div>', '3', '2', '1']
+        : ['3', '2', '1'];
+    let i = 0;
+    clearLevelDeco(ov);
+    spawnLevelDeco(ov);
+    ov.classList.add('show');
+    (function next() {
+        if (seq !== _levelSeq) return;
+        if (i >= steps.length) {
+            _levelSeqTimer = null;
+            ov.classList.remove('show');
+            clearLevelDeco(ov);
+            cb();
+            return;
+        }
+        const isTitleStep = hasLevel && i === 0;
+        box.innerHTML = isTitleStep ? steps[0] : '<div class="level-overlay__line">' + steps[i] + '</div>';
+        box.style.animation = 'none';
+        void box.offsetWidth;
+        box.style.animation = '';
+        if (typeof playOgg === 'function') {
+            playOgg(isTitleStep ? 'levelup' : 'menu_select');
+        }
+        _levelSeqTimer = setTimeout(next, isTitleStep ? 1800 : 700);
+        i++;
+    })();
+}
+function hideLevelSequence() {
+    _levelSeq++;
+    if (_levelSeqTimer) {
+        clearTimeout(_levelSeqTimer);
+        _levelSeqTimer = null;
+    }
+    const ov = document.getElementById('levelOverlay');
+    if (ov) {
+        ov.classList.remove('show');
+        clearLevelDeco(ov);
+    }
+}
+function clearLevelDeco(ov) {
+if (!ov) return;
+ov.querySelectorAll('.level-overlay__deco').forEach(function (el) { el.remove(); });
+}
+function spawnLevelDeco(ov) {
+    if (!ov) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var tier = (typeof getDeviceTier === 'function') ? getDeviceTier() : 'desktop';
+    var isMobile = (tier === 'mobile' || tier === 'weak');
+    var items = [
+        { type: 'leaf',  dx: -95, dy: 68, s: .9  },
+        { type: 'star',  dx: -58, dy: 84, s: .85 },
+        { type: 'berry', dx: -20, dy: 92, s: 1   },
+        { type: 'berry', dx:  20, dy: 92, s: .85 },
+        { type: 'star',  dx:  58, dy: 84, s: .85 },
+        { type: 'leaf',  dx:  95, dy: 68, s: .9  }
+    ];
+    items.forEach(function (it, i) {
+        var el = document.createElement('div');
+        el.className = 'start-deco start-deco--' + it.type + (isMobile ? '' : ' start-deco-float') + ' level-overlay__deco';
+        el.style.left = 'calc(50% + ' + it.dx + 'px)';
+        el.style.top  = 'calc(50% + ' + it.dy + 'px)';
+        el.style.transform = 'translate(-50%, -50%) scale(' + it.s + ')';
+        if (!isMobile) {
+            el.style.animationDelay = (i * .2) + 's';
+        }
+        el.style.zIndex = '1';
+        ov.appendChild(el);
+    });
+}
+function createGameDeco() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('.game-deco').forEach(function (el) { el.remove(); });
+    [
+        { type: 'cloud', x: 8, y: 12, s: 1 }, { type: 'cloud', x: 78, y: 8, s: .8 }, { type: 'cloud', x: 85, y: 70, s: .7 },
+        { type: 'star',  x: 15, y: 70, s: 1 }, { type: 'star',  x: 90, y: 30, s: .8 }, { type: 'star',  x: 5, y: 45, s: .6 },
+        { type: 'leaf',  x: 20, y: 85, s: 1 }, { type: 'leaf',  x: 72, y: 88, s: .9 },
+        { type: 'berry', x: 30, y: 15, s: 1 }, { type: 'berry', x: 65, y: 18, s: .8 }, { type: 'berry', x: 92, y: 55, s: .7 }
+    ].forEach(function (it, i) {
+        var el = document.createElement('div');
+        el.className = 'start-deco start-deco--' + it.type + ' start-deco-float game-deco';
+        el.style.left = it.x + '%';
+        el.style.top = it.y + '%';
+        el.style.transform = 'scale(' + it.s + ')';
+        el.style.animationDelay = (i * .3) + 's';
+        document.body.appendChild(el);
+    });
+}
+w.showLevelSequence = showLevelSequence;
+w.hideLevelSequence = hideLevelSequence;
+w.updateMaxLevel = updateMaxLevel;
+loadMaxLevel();
+createGameDeco();
+window.startRandomGame = function (skipIntro) {
+  var unlocked = (window.__SYNCED__ && window.__SYNCED__.unlocked) || new Array();
+  var available = new Array();
+  for (var i = 0; i < unlocked.length; i++) {
+    var n = Number(unlocked[i]);
+    if (n > 0 && n < 1000 && window.QUIZZES[String(n)]) available.push(n);
+  }
+  if (!available.length) available = new Array(1);
+  var pick = available[Math.floor(Math.random() * available.length)];
+  if (skipIntro) {
+    w.__autoStartQuiz = true;
+  }
+  pushRoute({ name: 'quiz', levelId: pick });
+};
+window.startMapGame = function (skipIntro) {
+  var mapUnlocked = (window.__SYNCED__ && window.__SYNCED__.mapUnlocked) || new Array(2001);
+  var mapUnlockedSet = new Set(mapUnlocked.map(Number));
+  var starsMap = asObject(w.__SYNCED__ && w.__SYNCED__.stars);
+  var mapLevels = getMapLevels();
+  var lastIdx = 0;
+  mapLevels.forEach(function (lvl, idx) {
+    if (mapUnlockedSet.has(Number(lvl.id))) {
+      lastIdx = idx;
+    }
+  });
+  var curLvl = mapLevels[lastIdx] || { id: 2001 };
+  var targetLevelId = Number(curLvl.id);
+  var curStars = Math.floor(Number(starsMap[targetLevelId]) || 0);
+  var nextLvl = (lastIdx + 1 < mapLevels.length) ? mapLevels[lastIdx + 1] : null;
+  var nextPreUnlocked = nextLvl && !mapUnlockedSet.has(Number(nextLvl.id)) && curStars >= 2;
+  if (nextPreUnlocked) {
+    pushRoute({ name: 'map' });
+    setTimeout(function () {
+      var tut = d.getElementById('extrasTutOverlay');
+      if (tut && tut.style.display !== 'none') return;
+      showMapUnlockAdModal(nextLvl, lastIdx + 1);
+    }, 120);
+    return;
+  }
+  if (skipIntro) {
+    w.__autoStartQuiz = true;
+  }
+  w.__quizFromMap = true;
+  pushRoute({ name: 'quiz', levelId: targetLevelId, fromPage: 'map' });
+};
+  loadMechanics();
+   claimReadyQuests();
+  ensureQuests();
+  ensureDaily();
+  renderDailyBadge();
+if (window.StartMenu && window.StartMenu.init) window.StartMenu.init(); updateCategoriesBtnVisibility();
+['menuHomeBtn', 'mapMenuHomeBtn'].forEach(btnId => {
+  const btn = d.getElementById(btnId);
+  if (btn) {
+    btn.addEventListener('click', () => {
+      pushRoute({
+        name: currentPage || (isLevel92Completed() ? 'index' : 'map'),
+        startMenuOpen: true
+      });
+    });
+  }
+});
+  loadMechanicsCloud().then(() => {
+        ensureQuests();
+    ensureDaily();
+     claimReadyQuests();
+    renderDailyBadge();
+    renderProgress();
+    mergeTempUnlocks();
+    if (currentPage === 'index') { try { renderIndex(); } catch (e) {} }
+  });
+  const dailyBtn = d.getElementById('extrasDailyBtn');
+  if (dailyBtn) dailyBtn.onclick = startDailyChallenge;
+  const questsBtn = d.getElementById('extrasQuestsBtn');
+  if (questsBtn) questsBtn.onclick = openQuestsModal;
+  ['extrasHelpBtn', 'mapHelpBtn'].forEach(btnId => {
+    const btn = d.getElementById(btnId);
+    if (btn) btn.onclick = openHelpModal;
+  });
+  const questsModal = d.getElementById('extrasQuestsModal');
+  if (questsModal) {
+    questsModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
+      b.onclick = () => questsModal.classList.remove('show');
+    });
+    questsModal.onclick = (e) => { if (e.target === questsModal) questsModal.classList.remove('show'); };
+  }
+  const helpModal = d.getElementById('extrasHelpModal');
+  if (helpModal) {
+    helpModal.querySelectorAll('.modal-close, [data-act="close"]').forEach(b => {
+      b.onclick = () => helpModal.classList.remove('show');
+    });
+    const tutBtn = helpModal.querySelector('[data-act="tutorial"]');
+    if (tutBtn) tutBtn.onclick = () => {
+      helpModal.classList.remove('show');
+      if (w.GameTutorial && typeof w.GameTutorial.start === 'function') w.GameTutorial.start(true);
+    };
+    helpModal.onclick = (e) => { if (e.target === helpModal) helpModal.classList.remove('show'); };
+  }
+  setTimeout(() => {
+    mergeTempUnlocks();
+    renderProgress();
+    renderDailyBadge();
+  }, 300);
+  (function tryAutoTutorial(n) {
+    n = n || 0;
+    if (n > 100) return;
+    if (!w.__appReady) { setTimeout(() => tryAutoTutorial(n + 1), 200); return; }
+    if (!w.GameTutorial || typeof w.GameTutorial.start !== 'function') return;
+    (async () => {
+      let passed = false;
+      try {
+        passed = (typeof w.GameTutorial.hasPassedAsync === 'function')
+          ? await w.GameTutorial.hasPassedAsync()
+          : w.GameTutorial.hasPassed();
+      } catch (e) { passed = w.GameTutorial.hasPassed(); }
+      if (!passed) {
+        try { w.GameTutorial.start(); } catch (e) { console.warn('Tutorial auto-start failed:', e); }
+      }
+    })();
+  })(0);
+}
+w.startDailyChallenge = startDailyChallenge;
+w.openQuestsModal = openQuestsModal;
+w.openHelpModal = openHelpModal;
+w.toggleHeroMore = function (btnEl) {
+    const activePage = d.querySelector('.page.active');
+    const toggle = btnEl || (activePage && activePage.querySelector('[id$="MoreToggle"]')) || d.getElementById('heroMoreToggle');
+    const menu = (toggle && toggle.parentElement && toggle.parentElement.querySelector('.hero-more'))
+      || (activePage && activePage.querySelector('.hero-more'))
+      || d.getElementById('heroMoreMenu');
+    if (!menu) return;
+    const willShow = menu.hasAttribute('hidden');
+    if (willShow) menu.removeAttribute('hidden');
+    else menu.setAttribute('hidden', '');
+    if (toggle) toggle.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+};
+})(window, document);
